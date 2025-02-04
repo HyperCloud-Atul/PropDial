@@ -12,8 +12,9 @@
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 8px !important;
-  text-transform: capitalize;
+  // text-transform: capitalize;
 }
+
 .success_new {
   text-align: center;
   background: #00a3001f;
@@ -112,36 +113,42 @@
     }
   }
 }
-.copy_value{
+
+.copy_value {
   position: relative;
   cursor: pointer;
-  .copied{
+
+  .copied {
     position: absolute;
-   top: 100%;
-   right: 0;
-   font-size: 13px;
+    top: 100%;
+    right: 0;
+    font-size: 13px;
     color: var(--theme-green);
     font-weight: 500;
   }
 }
+
 .delete_modal {
   .alert_text {
     font-size: 20px;
     font-weight: 600;
     color: var(--theme-red);
   }
+
   .sure_content {
     font-size: 18px;
     font-weight: 400;
     color: var(--theme-red);
     margin: 10px 0px 25px 0px;
   }
+
   .yes_no_btn {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 22px;
   }
 }
+
 .field_error {
   margin-top: 5px;
   font-size: 13px;
@@ -152,14 +159,16 @@
   margin-bottom: -6px;
   padding: 3px 20px;
 }
-.form_field{
-  .calendar_click{
-    input{
+
+.form_field {
+  .calendar_click {
+    input {
       z-index: 1;
       background: transparent;
     }
   }
 }
+
 .form_field.label_top {
   background: #fff;
   border: 1px solid #d7d7d7;
@@ -183,7 +192,8 @@
     position: absolute;
     top: -10px;
     text-transform: capitalize;
-    &.label{
+
+    &.label {
       position: unset;
       box-shadow: none;
     }
@@ -221,13 +231,16 @@
     padding: 0 10px 0 10px;
     position: relative;
   }
-textarea{
-  border: none;
-  padding: 10px 0px 0px 10px;
-  &:focus{
-    outline: none;
+
+  textarea {
+    border: none;
+    padding: 10px 0px 0px 10px;
+
+    &:focus {
+      outline: none;
+    }
   }
-}
+
   select {
     border: none;
     border-bottom: 1px solid #ddd;
@@ -295,28 +308,28 @@ textarea{
 .theme_radio_new {
   &.tab_type_radio {
     .theme_radio_container {
-      input[type="radio"] + label {
+      input[type="radio"]+label {
         border-radius: 8px 8px 0px 0px !important;
         border-color: var(--theme-grey);
         border-bottom: none;
         background: whitesmoke;
       }
 
-      input[type="radio"]:checked + label {
+      input[type="radio"]:checked+label {
         border-bottom: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"] + label::before {
+      input[type="radio"]+label::before {
         content: none;
       }
 
-      input[type="radio"] + label {
+      input[type="radio"]+label {
         position: relative;
       }
 
-      input[type="radio"]:checked + label::before {
+      input[type="radio"]:checked+label::before {
         content: "";
         position: absolute;
         bottom: -9px;
@@ -345,7 +358,7 @@ textarea{
       display: none;
     }
 
-    input[type="radio"] + label {
+    input[type="radio"]+label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -360,7 +373,7 @@ textarea{
 
     }
 
-    input[type="radio"]:checked + label {
+    input[type="radio"]:checked+label {
       background-color: var(--theme-blue);
       background: var(--theme-blue);
       color: var(--white-color);
@@ -372,19 +385,23 @@ textarea{
     }
 
     .male {
-      input[type="radio"] + label::before {
-        content: none; /* Unicode for Male face */
+      input[type="radio"]+label::before {
+        content: none;
+        /* Unicode for Male face */
       }
-      input[type="radio"]:checked + label::before {
-      }
+
+      input[type="radio"]:checked+label::before {}
     }
+
     .female {
-      input[type="radio"] + label::before {
-        content: none; /* Unicode for Female face */
+      input[type="radio"]+label::before {
+        content: none;
+        /* Unicode for Female face */
       }
-      input[type="radio"]:checked + label::before {
-      }
+
+      input[type="radio"]:checked+label::before {}
     }
+
     .gender_single {
       label {
         width: 150px;
@@ -396,6 +413,7 @@ textarea{
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         padding: 15px !important;
         position: relative;
+
         &::before {
           position: absolute;
           top: 5px;
@@ -403,13 +421,16 @@ textarea{
           font-size: 22px !important;
           font-weight: 800;
         }
+
         .label_inner {
           display: grid;
           gap: 7px;
+
           h6 {
             font-size: 16px;
           }
         }
+
         img {
           width: 75px;
           height: 75px;
@@ -418,15 +439,16 @@ textarea{
       }
     }
 
-    input[type="radio"] + label::before {
+    input[type="radio"]+label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="radio"]:checked + label::before {
-      content: "\2713"; /* Check mark icon */
+    input[type="radio"]:checked+label::before {
+      content: "\2713";
+      /* Check mark icon */
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
@@ -449,20 +471,20 @@ textarea{
 
   &.active_right {
     .theme_radio_container {
-      input[type="radio"] + label {
+      input[type="radio"]+label {
         border-radius: 8px 0px 0px 8px !important;
         border-bottom: 1px solid;
         border-right: 3px solid transparent;
       }
 
-      input[type="radio"]:checked + label {
+      input[type="radio"]:checked+label {
         border-bottom: 1px solid;
         border-right: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"]:checked + label::before {
+      input[type="radio"]:checked+label::before {
         bottom: inherit;
         right: -10px;
         top: 50%;
@@ -502,7 +524,7 @@ textarea{
       display: none;
     }
 
-    input[type="checkbox"] + label {
+    input[type="checkbox"]+label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -514,19 +536,19 @@ textarea{
       text-transform: capitalize;
     }
 
-    input[type="checkbox"]:checked + label {
+    input[type="checkbox"]:checked+label {
       background-color: var(--theme-blue);
       color: var(--white-color);
     }
 
-    input[type="checkbox"] + label::before {
+    input[type="checkbox"]+label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="checkbox"]:checked + label::before {
+    input[type="checkbox"]:checked+label::before {
       content: "\2713";
       /* Check mark icon */
       display: inline-block;
@@ -827,6 +849,7 @@ textarea{
         display: flex;
         align-items: center;
         gap: 3px;
+
         .status_dot {
           width: 8px;
           height: 8px;
@@ -1045,15 +1068,18 @@ textarea{
     }
   }
 }
+
 .info_icon {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+
   .material-symbols-outlined {
     font-size: 16px;
     cursor: pointer;
   }
+
   .info_icon_inner {
     position: absolute;
     line-height: normal;
@@ -1069,10 +1095,12 @@ textarea{
     top: 18px;
     color: var(--light-black);
     font-weight: 400;
+
     b {
       font-weight: 500;
     }
   }
+
   &:hover {
     .info_icon_inner {
       transition: 0.3s;
@@ -1080,6 +1108,7 @@ textarea{
     }
   }
 }
+
 .my_small_card_parent {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1114,6 +1143,7 @@ textarea{
         }
       }
     }
+
     .right {
       width: 80%;
     }
@@ -1150,6 +1180,7 @@ textarea{
       font-weight: 400;
       word-break: break-all;
     }
+
     .bottom_strip {
       display: flex;
       align-items: center;
@@ -1159,11 +1190,13 @@ textarea{
       border-radius: 0px 0px 15px 15px;
       border-bottom: 1px solid #91b8ff;
       margin: 8px -15px -15px -15px;
+
       .bs_left {
         h5 {
           font-size: 14px;
           font-weight: 600;
           color: #303030;
+
           span {
             font-size: 11px;
             font-weight: 400;
@@ -1171,6 +1204,7 @@ textarea{
           }
         }
       }
+
       .bs_right {
         h4 {
           font-size: 16px;
@@ -1182,32 +1216,38 @@ textarea{
   }
 }
 
-.pg_utility_bill .my_small_card_parent, .property_adv_pg .my_small_card_parent .my_small_card .left {
+.pg_utility_bill .my_small_card_parent,
+.property_adv_pg .my_small_card_parent .my_small_card .left {
   margin-top: 13px;
 }
-.property_adv_pg{
-  .field_error{
+
+.property_adv_pg {
+  .field_error {
     margin-left: -10px;
     margin-right: -10px;
     margin-bottom: -10px;
-}
+  }
 
 }
+
 .pg_utility_bill {
-  .field_error{
+  .field_error {
     margin-left: -10px;
     margin-right: -10px;
     margin-bottom: -10px;
+  }
 }
-}
+
 .pg_enquiry {
   .my_small_card_parent {
     grid-template-columns: repeat(4, 1fr);
 
     .my_small_card {
       display: block;
+
       &.right_gap {
         padding-right: 52px;
+
         .top_right_content {
           right: 52px;
         }
@@ -1273,28 +1313,35 @@ textarea{
     }
   }
 }
+
 .property_keys_pg {
   .my_small_card_parent {
     grid-template-columns: repeat(1, 1fr);
+
     .my_small_card {
       padding: 0px;
+
       .title {
         font-size: 14px;
         color: #303030;
       }
+
       .sub_title {
         font-size: 11px;
         margin-top: 0px !important;
       }
+
       .left {
         margin-top: 0px;
         gap: 0px;
         height: 100%;
+
         .img_div {
           border-radius: 15px 0px 0px 15px;
           width: 50%;
           height: 100%;
           background: #f7f7f7;
+
           img {
             width: 100%;
             height: 100%;
@@ -1304,28 +1351,34 @@ textarea{
           }
         }
       }
+
       .right {
         width: 50%;
         border-radius: 0px 15px 15px 0px;
         border-left: 1px solid var(--theme-grey);
         height: 100%;
+
         .ri_single {
           padding: 9px;
           border-bottom: 1px solid var(--theme-grey);
         }
+
         .ri_single:last-child {
           border-bottom: none;
         }
       }
     }
   }
+
   .aai_form {
     .fields_box {
       margin-top: 15px;
       row-gap: 15px;
+
       &:first-child {
         margin-top: 0px;
       }
+
       .close_field {
         width: 24px;
         height: 24px;
@@ -1333,15 +1386,18 @@ textarea{
       }
     }
   }
+
   .keys_card {
     display: flex;
     flex-direction: column;
     row-gap: 22px;
+
     .key_card_single {
       border: 1px solid #dfdfdf;
       border-radius: 10px;
       background: var(--white-color);
       border-top-color: #91b8ff;
+
       .top {
         background: rgb(226 226 226);
         padding: 8px 15px;
@@ -1349,15 +1405,18 @@ textarea{
         font-size: 14px;
         color: var(--light-black);
         border-radius: 10px 10px 0px 0px;
+
         .keys_edit {
-          color: var(--theme-green);         
+          color: var(--theme-green);
           font-size: 21px;
           cursor: pointer;
         }
       }
+
       .key_details {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
+
         .kd_single {
           padding: 12px;
           border-right: 1px solid #e1e1e1;
@@ -1366,6 +1425,7 @@ textarea{
           justify-content: space-between;
           align-items: end;
           gap: 3px;
+
           .left {
             h6 {
               color: var(--light-black);
@@ -1373,6 +1433,7 @@ textarea{
               font-weight: 400;
             }
           }
+
           .right {
             h5 {
               font-size: 19px;
@@ -1380,18 +1441,22 @@ textarea{
               color: var(--light-black);
             }
           }
+
           .remark_info {
             position: absolute;
             top: 5px;
             right: 5px;
+
             .info_icon {
               line-height: 0px;
             }
+
             span {
               font-size: 16px;
               color: var(--theme-grey);
               cursor: pointer;
             }
+
             .key_remark {
               position: absolute;
               line-height: normal;
@@ -1406,6 +1471,7 @@ textarea{
               opacity: 0;
               top: 18px;
             }
+
             &:hover {
               .key_remark {
                 transition: 0.3s;
@@ -1418,6 +1484,7 @@ textarea{
     }
   }
 }
+
 .delete_box_top {
   width: 20px;
   height: 20px;
@@ -1430,11 +1497,13 @@ textarea{
   display: flex;
   align-items: center;
   justify-content: center;
+
   span {
     font-size: 14px;
     line-height: 0px;
   }
 }
+
 .my_big_card {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -1808,29 +1877,35 @@ textarea{
     flex-wrap: wrap;
   }
 }
-.btn_and_msg_area{
+
+.btn_and_msg_area {
   display: flex;
   align-items: center;
   justify-content: end;
   gap: 22px;
   flex-direction: wrap;
 }
+
 .msg_area {
   font-size: 15px;
   padding: 4px 15px;
   border-radius: 8px;
-  &.big_font{
+
+  &.big_font {
     font-size: 17px;
   }
+
   &.error_msg {
     background: #ffe9e9;
     color: red;
   }
+
   &.success_msg {
     background: var(--theme-green-bg);
     color: var(--theme-green2);
   }
 }
+
 .table_filter_hide .filters .left {
   display: none !important;
 }
@@ -1846,9 +1921,11 @@ textarea{
 .table_filter_hide .filters {
   width: fit-content;
 }
+
 .detail_modal {
   padding-left: 0px !important;
 }
+
 .detail_modal .modal-content {
   padding: 25px 30px;
   position: relative;
@@ -1863,10 +1940,12 @@ textarea{
   .modal_footer {
     margin-top: 15px;
   }
+
   .attached_with {
     border-bottom: 1px solid #dddddd;
     padding: 15px 0px;
   }
+
   .modal_body {
     padding: 0px;
     padding-bottom: 15px;
@@ -1922,6 +2001,7 @@ textarea{
     }
   }
 }
+
 .search_results {
   padding: 0px;
   margin-top: 0px;
@@ -1945,6 +2025,7 @@ textarea{
       text-align: left;
       gap: 10px;
       cursor: pointer;
+
       input {
         margin-left: 10px;
       }
@@ -1970,6 +2051,7 @@ textarea{
   // left: 0;
   // margin: auto;
 }
+
 .price_input::after {
   content: "\20B9";
   position: absolute;
@@ -1980,12 +2062,15 @@ textarea{
   font-weight: 500;
   color: #666;
 }
-.price_input.two::after{
+
+.price_input.two::after {
   left: 8px;
 }
-.price_input.two input{
+
+.price_input.two input {
   padding-left: 22px !important;
 }
+
 .price_input input {
   padding-left: 13px !important;
 }
@@ -2007,15 +2092,19 @@ textarea{
     grid-template-columns: repeat(1, 1fr) !important;
     grid-row-gap: 22px;
   }
-  .pg_utility_bill .my_small_card_parent, .property_adv_pg .my_small_card_parent{
+
+  .pg_utility_bill .my_small_card_parent,
+  .property_adv_pg .my_small_card_parent {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .pg_adminproperty .filters {
     flex-direction: column;
     align-items: inherit;
     gap: 12px;
     margin-top: 7px;
   }
+
   .property_keys_pg {
     .keys_card {
       .key_card_single {
@@ -2032,9 +2121,12 @@ textarea{
     border-radius: 20px;
     padding: 15px;
   }
-  .pg_utility_bill .my_small_card_parent, .property_adv_pg .my_small_card_parent{
+
+  .pg_utility_bill .my_small_card_parent,
+  .property_adv_pg .my_small_card_parent {
     grid-template-columns: repeat(1, 1fr);
   }
+
   .page .propagent_dashboard_inner .all_payments {
     grid-template-columns: repeat(2, 1fr) !important;
     grid-column-gap: 15px;
@@ -2052,7 +2144,7 @@ textarea{
   .theme_radio_new {
     &.tab_type_radio {
       .theme_radio_container {
-        input[type="radio"] + label {
+        input[type="radio"]+label {
           font-size: 12px;
           padding: 8px;
         }
@@ -2062,33 +2154,39 @@ textarea{
 
   .theme_radio_new {
     .theme_radio_container {
-      input[type="radio"] + label {
+      input[type="radio"]+label {
         padding: 3px 12px;
         font-size: 13px;
       }
     }
   }
+
   .form_field.label_top {
     .increase_input_parent {
       grid-template-columns: repeat(1, 1fr);
       gap: 15px;
     }
+
     .plus_minus_input {
       width: 110px;
     }
+
     .plus_minus_input_wrapper {
       span.pmi_label {
         font-size: 16px;
         font-weight: 500;
       }
+
       .pmbutton {
         width: 30px;
+
         span {
           font-size: 18px;
         }
       }
     }
   }
+
   .property_keys_pg {
     .keys_card {
       .key_card_single {
@@ -2106,12 +2204,14 @@ textarea{
       margin-top: 20px;
     }
   }
+
   .modal_close {
     top: -14px;
     font-size: 16px;
     width: 28px;
     height: 28px;
   }
+
   .mobile_full_575 {
     margin-left: -15px;
     margin-right: -15px;
@@ -2247,10 +2347,12 @@ textarea{
       }
     }
   }
-  .row.form_full > * {
+
+  .row.form_full>* {
     padding-left: 0px;
     padding-right: 0px;
   }
+
   .form_field {
     &.label_top {
       border-radius: 0px;
@@ -2258,29 +2360,36 @@ textarea{
       border-bottom: 2px solid var(--theme-blue);
       padding: 15px;
       padding-top: 26px;
+
       .radio_group {
         padding-top: 0px;
       }
+
       label {
         font-size: 12px;
         font-weight: 500;
       }
+
       .radio_group_single label {
         border-radius: 8px !important;
         font-size: 12px !important;
       }
     }
   }
+
   .delete_modal {
     .alert_text {
       font-size: 18px;
     }
+
     .sure_content {
       font-size: 16px;
     }
   }
+
   .detail_modal .modal-content {
     padding: 15px;
+
     .modal_title {
       font-size: 16px;
       margin-bottom: 8px;
@@ -2290,9 +2399,11 @@ textarea{
       .img_area img {
         border-radius: 8px;
       }
+
       .main_detail {
         .md_single {
           font-size: 14px;
+
           .value {
             font-size: 14px;
           }
@@ -2308,6 +2419,7 @@ textarea{
       }
     }
   }
+
   .property_keys_pg {
     .keys_card {
       .key_card_single {
@@ -2316,31 +2428,39 @@ textarea{
         margin-left: -15px;
         border-top: none;
         border-bottom: 1px solid var(--theme-blue);
-        .top{
+
+        .top {
           font-size: 12px;
           padding-right: 38px;
           text-align: inherit;
-          .keys_edit{
+
+          .keys_edit {
             font-size: 17px;
           }
         }
+
         .key_details {
           grid-template-columns: repeat(2, 1fr);
-          .kd_single{
+
+          .kd_single {
             padding: 8px 15px;
-            .left{
-              h6{
+
+            .left {
+              h6 {
                 font-size: 13px;
               }
             }
-            .right{
-              h5{
+
+            .right {
+              h5 {
                 font-size: 17px;
               }
             }
-            .remark_info{
+
+            .remark_info {
               right: 15px;
-              span{
+
+              span {
                 font-size: 14px;
               }
             }
