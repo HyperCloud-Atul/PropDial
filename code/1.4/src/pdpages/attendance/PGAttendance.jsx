@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import AttendanceTable from "./AttendanceTable";
 import Popup from "../../components/Popup";
 import PunchInOut from "../../components/attendance/PunchInOut";
+import CurrentDateTime from "../../components/CurrentDateTime";
 
 // import scss
 import "./PGAttendance.scss";
@@ -321,34 +322,13 @@ const PGAttendance = () => {
 
   // console.log("user details: ", user)
 
-  // current date and time
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  // view mode control start
+  const [viewMode, setViewMode] = useState("card_view");
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDateTime(new Date());
-    }, 1000); // Update every second
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
-
-  // Extract date components separately
-  const optionsDate = { month: "short", day: "2-digit", year: "numeric" };
-  const formattedDate = currentDateTime.toLocaleDateString(
-    "en-US",
-    optionsDate
-  );
-  const weekday = currentDateTime.toLocaleDateString("en-US", {
-    weekday: "long",
-  });
-
-  // Format time like "09:25 AM"
-  const formattedTime = currentDateTime.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second:"2-digit",
-    hour12: true,
-  });
+  const handleModeChange = (newViewMode) => {
+    setViewMode(newViewMode);
+  };
+  // view mode control end
 
   return (
     <>
@@ -453,15 +433,19 @@ const PGAttendance = () => {
 
                 <br />
             </div> */}
-             {/* Pupup */}
+      {/* Pupup */}
       <div>
-        <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
+        <div
+          className={showPopupPunchInFlag ? "pop-up-div open" : "pop-up-div"}
+        >
           <div>
             <p>
-              {showPopupPunchInFlag && (" Are you sure you want to Punch-In now? ")}
-            </p><br />
+              {showPopupPunchInFlag &&
+                " Are you sure you want to Punch-In now? "}
+            </p>
+            <br />
 
-            {user && user.vehicleStatus &&
+            {user && user.vehicleStatus && (
               <input
                 id="id_tripstart"
                 className="custom-input"
@@ -472,29 +456,49 @@ const PGAttendance = () => {
                 onInput={(e) => {
                   restrictInput(e, 7);
                 }}
-                onChange={(e) =>
-                  setTripStart(e.target.value)
+                onChange={(e) => setTripStart(e.target.value)}
+                value={
+                  attendanceData &&
+                  attendanceData.length > 0 &&
+                  attendanceData[0].punchInMeterReading
                 }
-                value={attendanceData && attendanceData.length > 0 && attendanceData[0].punchInMeterReading}
               />
-            }
+            )}
 
-            <br></br><br></br>
-            <button onClick={() => handlePunchInPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0 0px' }}>CONFIRM</button>
-            <button onClick={() => handlePunchInPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0 0px' }}>CANCEL</button>
+            <br></br>
+            <br></br>
+            <button
+              onClick={() => handlePunchInPopup("CONFIRM")}
+              className="theme_btn btn_red pointer no_icon"
+              style={{ margin: "0 0px" }}
+            >
+              CONFIRM
+            </button>
+            <button
+              onClick={() => handlePunchInPopup("CANCEL")}
+              className="theme_btn btn_fill pointer no_icon"
+              style={{ margin: "0 0px" }}
+            >
+              CANCEL
+            </button>
           </div>
         </div>
-        <div className={showPopupPunchOutFlag ? 'pop-up-div open' : 'pop-up-div'}>
+        <div
+          className={showPopupPunchOutFlag ? "pop-up-div open" : "pop-up-div"}
+        >
           <div>
             <p>
-              {showPopupPunchOutFlag && (" Are you sure you want to Punch-Out now? ")}
+              {showPopupPunchOutFlag &&
+                " Are you sure you want to Punch-Out now? "}
             </p>
 
-
-            {user && user.vehicleStatus &&
+            {user && user.vehicleStatus && (
               <>
                 <p>
-                  Trip Start: {attendanceData && attendanceData.length > 0 && attendanceData[0].tripStart}
+                  Trip Start:{" "}
+                  {attendanceData &&
+                    attendanceData.length > 0 &&
+                    attendanceData[0].tripStart}
                 </p>
                 <input
                   id="id_tripend"
@@ -506,21 +510,232 @@ const PGAttendance = () => {
                   onInput={(e) => {
                     restrictInput(e, 7);
                   }}
-                  onChange={(e) =>
-                    setTripEnd(e.target.value)
+                  onChange={(e) => setTripEnd(e.target.value)}
+                  value={
+                    attendanceData &&
+                    attendanceData.length > 0 &&
+                    attendanceData[0].tripEnd
                   }
-                  value={attendanceData && attendanceData.length > 0 && attendanceData[0].tripEnd}
                 />
               </>
-            }
-            <br></br><br></br>
-            <button onClick={() => handlePunchOutPopup('CONFIRM')} className="theme_btn btn_red pointer no_icon" style={{ margin: '0px' }}>CONFIRM</button>
-            <button onClick={() => handlePunchOutPopup('CANCEL')} className="theme_btn btn_fill pointer no_icon" style={{ margin: '0px' }}>CANCEL</button>
+            )}
+            <br></br>
+            <br></br>
+            <button
+              onClick={() => handlePunchOutPopup("CONFIRM")}
+              className="theme_btn btn_red pointer no_icon"
+              style={{ margin: "0px" }}
+            >
+              CONFIRM
+            </button>
+            <button
+              onClick={() => handlePunchOutPopup("CANCEL")}
+              className="theme_btn btn_fill pointer no_icon"
+              style={{ margin: "0px" }}
+            >
+              CANCEL
+            </button>
           </div>
         </div>
-      </div >
+      </div>
       <div className="top_header_pg pg_bg attendance_pg relative">
-        <div className="attendance_list">cards</div>
+        <div className="attendance_dashboard">
+          <div className="pg_header">
+            <h2>Your progress of this week (1st - 7th Feb)</h2>
+          </div>
+          <div className="attendance_cards">
+            <div className="ac_single day">
+              <h6>Total number of</h6>
+              <h5>Days</h5>
+              <h2>05</h2>
+              <div className="icon">
+                <div className="icon_inner">
+                  <img src="/assets/img/edicon/appointment.png" alt="" />
+                </div>
+              </div>
+              <div className="trending">
+  <div className="inner up">
+    <span className="material-symbols-outlined">trending_up</span>
+    <div className="value">2.5%</div>
+  </div>
+  <p>last week</p>
+</div>
+
+            </div>
+            <div className="ac_single hr">
+              <h6>Total number of</h6>
+              <h5>Hrs Worked</h5>
+              <h2>40</h2>
+              <div className="icon">
+                <div className="icon_inner">
+                  <img src="/assets/img/edicon/working-time.png" alt="" />
+                </div>
+              </div>
+              <div className="trending">
+  <div className="inner down">
+    <span className="material-symbols-outlined">trending_down</span>
+    <div className="value">0.5%</div>
+  </div>
+  <p>last week</p>
+</div>
+            </div>
+            <div className="ac_single dist">
+              <h6>Total number of</h6>
+              <h5>Distance Covered</h5>
+              <h2>125</h2>
+              <div className="icon">
+                <div className="icon_inner">
+                  <img src="/assets/img/edicon/distance.png" alt="" />
+                </div>
+              </div>
+              <div className="trending">
+  <div className="inner up">
+    <span className="material-symbols-outlined">trending_up</span>
+    <div className="value">2.5%</div>
+  </div>
+  <p>last week</p>
+</div>
+            </div>
+          </div>
+          <div className="year_month">
+            <div className="left">
+              <h2>Logs</h2>
+            </div>
+            <div className="right">
+              <div className="filters">
+                <div className="right">
+                  <div className="icon_dropdown">
+                    <select name="months" id="months">
+                      <option value="" disabled>
+                        Select Month
+                      </option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                  </div>
+                  <div className="icon_dropdown">
+                    <select name="year" id="year">
+                      <option value="">Select Year</option>
+                      <option value="1">2025</option>
+                      <option value="2">2024</option>
+                      <option value="3">2023</option>
+                      <option value="4">2022</option>
+                      <option value="5">2021</option>
+                      <option value="6">2020</option>
+                    </select>
+                  </div>
+                  <div className="button_filter diff_views">
+                    <div
+                      className={`bf_single ${
+                        viewMode === "card_view" ? "active" : ""
+                      }`}
+                      onClick={() => handleModeChange("card_view")}
+                    >
+                      <span className="material-symbols-outlined">
+                        calendar_view_month
+                      </span>
+                    </div>
+                    <div
+                      className={`bf_single ${
+                        viewMode === "table_view" ? "active" : ""
+                      }`}
+                      onClick={() => handleModeChange("table_view")}
+                    >
+                      <span className="material-symbols-outlined">
+                        view_list
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="previous_punch">
+            <div className="pp_single">
+              <div className="top">
+                <div className="left">
+                  <h3>21</h3>
+                  <h4>Tue</h4>
+                </div>
+                <div className="right">
+                  <div className="r_single">
+                    <h6> Hrs Worked</h6>
+                    <h5>08 Hr : 25 Min</h5>
+                  </div>
+                  <div className="r_single">
+                    <h6> Dist Covered</h6>
+                    <h5>25 KM</h5>
+                  </div>
+                </div>
+              </div>
+              <div className="bottom">
+                <div className="b_single">
+                  <h6>Punch In</h6>
+                  <h5>06:09 AM</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Punch Out</h6>
+                  <h5>06:09 PM</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Trip Start</h6>
+                  <h5>69895</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Trip End</h6>
+                  <h5>69915</h5>
+                </div>
+              </div>
+            </div>
+            <div className="pp_single">
+              <div className="top">
+                <div className="left">
+                  <h3>21</h3>
+                  <h4>Tue</h4>
+                </div>
+                <div className="right">
+                  <div className="r_single">
+                    <h6> Hrs Worked</h6>
+                    <h5>08 Hr : 25 Min</h5>
+                  </div>
+                  <div className="r_single">
+                    <h6> Dist Covered</h6>
+                    <h5>25 KM</h5>
+                  </div>
+                </div>
+              </div>
+              <div className="bottom">
+                <div className="b_single">
+                  <h6>Punch In</h6>
+                  <h5>06:09 AM</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Punch Out</h6>
+                  <h5>06:09 PM</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Trip Start</h6>
+                  <h5>69895</h5>
+                </div>
+                <div className="b_single">
+                  <h6>Trip End</h6>
+                  <h5>69915</h5>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+        </div>
         <div className="punch">
           <div className="top">
             <div className="left">
@@ -532,58 +747,54 @@ const PGAttendance = () => {
             </div>
           </div>
           <div className="body">
-            <div className="date_time">
-              <h3>{formattedTime}</h3>
-              <h6>
-                {formattedDate} - {weekday}
-              </h6>
-            </div>
+            <CurrentDateTime />
             {attendanceData && attendanceData.length === 0 ? (
-          
-                  <div className="punch_button outer"    onClick={showPunchInPopup}>
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      <img src="/assets/img/hand-pointer.png" alt="" />
-                      <h6>Punch In</h6>
-                    </div>
+              <div className="punch_button outer" onClick={showPunchInPopup}>
+                <div className="inner_one">
+                  <div className="inner_two">
+                    <img src="/assets/img/hand-pointer.png" alt="" />
+                    <h6>Punch In</h6>
                   </div>
                 </div>
+              </div>
             ) : attendanceData &&
               attendanceData.length > 0 &&
               (!attendanceData[0].punchIn ||
                 attendanceData[0].date !== formattedTodaysDate) ? (
-                  <div className="punch_button outer"    onClick={showPunchInPopup}>
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      <img src="/assets/img/hand-pointer.png" alt="" />
-                      <h6>Punch In</h6>
-                    </div>
+              <div className="punch_button outer" onClick={showPunchInPopup}>
+                <div className="inner_one">
+                  <div className="inner_two">
+                    <img src="/assets/img/hand-pointer.png" alt="" />
+                    <h6>Punch In</h6>
                   </div>
                 </div>
+              </div>
             ) : attendanceData &&
               attendanceData.length > 0 &&
               attendanceData[0].date === formattedTodaysDate &&
               !attendanceData[0].punchOut ? (
-            
-              <div className="punch_button punchout outer"   onClick={showPunchOutPopup}>
-              <div className="inner_one">
-                <div className="inner_two">
-                  <img src="/assets/img/punchouthand.png" alt="" />
-                  <h6>Punch Out</h6>
+              <div
+                className="punch_button punchout outer"
+                onClick={showPunchOutPopup}
+              >
+                <div className="inner_one">
+                  <div className="inner_two">
+                    <img src="/assets/img/punchouthand.png" alt="" />
+                    <h6>Punch Out</h6>
+                  </div>
                 </div>
               </div>
-            </div>
             ) : (
               <div className="punch_button pio_done outer">
-              <div className="inner_one">
-                <div className="inner_two">
-                  {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
-                  {/* <h6>Next Punch In</h6> */}
-                  <h6 className="text-center">Next Punch In Tomorrow</h6>
-                  {/* <h6>Tomorrow</h6> */}
+                <div className="inner_one">
+                  <div className="inner_two">
+                    {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
+                    {/* <h6>Next Punch In</h6> */}
+                    <h6 className="text-center">Next Punch In Tomorrow</h6>
+                    {/* <h6>Tomorrow</h6> */}
+                  </div>
                 </div>
               </div>
-            </div>
             )}
 
             <div className="punch_detail">
@@ -591,21 +802,33 @@ const PGAttendance = () => {
                 <img src="/assets/img/punchin.png" alt="" />
                 {attendanceData && attendanceData.length === 0 ? (
                   <div className="data">--:--</div>
-                )
-              : 
-<div className="data">{attendanceData && attendanceData.length > 0 && attendanceData[0].date === formattedTodaysDate && attendanceData[0].punchIn ? attendanceData[0].punchIn : "--:--" }</div>
-              }
-                
+                ) : (
+                  <div className="data">
+                    {attendanceData &&
+                    attendanceData.length > 0 &&
+                    attendanceData[0].date === formattedTodaysDate &&
+                    attendanceData[0].punchIn
+                      ? attendanceData[0].punchIn
+                      : "--:--"}
+                  </div>
+                )}
+
                 <h6>Punch In</h6>
               </div>
               <div className="pd_single">
                 <img src="/assets/img/punchout.png" alt="" />
                 {attendanceData && attendanceData.length === 0 ? (
                   <div className="data">--:--</div>
-                )
-              : 
-<div className="data">{attendanceData && attendanceData.length > 0 && attendanceData[0].date === formattedTodaysDate && attendanceData[0].punchOut ? attendanceData[0].punchOut : "--:--" }</div>
-              }
+                ) : (
+                  <div className="data">
+                    {attendanceData &&
+                    attendanceData.length > 0 &&
+                    attendanceData[0].date === formattedTodaysDate &&
+                    attendanceData[0].punchOut
+                      ? attendanceData[0].punchOut
+                      : "--:--"}
+                  </div>
+                )}
                 <h6>Punch Out</h6>
               </div>
               <div className="pd_single">
