@@ -19,316 +19,327 @@ import CurrentDateTime from "../../components/CurrentDateTime";
 import "./PGAttendance.scss";
 
 const days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
 ];
 //Restrict to Input
 function restrictInput(event, maxLength) {
-  // Get the value entered in the input field
-  let inputValue = event.target.value;
+    // Get the value entered in the input field
+    let inputValue = event.target.value;
 
-  // Remove any non-numeric characters using a regular expression
-  let numericValue = inputValue.replace(/[^0-9]/g, "");
-  // console.log("numericValue: ", numericValue)
+    // Remove any non-numeric characters using a regular expression
+    let numericValue = inputValue.replace(/[^0-9]/g, "");
+    // console.log("numericValue: ", numericValue)
 
-  if (numericValue.length > maxLength) {
-    numericValue = numericValue.slice(0, maxLength);
-  }
+    if (numericValue.length > maxLength) {
+        numericValue = numericValue.slice(0, maxLength);
+    }
 
-  // Update the input field with the numeric value
-  event.target.value = numericValue;
+    // Update the input field with the numeric value
+    event.target.value = numericValue;
 }
 
 const calculateTimeDifference = (punchIn, punchOut) => {
-  // Convert 12-hour format to Date object
-  const parseTime = (timeStr) => {
-    const [time, modifier] = timeStr.split(" ");
-    let [hours, minutes] = time.split(":").map(Number);
+    // Convert 12-hour format to Date object
+    const parseTime = (timeStr) => {
+        const [time, modifier] = timeStr.split(" ");
+        let [hours, minutes] = time.split(":").map(Number);
 
-    if (modifier === "PM" && hours !== 12) hours += 12;
-    if (modifier === "AM" && hours === 12) hours = 0;
+        if (modifier === "PM" && hours !== 12) hours += 12;
+        if (modifier === "AM" && hours === 12) hours = 0;
 
-    return new Date(
-      `2024-02-05T${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-        2,
-        "0"
-      )}:00`
-    );
-  };
+        return new Date(
+            `2024-02-05T${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+                2,
+                "0"
+            )}:00`
+        );
+    };
 
-  const punchInTime = parseTime(punchIn);
-  const punchOutTime = parseTime(punchOut);
+    const punchInTime = parseTime(punchIn);
+    const punchOutTime = parseTime(punchOut);
 
-  // Calculate the difference in milliseconds
-  const diffMs = punchOutTime - punchInTime;
+    // Calculate the difference in milliseconds
+    const diffMs = punchOutTime - punchInTime;
 
-  // Convert milliseconds to hours & minutes
-  const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    // Convert milliseconds to hours & minutes
+    const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-  return `${diffHrs} hr ${diffMins} min`;
+    return `${diffHrs} hr ${diffMins} min`;
 };
 
+const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
 const PGAttendance = () => {
-  const navigate = useNavigate();
-  const { user } = useAuthContext(); // Current user
+    const navigate = useNavigate();
+    const { user } = useAuthContext(); // Current user
 
-  // Scroll to the top of the page whenever the location changes start
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-  // Scroll to the top of the page whenever the location changes end
+    // Scroll to the top of the page whenever the location changes start
+    const location = useLocation();
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
+    // Scroll to the top of the page whenever the location changes end
 
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [greeting, setGreeting] = useState("");
-  const [attendance, setAttendance] = useState([]);
-  const [punchIn, setPunchIn] = useState(null);
-  const [tripStart, setTripStart] = useState(null);
-  const [tripEnd, setTripEnd] = useState(null);
+    const currentYear = new Date().getFullYear(); // Get current year
+    const years = [currentYear, currentYear - 1, currentYear - 2, currentYear - 3]; // Create an array of years
+    const [selectedYear, setSelectedYear] = useState(currentYear); // Set current year as default
 
-  // console.log("attendence: ", attendance)
-  const today = new Date();
-  const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
-  const weekDay = days[today.getDay()]; // Current weekday
+    const currentMonthIndex = new Date().getMonth(); // Get current month index (0-11)
+    const [selectedMonth, setSelectedMonth] = useState(months[currentMonthIndex]);
+    const [currentTime, setCurrentTime] = useState(new Date());
+    const [greeting, setGreeting] = useState("");
+    const [attendance, setAttendance] = useState([]);
+    const [punchIn, setPunchIn] = useState(null);
+    const [tripStart, setTripStart] = useState(null);
+    const [tripEnd, setTripEnd] = useState(null);
 
-  const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
-    "attendance-propdial"
-  );
-  const { documents: attendanceData, errors: attendanceDataError } =
-    useCollection(
-      "attendance-propdial",
-      ["userId", "==", user.uid],
-      ["date", "desc"],
-      ["5"]
+    // console.log("attendence: ", attendance)
+    const today = new Date();
+    const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
+    const weekDay = days[today.getDay()]; // Current weekday
+
+    const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
+        "attendance-propdial"
     );
+    const { documents: attendanceData, errors: attendanceDataError } =
+        useCollection(
+            "attendance-propdial",
+            ["userId", "==", user.uid],
+            ["date", "desc"],
+            ["5"]
+        );
 
-  console.log("attendanceData: ", attendanceData);
+    console.log("attendanceData: ", attendanceData);
 
-  //Popup Flags
-  const [showPunchInPopup, setShowPunchInPopup] = useState(false);
-  // const [showPopupFlag, setShowPopupFlag] = useState(false);
-  const [popupReturn, setPopupReturn] = useState(false);
-  const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-  // const [popupReturn, setPopupReturn] = useState(false);
+    //Popup Flags
+    const [showPunchInPopup, setShowPunchInPopup] = useState(false);
+    // const [showPopupFlag, setShowPopupFlag] = useState(false);
+    const [popupReturn, setPopupReturn] = useState(false);
+    const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
+    // const [popupReturn, setPopupReturn] = useState(false);
 
-  const handelShowPunchInPopup = () => {    
-    setShowPunchInPopup(true);  
-  };
-
-  const handlePunchInPopup = (action) => {
-   
-    if (action === "CONFIRM") {
-      // setPopupReturn(true)
-      handlePunchIn();
-    }
-    setShowPunchInPopup(false);
-  };
-
-  const showPunchOutPopup = () => {
-    // e.preventDefault();
-    setShowPopupPunchOutFlag(true);
-    setPopupReturn(false);
-  };
-
-  const handlePunchOutPopup = (action) => {
-    // console.log('Popup Action:', action)
-    if (action === "CANCEL") {
-      setPopupReturn(false);
-    }
-    if (action === "CONFIRM") {
-      // setPopupReturn(true)
-      handlePunchOut();
-    }
-    setShowPopupPunchOutFlag(false);
-  };
-
-  useEffect(() => {
-    const getGreeting = () => {
-      const currentHour = new Date().getHours(); // Get the current hour (0-23)
-
-      if (currentHour < 12) {
-        return "Good Morning";
-      } else if (currentHour < 18) {
-        return "Good Afternoon";
-      } else {
-        return "Good Evening";
-      }
+    const handelShowPunchInPopup = () => {
+        setShowPunchInPopup(true);
     };
 
-    setGreeting(getGreeting());
+    const handlePunchInPopup = (action) => {
 
-    lastFiveRecords();
-
-    // Update the time every second
-    // const timer = setInterval(() => {
-    //     setCurrentTime(new Date());
-    // }, 1000);
-
-    // Cleanup the interval on component unmount
-    // return () => clearInterval(timer);
-  }, []); // Run once when the component mounts
-
-  const handlePunchIn = async () => {
-    if (!user) {
-      alert("Please log in to punch in.");
-      return;
-    }
-
-    const formattedPunchinTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
-
-    try {
-      // Add a punch-in record
-
-      const data = {
-        userId: user.uid,
-        punchIn: formattedPunchinTime,
-        punchOut: null,
-        workHrs: null,
-        date: formattedTodaysDate,
-        weekDay,
-        tripStart,
-      };
-
-      await addDocument(data);
-
-      // alert("Punch In successful!");
-    } catch (error) {
-      console.log("Error to add a Punch-in Record: ", error);
-    }
-  };
-
-  const handlePunchOut = async () => {
-    if (!user) {
-      alert("Please log in to punch out.");
-      return;
-    }
-
-    const formattedPunchoutTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
-
-    try {
-      // Find the punch-in record for today
-      const record = await projectFirestore
-        .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
-        .where("date", "==", formattedTodaysDate)
-        .get();
-
-      if (record.empty) {
-        alert("You have not punched in yet!");
-        return;
-      }
-
-      const docId = record.docs[0].id;
-      const tripStart = record.docs[0].data().tripStart;
-
-      //Validation Start Trip Reading should not be greater than End Trip Reading
-      if (Number(tripEnd) <= Number(tripStart)) {
-        alert("Trip End Reading should not be less than Trip Start Reading!");
-        return;
-      }
-      const tripDistance = tripEnd - tripStart;
-      // console.log("record.docs[0]: ", record.docs[0].data())
-
-      // Update the punch-out time
-      const data = {
-        punchOut: formattedPunchoutTime,
-        workHrs: calculateTimeDifference(
-          record.docs[0].data().punchIn,
-          formattedPunchoutTime
-        ),
-        tripEnd,
-        tripDistance,
-      };
-
-      await updateDocument(docId, data);
-
-      // alert("Punch Out successful!");
-      setPunchIn(null);
-    } catch (error) {
-      console.log("Error to Check the existing Punch-In record: ", error);
-    }
-  };
-
-  const lastFiveRecords = async () => {
-    // Find the punch-in record for today
-    const record = await projectFirestore
-      .collection("attendance-propdial")
-      .where("userId", "==", user.uid)
-      // .where("date", "==", formattedTodaysDate)
-      .limit(5)
-      .get();
-
-    // console.log("record: ", record.docs[0].data())
-
-    return record.docs;
-  };
-
-  //Fetch Second Last Record
-  const [record, setRecord] = useState(null);
-  useEffect(() => {
-    const fetchSecondLastRecord = async () => {
-      try {
-        // Step 1: Get the latest record
-        const latestRecordRef = projectFirestore
-          .collection("attendance-propdial")
-          .where("userId", "==", user.uid)
-          .orderBy("date", "desc")
-          .limit(1);
-
-        const latestSnapshot = await latestRecordRef.get();
-
-        if (latestSnapshot.empty) {
-          console.log("No records found");
-          return;
+        if (action === "CONFIRM") {
+            // setPopupReturn(true)
+            handlePunchIn();
         }
-
-        const latestDoc = latestSnapshot.docs[0];
-
-        // Step 2: Get the second last record, skipping the latest one
-        const secondLastRecordRef = projectFirestore
-          .collection("attendance-propdial")
-          .where("userId", "==", user.uid)
-          .orderBy("date", "desc")
-          .startAfter(latestDoc) // Skip the latest record
-          .limit(1);
-
-        const secondLastSnapshot = await secondLastRecordRef.get();
-
-        if (!secondLastSnapshot.empty) {
-          setRecord({
-            id: secondLastSnapshot.docs[0].id,
-            ...secondLastSnapshot.docs[0].data(),
-          });
-        } else {
-          console.log("No second last record found");
-        }
-      } catch (error) {
-        console.error("Error fetching second last record:", error);
-      }
+        setShowPunchInPopup(false);
     };
 
-    fetchSecondLastRecord();
-  }, [user.id]);
+    const showPunchOutPopup = () => {
+        // e.preventDefault();
+        setShowPopupPunchOutFlag(true);
+        setPopupReturn(false);
+    };
 
-  // console.log("user details: ", user)
+    const handlePunchOutPopup = (action) => {
+        // console.log('Popup Action:', action)
+        if (action === "CANCEL") {
+            setPopupReturn(false);
+        }
+        if (action === "CONFIRM") {
+            // setPopupReturn(true)
+            handlePunchOut();
+        }
+        setShowPopupPunchOutFlag(false);
+    };
 
-  // view mode control start
-  const [viewMode, setViewMode] = useState("card_view");
+    useEffect(() => {
+        const getGreeting = () => {
+            const currentHour = new Date().getHours(); // Get the current hour (0-23)
 
-  const handleModeChange = (newViewMode) => {
-    setViewMode(newViewMode);
-  };
-  // view mode control end
+            if (currentHour < 12) {
+                return "Good Morning";
+            } else if (currentHour < 18) {
+                return "Good Afternoon";
+            } else {
+                return "Good Evening";
+            }
+        };
 
-  return (
-    <>
-      {/* <div>
+        setGreeting(getGreeting());
+
+        lastFiveRecords();
+
+        // Update the time every second
+        // const timer = setInterval(() => {
+        //     setCurrentTime(new Date());
+        // }, 1000);
+
+        // Cleanup the interval on component unmount
+        // return () => clearInterval(timer);
+    }, []); // Run once when the component mounts
+
+    const handlePunchIn = async () => {
+        if (!user) {
+            alert("Please log in to punch in.");
+            return;
+        }
+
+        const formattedPunchinTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
+
+        try {
+            // Add a punch-in record
+
+            const data = {
+                userId: user.uid,
+                punchIn: formattedPunchinTime,
+                punchOut: null,
+                workHrs: null,
+                date: formattedTodaysDate,
+                weekDay,
+                tripStart,
+            };
+
+            await addDocument(data);
+
+            // alert("Punch In successful!");
+        } catch (error) {
+            console.log("Error to add a Punch-in Record: ", error);
+        }
+    };
+
+    const handlePunchOut = async () => {
+        if (!user) {
+            alert("Please log in to punch out.");
+            return;
+        }
+
+        const formattedPunchoutTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
+
+        try {
+            // Find the punch-in record for today
+            const record = await projectFirestore
+                .collection("attendance-propdial")
+                .where("userId", "==", user.uid)
+                .where("date", "==", formattedTodaysDate)
+                .get();
+
+            if (record.empty) {
+                alert("You have not punched in yet!");
+                return;
+            }
+
+            const docId = record.docs[0].id;
+            const tripStart = record.docs[0].data().tripStart;
+
+            //Validation Start Trip Reading should not be greater than End Trip Reading
+            if (Number(tripEnd) <= Number(tripStart)) {
+                alert("Trip End Reading should not be less than Trip Start Reading!");
+                return;
+            }
+            const tripDistance = tripEnd - tripStart;
+            // console.log("record.docs[0]: ", record.docs[0].data())
+
+            // Update the punch-out time
+            const data = {
+                punchOut: formattedPunchoutTime,
+                workHrs: calculateTimeDifference(
+                    record.docs[0].data().punchIn,
+                    formattedPunchoutTime
+                ),
+                tripEnd,
+                tripDistance,
+            };
+
+            await updateDocument(docId, data);
+
+            // alert("Punch Out successful!");
+            setPunchIn(null);
+        } catch (error) {
+            console.log("Error to Check the existing Punch-In record: ", error);
+        }
+    };
+
+    const lastFiveRecords = async () => {
+        // Find the punch-in record for today
+        const record = await projectFirestore
+            .collection("attendance-propdial")
+            .where("userId", "==", user.uid)
+            // .where("date", "==", formattedTodaysDate)
+            .limit(5)
+            .get();
+
+        // console.log("record: ", record.docs[0].data())
+
+        return record.docs;
+    };
+
+    //Fetch Second Last Record
+    const [record, setRecord] = useState(null);
+    useEffect(() => {
+        const fetchSecondLastRecord = async () => {
+            try {
+                // Step 1: Get the latest record
+                const latestRecordRef = projectFirestore
+                    .collection("attendance-propdial")
+                    .where("userId", "==", user.uid)
+                    .orderBy("date", "desc")
+                    .limit(1);
+
+                const latestSnapshot = await latestRecordRef.get();
+
+                if (latestSnapshot.empty) {
+                    console.log("No records found");
+                    return;
+                }
+
+                const latestDoc = latestSnapshot.docs[0];
+
+                // Step 2: Get the second last record, skipping the latest one
+                const secondLastRecordRef = projectFirestore
+                    .collection("attendance-propdial")
+                    .where("userId", "==", user.uid)
+                    .orderBy("date", "desc")
+                    .startAfter(latestDoc) // Skip the latest record
+                    .limit(1);
+
+                const secondLastSnapshot = await secondLastRecordRef.get();
+
+                if (!secondLastSnapshot.empty) {
+                    setRecord({
+                        id: secondLastSnapshot.docs[0].id,
+                        ...secondLastSnapshot.docs[0].data(),
+                    });
+                } else {
+                    console.log("No second last record found");
+                }
+            } catch (error) {
+                console.error("Error fetching second last record:", error);
+            }
+        };
+
+        fetchSecondLastRecord();
+    }, [user.id]);
+
+    // console.log("user details: ", user)
+
+    // view mode control start
+    const [viewMode, setViewMode] = useState("card_view");
+
+    const handleModeChange = (newViewMode) => {
+        setViewMode(newViewMode);
+    };
+    // view mode control end
+
+    return (
+        <>
+            {/* <div>
                 <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
                     <div>
                         <p>
@@ -429,54 +440,54 @@ const PGAttendance = () => {
 
                 <br />
             </div> */}
-      {/* Pupup */}
-      <div>
-      <Modal
-                  show={showPunchInPopup}
-                  onHide={() => setShowPunchInPopup(false)}
-                  centered
+            {/* Pupup */}
+            <div>
+                <Modal
+                    show={showPunchInPopup}
+                    onHide={() => setShowPunchInPopup(false)}
+                    centered
                 >
-                  <Modal.Header
-                    className="justify-content-center"
-                    style={{
-                      paddingBottom: "0px",
-                      border: "none",
-                    }}
-                  >
-                    <h5>
-                    Are you sure you want to Punch-In now?
-                    </h5>
-                  </Modal.Header>
-                  <Modal.Body
-                    className="text-center">                
-                   {user && user.vehicleStatus && (
-              <input
-                id="id_tripstart"
-                className="custom-input"
-                style={{ paddingRight: "10px" }}
-                type="number"
-                placeholder="Trip Start - Meter Reading"
-                maxLength={7}
-                onInput={(e) => {
-                  restrictInput(e, 7);
-                }}
-                onChange={(e) => setTripStart(e.target.value)}
-                value={
-                  attendanceData &&
-                  attendanceData.length > 0 &&
-                  attendanceData[0].punchInMeterReading
-                }
-              />
-            )}
+                    <Modal.Header
+                        className="justify-content-center"
+                        style={{
+                            paddingBottom: "0px",
+                            border: "none",
+                        }}
+                    >
+                        <h5>
+                            Are you sure you want to Punch-In now?
+                        </h5>
+                    </Modal.Header>
+                    <Modal.Body
+                        className="text-center">
+                        {user && user.vehicleStatus && (
+                            <input
+                                id="id_tripstart"
+                                className="custom-input"
+                                style={{ paddingRight: "10px" }}
+                                type="number"
+                                placeholder="Trip Start - Meter Reading"
+                                maxLength={7}
+                                onInput={(e) => {
+                                    restrictInput(e, 7);
+                                }}
+                                onChange={(e) => setTripStart(e.target.value)}
+                                value={
+                                    attendanceData &&
+                                    attendanceData.length > 0 &&
+                                    attendanceData[0].punchInMeterReading
+                                }
+                            />
+                        )}
                     </Modal.Body>
-                  <Modal.Footer
-                    className="d-flex justify-content-between"
-                    style={{
-                      border: "none",
-                      gap: "15px",
-                    }}
-                  >
-                    {/* {errorForNoSelectReasonMessage && (
+                    <Modal.Footer
+                        className="d-flex justify-content-between"
+                        style={{
+                            border: "none",
+                            gap: "15px",
+                        }}
+                    >
+                        {/* {errorForNoSelectReasonMessage && (
                       <div
                         style={{
                           fontSize: "15px",
@@ -491,444 +502,470 @@ const PGAttendance = () => {
                         {errorForNoSelectReasonMessage}
                       </div>
                     )} */}
-                    <div
-                      className="done_btn"
-                      onClick={() => handlePunchInPopup("CONFIRM")}
-                      // disabled={loading}
-                    >
-                      {/* {loading ? "Saving..." : "Yes, Update"} */}
-                      Confirm
-                    </div>
-                    <div
-                      className="cancel_btn"
-                      onClick={() => setShowPunchInPopup(false)}
-                    >
-                      Cancel
-                    </div>
-                  </Modal.Footer>
+                        <div
+                            className="done_btn"
+                            onClick={() => handlePunchInPopup("CONFIRM")}
+                        // disabled={loading}
+                        >
+                            {/* {loading ? "Saving..." : "Yes, Update"} */}
+                            Confirm
+                        </div>
+                        <div
+                            className="cancel_btn"
+                            onClick={() => setShowPunchInPopup(false)}
+                        >
+                            Cancel
+                        </div>
+                    </Modal.Footer>
                 </Modal>
-    
-        <div
-          className={showPopupPunchOutFlag ? "pop-up-div open" : "pop-up-div"}
-        >
-          <div>
-            <p>
-              {showPopupPunchOutFlag &&
-                " Are you sure you want to Punch-Out now? "}
-            </p>
 
-            {user && user.vehicleStatus && (
-              <>
-                <p>
-                  Trip Start:{" "}
-                  {attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData[0].tripStart}
-                </p>
-                <input
-                  id="id_tripend"
-                  className="custom-input"
-                  style={{ paddingRight: "10px" }}
-                  type="number"
-                  placeholder="Trip End - Meter Reading"
-                  maxLength={7}
-                  onInput={(e) => {
-                    restrictInput(e, 7);
-                  }}
-                  onChange={(e) => setTripEnd(e.target.value)}
-                  value={
-                    attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData[0].tripEnd
-                  }
-                />
-              </>
-            )}
-            <br></br>
-            <br></br>
-            <button
-              onClick={() => handlePunchOutPopup("CONFIRM")}
-              className="theme_btn btn_red pointer no_icon"
-              style={{ margin: "0px" }}
-            >
-              CONFIRM
-            </button>
-            <button
-              onClick={() => handlePunchOutPopup("CANCEL")}
-              className="theme_btn btn_fill pointer no_icon"
-              style={{ margin: "0px" }}
-            >
-              CANCEL
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="top_header_pg pg_bg attendance_pg relative">
-        <div className="attendance_dashboard">
-          <div className="pg_header">
-            <h2>Your progress of this week (1st - 7th Feb)</h2>
-          </div>
-          <div className="attendance_cards">
-            <div className="ac_single day">
-              <h6>Total number of</h6>
-              <h5>Days</h5>
-              <h2>05</h2>
-              <div className="icon">
-                <div className="icon_inner">
-                  <img src="/assets/img/edicon/appointment.png" alt="" />
-                </div>
-              </div>
-              <div className="trending">
-                <div className="inner up">
-                  <span className="material-symbols-outlined">trending_up</span>
-                  <div className="value">2.5%</div>
-                </div>
-                <p>last week</p>
-              </div>
-            </div>
-            <div className="ac_single hr">
-              <h6>Total number of</h6>
-              <h5>Hrs Worked</h5>
-              <h2>40</h2>
-              <div className="icon">
-                <div className="icon_inner">
-                  <img src="/assets/img/edicon/working-time.png" alt="" />
-                </div>
-              </div>
-              <div className="trending">
-                <div className="inner down">
-                  <span className="material-symbols-outlined">
-                    trending_down
-                  </span>
-                  <div className="value">0.5%</div>
-                </div>
-                <p>last week</p>
-              </div>
-            </div>
-            <div className="ac_single dist">
-              <h6>Total number of</h6>
-              <h5>Distance Covered</h5>
-              <h2>125</h2>
-              <div className="icon">
-                <div className="icon_inner">
-                  <img src="/assets/img/edicon/distance.png" alt="" />
-                </div>
-              </div>
-              <div className="trending">
-                <div className="inner up">
-                  <span className="material-symbols-outlined">trending_up</span>
-                  <div className="value">2.5%</div>
-                </div>
-                <p>last week</p>
-              </div>
-            </div>
-          </div>
-          <div className="year_month">
-            <div className="left">
-              <h2>Logs</h2>
-            </div>
-            <div className="right">
-              <div className="filters">
-                <div className="right">
-                  <div className="icon_dropdown">
-                    <select name="months" id="months">
-                      <option value="" disabled>
-                        Select Month
-                      </option>
-                      <option value="1">January</option>
-                      <option value="2">February</option>
-                      <option value="3">March</option>
-                      <option value="4">April</option>
-                      <option value="5">May</option>
-                      <option value="6">June</option>
-                      <option value="7">July</option>
-                      <option value="8">August</option>
-                      <option value="9">September</option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12">December</option>
-                    </select>
-                  </div>
-                  <div className="icon_dropdown">
-                    <select name="year" id="year">
-                      <option value="">Select Year</option>
-                      <option value="1">2025</option>
-                      <option value="2">2024</option>
-                      <option value="3">2023</option>
-                      <option value="4">2022</option>
-                      <option value="5">2021</option>
-                      <option value="6">2020</option>
-                    </select>
-                  </div>
-                  <div className="button_filter diff_views">
-                    <div
-                      className={`bf_single ${
-                        viewMode === "card_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("card_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        calendar_view_month
-                      </span>
-                    </div>
-                    <div
-                      className={`bf_single ${
-                        viewMode === "table_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("table_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        view_list
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="previous_punch">
-            <div className="pp_single">
-              <div className="top">
-                <div className="left">
-                  <h3>21</h3>
-                  <h4>Tue</h4>
-                </div>
-                <div className="right">
-                  <div className="r_single">
-                    <h6> Hrs Worked</h6>
-                    <h5>08 Hr : 25 Min</h5>
-                  </div>
-                  <div className="r_single">
-                    <h6> Dist Covered</h6>
-                    <h5>25 KM</h5>
-                  </div>
-                </div>
-              </div>
-              <div className="bottom">
-                <div className="b_single">
-                  <h6>Punch In</h6>
-                  <h5>06:09 AM</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Punch Out</h6>
-                  <h5>06:09 PM</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Trip Start</h6>
-                  <h5>69895</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Trip End</h6>
-                  <h5>69915</h5>
-                </div>
-              </div>
-            </div>
-            <div className="pp_single">
-              <div className="top">
-                <div className="left">
-                  <h3>21</h3>
-                  <h4>Tue</h4>
-                </div>
-                <div className="right">
-                  <div className="r_single">
-                    <h6> Hrs Worked</h6>
-                    <h5>08 Hr : 25 Min</h5>
-                  </div>
-                  <div className="r_single">
-                    <h6> Dist Covered</h6>
-                    <h5>25 KM</h5>
-                  </div>
-                </div>
-              </div>
-              <div className="bottom">
-                <div className="b_single">
-                  <h6>Punch In</h6>
-                  <h5>06:09 AM</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Punch Out</h6>
-                  <h5>06:09 PM</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Trip Start</h6>
-                  <h5>69895</h5>
-                </div>
-                <div className="b_single">
-                  <h6>Trip End</h6>
-                  <h5>69915</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="punch">
-          <div className="punch_inner">
-            <div className="top">
-              <div className="left">
-                <h3>Hey {user && user.fullName}!</h3>
-                <h6>{greeting}! Mark your attendance</h6>
-              </div>
-              <div className="right">
-                <img src={user && user.photoURL} alt="" />
-              </div>
-            </div>
-            <div className="body">
-              <CurrentDateTime />
-              {attendanceData && attendanceData.length === 0 ? (
-                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      <img src="/assets/img/hand-pointer.png" alt="" />
-                      <h6>Punch In</h6>
-                    </div>
-                  </div>
-                </div>
-              ) : attendanceData &&
-                attendanceData.length > 0 &&
-                (!attendanceData[0].punchIn ||
-                  attendanceData[0].date !== formattedTodaysDate) ? (
-                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      <img src="/assets/img/hand-pointer.png" alt="" />
-                      <h6>Punch In</h6>
-                    </div>
-                  </div>
-                </div>
-              ) : attendanceData &&
-                attendanceData.length > 0 &&
-                attendanceData[0].date === formattedTodaysDate &&
-                !attendanceData[0].punchOut ? (
                 <div
-                  className="punch_button punchout outer"
-                  onClick={showPunchOutPopup}
+                    className={showPopupPunchOutFlag ? "pop-up-div open" : "pop-up-div"}
                 >
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      <img src="/assets/img/punchouthand.png" alt="" />
-                      <h6>Punch Out</h6>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="punch_button pio_done outer">
-                  <div className="inner_one">
-                    <div className="inner_two">
-                      {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
-                      {/* <h6>Next Punch In</h6> */}
-                      <h6 className="text-center">Next Punch In Tomorrow</h6>
-                      {/* <h6>Tomorrow</h6> */}
-                    </div>
-                  </div>
-                </div>
-              )}
+                    <div>
+                        <p>
+                            {showPopupPunchOutFlag &&
+                                " Are you sure you want to Punch-Out now? "}
+                        </p>
 
-              <div className="punch_detail">
-                <div className="pd_single">
-                  <img src="/assets/img/punchin.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].punchIn
-                        ? attendanceData[0].punchIn
-                        : "--:--"}
+                        {user && user.vehicleStatus && (
+                            <>
+                                <p>
+                                    Trip Start:{" "}
+                                    {attendanceData &&
+                                        attendanceData.length > 0 &&
+                                        attendanceData[0].tripStart}
+                                </p>
+                                <input
+                                    id="id_tripend"
+                                    className="custom-input"
+                                    style={{ paddingRight: "10px" }}
+                                    type="number"
+                                    placeholder="Trip End - Meter Reading"
+                                    maxLength={7}
+                                    onInput={(e) => {
+                                        restrictInput(e, 7);
+                                    }}
+                                    onChange={(e) => setTripEnd(e.target.value)}
+                                    value={
+                                        attendanceData &&
+                                        attendanceData.length > 0 &&
+                                        attendanceData[0].tripEnd
+                                    }
+                                />
+                            </>
+                        )}
+                        <br></br>
+                        <br></br>
+                        <button
+                            onClick={() => handlePunchOutPopup("CONFIRM")}
+                            className="theme_btn btn_red pointer no_icon"
+                            style={{ margin: "0px" }}
+                        >
+                            CONFIRM
+                        </button>
+                        <button
+                            onClick={() => handlePunchOutPopup("CANCEL")}
+                            className="theme_btn btn_fill pointer no_icon"
+                            style={{ margin: "0px" }}
+                        >
+                            CANCEL
+                        </button>
                     </div>
-                  )}
-
-                  <h6>Punch In</h6>
                 </div>
-                <div className="pd_single">
-                  <img src="/assets/img/punchout.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].punchOut
-                        ? attendanceData[0].punchOut
-                        : "--:--"}
-                    </div>
-                  )}
-                  <h6>Punch Out</h6>
-                </div>
-                <div className="pd_single">
-                  <img src="/assets/img/edicon/total_work.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].workHrs
-                        ? attendanceData[0].workHrs
-                        : "--:--"}
-                    </div>
-                  )}
-                  <h6>Hrs Worked</h6>
-                </div>
-                <div className="pd_single">
-                  <img src="/assets/img/edicon/tripstart.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].tripStart
-                        ? attendanceData[0].tripStart
-                        : "--:--"}
-                    </div>
-                  )}
-
-                  <h6>Trip Start</h6>
-                </div>
-                <div className="pd_single">
-                  <img src="/assets/img/edicon/tripend.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].tripEnd
-                        ? attendanceData[0].tripEnd
-                        : "--:--"}
-                    </div>
-                  )}
-                  <h6>Trip End</h6>
-                </div>
-                <div className="pd_single">
-                  <img src="/assets/img/edicon/travel.png" alt="" />
-                  {attendanceData && attendanceData.length === 0 ? (
-                    <div className="data">--:--</div>
-                  ) : (
-                    <div className="data">
-                      {attendanceData &&
-                      attendanceData.length > 0 &&
-                      attendanceData[0].date === formattedTodaysDate &&
-                      attendanceData[0].tripDistance
-                        ? attendanceData[0].tripDistance
-                        : "--:--"}
-                    </div>
-                  )}
-                  <h6>Dist Covered</h6>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+            <div className="top_header_pg pg_bg attendance_pg relative">
+                <div className="attendance_dashboard">
+                    <div className="pg_header">
+                        <h2>Your progress of this week (1st - 7th Feb)</h2>
+                    </div>
+                    <div className="attendance_cards">
+                        <div className="ac_single day">
+                            <h6>Total number of</h6>
+                            <h5>Days</h5>
+                            <h2>05</h2>
+                            <div className="icon">
+                                <div className="icon_inner">
+                                    <img src="/assets/img/edicon/appointment.png" alt="" />
+                                </div>
+                            </div>
+                            <div className="trending">
+                                <div className="inner up">
+                                    <span className="material-symbols-outlined">trending_up</span>
+                                    <div className="value">2.5%</div>
+                                </div>
+                                <p>last week</p>
+                            </div>
+                        </div>
+                        <div className="ac_single hr">
+                            <h6>Total number of</h6>
+                            <h5>Hrs Worked</h5>
+                            <h2>40</h2>
+                            <div className="icon">
+                                <div className="icon_inner">
+                                    <img src="/assets/img/edicon/working-time.png" alt="" />
+                                </div>
+                            </div>
+                            <div className="trending">
+                                <div className="inner down">
+                                    <span className="material-symbols-outlined">
+                                        trending_down
+                                    </span>
+                                    <div className="value">0.5%</div>
+                                </div>
+                                <p>last week</p>
+                            </div>
+                        </div>
+                        <div className="ac_single dist">
+                            <h6>Total number of</h6>
+                            <h5>Distance Covered</h5>
+                            <h2>125</h2>
+                            <div className="icon">
+                                <div className="icon_inner">
+                                    <img src="/assets/img/edicon/distance.png" alt="" />
+                                </div>
+                            </div>
+                            <div className="trending">
+                                <div className="inner up">
+                                    <span className="material-symbols-outlined">trending_up</span>
+                                    <div className="value">2.5%</div>
+                                </div>
+                                <p>last week</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="year_month">
+                        <div className="left">
+                            <h2>Logs</h2>
+                        </div>
+                        <div className="right">
+                            <div className="filters">
+                                <div className="right">
+                                    <div className="icon_dropdown">
+                                        <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                            {months.map((month, index) => (
+                                                <option key={index} value={month}>
+                                                    {month}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {/* <select name="months" id="months">
+                                            <option value="" disabled>
+                                                Select Month
+                                            </option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select> */}
+                                    </div>
+                                    <div className="icon_dropdown">
+                                        <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+                                            {years.map((year) => (
+                                                <option key={year} value={year}>
+                                                    {year}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {/* <select name="year" id="year">
+                                            <option value="">Select Year</option>
+                                            <option value="1">2025</option>
+                                            <option value="2">2024</option>
+                                            <option value="3">2023</option>
+                                            <option value="4">2022</option>
+                                            <option value="5">2021</option>
+                                            <option value="6">2020</option>
+                                        </select> */}
+                                    </div>
+                                    <div className="button_filter diff_views">
+                                        <div
+                                            className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                                                }`}
+                                            onClick={() => handleModeChange("card_view")}
+                                        >
+                                            <span className="material-symbols-outlined">
+                                                calendar_view_month
+                                            </span>
+                                        </div>
+                                        <div
+                                            className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                                                }`}
+                                            onClick={() => handleModeChange("table_view")}
+                                        >
+                                            <span className="material-symbols-outlined">
+                                                view_list
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="previous_punch">
+
+                        {
+                            attendanceData && attendanceData.length > 0 && attendanceData.map((data) => (
+                                <>
+                                    <div className="pp_single">
+                                        <div className="top">
+                                            <div className="left">
+                                                {data.date ? <h3>{data.date.slice(0, 2)}</h3> : ""}
+                                                {data.weekDay ? <h4>{data.weekDay.slice(0, 3)}</h4> : ""}
+                                            </div>
+                                            <div className="right">
+                                                <div className="r_single">
+                                                    <h6> Hrs Worked</h6>
+                                                    {data.workHrs ? <h5>{data.workHrs}</h5> : "--:--"}
+                                                </div>
+                                                <div className="r_single">
+                                                    <h6> Dist Covered</h6>
+                                                    {data.tripDistance ? <h5>{data.tripDistance} KM</h5> : "--:--"}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="bottom">
+                                            <div className="b_single">
+                                                <h6>Punch In</h6>
+                                                {data.punchIn ? <h5>{data.punchIn}</h5> : "--:--"}
+                                            </div>
+                                            <div className="b_single">
+                                                <h6>Punch Out</h6>
+                                                {data.punchOut ? <h5>{data.punchOut}</h5> : "--:--"}
+                                            </div>
+                                            <div className="b_single">
+                                                <h6>Trip Start</h6>
+                                                {data.tripStart ? <h5>{data.tripStart}</h5> : "--:--"}
+                                            </div>
+                                            <div className="b_single">
+                                                <h6>Trip End</h6>
+                                                {data.tripEnd ? <h5>{data.tripEnd}</h5> : "--:--"}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ))
+                        }
+
+
+
+                        {/* Dummy */}
+                        {/* <div className="pp_single">
+                            <div className="top">
+                                <div className="left">
+                                    <h3>21</h3>
+                                    <h4>Tue</h4>
+                                </div>
+                                <div className="right">
+                                    <div className="r_single">
+                                        <h6> Hrs Worked</h6>
+                                        <h5>08 Hr : 25 Min</h5>
+                                    </div>
+                                    <div className="r_single">
+                                        <h6> Dist Covered</h6>
+                                        <h5>25 KM</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bottom">
+                                <div className="b_single">
+                                    <h6>Punch In</h6>
+                                    <h5>06:09 AM</h5>
+                                </div>
+                                <div className="b_single">
+                                    <h6>Punch Out</h6>
+                                    <h5>06:09 PM</h5>
+                                </div>
+                                <div className="b_single">
+                                    <h6>Trip Start</h6>
+                                    <h5>69895</h5>
+                                </div>
+                                <div className="b_single">
+                                    <h6>Trip End</h6>
+                                    <h5>69915</h5>
+                                </div>
+                            </div>
+                        </div> */}
+                    </div>
+                </div>
+
+                {/* Right side punch section */}
+                <div className="punch">
+                    <div className="punch_inner">
+                        <div className="top">
+                            <div className="left">
+                                <h3>Hey {user && user.fullName}!</h3>
+                                <h6>{greeting}! Mark your attendance</h6>
+                            </div>
+                            <div className="right">
+                                <img src={user && user.photoURL} alt="" />
+                            </div>
+                        </div>
+                        <div className="body">
+                            <CurrentDateTime />
+                            {attendanceData && attendanceData.length === 0 ? (
+                                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                                    <div className="inner_one">
+                                        <div className="inner_two">
+                                            <img src="/assets/img/hand-pointer.png" alt="" />
+                                            <h6>Punch In</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : attendanceData &&
+                                attendanceData.length > 0 &&
+                                (!attendanceData[0].punchIn ||
+                                    attendanceData[0].date !== formattedTodaysDate) ? (
+                                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                                    <div className="inner_one">
+                                        <div className="inner_two">
+                                            <img src="/assets/img/hand-pointer.png" alt="" />
+                                            <h6>Punch In</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : attendanceData &&
+                                attendanceData.length > 0 &&
+                                attendanceData[0].date === formattedTodaysDate &&
+                                !attendanceData[0].punchOut ? (
+                                <div
+                                    className="punch_button punchout outer"
+                                    onClick={showPunchOutPopup}
+                                >
+                                    <div className="inner_one">
+                                        <div className="inner_two">
+                                            <img src="/assets/img/punchouthand.png" alt="" />
+                                            <h6>Punch Out</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="punch_button pio_done outer">
+                                    <div className="inner_one">
+                                        <div className="inner_two">
+                                            {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
+                                            {/* <h6>Next Punch In</h6> */}
+                                            <h6 className="text-center">Next Punch In Tomorrow</h6>
+                                            {/* <h6>Tomorrow</h6> */}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="punch_detail">
+                                <div className="pd_single">
+                                    <img src="/assets/img/punchin.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].punchIn
+                                                ? attendanceData[0].punchIn
+                                                : "--:--"}
+                                        </div>
+                                    )}
+
+                                    <h6>Punch In</h6>
+                                </div>
+                                <div className="pd_single">
+                                    <img src="/assets/img/punchout.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].punchOut
+                                                ? attendanceData[0].punchOut
+                                                : "--:--"}
+                                        </div>
+                                    )}
+                                    <h6>Punch Out</h6>
+                                </div>
+                                <div className="pd_single">
+                                    <img src="/assets/img/edicon/total_work.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].workHrs
+                                                ? attendanceData[0].workHrs
+                                                : "--:--"}
+                                        </div>
+                                    )}
+                                    <h6>Hrs Worked</h6>
+                                </div>
+                                <div className="pd_single">
+                                    <img src="/assets/img/edicon/tripstart.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].tripStart
+                                                ? attendanceData[0].tripStart
+                                                : "--:--"}
+                                        </div>
+                                    )}
+
+                                    <h6>Trip Start</h6>
+                                </div>
+                                <div className="pd_single">
+                                    <img src="/assets/img/edicon/tripend.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].tripEnd
+                                                ? attendanceData[0].tripEnd
+                                                : "--:--"}
+                                        </div>
+                                    )}
+                                    <h6>Trip End</h6>
+                                </div>
+                                <div className="pd_single">
+                                    <img src="/assets/img/edicon/travel.png" alt="" />
+                                    {attendanceData && attendanceData.length === 0 ? (
+                                        <div className="data">--:--</div>
+                                    ) : (
+                                        <div className="data">
+                                            {attendanceData &&
+                                                attendanceData.length > 0 &&
+                                                attendanceData[0].date === formattedTodaysDate &&
+                                                attendanceData[0].tripDistance
+                                                ? attendanceData[0].tripDistance
+                                                : "--:--"}
+                                        </div>
+                                    )}
+                                    <h6>Dist Covered</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default PGAttendance;
