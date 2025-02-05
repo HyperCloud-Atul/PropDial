@@ -44,9 +44,9 @@
         box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
         background: var(--white-color);
         border-radius: 15px;
-        padding: 15px;
+        padding: 15px 74px 6px 15px;
         position: relative;
-        padding-bottom: 6px;
+      
         h6 {
           font-size: 14px;
           color: var(--theme-grey);
@@ -283,7 +283,13 @@
     top: 68px;
     right: 0;
     padding: 22px;
-    overflow: hidden;
+    overflow-y: auto;
+    display: flex;    
+    align-items: center;
+    justify-content: center;
+    .punch_inner{
+      width: 100%;
+    }
     &::after {
       content: "";
       position: absolute;
@@ -325,7 +331,7 @@
       }
     }
     .date_time {
-      margin: 30px 0px;
+      margin: 15px 0px;
       text-align: center;
       h3 {
         font-size: 36px;
@@ -429,29 +435,54 @@
     }
 
     .punch_detail {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
       gap: 15px;
-      margin-top: 30px;
+      margin-top: 15px;
       .pd_single {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 1px;
         align-items: center;
         justify-content: center;
+        background: #f2f2f2;
+    padding: 6px;
+    border-radius: 12px;
         .data {
-          font-size: 22px;
+          font-size: 18px;
           font-weight: 600;
         }
         h6 {
           font-size: 14px;
           color: var(--theme-grey);
+          font-weight: 400;
         }
         img {
-          height: 45px;
+          height: 32px;
           width: auto;
         }
       }
     }
   }
 }
+
+
+/* For Webkit-based browsers (Chrome, Edge, Safari) */
+.punch::-webkit-scrollbar {
+  width: 1px; /* Scrollbar width */
+}
+
+.punch::-webkit-scrollbar-thumb {
+  background: var(--theme-blue); /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded corners for thumb */
+}
+
+.punch::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-blue); /* Thumb color on hover */
+}
+
+.punch::-webkit-scrollbar-track {
+  background: var(--theme-grey); /* Scrollbar track color */
+}
+
+

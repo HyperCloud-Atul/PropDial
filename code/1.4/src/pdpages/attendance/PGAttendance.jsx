@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
@@ -70,7 +71,7 @@ const calculateTimeDifference = (punchIn, punchOut) => {
   const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
   const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-  return `${diffHrs} hrs ${diffMins} mins`;
+  return `${diffHrs} hr ${diffMins} min`;
 };
 
 const PGAttendance = () => {
@@ -110,28 +111,23 @@ const PGAttendance = () => {
   console.log("attendanceData: ", attendanceData);
 
   //Popup Flags
-  const [showPopupPunchInFlag, setShowPopupPunchInFlag] = useState(false);
+  const [showPunchInPopup, setShowPunchInPopup] = useState(false);
   // const [showPopupFlag, setShowPopupFlag] = useState(false);
   const [popupReturn, setPopupReturn] = useState(false);
   const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
   // const [popupReturn, setPopupReturn] = useState(false);
 
-  const showPunchInPopup = () => {
-    // e.preventDefault();
-    setShowPopupPunchInFlag(true);
-    setPopupReturn(false);
+  const handelShowPunchInPopup = () => {    
+    setShowPunchInPopup(true);  
   };
 
   const handlePunchInPopup = (action) => {
-    // console.log('Popup Action:', action)
-    if (action === "CANCEL") {
-      setPopupReturn(false);
-    }
+   
     if (action === "CONFIRM") {
       // setPopupReturn(true)
       handlePunchIn();
     }
-    setShowPopupPunchInFlag(false);
+    setShowPunchInPopup(false);
   };
 
   const showPunchOutPopup = () => {
@@ -435,17 +431,25 @@ const PGAttendance = () => {
             </div> */}
       {/* Pupup */}
       <div>
-        <div
-          className={showPopupPunchInFlag ? "pop-up-div open" : "pop-up-div"}
-        >
-          <div>
-            <p>
-              {showPopupPunchInFlag &&
-                " Are you sure you want to Punch-In now? "}
-            </p>
-            <br />
-
-            {user && user.vehicleStatus && (
+      <Modal
+                  show={showPunchInPopup}
+                  onHide={() => setShowPunchInPopup(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{
+                      paddingBottom: "0px",
+                      border: "none",
+                    }}
+                  >
+                    <h5>
+                    Are you sure you want to Punch-In now?
+                    </h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center">                
+                   {user && user.vehicleStatus && (
               <input
                 id="id_tripstart"
                 className="custom-input"
@@ -464,25 +468,46 @@ const PGAttendance = () => {
                 }
               />
             )}
-
-            <br></br>
-            <br></br>
-            <button
-              onClick={() => handlePunchInPopup("CONFIRM")}
-              className="theme_btn btn_red pointer no_icon"
-              style={{ margin: "0 0px" }}
-            >
-              CONFIRM
-            </button>
-            <button
-              onClick={() => handlePunchInPopup("CANCEL")}
-              className="theme_btn btn_fill pointer no_icon"
-              style={{ margin: "0 0px" }}
-            >
-              CANCEL
-            </button>
-          </div>
-        </div>
+                    </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{
+                      border: "none",
+                      gap: "15px",
+                    }}
+                  >
+                    {/* {errorForNoSelectReasonMessage && (
+                      <div
+                        style={{
+                          fontSize: "15px",
+                          padding: "4px 15px",
+                          borderRadius: "8px",
+                          background: "#ffe9e9",
+                          color: "red",
+                          width: "fit-content",
+                          margin: "auto",
+                        }}
+                      >
+                        {errorForNoSelectReasonMessage}
+                      </div>
+                    )} */}
+                    <div
+                      className="done_btn"
+                      onClick={() => handlePunchInPopup("CONFIRM")}
+                      // disabled={loading}
+                    >
+                      {/* {loading ? "Saving..." : "Yes, Update"} */}
+                      Confirm
+                    </div>
+                    <div
+                      className="cancel_btn"
+                      onClick={() => setShowPunchInPopup(false)}
+                    >
+                      Cancel
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+    
         <div
           className={showPopupPunchOutFlag ? "pop-up-div open" : "pop-up-div"}
         >
@@ -554,13 +579,12 @@ const PGAttendance = () => {
                 </div>
               </div>
               <div className="trending">
-  <div className="inner up">
-    <span className="material-symbols-outlined">trending_up</span>
-    <div className="value">2.5%</div>
-  </div>
-  <p>last week</p>
-</div>
-
+                <div className="inner up">
+                  <span className="material-symbols-outlined">trending_up</span>
+                  <div className="value">2.5%</div>
+                </div>
+                <p>last week</p>
+              </div>
             </div>
             <div className="ac_single hr">
               <h6>Total number of</h6>
@@ -572,12 +596,14 @@ const PGAttendance = () => {
                 </div>
               </div>
               <div className="trending">
-  <div className="inner down">
-    <span className="material-symbols-outlined">trending_down</span>
-    <div className="value">0.5%</div>
-  </div>
-  <p>last week</p>
-</div>
+                <div className="inner down">
+                  <span className="material-symbols-outlined">
+                    trending_down
+                  </span>
+                  <div className="value">0.5%</div>
+                </div>
+                <p>last week</p>
+              </div>
             </div>
             <div className="ac_single dist">
               <h6>Total number of</h6>
@@ -589,12 +615,12 @@ const PGAttendance = () => {
                 </div>
               </div>
               <div className="trending">
-  <div className="inner up">
-    <span className="material-symbols-outlined">trending_up</span>
-    <div className="value">2.5%</div>
-  </div>
-  <p>last week</p>
-</div>
+                <div className="inner up">
+                  <span className="material-symbols-outlined">trending_up</span>
+                  <div className="value">2.5%</div>
+                </div>
+                <p>last week</p>
+              </div>
             </div>
           </div>
           <div className="year_month">
@@ -733,108 +759,169 @@ const PGAttendance = () => {
                 </div>
               </div>
             </div>
-           
           </div>
         </div>
         <div className="punch">
-          <div className="top">
-            <div className="left">
-              <h3>Hey {user && user.fullName}!</h3>
-              <h6>{greeting}! Mark your attendance</h6>
+          <div className="punch_inner">
+            <div className="top">
+              <div className="left">
+                <h3>Hey {user && user.fullName}!</h3>
+                <h6>{greeting}! Mark your attendance</h6>
+              </div>
+              <div className="right">
+                <img src={user && user.photoURL} alt="" />
+              </div>
             </div>
-            <div className="right">
-              <img src={user && user.photoURL} alt="" />
-            </div>
-          </div>
-          <div className="body">
-            <CurrentDateTime />
-            {attendanceData && attendanceData.length === 0 ? (
-              <div className="punch_button outer" onClick={showPunchInPopup}>
-                <div className="inner_one">
-                  <div className="inner_two">
-                    <img src="/assets/img/hand-pointer.png" alt="" />
-                    <h6>Punch In</h6>
+            <div className="body">
+              <CurrentDateTime />
+              {attendanceData && attendanceData.length === 0 ? (
+                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      <img src="/assets/img/hand-pointer.png" alt="" />
+                      <h6>Punch In</h6>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : attendanceData &&
-              attendanceData.length > 0 &&
-              (!attendanceData[0].punchIn ||
-                attendanceData[0].date !== formattedTodaysDate) ? (
-              <div className="punch_button outer" onClick={showPunchInPopup}>
-                <div className="inner_one">
-                  <div className="inner_two">
-                    <img src="/assets/img/hand-pointer.png" alt="" />
-                    <h6>Punch In</h6>
+              ) : attendanceData &&
+                attendanceData.length > 0 &&
+                (!attendanceData[0].punchIn ||
+                  attendanceData[0].date !== formattedTodaysDate) ? (
+                <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      <img src="/assets/img/hand-pointer.png" alt="" />
+                      <h6>Punch In</h6>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : attendanceData &&
-              attendanceData.length > 0 &&
-              attendanceData[0].date === formattedTodaysDate &&
-              !attendanceData[0].punchOut ? (
-              <div
-                className="punch_button punchout outer"
-                onClick={showPunchOutPopup}
-              >
-                <div className="inner_one">
-                  <div className="inner_two">
-                    <img src="/assets/img/punchouthand.png" alt="" />
-                    <h6>Punch Out</h6>
+              ) : attendanceData &&
+                attendanceData.length > 0 &&
+                attendanceData[0].date === formattedTodaysDate &&
+                !attendanceData[0].punchOut ? (
+                <div
+                  className="punch_button punchout outer"
+                  onClick={showPunchOutPopup}
+                >
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      <img src="/assets/img/punchouthand.png" alt="" />
+                      <h6>Punch Out</h6>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="punch_button pio_done outer">
-                <div className="inner_one">
-                  <div className="inner_two">
-                    {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
-                    {/* <h6>Next Punch In</h6> */}
-                    <h6 className="text-center">Next Punch In Tomorrow</h6>
-                    {/* <h6>Tomorrow</h6> */}
+              ) : (
+                <div className="punch_button pio_done outer">
+                  <div className="inner_one">
+                    <div className="inner_two">
+                      {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
+                      {/* <h6>Next Punch In</h6> */}
+                      <h6 className="text-center">Next Punch In Tomorrow</h6>
+                      {/* <h6>Tomorrow</h6> */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div className="punch_detail">
-              <div className="pd_single">
-                <img src="/assets/img/punchin.png" alt="" />
-                {attendanceData && attendanceData.length === 0 ? (
-                  <div className="data">--:--</div>
-                ) : (
-                  <div className="data">
-                    {attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData[0].date === formattedTodaysDate &&
-                    attendanceData[0].punchIn
-                      ? attendanceData[0].punchIn
-                      : "--:--"}
-                  </div>
-                )}
+              <div className="punch_detail">
+                <div className="pd_single">
+                  <img src="/assets/img/punchin.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].punchIn
+                        ? attendanceData[0].punchIn
+                        : "--:--"}
+                    </div>
+                  )}
 
-                <h6>Punch In</h6>
-              </div>
-              <div className="pd_single">
-                <img src="/assets/img/punchout.png" alt="" />
-                {attendanceData && attendanceData.length === 0 ? (
-                  <div className="data">--:--</div>
-                ) : (
-                  <div className="data">
-                    {attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData[0].date === formattedTodaysDate &&
-                    attendanceData[0].punchOut
-                      ? attendanceData[0].punchOut
-                      : "--:--"}
-                  </div>
-                )}
-                <h6>Punch Out</h6>
-              </div>
-              <div className="pd_single">
-                <img src="/assets/img/punchin.png" alt="" />
-                <div className="data">--:--</div>
-                <h6>Reading</h6>
+                  <h6>Punch In</h6>
+                </div>
+                <div className="pd_single">
+                  <img src="/assets/img/punchout.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].punchOut
+                        ? attendanceData[0].punchOut
+                        : "--:--"}
+                    </div>
+                  )}
+                  <h6>Punch Out</h6>
+                </div>
+                <div className="pd_single">
+                  <img src="/assets/img/edicon/total_work.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].workHrs
+                        ? attendanceData[0].workHrs
+                        : "--:--"}
+                    </div>
+                  )}
+                  <h6>Hrs Worked</h6>
+                </div>
+                <div className="pd_single">
+                  <img src="/assets/img/edicon/tripstart.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].tripStart
+                        ? attendanceData[0].tripStart
+                        : "--:--"}
+                    </div>
+                  )}
+
+                  <h6>Trip Start</h6>
+                </div>
+                <div className="pd_single">
+                  <img src="/assets/img/edicon/tripend.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].tripEnd
+                        ? attendanceData[0].tripEnd
+                        : "--:--"}
+                    </div>
+                  )}
+                  <h6>Trip End</h6>
+                </div>
+                <div className="pd_single">
+                  <img src="/assets/img/edicon/travel.png" alt="" />
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <div className="data">--:--</div>
+                  ) : (
+                    <div className="data">
+                      {attendanceData &&
+                      attendanceData.length > 0 &&
+                      attendanceData[0].date === formattedTodaysDate &&
+                      attendanceData[0].tripDistance
+                        ? attendanceData[0].tripDistance
+                        : "--:--"}
+                    </div>
+                  )}
+                  <h6>Dist Covered</h6>
+                </div>
               </div>
             </div>
           </div>
