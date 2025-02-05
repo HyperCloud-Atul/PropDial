@@ -248,21 +248,21 @@ const PGAttendance = () => {
             const tripStart = record.docs[0].data().tripStart;
 
             //Validation Start Trip Reading should not be greater than End Trip Reading
-            if (Number(tripEnd) <= Number(tripStart)) {
+            if (Number(tripEndTemp) <= Number(topRecord.tripStart)) {
                 alert("Trip End Reading should not be less than Trip Start Reading!");
                 return;
             }
-            const tripDistance = tripEnd - tripStart;
+            const tripDistance = Number(tripEndTemp) - Number(topRecord.tripStart);
             // console.log("record.docs[0]: ", record.docs[0].data())
 
             // Update the punch-out time
             const data = {
                 punchOut: formattedPunchoutTime,
                 workHrs: calculateTimeDifference(
-                    record.docs[0].data().punchIn,
+                    topRecord.punchIn,
                     formattedPunchoutTime
                 ),
-                tripEnd,
+                tripEndTemp,
                 tripDistance,
             };
 
