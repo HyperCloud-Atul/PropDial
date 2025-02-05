@@ -329,6 +329,7 @@ const PGAttendance = () => {
     // Fetch Top latest Record
     //Fetch Second Last Record
     const [topRecord, setTopRecord] = useState(null);
+    const [tripEndTemp, setTripEndTemp] = useState(null);
 
     useEffect(() => {
         const fetchTopRecord = async () => {
@@ -349,6 +350,8 @@ const PGAttendance = () => {
 
                 const latestDoc = latestSnapshot.docs[0].data();
                 console.log("latest Record: ", latestDoc)
+                setTripEndTemp(latestDoc.tripEnd ? latestDoc.tripEnd : latestDoc.tripStart)
+                // latestDoc ={...}
                 setTopRecord(latestDoc)
 
             } catch (error) {
@@ -550,6 +553,7 @@ const PGAttendance = () => {
                                 maxLength={7}
                                 onInput={(e) => {
                                     restrictInput(e, 7);
+                                    // e.target.value = "45"
                                 }}
                                 onChange={(e) => setTripStart(e.target.value)}
                                 value={
@@ -612,9 +616,8 @@ const PGAttendance = () => {
                             <>
                                 <p>
                                     Trip Start:{" "}
-                                    {attendanceData &&
-                                        attendanceData.length > 0 &&
-                                        attendanceData[0].tripStart}
+                                    {topRecord &&
+                                        topRecord.tripStart}
                                 </p>
                                 <input
                                     id="id_tripend"
@@ -625,14 +628,21 @@ const PGAttendance = () => {
                                     maxLength={7}
                                     onInput={(e) => {
                                         restrictInput(e, 7);
+
+
                                     }}
-                                    onChange={(e) => setTripEnd(e.target.value)}
+                                    // onChange={(e) => setTripEnd(e.target.value)}
+                                    onChange={(e) => setTripEndTemp(e.target.value)}
+                                    // value={
+                                    //     topRecord && topRecord.tripEnd ? topRecord.tripEnd : topRecord && topRecord.tripStart ? topRecord.tripStart : ""
+                                    // }
                                     value={
-                                        attendanceData &&
-                                        attendanceData.length > 0 &&
-                                        attendanceData[0].tripEnd
+                                        tripEndTemp
                                     }
                                 />
+                                <p>
+                                    Distance: {Number(tripEndTemp) - Number(topRecord && topRecord.tripStart)} KM
+                                </p>
                             </>
                         )}
                         <br></br>
@@ -641,6 +651,7 @@ const PGAttendance = () => {
                             onClick={() => handlePunchOutPopup("CONFIRM")}
                             className="theme_btn btn_red pointer no_icon"
                             style={{ margin: "0px" }}
+                            disabled={(Number(topRecord && topRecord.tripStart) >= Number(tripEndTemp)) ? true : false}
                         >
                             CONFIRM
                         </button>
@@ -733,23 +744,6 @@ const PGAttendance = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                        {/* <select name="months" id="months">
-                                            <option value="" disabled>
-                                                Select Month
-                                            </option>
-                                            <option value="1">January</option>
-                                            <option value="2">February</option>
-                                            <option value="3">March</option>
-                                            <option value="4">April</option>
-                                            <option value="5">May</option>
-                                            <option value="6">June</option>
-                                            <option value="7">July</option>
-                                            <option value="8">August</option>
-                                            <option value="9">September</option>
-                                            <option value="10">October</option>
-                                            <option value="11">November</option>
-                                            <option value="12">December</option>
-                                        </select> */}
                                     </div>
                                     <div className="icon_dropdown">
                                         <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
@@ -759,15 +753,6 @@ const PGAttendance = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                        {/* <select name="year" id="year">
-                                            <option value="">Select Year</option>
-                                            <option value="1">2025</option>
-                                            <option value="2">2024</option>
-                                            <option value="3">2023</option>
-                                            <option value="4">2022</option>
-                                            <option value="5">2021</option>
-                                            <option value="6">2020</option>
-                                        </select> */}
                                     </div>
                                     <div className="button_filter diff_views">
                                         <div
@@ -894,7 +879,7 @@ const PGAttendance = () => {
                         </div>
                         <div className="body">
                             <CurrentDateTime />
-                            {attendanceData && attendanceData.length === 0 ? (
+                            {topRecord && topRecord.length === 0 ? (
                                 <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                     <div className="inner_one">
                                         <div className="inner_two">
