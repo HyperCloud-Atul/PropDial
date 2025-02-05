@@ -749,7 +749,7 @@ const Stage2 = (props) => {
     e.preventDefault();
     setFormError(null);
     let errorFlag = false;
-    let errorMsg = "Please select ";
+    let errorMsg = "Please resolve ERRORs before proceeding...";
 
     if (
       propertyDetails.PropertyType.toUpperCase() === "SELECT PROPERTY TYPE" ||
@@ -791,9 +791,9 @@ const Stage2 = (props) => {
         //   propertyDetails.SuperArea === "0" || propertyDetails.CarpetArea === "0")
         (propertyDetails.CarpetArea === "" || propertyDetails.CarpetArea === "0") //Carpet are is mandatory
       ) {
-        if (errorMsg === "Please select ")
-          errorMsg = "Carpet Area is mandatory";
-        else errorMsg = errorMsg + ", Carpet Area is mandatory";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Carpet Area is mandatory";
+        // else errorMsg = errorMsg + ", Carpet Area is mandatory";
         errorFlag = true;
       }
     }
@@ -807,31 +807,31 @@ const Stage2 = (props) => {
             errorMsg = "Enter Super Area or Carpet Area or both";
           else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
         } else {
-          if (errorMsg === "Please select ")
-            errorMsg = "Enter Super Area or Carpet Area or both";
-          else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
+          // if (errorMsg === "Please select ")
+          //   errorMsg = "Enter Super Area or Carpet Area or both";
+          // else errorMsg = errorMsg + ", Enter Super Area or Carpet Area or both";
         }
         errorFlag = true;
       }
-      else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
-        Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
-        if (errorMsg === "Please select ") {
-          errorMsg = "Carpet Area should be less than Super Area";
-        } else {
-          errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
-        }
-        errorFlag = true;
-      }
+      // else if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
+      //   Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
+      //   // if (errorMsg === "Please select ") {
+      //   //   errorMsg = "Carpet Area should be less than Super Area";
+      //   // } else {
+      //   //   errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+      //   // }
+      //   errorFlag = true;
+      // }
 
     }
 
     if ((propertyDetails.SuperArea !== "" && propertyDetails.CarpetArea !== "") &&
       Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) {
-      if (errorMsg === "Please select ") {
-        errorMsg = "Carpet Area should be less than Super Area";
-      } else {
-        errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
-      }
+      // if (errorMsg === "Please select ") {
+      //   errorMsg = "Carpet Area should be less than Super Area";
+      // } else {
+      //   errorMsg = errorMsg + ", Carpet Area should be less than Super Area";
+      // }
       errorFlag = true;
     }
 
@@ -839,9 +839,9 @@ const Stage2 = (props) => {
     if (
       (propertyDetails.SuperAreaUnit === "" && propertyDetails.CarpetAreaUnit === "")
     ) {
-      if (errorMsg === "Please select ")
-        errorMsg = "Super Area / Carpet Area Unit";
-      else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
+      // if (errorMsg === "Please select ")
+      //   errorMsg = "Super Area / Carpet Area Unit";
+      // else errorMsg = errorMsg + ", Select Super Area / Carpet Area Unit";
       errorFlag = true;
     }
 
@@ -849,51 +849,51 @@ const Stage2 = (props) => {
 
 
     //EV Charging Type
-    if (
-      propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
-    ) {
-      if (errorMsg === "Please select ")
-        errorMsg = "EV Charging Type";
-      else errorMsg = errorMsg + ", EV Charging Type";
-      errorFlag = true;
-    }
+    // if (
+    //   propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
+    // ) {
+    //   if (errorMsg === "Please select ")
+    //     errorMsg = "EV Charging Type";
+    //   else errorMsg = errorMsg + ", EV Charging Type";
+    //   errorFlag = true;
+    // }
 
 
     //Plot - Field Validations
     if (propertyDetails && propertyDetails.Category === 'Plot') {
       //Road Width Validation
       if (propertyDetails.RoadWidth === "" || propertyDetails.RoadWidth === "0") {
-        if (errorMsg === "Please select ")
-          errorMsg = "Enter Road Width";
-        else errorMsg = errorMsg + ", Enter Road Width";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Enter Road Width";
+        // else errorMsg = errorMsg + ", Enter Road Width";
         errorFlag = true;
       }
 
       if (propertyDetails.RoadWidthUnit === "") {
-        if (errorMsg === "Please select ")
-          errorMsg = "Enter Road Width Unit";
-        else errorMsg = errorMsg + ", Enter Road Width Unit";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Enter Road Width Unit";
+        // else errorMsg = errorMsg + ", Enter Road Width Unit";
         errorFlag = true;
       }
 
       if (propertyDetails.isCornerSidePlot === "") {
-        if (errorMsg === "Please select ")
-          errorMsg = "Select Corner Side Plot";
-        else errorMsg = errorMsg + ", Select Corner Side Plot";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Select Corner Side Plot";
+        // else errorMsg = errorMsg + ", Select Corner Side Plot";
         errorFlag = true;
       }
 
       if (propertyDetails.IsParkFacingPlot === "") {
-        if (errorMsg === "Please select ")
-          errorMsg = "Select Park Facing Plot";
-        else errorMsg = errorMsg + ", Select Park Facing Plot";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Select Park Facing Plot";
+        // else errorMsg = errorMsg + ", Select Park Facing Plot";
         errorFlag = true;
       }
 
       if (propertyDetails.GatedArea === "") {
-        if (errorMsg === "Please select ")
-          errorMsg = "Select Gated Community";
-        else errorMsg = errorMsg + ", Select Gated Community";
+        // if (errorMsg === "Please select ")
+        //   errorMsg = "Select Gated Community";
+        // else errorMsg = errorMsg + ", Select Gated Community";
         errorFlag = true;
       }
 
@@ -4726,8 +4726,8 @@ const Stage2 = (props) => {
               </div>
               <div>
                 {(propertyDetails.Category === "Plot") ? <div className="field_error">Please enter Area & Unit</div> :
-                  (propertyDetails.Category === "Residential" && (propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "" && propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> :
-                    (propertyDetails.Category === "Commercial") ? <div className="field_error">Please enter Super Area & Carpet Area both and Unit</div> : ""}
+                  (propertyDetails.Category === "Residential" && ((propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> : ((propertyDetails.Category === "Residential" || propertyDetails.Category === "Commercial") && (Number(propertyDetails.SuperArea) < Number(propertyDetails.CarpetArea))) ? <div className="field_error">Super Area should be greater than Carpet Area  </div> :
+                    (propertyDetails.Category === "Commercial" && (propertyDetails.CarpetArea === "" || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Carpet Area & Unit is mandatory</div> : ""}
               </div>
             </div>
 
@@ -4736,189 +4736,196 @@ const Stage2 = (props) => {
           {/* Road Width */}
           {propertyDetails && propertyDetails.Category === 'Plot' &&
             <div className="col-md-4">
-              <div className="form_field st-2 label_top">
-                <label htmlFor="">Road Width</label>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <div style={{ width: "100%", padding: "5px 0 " }}>
-                    <input
-                      id="id_roadWidth"
-                      className="custom-input"
-                      style={{ paddingRight: "10px" }}
-                      type="text"
-                      placeholder="Road Width"
-                      maxLength={2}
-                      onInput={(e) => {
-                        restrictInput(e, 2);
+              <div>
+                <div className="form_field st-2 label_top">
+                  <label htmlFor="">Road Width</label>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div style={{ width: "100%", padding: "5px 0 " }}>
+                      <input
+                        id="id_roadWidth"
+                        className="custom-input"
+                        style={{ paddingRight: "10px" }}
+                        type="text"
+                        placeholder="Road Width"
+                        maxLength={2}
+                        onInput={(e) => {
+                          restrictInput(e, 2);
+                        }}
+                        onChange={(e) =>
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            RoadWidth: e.target.value,
+                          })
+                        }
+                        value={propertyDetails && propertyDetails.RoadWidth}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ width: "100%", padding: "5px 0" }}>
+                    <div
+                      className="radio_group"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        width: "100%",
                       }}
-                      onChange={(e) =>
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          RoadWidth: e.target.value,
-                        })
-                      }
-                      value={propertyDetails && propertyDetails.RoadWidth}
-                    />
+                    >
+                      <div
+                        className="radio_group_single"
+                        style={{ padding: "5px 0", width: "100%" }}
+                      >
+                        <div
+                          className={
+                            propertyDetails.RoadWidthUnit === "Feet"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="roadwidth_Feet"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                RoadWidthUnit: "Feet",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="roadwidth_Feet"
+                            style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                          >
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6>Feet</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        className="radio_group_single"
+                        style={{ padding: "5px 0", width: "100%" }}
+                      >
+                        <div
+                          className={
+                            propertyDetails.RoadWidthUnit === "Yard"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="roadwidth_Yard"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                RoadWidthUnit: "Yard",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="roadwidth_Yard"
+                            style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                          >
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6>Yard</h6>
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        className="radio_group_single"
+                        style={{ padding: "5px 0", width: "100%" }}
+                      >
+                        <div
+                          className={
+                            propertyDetails.RoadWidthUnit === "Meter"
+                              ? "custom_radio_button radiochecked"
+                              : "custom_radio_button"
+                          }
+                        >
+                          <input
+                            type="checkbox"
+                            id="roadwidth_Meter"
+                            onClick={(e) => {
+                              setPropertyDetails({
+                                ...propertyDetails,
+                                RoadWidthUnit: "Meter",
+                              });
+                            }}
+                          />
+                          <label
+                            htmlFor="roadwidth_Meter"
+                            style={{ padding: "6px 0 10px 22px", height: "30px" }}
+                          >
+                            <div className="radio_icon">
+                              <span
+                                className="material-symbols-outlined add"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                add
+                              </span>
+                              <span
+                                className="material-symbols-outlined check"
+                                style={{
+                                  fontSize: "1.2rem",
+                                  transform: "translateX(-3px)",
+                                }}
+                              >
+                                done
+                              </span>
+                            </div>
+                            <h6>Meter</h6>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {(propertyDetails.RoadWidth === "" || propertyDetails.RoadWidth === "0" || propertyDetails.RoadWidthUnit === "") ? <div className="field_error">Please enter Road Width & Unit</div> : ""}
                   </div>
                 </div>
 
-                <div style={{ width: "100%", padding: "5px 0" }}>
-                  <div
-                    className="radio_group"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                    }}
-                  >
-                    <div
-                      className="radio_group_single"
-                      style={{ padding: "5px 0", width: "100%" }}
-                    >
-                      <div
-                        className={
-                          propertyDetails.RoadWidthUnit === "Feet"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="roadwidth_Feet"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              RoadWidthUnit: "Feet",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="roadwidth_Feet"
-                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
-                        >
-                          <div className="radio_icon">
-                            <span
-                              className="material-symbols-outlined add"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              add
-                            </span>
-                            <span
-                              className="material-symbols-outlined check"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              done
-                            </span>
-                          </div>
-                          <h6>Feet</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="radio_group_single"
-                      style={{ padding: "5px 0", width: "100%" }}
-                    >
-                      <div
-                        className={
-                          propertyDetails.RoadWidthUnit === "Yard"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="roadwidth_Yard"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              RoadWidthUnit: "Yard",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="roadwidth_Yard"
-                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
-                        >
-                          <div className="radio_icon">
-                            <span
-                              className="material-symbols-outlined add"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              add
-                            </span>
-                            <span
-                              className="material-symbols-outlined check"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              done
-                            </span>
-                          </div>
-                          <h6>Yard</h6>
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      className="radio_group_single"
-                      style={{ padding: "5px 0", width: "100%" }}
-                    >
-                      <div
-                        className={
-                          propertyDetails.RoadWidthUnit === "Meter"
-                            ? "custom_radio_button radiochecked"
-                            : "custom_radio_button"
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          id="roadwidth_Meter"
-                          onClick={(e) => {
-                            setPropertyDetails({
-                              ...propertyDetails,
-                              RoadWidthUnit: "Meter",
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor="roadwidth_Meter"
-                          style={{ padding: "6px 0 10px 22px", height: "30px" }}
-                        >
-                          <div className="radio_icon">
-                            <span
-                              className="material-symbols-outlined add"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              add
-                            </span>
-                            <span
-                              className="material-symbols-outlined check"
-                              style={{
-                                fontSize: "1.2rem",
-                                transform: "translateX(-3px)",
-                              }}
-                            >
-                              done
-                            </span>
-                          </div>
-                          <h6>Meter</h6>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           }
@@ -5571,6 +5578,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
               </div>
+              {(propertyDetails.IsCornerSidePlot === "") ? <div className="field_error">Is this corner side plot? </div> : ""}
             </div>
           </div>}
 
@@ -5651,6 +5659,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
               </div>
+              {(propertyDetails.IsParkFacingPlot === "") ? <div className="field_error">Is this park facing plot? </div> : ""}
             </div>
           </div>}
 
@@ -5731,6 +5740,7 @@ const Stage2 = (props) => {
                   </div>
                 </div>
               </div>
+              {(propertyDetails.GatedArea === "") ? <div className="field_error">Is this gated complex? </div> : ""}
             </div>
           </div>}
 
