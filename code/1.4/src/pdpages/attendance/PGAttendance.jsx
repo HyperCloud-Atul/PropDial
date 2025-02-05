@@ -27,6 +27,10 @@ const days = [
     "Friday",
     "Saturday",
 ];
+const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
 //Restrict to Input
 function restrictInput(event, maxLength) {
     // Get the value entered in the input field
@@ -74,10 +78,7 @@ const calculateTimeDifference = (punchIn, punchOut) => {
     return `${diffHrs} hr ${diffMins} min`;
 };
 
-const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-];
+
 
 const PGAttendance = () => {
     const navigate = useNavigate();
@@ -111,15 +112,20 @@ const PGAttendance = () => {
     const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
         "attendance-propdial"
     );
-    const { documents: attendanceData, errors: attendanceDataError } =
-        useCollection(
-            "attendance-propdial",
-            ["userId", "==", user.uid],
-            ["date", "desc"],
-            ["5"]
-        );
 
-    console.log("attendanceData: ", attendanceData);
+
+
+    // const { documents: attendanceData, errors: attendanceDataError } =
+    //     useCollection(
+    //         "attendance-propdial",
+    //         ["userId", "==", user.uid],
+    //         ["date", "desc"],
+    //         ["5"]
+    //     );
+
+    // console.log("attendanceData: ", attendanceData);
+
+    const [attendanceData, setCurrentMonthRecords] = useState();
 
     //Popup Flags
     const [showPunchInPopup, setShowPunchInPopup] = useState(false);
@@ -174,7 +180,10 @@ const PGAttendance = () => {
 
         setGreeting(getGreeting());
 
-        lastFiveRecords();
+        const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
+        console.log("currentMonthRecord: ",)
+
+
 
         // Update the time every second
         // const timer = setInterval(() => {
@@ -266,7 +275,43 @@ const PGAttendance = () => {
         }
     };
 
+
+    const fetchSelectedMonthRecords = async (selmonth) => {
+        setSelectedMonth(selmonth)
+        console.log("selectedMonth: ", selectedMonth)
+        // Get first and last day of the current month
+        const now = new Date();
+        console.log("Month: ", now.getMonth())
+
+        const selectedMonthIndex = months.indexOf(selmonth);
+
+        // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+        const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
+        // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+        const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
+
+        try {
+            const querySnapshot = await projectFirestore
+                .collection("attendance-propdial")
+                .where("userId", "==", user.uid)
+                .where("createdAt", ">=", firstDay)
+                .where("createdAt", "<=", lastDay)
+                .orderBy("createdAt", "desc")
+                // .limit(2)
+                .get();
+
+            const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            console.log("Current Month Data:", data);
+            setCurrentMonthRecords(data)
+
+            return data;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
     const lastFiveRecords = async () => {
+
         // Find the punch-in record for today
         const record = await projectFirestore
             .collection("attendance-propdial")
@@ -275,10 +320,45 @@ const PGAttendance = () => {
             .limit(5)
             .get();
 
-        // console.log("record: ", record.docs[0].data())
+        console.log("record: ", record.docs[0].data())
 
-        return record.docs;
+        // return record.docs;
+        return record;
     };
+
+    // Fetch Top latest Record
+    //Fetch Second Last Record
+    const [topRecord, setTopRecord] = useState(null);
+
+    useEffect(() => {
+        const fetchTopRecord = async () => {
+            try {
+                // Step 1: Get the latest record
+                const latestRecordRef = projectFirestore
+                    .collection("attendance-propdial")
+                    .where("userId", "==", user.uid)
+                    .orderBy("createdAt", "desc")
+                    .limit(1);
+
+                const latestSnapshot = await latestRecordRef.get();
+
+                if (latestSnapshot.empty) {
+                    console.log("No records found");
+                    return;
+                }
+
+                const latestDoc = latestSnapshot.docs[0].data();
+                console.log("latest Record: ", latestDoc)
+                setTopRecord(latestDoc)
+
+            } catch (error) {
+                console.error("Error fetching second last record:", error);
+            }
+        };
+
+        fetchTopRecord();
+    }, [user.id]);
+
 
     //Fetch Second Last Record
     const [record, setRecord] = useState(null);
@@ -643,7 +723,10 @@ const PGAttendance = () => {
                             <div className="filters">
                                 <div className="right">
                                     <div className="icon_dropdown">
-                                        <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+                                        <select value={selectedMonth}
+                                            // onChange={(e) => setSelectedMonth(e.target.value)}
+                                            onChange={(e) => fetchSelectedMonthRecords(e.target.value)}
+                                        >
                                             {months.map((month, index) => (
                                                 <option key={index} value={month}>
                                                     {month}
@@ -820,10 +903,8 @@ const PGAttendance = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : attendanceData &&
-                                attendanceData.length > 0 &&
-                                (!attendanceData[0].punchIn ||
-                                    attendanceData[0].date !== formattedTodaysDate) ? (
+                            ) : topRecord &&
+                                !topRecord.punchIn ? (
                                 <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                     <div className="inner_one">
                                         <div className="inner_two">
@@ -832,10 +913,8 @@ const PGAttendance = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : attendanceData &&
-                                attendanceData.length > 0 &&
-                                attendanceData[0].date === formattedTodaysDate &&
-                                !attendanceData[0].punchOut ? (
+                            ) : topRecord &&
+                                !topRecord.punchOut ? (
                                 <div
                                     className="punch_button punchout outer"
                                     onClick={showPunchOutPopup}
@@ -863,15 +942,14 @@ const PGAttendance = () => {
                             <div className="punch_detail">
                                 <div className="pd_single">
                                     <img src="/assets/img/punchin.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].punchIn
-                                                ? attendanceData[0].punchIn
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.punchIn
+                                                ? topRecord.punchIn
                                                 : "--:--"}
                                         </div>
                                     )}
@@ -880,15 +958,14 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="pd_single">
                                     <img src="/assets/img/punchout.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].punchOut
-                                                ? attendanceData[0].punchOut
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.punchOut
+                                                ? topRecord.punchOut
                                                 : "--:--"}
                                         </div>
                                     )}
@@ -896,15 +973,14 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="pd_single">
                                     <img src="/assets/img/edicon/total_work.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].workHrs
-                                                ? attendanceData[0].workHrs
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.workHrs
+                                                ? topRecord.workHrs
                                                 : "--:--"}
                                         </div>
                                     )}
@@ -912,15 +988,14 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="pd_single">
                                     <img src="/assets/img/edicon/tripstart.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].tripStart
-                                                ? attendanceData[0].tripStart
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.tripStart
+                                                ? topRecord.tripStart
                                                 : "--:--"}
                                         </div>
                                     )}
@@ -929,15 +1004,14 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="pd_single">
                                     <img src="/assets/img/edicon/tripend.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].tripEnd
-                                                ? attendanceData[0].tripEnd
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.tripEnd
+                                                ? topRecord.tripEnd
                                                 : "--:--"}
                                         </div>
                                     )}
@@ -945,15 +1019,14 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="pd_single">
                                     <img src="/assets/img/edicon/travel.png" alt="" />
-                                    {attendanceData && attendanceData.length === 0 ? (
+                                    {topRecord && !topRecord.date === formattedTodaysDate ? (
                                         <div className="data">--:--</div>
                                     ) : (
                                         <div className="data">
-                                            {attendanceData &&
-                                                attendanceData.length > 0 &&
-                                                attendanceData[0].date === formattedTodaysDate &&
-                                                attendanceData[0].tripDistance
-                                                ? attendanceData[0].tripDistance
+                                            {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.tripDistance
+                                                ? topRecord.tripDistance
                                                 : "--:--"}
                                         </div>
                                     )}
