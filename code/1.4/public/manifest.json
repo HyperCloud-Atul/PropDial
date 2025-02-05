@@ -3,40 +3,45 @@
   "name": "PROPDIAL",
   "icons": [
     {
-      "src": "/assets/img/Logo196x196.png",
+      "src": "/assets/img/logo/icon-196x196.png",
       "sizes": "196x196",
       "type": "image/x-icon",
       "purpose": "maskable"
     },
     {
-      "src": "/assets/img/Logo64x64.png",
+      "src": "/assets/img/logo/icon-64x64.png",
       "sizes": "64x64",
       "type": "image/x-icon"
     },
     {
-      "src": "/assets/img/Logo32x32.png",
+      "src": "/assets/img/logo/icon-32x32.png",
       "sizes": "32x32",
       "type": "image/x-icon"
     },
     {
-      "src": "/assets/img/Logo24x24.png",
+      "src": "/assets/img/logo/icon-24x24.png",
       "sizes": "24x24",
       "type": "image/x-icon"
     },
     {
-      "src": "/assets/img/Logo16x16.png",
+      "src": "/assets/img/logo/icon-16x16.png",
       "sizes": "16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "/assets/img/Logo192x192.png",
+      "src": "/assets/img/logo/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/assets/img/Logo512x512.png",
+      "src": "/assets/img/logo/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
+    },
+    {
+      "src": "/assets/img/logo/icon-1080x1080.png",
+      "type": "image/png",
+      "sizes": "1080x1080"
     }
   ],
   "start_url": ".",

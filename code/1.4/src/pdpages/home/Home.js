@@ -56,7 +56,7 @@ const Home = () => {
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
         <ProductCarousel></ProductCarousel>
-<PunchInOut/>
+        {/* <PunchInOut/> */}
 
         <section className="work_flow sect_padding">
           <div className="container">
@@ -460,7 +460,7 @@ const Home = () => {
                     <img src="./assets/img/VP-Interview-new.jpg" alt="" />
                   </Link>
                 </div> */}
-                  <div className="image_sect">                 
+                  <div className="image_sect">
                     <iframe
                       className="img_div"
                       src="https://www.youtube.com/embed/cwEu27fCsEM"
