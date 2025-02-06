@@ -100,6 +100,11 @@ const PGAttendance = () => {
     const currentMonthIndex = new Date().getMonth(); // Get current month index (0-11)
     const [selectedMonth, setSelectedMonth] = useState(months[currentMonthIndex]);
     // const [currentTime, setCurrentTime] = useState(new Date());
+
+    const [startWeekDate, setStartWeekDate] = useState();
+    const [endWeekDate, setEndWeekDate] = useState();
+
+
     const [greeting, setGreeting] = useState("");
     // const [attendance, setAttendance] = useState([]);
     const [punchIn, setPunchIn] = useState(null);
@@ -113,6 +118,8 @@ const PGAttendance = () => {
     const today = new Date();
     const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
     const weekDay = days[today.getDay()]; // Current weekday
+
+
 
     const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
         "attendance-propdial"
@@ -129,6 +136,9 @@ const PGAttendance = () => {
     // console.log("attendanceData: ", attendanceData);
 
     const [attendanceData, setCurrentMonthRecords] = useState();
+    const [currentWeekRecords, setCurrentWeekRecords] = useState();
+
+    console.log("currentWeekRecords: ", currentWeekRecords)
 
     //Popup Flags
     const [showPunchInPopup, setShowPunchInPopup] = useState(false);
@@ -137,41 +147,8 @@ const PGAttendance = () => {
     const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
     // const [popupReturn, setPopupReturn] = useState(false);
 
-
     // console.log("check continuous log")
     console.log("Top Record: ", topRecord)
-
-
-    const handelShowPunchInPopup = () => {
-        setShowPunchInPopup(true);
-    };
-
-    const handlePunchInPopup = (action) => {
-
-        if (action === "CONFIRM") {
-            // setPopupReturn(true)
-            handlePunchIn();
-        }
-        setShowPunchInPopup(false);
-    };
-
-    const showPunchOutPopup = () => {
-        // e.preventDefault();
-        setShowPopupPunchOutFlag(true);
-        setPopupReturn(false);
-    };
-
-    const handlePunchOutPopup = (action) => {
-        // console.log('Popup Action:', action)
-        if (action === "CANCEL") {
-            setPopupReturn(false);
-        }
-        if (action === "CONFIRM") {
-            // setPopupReturn(true)
-            handlePunchOut();
-        }
-        setShowPopupPunchOutFlag(false);
-    };
 
     useEffect(() => {
         const getGreeting = () => {
@@ -188,11 +165,14 @@ const PGAttendance = () => {
 
         setGreeting(getGreeting());
 
+        getCurrentWeekDates();
+
+        fetchCurrentWeekRecords()
+
         const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
         // console.log("currentMonthRecord: ",)
 
-        // fetchTopRecord();
-        fetchTopRecordRealTimeWithonSnapshot()
+        fetchTopRecord()
 
         // Update the time every second
         // const timer = setInterval(() => {
@@ -203,40 +183,80 @@ const PGAttendance = () => {
         // return () => clearInterval(timer);
     }, [user.uid]); // Run once when the component mounts
 
-    // const fetchSelectedMonthRecords = async (selmonth) => {
-    //     setSelectedMonth(selmonth)
-    //     // console.log("selectedMonth: ", selectedMonth)
-    //     // Get first and last day of the current month
-    //     const now = new Date();
-    //     // console.log("Month: ", now.getMonth())
 
-    //     const selectedMonthIndex = months.indexOf(selmonth);
+    //Fetch Top Record
+    const fetchTopRecord = async () => {
+        console.log("In fetchTopRecordRealTimeWithonSnapshot")
+        try {
+            // Step 1: Get the latest record
+            const latestRecordRef = projectFirestore
+                .collection("attendance-propdial")
+                .where("userId", "==", user.uid)
+                .orderBy("createdAt", "desc")
+                .limit(1);
 
-    //     // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-    //     const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
-    //     // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-    //     const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
+            const unsubscribe = latestRecordRef.onSnapshot(snapshot => {
+                if (!snapshot.empty) {
+                    console.log("snapshot.docs[0].data(): ", snapshot.docs[0].data())
+                    setTopRecord(snapshot.docs[0].data());
+                }
+            }, error => {
+                console.log(error)
+                // setError('could not fetch the data')
+            })
 
-    //     try {
-    //         const querySnapshot = await projectFirestore
-    //             .collection("attendance-propdial")
-    //             .where("userId", "==", user.uid)
-    //             .where("createdAt", ">=", firstDay)
-    //             .where("createdAt", "<=", lastDay)
-    //             .orderBy("createdAt", "desc")
-    //             // .limit(2)
-    //             .get();
+            return () => unsubscribe(); // Cleanup listener when component unmounts
 
-    //         const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    //         // console.log("Current Month Data:", data);
-    //         setCurrentMonthRecords(data)
+        } catch (error) {
+            console.error("Error fetching second last record:", error);
+        }
+    }
 
-    //         return data;
-    //     } catch (error) {
-    //         console.error("Error fetching data:", error);
-    //     }
-    // };
+    //Fetch Current Week Records
+    const fetchCurrentWeekRecords = async () => {
+        console.log("In fetchCurrentWeekRecords")
 
+
+        // const selectedMonthIndex = months.indexOf(selmonth);
+
+        // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+        // const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
+        // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+        // const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
+
+        try {
+            const querySnapshot = await projectFirestore
+                .collection("attendance-propdial")
+                .where("userId", "==", user.uid)
+                .where("createdAt", ">=", startWeekDate)
+                .where("createdAt", "<=", endWeekDate)
+                .orderBy("createdAt", "desc")
+
+            const unsubscribe = querySnapshot.onSnapshot(snapshot => {
+                let results = []
+                snapshot.docs.forEach(doc => {
+                    results.push({ ...doc.data(), id: doc.id })
+                });
+
+                // console.log("current week records: ", results)
+
+                // // update state
+                setCurrentWeekRecords(results)
+                // setError(null)
+            }, error => {
+                console.log(error)
+                // setError('could not fetch the data')
+            })
+
+            return () => unsubscribe(); // Cleanup listener when component unmounts
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+
+    //Fetch Selected Month Record
     const fetchSelectedMonthRecords = async (selmonth) => {
         console.log("In fetchSelectedMonthRecords")
         setSelectedMonth(selmonth)
@@ -281,91 +301,36 @@ const PGAttendance = () => {
         }
     };
 
-    const fetchTopRecord = async () => {
-        try {
-            // Step 1: Get the latest record
-            const latestRecordRef = projectFirestore
-                .collection("attendance-propdial")
-                .where("userId", "==", user.uid)
-                .orderBy("createdAt", "desc")
-                .limit(1);
-
-            const latestSnapshot = await latestRecordRef.get();
-
-            if (latestSnapshot.empty) {
-                console.log("No records found");
-                return;
-            }
-
-            const latestDoc = latestSnapshot.docs[0].data();
-            console.log("latest Record: ", latestDoc)
-            // setTripEndTemp(latestDoc.tripEnd ? latestDoc.tripEnd : latestDoc.tripStart)
-            // latestDoc ={...}
-            setTopRecord(latestDoc)
-
-        } catch (error) {
-            console.error("Error fetching second last record:", error);
-        }
+    const handelShowPunchInPopup = () => {
+        setShowPunchInPopup(true);
     };
 
-    const fetchTopRecordRealTimeWithonSnapshot = async () => {
-        console.log("In fetchTopRecordRealTimeWithonSnapshot")
-        try {
-            // Step 1: Get the latest record
-            const latestRecordRef = projectFirestore
-                .collection("attendance-propdial")
-                .where("userId", "==", user.uid)
-                .orderBy("createdAt", "desc")
-                .limit(1);
+    const handlePunchInPopup = (action) => {
 
-            const unsubscribe = latestRecordRef.onSnapshot(snapshot => {
-                if (!snapshot.empty) {
-                    console.log("snapshot.docs[0].data(): ", snapshot.docs[0].data())
-                    setTopRecord(snapshot.docs[0].data());
-                }
-            }, error => {
-                console.log(error)
-                // setError('could not fetch the data')
-            })
-
-            return () => unsubscribe(); // Cleanup listener when component unmounts
-
-        } catch (error) {
-            console.error("Error fetching second last record:", error);
+        if (action === "CONFIRM") {
+            // setPopupReturn(true)
+            handlePunchIn();
         }
-    }
+        setShowPunchInPopup(false);
+    };
 
-    // Fetch Top latest Record
-    // useEffect(() => {
-    //     // const fetchTopRecord = async () => {
-    //     //     try {
-    //     //         // Step 1: Get the latest record
-    //     //         const latestRecordRef = projectFirestore
-    //     //             .collection("attendance-propdial")
-    //     //             .where("userId", "==", user.uid)
-    //     //             .orderBy("createdAt", "desc")
-    //     //             .limit(1);
+    const showPunchOutPopup = () => {
+        // e.preventDefault();
+        setShowPopupPunchOutFlag(true);
+        setPopupReturn(false);
+    };
 
-    //     //         const latestSnapshot = await latestRecordRef.get();
-
-    //     //         if (latestSnapshot.empty) {
-    //     //             console.log("No records found");
-    //     //             return;
-    //     //         }
-
-    //     //         const latestDoc = latestSnapshot.docs[0].data();
-    //     //         console.log("latest Record: ", latestDoc)
-    //     //         // setTripEndTemp(latestDoc.tripEnd ? latestDoc.tripEnd : latestDoc.tripStart)
-    //     //         // latestDoc ={...}
-    //     //         setTopRecord(latestDoc)
-
-    //     //     } catch (error) {
-    //     //         console.error("Error fetching second last record:", error);
-    //     //     }
-    //     // };
-
-    //     fetchTopRecord();
-    // }, [user.id]);
+    const handlePunchOutPopup = (action) => {
+        // console.log('Popup Action:', action)
+        if (action === "CANCEL") {
+            setPopupReturn(false);
+        }
+        if (action === "CONFIRM") {
+            // setPopupReturn(true)
+            handlePunchOut();
+        }
+        setShowPopupPunchOutFlag(false);
+    };
 
     const handlePunchIn = async () => {
         if (!user) {
@@ -447,6 +412,25 @@ const PGAttendance = () => {
             console.log("Error to Check the existing Punch-In record: ", error);
         }
     };
+
+    const getCurrentWeekDates = () => {
+        const today = new Date();
+        const dayOfWeek = today.getDay(); // Get current day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+        const startDiff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust if today is Sunday
+        const startOfWeek = new Date(today.setDate(startDiff));
+        const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
+
+        console.log("startOfWeek: ", startOfWeek)
+        setStartWeekDate(startOfWeek)
+        setEndWeekDate(endOfWeek)
+
+        // return {
+        //     startOfWeek: startOfWeek.toISOString().split("T")[0], // Format as YYYY-MM-DD
+        //     endOfWeek: endOfWeek.toISOString().split("T")[0],
+        // };
+    };
+
+    // console.log(getCurrentWeekDates());
 
     const lastFiveRecords = async () => {
 
@@ -670,13 +654,13 @@ const PGAttendance = () => {
                         {/* Left section */}
                         <div className="attendance_dashboard">
                             <div className="pg_header">
-                                <h2>Your progress of this week (1st - 7th Feb)</h2>
+                                <h2>Your progress of this week {startWeekDate?.getDate()} - {endWeekDate?.getDate()} {months[endWeekDate?.getMonth()]?.slice(0, 3)}'{endWeekDate?.getFullYear()} </h2>
                             </div>
                             <div className="attendance_cards">
                                 <div className="ac_single day">
                                     <h6>Total number of</h6>
                                     <h5>Days</h5>
-                                    <h2>05</h2>
+                                    <h2>{currentWeekRecords?.length}</h2>
                                     <div className="icon">
                                         <div className="icon_inner">
                                             <img src="/assets/img/edicon/appointment.png" alt="" />
