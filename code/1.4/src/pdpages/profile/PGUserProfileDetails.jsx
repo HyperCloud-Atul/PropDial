@@ -114,7 +114,6 @@ export default function PGUserProfileDetails2() {
             label: stateData.data().state,
             value: stateData.id,
           }));
-
           if (stateOptions.current.length === 0) {
             console.log("No State");
             handleStateChange(null);
@@ -293,29 +292,58 @@ export default function PGUserProfileDetails2() {
   }, [userProfileDoc]);
 
   // Handle role change
+  // old code of handle role plz dont delete, this code without selected role number
+  // const handleRoleChange = (role) => {
+  //   if (selectedRoles.includes(role)) {
+  //     // Remove role if already selected
+  //     const updatedRoles = selectedRoles.filter((item) => item !== role);
+  //     setSelectedRoles(updatedRoles);
+
+  //     // Update primary role if the removed role was the primary one
+  //     if (primaryRole === role && updatedRoles.length > 0) {
+  //       setPrimaryRole(updatedRoles[0]);
+  //     } else if (updatedRoles.length === 0) {
+  //       setPrimaryRole("");
+  //     }
+  //   } else {
+  //     // Add role if not selected
+  //     const updatedRoles = [...selectedRoles, role];
+  //     setSelectedRoles(updatedRoles);
+
+  //     // Set the first selected role as the primary role
+  //     if (primaryRole === "") {
+  //       setPrimaryRole(role);
+  //     }
+  //   }
+  // };
+
+  // new code of selected roel number 
   const handleRoleChange = (role) => {
-    if (selectedRoles.includes(role)) {
-      // Remove role if already selected
-      const updatedRoles = selectedRoles.filter((item) => item !== role);
-      setSelectedRoles(updatedRoles);
-
-      // Update primary role if the removed role was the primary one
-      if (primaryRole === role && updatedRoles.length > 0) {
-        setPrimaryRole(updatedRoles[0]);
-      } else if (updatedRoles.length === 0) {
-        setPrimaryRole("");
+    setSelectedRoles((prevRoles) => {
+      let updatedRoles;
+  
+      if (prevRoles.includes(role)) {
+        // Remove role if already selected
+        updatedRoles = prevRoles.filter((item) => item !== role);
+  
+        // Update primary role if the removed role was the primary one
+        if (primaryRole === role) {
+          setPrimaryRole(updatedRoles.length > 0 ? updatedRoles[0] : "");
+        }
+      } else {
+        // Add role if not selected
+        updatedRoles = [...prevRoles, role];
+  
+        // Set the first selected role as the primary role
+        if (!primaryRole) {
+          setPrimaryRole(role);
+        }
       }
-    } else {
-      // Add role if not selected
-      const updatedRoles = [...selectedRoles, role];
-      setSelectedRoles(updatedRoles);
-
-      // Set the first selected role as the primary role
-      if (primaryRole === "") {
-        setPrimaryRole(role);
-      }
-    }
+  
+      return updatedRoles;
+    });
   };
+  
 
   // Handle save button click
   const handleSaveRole = async () => {
@@ -325,7 +353,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
       return;
     }
 
@@ -342,7 +370,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
       return;
     }
 
@@ -361,7 +389,7 @@ export default function PGUserProfileDetails2() {
       setSaveRoleMessage("Roles updated successfully!");
       setTimeout(() => {
         setIsRoleEditing(!isRoleEditing);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating roles:", error);
       setRoleMessageType("error_msg");
@@ -372,7 +400,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
     }
   };
 
@@ -483,7 +511,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
 
       return;
     }
@@ -495,7 +523,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000);
+      }, 4000);
       return;
     }
 
@@ -508,7 +536,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000);
+      }, 4000);
       return;
     }
 
@@ -524,7 +552,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000);
+      }, 4000);
       return;
     }
 
@@ -540,7 +568,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000);
+      }, 4000);
       return;
     }
 
@@ -565,7 +593,7 @@ export default function PGUserProfileDetails2() {
       setEmployeeDetailUpdateMessage("Employee details updated successfully!");
       setTimeout(() => {
         setIsEdEditing(!isEdEditing);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating employee details:", error);
       setEdMessageType("error_msg");
@@ -577,7 +605,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
     }
   };
 
@@ -635,7 +663,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setVehicleDetailUpdateMessage("");
         setVdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
       return;
     }
 
@@ -655,7 +683,7 @@ export default function PGUserProfileDetails2() {
       setVehicleDetailUpdateMessage("Vehicle details updated successfully!");
       setTimeout(() => {
         setIsVdEditing(!isVdEditing);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating vehicle details:", error);
       setVdMessageType("error_msg");
@@ -667,7 +695,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setVehicleDetailUpdateMessage("");
         setVdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
     }
   };
 
@@ -761,7 +789,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -773,7 +801,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -799,7 +827,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsRef1Editing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating reference 1 details:", error);
       setRef1MessageType("error_msg");
@@ -811,7 +839,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref1 end
@@ -882,7 +910,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -894,7 +922,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -920,7 +948,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsRef2Editing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating reference 1 details:", error);
       setRef2MessageType("error_msg");
@@ -932,7 +960,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref2 end
@@ -1004,7 +1032,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveBankDetailMessage("");
         setBankDetailMessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -1030,7 +1058,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsBankDetailEditing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating bank details:", error);
       setBankDetailMessageType("error_msg");
@@ -1042,7 +1070,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveBankDetailMessage("");
         setBankDetailMessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref2 end
@@ -1986,18 +2014,35 @@ export default function PGUserProfileDetails2() {
                           : !role.isEmployee || role.showInBoth // Show non-employee roles or those meant for both
                     )
                     .map(({ id, label }) => (
-                      <div className="radio_single" key={id}>
-                        <input
-                          type="checkbox"
-                          name="user_role"
-                          value={id}
-                          id={id}
-                          disabled={!isRoleEditing}
-                          checked={selectedRoles.includes(id)}
-                          onChange={() => handleRoleChange(id)}
-                        />
-                        <label htmlFor={id}>{label}</label>
-                      </div>
+                      // old code plz dont,t delete it 
+                      // <div className="radio_single" key={id}>
+                      //   <input
+                      //     type="checkbox"
+                      //     name="user_role"
+                      //     value={id}
+                      //     id={id}
+                      //     disabled={!isRoleEditing}
+                      //     checked={selectedRoles.includes(id)}
+                      //     onChange={() => handleRoleChange(id)}
+                      //   />
+                      //   <label htmlFor={id}>{label}</label>
+                      // </div>
+                      <div className="radio_single" key={id} style={{ display: "flex", alignItems: "center" }}>
+                      <input
+                        type="checkbox"
+                        name="user_role"
+                        value={id}
+                        id={id}
+                        disabled={!isRoleEditing}
+                        checked={selectedRoles.includes(id)}
+                        onChange={() => handleRoleChange(id)}
+                      />
+                    <label htmlFor={id}>
+  {label} {selectedRoles.includes(id) && `(${selectedRoles.indexOf(id) + 1})`}
+</label>
+
+                    
+                    </div>
                     ))}
                 </div>
               </div>
