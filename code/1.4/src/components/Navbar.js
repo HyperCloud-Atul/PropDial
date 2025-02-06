@@ -344,6 +344,8 @@ export default function Navbar() {
   //   setUnseenCount(0); // Remove bell indicator
   // };
   // code of notification seen by user and guest both end
+ 
+  
   return (
     <div className={navbarHideClass}>
       <header className={navbarClassName}>
@@ -473,13 +475,17 @@ export default function Navbar() {
                 <img src="./assets/img/home/ticketicon_navbar.png" alt=""
                   className="pointer" />
               </Link> */}
-              <Link to="/attendance" className="notification_icon">
-                <img
-                  src="/assets/img/home/working-time.png"
-                  alt=""
-                  className="pointer"
-                />
-              </Link>
+    {user?.isEmployee && (
+  <Link to="/attendance" className="notification_icon">
+    <img
+      src="/assets/img/home/working-time.png"
+      alt=""
+      className="pointer"
+    />
+  </Link>
+)}
+
+           
               <Link to="/notification" className="notification_icon relative">
                 <img
                   src="/assets/img/home/notification.png"

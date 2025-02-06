@@ -14,6 +14,8 @@ import AttendanceTable from "./AttendanceTable";
 import Popup from "../../components/Popup";
 import PunchInOut from "../../components/attendance/PunchInOut";
 import CurrentDateTime from "../../components/CurrentDateTime";
+import ScrollToTop from "../../components/ScrollToTop";
+import InactiveUserCard from "../../components/InactiveUserCard";
 
 // import scss
 import "./PGAttendance.scss";
@@ -422,7 +424,11 @@ const PGAttendance = () => {
 
     return (
         <>
-            {/* <div>
+            
+        {user && user.status === "active" ? (
+          <div >
+            <ScrollToTop />
+             {/* <div>
                 <div className={showPopupPunchInFlag ? 'pop-up-div open' : 'pop-up-div'}>
                     <div>
                         <p>
@@ -709,7 +715,7 @@ const PGAttendance = () => {
                         </div>
                         <div className="ac_single dist">
                             <h6>Total number of</h6>
-                            <h5>Distance Covered</h5>
+                            <h5>Distance</h5>
                             <h2>125</h2>
                             <div className="icon">
                                 <div className="icon_inner">
@@ -753,7 +759,7 @@ const PGAttendance = () => {
                                                 </option>
                                             ))}
                                         </select>
-                                    </div>
+                                    </div>                                 
                                     <div className="button_filter diff_views">
                                         <div
                                             className={`bf_single ${viewMode === "card_view" ? "active" : ""
@@ -773,6 +779,9 @@ const PGAttendance = () => {
                                                 view_list
                                             </span>
                                         </div>
+                                    </div>
+                                    <div className="export pointer">
+                                        <img src="/assets/img/icons/excel_logo.png" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -795,7 +804,7 @@ const PGAttendance = () => {
                                                     {data.workHrs ? <h5>{data.workHrs}</h5> : "--:--"}
                                                 </div>
                                                 <div className="r_single">
-                                                    <h6> Dist Covered</h6>
+                                                    <h6> Distance</h6>
                                                     {data.tripDistance ? <h5>{data.tripDistance} KM</h5> : "--:--"}
                                                 </div>
                                             </div>
@@ -1015,13 +1024,20 @@ const PGAttendance = () => {
                                                 : "--:--"}
                                         </div>
                                     )}
-                                    <h6>Dist Covered</h6>
+                                    <h6>Distance</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+          </div>
+        ) : (
+          <InactiveUserCard />
+        )}
+   
+  
+           
         </>
     );
 };

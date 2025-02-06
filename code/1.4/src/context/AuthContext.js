@@ -62,6 +62,7 @@ export const AuthContextProvider = ({ children }) => {
             let aadhaar = snapshot.data().aadhaar;
             let vehicleStatus = snapshot.data().vehicleStatus;
             let vehicleDetails = snapshot.data().vehicleDetails;
+            let isEmployee = snapshot.data().isEmployee;
 
             let userData = {
               ...user,
@@ -96,7 +97,8 @@ export const AuthContextProvider = ({ children }) => {
               pan,
               aadhaar,
               vehicleStatus,
-              vehicleDetails
+              vehicleDetails,
+              isEmployee
             };
 
             dispatch({ type: "AUTH_IS_READY", payload: userData });

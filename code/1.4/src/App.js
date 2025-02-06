@@ -926,9 +926,17 @@ function App() {
                       )
                     }
                   ></Route>
-                  <Route
+               "
+                  
+                    <Route
                     path="/attendance"
-                    element={<PGAttendance />}
+                    element={
+                      user?.isEmployee ? (
+                        <PGAttendance />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
                   ></Route>
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
