@@ -9,6 +9,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
 import { timestamp } from "../../firebase/config";
 import { format } from "date-fns";
+import dayjs from "dayjs"; // Library for time calculations
 
 import AttendanceTable from "./AttendanceTable";
 import Popup from "../../components/Popup";
@@ -77,7 +78,7 @@ const calculateTimeDifference = (punchIn, punchOut) => {
     const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
     const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-    return `${diffHrs} hr ${diffMins} min`;
+    return `${diffHrs} : ${diffMins}`;
 };
 
 
@@ -137,8 +138,10 @@ const PGAttendance = () => {
 
     const [attendanceData, setCurrentMonthRecords] = useState();
     const [currentWeekRecords, setCurrentWeekRecords] = useState();
+    const [currentWeekDistance, setCurrentWeekDistance] = useState();
+    const [currentWeekWorkedHours, setCurrentWeekWorkedHours] = useState();
 
-    console.log("currentWeekRecords: ", currentWeekRecords)
+    // console.log("currentWeekRecords: ", currentWeekRecords)
 
     //Popup Flags
     const [showPunchInPopup, setShowPunchInPopup] = useState(false);
@@ -148,7 +151,7 @@ const PGAttendance = () => {
     // const [popupReturn, setPopupReturn] = useState(false);
 
     // console.log("check continuous log")
-    console.log("Top Record: ", topRecord)
+    // console.log("Top Record: ", topRecord)
 
     useEffect(() => {
         const getGreeting = () => {
@@ -167,7 +170,7 @@ const PGAttendance = () => {
 
         getCurrentWeekDates();
 
-        fetchCurrentWeekRecords()
+        // fetchCurrentWeekRecords()
 
         const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
         // console.log("currentMonthRecord: ",)
@@ -186,7 +189,7 @@ const PGAttendance = () => {
 
     //Fetch Top Record
     const fetchTopRecord = async () => {
-        console.log("In fetchTopRecordRealTimeWithonSnapshot")
+        // console.log("In fetchTopRecordRealTimeWithonSnapshot")
         try {
             // Step 1: Get the latest record
             const latestRecordRef = projectFirestore
@@ -213,23 +216,15 @@ const PGAttendance = () => {
     }
 
     //Fetch Current Week Records
-    const fetchCurrentWeekRecords = async () => {
-        console.log("In fetchCurrentWeekRecords")
-
-
-        // const selectedMonthIndex = months.indexOf(selmonth);
-
-        // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-        // const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
-        // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-        // const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
-
+    // fetchCurrentWeekRecords(startOfWeek, endOfWeek)
+    const fetchCurrentWeekRecords = async (_startOfWeek, _endOfWeek) => {
+        // console.log("In fetchCurrentWeekRecords")
         try {
             const querySnapshot = await projectFirestore
                 .collection("attendance-propdial")
                 .where("userId", "==", user.uid)
-                .where("createdAt", ">=", startWeekDate)
-                .where("createdAt", "<=", endWeekDate)
+                .where("createdAt", ">=", _startOfWeek)
+                .where("createdAt", "<=", _endOfWeek)
                 .orderBy("createdAt", "desc")
 
             const unsubscribe = querySnapshot.onSnapshot(snapshot => {
@@ -242,6 +237,24 @@ const PGAttendance = () => {
 
                 // // update state
                 setCurrentWeekRecords(results)
+
+                // Calculate total work hours
+                const totalMinutes = results?.reduce((acc, record) => {
+                    // console.log("record.workHrs? ", record.workHrs)
+                    const [hours, minutes] = record.workHrs?.split(":").map(Number); // Convert to numbers
+                    // const [hours, minutes] = record.workHrs; // Convert to numbers
+                    return acc + hours * 60 + minutes;
+                }, 0);
+
+                // Convert minutes back to HH:mm format
+                const totalHours = Math.floor(totalMinutes / 60);
+                const totalMins = totalMinutes % 60;
+                setCurrentWeekWorkedHours(`${String(totalHours).padStart(2, "0")}:${String(totalMins).padStart(2, "0")}`);
+
+                // Total distance travelled for current week
+                const sumOfDistance = results.reduce((acc, record) => acc + (record.tripDistance || 0), 0);
+                setCurrentWeekDistance(sumOfDistance);
+
                 // setError(null)
             }, error => {
                 console.log(error)
@@ -255,10 +268,9 @@ const PGAttendance = () => {
         }
     };
 
-
     //Fetch Selected Month Record
     const fetchSelectedMonthRecords = async (selmonth) => {
-        console.log("In fetchSelectedMonthRecords")
+        // console.log("In fetchSelectedMonthRecords")
         setSelectedMonth(selmonth)
         // console.log("selectedMonth: ", selectedMonth)
         // Get first and last day of the current month
@@ -347,7 +359,7 @@ const PGAttendance = () => {
                 userId: user.uid,
                 punchIn: formattedPunchinTime,
                 punchOut: null,
-                workHrs: null,
+                workHrs: "00:00",
                 date: formattedTodaysDate,
                 weekDay,
                 tripStart,
@@ -420,9 +432,12 @@ const PGAttendance = () => {
         const startOfWeek = new Date(today.setDate(startDiff));
         const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
 
-        console.log("startOfWeek: ", startOfWeek)
+        // console.log("startOfWeek: ", startOfWeek)
         setStartWeekDate(startOfWeek)
         setEndWeekDate(endOfWeek)
+
+        fetchCurrentWeekRecords(startOfWeek, endOfWeek)
+
 
         // return {
         //     startOfWeek: startOfWeek.toISOString().split("T")[0], // Format as YYYY-MM-DD
@@ -677,7 +692,8 @@ const PGAttendance = () => {
                                 <div className="ac_single hr">
                                     <h6>Total number of</h6>
                                     <h5>Hrs Worked</h5>
-                                    <h2>40</h2>
+                                    {/* <h2>40</h2> */}
+                                    <h2>{currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
                                     <div className="icon">
                                         <div className="icon_inner">
                                             <img src="/assets/img/edicon/working-time.png" alt="" />
@@ -696,7 +712,7 @@ const PGAttendance = () => {
                                 <div className="ac_single dist">
                                     <h6>Total number of</h6>
                                     <h5>Distance</h5>
-                                    <h2>125</h2>
+                                    <h2>{currentWeekDistance ? currentWeekDistance : "--:--"}</h2>
                                     <div className="icon">
                                         <div className="icon_inner">
                                             <img src="/assets/img/edicon/distance.png" alt="" />
@@ -780,7 +796,7 @@ const PGAttendance = () => {
                                                     <div className="right">
                                                         <div className="r_single">
                                                             <h6> Hrs Worked</h6>
-                                                            {data.workHrs ? <h5>{data.workHrs}</h5> : "--:--"}
+                                                            {data.workHrs === "00:00" ? "--:--" : <h5>{data.workHrs}</h5>}
                                                         </div>
                                                         <div className="r_single">
                                                             <h6> Distance</h6>
@@ -826,7 +842,7 @@ const PGAttendance = () => {
                                     </div>
                                 </div>
                                 <div className="body">
-                                    {/* <CurrentDateTime /> */}
+                                    <CurrentDateTime />
                                     {topRecord && topRecord.length === 0 ? (
                                         <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                             <div className="inner_one">
@@ -905,17 +921,22 @@ const PGAttendance = () => {
                                             )}
                                             <h6>Punch Out</h6>
                                         </div>
+
                                         <div className="pd_single">
                                             <img src="/assets/img/edicon/total_work.png" alt="" />
                                             {topRecord && !topRecord.date === formattedTodaysDate ? (
                                                 <div className="data">--:--</div>
                                             ) : (
                                                 <div className="data">
-                                                    {topRecord &&
-                                                        topRecord.date === formattedTodaysDate &&
-                                                        topRecord.workHrs
-                                                        ? topRecord.workHrs
-                                                        : "--:--"}
+                                                    {
+                                                        (
+                                                            topRecord && topRecord.workHrs &&
+                                                            // topRecord.date === formattedTodaysDate &&
+                                                            topRecord.workHrs === "00:00")
+                                                            ? "--:--" :
+                                                            topRecord?.workHrs &&
+                                                                topRecord.date === formattedTodaysDate ?
+                                                                topRecord && topRecord.workHrs : "--:--"}
                                                 </div>
                                             )}
                                             <h6>Hrs Worked</h6>
