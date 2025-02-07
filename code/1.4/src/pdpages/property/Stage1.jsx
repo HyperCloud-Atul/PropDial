@@ -739,7 +739,7 @@ const Stage1 = (props) => {
       errorFlag = true;
     }
 
-    if (propertyDetails.SecurityDeposit === "") {
+    if (propertyDetails.Purpose === "Rent" && propertyDetails.SecurityDeposit === "") {
       errorFlag = true;
     }
 
