@@ -63,15 +63,15 @@ const PGAdminProperty = () => {
         allproperties &&
         allproperties.filter((item) =>
           filterOption.toLowerCase() === "in-review" ||
-          filterOption.toLowerCase() === "active" ||
-          filterOption.toLowerCase() === "inactive"
+            filterOption.toLowerCase() === "active" ||
+            filterOption.toLowerCase() === "inactive"
             ? item.isActiveInactiveReview.trim().toUpperCase() ===
-              filterOption.toUpperCase()
+            filterOption.toUpperCase()
             : filterOption.toLowerCase() === "residential" ||
               filterOption.toLowerCase() === "commercial" ||
               filterOption.toLowerCase() === "plot"
-            ? item.category.trim().toUpperCase() === filterOption.toUpperCase()
-            : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
+              ? item.category.trim().toUpperCase() === filterOption.toUpperCase()
+              : item.purpose.trim().toUpperCase() === filterOption.toUpperCase()
         );
     }
 
@@ -124,89 +124,90 @@ const PGAdminProperty = () => {
 
   const accessedPropertyList = propertyListWithUsers
     ? propertyListWithUsers.filter((document) => {
-        switch (caseFilter) {
-          case "country":
-            const lowerCaseCountryArray = user.accessValue.map((element) =>
-              element.toLowerCase()
-            );
-            return (
-              document.country &&
-              lowerCaseCountryArray.includes(document.country.toLowerCase())
-            );
-          case "region":
-            const lowerCaseRegionArray = user.accessValue.map((element) =>
-              element.toLowerCase()
-            );
-            return (
-              document.region &&
-              lowerCaseRegionArray.includes(document.region.toLowerCase())
-            );
-          case "state":
-            const lowerCaseStateArray = user.accessValue.map((element) =>
-              element.toLowerCase()
-            );
-            return (
-              document.state &&
-              lowerCaseStateArray.includes(document.state.toLowerCase())
-            );
-          case "city":
-            const lowerCaseCityArray = user.accessValue.map((element) =>
-              element.toLowerCase()
-            );
-            return (
-              document.city &&
-              lowerCaseCityArray.includes(document.city.toLowerCase())
-            );
-          default:
-            return true;
-        }
-      })
+      switch (caseFilter) {
+        case "country":
+          const lowerCaseCountryArray = user.accessValue.map((element) =>
+            element.toLowerCase()
+          );
+          return (
+            document.country &&
+            lowerCaseCountryArray.includes(document.country.toLowerCase())
+          );
+        case "region":
+          const lowerCaseRegionArray = user.accessValue.map((element) =>
+            element.toLowerCase()
+          );
+          return (
+            document.region &&
+            lowerCaseRegionArray.includes(document.region.toLowerCase())
+          );
+        case "state":
+          const lowerCaseStateArray = user.accessValue?.map((element) =>
+            //  element.toLowerCase()
+            element
+          );
+          return (
+            document.state &&
+            lowerCaseStateArray.includes(document.state.toLowerCase())
+          );
+        case "city":
+          const lowerCaseCityArray = user.accessValue.map((element) =>
+            element.toLowerCase()
+          );
+          return (
+            document.city &&
+            lowerCaseCityArray.includes(document.city.toLowerCase())
+          );
+        default:
+          return true;
+      }
+    })
     : null;
 
   // Filter properties based on search input, isActiveInactiveReview, and other filters
   const filteredProperties = accessedPropertyList
     ? accessedPropertyList.filter((document) => {
-        let categoryMatch = true;
-        let purposeMatch = true;
-        let searchMatch = true;
-        let statusMatch = true;
+      let categoryMatch = true;
+      let purposeMatch = true;
+      let searchMatch = true;
+      let statusMatch = true;
 
-        // Filter by category
-        switch (filter) {
-          case "Residential":
-            categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
-            break;
-          case "Commercial":
-            categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
-            break;
-          case "Plot":
-            categoryMatch = document.category.toUpperCase() === "PLOT";
-            break;
+      // Filter by category
+      switch (filter) {
+        case "Residential":
+          categoryMatch = document.category.toUpperCase() === "RESIDENTIAL";
+          break;
+        case "Commercial":
+          categoryMatch = document.category.toUpperCase() === "COMMERCIAL";
+          break;
+        case "Plot":
+          categoryMatch = document.category.toUpperCase() === "PLOT";
+          break;
 
-          default:
-            categoryMatch = true;
-        }
+        default:
+          categoryMatch = true;
+      }
 
-        // Filter by purpose
-        purposeMatch =
-          document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
+      // Filter by purpose
+      purposeMatch =
+        document.purpose.toUpperCase() === rentSaleFilter.toUpperCase();
 
-        // Filter by search input
-        searchMatch = searchInput
-          ? Object.values(document).some(
-              (field) =>
-                typeof field === "string" &&
-                field.toUpperCase().includes(searchInput.toUpperCase())
-            )
-          : true;
+      // Filter by search input
+      searchMatch = searchInput
+        ? Object.values(document).some(
+          (field) =>
+            typeof field === "string" &&
+            field.toUpperCase().includes(searchInput.toUpperCase())
+        )
+        : true;
 
-        // Filter by status
-        statusMatch =
-          document.isActiveInactiveReview.toUpperCase() ===
-          status.toUpperCase();
+      // Filter by status
+      statusMatch =
+        document.isActiveInactiveReview.toUpperCase() ===
+        status.toUpperCase();
 
-        return categoryMatch && searchMatch && statusMatch;
-      })
+      return categoryMatch && searchMatch && statusMatch;
+    })
     : null;
 
   //--------------------------- --------------------------  -------------
@@ -322,7 +323,7 @@ const PGAdminProperty = () => {
                       filterLength={filteredProperties.length}
                     />
                   )}
-                </div>             
+                </div>
                 {/* <div className="mobile_size residentail_commercial rent_sale">
                  <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
                    <div className="switch">
@@ -351,9 +352,8 @@ const PGAdminProperty = () => {
                </div> */}
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${
-                      viewMode === "card_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -361,9 +361,8 @@ const PGAdminProperty = () => {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${
-                      viewMode === "table_view" ? "active" : ""
-                    }`}
+                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                      }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
@@ -385,11 +384,11 @@ const PGAdminProperty = () => {
                       <Offcanvas.Title>Filters</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-               
+
                       <Button variant="outline-secondary">In-Review</Button>
                       <Button variant="outline-secondary">Active</Button>
                       <Button variant="outline-secondary">Inactive</Button>
-                     
+
                     </Offcanvas.Body>
                   </Offcanvas>
                 </>

@@ -398,10 +398,10 @@ const PGAttendance = () => {
             // const tripStart = record.docs[0].data().tripStart;
 
             //Validation Start Trip Reading should not be greater than End Trip Reading
-            if (Number(tripEnd) <= Number(topRecord.tripStart)) {
-                alert("Trip End Reading should not be less than Trip Start Reading!");
-                return;
-            }
+            // if (Number(tripEnd) <= Number(topRecord.tripStart)) {
+            //     alert("Trip End Reading should not be less than Trip Start Reading!");
+            //     return;
+            // }
             const tripDistance = Number(tripEnd) - Number(topRecord.tripStart);
             // console.log("record.docs[0]: ", record.docs[0].data())
 
@@ -692,8 +692,7 @@ const PGAttendance = () => {
                                 <div className="ac_single hr">
                                     <h6>Total number of</h6>
                                     <h5>Hrs Worked</h5>
-                                    {/* <h2>40</h2> */}
-                                    <h2>{currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
+                                    <h2>{currentWeekWorkedHours && currentWeekWorkedHours === "00:00" ? "--:--" : currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
                                     <div className="icon">
                                         <div className="icon_inner">
                                             <img src="/assets/img/edicon/working-time.png" alt="" />
@@ -843,6 +842,7 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="body">
                                     <CurrentDateTime />
+                                    {/* {console.log("topRecord: ", topRecord)} */}
                                     {topRecord && topRecord.length === 0 ? (
                                         <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                             <div className="inner_one">
@@ -852,8 +852,8 @@ const PGAttendance = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    ) : topRecord &&
-                                        (topRecord.createdAt?.toDate() < ((new Date()).setHours(0, 0, 0, 0)) || !topRecord?.punchIn) ? (
+                                    ) : ((!topRecord) || (topRecord &&
+                                        (topRecord.createdAt?.toDate() < ((new Date()).setHours(0, 0, 0, 0)) || !topRecord?.punchIn))) ? (
                                         <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                             <div className="inner_one">
                                                 <div className="inner_two">
