@@ -667,7 +667,7 @@ const PGAttendance = () => {
 
                     <div className="top_header_pg pg_bg attendance_pg relative">
                         {/* Left section */}
-                        <div className="attendance_dashboard">
+                        {/* <div className="attendance_dashboard">
                             <div className="pg_header">
                                 <h2>Your progress of this week {startWeekDate?.getDate()} - {endWeekDate?.getDate()} {months[endWeekDate?.getMonth()]?.slice(0, 3)}'{endWeekDate?.getFullYear()} </h2>
                             </div>
@@ -826,7 +826,7 @@ const PGAttendance = () => {
                                     ))
                                 }
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Right side punch section */}
                         {/* <div className="punch">
