@@ -1848,10 +1848,18 @@
       font-size: 15px;
       justify-content: center;
       padding: 5px 15px;
+      svg{
+        fill: var(--theme-grey);
+        
+      }
+     
 
       &.active {
         color: var(--white-color);
         background: var(--theme-blue);
+        svg{
+          fill: var(--white-color);
+        }
       }
     }
   }

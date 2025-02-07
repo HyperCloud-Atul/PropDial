@@ -683,7 +683,8 @@ const PGAttendance = () => {
                                     </div>
                                     <div className="trending">
                                         <div className="inner up">
-                                            <span className="material-symbols-outlined">trending_up</span>
+                                            {/* <span className="material-symbols-outlined">trending_up</span>  */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z"/></svg>
                                             <div className="value">2.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -700,9 +701,10 @@ const PGAttendance = () => {
                                     </div>
                                     <div className="trending">
                                         <div className="inner down">
-                                            <span className="material-symbols-outlined">
+                                            {/* <span className="material-symbols-outlined">
                                                 trending_down
-                                            </span>
+                                            </span> */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FA6262"><path d="M624-209v-72h117L529-492 377-340 96-621l51-51 230 230 152-152 263 262v-117h72v240H624Z"/></svg>
                                             <div className="value">0.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -719,7 +721,8 @@ const PGAttendance = () => {
                                     </div>
                                     <div className="trending">
                                         <div className="inner up">
-                                            <span className="material-symbols-outlined">trending_up</span>
+                                            {/* <span className="material-symbols-outlined">trending_up</span> */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z"/></svg>
                                             <div className="value">2.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -762,18 +765,20 @@ const PGAttendance = () => {
                                                         }`}
                                                     onClick={() => handleModeChange("card_view")}
                                                 >
-                                                    <span className="material-symbols-outlined">
+                                                    {/* <span className="material-symbols-outlined">
                                                         calendar_view_month
-                                                    </span>
+                                                    </span> */}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-360h160v-200H160v200Zm240 0h160v-200H400v200Zm240 0h160v-200H640v200ZM320-240v-200H160v200h160Zm80 0h160v-200H400v200Zm240 0h160v-200H640v200Z"/></svg>
                                                 </div>
                                                 <div
                                                     className={`bf_single ${viewMode === "table_view" ? "active" : ""
                                                         }`}
                                                     onClick={() => handleModeChange("table_view")}
                                                 >
-                                                    <span className="material-symbols-outlined">
+                                                    {/* <span className="material-symbols-outlined">
                                                         view_list
-                                                    </span>
+                                                    </span> */}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240h440v-107H360v107ZM160-613h120v-107H160v107Zm0 187h120v-107H160v107Zm0 186h120v-107H160v107Zm200-186h440v-107H360v107Zm0-187h440v-107H360v107ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z"/></svg>
                                                 </div>
                                             </div>
                                             <div className="export pointer">
