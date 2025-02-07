@@ -691,8 +691,7 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="ac_single hr">
                                     <h6>Total number of</h6>
-                                    <h5>Hrs Worked</h5>
-                                    {/* <h2>40</h2> */}
+                                    <h5>Hrs Worked</h5>                                    
                                     <h2>{currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
                                     <div className="icon">
                                         <div className="icon_inner">
@@ -737,7 +736,7 @@ const PGAttendance = () => {
                                         <div className="right">
                                             <div className="icon_dropdown">
                                                 <select value={selectedMonth}
-                                                    // onChange={(e) => setSelectedMonth(e.target.value)}
+                                                    
                                                     onChange={(e) => fetchSelectedMonthRecords(e.target.value)}
                                                 >
                                                     {months.map((month, index) => (
@@ -830,7 +829,7 @@ const PGAttendance = () => {
                         </div>
 
                         {/* Right side punch section */}
-                        <div className="punch">
+                        {/* <div className="punch">
                             <div className="punch_inner">
                                 <div className="top">
                                     <div className="left">
@@ -842,7 +841,8 @@ const PGAttendance = () => {
                                     </div>
                                 </div>
                                 <div className="body">
-                                    <CurrentDateTime />
+                               <div className="body_top">
+                               <CurrentDateTime />
                                     {topRecord && topRecord.length === 0 ? (
                                         <div className="punch_button outer" onClick={handelShowPunchInPopup}>
                                             <div className="inner_one">
@@ -880,14 +880,14 @@ const PGAttendance = () => {
                                         <div className="punch_button pio_done outer">
                                             <div className="inner_one">
                                                 <div className="inner_two">
-                                                    {/* <img src="/assets/img/hand-pointer.png" alt="" /> */}
-                                                    {/* <h6>Next Punch In</h6> */}
+                                                   
                                                     <h6 className="text-center">Next Punch In Tomorrow</h6>
-                                                    {/* <h6>Tomorrow</h6> */}
+                                                   
                                                 </div>
                                             </div>
                                         </div>
                                     )}
+                               </div>
 
                                     <div className="punch_detail">
                                         <div className="pd_single">
@@ -930,8 +930,7 @@ const PGAttendance = () => {
                                                 <div className="data">
                                                     {
                                                         (
-                                                            topRecord && topRecord.workHrs &&
-                                                            // topRecord.date === formattedTodaysDate &&
+                                                            topRecord && topRecord.workHrs &&                                                           
                                                             topRecord.workHrs === "00:00")
                                                             ? "--:--" :
                                                             topRecord?.workHrs &&
@@ -990,7 +989,7 @@ const PGAttendance = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             ) : (
