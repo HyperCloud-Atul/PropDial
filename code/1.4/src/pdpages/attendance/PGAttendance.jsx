@@ -398,10 +398,10 @@ const PGAttendance = () => {
             // const tripStart = record.docs[0].data().tripStart;
 
             //Validation Start Trip Reading should not be greater than End Trip Reading
-            if (Number(tripEnd) <= Number(topRecord.tripStart)) {
-                alert("Trip End Reading should not be less than Trip Start Reading!");
-                return;
-            }
+            // if (Number(tripEnd) <= Number(topRecord.tripStart)) {
+            //     alert("Trip End Reading should not be less than Trip Start Reading!");
+            //     return;
+            // }
             const tripDistance = Number(tripEnd) - Number(topRecord.tripStart);
             // console.log("record.docs[0]: ", record.docs[0].data())
 
@@ -667,7 +667,7 @@ const PGAttendance = () => {
 
                     <div className="top_header_pg pg_bg attendance_pg relative">
                         {/* Left section */}
-                         <div className="attendance_dashboard">
+                        <div className="attendance_dashboard">
                             <div className="pg_header">
                                 <h2>Your progress of this week {startWeekDate?.getDate()} - {endWeekDate?.getDate()} {months[endWeekDate?.getMonth()]?.slice(0, 3)}'{endWeekDate?.getFullYear()} </h2>
                             </div>
@@ -684,7 +684,7 @@ const PGAttendance = () => {
                                     <div className="trending">
                                         <div className="inner up">
                                             {/* <span className="material-symbols-outlined">trending_up</span>  */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
                                             <div className="value">2.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -692,8 +692,9 @@ const PGAttendance = () => {
                                 </div>
                                 <div className="ac_single hr">
                                     <h6>Total number of</h6>
-                                    <h5>Hrs Worked</h5>                                    
-                                    <h2>{currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
+                                    <h5>Hrs Worked</h5>
+                                    <h2>{currentWeekWorkedHours && currentWeekWorkedHours === "00:00" ? "--:--" : currentWeekWorkedHours ? (currentWeekWorkedHours.split(":")[0]) + "hrs " + (currentWeekWorkedHours.split(":")[1]) + "mins" : "--:--"}</h2>
+
                                     <div className="icon">
                                         <div className="icon_inner">
                                             <img src="/assets/img/edicon/working-time.png" alt="" />
@@ -704,7 +705,7 @@ const PGAttendance = () => {
                                             {/* <span className="material-symbols-outlined">
                                                 trending_down
                                             </span> */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FA6262"><path d="M624-209v-72h117L529-492 377-340 96-621l51-51 230 230 152-152 263 262v-117h72v240H624Z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FA6262"><path d="M624-209v-72h117L529-492 377-340 96-621l51-51 230 230 152-152 263 262v-117h72v240H624Z" /></svg>
                                             <div className="value">0.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -722,7 +723,7 @@ const PGAttendance = () => {
                                     <div className="trending">
                                         <div className="inner up">
                                             {/* <span className="material-symbols-outlined">trending_up</span> */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
                                             <div className="value">2.5%</div>
                                         </div>
                                         <p>last week</p>
@@ -733,14 +734,14 @@ const PGAttendance = () => {
                             <div className="year_month">
                                 <div className="left">
                                     <h2>Logs</h2>
-                                
+
                                 </div>
                                 <div className="right">
                                     <div className="filters">
                                         <div className="right">
                                             <div className="icon_dropdown">
                                                 <select value={selectedMonth}
-                                                    
+
                                                     onChange={(e) => fetchSelectedMonthRecords(e.target.value)}
                                                 >
                                                     {months.map((month, index) => (
@@ -768,7 +769,7 @@ const PGAttendance = () => {
                                                     {/* <span className="material-symbols-outlined">
                                                         calendar_view_month
                                                     </span> */}
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-360h160v-200H160v200Zm240 0h160v-200H400v200Zm240 0h160v-200H640v200ZM320-240v-200H160v200h160Zm80 0h160v-200H400v200Zm240 0h160v-200H640v200Z"/></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-360h160v-200H160v200Zm240 0h160v-200H400v200Zm240 0h160v-200H640v200ZM320-240v-200H160v200h160Zm80 0h160v-200H400v200Zm240 0h160v-200H640v200Z" /></svg>
                                                 </div>
                                                 <div
                                                     className={`bf_single ${viewMode === "table_view" ? "active" : ""
@@ -778,7 +779,7 @@ const PGAttendance = () => {
                                                     {/* <span className="material-symbols-outlined">
                                                         view_list
                                                     </span> */}
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240h440v-107H360v107ZM160-613h120v-107H160v107Zm0 187h120v-107H160v107Zm0 186h120v-107H160v107Zm200-186h440v-107H360v107Zm0-187h440v-107H360v107ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z"/></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M360-240h440v-107H360v107ZM160-613h120v-107H160v107Zm0 187h120v-107H160v107Zm0 186h120v-107H160v107Zm200-186h440v-107H360v107Zm0-187h440v-107H360v107ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Z" /></svg>
                                                 </div>
                                             </div>
                                             <div className="export pointer">
@@ -835,7 +836,7 @@ const PGAttendance = () => {
                         </div>
 
                         {/* Right side punch section */}
-                         <div className="punch">
+                        <div className="punch">
                             <div className="punch_inner">
                                 <div className="top">
                                     <div className="left">
@@ -847,53 +848,56 @@ const PGAttendance = () => {
                                     </div>
                                 </div>
                                 <div className="body">
-                               <div className="body_top">
-                               <CurrentDateTime />
-                                    {topRecord && topRecord.length === 0 ? (
-                                        <div className="punch_button outer" onClick={handelShowPunchInPopup}>
-                                            <div className="inner_one">
-                                                <div className="inner_two">
-                                                    <img src="/assets/img/hand-pointer.png" alt="" />
-                                                    <h6>Punch In : Length === 0</h6>
+                                    <div className="body_top">
+                                        <CurrentDateTime />
+                                        {topRecord && topRecord.length === 0 ? (
+                                            <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                                                <div className="inner_one">
+                                                    <div className="inner_two">
+                                                        <img src="/assets/img/hand-pointer.png" alt="" />
+                                                        <h6>Punch In : Length === 0</h6>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ) : topRecord &&
-                                        (topRecord.createdAt?.toDate() < ((new Date()).setHours(0, 0, 0, 0)) || !topRecord?.punchIn) ? (
-                                        <div className="punch_button outer" onClick={handelShowPunchInPopup}>
-                                            <div className="inner_one">
-                                                <div className="inner_two">
-                                                    <img src="/assets/img/hand-pointer.png" alt="" />
-                                                    <h6>Punch In</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : topRecord &&
-                                        topRecord.date === formattedTodaysDate &&
-                                        !topRecord.punchOut ? (
-                                        <div
-                                            className="punch_button punchout outer"
-                                            onClick={showPunchOutPopup}
-                                        >
-                                            <div className="inner_one">
-                                                <div className="inner_two">
-                                                    <img src="/assets/img/punchouthand.png" alt="" />
-                                                    <h6>Punch Out</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="punch_button pio_done outer">
-                                            <div className="inner_one">
-                                                <div className="inner_two">
-                                                   
-                                                    <h6 className="text-center">Next Punch In Tomorrow</h6>
-                                                   
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                               </div>
+                                        ) :
+                                            ((!topRecord) || (topRecord &&
+                                                (topRecord.createdAt?.toDate() < ((new Date()).setHours(0, 0, 0, 0)) || !topRecord?.punchIn)))
+
+                                                ? (
+                                                    <div className="punch_button outer" onClick={handelShowPunchInPopup}>
+                                                        <div className="inner_one">
+                                                            <div className="inner_two">
+                                                                <img src="/assets/img/hand-pointer.png" alt="" />
+                                                                <h6>Punch In</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : topRecord &&
+                                                    topRecord.date === formattedTodaysDate &&
+                                                    !topRecord.punchOut ? (
+                                                    <div
+                                                        className="punch_button punchout outer"
+                                                        onClick={showPunchOutPopup}
+                                                    >
+                                                        <div className="inner_one">
+                                                            <div className="inner_two">
+                                                                <img src="/assets/img/punchouthand.png" alt="" />
+                                                                <h6>Punch Out</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="punch_button pio_done outer">
+                                                        <div className="inner_one">
+                                                            <div className="inner_two">
+
+                                                                <h6 className="text-center">Next Punch In Tomorrow</h6>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                    </div>
 
                                     <div className="punch_detail">
                                         <div className="pd_single">
@@ -936,7 +940,7 @@ const PGAttendance = () => {
                                                 <div className="data">
                                                     {
                                                         (
-                                                            topRecord && topRecord.workHrs &&                                                           
+                                                            topRecord && topRecord.workHrs &&
                                                             topRecord.workHrs === "00:00")
                                                             ? "--:--" :
                                                             topRecord?.workHrs &&
