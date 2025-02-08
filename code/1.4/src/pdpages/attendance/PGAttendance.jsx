@@ -270,19 +270,39 @@ const PGAttendance = () => {
 
     //Fetch Selected Month Record
     const fetchSelectedMonthRecords = async (selmonth) => {
-        // console.log("In fetchSelectedMonthRecords")
+        setSelectedMonth(selmonth)
+        fetchSelectedMonthYearRecords(selmonth, selectedYear)
+    }
+
+    //Fetch Selected Month Record
+    const fetchSelectedYearRecords = async (selYear) => {
+        console.log("Selected Year: ", selYear)
+        setSelectedYear(selYear)
+
+        console.log("Selected Month: ", selectedMonth)
+        fetchSelectedMonthYearRecords(selectedMonth, selYear)
+    }
+
+    //Fetch Selected Month Record
+    const fetchSelectedMonthYearRecords = async (selmonth, selyear) => {
+        console.log("In fetchSelectedMonthRecords")
         setSelectedMonth(selmonth)
         // console.log("selectedMonth: ", selectedMonth)
         // Get first and last day of the current month
+
         const now = new Date();
-        // console.log("Month: ", now.getMonth())
+        // console.log("now.getFullYear(): ", now.getFullYear())
+        // console.log("selectedYear: ", selectedYear)
 
         const selectedMonthIndex = months.indexOf(selmonth);
 
-        // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-        const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
-        // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
-        const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
+
+        // const firstDay = new Date(now.getFullYear(), selectedMonthIndex, 1);
+        const firstDay = new Date(selyear, selectedMonthIndex, 1);
+
+        // const lastDay = new Date(now.getFullYear(), selectedMonthIndex + 1, 0, 23, 59, 59);
+        const lastDay = new Date(selyear, selectedMonthIndex + 1, 0, 23, 59, 59);
+
 
         try {
             const querySnapshot = await projectFirestore
@@ -752,7 +772,7 @@ const PGAttendance = () => {
                                                 </select>
                                             </div>
                                             <div className="icon_dropdown">
-                                                <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+                                                <select value={selectedYear} onChange={(e) => fetchSelectedYearRecords(e.target.value)}>
                                                     {years.map((year) => (
                                                         <option key={year} value={year}>
                                                             {year}
@@ -790,7 +810,7 @@ const PGAttendance = () => {
                                 </div>
                             </div>
                             <div className="previous_punch">
-                                {
+                                {attendanceData && attendanceData.length === 0 ? <h1>No data found </h1> :
                                     attendanceData && attendanceData.length > 0 && attendanceData.map((data) => (
                                         <>
                                             <div className="pp_single">
