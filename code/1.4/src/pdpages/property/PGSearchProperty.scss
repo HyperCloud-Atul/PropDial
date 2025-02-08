@@ -383,17 +383,9 @@ span.material-symbols-outlined.fav {
 .pmd_top {
   display: grid;
   gap: 2px;
-  padding-right: 56px;
+  
   position: relative;
-  .google_map {
-    position: absolute;
-    top: 0;
-    right: 0;
-    img {
-      width: 46px;
-      aspect-ratio: 1/1;
-    }
-  }
+
 }
 
 .pmd_top .property_name {
@@ -401,7 +393,16 @@ span.material-symbols-outlined.fav {
   font-weight: 600;
   color: #303030;
 }
-
+.pmd_top .action_icons{
+  display: flex;
+  gap: 16px;
+  position: absolute;
+  top: -8px;
+  right: 0;
+  img{
+    height: 36px;
+  }
+}
 .pmd_top .property_location {
   font-size: 14px;
   font-weight: 400;
@@ -562,7 +563,20 @@ h6.value_per_sqf {
     column-gap: 15px;
     flex-wrap: wrap;
   }
-
+  .pmd_top .action_icons{    
+    position: unset;
+ gap: 10px;
+    img{
+      height: 24px;
+      width: auto !important;
+    }
+  }
+  .badge_and_icons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+  }
   .property_card_single {
     overflow: hidden;
     width: 48%;

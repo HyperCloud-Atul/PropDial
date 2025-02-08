@@ -145,7 +145,9 @@
 .pd_single .pmd_top .property_name {
   font-size: 22px;
 }
-
+.pd_single .pmd_top .padd_right{
+  padding-right: 200px;
+}
 .pd_single .pmd_top .property_location {
   font-size: 18px;
 }
@@ -1109,8 +1111,12 @@ label.upload_img input {
 
 .property_card_single .pmd_section4 .left {
   width: inherit;
+  display: flex;
+  gap: 22px;
 }
-
+.property_card_single .pmd_section4 .left .theme_btn{
+  min-width: 120px;
+}
 .short_prop_summary {
   display: block;
   align-items: center;
@@ -1131,6 +1137,9 @@ label.upload_img input {
   width: fit-content;
   color: var(--theme-orange);
   font-weight: 500;
+
+}
+.badge_and_icons{
   margin-top: 5px;
 }
 .short_prop_summary .left .detail {
@@ -1301,7 +1310,7 @@ label.upload_img input {
   }
 
   .pd_single .pcs_inner .pcs_main_detail .pmd_top {
-    padding-right: 35px;
+    /* padding-right: 35px; */
     gap: 3px;
   }
   .pd_single .pcs_inner .pcs_main_detail .pmd_top    img {
