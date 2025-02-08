@@ -274,18 +274,18 @@ const PGAttendance = () => {
         fetchSelectedMonthYearRecords(selmonth, selectedYear)
     }
 
-    //Fetch Selected Month Record
+    //Fetch Selected Year Record
     const fetchSelectedYearRecords = async (selYear) => {
-        console.log("Selected Year: ", selYear)
+        // console.log("Selected Year: ", selYear)
         setSelectedYear(selYear)
 
-        console.log("Selected Month: ", selectedMonth)
+        // console.log("Selected Month: ", selectedMonth)
         fetchSelectedMonthYearRecords(selectedMonth, selYear)
     }
 
-    //Fetch Selected Month Record
+    //Fetch Selected Month & Year Record
     const fetchSelectedMonthYearRecords = async (selmonth, selyear) => {
-        console.log("In fetchSelectedMonthRecords")
+        // console.log("In fetchSelectedMonthRecords")
         setSelectedMonth(selmonth)
         // console.log("selectedMonth: ", selectedMonth)
         // Get first and last day of the current month
