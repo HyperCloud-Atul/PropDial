@@ -88,10 +88,10 @@ const PGAttendance = () => {
     const { user } = useAuthContext(); // Current user
 
     // Scroll to the top of the page whenever the location changes start
-    const location = useLocation();
+    const pagelocation = useLocation();
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [location]);
+    }, [pagelocation]);
     // Scroll to the top of the page whenever the location changes end
 
     const currentYear = new Date().getFullYear(); // Get current year
@@ -100,7 +100,6 @@ const PGAttendance = () => {
 
     const currentMonthIndex = new Date().getMonth(); // Get current month index (0-11)
     const [selectedMonth, setSelectedMonth] = useState(months[currentMonthIndex]);
-    // const [currentTime, setCurrentTime] = useState(new Date());
 
     const [startWeekDate, setStartWeekDate] = useState();
     const [endWeekDate, setEndWeekDate] = useState();
@@ -119,8 +118,6 @@ const PGAttendance = () => {
     const today = new Date();
     const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
     const weekDay = days[today.getDay()]; // Current weekday
-
-
 
     const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
         "attendance-propdial"
@@ -149,6 +146,9 @@ const PGAttendance = () => {
     const [popupReturn, setPopupReturn] = useState(false);
     const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
     // const [popupReturn, setPopupReturn] = useState(false);
+
+    //Fetch current location of user : Start
+    const [location, setLocation] = useState("");
 
     // console.log("check continuous log")
     // console.log("Top Record: ", topRecord)
@@ -185,6 +185,12 @@ const PGAttendance = () => {
         // Cleanup the interval on component unmount
         // return () => clearInterval(timer);
     }, [user.uid]); // Run once when the component mounts
+
+
+    // // Filter months based on selected year
+    const filteredMonths = selectedYear === currentYear
+        ? months.slice(0, currentMonthIndex + 1)  // Show only past & current months
+        : months;  // Show all months for past years
 
 
     //Fetch Top Record
@@ -337,10 +343,11 @@ const PGAttendance = () => {
         setShowPunchInPopup(true);
     };
 
-    const handlePunchInPopup = (action) => {
+    const handlePunchInPopup = async (action) => {
 
         if (action === "CONFIRM") {
             // setPopupReturn(true)
+            getLocation()
             handlePunchIn();
         }
         setShowPunchInPopup(false);
@@ -352,13 +359,14 @@ const PGAttendance = () => {
         setPopupReturn(false);
     };
 
-    const handlePunchOutPopup = (action) => {
+    const handlePunchOutPopup = async (action) => {
         // console.log('Popup Action:', action)
         if (action === "CANCEL") {
             setPopupReturn(false);
         }
         if (action === "CONFIRM") {
             // setPopupReturn(true)
+            getLocation()
             handlePunchOut();
         }
         setShowPopupPunchOutFlag(false);
@@ -383,6 +391,7 @@ const PGAttendance = () => {
                 date: formattedTodaysDate,
                 weekDay,
                 tripStart,
+                punchInLocation: location,
             };
 
             await addDocument(data);
@@ -434,6 +443,7 @@ const PGAttendance = () => {
                 ),
                 tripEnd,
                 tripDistance,
+                punchOutLocation: location,
             };
 
             await updateDocument(docId, data);
@@ -445,6 +455,7 @@ const PGAttendance = () => {
         }
     };
 
+    //Fetch the current week dates
     const getCurrentWeekDates = () => {
         const today = new Date();
         const dayOfWeek = today.getDay(); // Get current day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
@@ -457,88 +468,125 @@ const PGAttendance = () => {
         setEndWeekDate(endOfWeek)
 
         fetchCurrentWeekRecords(startOfWeek, endOfWeek)
-
-
-        // return {
-        //     startOfWeek: startOfWeek.toISOString().split("T")[0], // Format as YYYY-MM-DD
-        //     endOfWeek: endOfWeek.toISOString().split("T")[0],
-        // };
     };
 
-    // console.log(getCurrentWeekDates());
+    //Find out Last 5 records
+    // const lastFiveRecords = async () => {
 
-    const lastFiveRecords = async () => {
+    //     // Find the punch-in record for today
+    //     const record = await projectFirestore
+    //         .collection("attendance-propdial")
+    //         .where("userId", "==", user.uid)
+    //         // .where("date", "==", formattedTodaysDate)
+    //         .limit(5)
+    //         .get();
 
-        // Find the punch-in record for today
-        const record = await projectFirestore
-            .collection("attendance-propdial")
-            .where("userId", "==", user.uid)
-            // .where("date", "==", formattedTodaysDate)
-            .limit(5)
-            .get();
+    //     console.log("record: ", record.docs[0].data())
 
-        console.log("record: ", record.docs[0].data())
-
-        // return record.docs;
-        return record;
-    };
+    //     // return record.docs;
+    //     return record;
+    // };
 
     //Fetch Second Last Record
-    const [record, setRecord] = useState(null);
-    useEffect(() => {
-        // const fetchSecondLastRecord = async () => {
-        //     try {
-        //         // Step 1: Get the latest record
-        //         const latestRecordRef = projectFirestore
-        //             .collection("attendance-propdial")
-        //             .where("userId", "==", user.uid)
-        //             .orderBy("date", "desc")
-        //             .limit(1);
+    // const [record, setRecord] = useState(null);
+    // useEffect(() => {
+    //     const fetchSecondLastRecord = async () => {
+    //         try {
+    //             // Step 1: Get the latest record
+    //             const latestRecordRef = projectFirestore
+    //                 .collection("attendance-propdial")
+    //                 .where("userId", "==", user.uid)
+    //                 .orderBy("date", "desc")
+    //                 .limit(1);
 
-        //         const latestSnapshot = await latestRecordRef.get();
+    //             const latestSnapshot = await latestRecordRef.get();
 
-        //         if (latestSnapshot.empty) {
-        //             console.log("No records found");
-        //             return;
-        //         }
+    //             if (latestSnapshot.empty) {
+    //                 console.log("No records found");
+    //                 return;
+    //             }
 
-        //         const latestDoc = latestSnapshot.docs[0];
+    //             const latestDoc = latestSnapshot.docs[0];
 
-        //         // Step 2: Get the second last record, skipping the latest one
-        //         const secondLastRecordRef = projectFirestore
-        //             .collection("attendance-propdial")
-        //             .where("userId", "==", user.uid)
-        //             .orderBy("date", "desc")
-        //             .startAfter(latestDoc) // Skip the latest record
-        //             .limit(1);
+    //             // Step 2: Get the second last record, skipping the latest one
+    //             const secondLastRecordRef = projectFirestore
+    //                 .collection("attendance-propdial")
+    //                 .where("userId", "==", user.uid)
+    //                 .orderBy("date", "desc")
+    //                 .startAfter(latestDoc) // Skip the latest record
+    //                 .limit(1);
 
-        //         const secondLastSnapshot = await secondLastRecordRef.get();
+    //             const secondLastSnapshot = await secondLastRecordRef.get();
 
-        //         if (!secondLastSnapshot.empty) {
-        //             setRecord({
-        //                 id: secondLastSnapshot.docs[0].id,
-        //                 ...secondLastSnapshot.docs[0].data(),
-        //             });
-        //         } else {
-        //             console.log("No second last record found");
-        //         }
-        //     } catch (error) {
-        //         console.error("Error fetching second last record:", error);
-        //     }
-        // };
+    //             if (!secondLastSnapshot.empty) {
+    //                 setRecord({
+    //                     id: secondLastSnapshot.docs[0].id,
+    //                     ...secondLastSnapshot.docs[0].data(),
+    //                 });
+    //             } else {
+    //                 console.log("No second last record found");
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching second last record:", error);
+    //         }
+    //     };
 
-        // fetchSecondLastRecord();
-    }, [user.id]);
+    //     fetchSecondLastRecord();
+    // }, [user.id]);
 
     // console.log("user details: ", user)
 
     // view mode control start
+
     const [viewMode, setViewMode] = useState("card_view");
 
     const handleModeChange = (newViewMode) => {
         setViewMode(newViewMode);
     };
     // view mode control end
+
+
+
+    // Function to get user's location
+    const getLocation = () => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    console.log("Lat:", latitude, "Lng:", longitude);
+                    await getAddress(latitude, longitude); // Convert lat/lng to address
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                    setLocation("Location access denied.");
+                }
+            );
+        } else {
+            setLocation("Geolocation is not supported by this browser.");
+        }
+    };
+
+    // Function to convert lat/lng to a readable address (Using OpenStreetMap API)
+    const getAddress = async (lat, lng) => {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+            );
+            const data = await response.json();
+            console.log("location object: ", data)
+            if (data && data.display_name) {
+                const location_details = data.address.suburb + ", " + data.address.state_district + ", " + data.address.state + ", " + data.address.country
+                setLocation(location_details); // Set location name
+                // setLocation(data.display_name); // Set location name
+            } else {
+                setLocation("Location not found.");
+            }
+        } catch (error) {
+            console.error("Error fetching address:", error);
+            setLocation("Error fetching location.");
+        }
+    };
+    //Fetch current location of user : End
 
     return (
         <>
@@ -651,13 +699,6 @@ const PGAttendance = () => {
 
                                             }}
                                             onChange={(e) => setTripEnd(e.target.value)}
-                                        // onChange={(e) => setTripEndTemp(e.target.value)}
-                                        // value={
-                                        //     topRecord && topRecord.tripEnd ? topRecord.tripEnd : topRecord && topRecord.tripStart ? topRecord.tripStart : ""
-                                        // }
-                                        // value={
-                                        //     tripEndTemp
-                                        // }
                                         />
                                         <p>
                                             {Number(tripEnd) > Number(topRecord && topRecord.tripStart) ? "Distance: " + (Number(tripEnd) - Number(topRecord && topRecord.tripStart)) + " KM" : "Trip End should be greater than Trip Start"}
@@ -670,7 +711,6 @@ const PGAttendance = () => {
                                     onClick={() => handlePunchOutPopup("CONFIRM")}
                                     className="theme_btn btn_red pointer no_icon"
                                     style={{ margin: "0px" }}
-                                // disabled={(Number(topRecord && topRecord.tripStart) >= Number(tripEndTemp)) ? true : false}
                                 >
                                     CONFIRM
                                 </button>
@@ -764,11 +804,16 @@ const PGAttendance = () => {
 
                                                     onChange={(e) => fetchSelectedMonthRecords(e.target.value)}
                                                 >
-                                                    {months.map((month, index) => (
+                                                    {/* {months.map((month, index) => (
                                                         <option key={index} value={month}>
                                                             {month}
                                                         </option>
+                                                    ))} */}
+
+                                                    {filteredMonths.map((month, index) => (
+                                                        <option key={index} value={month}>{month}</option>
                                                     ))}
+
                                                 </select>
                                             </div>
                                             <div className="icon_dropdown">
@@ -855,7 +900,7 @@ const PGAttendance = () => {
                             </div>
                         </div>
 
-                        {/* Right side punch section */}
+                        {/* Todays'punch-in & punch-out section */}
                         <div className="punch">
                             <div className="punch_inner">
                                 <div className="top">
@@ -875,7 +920,7 @@ const PGAttendance = () => {
                                                 <div className="inner_one">
                                                     <div className="inner_two">
                                                         <img src="/assets/img/hand-pointer.png" alt="" />
-                                                        <h6>Punch In : Length === 0</h6>
+                                                        <h6>Punch In</h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -935,6 +980,11 @@ const PGAttendance = () => {
                                             )}
 
                                             <h6>Punch In</h6>
+                                            <h6>{topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.punchInLocation
+                                                ? topRecord.punchInLocation
+                                                : ""}</h6>
                                         </div>
                                         <div className="pd_single">
                                             <img src="/assets/img/punchout.png" alt="" />
@@ -950,6 +1000,11 @@ const PGAttendance = () => {
                                                 </div>
                                             )}
                                             <h6>Punch Out</h6>
+                                            <h6> {topRecord &&
+                                                topRecord.date === formattedTodaysDate &&
+                                                topRecord.punchOutLocation
+                                                ? topRecord.punchOutLocation
+                                                : ""}</h6>
                                         </div>
 
                                         <div className="pd_single">
