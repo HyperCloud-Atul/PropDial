@@ -105,10 +105,9 @@ const PropertyDetails = () => {
   ]);
 
   const { documents: onlyExecutives, error: onlyExecutivesError } =
-    useCollection("users-propdial", ["rolePropDial", "==", "executive"]);  
+    useCollection("users-propdial", ["rolePropDial", "==", "executive"]);
 
-  const { documents: tenantDocument, errors: tenantDocError } =
-  useCollection(
+  const { documents: tenantDocument, errors: tenantDocError } = useCollection(
     "tenants",
     ["propertyId", "==", propertyid],
     ["createdAt", "desc"]
@@ -1903,10 +1902,7 @@ const PropertyDetails = () => {
                         )}
                     </div>
                     <div className="pcs_main_detail">
-                      
                       <div className="pmd_top">
-                       
-
                         <h4 className="padd_right">
                           {user &&
                             user.status === "active" &&
@@ -2000,48 +1996,62 @@ const PropertyDetails = () => {
                           {propertyDocument.locality}, {propertyDocument.city},{" "}
                           {propertyDocument.state}
                         </h6>
-                 <div className="badge_and_icons">
-                 <span className="pid_badge">
-                          PID: {" " + propertyDocument.pid}
-                        </span>
-                        <div className="action_icons">
-                      <div className="icon_single"   onClick={handleShareClick}>
-                            <img src="/assets/img/icons/sharearrow.png" alt="" />
-                          </div>
-                         
-                          <div className="icon_single" onClick={() =>
-                                  handleEnquiryNowClick(propertyDocument)
-                                }>
-                            <img src="/assets/img/icons/support.png" alt="" />
-                          </div>
-                         
-                          
-                          {propertyDocument &&
-                          propertyDocument.propertyVideoYouTubeLink && (
-                            <Link
-                              to={
-                                propertyDocument &&
-                                propertyDocument.propertyVideoYouTubeLink
-                              }
-                              className="google_map icon_single"
+                        <div className="badge_and_icons">
+                          <span className="pid_badge">
+                            PID: {" " + propertyDocument.pid}
+                          </span>
+                          <div className="action_icons">
+                            <div
+                              className="icon_single"
+                              onClick={handleShareClick}
                             >
-                               <img src="/assets/img/icons/youtube.png" alt="" />
-                            </Link>
-                          )}
-                          {propertyDocument &&
-                          propertyDocument.propertyGoogleMap && (
-                            <Link
-                              to={
-                                propertyDocument &&
-                                propertyDocument.propertyGoogleMap
+                              <img
+                                src="/assets/img/icons/sharearrow.png"
+                                alt=""
+                              />
+                            </div>
+
+                            <div
+                              className="icon_single"
+                              onClick={() =>
+                                handleEnquiryNowClick(propertyDocument)
                               }
-                              className="google_map icon_single"
                             >
-                               <img src="/assets/img/icons/mappin.png" alt="" />
-                            </Link>
-                          )}
-                      </div>
-                 </div>
+                              <img src="/assets/img/icons/support.png" alt="" />
+                            </div>
+
+                            {propertyDocument &&
+                              propertyDocument.propertyVideoYouTubeLink && (
+                                <Link
+                                  to={
+                                    propertyDocument &&
+                                    propertyDocument.propertyVideoYouTubeLink
+                                  }
+                                  className="google_map icon_single"
+                                >
+                                  <img
+                                    src="/assets/img/icons/youtube.png"
+                                    alt=""
+                                  />
+                                </Link>
+                              )}
+                            {propertyDocument &&
+                              propertyDocument.propertyGoogleMap && (
+                                <Link
+                                  to={
+                                    propertyDocument &&
+                                    propertyDocument.propertyGoogleMap
+                                  }
+                                  className="google_map icon_single"
+                                >
+                                  <img
+                                    src="/assets/img/icons/mappin.png"
+                                    alt=""
+                                  />
+                                </Link>
+                              )}
+                          </div>
+                        </div>
                       </div>
                       <div className="divider"></div>
                       <div className="pmd_section2">
@@ -2444,10 +2454,10 @@ const PropertyDetails = () => {
                        
                       </div> */}
                       <EnquiryAddModal
-                                show={showEnquiryModal}
-                                handleClose={handleEnquiryModalClose}
-                                selectedProperty={selectedProperty}
-                              />
+                        show={showEnquiryModal}
+                        handleClose={handleEnquiryModalClose}
+                        selectedProperty={selectedProperty}
+                      />
                     </div>
                   </div>
                 </div>
@@ -2606,22 +2616,18 @@ const PropertyDetails = () => {
                         </SwiperSlide>
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
-                          <Link to={`/inspection/${propertyid}`} >
-                          
-                          
-                         
-                          <div className="eicp_single coming_soon">
-                            <div className="icon">
-                              <span className="material-symbols-outlined">
-                                pageview
-                                
-                              </span>
-                              <div className="text">
-                                <h6>{inspections && inspections.length}</h6>
-                                <h5>Inspections</h5>
+                          <Link to={`/inspection/${propertyid}`}>
+                            <div className="eicp_single coming_soon">
+                              <div className="icon">
+                                <span className="material-symbols-outlined">
+                                  pageview
+                                </span>
+                                <div className="text">
+                                  <h6>{inspections && inspections.length}</h6>
+                                  <h5>Inspections</h5>
+                                </div>
                               </div>
                             </div>
-                          </div>
                           </Link>
                         </SwiperSlide>
                         {/* Transactions */}
@@ -3923,18 +3929,18 @@ const PropertyDetails = () => {
 
                 {/* propdial managers / users card  start */}
                 {user &&
-                        user.status === "active" &&
-                        ((user &&
-                          user.role === "owner" &&
-                          tenantDocument &&
-                          tenantDocument.length > 0) ||
-                          (user &&
-                            user.role === "coowner" &&
-                            tenantDocument &&
-                            tenantDocument.length > 0) ||
-                          (user &&
-                            (user.role === "admin" ||
-                              user.role === "superAdmin"))) && (
+                  user.status === "active" &&
+                  ((user &&
+                    user.role === "owner" &&
+                    tenantDocument &&
+                    tenantDocument.length > 0) ||
+                    (user &&
+                      user.role === "coowner" &&
+                      tenantDocument &&
+                      tenantDocument.length > 0) ||
+                    (user &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin"))) && (
                     <>
                       <section className="property_card_single full_width_sec with_orange property_user">
                         <span className="verticall_title">
@@ -4615,110 +4621,122 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
- {/* Rooms for commercial  */}
- {propertyDocument &&
+                {/* Rooms for commercial  */}
+                {propertyDocument &&
                   propertyDocument.category === "Commercial" && (
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
                         <h2 className="card_title">Rooms</h2>
                         <div className="p_info">
-                             {/* Workstations  */}
-        {propertyDocument &&
-  propertyDocument.numberOfWorkstations &&
-(
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/workstation.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Workstations</h6>
-        <h5>{propertyDocument.numberOfWorkstations}</h5>
-      </div>
-    </div>
-  )}
+                          {/* Workstations  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfWorkstations && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/workstation.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Workstations</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfWorkstations}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
 
-              {/* Cabins  */}
-              {propertyDocument &&
-  propertyDocument.numberOfCabins
- &&
-(
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/cabin.png" alt="" />
-        
-      </div>
-      <div className="pis_content">
-        <h6>Cabins</h6>
-        <h5>{propertyDocument.numberOfCabins
-}</h5>
-      </div>
-    </div>
-  )}
+                          {/* Cabins  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfCabins && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/cabin.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Cabins</h6>
+                                  <h5>{propertyDocument.numberOfCabins}</h5>
+                                </div>
+                              </div>
+                            )}
 
-   {/* Meeting Rooms  */}
-   {propertyDocument &&
-  propertyDocument.numberOfMeetingRooms
- &&
-(
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/conversation.png" alt="" />
-        
-      </div>
-      <div className="pis_content">
-        <h6>Meeting Rooms</h6>
-        <h5>{propertyDocument.numberOfMeetingRooms
-}</h5>
-      </div>
-    </div>
-  )}
+                          {/* Meeting Rooms  */}
+                          {propertyDocument &&
+                            propertyDocument.numberOfMeetingRooms && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/conversation.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Meeting Rooms</h6>
+                                  <h5>
+                                    {propertyDocument.numberOfMeetingRooms}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
 
+                          {/* Reception Area?  */}
+                          {propertyDocument &&
+                            propertyDocument.isReceptionArea &&
+                            propertyDocument.propertyType === "Office" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/information-desk.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Reception Area?</h6>
+                                  <h5>{propertyDocument.isReceptionArea}</h5>
+                                </div>
+                              </div>
+                            )}
 
+                          {/* Pantry/Cafeteria  */}
+                          {propertyDocument &&
+                            propertyDocument.pantryCafeteria &&
+                            (propertyDocument.propertyType === "Retail" ||
+                              propertyDocument.propertyType === "Office") && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/cafetaria.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Pantry/Cafeteria</h6>
+                                  <h5>{propertyDocument.pantryCafeteria}</h5>
+                                </div>
+                              </div>
+                            )}
 
-          {/* Reception Area?  */}
-          {propertyDocument &&
-  propertyDocument.isReceptionArea &&
-  propertyDocument.propertyType === "Office" && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/information-desk.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Reception Area?</h6>
-        <h5>{propertyDocument.isReceptionArea}</h5>
-      </div>
-    </div>
-  )}
-
-        {/* Pantry/Cafeteria  */}
-        {propertyDocument &&
-  propertyDocument.pantryCafeteria &&
-(  propertyDocument.propertyType === "Retail" ||
-  propertyDocument.propertyType === "Office") && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/cafetaria.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Pantry/Cafeteria</h6>
-        <h5>{propertyDocument.pantryCafeteria}</h5>
-      </div>
-    </div>
-  )}
-
-       {/* Washrooms  */}
-       {propertyDocument &&
-  propertyDocument.washrooms &&  propertyDocument.propertyType !== "Land" && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/washroom.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Washrooms</h6>
-        <h5>{propertyDocument.washrooms}</h5>
-      </div>
-    </div>
-  )}
+                          {/* Washrooms  */}
+                          {propertyDocument &&
+                            propertyDocument.washrooms &&
+                            propertyDocument.propertyType !== "Land" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/washroom.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Washrooms</h6>
+                                  <h5>{propertyDocument.washrooms}</h5>
+                                </div>
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>
@@ -4764,41 +4782,45 @@ const PropertyDetails = () => {
                               </div>
                             )}
 
-                               {/* Property Readiness  */}
-                               {propertyDocument &&
-  propertyDocument.readiness &&
-  propertyDocument.propertyType !== "Land" &&
-  propertyDocument.propertyType !== "Other" && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/construction.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Property Readiness</h6>
-        <h5>{propertyDocument.readiness}</h5>
-      </div>
-    </div>
-  )}
+                          {/* Property Readiness  */}
+                          {propertyDocument &&
+                            propertyDocument.readiness &&
+                            propertyDocument.propertyType !== "Land" &&
+                            propertyDocument.propertyType !== "Other" && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/construction.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Property Readiness</h6>
+                                  <h5>{propertyDocument.readiness}</h5>
+                                </div>
+                              </div>
+                            )}
 
-             {/* Is Centrally Airconditioned?  */}
-             {propertyDocument &&
-  propertyDocument.isCentrallyAirconditioned &&
-(  propertyDocument.propertyType === "Retail" ||
-  propertyDocument.propertyType === "Office") && (
-    <div className="p_info_single">
-      <div className="pd_icon">
-        <img src="/assets/img/property-detail-icon/air.png" alt="" />
-      </div>
-      <div className="pis_content">
-        <h6>Is Centrally Airconditioned?</h6>
-        <h5>{propertyDocument.isCentrallyAirconditioned}</h5>
-      </div>
-    </div>
-  )}
-
-   
-
-
+                          {/* Is Centrally Airconditioned?  */}
+                          {propertyDocument &&
+                            propertyDocument.isCentrallyAirconditioned &&
+                            (propertyDocument.propertyType === "Retail" ||
+                              propertyDocument.propertyType === "Office") && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/air.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Is Centrally Airconditioned?</h6>
+                                  <h5>
+                                    {propertyDocument.isCentrallyAirconditioned}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
 
                           {/* Furnishing */}
                           {propertyDocument &&
@@ -5020,40 +5042,37 @@ const PropertyDetails = () => {
                                 </div>
                               </div>
                             )}
-                            {/* Gated Complex?  */}
-                              {propertyDocument &&
-                            propertyDocument.gatedArea && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/property-detail-icon/expire.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Gated Complex?</h6>
-                                  <h5>{propertyDocument.gatedArea}</h5>
-                                </div>
+                          {/* Gated Complex?  */}
+                          {propertyDocument && propertyDocument.gatedArea && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/expire.png"
+                                  alt=""
+                                />
                               </div>
-                            )}
-
-                                  {/* Pre-leased?  */}
-                                  {propertyDocument &&
-                            propertyDocument.isPreleased && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/property-detail-icon/expire.png"
-                                    alt=""
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Pre-leased?</h6>
-                                  <h5>{propertyDocument.isPreleased}</h5>
-                                </div>
+                              <div className="pis_content">
+                                <h6>Gated Complex?</h6>
+                                <h5>{propertyDocument.gatedArea}</h5>
                               </div>
-                            )}
+                            </div>
+                          )}
 
+                          {/* Pre-leased?  */}
+                          {propertyDocument && propertyDocument.isPreleased && (
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/expire.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Pre-leased?</h6>
+                                <h5>{propertyDocument.isPreleased}</h5>
+                              </div>
+                            </div>
+                          )}
 
                           {/* lock in period  */}
                           {propertyDocument &&
@@ -5173,119 +5192,121 @@ const PropertyDetails = () => {
                   </div>
                 )}
 
-               
-                    {propertyDocument && (
-                      <div className="property_card_single mobile_full_card">
-                        <div className="row">
-                          <div className={propertyDocument.propertyGoogleMap ? "col-md-11 col-2" : "col-12"}>
-                            <div className="more_detail_card_inner">
-                              <h2 className="card_title">Property Address</h2>
-                              <div className="p_info">
-                                {user &&
-                                  user.status === "active" &&
-                                  user.role !== "guest" && (
-                                    <div className="p_info_single">
-                                      <div className="pd_icon">
-                                        <img
-                                          src="/assets/img/property-detail-icon/unitnumber.png"
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div className="pis_content">
-                                        <h6>Unit Number</h6>
-                                        <h5>{propertyDocument.unitNumber}</h5>
-                                      </div>
-                                    </div>
-                                  )}
+                {propertyDocument && (
+                  <div className="property_card_single mobile_full_card">
+                    <div className="row">
+                      <div
+                        className={
+                          propertyDocument.propertyGoogleMap
+                            ? "col-md-11 col-2"
+                            : "col-12"
+                        }
+                      >
+                        <div className="more_detail_card_inner">
+                          <h2 className="card_title">Property Address</h2>
+                          <div className="p_info">
+                            {user &&
+                              user.status === "active" &&
+                              user.role !== "guest" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
-                                      src="/assets/img/property-detail-icon/society.png"
+                                      src="/assets/img/property-detail-icon/unitnumber.png"
                                       alt=""
                                     />
                                   </div>
                                   <div className="pis_content">
-                                    <h6>Society</h6>
-                                    <h5> {propertyDocument.society}</h5>
+                                    <h6>Unit Number</h6>
+                                    <h5>{propertyDocument.unitNumber}</h5>
                                   </div>
                                 </div>
-                                <div className="p_info_single">
-                                  <div className="pd_icon">
-                                    <img
-                                      src="/assets/img/property-detail-icon/locality.png"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="pis_content">
-                                    <h6>locality</h6>
-                                    <h5> {propertyDocument.locality}</h5>
-                                  </div>
-                                </div>
-                                <div className="p_info_single">
-                                  <div className="pd_icon">
-                                    <img
-                                      src="/assets/img/property-detail-icon/city.png"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="pis_content">
-                                    <h6>city</h6>
-                                    <h5> {propertyDocument.city}</h5>
-                                  </div>
-                                </div>
-                                <div className="p_info_single">
-                                  <div className="pd_icon">
-                                    <img
-                                      src="/assets/img/property-detail-icon/state.png"
-                                      alt=""
-                                    />
-                                  </div>
-                                  <div className="pis_content">
-                                    <h6>state</h6>
-                                    <h5> {propertyDocument.state}</h5>
-                                  </div>
-                                </div>
-                                {propertyDocument.pincode && (
-                                  <div className="p_info_single">
-                                    <div className="pd_icon">
-                                      <img
-                                        src="/assets/img/property-detail-icon/pincode.png"
-                                        alt=""
-                                      />
-                                    </div>
-                                    <div className="pis_content">
-                                      <h6>Pincode</h6>
-                                      <h5> {propertyDocument.pincode}</h5>
-                                    </div>
-                                  </div>
-                                )}
+                              )}
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/society.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Society</h6>
+                                <h5> {propertyDocument.society}</h5>
                               </div>
                             </div>
-                          
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/locality.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>locality</h6>
+                                <h5> {propertyDocument.locality}</h5>
+                              </div>
+                            </div>
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/city.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>city</h6>
+                                <h5> {propertyDocument.city}</h5>
+                              </div>
+                            </div>
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/state.png"
+                                  alt=""
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>state</h6>
+                                <h5> {propertyDocument.state}</h5>
+                              </div>
+                            </div>
+                            {propertyDocument.pincode && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/pincode.png"
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Pincode</h6>
+                                  <h5> {propertyDocument.pincode}</h5>
+                                </div>
+                              </div>
+                            )}
                           </div>
-                          {propertyDocument &&
-                          propertyDocument.propertyGoogleMap && (
-                            <div className="col-md-1 col-2">
-                          <Link
+                        </div>
+                      </div>
+                      {propertyDocument &&
+                        propertyDocument.propertyGoogleMap && (
+                          <div className="col-md-1 col-2">
+                            <Link
                               to={
                                 propertyDocument &&
                                 propertyDocument.propertyGoogleMap
                               }
                               className="google_map"
                             >
-                               <img
-                                  src="/assets/img/icons/googlemap_big.png"
-                                  alt=""
-                                  className="w-100"
-                                />
+                              <img
+                                src="/assets/img/icons/googlemap_big.png"
+                                alt=""
+                                className="w-100"
+                              />
                             </Link>
-                            </div>
-                          )}
-                        
-                        </div>
-                      </div>
-                    )}
-               
+                          </div>
+                        )}
+                    </div>
+                  </div>
+                )}
 
                 {/*Overlooking for all category */}
                 {propertyDocument &&
