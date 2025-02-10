@@ -168,6 +168,8 @@ const PGAttendance = () => {
 
         setGreeting(getGreeting());
 
+        getLocation()
+
         getCurrentWeekDates();
 
         // fetchCurrentWeekRecords()
@@ -176,6 +178,8 @@ const PGAttendance = () => {
         // console.log("currentMonthRecord: ",)
 
         fetchTopRecord()
+
+        // ensureMissingRecords()
 
         // Update the time every second
         // const timer = setInterval(() => {
@@ -186,6 +190,147 @@ const PGAttendance = () => {
         // return () => clearInterval(timer);
     }, [user.uid]); // Run once when the component mounts
 
+
+
+    // Generate missing records from last recorded date to today
+    const ensureMissingRecords = async () => {
+        try {
+            // Step 1: Get the latest record
+            const record = await projectFirestore
+                .collection("attendance-propdial")
+                .where("userId", "==", user.uid)
+                .orderBy("createdAt", "desc")
+                .limit(1)
+                .get();
+
+            // const docId = record.docs[0].id;
+            // record.docs[0].data()
+
+            // const unsubscribe = latestRecordRef.onSnapshot(snapshot => {             
+
+            if (!record.empty) {
+                // console.log("snapshot.docs[0].data(): ", snapshot.docs[0].data())
+                // setTopRecord(snapshot.docs[0].data());
+                const latestRecordDate = record.docs[0].data().date
+                const lastDate = dayjs(new Date(latestRecordDate));
+                console.log("last date: ", lastDate)
+
+
+                const today = dayjs();
+                console.log("today: ", today)
+
+                if ((lastDate.format("DD-MMM-YY")) === (today.format("DD-MMM-YY"))) {
+                    console.log("Last day & today is same")
+                }
+                else {
+                    console.log("Last day is less than today")
+                    for (let date = lastDate.add(1, "day"); date.isBefore(today); date = date.add(1, "day")) {
+
+
+                        if ((date.format("DD-MMM-YY")) === (today.format("DD-MMM-YY"))) {
+                            console.log("loop date & today is same, so break the loop")
+                            break
+                        }
+
+                        // let date = dayjs().subtract(i, "day").format("YYYY-MM-DD");
+                        // const dateStr = date.format("YYYY-MM-DD");
+                        const dateStr = date.format("DD-MMM-YY");
+                        console.log("missing dates: ", dateStr)
+
+                        // console.log("missing date: ", date)
+                        const weekDay = days[(new Date(dateStr)).getDay()];
+                        // const weekDay = days[date.getDay()];
+                        console.log("weekDay: ", weekDay)
+
+                        try {
+                            // Add a punch-in record
+                            const data = {
+                                // createdAt: (new Date(dateStr)),
+                                createdAt: date.toDate(),
+                                userId: user.uid,
+                                punchIn: null,
+                                punchOut: null,
+                                workHrs: "00:00",
+                                date: dateStr,
+                                // date,
+                                weekDay,
+                                tripStart: "",
+                                punchInLocation: "",
+                            };
+
+                            console.log("missing data: ", data)
+                            const ref = projectFirestore.collection("attendance-propdial");
+
+                            // await addDocument(data);
+                            ref.add(data);
+
+                            // alert("Punch In successful!");
+                        } catch (error) {
+                            console.log("Error to add a Punch-in Record: ", error);
+                        }
+                    }
+                }
+
+
+            }
+
+
+            console.log("ensureMissingRecords")
+            // const lastDate = topRecord.createdAt;
+            // console.log("latest record date: ", latestRecordDate)
+
+            // const lastDate = dayjs(new Date(latestRecordDate));
+            // console.log("last date: ", lastDate)
+            // const today = dayjs();
+            // console.log("today: ", today)
+
+            // for (let date = lastDate.add(1, "day"); date.isBefore(today) || date.isSame(today, "day"); date = date.add(1, "day")) {
+            //     // let date = dayjs().subtract(i, "day").format("YYYY-MM-DD");         
+            //     // const dateStr = date.format("YYYY-MM-DD");
+            //     const dateStr = date.format("DD-MMM-YY");
+            //     console.log("missing dates: ", dateStr)
+
+            //     const weekDay = days[(new Date(dateStr)).getDay()];
+            //     console.log("weekDay: ", weekDay)
+
+            //     try {
+            //         // Add a punch-in record
+            //         const data = {
+            //             createdAt: (new Date(dateStr)),
+            //             userId: user.uid,
+            //             punchIn: "",
+            //             punchOut: null,
+            //             workHrs: "00:00",
+            //             date: dateStr,
+            //             weekDay,
+            //             tripStart: "",
+            //             punchInLocation: "",
+            //         };
+
+            //         const ref = projectFirestore.collection("attendance-propdial");
+
+            //         // await addDocument(data);
+            //         await ref.add({ data });
+
+            //         // alert("Punch In successful!");
+            //     } catch (error) {
+            //         console.log("Error to add a Punch-in Record: ", error);
+            //     }
+
+            //     // const attendanceDoc = doc(db, `users_attendance/${userId}/attendance/${dateStr}`);
+
+            //     // batchUpdates.push(setDoc(attendanceDoc, {
+            //     //     punchIn: null,
+            //     //     punchOut: null,
+            //     //     workHrs: null,
+            //     //     location: null,
+            //     //     date: dateStr,
+            //     // }, { merge: true })); // `merge: true` ensures we don't overwrite existing data
+            // }
+        } catch (error) {
+            console.log("Error : ", error);
+        }
+    }
 
     // // Filter months based on selected year
     const filteredMonths = selectedYear === currentYear
@@ -422,34 +567,36 @@ const PGAttendance = () => {
                 alert("You have not punched in yet!");
                 return;
             }
+            else {
 
-            const docId = record.docs[0].id;
-            // const tripStart = record.docs[0].data().tripStart;
+                const docId = record.docs[0].id;
+                // const tripStart = record.docs[0].data().tripStart;
 
-            //Validation Start Trip Reading should not be greater than End Trip Reading
-            // if (Number(tripEnd) <= Number(topRecord.tripStart)) {
-            //     alert("Trip End Reading should not be less than Trip Start Reading!");
-            //     return;
-            // }
-            const tripDistance = Number(tripEnd) - Number(topRecord.tripStart);
-            // console.log("record.docs[0]: ", record.docs[0].data())
+                //Validation Start Trip Reading should not be greater than End Trip Reading
+                // if (Number(tripEnd) <= Number(topRecord.tripStart)) {
+                //     alert("Trip End Reading should not be less than Trip Start Reading!");
+                //     return;
+                // }
+                const tripDistance = Number(tripEnd) - Number(topRecord.tripStart);
+                // console.log("record.docs[0]: ", record.docs[0].data())
 
-            // Update the punch-out time
-            const data = {
-                punchOut: formattedPunchoutTime,
-                workHrs: calculateTimeDifference(
-                    topRecord.punchIn,
-                    formattedPunchoutTime
-                ),
-                tripEnd,
-                tripDistance,
-                punchOutLocation: location,
-            };
+                // Update the punch-out time
+                const data = {
+                    punchOut: formattedPunchoutTime,
+                    workHrs: calculateTimeDifference(
+                        topRecord.punchIn,
+                        formattedPunchoutTime
+                    ),
+                    tripEnd,
+                    tripDistance,
+                    punchOutLocation: location,
+                };
 
-            await updateDocument(docId, data);
+                await updateDocument(docId, data);
 
-            // alert("Punch Out successful!");
-            setPunchIn(null);
+                // alert("Punch Out successful!");
+                setPunchIn(null);
+            }
         } catch (error) {
             console.log("Error to Check the existing Punch-In record: ", error);
         }
@@ -554,7 +701,8 @@ const PGAttendance = () => {
                 async (position) => {
                     const { latitude, longitude } = position.coords;
                     console.log("Lat:", latitude, "Lng:", longitude);
-                    await getAddress(latitude, longitude); // Convert lat/lng to address
+                    // await getAddress(latitude, longitude); // Convert lat/lng to address
+                    await getLocationName(latitude, longitude) // Convert lat/lng using Google Map Geolocation
                 },
                 (error) => {
                     console.error("Error getting location:", error);
@@ -586,7 +734,58 @@ const PGAttendance = () => {
             setLocation("Error fetching location.");
         }
     };
+
+    const getComponent = (components, type) => {
+        const found = components.find((component) => component.types.includes(type));
+        return found ? found.long_name : "";
+    };
+
+    const getLocationName = async (latitude, longitude) => {
+        console.log("In getLocationName")
+        const API_KEY = "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw"; // Replace with your API Key
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            console.log("data from GeoLocation: ", data)
+            if (data.status === "OK") {
+                // const locationName = data.results[0].formatted_address;
+                // console.log("Location Name:", locationName);
+
+                const addressComponents = data.results[0].address_components;
+                const sublocality = getComponent(addressComponents, "sublocality");
+                console.log("sublocality: ", sublocality)
+                // const locality = getComponent(addressComponents, "locality");
+                // console.log("locality: ", locality)
+                const city = getComponent(addressComponents, "administrative_area_level_2");
+                console.log("city: ", city)
+                // const district = getComponent(addressComponents, "administrative_area_level_3");
+                // console.log("district: ", district)
+                const state = getComponent(addressComponents, "administrative_area_level_1");
+                console.log("state: ", state)
+                const country = getComponent(addressComponents, "country");
+                console.log("country: ", country)
+                const locationName = sublocality + ", " + city + ", " + state + ", " + country
+
+                setLocation(locationName); // Set location name
+                // return locationName;
+            } else {
+                console.error("Geocoding Error:", data.status);
+                // return null;
+            }
+        } catch (error) {
+            console.error("Error fetching location:", error);
+            // return null;
+        }
+    };
+
+
     //Fetch current location of user : End
+
+
+
+
 
     return (
         <>
@@ -879,10 +1078,12 @@ const PGAttendance = () => {
                                                     <div className="b_single">
                                                         <h6>Punch In</h6>
                                                         {data.punchIn ? <h5>{data.punchIn}</h5> : "--:--"}
+                                                        {data.punchInLocation ? <h5>{data.punchInLocation}</h5> : "--:--"}
                                                     </div>
                                                     <div className="b_single">
                                                         <h6>Punch Out</h6>
                                                         {data.punchOut ? <h5>{data.punchOut}</h5> : "--:--"}
+                                                        {data.punchOutLocation ? <h5>{data.punchOutLocation}</h5> : "--:--"}
                                                     </div>
                                                     <div className="b_single">
                                                         <h6>Trip Start</h6>
