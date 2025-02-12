@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
-import PhoneInput, { allCountries } from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
+import PhoneInput, { allCountries } from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 // import 'flag-icon-css/css/flag-icon.min.css';
 import OtpInput from "react-otp-input";
 
@@ -12,13 +12,17 @@ import { useSignupPhone } from "../../hooks/useSignupPhone";
 import { useCollection } from "../../hooks/useCollection";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { projectAuth, projectAuthObj, projectFirestore, timestamp } from "../../firebase/config";
+import {
+  projectAuth,
+  projectAuthObj,
+  projectFirestore,
+  timestamp,
+} from "../../firebase/config";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
 
 // css
 import "./PhoneLogin.scss";
 import { displayName } from "react-quill";
-
 
 function camelCase(str) {
   return (
@@ -38,8 +42,6 @@ const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(email).toLowerCase());
 };
-
-
 
 const PhoneLogin_reCaptchaV2 = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
@@ -78,8 +80,6 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [resendOTPFlag, setResendOTPFlag] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-
 
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users");
@@ -128,7 +128,8 @@ const PhoneLogin_reCaptchaV2 = () => {
   // Google authentication
   const signInWithGoogle = () => {
     const provider = new projectAuthObj.GoogleAuthProvider();
-    projectAuth.signInWithPopup(provider)
+    projectAuth
+      .signInWithPopup(provider)
       .then(async (result) => {
         // User signed in
         console.log(result.user);
@@ -171,27 +172,24 @@ const PhoneLogin_reCaptchaV2 = () => {
               rolePropAgent: "na",
               rolePropDial: "owner",
               rolesPropAgent: ["propagent"],
-              rolesPropDial: ['owner'],
+              rolesPropDial: ["owner"],
               status: "active",
               createdAt: timestamp.fromDate(new Date()),
               lastLoginTimestamp: timestamp.fromDate(new Date()),
             });
-
         } else {
           console.log("Existing user signed in with Google");
           console.log("existing user:", user);
-          let role = 'owner';
-          const docRef = projectFirestore.collection("users").doc(user.uid)
+          let role = "owner";
+          const docRef = projectFirestore.collection("users").doc(user.uid);
           // Get the document snapshot
           const docSnapshot = await docRef.get();
           // Check if the document exists
           if (docSnapshot.exists) {
             // Extract the data from the document snapshot
             // const data = docSnapshot.data();
-            if (docSnapshot.data().rolePropDial === 'na')
-              role = 'owner'
-            else
-              role = docSnapshot.data().rolePropDial
+            if (docSnapshot.data().rolePropDial === "na") role = "owner";
+            else role = docSnapshot.data().rolePropDial;
           }
 
           // console.log('role: ', role)
@@ -205,24 +203,22 @@ const PhoneLogin_reCaptchaV2 = () => {
             email: user.email,
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
-
         }
 
         // navigate("/profile");
-
       })
       .catch((error) => {
         // Handle Errors here.
         console.error(error);
       });
-
   };
 
   //Link Google Account with phone number
   const linkGoogleAccount = (curuser) => {
     const provider = new projectAuthObj.GoogleAuthProvider();
 
-    curuser.linkWithPopup(provider)
+    curuser
+      .linkWithPopup(provider)
       .then(async (result) => {
         const user = result.user;
         // Accounts successfully linked
@@ -240,7 +236,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   //   send opt
   const getOTP = async (e) => {
     e.preventDefault();
-    setIsLoading(true);  // Start the loader
+    setIsLoading(true); // Start the loader
     setOtpTimer(20);
     setIsResendDisabled(true);
     console.log("In getOTP");
@@ -255,47 +251,43 @@ const PhoneLogin_reCaptchaV2 = () => {
       const respons = await setUpRecapcha("+" + phone);
       console.log("in try 2", respons);
       setConfirmObj(respons);
-      setmobilenoSliderState(false)
-      setotpSliderState(true)
-      setnewUserSliderState(false)
-    }
-    catch (error) {
+      setmobilenoSliderState(false);
+      setotpSliderState(true);
+      setnewUserSliderState(false);
+    } catch (error) {
       console.log("2 error.message", error.message);
       setError(error.message);
       await resendOTP("+" + phone);
       let obj_maintenance = document.getElementById("btn_sendotp");
       obj_maintenance.style.display = "block";
-      setIsLoading(false);  // Stop the loader
+      setIsLoading(false); // Stop the loader
     }
-  }
+  };
 
   // New User Form
   const newUserForm = async () => {
-    console.log("In New User Form ")
-    console.log("User: ", user)
-    setmobilenoSliderState(false)
-    setotpSliderState(false)
-    setnewUserSliderState(true)
+    console.log("In New User Form ");
+    console.log("User: ", user);
+    setmobilenoSliderState(false);
+    setotpSliderState(false);
+    setnewUserSliderState(true);
 
-    let errFlag = false
+    let errFlag = false;
     // if (!validateEmail(email)) {
     //   setError("Email format is not valid");
     //   errFlag = true
     // }
     if (name === "" || email === "" || city === "") {
       setError("All details are mandatory");
-      errFlag = true
-    }
-    else if (!validateEmail(email)) {
+      errFlag = true;
+    } else if (!validateEmail(email)) {
       setError("Email format is not valid");
-      errFlag = true
-    }
-    else {
-      errFlag = false
+      errFlag = true;
+    } else {
+      errFlag = false;
     }
 
     if (!errFlag) {
-
       let splitName = name.split(" ");
 
       // Extract the first name
@@ -310,13 +302,12 @@ const PhoneLogin_reCaptchaV2 = () => {
 
       navigate("/dashboard");
     }
-  }
-
+  };
 
   // OTP verify
   const verifyOTP = async (e) => {
     e.preventDefault();
-    setIsLoading(true);  // Start the loader
+    setIsLoading(true); // Start the loader
     setError("");
     console.log("in verifyOTP", otp);
 
@@ -324,7 +315,7 @@ const PhoneLogin_reCaptchaV2 = () => {
     try {
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
-        setUser(user)
+        setUser(user);
         // Check if the user is new
         if (result.additionalUserInfo.isNewUser) {
           console.log("New user signed in with phone number");
@@ -360,7 +351,7 @@ const PhoneLogin_reCaptchaV2 = () => {
               rolePropAgent: "na",
               rolePropDial: "owner",
               rolesPropAgent: ["propagent"],
-              rolesPropDial: ['owner'],
+              rolesPropDial: ["owner"],
               accessType: "country",
               accessValue: "India",
               status: "active",
@@ -368,29 +359,26 @@ const PhoneLogin_reCaptchaV2 = () => {
               lastLoginTimestamp: timestamp.fromDate(new Date()),
             });
 
-          setnewUserSliderState(true)
-          setmobilenoSliderState(false)
-          setotpSliderState(false)
-
+          setnewUserSliderState(true);
+          setmobilenoSliderState(false);
+          setotpSliderState(false);
         } else {
           console.log("Existing user signed in with phone number");
-          setIsLoading(false);  // Stop the loader  
-          setmobilenoSliderState(false)
-          setotpSliderState(true)
-          setnewUserSliderState(false)
+          setIsLoading(false); // Stop the loader
+          setmobilenoSliderState(false);
+          setotpSliderState(true);
+          setnewUserSliderState(false);
 
-          let role = 'owner';
-          const docRef = projectFirestore.collection("users").doc(user.uid)
+          let role = "owner";
+          const docRef = projectFirestore.collection("users").doc(user.uid);
           // Get the document snapshot
           const docSnapshot = await docRef.get();
           // Check if the document exists
           if (docSnapshot.exists) {
             // Extract the data from the document snapshot
             // const data = docSnapshot.data();
-            if (docSnapshot.data().rolePropDial === 'na')
-              role = 'owner'
-            else
-              role = docSnapshot.data().rolePropDial
+            if (docSnapshot.data().rolePropDial === "na") role = "owner";
+            else role = docSnapshot.data().rolePropDial;
           }
 
           // console.log('role: ', role)
@@ -433,10 +421,8 @@ const PhoneLogin_reCaptchaV2 = () => {
         //   setotpSliderState(false)
         //   navigate("/profile");
         // }
-
-      })
-    }
-    catch (error) {
+      });
+    } catch (error) {
       console.log("error.message", error.message);
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
@@ -447,17 +433,21 @@ const PhoneLogin_reCaptchaV2 = () => {
         setResendOTPFlag(true);
       }, 30000);
     }
-  }
+  };
 
   const handlePhoneChange = (value, countryData) => {
     // setPhone(value);
     // setCountry(countryData);
-    console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
-    setPhone(value)
-    setCountryCode(countryData.countryCode)
-    setCountryName(countryData.name)
+    console.log(
+      "value: ",
+      value + " country code: ",
+      countryData.countryCode + ", country name: ",
+      countryData.name
+    );
+    setPhone(value);
+    setCountryCode(countryData.countryCode);
+    setCountryName(countryData.name);
   };
-
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -482,10 +472,10 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <label htmlFor="" className="text-center">
                     Mobile Number
                   </label>
-                  <div >
+                  <div>
                     <PhoneInput
                       country={"in"}
-                      // onlyCountries={['in', 'us', 'ae']}                 
+                      // onlyCountries={['in', 'us', 'ae']}
                       value={phone}
                       // onChange={setPhone}
                       onChange={handlePhoneChange}
@@ -501,17 +491,17 @@ const PhoneLogin_reCaptchaV2 = () => {
                         autoFocus: false,
                       }}
                       inputStyle={{
-                        width: '100%',
-                        height: '45px',
-                        paddingLeft: '45px',
-                        fontSize: '16px',
-                        borderRadius: '5px',
-                        border: '1px solid #00A8A8',
+                        width: "100%",
+                        height: "45px",
+                        paddingLeft: "45px",
+                        fontSize: "16px",
+                        borderRadius: "5px",
+                        border: "1px solid #00A8A8",
                       }}
                       buttonStyle={{
-                        borderRadius: '5px',
-                        textAlign: 'left',
-                        border: '1px solid #00A8A8',
+                        borderRadius: "5px",
+                        textAlign: "left",
+                        border: "1px solid #00A8A8",
                       }}
                     ></PhoneInput>
                     {error && <div className="field_error">{error}</div>}
@@ -538,7 +528,8 @@ const PhoneLogin_reCaptchaV2 = () => {
                 </div> */}
                 {!isLoading && (
                   <>
-                    <div id='btn_sendotp'
+                    <div
+                      id="btn_sendotp"
                       className="theme_btn btn_fill w_full"
                       onClick={getOTP}
                     >
@@ -567,9 +558,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                     <BeatLoader color={"#00a8a8"} loading={true} />
                   </div>
                 )}
-
               </form>
-
             </div>
           </>
         )}
@@ -636,7 +625,6 @@ const PhoneLogin_reCaptchaV2 = () => {
               <div className="otp_input">
                 <label htmlFor="">Enter 6 digit OTP</label>
                 <OtpInput
-
                   value={otp}
                   onChange={setOtp}
                   numInputs={6}
@@ -681,7 +669,10 @@ const PhoneLogin_reCaptchaV2 = () => {
                           </p> */}
               <div className="vg10"></div>
               {isLoading && (
-                <button className="theme_btn btn_fill w_full" onClick={verifyOTP}>
+                <button
+                  className="theme_btn btn_fill w_full"
+                  onClick={verifyOTP}
+                >
                   Confirm
                 </button>
               )}
@@ -696,77 +687,81 @@ const PhoneLogin_reCaptchaV2 = () => {
         </div>
         {/* New User Slider to provide Name & City and email */}
         <div>
-          {newUserSliderState &&
-            (
-              <>
-                <div className="left_inner col_left_inner">
-                  <div className="page_inner_logo">
-                    <img src="/assets/img/logo_propdial.png" alt="" />
-                  </div>
-                  {/* <h5 className="m20 mt-3 mb-4">
+          {newUserSliderState && (
+            <>
+              <div className="left_inner col_left_inner">
+                <div className="page_inner_logo">
+                  <img src="/assets/img/logo_propdial.png" alt="" />
+                </div>
+                {/* <h5 className="m20 mt-3 mb-4">
               Unlocking Your Property Prospects: PropDial - Where Realty Meets
               Security.
             </h5> */}
+                <div className="vg22"></div>
+                <div></div>
+
+                <label htmlFor="" className="text-center">
+                  {/* <strong> Welcome to Propdial</strong> */}
+
+                  <h5>Congratulations and welcome aboard! 🎉</h5>
+
+                  <p
+                    style={{
+                      marginTop: "3px",
+                    }}
+                  >
+                    {" "}
+                    Welcome to join the Propdial community.
+                  </p>
+                </label>
+                <div className="vg22"></div>
+                <div className="new_form_field with_icon">
+                  <input
+                    required
+                    type="text"
+                    placeholder="Your Full Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    style={{
+                      background: "none",
+                    }}
+                  />
                   <div className="vg22"></div>
-                  <div></div>
-
-                  <label htmlFor="" className="text-center">
-                    {/* <strong> Welcome to Propdial</strong> */}
-
-                    <h5>Congratulations and welcome aboard! 🎉</h5>
-
-                    <p style={{
-                      marginTop: "3px"
-                    }}>   Welcome to join the Propdial community.</p>
-
-                  </label>
+                  <input
+                    required
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{
+                      background: "none",
+                    }}
+                  />
                   <div className="vg22"></div>
-                  <div className="new_form_field with_icon">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      style={{
-                        background: "none"
-                      }}
-                    />
-                    <div className="vg22"></div>
-                    <input
-                      required
-                      type="email"
-                      placeholder="Your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      style={{
-                        background: "none"
-                      }}
-                    />
-                    <div className="vg22"></div>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Current City"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      style={{
-                        background: "none"
-                      }}
-                    />
-                  </div>
-                  {error && <div className="field_error">{error}</div>}
-                  <div className="vg10"></div>
-                  <div>
-                    <button className="theme_btn btn_fill w_full" onClick={newUserForm}>
-                      Next
-                    </button>
-                  </div>
+                  <input
+                    required
+                    type="text"
+                    placeholder="Your Current City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    style={{
+                      background: "none",
+                    }}
+                  />
                 </div>
-
-              </>
-            )
-          }
+                {error && <div className="field_error">{error}</div>}
+                <div className="vg10"></div>
+                <div>
+                  <button
+                    className="theme_btn btn_fill w_full"
+                    onClick={newUserForm}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
