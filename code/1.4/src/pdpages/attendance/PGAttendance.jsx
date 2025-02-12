@@ -4,7 +4,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
 import { timestamp } from "../../firebase/config";
@@ -17,6 +17,7 @@ import PunchInOut from "../../components/attendance/PunchInOut";
 import CurrentDateTime from "../../components/CurrentDateTime";
 import ScrollToTop from "../../components/ScrollToTop";
 import InactiveUserCard from "../../components/InactiveUserCard";
+import ReactTable from "../../components/ReactTable";
 
 // import scss
 import "./PGAttendance.scss";
@@ -811,6 +812,146 @@ const PGAttendance = () => {
 
   //Fetch current location of user : End
 
+  // previous punches data in table 
+    const columns = useMemo(
+      () => [
+        {
+          Header: 'S.No',
+          accessor: (row, i) => i + 1,
+          id: 'serialNumber',
+          Cell: ({ row }) => row.index + 1,
+          disableFilters: true,
+        },
+        {
+          Header: 'Date',
+          accessor: 'date',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Hrs Worked',
+          accessor: 'workHrs',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Punch In',
+          accessor: 'punchIn',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Punch In Location',
+          accessor: 'punchInLocation',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Punch Out Location',
+          accessor: 'punchOutLocation',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Punch Out',
+          accessor: 'punchOut',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Distance',
+          accessor: 'tripDistance',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Trip Start',
+          accessor: 'tripStart',
+          disableFilters: true,
+  
+       
+        },
+        {
+          Header: 'Trip End',
+          accessor: 'tripEnd',
+          disableFilters: true,
+  
+       
+        },
+        // {
+        //   Header: 'Phone Number',
+        //   accessor: 'phoneNumber',
+        //   Cell: ({ value }) => (
+        //     <div className="phone-number mobile_min_width">
+        //       <span>{formatPhoneNumber(value)}</span>
+        //     </div>
+        //   ),
+        // },
+        // {
+        //   Header: 'Email',
+        //   accessor: 'email',
+        //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
+        // },
+        // {
+        //   Header: 'Contact Options',
+        //   accessor: 'actions',
+  
+        //   Cell: ({ row }) => (
+        //     <div className="contact_btn mobile_min_width">
+        //       <Link
+        //         className="whatsapp-icon"
+        //         to={`https://wa.me/+${row.original.phoneNumber}`}
+        //         target="_blank"
+        //       >
+        //         <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
+        //       </Link>
+        //       <Link
+        //         className="call-icon"
+        //         to={`tel:+${row.original.phoneNumber}`}
+        //         target="_blank"
+        //       >
+        //         <img src="/assets/img/simple_call.png" alt="Call" />
+        //       </Link>
+        //     </div>
+        //   ),
+        // },
+  
+        // {
+        //   Header: 'On-Boarded',
+        //   accessor: 'createdAt',
+        //   Cell: ({ value }) => (
+        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+        //   ),
+        // },
+        // {
+        //   Header: 'Last Login',
+        //   accessor: 'lastLoginTimestamp',
+        //   Cell: ({ value }) => (
+        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+        //   ),
+        // },
+        // {
+        //   Header: 'Status',
+        //   accessor: 'status',
+  
+        //   Cell: ({ value }) => (
+        //     <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
+        //       {value}
+        //     </span>
+        //   ),
+        // },
+  
+      ],
+      []
+    );
+
   return (
     <>
       {user && user.status === "active" ? (
@@ -834,24 +975,26 @@ const PGAttendance = () => {
               </Modal.Header>
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
-                  <input
-                    id="id_tripstart"
-                    className="custom-input"
-                    style={{ paddingRight: "10px" }}
-                    type="number"
-                    placeholder={
-                      topRecord && topRecord.tripEnd
-                        ? "Last Trip End: " + topRecord.tripEnd
-                        : ""
-                    }
-                    maxLength={7}
-                    onInput={(e) => {
-                      restrictInput(e, 7);
-                      // e.target.value = "45"
-                    }}
-                    onChange={(e) => setTripStart(e.target.value)}
-                    // value={topRecord && topRecord.tripEnd}
-                  />
+                  <div className="form_field">
+                    <input
+                      id="id_tripstart"
+                      className="custom-input"
+                      style={{ paddingRight: "10px" }}
+                      type="number"
+                      placeholder={
+                        topRecord && topRecord.tripEnd
+                          ? "Last Trip End: " + topRecord.tripEnd
+                          : ""
+                      }
+                      maxLength={7}
+                      onInput={(e) => {
+                        restrictInput(e, 7);
+                        // e.target.value = "45"
+                      }}
+                      onChange={(e) => setTripStart(e.target.value)}
+                      // value={topRecord && topRecord.tripEnd}
+                    />
+                  </div>
                 )}
               </Modal.Body>
               <Modal.Footer
@@ -1017,7 +1160,7 @@ const PGAttendance = () => {
                   </div>
                 </div>
                 {user && user.vehicleStatus && (
-                    <div className="ac_single dist">
+                  <div className="ac_single dist">
                     <h6>Total number of</h6>
                     <h5>Distance</h5>
                     <h2>
@@ -1030,7 +1173,7 @@ const PGAttendance = () => {
                         "--:--"
                       )}
                     </h2>
-  
+
                     <div className="icon">
                       <div className="icon_inner">
                         <img src="/assets/img/edicon/distance.png" alt="" />
@@ -1137,88 +1280,192 @@ const PGAttendance = () => {
                   </div>
                 </div>
               </div>
-              <div className="previous_punch">
-                {attendanceData && attendanceData.length === 0 ? (
-                  <h1>No data found </h1>
-                ) : (
-                  attendanceData &&
-                  attendanceData.length > 0 &&
-                  attendanceData.map((data) => (
-                    <>
-                      <div className="pp_single">
-                        <div className="top">
-                          <div className="left">
-                            {data.date ? <h3>{data.date.slice(0, 2)}</h3> : ""}
-                            {data.weekDay ? (
-                              <h4>{data.weekDay.slice(0, 3)}</h4>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                          <div className="right">
-                            <div className="r_single">
-                              <h6> Hrs Worked</h6>
-                              {data.workHrs === "00:00" ? (
-                                "--:--"
-                              ) : (
-                                <h5>{data.workHrs}</h5>
-                              )}
-                            </div>
-                            <div className="r_single">
-                              <h6> Distance</h6>
-                              {data.tripDistance ? (
-                                <h5>{data.tripDistance} KM</h5>
-                              ) : (
-                                "--:--"
-                              )}
-                            </div>
-                          </div>
-                        </div>
+              {viewMode === "card_view" && (
+                <div className="previous_punch">
+                  {attendanceData && attendanceData.length === 0 ? (
+                    <h1>No data found </h1>
+                  ) : (
+                    attendanceData &&
+                    attendanceData.length > 0 &&
+                    attendanceData.map((data) => (
+                      <>
                         <div
-                          className={`bottom ${
-                            user && user.vehicleStatus ? "trip" : ""
+                          className={`pp_single ${
+                            user && user.vehicleStatus ? "" : "v_not"
                           }`}
                         >
-                          <div className="b_single">
-                            <h6>Punch In</h6>
-                            {data.punchIn ? <h5>{data.punchIn}</h5> : "--:--"}
-                            {data.punchInLocation ? (
-                              <h5>{data.punchInLocation}</h5>
-                            ) : (
-                              "--:--"
-                            )}
-                          </div>
-                          <div className="b_single">
-                            <h6>Punch Out</h6>
-                            {data.punchOut ? <h5>{data.punchOut}</h5> : "--:--"}
-                            {data.punchOutLocation ? (
-                              <h5>{data.punchOutLocation}</h5>
-                            ) : (
-                              "--:--"
-                            )}
-                          </div>
-                          {user && user.vehicleStatus && (
-                            <div className="b_single">
-                              <h6>Trip Start</h6>
-                              {data.tripStart ? (
-                                <h5>{data.tripStart}</h5>
+                          <div className="top">
+                            <div className="left">
+                              {data.date ? (
+                                <h3>{data.date.slice(0, 2)}</h3>
                               ) : (
-                                "--:--"
+                                ""
+                              )}
+                              {data.weekDay ? (
+                                <h4>{data.weekDay.slice(0, 3)}</h4>
+                              ) : (
+                                ""
                               )}
                             </div>
-                          )}
-                          {user && user.vehicleStatus && (
-                            <div className="b_single">
-                              <h6>Trip End</h6>
-                              {data.tripEnd ? <h5>{data.tripEnd}</h5> : "--:--"}
+                            <div className="right">
+                              <div className="r_single">
+                                <h6> Hrs Worked</h6>
+                                {data.workHrs === "00:00" ? (
+                                  "--:--"
+                                ) : (
+                                  // <h5>{data.workHrs}</h5>
+                                  <h5>
+                                    {data.workHrs
+                                      ? data.workHrs
+                                          .split(":")
+                                          .map((val, index) => (
+                                            <span key={index}>
+                                              {val.trim()}
+                                              <span className="unit">
+                                                {index === 0 ? "hrs" : "min"}
+                                              </span>
+                                              {index === 0 && (
+                                                <span
+                                                  style={{ marginRight: "8px" }}
+                                                ></span>
+                                              )}
+                                            </span>
+                                          ))
+                                      : "--:--"}
+                                  </h5>
+                                )}
+                              </div>
+
+                              {user && user.vehicleStatus ? (
+                                <div className="r_single">
+                                  <h6> Distance</h6>
+                                  {data.tripDistance ? (
+                                    <h5>{data.tripDistance} KM</h5>
+                                  ) : (
+                                    "--:--"
+                                  )}
+                                </div>
+                              ) : (
+                                <div className="r_single">
+                                  <h6> Punch In</h6>
+                                  {data.punchIn ? (
+                                    <h5>{data.punchIn}</h5>
+                                  ) : (
+                                    "--:--"
+                                  )}
+                                </div>
+                              )}
+                              {user && user.vehicleStatus ? (
+                                ""
+                              ) : (
+                                <div className="r_single">
+                                  <h6> Punch Out</h6>
+                                  {data.punchOut ? (
+                                    <h5>{data.punchOut}</h5>
+                                  ) : (
+                                    "--:--"
+                                  )}
+                                </div>
+                              )}
                             </div>
+                          </div>
+                          {user && user.vehicleStatus ? (
+                            <div
+                              className={`bottom ${
+                                user && user.vehicleStatus ? "trip" : ""
+                              }`}
+                            >
+                              <div className="b_single">
+                                <h6>Punch In</h6>
+                                {data.punchIn ? (
+                                  <h5>{data.punchIn}</h5>
+                                ) : (
+                                  "--:--"
+                                )}
+                              </div>
+                              <div className="b_single">
+                                <h6>Punch Out</h6>
+                                {data.punchOut ? (
+                                  <h5>{data.punchOut}</h5>
+                                ) : (
+                                  "--:--"
+                                )}
+                              </div>
+                              {user && user.vehicleStatus && (
+                                <div className="b_single">
+                                  <h6>Trip Start</h6>
+                                  {data.tripStart ? (
+                                    <h5>{data.tripStart}</h5>
+                                  ) : (
+                                    "--:--"
+                                  )}
+                                </div>
+                              )}
+                              {user && user.vehicleStatus && (
+                                <div className="b_single">
+                                  <h6>Trip End</h6>
+                                  {data.tripEnd ? (
+                                    <h5>{data.tripEnd}</h5>
+                                  ) : (
+                                    "--:--"
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            ""
                           )}
+                          <div className="punch_location">
+                            <div className="pl_single">
+                              <h6>Punch In </h6>
+
+                              <h5>
+                                {data.punchInLocation
+                                  ? data.punchInLocation
+                                      .split(", ") // Comma se split karega
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
+                                  : "--:--"}
+                              </h5>
+                            </div>
+                            <div className="pl_single">
+                              <h6>Punch Out </h6>
+
+                              <h5>
+                                {data.punchOutLocation
+                                  ? data.punchOutLocation
+                                      .split(", ")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
+                                  : "--:--"}
+                              </h5>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  ))
-                )}
-              </div>
+                      </>
+                    ))
+                  )}
+                </div>
+              )}
+                {viewMode === "table_view" && (
+                <div className="previous_punch">
+                 <div className="user-single-table table_filter_hide">
+      <ReactTable tableColumns={columns} tableData={attendanceData} />
+
+     
+    </div>
+                </div>
+              )}
             </div>
 
             {/* Todays'punch-in & punch-out section */}
@@ -1307,36 +1554,54 @@ const PGAttendance = () => {
                     )}
 
                     <h6>Punch In</h6>
-                    <h6>
+                    {/* <h6>
+                      {topRecord &&
+                      topRecord.date === formattedTodaysDate &&
+                      topRecord.punchInLocation
+                        ? (() => {
+                            const parts = topRecord.punchInLocation
+                              .split(", ")
+                              .map((part) => part.trim());                           
+                            const first =
+                              parts[0] !== "undefined" && parts[0] !== ""
+                                ? parts[0]
+                                : null;
+                            const second =
+                              parts[1] !== "undefined" && parts[1] !== ""
+                                ? parts[1]
+                                : null;
+
+                            if (first && second) return `${first}, ${second}`;
+                            if (!first && second) return second; 
+                            return first || "";
+                          })()
+                        : ""}
+                    </h6> */}
+
+                    <marquee behavior="" direction="" scrollamount="3">
+                      {/* <h6>
                       {topRecord &&
                       topRecord.date === formattedTodaysDate &&
                       topRecord.punchInLocation
                         ? topRecord.punchInLocation
                         : ""}
-                    </h6>
-                  </div>
-                  <div className="pd_single">
-                    <img src="/assets/img/punchout.png" alt="" />
-                    {topRecord && !topRecord.date === formattedTodaysDate ? (
-                      <div className="data">--:--</div>
-                    ) : (
-                      <div className="data">
+                    </h6> */}
+                      <h6>
                         {topRecord &&
                         topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOut
-                          ? topRecord.punchOut
-                          : "--:--"}
-                      </div>
-                    )}
-                    <h6>Punch Out</h6>
-                    <h6>
-                      {" "}
-                      {topRecord &&
-                      topRecord.date === formattedTodaysDate &&
-                      topRecord.punchOutLocation
-                        ? topRecord.punchOutLocation
-                        : ""}
-                    </h6>
+                        topRecord.punchInLocation
+                          ? topRecord.punchInLocation
+                              .split(", ")
+                              .filter(
+                                (part) =>
+                                  part.trim() !== "undefined" &&
+                                  part.trim() !== ""
+                              )
+                              .slice(0, -1)
+                              .join(", ")
+                          : ""}
+                      </h6>
+                    </marquee>
                   </div>
 
                   <div className="pd_single">
@@ -1356,6 +1621,46 @@ const PGAttendance = () => {
                       </div>
                     )}
                     <h6>Hrs Worked</h6>
+                  </div>
+                  <div className="pd_single">
+                    <img src="/assets/img/punchout.png" alt="" />
+                    {topRecord && !topRecord.date === formattedTodaysDate ? (
+                      <div className="data">--:--</div>
+                    ) : (
+                      <div className="data">
+                        {topRecord &&
+                        topRecord.date === formattedTodaysDate &&
+                        topRecord.punchOut
+                          ? topRecord.punchOut
+                          : "--:--"}
+                      </div>
+                    )}
+                    <h6>Punch Out</h6>
+                    {/* <h6>
+                      {" "}
+                      {topRecord &&
+                      topRecord.date === formattedTodaysDate &&
+                      topRecord.punchOutLocation
+                        ? topRecord.punchOutLocation
+                        : ""}
+                    </h6> */}
+                    <marquee behavior="" direction="" scrollamount="3">
+                      <h6>
+                        {topRecord &&
+                        topRecord.date === formattedTodaysDate &&
+                        topRecord.punchOutLocation
+                          ? topRecord.punchOutLocation
+                              .split(", ")
+                              .filter(
+                                (part) =>
+                                  part.trim() !== "undefined" &&
+                                  part.trim() !== ""
+                              )
+                              .slice(0, -1)
+                              .join(", ")
+                          : ""}
+                      </h6>
+                    </marquee>
                   </div>
                   {user && user.vehicleStatus && (
                     <div className="pd_single">

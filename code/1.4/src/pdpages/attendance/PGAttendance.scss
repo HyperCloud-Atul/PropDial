@@ -178,6 +178,8 @@
         padding: 15px;
         background: var(--white-color);
         border-radius: 15px;
+        overflow: hidden;
+        padding-bottom: 0px;
 
         .top {
           display: flex;
@@ -206,13 +208,21 @@
               display: flex;
               flex-direction: column;
               gap: 5px;
+              width: 100%;
+              border-right: 1px solid #cecece;
+              &:last-child{
+                border-right: none;
+              }
               h6 {
-                font-size: 16px;
+                font-size: 15px;
                 color: var(--theme-grey);
               }
               h5 {
-                font-size: 20px;
+                font-size: 18px;
                 color: var(--light-black);
+                .unit{
+                  font-size: 14px;
+                }
               }
             }
           }
@@ -235,6 +245,7 @@
             }
           }
         }
+      
         .bottom {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -256,6 +267,29 @@
               font-size: 15px;
               color: var(--light-black);
             }
+          }
+        }
+        .punch_location{
+          display: grid
+          ;
+              grid-template-columns: repeat(2, 1fr);
+              background: #ebeef4;
+              padding: 8px 15px;
+              margin: 6px -15px 00px -15px;
+              grid-column-gap: 15px;
+          .pl_single{
+            text-align: center;
+            h6 {
+              font-size: 13px;
+              font-weight: 400;
+              color: var(--theme-grey);
+            }
+            h5 {
+              font-size: 13px;
+              color: var(--light-black);
+              font-weight: 400;
+            }
+
           }
         }
       }
@@ -579,7 +613,8 @@
         gap: 15px;
         margin-top: 15px;
         .pp_single {
-          padding: 8px;        
+          padding: 8px;      
+          padding-bottom: 0px;  
           border-radius: 8px;
           .top {
             gap: 10px;           
