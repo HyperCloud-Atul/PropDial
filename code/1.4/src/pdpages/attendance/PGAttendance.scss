@@ -24,6 +24,9 @@
         border-radius: 15px;
         padding: 15px 74px 6px 15px;
         position: relative;
+        .unit{
+          font-size: 14px;
+        }
 
         h6 {
           font-size: 14px;
@@ -234,11 +237,14 @@
         }
         .bottom {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 15px;
           margin-top: 10px;
           padding-top: 10px;
           border-top: 1px solid #d2d2d2;
+          &.trip{
+            grid-template-columns: repeat(4, 1fr);
+          }
           .b_single {
             text-align: center;
             h6 {
@@ -267,9 +273,7 @@
     right: 0;
     padding: 22px;
     overflow-y: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+   
     .punch_inner {
       width: 100%;
     }
