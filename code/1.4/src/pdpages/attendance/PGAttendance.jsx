@@ -150,15 +150,17 @@ const PGAttendance = () => {
   const [currentWeekRecords, setCurrentWeekRecords] = useState();
   const [currentWeekDistance, setCurrentWeekDistance] = useState();
   const [currentWeekWorkedHours, setCurrentWeekWorkedHours] = useState();
+  const [punchInError, setPunchInError] = useState(false);
+  const [punchOutError, setPunchOutError] = useState(false);
 
   // console.log("currentWeekRecords: ", currentWeekRecords)
 
   //Popup Flags
-  const [showPunchInPopup, setShowPunchInPopup] = useState(false);
-  // const [showPopupFlag, setShowPopupFlag] = useState(false);
+  const [showPunchInPopup, setShowPunchInPopup] = useState(false);  
+  const [showPunchOutPopup, setShowPunchOutPopup] = useState(false);
   const [popupReturn, setPopupReturn] = useState(false);
   const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-  // const [popupReturn, setPopupReturn] = useState(false);
+  
 
   //Fetch current location of user : Start
   const [location, setLocation] = useState("");
@@ -516,10 +518,8 @@ const PGAttendance = () => {
     setShowPunchInPopup(false);
   };
 
-  const showPunchOutPopup = () => {
-    // e.preventDefault();
-    setShowPopupPunchOutFlag(true);
-    setPopupReturn(false);
+  const handelShowPunchOutPopup = () => {  
+    setShowPunchOutPopup(true);    
   };
 
   const handlePunchOutPopup = async (action) => {
@@ -531,8 +531,7 @@ const PGAttendance = () => {
       // setPopupReturn(true)
       getLocation();
       handlePunchOut();
-    }
-    setShowPopupPunchOutFlag(false);
+    }    
   };
 
   const handlePunchIn = async () => {
@@ -540,12 +539,16 @@ const PGAttendance = () => {
       alert("Please log in to punch in.");
       return;
     }
-
-    const formattedPunchinTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
-
+  
+    if (user.vehicleStatus && !tripStart) {
+      setPunchInError(true);
+      return; // Prevent further execution
+    }
+  
+    const formattedPunchinTime = format(today, "hh:mm a"); 
+  
     try {
       // Add a punch-in record
-
       const data = {
         userId: user.uid,
         punchIn: formattedPunchinTime,
@@ -556,21 +559,27 @@ const PGAttendance = () => {
         tripStart,
         punchInLocation: location,
       };
-
+  
       await addDocument(data);
-
-      // alert("Punch In successful!");
+      
     } catch (error) {
-      console.log("Error to add a Punch-in Record: ", error);
+      console.log("Error adding a Punch-in Record: ", error);
     }
+    setShowPunchInPopup(false);
+    setPunchInError(false);
+    setTripStart(null)
   };
+  
 
   const handlePunchOut = async () => {
     if (!user) {
       alert("Please log in to punch out.");
       return;
     }
-
+    if (user.vehicleStatus && !tripEnd) {
+      setPunchOutError(true);
+      return; // Prevent further execution
+    }
     const formattedPunchoutTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
 
     try {
@@ -616,6 +625,9 @@ const PGAttendance = () => {
     } catch (error) {
       console.log("Error to Check the existing Punch-In record: ", error);
     }
+    setShowPunchOutPopup(false);
+    setPunchOutError(false);
+    setTripEnd(null)
   };
 
   //Fetch the current week dates
@@ -826,6 +838,11 @@ const PGAttendance = () => {
           Header: 'Date',
           accessor: 'date',
           disableFilters: true,
+          Cell: ({ value }) => (
+                <div className="date mobile_min_width">
+               {value}
+                </div>
+              ),
   
        
         },
@@ -833,6 +850,28 @@ const PGAttendance = () => {
           Header: 'Hrs Worked',
           accessor: 'workHrs',
           disableFilters: true,
+          Cell: ({ value }) => (
+            <div className="hr_worked mobile_min_width">
+             
+              {value !== "00:00"
+                                      ? value
+                                          .split(":")
+                                          .map((val, index) => (
+                                            <span key={index}>
+                                              {val.trim()}
+                                              <span className="unit">
+                                                {index === 0 ? "hrs" : "min"}
+                                              </span>
+                                              {index === 0 && (
+                                                <span
+                                                  style={{ marginRight: "8px" }}
+                                                ></span>
+                                              )}
+                                            </span>
+                                          ))
+                                      : "--:--"}
+            </div>
+          ),
   
        
         },
@@ -840,6 +879,11 @@ const PGAttendance = () => {
           Header: 'Punch In',
           accessor: 'punchIn',
           disableFilters: true,
+          Cell: ({ value }) => (
+            <div className="time mobile_min_width">
+           {value ? value : "--:--"}
+            </div>
+          ),
   
        
         },
@@ -847,20 +891,33 @@ const PGAttendance = () => {
           Header: 'Punch In Location',
           accessor: 'punchInLocation',
           disableFilters: true,
-  
+          Cell: ({ value }) => (
+            <div className="location mobile_min_width">
+           {value ? value : "--:--"}
+            </div>
+          ),
        
         },
         {
           Header: 'Punch Out Location',
           accessor: 'punchOutLocation',
           disableFilters: true,
-  
+          Cell: ({ value }) => (
+            <div className="location mobile_min_width">
+           {value ? value : "--:--"}
+            </div>
+          ),
        
         },
         {
           Header: 'Punch Out',
           accessor: 'punchOut',
           disableFilters: true,
+          Cell: ({ value }) => (
+            <div className="time mobile_min_width">
+          {value ? value : "--:--"}
+            </div>
+          ),         
   
        
         },
@@ -868,21 +925,33 @@ const PGAttendance = () => {
           Header: 'Distance',
           accessor: 'tripDistance',
           disableFilters: true,
-  
+    Cell: ({ value }) => (
+            <div className="time mobile_min_width">
+          {value ? value : "--:--"}
+            </div>
+          ),  
        
         },
         {
           Header: 'Trip Start',
           accessor: 'tripStart',
           disableFilters: true,
-  
+    Cell: ({ value }) => (
+            <div className="time mobile_min_width">
+          {value ? value : "--:--"}
+            </div>
+          ),  
        
         },
         {
           Header: 'Trip End',
           accessor: 'tripEnd',
           disableFilters: true,
-  
+    Cell: ({ value }) => (
+            <div className="time mobile_min_width">
+          {value ? value : "--:--"}
+            </div>
+          ),  
        
         },
         // {
@@ -957,12 +1026,13 @@ const PGAttendance = () => {
       {user && user.status === "active" ? (
         <div>
           <ScrollToTop />
-          {/* Pupup */}
+          {/* Poupup */}
           <div>
             <Modal
               show={showPunchInPopup}
               onHide={() => setShowPunchInPopup(false)}
               centered
+              className="pl-0"
             >
               <Modal.Header
                 className="justify-content-center"
@@ -971,11 +1041,12 @@ const PGAttendance = () => {
                   border: "none",
                 }}
               >
-                <h5>Are you sure you want to Punch-In now?</h5>
+                <h5 className="text-center text_red">Are you sure you want to Punch-In now?</h5>
               </Modal.Header>
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
-                  <div className="form_field">
+                  <div className="form_field pi_input">
+                    <label htmlFor="id_tripstart">Trip Start*</label>
                     <input
                       id="id_tripstart"
                       className="custom-input"
@@ -991,9 +1062,13 @@ const PGAttendance = () => {
                         restrictInput(e, 7);
                         // e.target.value = "45"
                       }}
+                     
                       onChange={(e) => setTripStart(e.target.value)}
                       // value={topRecord && topRecord.tripEnd}
                     />
+                    {punchInError && (
+                      <div className="field_error">Please enter the trip start</div>
+                    )}
                   </div>
                 )}
               </Modal.Body>
@@ -1019,79 +1094,108 @@ const PGAttendance = () => {
                         {errorForNoSelectReasonMessage}
                       </div>
                     )} */}
+               
+               <div
+  className="cancel_btn"
+  onClick={() => {
+    setShowPunchInPopup(false);
+    setPunchInError(false);
+    setTripStart(null);
+  }}
+>
+  Cancel
+</div>
                 <div
                   className="done_btn"
-                  onClick={() => handlePunchInPopup("CONFIRM")}
+                  onClick={handlePunchIn}
                   // disabled={loading}
-                >
-                  {/* {loading ? "Saving..." : "Yes, Update"} */}
+                >                  
                   Confirm
-                </div>
-                <div
-                  className="cancel_btn"
-                  onClick={() => setShowPunchInPopup(false)}
-                >
-                  Cancel
                 </div>
               </Modal.Footer>
             </Modal>
-
-            <div
-              className={
-                showPopupPunchOutFlag ? "pop-up-div open" : "pop-up-div"
-              }
+            <Modal
+              show={showPunchOutPopup}
+              onHide={() => setShowPunchOutPopup(false)}
+              centered
+              className="pl-0"
             >
-              <div>
-                <p>
-                  {showPopupPunchOutFlag &&
-                    " Are you sure you want to Punch-Out now? "}
-                </p>
-
+              <Modal.Header
+                className="justify-content-center"
+                style={{
+                  paddingBottom: "0px",
+                  border: "none",
+                }}
+              >
+                <h5 className="text-center text_red">Are you sure you want to Punch-Out now?</h5>
+              </Modal.Header>
+              <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
-                  <>
-                    <p>Trip Start: {topRecord && topRecord.tripStart}</p>
+                  <div className="form_field pi_input">
+                    <label htmlFor="id_tripstart">Trip End</label>
                     <input
                       id="id_tripend"
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder="Trip End - Meter Reading"
+                      placeholder={`Trip Start: ${topRecord && topRecord.tripStart}`}
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);
                       }}
                       onChange={(e) => setTripEnd(e.target.value)}
                     />
-                    <p>
+                       <p className="mt-2 text_grey">
                       {Number(tripEnd) >
                       Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
                           (Number(tripEnd) -
                             Number(topRecord && topRecord.tripStart)) +
                           " KM"
-                        : "Trip End should be greater than Trip Start"}
+                        : "Note:- Trip End should be greater than Trip Start"}
                     </p>
-                  </>
+                    {punchOutError && (
+                      <div className="field_error">Please enter the trip end</div>
+                    )}
+                  </div>
                 )}
-                <br></br>
-                <br></br>
-                <button
-                  onClick={() => handlePunchOutPopup("CONFIRM")}
-                  className="theme_btn btn_red pointer no_icon"
-                  style={{ margin: "0px" }}
+              </Modal.Body>
+              <Modal.Footer
+                className="d-flex justify-content-between"
+                style={{
+                  border: "none",
+                  gap: "15px",
+                }}
+              >
+            
+               
+                <div
+                  className="cancel_btn"
+                  
+                  onClick={() => {
+                    setShowPunchOutPopup(false);
+                    setPunchOutError(false);
+                    setTripEnd(null);
+                  }}
                 >
-                  CONFIRM
-                </button>
-                <button
-                  onClick={() => handlePunchOutPopup("CANCEL")}
-                  className="theme_btn btn_fill pointer no_icon"
-                  style={{ margin: "0px" }}
+                  Cancel
+                </div>
+                <div
+                  className="done_btn"
+                  onClick={handlePunchOut}
+                  // disabled={loading}
                 >
-                  CANCEL
-                </button>
-              </div>
-            </div>
+                  
+                  Confirm
+                </div>
+              </Modal.Footer>
+            </Modal>
+
+
+            
           </div>
+
+         
 
           <div className="top_header_pg pg_bg attendance_pg relative">
             {/* Left section */}
@@ -1417,7 +1521,7 @@ const PGAttendance = () => {
                           )}
                           <div className="punch_location">
                             <div className="pl_single">
-                              <h6>Punch In </h6>
+                              <h6>Punch In Location</h6>
 
                               <h5>
                                 {data.punchInLocation
@@ -1434,7 +1538,7 @@ const PGAttendance = () => {
                               </h5>
                             </div>
                             <div className="pl_single">
-                              <h6>Punch Out </h6>
+                              <h6>Punch Out Location </h6>
 
                               <h5>
                                 {data.punchOutLocation
@@ -1458,12 +1562,12 @@ const PGAttendance = () => {
                 </div>
               )}
                 {viewMode === "table_view" && (
-                <div className="previous_punch">
-                 <div className="user-single-table table_filter_hide">
+                
+                 <div className="attendance_table table_filter_hide mt-3">
       <ReactTable tableColumns={columns} tableData={attendanceData} />
 
      
-    </div>
+   
                 </div>
               )}
             </div>
@@ -1516,7 +1620,7 @@ const PGAttendance = () => {
                     !topRecord.punchOut ? (
                     <div
                       className="punch_button punchout outer"
-                      onClick={showPunchOutPopup}
+                      onClick={handelShowPunchOutPopup}
                     >
                       <div className="inner_one">
                         <div className="inner_two">
@@ -1609,16 +1713,26 @@ const PGAttendance = () => {
                     {topRecord && !topRecord.date === formattedTodaysDate ? (
                       <div className="data">--:--</div>
                     ) : (
+                      // <div className="data">
+                      //   {topRecord &&
+                      //   topRecord.workHrs &&
+                      //   topRecord.workHrs === "00:00"
+                      //     ? "--:--"
+                      //     : topRecord?.workHrs &&
+                      //       topRecord.date === formattedTodaysDate
+                      //     ? topRecord && topRecord.workHrs
+                      //     : "--:--"}
+                      // </div>
                       <div className="data">
-                        {topRecord &&
-                        topRecord.workHrs &&
-                        topRecord.workHrs === "00:00"
-                          ? "--:--"
-                          : topRecord?.workHrs &&
-                            topRecord.date === formattedTodaysDate
-                          ? topRecord && topRecord.workHrs
-                          : "--:--"}
-                      </div>
+  {topRecord?.workHrs
+    ? topRecord.workHrs === "00:00"
+      ? "--:--"
+      : topRecord.date === formattedTodaysDate
+      ? `${parseInt(topRecord.workHrs.split(":")[0])}hrs ${parseInt(topRecord.workHrs.split(":")[1])}min`
+      : "--:--"
+    : "--:--"}
+</div>
+
                     )}
                     <h6>Hrs Worked</h6>
                   </div>

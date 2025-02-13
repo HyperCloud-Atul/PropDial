@@ -381,10 +381,19 @@ const PhoneLogin_reCaptchaV2 = () => {
     setCountryName(countryData.name);
   };
 
+    // goback code
+   
+      const handleGoBack = () => {
+          setmobilenoSliderState(true)
+          setotpSliderState(false)
+          setIsLoading(false)          
+      };
+      // goback code
+
   return (
     <div className="phone_login two_col_page top_header_pg">
       <div className="right col_right">
-        <img src="/assets/img/login_img2.png" alt="" />
+        <img src="/assets/img/elevation.jpg" alt="" />
       </div>
       <div className="left col_left">
 
@@ -400,6 +409,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <label htmlFor="" className="text-center">
                     Mobile Number
                   </label>
+                 
                   <div>
                     <PhoneInput
                       country={"in"}
@@ -500,14 +510,23 @@ const PhoneLogin_reCaptchaV2 = () => {
               </div> */}
 
               <div className="vg22"></div>
+              
               <div className="otp_input"
                 style={{
                   width: "fit-content",
                   margin: "auto"
                 }}
               >
-                <label htmlFor="" className="w-100 relative">Enter 6 digit OTP
-                  <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
+                <h5>OTP Verification</h5>
+                <label htmlFor="" className="w-100 relative" style={{
+                  color:"var(--theme-grey)",
+                  maxWidth:"260px",
+                  marginTop:"4px"
+                }}>Enter the code from the sms we sent to <span className="mobile" style={{
+                  color:"var(--light-black)",
+                  fontWeight:"500"
+                }}>{phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}</span>
+                  {/* <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
                     style={{
                       position: "absolute",
                       top: "0",
@@ -515,7 +534,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                     }}
                   >
                     {isOtpHidden ? "Show" : "Hide"}
-                  </span>
+                  </span> */}
 
                 </label>
                 <OtpInput
@@ -564,7 +583,7 @@ const PhoneLogin_reCaptchaV2 = () => {
               <div className="vg10"></div>
               {isLoading && (
                 <button
-                  className="theme_btn btn_fill w_full"
+                  className="theme_btn btn_fill w_full no_icon"
                   onClick={verifyOTP}
                 >
                   Confirm
@@ -576,6 +595,15 @@ const PhoneLogin_reCaptchaV2 = () => {
                   <BeatLoader color={"#00a8a8"} loading={true} />
                 </div>
               )}
+                 <div className="vg10"></div>
+             
+                <button
+                  className="theme_btn btn_border w_full no_icon"
+                  onClick={handleGoBack}
+                >
+                 Change Number
+                </button>
+              
             </div>
           )}
         </div>

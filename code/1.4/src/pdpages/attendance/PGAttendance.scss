@@ -169,6 +169,26 @@
         }
       }
     }
+    .attendance_table{
+      .date{
+        min-width: 75px;
+        text-align: center;
+      }
+      .hr_worked{
+        min-width: 90px;
+        text-align: center;
+      }
+      .time{
+        min-width:70px;
+      }
+      .location{
+        min-width: 130px;
+      }
+      td{
+        text-align: center;
+      }
+
+    }
     .previous_punch {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -745,7 +765,31 @@
     }
   }
 }
-
+.form_field.pi_input {
+  position: relative;
+  input{
+    text-align: center;
+    padding: 10px !important;
+    padding-top: 14px !important;
+ 
+    &:focus{
+      outline: none;
+      border: 1px solid var(--theme-blue);
+    }
+}
+  label{
+    position: absolute;
+    top: -12px;
+    left: 00;
+    right: 0;
+    margin: auto;
+    background: white;
+    width: fit-content;
+    color: var(--theme-blue);
+    padding: 0px 15px;
+    z-index: 1;
+  }
+}
 @media only screen and (max-width: 575px) {
   .attendance_pg {   
     .attendance_dashboard { 
