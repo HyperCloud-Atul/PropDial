@@ -42,13 +42,18 @@ export default function MasterSocietyList() {
     "",
     ["city", "asc"]
   );
-  const { documents: masterLocality, error: masterLocalityError } =
-    useCollection("m_localities", "", ["locality", "asc"]);
-  const { documents: masterSociety, error: masterSocietyError } = useCollection(
-    "m_societies",
-    "",
-    ["society", "asc"]
-  );
+  // const { documents: masterLocality, error: masterLocalityError } =
+  //   useCollection("m_localities", "", ["locality", "asc"]);
+
+  const [filteredLocalityData, setfilteredLocalityData] = useState();
+
+  // const { documents: masterSociety, error: masterSocietyError } = useCollection(
+  //   "m_societies",
+  //   "",
+  //   ["society", "asc"]
+  // );
+
+  const [filteredSocietyData, setfilteredSocietyData] = useState();
 
   const [country, setCountry] = useState({ label: "INDIA", value: "_india" });
   const [state, setState] = useState();
@@ -61,7 +66,7 @@ export default function MasterSocietyList() {
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
   let localityOptions = useRef([]);
-  let societyOptions = useRef([]);
+  // let societyOptions = useRef([]);
 
   //Master Data Loading Initialisation - End
 
@@ -86,13 +91,13 @@ export default function MasterSocietyList() {
     }
   }, [masterCountry]);
 
-  useEffect(() => {
-    // console.log('in useeffect')
-    if (masterSociety) {
+  // useEffect(() => {
+  //   // console.log('in useeffect')
+  //   if (masterSociety) {
 
-      filteredDataNew(locality)
-    }
-  }, [masterSociety]);
+  //     filteredDataNew(locality)
+  //   }
+  // }, [masterSociety]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -173,7 +178,7 @@ export default function MasterSocietyList() {
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    // console.log('city.id:', option)
+    console.log('city option:', option)
 
     if (option) {
       const ref = await projectFirestore
@@ -215,32 +220,65 @@ export default function MasterSocietyList() {
   //Locality select onchange
   const handleLocalityChange = async (option) => {
     setLocality(option);
-    // console.log('locality.id:', option.value)
+    console.log('locality:', option)
 
     if (option) {
-      const ref = await projectFirestore
-        .collection("m_societies")
-        .where("locality", "==", option.value)
-        .orderBy("society", "asc");
-      ref.onSnapshot(
-        async (snapshot) => {
-          if (snapshot.docs) {
-            societyOptions.current = snapshot.docs.map((societyData) => ({
-              label: societyData.data().society,
-              value: societyData.id,
-            }));
+      try {
 
-            filteredDataNew(option)
-          } else {
-            // handleSocietyChange(null)
-          }
-        },
-        (err) => {
-          console.log(err.message);
-          // setError('failed to get document')
-        }
-      );
+        const querySnapshot = await projectFirestore
+          .collection("m_societies")
+          .where("locality", "==", option.value)
+          .orderBy("society", "asc");
+
+        const unsubscribe = querySnapshot.onSnapshot(snapshot => {
+          let results = []
+          snapshot.docs.forEach(doc => {
+            results.push({ ...doc.data(), id: doc.id })
+          });
+
+          console.log("list of Societies: ", results)
+
+          // // update state
+          setfilteredSocietyData(results)
+          // setError(null)
+        }, error => {
+          console.log(error)
+          // setError('could not fetch the data')
+        })
+
+        return () => unsubscribe(); // Cleanup listener when component unmounts
+
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
+
+
+    // if (option) {
+    //   const ref = await projectFirestore
+    //     .collection("m_societies")
+    //     .where("locality", "==", option.value)
+    //     .orderBy("society", "asc");
+    //   ref.onSnapshot(
+    //     async (snapshot) => {
+    //       if (snapshot.docs) {
+    //         societyOptions.current = snapshot.docs.map((societyData) => ({
+    //           label: societyData.data().society,
+    //           value: societyData.id,
+    //         }));
+
+    //         filteredDataNew(option)
+    //       } else {
+    //         // handleSocietyChange(null)
+    //       }
+    //     },
+    //     (err) => {
+    //       console.log(err.message);
+    //       // setError('failed to get document')
+    //     }
+    //   );
+    // }
   };
 
 
@@ -368,44 +406,48 @@ export default function MasterSocietyList() {
 
         const snapshot = await ref.get(); // Use get() for one-time query
 
-        // if (snapshot.empty) {
-        // Update existing document
-        await updateDocument(currentDocid, {
-          country: country.value,
-          state: state.value,
-          city: city.value,
-          locality: locality.value,
-          society: societyname,
-          category: selectedCategory,
-        });
+        if (snapshot.empty) {
+          const dataSet = {
+            country: country.value,
+            state: state.value,
+            city: city.value,
+            locality: locality.value,
+            society: societyname,
+            category: selectedCategory
+          };
+          // Update existing document
+          await updateDocument(currentDocid, dataSet);
 
-        setFormErrorType("success_msg");
-        setFormError("Successfully updated");
-        setIsAdding(false);
+          setFormErrorType("success_msg");
+          setFormError("Successfully updated");
+          setIsAdding(false);
 
-        // Reset error message and locality after 5 seconds
-        setTimeout(() => {
-          setFormError(null);
-          setFormErrorType(null);
-        }, 5000);
-        // }
-        // else {
-        //   // Handle duplicate case
-        //   setFormErrorType("error_msg");
-        //   setFormError("Already added");
-        //   setIsAdding(false);
+          // Reset error message and locality after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
+        else {
+          // Handle duplicate case
+          setFormErrorType("error_msg");
+          setFormError("Already added");
+          setIsAdding(false);
 
-        //   // Reset error message after 5 seconds
-        //   setTimeout(() => {
-        //     setFormError(null);
-        //     setFormErrorType(null);
-        //   }, 5000);
-        // }
+          // Reset error message after 5 seconds
+          setTimeout(() => {
+            setFormError(null);
+            setFormErrorType(null);
+          }, 5000);
+        }
       } else {
+        console.log("New Society to be added")
         // Check for duplicates before adding
         // const ref = projectFirestore
         //   .collection("m_societies")
         //   .where("society", "==", societyname);
+        console.log("locality_docid: ", locality_docid)
+        console.log("societyname: ", societyname)
 
         const ref = projectFirestore
           .collection("m_societies")
@@ -418,6 +460,9 @@ export default function MasterSocietyList() {
           id: doc.id,
         }));
 
+        console.log("results: ", results)
+        console.log("selectedCategory: ", selectedCategory)
+
         if (results.length === 0) {
           // Add new document
           const dataSet = {
@@ -429,6 +474,8 @@ export default function MasterSocietyList() {
             status: "active",
             category: selectedCategory,
           };
+
+          console.log("society dataSet: ", dataSet)
           await addDocument(dataSet);
 
           setFormErrorType("success_msg");
@@ -510,27 +557,28 @@ export default function MasterSocietyList() {
     docsociety,
     doccategory
   ) => {
-    // console.log('data:', data)
+    console.log('In handleEditCard: ', docid, doccountry, docstate, doclocality, docsociety, doccategory)
     // console.log("country id: ", doccountry)
-    const countryname = (
-      masterCountry && masterCountry.find((e) => e.id === doccountry)
-    ).country;
+    // const countryname = (
+    //   masterCountry && masterCountry.find((e) => e.id === doccountry)
+    // ).country;
     // console.log("country name: ", countryname)
-    const statename = (
-      masterState && masterState.find((e) => e.id === docstate)
-    ).state;
-    const cityname = (masterCity && masterCity.find((e) => e.id === doccity))
-      .city;
-    const localityname = (
-      masterLocality && masterLocality.find((e) => e.id === doclocality)
-    ).locality;
+    // const statename = (
+    //   masterState && masterState.find((e) => e.id === docstate)
+    // ).state;
+    // const cityname = (masterCity && masterCity.find((e) => e.id === doccity))
+    //   .city;
+    // const localityname = (
+    //   filteredLocalityData && filteredLocalityData.find((e) => e.id === doclocality)
+    // ).locality;
 
     window.scrollTo(0, 0);
     setFormError(null);
-    setCountry({ label: countryname, value: doccountry });
-    setState({ label: statename, value: docstate });
-    setCity({ label: cityname, value: doccity });
-    setLocality({ label: localityname, value: doclocality });
+    // setCountry({ label: countryname, value: doccountry });
+    // setState({ label: statename, value: docstate });
+    // setCity({ label: cityname, value: doccity });
+    // setLocality({ label: localityname, value: doclocality });
+    console.log("doccategory: ", doccategory)
     setSociety(docsociety);
     setSelectedCategory(doccategory);
     sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -540,19 +588,19 @@ export default function MasterSocietyList() {
 
   const [searchInput, setSearchInput] = useState("");
 
-  const filteredDataNew = (data) => {
-    // console.log(data);
-    let _filterList = [];
-    if (data) {
-      // _filterList = masterCity.filter(e => e.state === data.value)
-      _filterList =
-        masterSociety && masterSociety.filter((e) => e.locality === data.value);
-    }
-    // console.log('_filterList', _filterList)
-    setFilteredData(_filterList);
-    // filterData
-    // console.log('filteredData', filteredData)
-  };
+  // const filteredDataNew = (data) => {
+  //   // console.log(data);
+  //   let _filterList = [];
+  //   if (data) {
+  //     // _filterList = masterCity.filter(e => e.state === data.value)
+  //     _filterList =
+  //       masterSociety && masterSociety.filter((e) => e.locality === data.value);
+  //   }
+  //   // console.log('_filterList', _filterList)
+  //   setFilteredData(_filterList);
+  //   // filterData
+  //   // console.log('filteredData', filteredData)
+  // };
 
   const handleSearchInputChange = (e) => {
     // console.log("e.target.value: ", e.target.value)
@@ -613,7 +661,7 @@ export default function MasterSocietyList() {
     <>
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
-          className={`page_spacing ${masterSociety && masterSociety.length === 0 && "pg_min_height"
+          className={`page_spacing ${filteredSocietyData && filteredSocietyData.length === 0 && "pg_min_height"
             }`}
         >
           <NineDots
@@ -624,7 +672,7 @@ export default function MasterSocietyList() {
             }
           />
 
-          {masterSociety && masterSociety.length === 0 && (
+          {/* {filteredSocietyData && filteredSocietyData.length === 0 && (
             <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
               <div>
                 No Society Yet!
@@ -637,18 +685,13 @@ export default function MasterSocietyList() {
                 </div>
               </div>
             </div>
-          )}
-          {masterSociety && masterSociety.length !== 0 && (
+          )} */}
+          {(
             <>
               <div className="pg_header d-flex justify-content-between">
                 <div className="left">
                   <h2 className="m22">
-                    Total Society:{" "}
-                    {masterSociety && (
-                      <span className="text_orange">
-                        {masterSociety.length}
-                      </span>
-                    )}
+                    Search for Societies
                   </h2>
                 </div>
                 <div className="right">
@@ -721,14 +764,15 @@ export default function MasterSocietyList() {
                       }}
                     />
                   </div>
-                  <div>
+                  {<div>
                     <Select
                       className=""
                       // onChange={(option) => handleFilterStateChange(option)}
                       // onChange={(option) => setState(option)}
                       onChange={(e) => {
                         setLocality(e);
-                        filteredDataNew(e);
+                        // filteredDataNew(e);
+                        handleLocalityChange(e)
                       }}
                       // changeFilter={changeFilter}
                       options={localityOptions.current}
@@ -743,7 +787,7 @@ export default function MasterSocietyList() {
                         }),
                       }}
                     />
-                  </div>
+                  </div>}
                 </div>
                 <div className="right">
                   <div className="button_filter diff_views">
@@ -794,7 +838,7 @@ export default function MasterSocietyList() {
           >
             <form>
               <div className="row row_gap form_full">
-                <div className="col-xl-4 col-lg-6">
+                {/* <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">Country</label>
                     <div className="form_field_inner">
@@ -815,8 +859,8 @@ export default function MasterSocietyList() {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">State</label>
                     <div className="form_field_inner">
@@ -837,8 +881,8 @@ export default function MasterSocietyList() {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">City</label>
                     <div className="form_field_inner">
@@ -859,8 +903,8 @@ export default function MasterSocietyList() {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-lg-6">
+                </div> */}
+                {/* <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">Locality</label>
                     <div className="form_field_inner">
@@ -881,7 +925,7 @@ export default function MasterSocietyList() {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">Society</label>
@@ -967,20 +1011,20 @@ export default function MasterSocietyList() {
             </form>
           </div>
           <div className="vg22"></div>
-          {filteredData && filteredData.length > 0 ? (
+          {filteredSocietyData && filteredSocietyData.length > 0 ? (
             <div className="m18">
-              Filtered Society: <span className="text_orange">{filteredData.length}</span>
+              Filtered Society: <span className="text_orange">{filteredSocietyData.length}</span>
             </div>
           ) : (
             "No data"
           )}
-          {filteredData && filteredData.length !== 0 && (
+          {filteredSocietyData && filteredSocietyData.length !== 0 && (
             <>
               <div className="master_data_card">
                 {viewMode === "card_view" && (
                   <>
-                    {filteredData &&
-                      filteredData.map((data) => (
+                    {filteredSocietyData &&
+                      filteredSocietyData.map((data) => (
                         <div className="property-status-padding-div">
                           <div
                             className="profile-card-div"
@@ -1042,8 +1086,8 @@ export default function MasterSocietyList() {
                                     {/* {dblocalitiesdocuments[2].id} */}
                                     {
                                       (
-                                        masterLocality &&
-                                        masterLocality.find(
+                                        filteredLocalityData &&
+                                        filteredLocalityData.find(
                                           (e) => e.id === data.locality
                                         )
                                       )?.locality
@@ -1121,8 +1165,8 @@ export default function MasterSocietyList() {
               </div>
               {viewMode === "table_view" && (
                 <>
-                  {filteredData && (
-                    <MasterSocietyTable filterData={filteredData} />
+                  {filteredSocietyData && (
+                    <MasterSocietyTable filterData={filteredSocietyData} />
                   )}
                 </>
               )}

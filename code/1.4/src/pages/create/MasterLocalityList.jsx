@@ -36,8 +36,10 @@ export default function MasterLocalityList() {
   const { documents: masterCity, error: masterCityError } = useCollection(
     "m_cities", "", ["city", "asc"]
   );
-  const { documents: masterLocality, error: masterLocalityerror } =
-    useCollection("m_localities", "", ["locality", "asc"]);
+  // const { documents: masterLocality, error: masterLocalityerror } =
+  //   useCollection("m_localities", "", ["locality", "asc"]);
+
+  const [filteredLocalityData, setfilteredLocalityData] = useState();
 
   // const { documents: masterSociety, error: masterSocietyError } =
   //   useCollection("m_societies", "", ["society", "asc"]);
@@ -52,8 +54,8 @@ export default function MasterLocalityList() {
   let countryOptions = useRef([]);
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
-  let localityOptions = useRef([]);
-  let societyOptions = useRef([]);
+  // let localityOptions = useRef([]);
+  // let societyOptions = useRef([]);
 
   //Master Data Loading Initialisation - End
 
@@ -79,13 +81,13 @@ export default function MasterLocalityList() {
 
   }, [masterCountry]);
 
-  useEffect(() => {
-    // console.log('in useeffect')
-    if (masterLocality) {
+  // useEffect(() => {
+  //   // console.log('in useeffect')
+  //   if (masterLocality) {
 
-      filteredDataNew(city)
-    }
-  }, [masterLocality]);
+  //     filteredDataNew(city)
+  //   }
+  // }, [masterLocality]);
 
   // Populate Master Data - Start
   //Country select onchange
@@ -167,37 +169,73 @@ export default function MasterLocalityList() {
     );
   };
 
+
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    // console.log('handleCityChange city.id:', option)
+    console.log('handleCityChange city.id:', option)
 
     if (option) {
-      const ref = await projectFirestore
-        .collection("m_localities")
-        .where("city", "==", option.value)
-        .orderBy("locality", "asc");
-      ref.onSnapshot(
-        async (snapshot) => {
-          if (snapshot.docs) {
-            localityOptions.current = snapshot.docs.map((localityData) => ({
-              label: localityData.data().locality,
-              value: localityData.id,
-            }));
+      try {
 
-            // console.log("localityOptions: ", localityOptions)   
-            filteredDataNew(option)
+        const querySnapshot = await projectFirestore
+          .collection("m_localities")
+          .where("city", "==", option.value)
+          .orderBy("locality", "asc");
 
-          } else {
-            // setError('No such document exists')
-          }
-        },
-        (err) => {
-          console.log(err.message);
-          // setError('failed to get document')
-        }
-      );
+        const unsubscribe = querySnapshot.onSnapshot(snapshot => {
+          let results = []
+          snapshot.docs.forEach(doc => {
+            results.push({ ...doc.data(), id: doc.id })
+          });
+
+          // console.log("results: ", results)
+
+          // // update state
+          setfilteredLocalityData(results)
+          // setError(null)
+        }, error => {
+          console.log(error)
+          // setError('could not fetch the data')
+        })
+
+        return () => unsubscribe(); // Cleanup listener when component unmounts
+
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
+
+    // if (option) {
+    //   const ref = await projectFirestore
+    //     .collection("m_localities")
+    //     .where("city", "==", option.value)
+    //     .orderBy("locality", "asc");
+    //   ref.onSnapshot(
+    //     async (snapshot) => {
+    //       if (snapshot.docs) {
+
+    //         localityOptions.current = snapshot.docs.map((localityData) => ({
+    //           label: localityData.data().locality,
+    //           value: localityData.id,
+    //         }));
+
+    //         console.log("localityOptions: ", localityOptions)
+
+    //         // console.log("localityOptions: ", localityOptions)   
+    //         filteredDataNew(option)
+
+    //       } else {
+    //         // setError('No such document exists')
+    //       }
+    //     },
+    //     (err) => {
+    //       console.log(err.message);
+    //       // setError('failed to get document')
+    //     }
+    //   );
+    // }
   };
 
   //Locality select onchange
@@ -300,7 +338,10 @@ export default function MasterLocalityList() {
     setFormErrorType(null);
     setIsAdding(true);
 
+    // console.log("locality: ", locality)
+
     if (locality) {
+
 
       let localityname = camelCase(locality.trim());
       let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
@@ -317,13 +358,24 @@ export default function MasterLocalityList() {
 
         if (snapshot.empty) {
 
-          // Update existing document
-          await updateDocument(currentDocid, {
+          const dataSet = {
             country: country.value,
             state: state.value,
             city: city.value,
-            locality: localityname,
-          });
+            locality: localityname
+          };
+
+          console.log("Edited Locality dataSet: ", dataSet)
+          console.log("currentDocid: ", currentDocid)
+
+          // Update existing document
+          await updateDocument(currentDocid, dataSet)
+          // await updateDocument(currentDocid, {
+          //   country: country.value,
+          //   state: state.value,
+          //   city: city.value,
+          //   locality: localityname,
+          // });
 
           setFormErrorType("success_msg");
           setFormError("Successfully updated");
@@ -348,6 +400,7 @@ export default function MasterLocalityList() {
           }, 5000);
         }
       } else {
+        console.log("New Locality to be added")
         // Query Firestore for duplicate document
         const ref = projectFirestore
           .collection("m_localities")
@@ -367,6 +420,7 @@ export default function MasterLocalityList() {
             locality: localityname,
             status: "active",
           };
+          console.log("New Locality dataSet: ", dataSet)
 
           const _customDocId = dataSet.docId;
           await addDocumentWithCustomDocId(dataSet, _customDocId);
@@ -448,19 +502,19 @@ export default function MasterLocalityList() {
     doccity,
     doclocality
   ) => {
-    // console.log('data:', data)
+    console.log('doclocality:', doclocality)
 
-    // console.log("country id: ", doccountry)
-    const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
-    // console.log("country name: ", countryname)
-    const statename = (masterState && masterState.find((e) => e.id === docstate)).state
-    const cityname = (masterCity && masterCity.find((e) => e.id === doccity)).city
+    console.log("docid: ", docid)
+    // const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
+    // // console.log("country name: ", countryname)
+    // const statename = (masterState && masterState.find((e) => e.id === docstate)).state
+    // const cityname = (masterCity && masterCity.find((e) => e.id === doccity)).city
 
     window.scrollTo(0, 0);
-    setFormError(null);
-    setCountry({ label: countryname, value: doccountry });
-    setState({ label: statename, value: docstate });
-    setCity({ label: cityname, value: doccity });
+    // setFormError(null);
+    // setCountry({ label: countryname, value: doccountry });
+    // setState({ label: statename, value: docstate });
+    // setCity({ label: cityname, value: doccity });
     setLocality(doclocality);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update Locality");
@@ -469,19 +523,21 @@ export default function MasterLocalityList() {
 
   const [searchInput, setSearchInput] = useState("");
 
-  const filteredDataNew = (data) => {
-    // console.log(data)
-    let _filterList = [];
-    if (data) {
-      // _filterList = masterCity.filter(e => e.state === data.value)
-      _filterList = masterLocality && masterLocality.filter(e => e.city === data.value)
-    }
-    // console.log('_filterList', _filterList)
-    setFilteredData(_filterList)
-    // filterData
-    // console.log('filteredData', filteredData)
+  // const filteredDataNew = (data) => {
+  //   // console.log(data)
+  //   let _filterList = [];
+  //   if (data) {
+  //     // _filterList = masterCity.filter(e => e.state === data.value)
+  //     // _filterList = masterLocality && masterLocality.filter(e => e.city === data.value)
 
-  }
+  //     _filterList = localityOptions && localityOptions.filter(e => e.city === data.value)
+  //   }
+  //   // console.log('_filterList', _filterList)
+  //   setFilteredData(_filterList)
+  //   // filterData
+  //   // console.log('filteredData', filteredData)
+
+  // }
 
   const handleSearchInputChange = (e) => {
     // console.log("e.target.value: ", e.target.value)
@@ -549,13 +605,18 @@ export default function MasterLocalityList() {
 
   return (
     <div className="top_header_pg pg_bg pg_adminproperty">
+      {/* <div
+        className={`page_spacing pg_min_height ${ masterLocality && masterLocality.length === 0 && "pg_min_height"
+          }`}
+      > */}
       <div
-        className={`page_spacing pg_min_height ${masterLocality && masterLocality.length === 0 && "pg_min_height"
+        className={`page_spacing pg_min_height ${filteredLocalityData && filteredLocalityData.length === 0 && "pg_min_height"
           }`}
       >
         <NineDots nineDotsMenu={user && user.role === 'superAdmin' ? nineDotsMenu : nineDotsAdminMenu} />
 
-        {masterLocality && masterLocality.length === 0 && (
+        {/* {masterLocality && masterLocality.length === 0 && ( */}
+        {/* {filteredLocalityData && filteredLocalityData.length === 0 && (
           <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
             <div>
               No Locality Yet!
@@ -568,16 +629,14 @@ export default function MasterLocalityList() {
               </div>
             </div>
           </div>
-        )}
-        {masterLocality && masterLocality.length !== 0 && (
+        )} */}
+        {/* {masterLocality && masterLocality.length !== 0 && ( */}
+        {(
           <>
             <div className="pg_header d-flex justify-content-between">
               <div className="left">
                 <h2 className="m22">
-                  Total Localities:{" "}
-                  {masterLocality && (
-                    <span className="text_orange">{masterLocality.length}</span>
-                  )}
+                  Search for Localities
                 </h2>
               </div>
               <div className="right">
@@ -590,8 +649,8 @@ export default function MasterLocalityList() {
             </div>
             <div className="vg12"></div>
             <div className="filters">
-              <div className="left" 
-              style={{ display: "flex", alignItems: "center", flexWrap:"wrap", gap:"15px" }}
+              <div className="left"
+                style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}
               >
                 <div className="rt_global_search search_field">
                   <input
@@ -634,7 +693,8 @@ export default function MasterLocalityList() {
                     // onChange={(option) => setState(option)}
                     onChange={(e) => {
                       setCity(e)
-                      filteredDataNew(e)
+                      // filteredDataNew(e)
+                      handleCityChange(e)
 
                     }}
                     // changeFilter={changeFilter}
@@ -704,7 +764,7 @@ export default function MasterLocalityList() {
         >
           <form>
             <div className="row row_gap form_full">
-              <div className="col-xl-4 col-lg-6">
+              {/* <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
                   <label htmlFor="">Country</label>
                   <div className="form_field_inner">
@@ -724,8 +784,8 @@ export default function MasterLocalityList() {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-4 col-lg-6">
+              </div> */}
+              {/* <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
                   <label htmlFor="">State</label>
                   <div className="form_field_inner">
@@ -746,8 +806,8 @@ export default function MasterLocalityList() {
                     />
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-4 col-lg-6">
+              </div> */}
+              {/* <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
                   <label htmlFor="">City</label>
                   <div className="form_field_inner">
@@ -768,7 +828,7 @@ export default function MasterLocalityList() {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
                   <label htmlFor="">Locality</label>
@@ -826,12 +886,12 @@ export default function MasterLocalityList() {
             </div>
           </form>
         </div>
-        {filteredData && filteredData.length > 0 ? (
+        {filteredLocalityData && filteredLocalityData.length > 0 ? (
           <>
             <div className="vg22"></div>
-            {filteredData && filteredData.length > 0 ? (
+            {filteredLocalityData && filteredLocalityData.length > 0 ? (
               <div className="m18">
-                Filtered Locality: <span className="text_orange">{filteredData.length}</span>
+                Filtered Locality: <span className="text_orange">{filteredLocalityData.length}</span>
               </div>
             ) : (
               ""
@@ -840,8 +900,8 @@ export default function MasterLocalityList() {
             <div className="master_data_card">
               {viewMode === "card_view" && (
                 <>
-                  {filteredData &&
-                    (filteredData.map((data) => <div className="property-status-padding-div">
+                  {filteredLocalityData &&
+                    (filteredLocalityData.map((data) => <div className="property-status-padding-div">
                       <div
                         className="profile-card-div"
                         style={{ position: "relative" }}
@@ -897,11 +957,10 @@ export default function MasterLocalityList() {
                                   transform: "translateY(5px)",
                                 }}
                               >
-                                {(masterCity && masterCity.find((e) => e.id === data.city))?.city}, {" "}
-                                {/* {data.state} */}
-                                {(masterState && masterState.find((e) => e.id === data.state))?.state}, {" "}
-                                {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country}
-                                {/* {data.country} */}
+                                {/* {(masterCity && masterCity.find((e) => e.id === data.city))?.city}, {" "} */}
+                                {/* {(masterState && masterState.find((e) => e.id === data.state))?.state}, {" "} */}
+                                {/* {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country} */}
+
                               </small>
                             </div>
                             <div
@@ -947,7 +1006,7 @@ export default function MasterLocalityList() {
               )}
             </div>
             {viewMode === "table_view" && (
-              <>{filteredData && <MasterLocalityTable filterData={filteredData} />}</>
+              <>{filteredLocalityData && <MasterLocalityTable filterData={filteredLocalityData} />}</>
             )}
 
           </>
