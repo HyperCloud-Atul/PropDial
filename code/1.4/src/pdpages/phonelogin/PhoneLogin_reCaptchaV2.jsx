@@ -393,7 +393,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   return (
     <div className="phone_login two_col_page top_header_pg">
       <div className="right col_right">
-        <img src="/assets/img/elevation.jpg" alt="" />
+        <img src="/assets/img/login_img2.png" alt="" />
       </div>
       <div className="left col_left">
 
