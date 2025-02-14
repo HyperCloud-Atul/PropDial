@@ -156,11 +156,11 @@ const PGAttendance = () => {
   // console.log("currentWeekRecords: ", currentWeekRecords)
 
   //Popup Flags
-  const [showPunchInPopup, setShowPunchInPopup] = useState(false);  
+  const [showPunchInPopup, setShowPunchInPopup] = useState(false);
   const [showPunchOutPopup, setShowPunchOutPopup] = useState(false);
   const [popupReturn, setPopupReturn] = useState(false);
   const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-  
+
 
   //Fetch current location of user : Start
   const [location, setLocation] = useState("");
@@ -518,8 +518,8 @@ const PGAttendance = () => {
     setShowPunchInPopup(false);
   };
 
-  const handelShowPunchOutPopup = () => {  
-    setShowPunchOutPopup(true);    
+  const handelShowPunchOutPopup = () => {
+    setShowPunchOutPopup(true);
   };
 
   const handlePunchOutPopup = async (action) => {
@@ -531,7 +531,7 @@ const PGAttendance = () => {
       // setPopupReturn(true)
       getLocation();
       handlePunchOut();
-    }    
+    }
   };
 
   const handlePunchIn = async () => {
@@ -539,14 +539,14 @@ const PGAttendance = () => {
       alert("Please log in to punch in.");
       return;
     }
-  
+
     if (user.vehicleStatus && !tripStart) {
       setPunchInError(true);
       return; // Prevent further execution
     }
-  
-    const formattedPunchinTime = format(today, "hh:mm a"); 
-  
+
+    const formattedPunchinTime = format(today, "hh:mm a");
+
     try {
       // Add a punch-in record
       const data = {
@@ -559,9 +559,9 @@ const PGAttendance = () => {
         tripStart,
         punchInLocation: location,
       };
-  
+
       await addDocument(data);
-      
+
     } catch (error) {
       console.log("Error adding a Punch-in Record: ", error);
     }
@@ -569,7 +569,7 @@ const PGAttendance = () => {
     setPunchInError(false);
     setTripStart(null)
   };
-  
+
 
   const handlePunchOut = async () => {
     if (!user) {
@@ -777,7 +777,9 @@ const PGAttendance = () => {
 
   const getLocationName = async (latitude, longitude) => {
     console.log("In getLocationName");
-    const API_KEY = "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw"; // Replace with your API Key
+    // const API_KEY = "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw"; // Dev API - Replace with your API Key
+    const API_KEY = "AIzaSyAHSLHwNrU95nb1ZYZ7Fgkr2ZIhguEBYks"; // Production API - Replace with your API Key
+
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`;
 
     try {
@@ -825,201 +827,201 @@ const PGAttendance = () => {
   //Fetch current location of user : End
 
   // previous punches data in table 
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'S.No',
-          accessor: (row, i) => i + 1,
-          id: 'serialNumber',
-          Cell: ({ row }) => row.index + 1,
-          disableFilters: true,
-        },
-        {
-          Header: 'Date',
-          accessor: 'date',
-          disableFilters: true,
-          Cell: ({ value }) => (
-                <div className="date mobile_min_width">
-               {value}
-                </div>
-              ),
-  
-       
-        },
-        {
-          Header: 'Hrs Worked',
-          accessor: 'workHrs',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="hr_worked mobile_min_width">
-             
-              {value !== "00:00"
-                                      ? value
-                                          .split(":")
-                                          .map((val, index) => (
-                                            <span key={index}>
-                                              {val.trim()}
-                                              <span className="unit">
-                                                {index === 0 ? "hrs" : "min"}
-                                              </span>
-                                              {index === 0 && (
-                                                <span
-                                                  style={{ marginRight: "8px" }}
-                                                ></span>
-                                              )}
-                                            </span>
-                                          ))
-                                      : "--:--"}
-            </div>
-          ),
-  
-       
-        },
-        {
-          Header: 'Punch In',
-          accessor: 'punchIn',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-  
-       
-        },
-        {
-          Header: 'Punch In Location',
-          accessor: 'punchInLocation',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="location mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-       
-        },
-        {
-          Header: 'Punch Out Location',
-          accessor: 'punchOutLocation',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="location mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-       
-        },
-        {
-          Header: 'Punch Out',
-          accessor: 'punchOut',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),         
-  
-       
-        },
-        {
-          Header: 'Distance',
-          accessor: 'tripDistance',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),  
-       
-        },
-        {
-          Header: 'Trip Start',
-          accessor: 'tripStart',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),  
-       
-        },
-        {
-          Header: 'Trip End',
-          accessor: 'tripEnd',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),  
-       
-        },
-        // {
-        //   Header: 'Phone Number',
-        //   accessor: 'phoneNumber',
-        //   Cell: ({ value }) => (
-        //     <div className="phone-number mobile_min_width">
-        //       <span>{formatPhoneNumber(value)}</span>
-        //     </div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Email',
-        //   accessor: 'email',
-        //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
-        // },
-        // {
-        //   Header: 'Contact Options',
-        //   accessor: 'actions',
-  
-        //   Cell: ({ row }) => (
-        //     <div className="contact_btn mobile_min_width">
-        //       <Link
-        //         className="whatsapp-icon"
-        //         to={`https://wa.me/+${row.original.phoneNumber}`}
-        //         target="_blank"
-        //       >
-        //         <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
-        //       </Link>
-        //       <Link
-        //         className="call-icon"
-        //         to={`tel:+${row.original.phoneNumber}`}
-        //         target="_blank"
-        //       >
-        //         <img src="/assets/img/simple_call.png" alt="Call" />
-        //       </Link>
-        //     </div>
-        //   ),
-        // },
-  
-        // {
-        //   Header: 'On-Boarded',
-        //   accessor: 'createdAt',
-        //   Cell: ({ value }) => (
-        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Last Login',
-        //   accessor: 'lastLoginTimestamp',
-        //   Cell: ({ value }) => (
-        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Status',
-        //   accessor: 'status',
-  
-        //   Cell: ({ value }) => (
-        //     <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
-        //       {value}
-        //     </span>
-        //   ),
-        // },
-  
-      ],
-      []
-    );
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'S.No',
+        accessor: (row, i) => i + 1,
+        id: 'serialNumber',
+        Cell: ({ row }) => row.index + 1,
+        disableFilters: true,
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="date mobile_min_width">
+            {value}
+          </div>
+        ),
+
+
+      },
+      {
+        Header: 'Hrs Worked',
+        accessor: 'workHrs',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="hr_worked mobile_min_width">
+
+            {value !== "00:00"
+              ? value
+                .split(":")
+                .map((val, index) => (
+                  <span key={index}>
+                    {val.trim()}
+                    <span className="unit">
+                      {index === 0 ? "hrs" : "min"}
+                    </span>
+                    {index === 0 && (
+                      <span
+                        style={{ marginRight: "8px" }}
+                      ></span>
+                    )}
+                  </span>
+                ))
+              : "--:--"}
+          </div>
+        ),
+
+
+      },
+      {
+        Header: 'Punch In',
+        accessor: 'punchIn',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+
+      },
+      {
+        Header: 'Punch In Location',
+        accessor: 'punchInLocation',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="location mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+      },
+      {
+        Header: 'Punch Out Location',
+        accessor: 'punchOutLocation',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="location mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+      },
+      {
+        Header: 'Punch Out',
+        accessor: 'punchOut',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+
+      },
+      {
+        Header: 'Distance',
+        accessor: 'tripDistance',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+      },
+      {
+        Header: 'Trip Start',
+        accessor: 'tripStart',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+      },
+      {
+        Header: 'Trip End',
+        accessor: 'tripEnd',
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+
+      },
+      // {
+      //   Header: 'Phone Number',
+      //   accessor: 'phoneNumber',
+      //   Cell: ({ value }) => (
+      //     <div className="phone-number mobile_min_width">
+      //       <span>{formatPhoneNumber(value)}</span>
+      //     </div>
+      //   ),
+      // },
+      // {
+      //   Header: 'Email',
+      //   accessor: 'email',
+      //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
+      // },
+      // {
+      //   Header: 'Contact Options',
+      //   accessor: 'actions',
+
+      //   Cell: ({ row }) => (
+      //     <div className="contact_btn mobile_min_width">
+      //       <Link
+      //         className="whatsapp-icon"
+      //         to={`https://wa.me/+${row.original.phoneNumber}`}
+      //         target="_blank"
+      //       >
+      //         <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
+      //       </Link>
+      //       <Link
+      //         className="call-icon"
+      //         to={`tel:+${row.original.phoneNumber}`}
+      //         target="_blank"
+      //       >
+      //         <img src="/assets/img/simple_call.png" alt="Call" />
+      //       </Link>
+      //     </div>
+      //   ),
+      // },
+
+      // {
+      //   Header: 'On-Boarded',
+      //   accessor: 'createdAt',
+      //   Cell: ({ value }) => (
+      //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+      //   ),
+      // },
+      // {
+      //   Header: 'Last Login',
+      //   accessor: 'lastLoginTimestamp',
+      //   Cell: ({ value }) => (
+      //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
+      //   ),
+      // },
+      // {
+      //   Header: 'Status',
+      //   accessor: 'status',
+
+      //   Cell: ({ value }) => (
+      //     <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
+      //       {value}
+      //     </span>
+      //   ),
+      // },
+
+    ],
+    []
+  );
 
   return (
     <>
@@ -1062,9 +1064,9 @@ const PGAttendance = () => {
                         restrictInput(e, 7);
                         // e.target.value = "45"
                       }}
-                     
+
                       onChange={(e) => setTripStart(e.target.value)}
-                      // value={topRecord && topRecord.tripEnd}
+                    // value={topRecord && topRecord.tripEnd}
                     />
                     {punchInError && (
                       <div className="field_error">Please enter the trip start</div>
@@ -1094,22 +1096,22 @@ const PGAttendance = () => {
                         {errorForNoSelectReasonMessage}
                       </div>
                     )} */}
-               
-               <div
-  className="cancel_btn"
-  onClick={() => {
-    setShowPunchInPopup(false);
-    setPunchInError(false);
-    setTripStart(null);
-  }}
->
-  Cancel
-</div>
+
+                <div
+                  className="cancel_btn"
+                  onClick={() => {
+                    setShowPunchInPopup(false);
+                    setPunchInError(false);
+                    setTripStart(null);
+                  }}
+                >
+                  Cancel
+                </div>
                 <div
                   className="done_btn"
                   onClick={handlePunchIn}
-                  // disabled={loading}
-                >                  
+                // disabled={loading}
+                >
                   Confirm
                 </div>
               </Modal.Footer>
@@ -1145,13 +1147,13 @@ const PGAttendance = () => {
                       }}
                       onChange={(e) => setTripEnd(e.target.value)}
                     />
-                       <p className="mt-2 text_grey">
+                    <p className="mt-2 text_grey">
                       {Number(tripEnd) >
-                      Number(topRecord && topRecord.tripStart)
+                        Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
-                          (Number(tripEnd) -
-                            Number(topRecord && topRecord.tripStart)) +
-                          " KM"
+                        (Number(tripEnd) -
+                          Number(topRecord && topRecord.tripStart)) +
+                        " KM"
                         : "Note:- Trip End should be greater than Trip Start"}
                     </p>
                     {punchOutError && (
@@ -1167,11 +1169,11 @@ const PGAttendance = () => {
                   gap: "15px",
                 }}
               >
-            
-               
+
+
                 <div
                   className="cancel_btn"
-                  
+
                   onClick={() => {
                     setShowPunchOutPopup(false);
                     setPunchOutError(false);
@@ -1183,19 +1185,19 @@ const PGAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchOut}
-                  // disabled={loading}
+                // disabled={loading}
                 >
-                  
+
                   Confirm
                 </div>
               </Modal.Footer>
             </Modal>
 
 
-            
+
           </div>
 
-         
+
 
           <div className="top_header_pg pg_bg attendance_pg relative">
             {/* Left section */}
@@ -1232,7 +1234,7 @@ const PGAttendance = () => {
                   <h5>Hrs Worked</h5>
                   <h2>
                     {currentWeekWorkedHours &&
-                    currentWeekWorkedHours === "00:00" ? (
+                      currentWeekWorkedHours === "00:00" ? (
                       "--:--"
                     ) : currentWeekWorkedHours ? (
                       <>
@@ -1339,9 +1341,8 @@ const PGAttendance = () => {
                       </div>
                       <div className="button_filter diff_views">
                         <div
-                          className={`bf_single ${
-                            viewMode === "card_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("card_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1358,9 +1359,8 @@ const PGAttendance = () => {
                           </svg>
                         </div>
                         <div
-                          className={`bf_single ${
-                            viewMode === "table_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("table_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1394,9 +1394,8 @@ const PGAttendance = () => {
                     attendanceData.map((data) => (
                       <>
                         <div
-                          className={`pp_single ${
-                            user && user.vehicleStatus ? "" : "v_not"
-                          }`}
+                          className={`pp_single ${user && user.vehicleStatus ? "" : "v_not"
+                            }`}
                         >
                           <div className="top">
                             <div className="left">
@@ -1421,20 +1420,20 @@ const PGAttendance = () => {
                                   <h5>
                                     {data.workHrs
                                       ? data.workHrs
-                                          .split(":")
-                                          .map((val, index) => (
-                                            <span key={index}>
-                                              {val.trim()}
-                                              <span className="unit">
-                                                {index === 0 ? "hrs" : "min"}
-                                              </span>
-                                              {index === 0 && (
-                                                <span
-                                                  style={{ marginRight: "8px" }}
-                                                ></span>
-                                              )}
+                                        .split(":")
+                                        .map((val, index) => (
+                                          <span key={index}>
+                                            {val.trim()}
+                                            <span className="unit">
+                                              {index === 0 ? "hrs" : "min"}
                                             </span>
-                                          ))
+                                            {index === 0 && (
+                                              <span
+                                                style={{ marginRight: "8px" }}
+                                              ></span>
+                                            )}
+                                          </span>
+                                        ))
                                       : "--:--"}
                                   </h5>
                                 )}
@@ -1475,9 +1474,8 @@ const PGAttendance = () => {
                           </div>
                           {user && user.vehicleStatus ? (
                             <div
-                              className={`bottom ${
-                                user && user.vehicleStatus ? "trip" : ""
-                              }`}
+                              className={`bottom ${user && user.vehicleStatus ? "trip" : ""
+                                }`}
                             >
                               <div className="b_single">
                                 <h6>Punch In</h6>
@@ -1526,14 +1524,14 @@ const PGAttendance = () => {
                               <h5>
                                 {data.punchInLocation
                                   ? data.punchInLocation
-                                      .split(", ") // Comma se split karega
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
+                                    .split(", ") // Comma se split karega
+                                    .filter(
+                                      (part) =>
+                                        part.trim() !== "undefined" &&
+                                        part.trim() !== ""
+                                    )
+                                    .slice(0, -1)
+                                    .join(", ")
                                   : "--:--"}
                               </h5>
                             </div>
@@ -1543,14 +1541,14 @@ const PGAttendance = () => {
                               <h5>
                                 {data.punchOutLocation
                                   ? data.punchOutLocation
-                                      .split(", ")
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
+                                    .split(", ")
+                                    .filter(
+                                      (part) =>
+                                        part.trim() !== "undefined" &&
+                                        part.trim() !== ""
+                                    )
+                                    .slice(0, -1)
+                                    .join(", ")
                                   : "--:--"}
                               </h5>
                             </div>
@@ -1561,13 +1559,13 @@ const PGAttendance = () => {
                   )}
                 </div>
               )}
-                {viewMode === "table_view" && (
-                
-                 <div className="attendance_table table_filter_hide mt-3">
-      <ReactTable tableColumns={columns} tableData={attendanceData} />
+              {viewMode === "table_view" && (
 
-     
-   
+                <div className="attendance_table table_filter_hide mt-3">
+                  <ReactTable tableColumns={columns} tableData={attendanceData} />
+
+
+
                 </div>
               )}
             </div>
@@ -1650,8 +1648,8 @@ const PGAttendance = () => {
                     ) : (
                       <div className="data">
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchIn
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchIn
                           ? topRecord.punchIn
                           : "--:--"}
                       </div>
@@ -1692,17 +1690,17 @@ const PGAttendance = () => {
                     </h6> */}
                       <h6>
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchInLocation
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchInLocation
                           ? topRecord.punchInLocation
-                              .split(", ")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
+                            .split(", ")
+                            .filter(
+                              (part) =>
+                                part.trim() !== "undefined" &&
+                                part.trim() !== ""
+                            )
+                            .slice(0, -1)
+                            .join(", ")
                           : ""}
                       </h6>
                     </marquee>
@@ -1724,14 +1722,14 @@ const PGAttendance = () => {
                       //     : "--:--"}
                       // </div>
                       <div className="data">
-  {topRecord?.workHrs
-    ? topRecord.workHrs === "00:00"
-      ? "--:--"
-      : topRecord.date === formattedTodaysDate
-      ? `${parseInt(topRecord.workHrs.split(":")[0])}hrs ${parseInt(topRecord.workHrs.split(":")[1])}min`
-      : "--:--"
-    : "--:--"}
-</div>
+                        {topRecord?.workHrs
+                          ? topRecord.workHrs === "00:00"
+                            ? "--:--"
+                            : topRecord.date === formattedTodaysDate
+                              ? `${parseInt(topRecord.workHrs.split(":")[0])}hrs ${parseInt(topRecord.workHrs.split(":")[1])}min`
+                              : "--:--"
+                          : "--:--"}
+                      </div>
 
                     )}
                     <h6>Hrs Worked</h6>
@@ -1743,8 +1741,8 @@ const PGAttendance = () => {
                     ) : (
                       <div className="data">
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOut
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchOut
                           ? topRecord.punchOut
                           : "--:--"}
                       </div>
@@ -1761,17 +1759,17 @@ const PGAttendance = () => {
                     <marquee behavior="" direction="" scrollamount="3">
                       <h6>
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOutLocation
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchOutLocation
                           ? topRecord.punchOutLocation
-                              .split(", ")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
+                            .split(", ")
+                            .filter(
+                              (part) =>
+                                part.trim() !== "undefined" &&
+                                part.trim() !== ""
+                            )
+                            .slice(0, -1)
+                            .join(", ")
                           : ""}
                       </h6>
                     </marquee>
@@ -1784,8 +1782,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripStart
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripStart
                             ? topRecord.tripStart
                             : "--:--"}
                         </div>
@@ -1802,8 +1800,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripEnd
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripEnd
                             ? topRecord.tripEnd
                             : "--:--"}
                         </div>
@@ -1819,8 +1817,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripDistance
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripDistance
                             ? topRecord.tripDistance
                             : "--:--"}
                         </div>
