@@ -93,7 +93,7 @@ const calculateTimeDifference = (punchIn, punchOut) => {
   return `${diffHrs} : ${diffMins}`;
 };
 
-const PGAttendance = () => {
+const PGHrAttendance = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext(); // Current user
 
@@ -103,6 +103,15 @@ const PGAttendance = () => {
     window.scrollTo(0, 0);
   }, [pagelocation]);
   // Scroll to the top of the page whenever the location changes end
+
+    const { documents: dbUsers, error: dbuserserror } = useCollection(
+      "users-propdial",
+      ["status", "==", "active"]
+    );
+    const [dbUserState, setdbUserState] = useState(dbUsers);
+    useEffect(() => {
+      setdbUserState(dbUsers);
+    });
 
   const currentYear = new Date().getFullYear(); // Get current year
   const years = [
@@ -211,7 +220,7 @@ const PGAttendance = () => {
       // Step 1: Get the latest record
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        // .where("userId", "==", user.uid)
         .orderBy("createdAt", "desc")
         .limit(1)
         .get();
@@ -355,7 +364,7 @@ const PGAttendance = () => {
       // Step 1: Get the latest record
       const latestRecordRef = projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        // .where("userId", "==", user.uid)
         .orderBy("createdAt", "desc")
         .limit(1);
 
@@ -385,7 +394,7 @@ const PGAttendance = () => {
     try {
       const querySnapshot = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        // .where("userId", "==", user.uid)
         .where("createdAt", ">=", _startOfWeek)
         .where("createdAt", "<=", _endOfWeek)
         .orderBy("createdAt", "desc");
@@ -477,7 +486,7 @@ const PGAttendance = () => {
     try {
       const querySnapshot = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        // .where("userId", "==", user.uid)
         .where("createdAt", ">=", firstDay)
         .where("createdAt", "<=", lastDay)
         .orderBy("createdAt", "desc");
@@ -584,7 +593,7 @@ const PGAttendance = () => {
       // Find the punch-in record for today
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        // .where("userId", "==", user.uid)
         .where("date", "==", formattedTodaysDate)
         .get();
 
@@ -993,6 +1002,8 @@ const PGAttendance = () => {
 
   // export data in excel
 
+
+
   return (
     <>
       {user && user.status === "active" ? (
@@ -1169,104 +1180,14 @@ const PGAttendance = () => {
             </Modal>
           </div>
 
-          <div className="top_header_pg pg_bg attendance_pg relative">
+          <div className="top_header_pg pg_bg attendance_pg hr_attendance_pg relative">
             {/* Left section */}
             <div className="attendance_dashboard">
               <div className="pg_header">
                 <h2>
-                  Your progress of this week {startWeekDate?.getDate()} -{" "}
-                  {endWeekDate?.getDate()}{" "}
-                  {months[endWeekDate?.getMonth()]?.slice(0, 3)}'
-                  {endWeekDate?.getFullYear()}{" "}
+                  Attendance Dashboard
                 </h2>
-              </div>
-              <div className="attendance_cards">
-                <div className="ac_single day">
-                  <h6>Total number of</h6>
-                  <h5>Days</h5>
-                  <h2>{currentWeekRecords?.length}</h2>
-                  <div className="icon">
-                    <div className="icon_inner">
-                      <img src="/assets/img/edicon/appointment.png" alt="" />
-                    </div>
-                  </div>
-                  <div className="trending">
-                    <div className="inner up">
-                      {/* <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
-                                            <div className="value">2.5%</div> */}
-                      --:--
-                    </div>
-                    <p>last week</p>
-                  </div>
-                </div>
-                <div className="ac_single hr">
-                  <h6>Total number of</h6>
-                  <h5>Hrs Worked</h5>
-                  <h2>
-                    {currentWeekWorkedHours &&
-                    currentWeekWorkedHours === "00:00" ? (
-                      "--:--"
-                    ) : currentWeekWorkedHours ? (
-                      <>
-                        {currentWeekWorkedHours.split(":")[0]}
-                        <span className="unit">hrs</span>{" "}
-                        {currentWeekWorkedHours.split(":")[1]}
-                        <span className="unit">mins</span>
-                      </>
-                    ) : (
-                      "--:--"
-                    )}
-                  </h2>
-
-                  <div className="icon">
-                    <div className="icon_inner">
-                      <img src="/assets/img/edicon/working-time.png" alt="" />
-                    </div>
-                  </div>
-                  <div className="trending">
-                    <div className="inner down">
-                      {/* <span className="material-symbols-outlined">
-                                                trending_down
-                                            </span> */}
-                      {/* <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FA6262"><path d="M624-209v-72h117L529-492 377-340 96-621l51-51 230 230 152-152 263 262v-117h72v240H624Z" /></svg>
-                                            <div className="value">0.5%</div> */}
-                      --:--
-                    </div>
-                    <p>last week</p>
-                  </div>
-                </div>
-                {user && user.vehicleStatus && (
-                  <div className="ac_single dist">
-                    <h6>Total number of</h6>
-                    <h5>Distance</h5>
-                    <h2>
-                      {currentWeekDistance ? (
-                        <>
-                          {currentWeekDistance}
-                          <span className="unit">km</span>
-                        </>
-                      ) : (
-                        "--:--"
-                      )}
-                    </h2>
-
-                    <div className="icon">
-                      <div className="icon_inner">
-                        <img src="/assets/img/edicon/distance.png" alt="" />
-                      </div>
-                    </div>
-                    <div className="trending">
-                      <div className="inner up">
-                        {/* <span className="material-symbols-outlined">trending_up</span> */}
-                        {/* <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
-                                              <div className="value">2.5%</div> */}
-                        --:--
-                      </div>
-                      <p>last week</p>
-                    </div>
-                  </div>
-                )}
-              </div>
+              </div>          
 
               <div className="year_month">
                 <div className="left">
@@ -1373,6 +1294,10 @@ const PGAttendance = () => {
                             user && user.vehicleStatus ? "" : "v_not"
                           }`}
                         >
+                                {dbUserState &&
+                    dbUserState.find(
+                      (user) => user.id === data.createdBy
+                    )?.fullName}
                           <div className="top">
                             <div className="left">
                               {data.date ? (
@@ -1546,269 +1471,7 @@ const PGAttendance = () => {
               )}
             </div>
 
-            {/* Todays'punch-in & punch-out section */}
-            <div className="punch">
-              {/* <div className="punch_inner"> */}
-              <div className="top">
-                <div className="left">
-                  <h3>Hey {user && user.fullName}!</h3>
-                  <h6>{greeting}! Mark your attendance</h6>
-                </div>
-                <div className="right">
-                  <img src={user && user.photoURL} alt="" />
-                </div>
-              </div>
-              <div className="body">
-                <div className="body_top">
-                  <CurrentDateTime />
-                  {topRecord && topRecord.length === 0 ? (
-                    <div
-                      className="punch_button outer"
-                      onClick={handelShowPunchInPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/hand-pointer.png" alt="" />
-                          <h6>Punch In</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : !topRecord ||
-                    (topRecord &&
-                      (topRecord.createdAt?.toDate() <
-                        new Date().setHours(0, 0, 0, 0) ||
-                        !topRecord?.punchIn)) ? (
-                    <div
-                      className="punch_button outer"
-                      onClick={handelShowPunchInPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/hand-pointer.png" alt="" />
-                          <h6>Punch In</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : topRecord &&
-                    topRecord.date === formattedTodaysDate &&
-                    !topRecord.punchOut ? (
-                    <div
-                      className="punch_button punchout outer"
-                      onClick={handelShowPunchOutPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/punchouthand.png" alt="" />
-                          <h6>Punch Out</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="punch_button pio_done outer">
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <h6 className="text-center">
-                            Next Punch In Tomorrow
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="punch_detail">
-                  <div className="pd_single">
-                    <img src="/assets/img/punchin.png" alt="" />
-                    {topRecord && !topRecord.date === formattedTodaysDate ? (
-                      <div className="data">--:--</div>
-                    ) : (
-                      <div className="data">
-                        {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchIn
-                          ? topRecord.punchIn
-                          : "--:--"}
-                      </div>
-                    )}
-
-                    <h6>Punch In</h6>
-                    {/* <h6>
-                      {topRecord &&
-                      topRecord.date === formattedTodaysDate &&
-                      topRecord.punchInLocation
-                        ? (() => {
-                            const parts = topRecord.punchInLocation
-                              .split(", ")
-                              .map((part) => part.trim());                           
-                            const first =
-                              parts[0] !== "undefined" && parts[0] !== ""
-                                ? parts[0]
-                                : null;
-                            const second =
-                              parts[1] !== "undefined" && parts[1] !== ""
-                                ? parts[1]
-                                : null;
-
-                            if (first && second) return `${first}, ${second}`;
-                            if (!first && second) return second; 
-                            return first || "";
-                          })()
-                        : ""}
-                    </h6> */}
-
-                    <marquee behavior="" direction="" scrollamount="3">
-                      {/* <h6>
-                      {topRecord &&
-                      topRecord.date === formattedTodaysDate &&
-                      topRecord.punchInLocation
-                        ? topRecord.punchInLocation
-                        : ""}
-                    </h6> */}
-                      <h6>
-                        {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchInLocation
-                          ? topRecord.punchInLocation
-                              .split(", ")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
-                          : ""}
-                      </h6>
-                    </marquee>
-                  </div>
-
-                  <div className="pd_single">
-                    <img src="/assets/img/edicon/total_work.png" alt="" />
-                    {topRecord && !topRecord.date === formattedTodaysDate ? (
-                      <div className="data">--:--</div>
-                    ) : (
-                      // <div className="data">
-                      //   {topRecord &&
-                      //   topRecord.workHrs &&
-                      //   topRecord.workHrs === "00:00"
-                      //     ? "--:--"
-                      //     : topRecord?.workHrs &&
-                      //       topRecord.date === formattedTodaysDate
-                      //     ? topRecord && topRecord.workHrs
-                      //     : "--:--"}
-                      // </div>
-                      <div className="data">
-                        {topRecord?.workHrs
-                          ? topRecord.workHrs === "00:00"
-                            ? "--:--"
-                            : topRecord.date === formattedTodaysDate
-                            ? `${parseInt(
-                                topRecord.workHrs.split(":")[0]
-                              )}hrs ${parseInt(
-                                topRecord.workHrs.split(":")[1]
-                              )}min`
-                            : "--:--"
-                          : "--:--"}
-                      </div>
-                    )}
-                    <h6>Hrs Worked</h6>
-                  </div>
-                  <div className="pd_single">
-                    <img src="/assets/img/punchout.png" alt="" />
-                    {topRecord && !topRecord.date === formattedTodaysDate ? (
-                      <div className="data">--:--</div>
-                    ) : (
-                      <div className="data">
-                        {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOut
-                          ? topRecord.punchOut
-                          : "--:--"}
-                      </div>
-                    )}
-                    <h6>Punch Out</h6>
-                    {/* <h6>
-                      {" "}
-                      {topRecord &&
-                      topRecord.date === formattedTodaysDate &&
-                      topRecord.punchOutLocation
-                        ? topRecord.punchOutLocation
-                        : ""}
-                    </h6> */}
-                    <marquee behavior="" direction="" scrollamount="3">
-                      <h6>
-                        {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOutLocation
-                          ? topRecord.punchOutLocation
-                              .split(", ")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
-                          : ""}
-                      </h6>
-                    </marquee>
-                  </div>
-                  {user && user.vehicleStatus && (
-                    <div className="pd_single">
-                      <img src="/assets/img/edicon/tripstart.png" alt="" />
-                      {topRecord && !topRecord.date === formattedTodaysDate ? (
-                        <div className="data">--:--</div>
-                      ) : (
-                        <div className="data">
-                          {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripStart
-                            ? topRecord.tripStart
-                            : "--:--"}
-                        </div>
-                      )}
-
-                      <h6>Trip Start</h6>
-                    </div>
-                  )}
-                  {user && user.vehicleStatus && (
-                    <div className="pd_single">
-                      <img src="/assets/img/edicon/tripend.png" alt="" />
-                      {topRecord && !topRecord.date === formattedTodaysDate ? (
-                        <div className="data">--:--</div>
-                      ) : (
-                        <div className="data">
-                          {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripEnd
-                            ? topRecord.tripEnd
-                            : "--:--"}
-                        </div>
-                      )}
-                      <h6>Trip End</h6>
-                    </div>
-                  )}
-                  {user && user.vehicleStatus && (
-                    <div className="pd_single">
-                      <img src="/assets/img/edicon/travel.png" alt="" />
-                      {topRecord && !topRecord.date === formattedTodaysDate ? (
-                        <div className="data">--:--</div>
-                      ) : (
-                        <div className="data">
-                          {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripDistance
-                            ? topRecord.tripDistance
-                            : "--:--"}
-                        </div>
-                      )}
-                      <h6>Distance</h6>
-                    </div>
-                  )}
-                </div>
-              </div>
-              {/* </div> */}
-            </div>
+          
           </div>
         </div>
       ) : (
@@ -1818,5 +1481,4 @@ const PGAttendance = () => {
   );
 };
 
-export default PGAttendance;
-
+export default PGHrAttendance;

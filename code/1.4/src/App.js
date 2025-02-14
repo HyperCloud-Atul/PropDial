@@ -18,6 +18,7 @@ import PGProfile from "./pdpages/profile/PGProfile";
 import PGUserProfileDetails from "./pdpages/profile/PGUserProfileDetails";
 import PGNotification from "./pdpages/notification/PGNotification";
 import PGAttendance from "./pdpages/attendance/PGAttendance";
+import PGHrAttendance from "./pdpages/attendance/PGHrAttendance";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
 import PGTerms from "./pdpages/terms/PGTerms";
@@ -938,6 +939,19 @@ function App() {
                       )
                     }
                   ></Route>
+
+<Route
+                    path="/attendance-dashboard"
+                    element={
+                      user && (user.role === "hr" || user.role === "superAdmin") ? (
+                        <PGHrAttendance />
+                      ) : (
+                        <Navigate to="/login" />
+                      )
+                    }
+                  ></Route>
+
+
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
                 <Footer></Footer>
