@@ -8,6 +8,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
 import { timestamp } from "../../firebase/config";
+import { useExportToExcel } from "../../hooks/useExportToExcel";
 import { format } from "date-fns";
 import dayjs from "dayjs"; // Library for time calculations
 
@@ -951,75 +952,40 @@ const PGAttendance = () => {
             <div className="time mobile_min_width">
           {value ? value : "--:--"}
             </div>
-          ),  
-       
+          ),         
         },
-        // {
-        //   Header: 'Phone Number',
-        //   accessor: 'phoneNumber',
-        //   Cell: ({ value }) => (
-        //     <div className="phone-number mobile_min_width">
-        //       <span>{formatPhoneNumber(value)}</span>
-        //     </div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Email',
-        //   accessor: 'email',
-        //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
-        // },
-        // {
-        //   Header: 'Contact Options',
-        //   accessor: 'actions',
-  
-        //   Cell: ({ row }) => (
-        //     <div className="contact_btn mobile_min_width">
-        //       <Link
-        //         className="whatsapp-icon"
-        //         to={`https://wa.me/+${row.original.phoneNumber}`}
-        //         target="_blank"
-        //       >
-        //         <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
-        //       </Link>
-        //       <Link
-        //         className="call-icon"
-        //         to={`tel:+${row.original.phoneNumber}`}
-        //         target="_blank"
-        //       >
-        //         <img src="/assets/img/simple_call.png" alt="Call" />
-        //       </Link>
-        //     </div>
-        //   ),
-        // },
-  
-        // {
-        //   Header: 'On-Boarded',
-        //   accessor: 'createdAt',
-        //   Cell: ({ value }) => (
-        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Last Login',
-        //   accessor: 'lastLoginTimestamp',
-        //   Cell: ({ value }) => (
-        //     <div className="mobile_min_width">{format(value.toDate(), 'dd-MMM-yy hh:mm a')}</div>
-        //   ),
-        // },
-        // {
-        //   Header: 'Status',
-        //   accessor: 'status',
-  
-        //   Cell: ({ value }) => (
-        //     <span className={`text-capitalize  ${value === 'active' ? 'text_green2' : 'text_red'}`}>
-        //       {value}
-        //     </span>
-        //   ),
-        // },
+     
   
       ],
       []
     );
+
+      // export data in excel
+      const { exportToExcel, response: res } = useExportToExcel();
+      const exportExcelFormate = async () => {
+        const subsetData = attendanceData.map((item) => ({
+          // Name: item.name,
+          // IAm: item.iAm,
+          // Date: format(item.createdAt.toDate(), "dd-MMM-yy hh:mm a"),
+          Date:item.date,
+          // PhoneNumbar: item.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3"),
+          HrsWorked: item.workHrs,
+          PunchIn: item.punchIn,
+          PunchInLocation:item.punchInLocation,
+PunchOut:item.punchOut,
+PunchOutLocation:item.punchOutLocation,
+Distance:item.tripDistance,
+TripStart:item.tripStart,
+TripEnd:item.tripEnd
+          // State: item.state,
+          // City: item.city,
+          // Description: item.description,
+        }));
+    
+        let filename = "your-attendance.xlsx";
+        exportToExcel(subsetData, filename);
+      };
+      // export data in excel
 
   return (
     <>
@@ -1377,7 +1343,7 @@ const PGAttendance = () => {
                           </svg>
                         </div>
                       </div>
-                      <div className="export pointer">
+                      <div className="export pointer" onClick={exportExcelFormate}>
                         <img src="/assets/img/icons/excel_logo.png" alt="" />
                       </div>
                     </div>
