@@ -157,11 +157,10 @@ const PGAttendance = () => {
   // console.log("currentWeekRecords: ", currentWeekRecords)
 
   //Popup Flags
-  const [showPunchInPopup, setShowPunchInPopup] = useState(false);  
+  const [showPunchInPopup, setShowPunchInPopup] = useState(false);
   const [showPunchOutPopup, setShowPunchOutPopup] = useState(false);
   const [popupReturn, setPopupReturn] = useState(false);
   const [showPopupPunchOutFlag, setShowPopupPunchOutFlag] = useState(false);
-  
 
   //Fetch current location of user : Start
   const [location, setLocation] = useState("");
@@ -519,8 +518,8 @@ const PGAttendance = () => {
     setShowPunchInPopup(false);
   };
 
-  const handelShowPunchOutPopup = () => {  
-    setShowPunchOutPopup(true);    
+  const handelShowPunchOutPopup = () => {
+    setShowPunchOutPopup(true);
   };
 
   const handlePunchOutPopup = async (action) => {
@@ -532,7 +531,7 @@ const PGAttendance = () => {
       // setPopupReturn(true)
       getLocation();
       handlePunchOut();
-    }    
+    }
   };
 
   const handlePunchIn = async () => {
@@ -540,14 +539,14 @@ const PGAttendance = () => {
       alert("Please log in to punch in.");
       return;
     }
-  
+
     if (user.vehicleStatus && !tripStart) {
       setPunchInError(true);
       return; // Prevent further execution
     }
-  
-    const formattedPunchinTime = format(today, "hh:mm a"); 
-  
+
+    const formattedPunchinTime = format(today, "hh:mm a");
+
     try {
       // Add a punch-in record
       const data = {
@@ -560,17 +559,15 @@ const PGAttendance = () => {
         tripStart,
         punchInLocation: location,
       };
-  
+
       await addDocument(data);
-      
     } catch (error) {
       console.log("Error adding a Punch-in Record: ", error);
     }
     setShowPunchInPopup(false);
     setPunchInError(false);
-    setTripStart(null)
+    setTripStart(null);
   };
-  
 
   const handlePunchOut = async () => {
     if (!user) {
@@ -628,7 +625,7 @@ const PGAttendance = () => {
     }
     setShowPunchOutPopup(false);
     setPunchOutError(false);
-    setTripEnd(null)
+    setTripEnd(null);
   };
 
   //Fetch the current week dates
@@ -825,167 +822,139 @@ const PGAttendance = () => {
 
   //Fetch current location of user : End
 
-  // previous punches data in table 
-    const columns = useMemo(
-      () => [
-        {
-          Header: 'S.No',
-          accessor: (row, i) => i + 1,
-          id: 'serialNumber',
-          Cell: ({ row }) => row.index + 1,
-          disableFilters: true,
-        },
-        {
-          Header: 'Date',
-          accessor: 'date',
-          disableFilters: true,
-          Cell: ({ value }) => (
-                <div className="date mobile_min_width">
-               {value}
-                </div>
-              ),
-  
-       
-        },
-        {
-          Header: 'Hrs Worked',
-          accessor: 'workHrs',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="hr_worked mobile_min_width">
-             
-              {value !== "00:00"
-                                      ? value
-                                          .split(":")
-                                          .map((val, index) => (
-                                            <span key={index}>
-                                              {val.trim()}
-                                              <span className="unit">
-                                                {index === 0 ? "hrs" : "min"}
-                                              </span>
-                                              {index === 0 && (
-                                                <span
-                                                  style={{ marginRight: "8px" }}
-                                                ></span>
-                                              )}
-                                            </span>
-                                          ))
-                                      : "--:--"}
-            </div>
-          ),
-  
-       
-        },
-        {
-          Header: 'Punch In',
-          accessor: 'punchIn',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-  
-       
-        },
-        {
-          Header: 'Punch In Location',
-          accessor: 'punchInLocation',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="location mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-       
-        },
-        {
-          Header: 'Punch Out Location',
-          accessor: 'punchOutLocation',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="location mobile_min_width">
-           {value ? value : "--:--"}
-            </div>
-          ),
-       
-        },
-        {
-          Header: 'Punch Out',
-          accessor: 'punchOut',
-          disableFilters: true,
-          Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),         
-  
-       
-        },
-        {
-          Header: 'Distance',
-          accessor: 'tripDistance',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),  
-       
-        },
-        {
-          Header: 'Trip Start',
-          accessor: 'tripStart',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),  
-       
-        },
-        {
-          Header: 'Trip End',
-          accessor: 'tripEnd',
-          disableFilters: true,
-    Cell: ({ value }) => (
-            <div className="time mobile_min_width">
-          {value ? value : "--:--"}
-            </div>
-          ),         
-        },
-     
-  
-      ],
-      []
-    );
+  // previous punches data in table
+  const columns = useMemo(
+    () => [
+      {
+        Header: "S.No",
+        accessor: (row, i) => i + 1,
+        id: "serialNumber",
+        Cell: ({ row }) => row.index + 1,
+        disableFilters: true,
+      },
+      {
+        Header: "Date",
+        accessor: "date",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="date mobile_min_width">{value}</div>
+        ),
+      },
+      {
+        Header: "Hrs Worked",
+        accessor: "workHrs",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="hr_worked mobile_min_width">
+            {value !== "00:00"
+              ? value.split(":").map((val, index) => (
+                  <span key={index}>
+                    {val.trim()}
+                    <span className="unit">{index === 0 ? "hrs" : "min"}</span>
+                    {index === 0 && (
+                      <span style={{ marginRight: "8px" }}></span>
+                    )}
+                  </span>
+                ))
+              : "--:--"}
+          </div>
+        ),
+      },
+      {
+        Header: "Punch In",
+        accessor: "punchIn",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Punch In Location",
+        accessor: "punchInLocation",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="location mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+      },
+      {
+        Header: "Punch Out Location",
+        accessor: "punchOutLocation",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="location mobile_min_width">
+            {value ? value : "--:--"}
+          </div>
+        ),
+      },
+      {
+        Header: "Punch Out",
+        accessor: "punchOut",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Distance",
+        accessor: "tripDistance",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Trip Start",
+        accessor: "tripStart",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Trip End",
+        accessor: "tripEnd",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
+    ],
+    []
+  );
 
-      // export data in excel
-      const { exportToExcel, response: res } = useExportToExcel();
-      const exportExcelFormate = async () => {
-        const subsetData = attendanceData.map((item) => ({
-          // Name: item.name,
-          // IAm: item.iAm,
-          // Date: format(item.createdAt.toDate(), "dd-MMM-yy hh:mm a"),
-          Date:item.date,
-          // PhoneNumbar: item.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3"),
-          HrsWorked: item.workHrs,
-          PunchIn: item.punchIn,
-          PunchInLocation:item.punchInLocation,
-PunchOut:item.punchOut,
-PunchOutLocation:item.punchOutLocation,
-Distance:item.tripDistance,
-TripStart:item.tripStart,
-TripEnd:item.tripEnd
-          // State: item.state,
-          // City: item.city,
-          // Description: item.description,
-        }));
-    
-        let filename = "your-attendance.xlsx";
-        exportToExcel(subsetData, filename);
-      };
-      // export data in excel
+  // export data in excel
+  const { exportToExcel, response: res } = useExportToExcel();
+  const exportExcelFormate = async () => {
+    const subsetData = attendanceData.map((item) => ({
+      "Date": item.date,
+      "Hrs Worked": item.workHrs !== "00:00" 
+        ? item.workHrs.split(":").map((val, index) => 
+            `${val.trim()}${index === 0 ? " hrs" : " min"}`
+          ).join(" ") 
+        : "--:--",
+      "Punch In": item.punchIn ? item.punchIn : "--:--",
+      "Punch In Location": item.punchInLocation || "--",
+      "Punch Out": item.punchOut ? item.punchOut : "--:--",
+      "Punch Out Location": item.punchOutLocation || "--",
+  
+      // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
+      ...(user && user.vehicleStatus
+        ? {
+           "Distance (km)": item.tripDistance ? item.tripDistance + " Km" : "--:--",
+            "Trip Start": item.tripStart ? item.tripStart : "--:--",
+            "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+          }
+        : {}),
+    }));
+  
+    let filename = "your-attendance.xlsx";
+    exportToExcel(subsetData, filename);
+  };
+  
+  
+  // export data in excel
 
   return (
     <>
@@ -1007,7 +976,9 @@ TripEnd:item.tripEnd
                   border: "none",
                 }}
               >
-                <h5 className="text-center text_red">Are you sure you want to Punch-In now?</h5>
+                <h5 className="text-center text_red">
+                  Are you sure you want to Punch-In now?
+                </h5>
               </Modal.Header>
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
@@ -1028,12 +999,13 @@ TripEnd:item.tripEnd
                         restrictInput(e, 7);
                         // e.target.value = "45"
                       }}
-                     
                       onChange={(e) => setTripStart(e.target.value)}
                       // value={topRecord && topRecord.tripEnd}
                     />
                     {punchInError && (
-                      <div className="field_error">Please enter the trip start</div>
+                      <div className="field_error">
+                        Please enter the trip start
+                      </div>
                     )}
                   </div>
                 )}
@@ -1060,22 +1032,22 @@ TripEnd:item.tripEnd
                         {errorForNoSelectReasonMessage}
                       </div>
                     )} */}
-               
-               <div
-  className="cancel_btn"
-  onClick={() => {
-    setShowPunchInPopup(false);
-    setPunchInError(false);
-    setTripStart(null);
-  }}
->
-  Cancel
-</div>
+
+                <div
+                  className="cancel_btn"
+                  onClick={() => {
+                    setShowPunchInPopup(false);
+                    setPunchInError(false);
+                    setTripStart(null);
+                  }}
+                >
+                  Cancel
+                </div>
                 <div
                   className="done_btn"
                   onClick={handlePunchIn}
                   // disabled={loading}
-                >                  
+                >
                   Confirm
                 </div>
               </Modal.Footer>
@@ -1093,7 +1065,9 @@ TripEnd:item.tripEnd
                   border: "none",
                 }}
               >
-                <h5 className="text-center text_red">Are you sure you want to Punch-Out now?</h5>
+                <h5 className="text-center text_red">
+                  Are you sure you want to Punch-Out now?
+                </h5>
               </Modal.Header>
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
@@ -1104,14 +1078,16 @@ TripEnd:item.tripEnd
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder={`Trip Start: ${topRecord && topRecord.tripStart}`}
+                      placeholder={`Trip Start: ${
+                        topRecord && topRecord.tripStart
+                      }`}
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);
                       }}
                       onChange={(e) => setTripEnd(e.target.value)}
                     />
-                       <p className="mt-2 text_grey">
+                    <p className="mt-2 text_grey">
                       {Number(tripEnd) >
                       Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
@@ -1121,7 +1097,9 @@ TripEnd:item.tripEnd
                         : "Note:- Trip End should be greater than Trip Start"}
                     </p>
                     {punchOutError && (
-                      <div className="field_error">Please enter the trip end</div>
+                      <div className="field_error">
+                        Please enter the trip end
+                      </div>
                     )}
                   </div>
                 )}
@@ -1133,11 +1111,8 @@ TripEnd:item.tripEnd
                   gap: "15px",
                 }}
               >
-            
-               
                 <div
                   className="cancel_btn"
-                  
                   onClick={() => {
                     setShowPunchOutPopup(false);
                     setPunchOutError(false);
@@ -1151,17 +1126,11 @@ TripEnd:item.tripEnd
                   onClick={handlePunchOut}
                   // disabled={loading}
                 >
-                  
                   Confirm
                 </div>
               </Modal.Footer>
             </Modal>
-
-
-            
           </div>
-
-         
 
           <div className="top_header_pg pg_bg attendance_pg relative">
             {/* Left section */}
@@ -1343,7 +1312,10 @@ TripEnd:item.tripEnd
                           </svg>
                         </div>
                       </div>
-                      <div className="export pointer" onClick={exportExcelFormate}>
+                      <div
+                        className="export pointer"
+                        onClick={exportExcelFormate}
+                      >
                         <img src="/assets/img/icons/excel_logo.png" alt="" />
                       </div>
                     </div>
@@ -1527,13 +1499,12 @@ TripEnd:item.tripEnd
                   )}
                 </div>
               )}
-                {viewMode === "table_view" && (
-                
-                 <div className="attendance_table table_filter_hide mt-3">
-      <ReactTable tableColumns={columns} tableData={attendanceData} />
-
-     
-   
+              {viewMode === "table_view" && (
+                <div className="attendance_table table_filter_hide mt-3">
+                  <ReactTable
+                    tableColumns={columns}
+                    tableData={attendanceData}
+                  />
                 </div>
               )}
             </div>
@@ -1690,15 +1661,18 @@ TripEnd:item.tripEnd
                       //     : "--:--"}
                       // </div>
                       <div className="data">
-  {topRecord?.workHrs
-    ? topRecord.workHrs === "00:00"
-      ? "--:--"
-      : topRecord.date === formattedTodaysDate
-      ? `${parseInt(topRecord.workHrs.split(":")[0])}hrs ${parseInt(topRecord.workHrs.split(":")[1])}min`
-      : "--:--"
-    : "--:--"}
-</div>
-
+                        {topRecord?.workHrs
+                          ? topRecord.workHrs === "00:00"
+                            ? "--:--"
+                            : topRecord.date === formattedTodaysDate
+                            ? `${parseInt(
+                                topRecord.workHrs.split(":")[0]
+                              )}hrs ${parseInt(
+                                topRecord.workHrs.split(":")[1]
+                              )}min`
+                            : "--:--"
+                          : "--:--"}
+                      </div>
                     )}
                     <h6>Hrs Worked</h6>
                   </div>
