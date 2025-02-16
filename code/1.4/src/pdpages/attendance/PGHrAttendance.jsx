@@ -4,6 +4,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import moment from "moment";
 import { useState, useEffect, useMemo } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
@@ -19,6 +20,7 @@ import CurrentDateTime from "../../components/CurrentDateTime";
 import ScrollToTop from "../../components/ScrollToTop";
 import InactiveUserCard from "../../components/InactiveUserCard";
 import ReactTable from "../../components/ReactTable";
+import NineDots from "../../components/NineDots";
 
 // import scss
 import "./PGAttendance.scss";
@@ -104,14 +106,14 @@ const PGHrAttendance = () => {
   }, [pagelocation]);
   // Scroll to the top of the page whenever the location changes end
 
-    const { documents: dbUsers, error: dbuserserror } = useCollection(
-      "users-propdial",
-      ["status", "==", "active"]
-    );
-    const [dbUserState, setdbUserState] = useState(dbUsers);
-    useEffect(() => {
-      setdbUserState(dbUsers);
-    });
+  const { documents: dbUsers, error: dbuserserror } = useCollection(
+    "users-propdial",
+    ["status", "==", "active"]
+  );
+  const [dbUserState, setdbUserState] = useState(dbUsers);
+  useEffect(() => {
+    setdbUserState(dbUsers);
+  });
 
   const currentYear = new Date().getFullYear(); // Get current year
   const years = [
@@ -897,12 +899,21 @@ const PGHrAttendance = () => {
           </div>
         ),
       },
+
+      {
+        Header: "Punch Out",
+        accessor: "punchOut",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
       {
         Header: "Punch Out Location",
         accessor: "punchOutLocation",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="location mobile_min_width">           
+          <div className="location mobile_min_width">
             {value
               ? value
                   .split(", ")
@@ -913,14 +924,6 @@ const PGHrAttendance = () => {
                   .join(", ")
               : "--:--"}
           </div>
-        ),
-      },
-      {
-        Header: "Punch Out",
-        accessor: "punchOut",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
         ),
       },
       {
@@ -966,22 +969,18 @@ const PGHrAttendance = () => {
               .join(" ")
           : "--:--",
       "Punch In": item.punchIn ? item.punchIn : "--:--",
-      "Punch In Location":     item.punchInLocation
+      "Punch In Location": item.punchInLocation
         ? item.punchInLocation
             .split(", ")
-            .filter(
-              (part) => part.trim() !== "undefined" && part.trim() !== ""
-            )            
+            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
             .join(", ")
         : "--:--",
-      "Punch Out":  item.punchOutLocation
-      ? item.punchOutLocation
-          .split(", ")
-          .filter(
-            (part) => part.trim() !== "undefined" && part.trim() !== ""
-          )         
-          .join(", ")
-      : "--:--",
+      "Punch Out": item.punchOutLocation
+        ? item.punchOutLocation
+            .split(", ")
+            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+            .join(", ")
+        : "--:--",
       "Punch Out Location": item.punchOutLocation || "--",
 
       // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
@@ -1002,13 +1001,20 @@ const PGHrAttendance = () => {
 
   // export data in excel
 
+  // nine dots menu start
 
+  const nineDotsMenu = [
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
+    { title: "Users List", link: "/userlist", icon: "group" },
+  ];
+  // nine dots menu end
 
   return (
     <>
       {user && user.status === "active" ? (
         <div>
           <ScrollToTop />
+          <NineDots nineDotsMenu={nineDotsMenu} />
           {/* Poupup */}
           <div>
             <Modal
@@ -1184,10 +1190,8 @@ const PGHrAttendance = () => {
             {/* Left section */}
             <div className="attendance_dashboard">
               <div className="pg_header">
-                <h2>
-                  Attendance Dashboard
-                </h2>
-              </div>          
+                <h2>Attendance Dashboard</h2>
+              </div>
 
               <div className="year_month">
                 <div className="left">
@@ -1196,6 +1200,22 @@ const PGHrAttendance = () => {
                 <div className="right">
                   <div className="filters">
                     <div className="right">
+                      <div className="new_inline">
+                        <div className="project-filter">
+                          <nav>
+                            <button className="active">
+                              <span>Today</span>
+                            </button>
+                            <button className="">
+                              <span>Yesterday</span>
+                            </button>
+                            <button className="">
+                              <span>This Week</span>
+                            </button>
+                          </nav>
+                        </div>
+                      </div>
+
                       <div className="icon_dropdown">
                         <select
                           value={selectedMonth}
@@ -1291,13 +1311,45 @@ const PGHrAttendance = () => {
                       <>
                         <div
                           className={`pp_single ${
-                            user && user.vehicleStatus ? "" : "v_not"
+                            dbUserState &&
+                            dbUserState.find(
+                              (user) => user.id === data.createdBy
+                            )?.vehicleStatus
+                              ? ""
+                              : "v_not"
                           }`}
                         >
+                          <div className="u_detail">
+                            <div className="ud_single">
+                              <h5>
+                                {" "}
                                 {dbUserState &&
-                    dbUserState.find(
-                      (user) => user.id === data.createdBy
-                    )?.fullName}
+                                  dbUserState.find(
+                                    (user) => user.id === data.createdBy
+                                  )?.fullName}
+                              </h5>
+                              <h6>
+                                {" "}
+                                {dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.designation?.label
+                                  ? dbUserState.find(
+                                      (user) => user.id === data.createdBy
+                                    )?.designation?.label
+                                  : "N/A"}
+                                ,{" "}
+                                {dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.department?.label
+                                  ? dbUserState.find(
+                                      (user) => user.id === data.createdBy
+                                    )?.department?.label
+                                  : "N/A"}
+                              </h6>
+                            </div>
+                          </div>
                           <div className="top">
                             <div className="left">
                               {data.date ? (
@@ -1340,7 +1392,10 @@ const PGHrAttendance = () => {
                                 )}
                               </div>
 
-                              {user && user.vehicleStatus ? (
+                              {dbUserState &&
+                              dbUserState.find(
+                                (user) => user.id === data.createdBy
+                              )?.vehicleStatus ? (
                                 <div className="r_single">
                                   <h6> Distance</h6>
                                   {data.tripDistance ? (
@@ -1350,52 +1405,50 @@ const PGHrAttendance = () => {
                                   )}
                                 </div>
                               ) : (
-                                <div className="r_single">
-                                  <h6> Punch In</h6>
-                                  {data.punchIn ? (
-                                    <h5>{data.punchIn}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
-                                </div>
-                              )}
-                              {user && user.vehicleStatus ? (
-                                ""
-                              ) : (
-                                <div className="r_single">
-                                  <h6> Punch Out</h6>
-                                  {data.punchOut ? (
-                                    <h5>{data.punchOut}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
+                                <div className="r_single nv">
+                                  <h6>No</h6>
+                                  <h5>Vehicle</h5>
                                 </div>
                               )}
                             </div>
                           </div>
-                          {user && user.vehicleStatus ? (
-                            <div
-                              className={`bottom ${
-                                user && user.vehicleStatus ? "trip" : ""
-                              }`}
-                            >
-                              <div className="b_single">
-                                <h6>Punch In</h6>
-                                {data.punchIn ? (
-                                  <h5>{data.punchIn}</h5>
-                                ) : (
-                                  "--:--"
-                                )}
-                              </div>
-                              <div className="b_single">
-                                <h6>Punch Out</h6>
-                                {data.punchOut ? (
-                                  <h5>{data.punchOut}</h5>
-                                ) : (
-                                  "--:--"
-                                )}
-                              </div>
-                              {user && user.vehicleStatus && (
+
+                          <div
+                            className={`bottom 
+                              ${
+                                dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.vehicleStatus
+                                  ? "trip"
+                                  : ""
+                              } ${
+                              moment(data.date, "DD-MMM-YY").format(
+                                "DD-MMM-YY"
+                              ) !== moment().format("DD-MMM-YY") &&
+                              !data.punchOut
+                                ? "no_punchout"
+                                : ""
+                            }
+                                
+                            `}
+                          >
+                            <div className="b_single">
+                              <h6>Punch In</h6>
+                              {data.punchIn ? <h5>{data.punchIn}</h5> : "--:--"}
+                            </div>
+                            <div className="b_single po">
+                              <h6>Punch Out</h6>
+                              {data.punchOut ? (
+                                <h5>{data.punchOut}</h5>
+                              ) : (
+                                "--:--"
+                              )}
+                            </div>
+                            {dbUserState &&
+                              dbUserState.find(
+                                (user) => user.id === data.createdBy
+                              )?.vehicleStatus && (
                                 <div className="b_single">
                                   <h6>Trip Start</h6>
                                   {data.tripStart ? (
@@ -1405,7 +1458,10 @@ const PGHrAttendance = () => {
                                   )}
                                 </div>
                               )}
-                              {user && user.vehicleStatus && (
+                            {dbUserState &&
+                              dbUserState.find(
+                                (user) => user.id === data.createdBy
+                              )?.vehicleStatus && (
                                 <div className="b_single">
                                   <h6>Trip End</h6>
                                   {data.tripEnd ? (
@@ -1415,44 +1471,66 @@ const PGHrAttendance = () => {
                                   )}
                                 </div>
                               )}
-                            </div>
-                          ) : (
-                            ""
-                          )}
+                          </div>
+
                           <div className="punch_location">
                             <div className="pl_single">
                               <h6>Punch In Location</h6>
-
-                              <h5>
-                                {data.punchInLocation
-                                  ? data.punchInLocation
-                                      .split(", ")
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
-                                  : "--:--"}
-                              </h5>
+                              {data.punchInLocation &&
+                              data.punchInLocation ===
+                                "Location access denied." ? (
+                                <h5
+                                  style={{
+                                    color: "var(--theme-red)",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  Location access denied
+                                </h5>
+                              ) : (
+                                <h5>
+                                  {data.punchInLocation
+                                    ? data.punchInLocation
+                                        .split(", ")
+                                        .filter(
+                                          (part) =>
+                                            part.trim() !== "undefined" &&
+                                            part.trim() !== ""
+                                        )
+                                        .slice(0, -1)
+                                        .join(", ")
+                                    : "--:--"}
+                                </h5>
+                              )}
                             </div>
                             <div className="pl_single">
                               <h6>Punch Out Location </h6>
-
-                              <h5>
-                                {data.punchOutLocation
-                                  ? data.punchOutLocation
-                                      .split(", ")
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
-                                  : "--:--"}
-                              </h5>
+                              {data.punchOutLocation &&
+                              data.punchOutLocation ===
+                                "Location access denied." ? (
+                                <h5
+                                  style={{
+                                    color: "var(--theme-red)",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  Location access denied
+                                </h5>
+                              ) : (
+                                <h5>
+                                  {data.punchOutLocation
+                                    ? data.punchOutLocation
+                                        .split(", ")
+                                        .filter(
+                                          (part) =>
+                                            part.trim() !== "undefined" &&
+                                            part.trim() !== ""
+                                        )
+                                        .slice(0, -1)
+                                        .join(", ")
+                                    : "--:--"}
+                                </h5>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1470,8 +1548,6 @@ const PGHrAttendance = () => {
                 </div>
               )}
             </div>
-
-          
           </div>
         </div>
       ) : (

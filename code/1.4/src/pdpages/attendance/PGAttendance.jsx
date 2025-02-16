@@ -888,6 +888,15 @@ const PGAttendance = () => {
           </div>
         ),
       },
+    
+      {
+        Header: "Punch Out",
+        accessor: "punchOut",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+        ),
+      },
       {
         Header: "Punch Out Location",
         accessor: "punchOutLocation",
@@ -904,14 +913,6 @@ const PGAttendance = () => {
                   .join(", ")
               : "--:--"}
           </div>
-        ),
-      },
-      {
-        Header: "Punch Out",
-        accessor: "punchOut",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
         ),
       },
       {
@@ -1020,17 +1021,18 @@ const PGAttendance = () => {
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
                   <div className="form_field pi_input">
-                    <label htmlFor="id_tripstart">Trip Start*</label>
+                    <label htmlFor="id_tripstart">Trip Start Meter Reading*</label>
                     <input
                       id="id_tripstart"
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder={
-                        topRecord && topRecord.tripEnd
-                          ? "Last Trip End: " + topRecord.tripEnd
-                          : ""
-                      }
+                      // placeholder={
+                      //   topRecord && topRecord.tripEnd
+                      //     ? "Last Trip End: " + topRecord.tripEnd
+                      //     : ""
+                      // }
+                      placeholder="Enter here"
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);
@@ -1109,15 +1111,16 @@ const PGAttendance = () => {
               <Modal.Body className="text-center">
                 {user && user.vehicleStatus && (
                   <div className="form_field pi_input">
-                    <label htmlFor="id_tripstart">Trip End</label>
+                    <label htmlFor="id_tripstart">Trip End Meter Reading*</label>
                     <input
                       id="id_tripend"
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder={`Trip Start: ${
-                        topRecord && topRecord.tripStart
-                      }`}
+                      // placeholder={`Trip Start: ${
+                      //   topRecord && topRecord.tripStart
+                      // }`}
+                      placeholder="Enter here"
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);

@@ -1,9 +1,35 @@
 .attendance_pg.hr_attendance_pg{
   .attendance_dashboard{
     width: 100%;
+
     .previous_punch { 
       grid-template-columns: repeat(3, 1fr);
-      
+      .pp_single{
+        .u_detail {
+          display: flex
+      ;
+        
+          gap: 15px;
+         padding-bottom: 15px;
+          .ud_single {
+            background: #ebeef4;
+            width: fit-content;
+            padding: 6px;
+            border-radius: 6px;
+           h5{
+            font-size: 14px;
+            color: var(--light-black);
+            font-weight: 500;
+           }
+           h6{
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--theme-grey);
+           }
+        }
+          
+      }
+      }
   }
   }
 }
@@ -210,6 +236,7 @@
         border-radius: 15px;
         overflow: hidden;
         padding-bottom: 0px;
+    
 
         .top {
           display: flex;
@@ -242,6 +269,16 @@
               border-right: 1px solid #cecece;
               &:last-child{
                 border-right: none;
+              }
+              &.nv{
+                h6{
+                  font-size: 16px;
+                  color: var(--light-black);
+                }
+                h5{
+                  font-size: 16px;
+                  color: var(--light-black);
+                }
               }
               h6 {
                 font-size: 15px;
@@ -286,6 +323,18 @@
           &.trip{
             grid-template-columns: repeat(4, 1fr);
           }
+          &.no_punchout{
+            .b_single.po{
+              h6{
+                color: var(--theme-red);
+                font-size: 15px;
+                font-weight: 500;
+              }
+              h5{
+                color: var(--theme-red);
+              }
+            }
+          }
           .b_single {
             text-align: center;
             h6 {
@@ -305,7 +354,7 @@
               grid-template-columns: repeat(2, 1fr);
               background: #ebeef4;
               padding: 8px 15px;
-              margin: 6px -15px 00px -15px;
+              margin: 15px -15px 00px -15px;
               grid-column-gap: 15px;
               height: 100%;
           .pl_single{
