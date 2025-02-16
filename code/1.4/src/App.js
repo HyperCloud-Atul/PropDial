@@ -932,7 +932,7 @@ function App() {
                     <Route
                     path="/attendance"
                     element={
-                      user?.isEmployee ? (
+                      user?.isEmployee && user?.isAttendanceRequired ? (
                         <PGAttendance />
                       ) : (
                         <Navigate to="/login" />
