@@ -475,15 +475,16 @@ export default function Navbar() {
                 <img src="./assets/img/home/ticketicon_navbar.png" alt=""
                   className="pointer" />
               </Link> */}
-    {user?.isEmployee && (
+ {user?.isEmployee && user?.isAttendanceRequired && (
   <Link to="/attendance" className="notification_icon">
     <img
       src="/assets/img/home/working-time.png"
-      alt=""
+      alt="Attendance"
       className="pointer"
     />
   </Link>
 )}
+
 
            
               <Link to="/notification" className="notification_icon relative">

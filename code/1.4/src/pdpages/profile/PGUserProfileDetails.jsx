@@ -317,15 +317,15 @@ export default function PGUserProfileDetails2() {
   //   }
   // };
 
-  // new code of selected roel number 
+  // new code of selected roel number
   const handleRoleChange = (role) => {
     setSelectedRoles((prevRoles) => {
       let updatedRoles;
-  
+
       if (prevRoles.includes(role)) {
         // Remove role if already selected
         updatedRoles = prevRoles.filter((item) => item !== role);
-  
+
         // Update primary role if the removed role was the primary one
         if (primaryRole === role) {
           setPrimaryRole(updatedRoles.length > 0 ? updatedRoles[0] : "");
@@ -333,17 +333,16 @@ export default function PGUserProfileDetails2() {
       } else {
         // Add role if not selected
         updatedRoles = [...prevRoles, role];
-  
+
         // Set the first selected role as the primary role
         if (!primaryRole) {
           setPrimaryRole(role);
         }
       }
-  
+
       return updatedRoles;
     });
   };
-  
 
   // Handle save button click
   const handleSaveRole = async () => {
@@ -723,6 +722,38 @@ export default function PGUserProfileDetails2() {
     }
   };
   // code for isemployee end
+
+  // Code for isAttendanceRequired start
+  const [isAttendanceRequired, setIsAttendanceRequired] = useState(false);
+  const [showConfirmationPopupAr, setShowConfirmationPopupAr] = useState(false);
+  const [
+    selectedAttendanceRequiredStatus,
+    setSelectedAttendanceRequiredStatus,
+  ] = useState(null);
+
+  const handleArRadioChange = (value) => {
+    setSelectedAttendanceRequiredStatus(value); // Set the selected value ("yes" or "no")
+    setShowConfirmationPopupAr(true); // Show the confirmation popup
+  };
+
+  const handleUpdateIsAttendanceRequired = async () => {
+    try {
+      setLoading(true);
+      const updatedStatus = selectedAttendanceRequiredStatus === "yes"; // Fixed the issue
+
+      await updateDocument(userProfileId, {
+        isAttendanceRequired: updatedStatus,
+      });
+
+      setIsAttendanceRequired(updatedStatus); // Update state
+      setShowConfirmationPopupAr(false); // Close popup
+    } catch (error) {
+      console.error("Error updating employee status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Code for isAttendanceRequired end
 
   // full code for ref1 start
   const [ref1FormData, setRef1FormData] = useState({
@@ -1881,6 +1912,7 @@ export default function PGUserProfileDetails2() {
                   </Modal.Footer>
                 </Modal>
               </div>
+
               <div className="blue_single is_employee">
                 <h5>Current Role - </h5>
                 <h6 className="text_blue text-capitalize">
@@ -1900,6 +1932,94 @@ export default function PGUserProfileDetails2() {
                     ? "Online"
                     : "Offline"}
                 </h6>
+              </div>
+              <div className="blue_single  is_employee is_attendance_required">
+                <h5>Is Attendance Required?</h5>
+                <div className="form_field">
+                  <div className="field_box theme_radio_new">
+                    <div
+                      className="theme_radio_container"
+                      style={{
+                        padding: "0px",
+                        border: "none",
+                        background: "transparent",
+                      }}
+                    >
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isar"
+                          value="yes"
+                          id="isaryes"
+                          checked={
+                            userProfileDoc?.isAttendanceRequired === true
+                          } // Fixed checked condition
+                          onChange={() => handleArRadioChange("yes")}
+                        />
+                        <label htmlFor="isaryes">yes</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isar"
+                          value="no"
+                          id="isarno"
+                          checked={
+                            userProfileDoc?.isAttendanceRequired === false
+                          } // Fixed checked condition
+                          onChange={() => handleArRadioChange("no")}
+                        />
+                        <label htmlFor="isarno">no</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Confirmation Modal */}
+                <Modal
+                  show={showConfirmationPopupAr}
+                  onHide={() => setShowConfirmationPopupAr(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{ paddingBottom: "0px", border: "none" }}
+                  >
+                    <h5>Confirmation</h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to mark this user as{" "}
+                    {selectedAttendanceRequiredStatus === "yes"
+                      ? "attendance required"
+                      : "not attendance required"}
+                    ?
+                  </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{ border: "none", gap: "15px" }}
+                  >
+                    <div
+                      className="cancel_btn"
+                      onClick={handleUpdateIsAttendanceRequired}
+                      disabled={loading}
+                    >
+                      {loading ? "Saving..." : "Yes, Update"}
+                    </div>
+                    <div
+                      className="done_btn"
+                      onClick={() => setShowConfirmationPopupAr(false)}
+                    >
+                      No
+                    </div>
+                  </Modal.Footer>
+                </Modal>
               </div>
             </div>
           </div>
@@ -2014,7 +2134,7 @@ export default function PGUserProfileDetails2() {
                           : !role.isEmployee || role.showInBoth // Show non-employee roles or those meant for both
                     )
                     .map(({ id, label }) => (
-                      // old code plz dont,t delete it 
+                      // old code plz dont,t delete it
                       // <div className="radio_single" key={id}>
                       //   <input
                       //     type="checkbox"
@@ -2027,22 +2147,26 @@ export default function PGUserProfileDetails2() {
                       //   />
                       //   <label htmlFor={id}>{label}</label>
                       // </div>
-                      <div className="radio_single" key={id} style={{ display: "flex", alignItems: "center" }}>
-                      <input
-                        type="checkbox"
-                        name="user_role"
-                        value={id}
-                        id={id}
-                        disabled={!isRoleEditing}
-                        checked={selectedRoles.includes(id)}
-                        onChange={() => handleRoleChange(id)}
-                      />
-                    <label htmlFor={id}>
-  {label} {selectedRoles.includes(id) && `(${selectedRoles.indexOf(id) + 1})`}
-</label>
-
-                    
-                    </div>
+                      <div
+                        className="radio_single"
+                        key={id}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <input
+                          type="checkbox"
+                          name="user_role"
+                          value={id}
+                          id={id}
+                          disabled={!isRoleEditing}
+                          checked={selectedRoles.includes(id)}
+                          onChange={() => handleRoleChange(id)}
+                        />
+                        <label htmlFor={id}>
+                          {label}{" "}
+                          {selectedRoles.includes(id) &&
+                            `(${selectedRoles.indexOf(id) + 1})`}
+                        </label>
+                      </div>
                     ))}
                 </div>
               </div>
@@ -2646,75 +2770,67 @@ export default function PGUserProfileDetails2() {
                   </div>
                   {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
                     <div className="p_info_single">
-                    <div className="pd_icon">
-                    <img
-  src={`/assets/img/edicon/${
-    userProfileDoc
-      ? userProfileDoc.vehicleType === "2-Wheeler"
-        ? "bike.png"
-        : userProfileDoc.vehicleType === "4-Wheeler"
-        ? "car.png"
-        : "vehicles.png"
-      : "vehicles.png"
-  }`}
-    alt=""
-/>
+                      <div className="pd_icon">
+                        <img
+                          src={`/assets/img/edicon/${
+                            userProfileDoc
+                              ? userProfileDoc.vehicleType === "2-Wheeler"
+                                ? "bike.png"
+                                : userProfileDoc.vehicleType === "4-Wheeler"
+                                ? "car.png"
+                                : "vehicles.png"
+                              : "vehicles.png"
+                          }`}
+                          alt=""
+                        />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Vehicle Type</h6>
 
-                      
-                      
+                        <h5>
+                          {userProfileDoc && userProfileDoc.vehicleType
+                            ? userProfileDoc.vehicleType
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
                     </div>
-                    <div className="pis_content">
-                      <h6>Vehicle Type</h6>
-  
-                      <h5>
-                        {userProfileDoc && userProfileDoc.vehicleType
-                          ? userProfileDoc.vehicleType
-                          : "Not provided yet"}
-                      </h5>
+                  ) : (
+                    ""
+                  )}
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                      <div className="pd_icon">
+                        <img src="/assets/img/edicon/numberplate.png" alt="" />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Number Plate</h6>
+                        <h5>
+                          {userProfileDoc && userProfileDoc.vehicleNumberPlate
+                            ? userProfileDoc.vehicleNumberPlate
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
                     </div>
-                  </div>
-                  )
-                :(
-                ""
-                )}
-                   {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
-                   <div className="p_info_single">
-                   <div className="pd_icon">
-                     <img src="/assets/img/edicon/numberplate.png" alt="" />
-                   </div>
-                   <div className="pis_content">
-                     <h6>Number Plate</h6>
-                     <h5>
-                       {userProfileDoc && userProfileDoc.vehicleNumberPlate
-                         ? userProfileDoc.vehicleNumberPlate
-                         : "Not provided yet"}
-                     </h5>
-                   </div>
-                 </div>
-                  )
-                :(
-                ""
-                )}
-                 {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
-                   <div className="p_info_single">
-                   <div className="pd_icon">
-                     <img src="/assets/img/edicon/id-card.png" alt="" />
-                   </div>
-                   <div className="pis_content">
-                     <h6>Driving Licence</h6>
-                     <h5>
-                       {userProfileDoc && userProfileDoc.drivingLicence
-                         ? userProfileDoc.drivingLicence
-                         : "Not provided yet"}
-                     </h5>
-                   </div>
-                 </div>
-                  )
-                :(
-                ""
-                )}
-               
-               
+                  ) : (
+                    ""
+                  )}
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                      <div className="pd_icon">
+                        <img src="/assets/img/edicon/id-card.png" alt="" />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Driving Licence</h6>
+                        <h5>
+                          {userProfileDoc && userProfileDoc.drivingLicence
+                            ? userProfileDoc.drivingLicence
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               )}
 
