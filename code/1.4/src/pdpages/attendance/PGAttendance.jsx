@@ -181,18 +181,24 @@ const PGAttendance = () => {
       }
     };
 
-    setGreeting(getGreeting());
+    try {
+      setGreeting(getGreeting());
 
-    getLocation();
+      getLocation();
 
-    getCurrentWeekDates();
+      getCurrentWeekDates();
 
-    // fetchCurrentWeekRecords()
+      // fetchCurrentWeekRecords()
 
-    const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
-    // console.log("currentMonthRecord: ",)
+      const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
+      // console.log("currentMonthRecord: ",)
 
-    fetchTopRecord();
+      fetchTopRecord();
+
+    }
+    catch (err) {
+      console.log("Error: ", err)
+    }
 
     // ensureMissingRecords()
 
@@ -362,7 +368,7 @@ const PGAttendance = () => {
       const unsubscribe = latestRecordRef.onSnapshot(
         (snapshot) => {
           if (!snapshot.empty) {
-            console.log("snapshot.docs[0].data(): ", snapshot.docs[0].data());
+            // console.log("snapshot.docs[0].data(): ", snapshot.docs[0].data());
             setTopRecord(snapshot.docs[0].data());
           }
         },
@@ -551,6 +557,8 @@ const PGAttendance = () => {
       // Add a punch-in record
       const data = {
         userId: user.uid,
+        userName: user.fullName,
+        userPhoneNo: user.phoneNumber,
         punchIn: formattedPunchinTime,
         punchOut: null,
         workHrs: "00:00",
@@ -724,7 +732,7 @@ const PGAttendance = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          console.log("Lat:", latitude, "Lng:", longitude);
+          // console.log("Lat:", latitude, "Lng:", longitude);
           // await getAddress(latitude, longitude); // Convert lat/lng to address
           await getLocationName(latitude, longitude); // Convert lat/lng using Google Map Geolocation
         },
@@ -745,7 +753,7 @@ const PGAttendance = () => {
         `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
       );
       const data = await response.json();
-      console.log("location object: ", data);
+      // console.log("location object: ", data);
       if (data && data.display_name) {
         const location_details =
           data.address.suburb +
@@ -774,9 +782,9 @@ const PGAttendance = () => {
   };
 
   const getLocationName = async (latitude, longitude) => {
-    console.log("In getLocationName");
-    // const API_KEY = "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw"; // Dev API - Replace with your API Key
-    const API_KEY = "AIzaSyAHSLHwNrU95nb1ZYZ7Fgkr2ZIhguEBYks"; // Production API - Replace with your API Key
+    // console.log("In getLocationName");
+    const API_KEY = "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw"; // Dev API - Replace with your API Key
+    // const API_KEY = "AIzaSyAHSLHwNrU95nb1ZYZ7Fgkr2ZIhguEBYks"; // Production API - Replace with your API Key
 
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`;
 
@@ -785,22 +793,31 @@ const PGAttendance = () => {
 
       const response = await fetch(url);
       const data = await response.json();
-      console.log("data from GeoLocation: ", data);
+      // console.log("data from GeoLocation: ", data);
       if (data.status === "OK") {
         // const locationName = data.results[0].formatted_address;
         // console.log("Location Name:", locationName);
 
         const formattedAddress = data.results[0].formatted_address;
-        const addressParts = formattedAddress.split(",");
-        console.log("address Parts: ", addressParts)
+        console.log("formattedAddress: ", formattedAddress)
+        // const addressParts = formattedAddress.split(",");
+        // console.log("address Parts: ", addressParts)
 
-        const stateFallback = addressParts.length > 1 ? addressParts[addressParts.length - 2].trim() : "";
-        const cityFallback = addressParts.length > 1 ? addressParts[addressParts.length - 3].trim() : "";
-        const localityFallback = addressParts.length > 1 ? addressParts[addressParts.length - 4].trim() : "";
 
-        locationName = localityFallback + ", " + cityFallback + ", " + stateFallback
+        // addressParts.map((data) => (
+        //   locationName += ", " + data
+        // ))
 
-        console.log("Fallback: ", locationName)
+        // console.log("addressParts map data: ", locationName)
+
+
+        // const stateFallback = addressParts.length === 1 ? addressParts[addressParts.length - 2].trim() : "";
+        // const cityFallback = addressParts.length > 2 ? addressParts[addressParts.length - 3].trim() : "";
+        // const localityFallback = addressParts.length > 3 ? addressParts[addressParts.length - 4].trim() : "";
+
+        // locationName = localityFallback + ", " + cityFallback + ", " + stateFallback
+
+        // console.log("Fallback: ", locationName)
 
         // const addressComponents = data.results[0].address_components;
         // const sublocality = getComponent(addressComponents, "sublocality");
@@ -824,7 +841,7 @@ const PGAttendance = () => {
         // const locationName =
         //   sublocality + ", " + city + ", " + state + ", " + country;
 
-        setLocation(locationName); // Set location name
+        setLocation(formattedAddress); // Set location name
         // return locationName;
       } else {
         console.error("Geocoding Error:", data.status);
