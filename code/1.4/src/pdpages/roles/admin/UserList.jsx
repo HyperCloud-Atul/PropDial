@@ -21,6 +21,7 @@ const userFilter = [
   "Admin",
   "Agent",
   "Super Admin",
+  "HR",
   "Tenant",
   "Prospective Tenant",
   "Buyer",
@@ -97,6 +98,9 @@ const UserList = () => {
         case "Prospective Buyer":
           roleMatch = document.status === "active" && document.rolePropDial === "prospectiveBuyer";
           break;
+          case "HR":
+            roleMatch = document.status === "active" && document.rolePropDial === "hr";
+            break;
         default:
           roleMatch = true;
       }

@@ -11,6 +11,8 @@
         
           gap: 15px;
          padding-bottom: 15px;
+         justify-content: space-between;
+         align-items: center;
           .ud_single {
             background: #ebeef4;
             width: fit-content;
@@ -27,6 +29,25 @@
             color: var(--theme-grey);
            }
         }
+        .w_c {
+          display: flex
+      ;
+          align-items: center;
+          gap: 22px;
+          position: relative;
+          &::after{
+            content: "";
+            background: #cecece;
+            width: 1px;
+            height: 80%;
+            left: 0;
+            right: 0;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+      }
           
       }
       }

@@ -1933,6 +1933,7 @@ export default function PGUserProfileDetails2() {
                     : "Offline"}
                 </h6>
               </div>
+              {userProfileDoc && userProfileDoc.isEmployee && (
               <div className="blue_single  is_employee is_attendance_required">
                 <h5>Is Attendance Required?</h5>
                 <div className="form_field">
@@ -2021,6 +2022,7 @@ export default function PGUserProfileDetails2() {
                   </Modal.Footer>
                 </Modal>
               </div>
+              )}
             </div>
           </div>
         </div>

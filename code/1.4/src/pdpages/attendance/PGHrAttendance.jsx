@@ -833,11 +833,21 @@ const PGHrAttendance = () => {
     }
   };
 
+
+
   //Fetch current location of user : End
 
+  const formatPhoneNumber = phoneNumber => {
+    const countryCode = phoneNumber.slice(0, 2);
+    const mainNumber = phoneNumber.slice(2);
+    return `+${countryCode} ${mainNumber.replace(/(\d{5})(\d{5})/, '$1-$2')}`;
+  };
+
   // previous punches data in table
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    if (!dbUserState) return []; // Return an empty array if dbUserState is not available
+  
+    return [
       {
         Header: "S.No",
         accessor: (row, i) => i + 1,
@@ -854,6 +864,64 @@ const PGHrAttendance = () => {
         ),
       },
       {
+        Header: "Name",
+        accessor: "createdBy",
+        disableFilters: true,
+        Cell: ({ value }) => {
+          const user = dbUserState?.find((user) => user.id === value);
+          return (
+            <div className="date mobile_min_width">
+              {user?.fullName || "--"}
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Phone Number",
+        accessor: "createdBy",  // Same accessor but unique ID
+        id: "phoneNumber",  // Unique ID to prevent duplicate column errors
+        disableFilters: true,
+        Cell: ({ value }) => {
+          const user = dbUserState?.find((user) => user.id === value);
+          return (
+            <div className="phone-number mobile_min_width">
+              <span>{user?.phoneNumber ? formatPhoneNumber(user?.phoneNumber) : "--"}</span>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Designation",
+        accessor: "createdBy",  // Same accessor but unique ID
+        id: "designation",  // Unique ID to prevent duplicate column errors
+        disableFilters: true,
+        Cell: ({ value }) => {
+          const user = dbUserState?.find((user) => user.id === value);
+          return (
+            <div className="phone-number mobile_min_width">
+              <span>{user?.designation?.label || "--"}</span>
+            </div>
+          );
+        },
+      },
+      {
+        Header: "Department",
+        accessor: "createdBy",  // Same accessor but unique ID
+        id: "department",  // Unique ID to prevent duplicate column errors
+        disableFilters: true,
+        Cell: ({ value }) => {
+          const user = dbUserState?.find((user) => user.id === value);
+          return (
+            <div className="phone-number mobile_min_width">
+              <span>{user?.department?.label || "--"}</span>
+            </div>
+          );
+        },
+      },
+      
+      
+
+      {
         Header: "Hrs Worked",
         accessor: "workHrs",
         disableFilters: true,
@@ -864,9 +932,7 @@ const PGHrAttendance = () => {
                   <span key={index}>
                     {val.trim()}
                     <span className="unit">{index === 0 ? "hrs" : "min"}</span>
-                    {index === 0 && (
-                      <span style={{ marginRight: "8px" }}></span>
-                    )}
+                    {index === 0 && <span style={{ marginRight: "8px" }}></span>}
                   </span>
                 ))
               : "--:--"}
@@ -878,7 +944,7 @@ const PGHrAttendance = () => {
         accessor: "punchIn",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+          <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
       {
@@ -890,22 +956,19 @@ const PGHrAttendance = () => {
             {value
               ? value
                   .split(", ")
-                  .filter(
-                    (part) => part.trim() !== "undefined" && part.trim() !== ""
-                  )
+                  .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
                   .slice(0, -1)
                   .join(", ")
-              : "--:--"}
+              : "--"}
           </div>
         ),
       },
-
       {
         Header: "Punch Out",
         accessor: "punchOut",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+          <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
       {
@@ -917,12 +980,10 @@ const PGHrAttendance = () => {
             {value
               ? value
                   .split(", ")
-                  .filter(
-                    (part) => part.trim() !== "undefined" && part.trim() !== ""
-                  )
+                  .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
                   .slice(0, -1)
                   .join(", ")
-              : "--:--"}
+              : "--"}
           </div>
         ),
       },
@@ -931,7 +992,7 @@ const PGHrAttendance = () => {
         accessor: "tripDistance",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+          <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
       {
@@ -939,7 +1000,7 @@ const PGHrAttendance = () => {
         accessor: "tripStart",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+          <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
       {
@@ -947,12 +1008,17 @@ const PGHrAttendance = () => {
         accessor: "tripEnd",
         disableFilters: true,
         Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value ? value : "--:--"}</div>
+          <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
-    ],
-    []
-  );
+    ];
+  }, [dbUserState]); // Dependency array for useMemo
+  
+  
+  
+
+
+ 
 
   // export data in excel
   const { exportToExcel, response: res } = useExportToExcel();
@@ -1192,7 +1258,74 @@ const PGHrAttendance = () => {
               <div className="pg_header">
                 <h2>Attendance Dashboard</h2>
               </div>
+              <div className="attendance_cards">
+                <div className="ac_single day">
+                  <h6>Total number of</h6>
+                  <h5>Employee</h5>
+                  <h2>25</h2>
+                  <div className="icon">
+                    <div className="icon_inner">
+                      <img src="/assets/img/edicon/appointment.png" alt="" />
+                    </div>
+                  </div>
+                  {/* <div className="trending">
+                    <div className="inner up">
+                      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
+                                            <div className="value">2.5%</div>
+                      --:--
+                    </div>
+                    <p>last week</p>
+                  </div> */}
+                </div>
+                <div className="ac_single hr">
+                  <h6>Total number of</h6>
+                  <h5>Attendance ON</h5>
+                  <h2>
+                20
+                  </h2>
 
+                  <div className="icon">
+                    <div className="icon_inner">
+                      <img src="/assets/img/edicon/working-time.png" alt="" />
+                    </div>
+                  </div>
+                  {/* <div className="trending">
+                    <div className="inner down">
+                      <span className="material-symbols-outlined">
+                                                trending_down
+                                            </span> 
+                      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FA6262"><path d="M624-209v-72h117L529-492 377-340 96-621l51-51 230 230 152-152 263 262v-117h72v240H624Z" /></svg>
+                                            <div className="value">0.5%</div> 
+                      --:--
+                    </div>
+                    <p>last week</p>
+                  </div> */}
+                </div>
+             
+                  <div className="ac_single dist">
+                    <h6>Total number of</h6>
+                    <h5>Attendance OFF</h5>
+                    <h2>
+                   05
+                    </h2>
+
+                    <div className="icon">
+                      <div className="icon_inner">
+                        <img src="/assets/img/edicon/distance.png" alt="" />
+                      </div>
+                    </div>
+                    {/* <div className="trending">
+                      <div className="inner up">
+                        <span className="material-symbols-outlined">trending_up</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
+                                              <div className="value">2.5%</div>
+                        --:--
+                      </div>
+                      <p>last week</p>
+                    </div> */}
+                  </div>
+              
+              </div>
               <div className="year_month">
                 <div className="left">
                   <h2>Logs</h2>
@@ -1200,14 +1333,35 @@ const PGHrAttendance = () => {
                 <div className="right">
                   <div className="filters">
                     <div className="right">
+                    <div className="icon_dropdown">
+                        <select                        
+                        >
+                        
+
+                         
+                            <option >
+                           Naman
+                            </option>
+                            <option >
+                          Khushi
+                            </option>
+                            <option >
+                       Rahul
+                            </option>
+                            <option >
+                        Kaartik
+                            </option>
+                         
+                        </select>
+                      </div>
                       <div className="new_inline">
                         <div className="project-filter">
                           <nav>
                             <button className="active">
-                              <span>Today</span>
+                              <span>Today (20)</span>
                             </button>
                             <button className="">
-                              <span>Yesterday</span>
+                              <span>Yesterday (18)</span>
                             </button>
                             <button className="">
                               <span>This Week</span>
@@ -1319,37 +1473,41 @@ const PGHrAttendance = () => {
                               : "v_not"
                           }`}
                         >
-                          <div className="u_detail">
-                            <div className="ud_single">
-                              <h5>
-                                {" "}
-                                {dbUserState &&
-                                  dbUserState.find(
-                                    (user) => user.id === data.createdBy
-                                  )?.fullName}
-                              </h5>
-                              <h6>
-                                {" "}
-                                {dbUserState &&
-                                dbUserState.find(
-                                  (user) => user.id === data.createdBy
-                                )?.designation?.label
-                                  ? dbUserState.find(
-                                      (user) => user.id === data.createdBy
-                                    )?.designation?.label
-                                  : "N/A"}
-                                ,{" "}
-                                {dbUserState &&
-                                dbUserState.find(
-                                  (user) => user.id === data.createdBy
-                                )?.department?.label
-                                  ? dbUserState.find(
-                                      (user) => user.id === data.createdBy
-                                    )?.department?.label
-                                  : "N/A"}
-                              </h6>
-                            </div>
-                          </div>
+   <div className="u_detail">
+  <div className="ud_single">
+    <h5>
+      {dbUserState?.find((user) => user.id === data.createdBy)?.fullName}
+    </h5>
+    <h6>
+      {dbUserState?.find((user) => user.id === data.createdBy)?.designation?.label || "N/A"},{" "}
+      {dbUserState?.find((user) => user.id === data.createdBy)?.department?.label || "N/A"}
+    </h6>
+  </div>
+
+  {(() => {
+    const user = dbUserState?.find((user) => user.id === data.createdBy);
+    let phoneNumber = user?.phoneNumber;
+
+    if (phoneNumber) {
+      // Ensure phone number starts with "+"
+      phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+
+      return (
+        <div className="w_c">
+          <a href={`tel:${phoneNumber}`} target="_blank" rel="noopener noreferrer">
+            <img src="/assets/img/simple_call.png" alt="Call" />
+          </a>
+          <a href={`https://wa.me/${phoneNumber.replace(/\s+/g, "")}`} target="_blank" rel="noopener noreferrer">
+            <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
+          </a>
+        </div>
+      );
+    }
+
+    return null; // Do not render .w_c if no phone number
+  })()}
+</div>
+
                           <div className="top">
                             <div className="left">
                               {data.date ? (
