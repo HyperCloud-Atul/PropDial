@@ -909,7 +909,7 @@ const PGAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                .split(", ")
+                .split(",")
                 .filter(
                   (part) => part.trim() !== "undefined" && part.trim() !== ""
                 )
@@ -936,7 +936,7 @@ const PGAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                .split(", ")
+                .split(",")
                 .filter(
                   (part) => part.trim() !== "undefined" && part.trim() !== ""
                 )
@@ -991,7 +991,7 @@ const PGAttendance = () => {
       "Punch In": item.punchIn ? item.punchIn : "--:--",
       "Punch In Location": item.punchInLocation
         ? item.punchInLocation
-          .split(", ")
+          .split(",")
           .filter(
             (part) => part.trim() !== "undefined" && part.trim() !== ""
           )
@@ -999,7 +999,7 @@ const PGAttendance = () => {
         : "--:--",
       "Punch Out": item.punchOutLocation
         ? item.punchOutLocation
-          .split(", ")
+          .split(",")
           .filter(
             (part) => part.trim() !== "undefined" && part.trim() !== ""
           )
@@ -1526,12 +1526,12 @@ const PGAttendance = () => {
                           )}
                           <div className="punch_location">
                             <div className="pl_single">
-                              <h6>Punch In Location</h6>
+                              <h6>Punch In Location1</h6>
 
                               <h5>
                                 {data.punchInLocation
                                   ? data.punchInLocation
-                                    .split(", ")
+                                    .split(",")
                                     .filter(
                                       (part) =>
                                         part.trim() !== "undefined" &&
@@ -1548,7 +1548,7 @@ const PGAttendance = () => {
                               <h5>
                                 {data.punchOutLocation
                                   ? data.punchOutLocation
-                                    .split(", ")
+                                    .split(",")
                                     .filter(
                                       (part) =>
                                         part.trim() !== "undefined" &&
@@ -1699,7 +1699,7 @@ const PGAttendance = () => {
                           topRecord.date === formattedTodaysDate &&
                           topRecord.punchInLocation
                           ? topRecord.punchInLocation
-                            .split(", ")
+                            .split(",")
                             .filter(
                               (part) =>
                                 part.trim() !== "undefined" &&
@@ -1771,7 +1771,7 @@ const PGAttendance = () => {
                           topRecord.date === formattedTodaysDate &&
                           topRecord.punchOutLocation
                           ? topRecord.punchOutLocation
-                            .split(", ")
+                            .split(",")
                             .filter(
                               (part) =>
                                 part.trim() !== "undefined" &&
