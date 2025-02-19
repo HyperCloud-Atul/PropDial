@@ -119,6 +119,8 @@ import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 
 // New component import end
 
+import InterViewStart from "./pages/interviewStart/InterViewStart";
+
 function App() {
   //---------------------- Copy Collection Code - Start -----------------------------------
   // const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
@@ -951,6 +953,14 @@ function App() {
                     }
                   ></Route>
 
+
+{/* remove  */}
+<Route
+                    path="/interviewStart"
+                    element={<InterViewStart/>
+                    
+                    }
+                  ></Route>
 
                 </Routes>
                 {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}

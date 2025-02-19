@@ -1,0 +1,175 @@
+// src/components/Interview.scss
+
+.interview_container {
+  margin-top: 68px;
+  display: flex;
+  position: relative;
+  background: white;
+  .theme_btn{
+    background: white;
+    color: #0E7B95;
+    border: 1px solid #0E7B95;
+    font-size: 16px;
+    font-weight: pa;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 0px;
+    text-transform: capitalize;
+    &.fill{
+        color: white;
+        background: #0E7B95;
+    }
+  }
+  .left {
+    position: fixed;
+    width: 25%;
+    padding: 22px;
+    height: 100vh;
+    left: 0;
+    top: 68px;
+    overflow-y: auto;
+    background: white;
+    .timer {
+        width: 100%;
+        text-align: center;
+        font-size: 24px;
+        border: 2px solid #00a8a8;
+        color: #00a8a8;
+        font-weight: 600;
+        padding: 4px;
+    }
+    .final_grade {
+        text-align: center;
+        margin: 12px 0px;
+        h6 {
+            font-size: 17px;
+            font-weight: 500;
+        }
+        h5 {
+            font-size: 24px;
+            margin-top: 3px !important;
+            color: red;
+            span{
+                font-size: 19px;
+                color: grey;
+            }
+        }
+    }
+ 
+    .candidate-info {
+        background: #eeeeee;
+        padding: 10px;
+        .pic_area {
+            background: white;
+            padding: 10px;
+            text-align: center;
+            .pic {
+                img{
+                    height: 120px;
+                    object-fit: contain;
+                    margin: auto;
+                }
+            }
+            button{
+             margin-top: 8px;
+            }
+        }
+        .info {
+            margin-top: 15px;
+            display: flex
+        ;
+            flex-direction: column;
+            gap: 4px;
+            p {
+                font-size: 15px;
+                b{
+                    font-weight: 500;
+                }
+            }
+            button{
+                margin-top: 15px;
+            }
+        }
+    }
+
+  }
+  .right{
+    width: 75%;
+    margin-left: auto;
+    padding: 22px;
+    min-height: 100vh;
+    .questions_container {
+        display: flex
+    ;
+        flex-direction: column;
+        gap: 22px;
+        .q_single {
+            .title {
+                font-size: 20px;
+                font-weight: 500;
+                display: flex
+            ;
+                align-items: center;
+                justify-content: space-between;
+                gap: 15px;
+                padding-bottom: 14px;
+                margin-bottom: 14px;
+                border-bottom: 1px solid grey;
+                .dot {
+                    width: 12px;
+                    height: 12px;
+                    background: #00a8a8;
+                    border-radius: 50%;
+                }
+            }
+            .question {
+                display: flex
+            ;
+                align-items: center;
+                gap: 14px;
+                margin-bottom: 14px;
+                .q_left{
+                    width: 20%;
+                }
+                .q_right{
+                    width: 50%;
+                }
+                .button_group {
+                    display: flex
+                ;
+                    width: 100%;
+                }
+                button{
+                    width: 100%;
+                    min-height: 40px;
+                    &.active{
+                        background: #0E7B95;
+                        color: white;
+                    }
+                }
+                select, textarea {
+                  
+                    min-width: 100%;
+                    width: 100%;
+                    border: 1px solid grey;
+                    padding: 6px;
+                }
+                textarea{
+                    min-height: 110px;
+                }
+            }
+        }
+    }
+    
+  }
+  .action_btn {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 1px solid grey;
+    text-align: center;
+    button{
+        min-height: 40px;
+        min-width: 100px;
+    }
+}
+}
