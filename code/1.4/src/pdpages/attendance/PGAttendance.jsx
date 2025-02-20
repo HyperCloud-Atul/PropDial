@@ -193,7 +193,7 @@ const PGAttendance = () => {
       const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
       // console.log("currentMonthRecord: ",)
 
-      fetchTopRecord();
+      // fetchTopRecord();
 
     }
     catch (err) {
@@ -551,9 +551,10 @@ const PGAttendance = () => {
       return; // Prevent further execution
     }
 
-    const formattedPunchinTime = format(today, "hh:mm a");
-
     try {
+
+      const formattedPunchinTime = format(today, "hh:mm a");
+
       // Add a punch-in record
       const data = {
         userId: user.uid,
@@ -568,10 +569,28 @@ const PGAttendance = () => {
         punchInLocation: location,
       };
 
-      await addDocument(data);
-    } catch (error) {
+      // Find the punch-in record for today
+      const record = await projectFirestore
+        .collection("attendance-propdial")
+        .where("userId", "==", user.uid)
+        .where("date", "==", formattedTodaysDate)
+        .get();
+
+      if (record.empty) {
+        console.log("Add new record!");
+
+        await addDocument(data);
+      }
+      else { //Update record
+        const docId = record.docs[0].id;
+
+        await updateDocument(docId, data);
+      }
+    }
+    catch (error) {
       console.log("Error adding a Punch-in Record: ", error);
     }
+
     setShowPunchInPopup(false);
     setPunchInError(false);
     setTripStart(null);

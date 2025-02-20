@@ -194,16 +194,16 @@ const PGHrAttendance = () => {
 
     setGreeting(getGreeting());
 
-    getLocation();
+    // getLocation();
 
-    getCurrentWeekDates();
+    // getCurrentWeekDates();
 
     // fetchCurrentWeekRecords()
 
     const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
     // console.log("currentMonthRecord: ",)
 
-    fetchTopRecord();
+    // fetchTopRecord();
 
     // ensureMissingRecords()
 
@@ -846,7 +846,7 @@ const PGHrAttendance = () => {
   // previous punches data in table
   const columns = useMemo(() => {
     if (!dbUserState) return []; // Return an empty array if dbUserState is not available
-  
+
     return [
       {
         Header: "S.No",
@@ -918,8 +918,8 @@ const PGHrAttendance = () => {
           );
         },
       },
-      
-      
+
+
 
       {
         Header: "Hrs Worked",
@@ -929,12 +929,12 @@ const PGHrAttendance = () => {
           <div className="hr_worked mobile_min_width">
             {value !== "00:00"
               ? value.split(":").map((val, index) => (
-                  <span key={index}>
-                    {val.trim()}
-                    <span className="unit">{index === 0 ? "hrs" : "min"}</span>
-                    {index === 0 && <span style={{ marginRight: "8px" }}></span>}
-                  </span>
-                ))
+                <span key={index}>
+                  {val.trim()}
+                  <span className="unit">{index === 0 ? "hrs" : "min"}</span>
+                  {index === 0 && <span style={{ marginRight: "8px" }}></span>}
+                </span>
+              ))
               : "--:--"}
           </div>
         ),
@@ -955,10 +955,10 @@ const PGHrAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                  .split(", ")
-                  .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-                  .slice(0, -1)
-                  .join(", ")
+                .split(", ")
+                .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+                .slice(0, -1)
+                .join(", ")
               : "--"}
           </div>
         ),
@@ -979,10 +979,10 @@ const PGHrAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                  .split(", ")
-                  .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-                  .slice(0, -1)
-                  .join(", ")
+                .split(", ")
+                .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+                .slice(0, -1)
+                .join(", ")
               : "--"}
           </div>
         ),
@@ -1013,12 +1013,12 @@ const PGHrAttendance = () => {
       },
     ];
   }, [dbUserState]); // Dependency array for useMemo
-  
-  
-  
 
 
- 
+
+
+
+
 
   // export data in excel
   const { exportToExcel, response: res } = useExportToExcel();
@@ -1028,36 +1028,36 @@ const PGHrAttendance = () => {
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
-              .split(":")
-              .map(
-                (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
-              )
-              .join(" ")
+            .split(":")
+            .map(
+              (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
+            )
+            .join(" ")
           : "--:--",
       "Punch In": item.punchIn ? item.punchIn : "--:--",
       "Punch In Location": item.punchInLocation
         ? item.punchInLocation
-            .split(", ")
-            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-            .join(", ")
+          .split(", ")
+          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+          .join(", ")
         : "--:--",
       "Punch Out": item.punchOutLocation
         ? item.punchOutLocation
-            .split(", ")
-            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-            .join(", ")
+          .split(", ")
+          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+          .join(", ")
         : "--:--",
       "Punch Out Location": item.punchOutLocation || "--",
 
       // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
       ...(user && user.vehicleStatus
         ? {
-            "Distance (km)": item.tripDistance
-              ? item.tripDistance + " Km"
-              : "--:--",
-            "Trip Start": item.tripStart ? item.tripStart : "--:--",
-            "Trip End": item.tripEnd ? item.tripEnd : "--:--",
-          }
+          "Distance (km)": item.tripDistance
+            ? item.tripDistance + " Km"
+            : "--:--",
+          "Trip Start": item.tripStart ? item.tripStart : "--:--",
+          "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+        }
         : {}),
     }));
 
@@ -1120,7 +1120,7 @@ const PGHrAttendance = () => {
                         // e.target.value = "45"
                       }}
                       onChange={(e) => setTripStart(e.target.value)}
-                      // value={topRecord && topRecord.tripEnd}
+                    // value={topRecord && topRecord.tripEnd}
                     />
                     {punchInError && (
                       <div className="field_error">
@@ -1166,7 +1166,7 @@ const PGHrAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchIn}
-                  // disabled={loading}
+                // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1198,9 +1198,8 @@ const PGHrAttendance = () => {
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder={`Trip Start: ${
-                        topRecord && topRecord.tripStart
-                      }`}
+                      placeholder={`Trip Start: ${topRecord && topRecord.tripStart
+                        }`}
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);
@@ -1209,11 +1208,11 @@ const PGHrAttendance = () => {
                     />
                     <p className="mt-2 text_grey">
                       {Number(tripEnd) >
-                      Number(topRecord && topRecord.tripStart)
+                        Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
-                          (Number(tripEnd) -
-                            Number(topRecord && topRecord.tripStart)) +
-                          " KM"
+                        (Number(tripEnd) -
+                          Number(topRecord && topRecord.tripStart)) +
+                        " KM"
                         : "Note:- Trip End should be greater than Trip Start"}
                     </p>
                     {punchOutError && (
@@ -1244,7 +1243,7 @@ const PGHrAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchOut}
-                  // disabled={loading}
+                // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1260,8 +1259,8 @@ const PGHrAttendance = () => {
               </div>
               <div className="attendance_cards">
                 <div className="ac_single day">
-                  <h6>Total number of</h6>
-                  <h5>Employee</h5>
+                  <h6>Total Company</h6>
+                  <h5>Headcount</h5>
                   <h2>25</h2>
                   <div className="icon">
                     <div className="icon_inner">
@@ -1278,10 +1277,10 @@ const PGHrAttendance = () => {
                   </div> */}
                 </div>
                 <div className="ac_single hr">
-                  <h6>Total number of</h6>
+                  <h6>Staff Count for</h6>
                   <h5>Attendance ON</h5>
                   <h2>
-                20
+                    20
                   </h2>
 
                   <div className="icon">
@@ -1301,20 +1300,20 @@ const PGHrAttendance = () => {
                     <p>last week</p>
                   </div> */}
                 </div>
-             
-                  <div className="ac_single dist">
-                    <h6>Total number of</h6>
-                    <h5>Attendance OFF</h5>
-                    <h2>
-                   05
-                    </h2>
 
-                    <div className="icon">
-                      <div className="icon_inner">
-                        <img src="/assets/img/edicon/distance.png" alt="" />
-                      </div>
+                <div className="ac_single dist">
+                  <h6>Staff Count for</h6>
+                  <h5>Attendance OFF</h5>
+                  <h2>
+                    05
+                  </h2>
+
+                  <div className="icon">
+                    <div className="icon_inner">
+                      <img src="/assets/img/edicon/distance.png" alt="" />
                     </div>
-                    {/* <div className="trending">
+                  </div>
+                  {/* <div className="trending">
                       <div className="inner up">
                         <span className="material-symbols-outlined">trending_up</span>
                         <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#00a300"><path d="m147-209-51-51 281-281 152 152 212-211H624v-72h240v240h-72v-117L529-287 377-439 147-209Z" /></svg>
@@ -1323,8 +1322,8 @@ const PGHrAttendance = () => {
                       </div>
                       <p>last week</p>
                     </div> */}
-                  </div>
-              
+                </div>
+
               </div>
               <div className="year_month">
                 <div className="left">
@@ -1333,25 +1332,25 @@ const PGHrAttendance = () => {
                 <div className="right">
                   <div className="filters">
                     <div className="right">
-                    <div className="icon_dropdown">
-                        <select                        
+                      <div className="icon_dropdown">
+                        <select
                         >
-                        
 
-                         
-                            <option >
-                           Naman
-                            </option>
-                            <option >
-                          Khushi
-                            </option>
-                            <option >
-                       Rahul
-                            </option>
-                            <option >
-                        Kaartik
-                            </option>
-                         
+
+
+                          <option >
+                            Naman
+                          </option>
+                          <option >
+                            Khushi
+                          </option>
+                          <option >
+                            Rahul
+                          </option>
+                          <option >
+                            Kaartik
+                          </option>
+
                         </select>
                       </div>
                       <div className="new_inline">
@@ -1406,9 +1405,8 @@ const PGHrAttendance = () => {
                       </div>
                       <div className="button_filter diff_views">
                         <div
-                          className={`bf_single ${
-                            viewMode === "card_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("card_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1425,9 +1423,8 @@ const PGHrAttendance = () => {
                           </svg>
                         </div>
                         <div
-                          className={`bf_single ${
-                            viewMode === "table_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("table_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1464,49 +1461,48 @@ const PGHrAttendance = () => {
                     attendanceData.map((data) => (
                       <>
                         <div
-                          className={`pp_single ${
-                            dbUserState &&
+                          className={`pp_single ${dbUserState &&
                             dbUserState.find(
                               (user) => user.id === data.createdBy
                             )?.vehicleStatus
-                              ? ""
-                              : "v_not"
-                          }`}
+                            ? ""
+                            : "v_not"
+                            }`}
                         >
-   <div className="u_detail">
-  <div className="ud_single">
-    <h5>
-      {dbUserState?.find((user) => user.id === data.createdBy)?.fullName}
-    </h5>
-    <h6>
-      {dbUserState?.find((user) => user.id === data.createdBy)?.designation?.label || "N/A"},{" "}
-      {dbUserState?.find((user) => user.id === data.createdBy)?.department?.label || "N/A"}
-    </h6>
-  </div>
+                          <div className="u_detail">
+                            <div className="ud_single">
+                              <h5>
+                                {dbUserState?.find((user) => user.id === data.createdBy)?.fullName}
+                              </h5>
+                              <h6>
+                                {dbUserState?.find((user) => user.id === data.createdBy)?.designation?.label || "N/A"},{" "}
+                                {dbUserState?.find((user) => user.id === data.createdBy)?.department?.label || "N/A"}
+                              </h6>
+                            </div>
 
-  {(() => {
-    const user = dbUserState?.find((user) => user.id === data.createdBy);
-    let phoneNumber = user?.phoneNumber;
+                            {(() => {
+                              const user = dbUserState?.find((user) => user.id === data.createdBy);
+                              let phoneNumber = user?.phoneNumber;
 
-    if (phoneNumber) {
-      // Ensure phone number starts with "+"
-      phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+                              if (phoneNumber) {
+                                // Ensure phone number starts with "+"
+                                phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
 
-      return (
-        <div className="w_c">
-          <a href={`tel:${phoneNumber}`} target="_blank" rel="noopener noreferrer">
-            <img src="/assets/img/simple_call.png" alt="Call" />
-          </a>
-          <a href={`https://wa.me/${phoneNumber.replace(/\s+/g, "")}`} target="_blank" rel="noopener noreferrer">
-            <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
-          </a>
-        </div>
-      );
-    }
+                                return (
+                                  <div className="w_c">
+                                    <a href={`tel:${phoneNumber}`} target="_blank" rel="noopener noreferrer">
+                                      <img src="/assets/img/simple_call.png" alt="Call" />
+                                    </a>
+                                    <a href={`https://wa.me/${phoneNumber.replace(/\s+/g, "")}`} target="_blank" rel="noopener noreferrer">
+                                      <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
+                                    </a>
+                                  </div>
+                                );
+                              }
 
-    return null; // Do not render .w_c if no phone number
-  })()}
-</div>
+                              return null; // Do not render .w_c if no phone number
+                            })()}
+                          </div>
 
                           <div className="top">
                             <div className="left">
@@ -1531,29 +1527,29 @@ const PGHrAttendance = () => {
                                   <h5>
                                     {data.workHrs
                                       ? data.workHrs
-                                          .split(":")
-                                          .map((val, index) => (
-                                            <span key={index}>
-                                              {val.trim()}
-                                              <span className="unit">
-                                                {index === 0 ? "hrs" : "min"}
-                                              </span>
-                                              {index === 0 && (
-                                                <span
-                                                  style={{ marginRight: "8px" }}
-                                                ></span>
-                                              )}
+                                        .split(":")
+                                        .map((val, index) => (
+                                          <span key={index}>
+                                            {val.trim()}
+                                            <span className="unit">
+                                              {index === 0 ? "hrs" : "min"}
                                             </span>
-                                          ))
+                                            {index === 0 && (
+                                              <span
+                                                style={{ marginRight: "8px" }}
+                                              ></span>
+                                            )}
+                                          </span>
+                                        ))
                                       : "--:--"}
                                   </h5>
                                 )}
                               </div>
 
                               {dbUserState &&
-                              dbUserState.find(
-                                (user) => user.id === data.createdBy
-                              )?.vehicleStatus ? (
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.vehicleStatus ? (
                                 <div className="r_single">
                                   <h6> Distance</h6>
                                   {data.tripDistance ? (
@@ -1573,21 +1569,19 @@ const PGHrAttendance = () => {
 
                           <div
                             className={`bottom 
-                              ${
-                                dbUserState &&
+                              ${dbUserState &&
                                 dbUserState.find(
                                   (user) => user.id === data.createdBy
                                 )?.vehicleStatus
-                                  ? "trip"
-                                  : ""
-                              } ${
-                              moment(data.date, "DD-MMM-YY").format(
+                                ? "trip"
+                                : ""
+                              } ${moment(data.date, "DD-MMM-YY").format(
                                 "DD-MMM-YY"
                               ) !== moment().format("DD-MMM-YY") &&
-                              !data.punchOut
+                                !data.punchOut
                                 ? "no_punchout"
                                 : ""
-                            }
+                              }
                                 
                             `}
                           >
@@ -1635,7 +1629,7 @@ const PGHrAttendance = () => {
                             <div className="pl_single">
                               <h6>Punch In Location</h6>
                               {data.punchInLocation &&
-                              data.punchInLocation ===
+                                data.punchInLocation ===
                                 "Location access denied." ? (
                                 <h5
                                   style={{
@@ -1649,14 +1643,14 @@ const PGHrAttendance = () => {
                                 <h5>
                                   {data.punchInLocation
                                     ? data.punchInLocation
-                                        .split(", ")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
+                                      .split(", ")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
                                     : "--:--"}
                                 </h5>
                               )}
@@ -1664,7 +1658,7 @@ const PGHrAttendance = () => {
                             <div className="pl_single">
                               <h6>Punch Out Location </h6>
                               {data.punchOutLocation &&
-                              data.punchOutLocation ===
+                                data.punchOutLocation ===
                                 "Location access denied." ? (
                                 <h5
                                   style={{
@@ -1678,14 +1672,14 @@ const PGHrAttendance = () => {
                                 <h5>
                                   {data.punchOutLocation
                                     ? data.punchOutLocation
-                                        .split(", ")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
+                                      .split(", ")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
                                     : "--:--"}
                                 </h5>
                               )}
