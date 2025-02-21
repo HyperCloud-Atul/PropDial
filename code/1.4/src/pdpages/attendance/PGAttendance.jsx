@@ -193,7 +193,7 @@ const PGAttendance = () => {
       const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
       // console.log("currentMonthRecord: ",)
 
-      // fetchTopRecord();
+      fetchTopRecord();
 
     }
     catch (err) {
