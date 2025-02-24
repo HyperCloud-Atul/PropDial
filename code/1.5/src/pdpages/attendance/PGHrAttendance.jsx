@@ -98,6 +98,7 @@ const calculateTimeDifference = (punchIn, punchOut) => {
 const PGHrAttendance = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext(); // Current user
+  // console.log("user: ", user)
 
   // Scroll to the top of the page whenever the location changes start
   const pagelocation = useLocation();
@@ -141,7 +142,7 @@ const PGHrAttendance = () => {
 
   // console.log("attendence: ", attendance)
   const today = new Date();
-  const formattedTodaysDate = format(today, "dd-MMM-yy"); // 
+  const formattedTodaysDate = format(today, "dd-MMM-yy");
 
   //Formats as DD-MMM-YY
   const weekDay = days[today.getDay()]; // Current weekday
@@ -153,6 +154,12 @@ const PGHrAttendance = () => {
   // console.log("attendanceData: ", attendanceData);
 
   const [attendanceData, setAttendanceData] = useState();
+  const [attendanceTodaysCount, setAttendanceTodaysCount] = useState();
+  const [attendanceYesterdayCount, setAttendanceYesterdayCount] = useState();
+
+  const [staffCount, setStaffCount] = useState();
+  const [staffAttendanceONCount, setStaffAttendanceONCount] = useState();
+
   const [currentMonthRecords, setCurrentMonthRecords] = useState();
   const [todaysRecords, setTodaysRecords] = useState();
   const [currentWeekRecords, setCurrentWeekRecords] = useState();
@@ -192,6 +199,10 @@ const PGHrAttendance = () => {
 
     // getLocation();
 
+    getStaffCount()
+
+    getStaffCountForAttendanceONOFF()
+
     fetchTodaysRecords()
 
     // getCurrentWeekDates();
@@ -212,26 +223,68 @@ const PGHrAttendance = () => {
 
     // Cleanup the interval on component unmount
     // return () => clearInterval(timer);
-  }, [user.uid]); // Run once when the component mounts
+  }, [user]); // Run once when the component mounts
 
+
+  //Fetch Staff Count
+  const getStaffCount = async () => {
+    console.log("In getStaffCount")
+    try {
+
+      const record = await projectFirestore
+        .collection("users-propdial")
+        .where("isEmployee", "==", true)
+        // .where("date", "==", formattedTodaysDate)
+        .get();
+
+      console.log("Total documents:", record.size);
+      setStaffCount(record.size)
+
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
+
+  //Fetch Staff Count
+  const getStaffCountForAttendanceONOFF = async () => {
+    console.log("In getStaffCountForAttendanceONOFF")
+    try {
+
+      const record = await projectFirestore
+        .collection("users-propdial")
+        .where("isAttendanceRequired", "==", true)
+        // .where("date", "==", formattedTodaysDate)
+        .get();
+
+      console.log("Attendance ON:", record.size);
+      setStaffAttendanceONCount(record.size)
+
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
 
   //Fetch Yesterdays Record
   const fetchYesterdaysRecords = async () => {
-    console.log("In fetchTodaysRecords")
-    const formattedYesterddayDate = format(today - 1, "dd-MMM-yy"); // 
+    console.log("In fetchYesterdaysRecords")
 
-    const yearesterdayDayName = days[(today - 1).getDay()];
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
+    console.log("formattedYesterddayDate", formattedYesterddayDate)
+    // const yearesterdayDayName = days[yesterday.getDay()];
 
     try {
       // Step 1: Get the todays record
-      const todaysRecordRef = projectFirestore
+      const recordRef = projectFirestore
         .collection("attendance-propdial")
         // .where("userId", "==", user.uid)
-        .where("date", "==", formattedTodaysDate)
+        .where("date", "==", formattedYesterddayDate)
         .orderBy("createdAt", "desc")
 
 
-      const unsubscribe = todaysRecordRef.onSnapshot(
+      const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
           if (!snapshot.empty) {
             let results = [];
@@ -242,6 +295,7 @@ const PGHrAttendance = () => {
             // console.log("todays records: ", results)
 
             setAttendanceData(results);
+            setAttendanceYesterdayCount(results && results.length)
           }
         },
         (error) => {
@@ -262,14 +316,13 @@ const PGHrAttendance = () => {
     console.log("In fetchTodaysRecords")
     try {
       // Step 1: Get the todays record
-      const todaysRecordRef = projectFirestore
+      const recordRef = projectFirestore
         .collection("attendance-propdial")
         // .where("userId", "==", user.uid)
         .where("date", "==", formattedTodaysDate)
         .orderBy("createdAt", "desc")
 
-
-      const unsubscribe = todaysRecordRef.onSnapshot(
+      const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
           if (!snapshot.empty) {
             let results = [];
@@ -280,6 +333,7 @@ const PGHrAttendance = () => {
             // console.log("todays records: ", results)
 
             setAttendanceData(results);
+            setAttendanceTodaysCount(results && results.length)
           }
         },
         (error) => {
@@ -490,7 +544,8 @@ const PGHrAttendance = () => {
           // console.log("current week records: ", results)
 
           // // update state
-          setCurrentWeekRecords(results);
+          // setCurrentWeekRecords(results);
+          setAttendanceData(results)
 
           // Calculate total work hours
           const totalMinutes = results?.reduce((acc, record) => {
@@ -1104,6 +1159,8 @@ const PGHrAttendance = () => {
   const exportExcelFormate = async () => {
     const subsetData = attendanceData.map((item) => ({
       Date: item.date,
+      Name: item.userName,
+      "Contact No": item.userPhoneNo,
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
@@ -1140,7 +1197,7 @@ const PGHrAttendance = () => {
         : {}),
     }));
 
-    let filename = "your-attendance.xlsx";
+    let filename = "attendance-report.xlsx";
     exportToExcel(subsetData, filename);
   };
 
@@ -1340,7 +1397,7 @@ const PGHrAttendance = () => {
                 <div className="ac_single day">
                   <h6>Total Company</h6>
                   <h5>Headcount</h5>
-                  <h2>25</h2>
+                  <h2>{staffCount}</h2>
                   <div className="icon">
                     <div className="icon_inner">
                       <img src="/assets/img/edicon/appointment.png" alt="" />
@@ -1359,7 +1416,7 @@ const PGHrAttendance = () => {
                   <h6>Staff Count for</h6>
                   <h5>Attendance ON</h5>
                   <h2>
-                    20
+                    {staffAttendanceONCount}
                   </h2>
 
                   <div className="icon">
@@ -1384,7 +1441,7 @@ const PGHrAttendance = () => {
                   <h6>Staff Count for</h6>
                   <h5>Attendance OFF</h5>
                   <h2>
-                    05
+                    {staffCount - staffAttendanceONCount}
                   </h2>
 
                   <div className="icon">
@@ -1435,13 +1492,13 @@ const PGHrAttendance = () => {
                       <div className="new_inline">
                         <div className="project-filter">
                           <nav>
-                            <button className="active">
-                              <span>Today (20)</span>
+                            <button className="active" onClick={() => fetchTodaysRecords()}>
+                              <span>Today ({attendanceTodaysCount})</span>
                             </button>
-                            <button className="">
-                              <span>Yesterday (18)</span>
+                            <button className="" onClick={() => fetchYesterdaysRecords()} >
+                              <span>Yesterday ({attendanceYesterdayCount})</span>
                             </button>
-                            <button className="">
+                            <button className="" onClick={() => getCurrentWeekDates()}>
                               <span>This Week</span>
                             </button>
                           </nav>
@@ -1530,7 +1587,7 @@ const PGHrAttendance = () => {
                   </div>
                 </div>
               </div>
-              <div>attendanceData: {attendanceData && attendanceData.length}</div>
+
               {viewMode === "card_view" && (
                 <div className="previous_punch">
                   {attendanceData && attendanceData.length === 0 ? (
