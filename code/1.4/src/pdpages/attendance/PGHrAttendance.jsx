@@ -141,24 +141,20 @@ const PGHrAttendance = () => {
 
   // console.log("attendence: ", attendance)
   const today = new Date();
-  const formattedTodaysDate = format(today, "dd-MMM-yy"); // Formats as DD-MMM-YY
+  const formattedTodaysDate = format(today, "dd-MMM-yy"); // 
+
+  //Formats as DD-MMM-YY
   const weekDay = days[today.getDay()]; // Current weekday
 
   const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
     "attendance-propdial"
   );
 
-  // const { documents: attendanceData, errors: attendanceDataError } =
-  //     useCollection(
-  //         "attendance-propdial",
-  //         ["userId", "==", user.uid],
-  //         ["date", "desc"],
-  //         ["5"]
-  //     );
-
   // console.log("attendanceData: ", attendanceData);
 
-  const [attendanceData, setCurrentMonthRecords] = useState();
+  const [attendanceData, setAttendanceData] = useState();
+  const [currentMonthRecords, setCurrentMonthRecords] = useState();
+  const [todaysRecords, setTodaysRecords] = useState();
   const [currentWeekRecords, setCurrentWeekRecords] = useState();
   const [currentWeekDistance, setCurrentWeekDistance] = useState();
   const [currentWeekWorkedHours, setCurrentWeekWorkedHours] = useState();
@@ -196,6 +192,8 @@ const PGHrAttendance = () => {
 
     // getLocation();
 
+    fetchTodaysRecords()
+
     // getCurrentWeekDates();
 
     // fetchCurrentWeekRecords()
@@ -215,6 +213,87 @@ const PGHrAttendance = () => {
     // Cleanup the interval on component unmount
     // return () => clearInterval(timer);
   }, [user.uid]); // Run once when the component mounts
+
+
+  //Fetch Yesterdays Record
+  const fetchYesterdaysRecords = async () => {
+    console.log("In fetchTodaysRecords")
+    const formattedYesterddayDate = format(today - 1, "dd-MMM-yy"); // 
+
+    const yearesterdayDayName = days[(today - 1).getDay()];
+
+    try {
+      // Step 1: Get the todays record
+      const todaysRecordRef = projectFirestore
+        .collection("attendance-propdial")
+        // .where("userId", "==", user.uid)
+        .where("date", "==", formattedTodaysDate)
+        .orderBy("createdAt", "desc")
+
+
+      const unsubscribe = todaysRecordRef.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            let results = [];
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)
+
+            setAttendanceData(results);
+          }
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
+
+
+  //Fetch Today's Record
+  const fetchTodaysRecords = async () => {
+    console.log("In fetchTodaysRecords")
+    try {
+      // Step 1: Get the todays record
+      const todaysRecordRef = projectFirestore
+        .collection("attendance-propdial")
+        // .where("userId", "==", user.uid)
+        .where("date", "==", formattedTodaysDate)
+        .orderBy("createdAt", "desc")
+
+
+      const unsubscribe = todaysRecordRef.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            let results = [];
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)
+
+            setAttendanceData(results);
+          }
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
+
 
   // Generate missing records from last recorded date to today
   const ensureMissingRecords = async () => {
@@ -1451,6 +1530,7 @@ const PGHrAttendance = () => {
                   </div>
                 </div>
               </div>
+              <div>attendanceData: {attendanceData && attendanceData.length}</div>
               {viewMode === "card_view" && (
                 <div className="previous_punch">
                   {attendanceData && attendanceData.length === 0 ? (
