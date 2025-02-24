@@ -1,0 +1,35 @@
+.inspection_modal .modal-content {
+  padding-bottom: 0px;
+}
+.inspection_modal .modal-dialog {
+  max-width: 360px;
+}
+.inspection_types {
+  margin-top: 14px;
+  .it_single {
+    display: flex;
+    cursor: pointer;
+    margin: 0px -15px;
+    padding: 8px 15px;
+    color: var(--light-black);
+    font-size: 17px;
+    font-weight: 500;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid grey;
+    img {
+      height: 32px;
+    }
+    &:nth-child(odd) {
+      background-color: var(--theme-orange-bg);
+    }
+    &:nth-child(even) {
+      background-color: var(--theme-blue-bg);
+    }
+  }
+}
+.add_inspection_form{
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
