@@ -229,7 +229,7 @@ const PGHrAttendance = () => {
 
   //Fetch Staff Count
   const getStaffCount = async () => {
-    console.log("In getStaffCount")
+    // console.log("In getStaffCount")
     try {
 
       const record = await projectFirestore
@@ -238,7 +238,7 @@ const PGHrAttendance = () => {
         // .where("date", "==", formattedTodaysDate)
         .get();
 
-      console.log("Total documents:", record.size);
+      // console.log("Total documents:", record.size);
       setStaffCount(record.size)
 
     } catch (error) {
@@ -248,7 +248,7 @@ const PGHrAttendance = () => {
 
   //Fetch Staff Count
   const getStaffCountForAttendanceONOFF = async () => {
-    console.log("In getStaffCountForAttendanceONOFF")
+    // console.log("In getStaffCountForAttendanceONOFF")
 
     try {
       // Step 1: Get the todays record
@@ -267,7 +267,7 @@ const PGHrAttendance = () => {
               results.push({ name: doc.data().fullName, id: doc.id });
             });
 
-            console.log("Staff for those attendance is ON:  ", results)
+            // console.log("Staff for those attendance is ON:  ", results)
 
             // setAttendanceData(results);
             setOptions(results);
@@ -375,7 +375,7 @@ const PGHrAttendance = () => {
 
   //Fetch Today's Record
   const fetchTodaysRecords = async () => {
-    console.log("In fetchTodaysRecords")
+    // console.log("In fetchTodaysRecords")
     try {
       // Step 1: Get the todays record
       const recordRef = projectFirestore
@@ -384,19 +384,23 @@ const PGHrAttendance = () => {
         .where("date", "==", formattedTodaysDate)
         .orderBy("createdAt", "desc")
 
+      // console.log("formattedTodaysDate: ", formattedTodaysDate)
+
       const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
+          let results = [];
           if (!snapshot.empty) {
-            let results = [];
+
             snapshot.docs.forEach((doc) => {
               results.push({ ...doc.data(), id: doc.id });
             });
-
-            // console.log("todays records: ", results)
-
-            setAttendanceData(results);
-            setAttendanceTodaysCount(results && results.length)
           }
+          // console.log("todays records: ", results)
+
+          setAttendanceData(results);
+
+          setAttendanceTodaysCount(results && results.length)
+
         },
         (error) => {
           console.log(error);
@@ -651,6 +655,16 @@ const PGHrAttendance = () => {
 
   //Fetch Selected Month Record
   const fetchSelectedMonthRecords = async (selmonth) => {
+
+    // console.log("selmonth: ", selmonth)
+    // console.log("selectedmonth: ", selectedMonth)
+    // console.log("selectedYear: ", selectedYear)
+
+    if (selmonth === "" || selmonth === null)
+      selmonth = months[currentMonthIndex]
+
+    // console.log("selmonth: ", selmonth)
+
     setSelectedMonth(selmonth);
     fetchSelectedMonthYearRecords(selmonth, selectedYear);
   };
@@ -699,7 +713,8 @@ const PGHrAttendance = () => {
           });
 
           // // update state
-          setCurrentMonthRecords(results);
+          // setCurrentMonthRecords(results);
+          setAttendanceData(results)
           // setError(null)
         },
         (error) => {
@@ -1538,7 +1553,7 @@ const PGHrAttendance = () => {
                       <div className="icon_dropdown">
                         <select onChange={handleStaffCahnge}
                         >
-                          <option value="">Select Staff</option>
+                          <option value="">All Staff</option>
                           {options.map((item) => (
                             <option key={item.id} value={item.id}>
                               {item.name}
@@ -1558,6 +1573,9 @@ const PGHrAttendance = () => {
                             </button>
                             <button className="" onClick={() => getCurrentWeekDates()}>
                               <span>This Week</span>
+                            </button>
+                            <button className="" onClick={() => fetchSelectedMonthRecords("")}>
+                              <span>This Month</span>
                             </button>
                           </nav>
                         </div>
