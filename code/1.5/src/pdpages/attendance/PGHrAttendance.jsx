@@ -159,6 +159,7 @@ const PGHrAttendance = () => {
 
   const [staffCount, setStaffCount] = useState();
   const [staffAttendanceONCount, setStaffAttendanceONCount] = useState();
+  const [options, setOptions] = useState([]);
 
   const [currentMonthRecords, setCurrentMonthRecords] = useState();
   const [todaysRecords, setTodaysRecords] = useState();
@@ -228,7 +229,7 @@ const PGHrAttendance = () => {
 
   //Fetch Staff Count
   const getStaffCount = async () => {
-    console.log("In getStaffCount")
+    // console.log("In getStaffCount")
     try {
 
       const record = await projectFirestore
@@ -237,7 +238,7 @@ const PGHrAttendance = () => {
         // .where("date", "==", formattedTodaysDate)
         .get();
 
-      console.log("Total documents:", record.size);
+      // console.log("Total documents:", record.size);
       setStaffCount(record.size)
 
     } catch (error) {
@@ -247,22 +248,83 @@ const PGHrAttendance = () => {
 
   //Fetch Staff Count
   const getStaffCountForAttendanceONOFF = async () => {
-    console.log("In getStaffCountForAttendanceONOFF")
+    // console.log("In getStaffCountForAttendanceONOFF")
+
     try {
-
-      const record = await projectFirestore
+      // Step 1: Get the todays record
+      const recordRef = projectFirestore
         .collection("users-propdial")
+        // .where("userId", "==", user.uid)
         .where("isAttendanceRequired", "==", true)
-        // .where("date", "==", formattedTodaysDate)
-        .get();
+      // .orderBy("createdAt", "desc")
 
-      console.log("Attendance ON:", record.size);
-      setStaffAttendanceONCount(record.size)
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            let results = [];
+            snapshot.docs.forEach((doc) => {
+              // results.push({ ...doc.data(), id: doc.id });
+              results.push({ name: doc.data().fullName, id: doc.id });
+            });
 
+            // console.log("Staff for those attendance is ON:  ", results)
+
+            // setAttendanceData(results);
+            setOptions(results);
+
+            setStaffAttendanceONCount(results && results.length)
+          }
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
     } catch (error) {
       console.error("Error fetching second last record:", error);
     }
+
   };
+
+  const handleStaffCahnge = (e) => {
+    console.log("handleStaffChange: ", e.target.value)
+
+    try {
+      // Step 1: Get the todays record
+      const recordRef = projectFirestore
+        .collection("attendance-propdial")
+        .where("userId", "==", e.target.value)
+        // .where("date", "==", formattedTodaysDate)
+        .orderBy("createdAt", "desc")
+
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            let results = [];
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)
+
+            setAttendanceData(results);
+
+          }
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+
+  }
 
   //Fetch Yesterdays Record
   const fetchYesterdaysRecords = async () => {
@@ -313,7 +375,7 @@ const PGHrAttendance = () => {
 
   //Fetch Today's Record
   const fetchTodaysRecords = async () => {
-    console.log("In fetchTodaysRecords")
+    // console.log("In fetchTodaysRecords")
     try {
       // Step 1: Get the todays record
       const recordRef = projectFirestore
@@ -322,19 +384,23 @@ const PGHrAttendance = () => {
         .where("date", "==", formattedTodaysDate)
         .orderBy("createdAt", "desc")
 
+      // console.log("formattedTodaysDate: ", formattedTodaysDate)
+
       const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
+          let results = [];
           if (!snapshot.empty) {
-            let results = [];
+
             snapshot.docs.forEach((doc) => {
               results.push({ ...doc.data(), id: doc.id });
             });
-
-            // console.log("todays records: ", results)
-
-            setAttendanceData(results);
-            setAttendanceTodaysCount(results && results.length)
           }
+          // console.log("todays records: ", results)
+
+          setAttendanceData(results);
+
+          setAttendanceTodaysCount(results && results.length)
+
         },
         (error) => {
           console.log(error);
@@ -525,7 +591,9 @@ const PGHrAttendance = () => {
   //Fetch Current Week Records
   // fetchCurrentWeekRecords(startOfWeek, endOfWeek)
   const fetchCurrentWeekRecords = async (_startOfWeek, _endOfWeek) => {
-    // console.log("In fetchCurrentWeekRecords")
+    console.log("In fetchCurrentWeekRecords")
+    console.log("_startOfWeek: ", _startOfWeek)
+    console.log("_endOfWeek: ", _endOfWeek)
     try {
       const querySnapshot = await projectFirestore
         .collection("attendance-propdial")
@@ -587,6 +655,16 @@ const PGHrAttendance = () => {
 
   //Fetch Selected Month Record
   const fetchSelectedMonthRecords = async (selmonth) => {
+
+    // console.log("selmonth: ", selmonth)
+    // console.log("selectedmonth: ", selectedMonth)
+    // console.log("selectedYear: ", selectedYear)
+
+    if (selmonth === "" || selmonth === null)
+      selmonth = months[currentMonthIndex]
+
+    // console.log("selmonth: ", selmonth)
+
     setSelectedMonth(selmonth);
     fetchSelectedMonthYearRecords(selmonth, selectedYear);
   };
@@ -635,7 +713,8 @@ const PGHrAttendance = () => {
           });
 
           // // update state
-          setCurrentMonthRecords(results);
+          // setCurrentMonthRecords(results);
+          setAttendanceData(results)
           // setError(null)
         },
         (error) => {
@@ -775,11 +854,14 @@ const PGHrAttendance = () => {
 
   //Fetch the current week dates
   const getCurrentWeekDates = () => {
+    console.log("In getCurrentWeekDates")
     const today = new Date();
     const dayOfWeek = today.getDay(); // Get current day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
     const startDiff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust if today is Sunday
     const startOfWeek = new Date(today.setDate(startDiff));
+    startOfWeek.setHours(0, 0, 0, 0); // Sets hours, minutes, seconds, and milliseconds to 0
     const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
+    endOfWeek.setHours(0, 0, 0, 0); // Sets hours, minutes, seconds, and milliseconds to 0
 
     // console.log("startOfWeek: ", startOfWeek)
     setStartWeekDate(startOfWeek);
@@ -1469,23 +1551,14 @@ const PGHrAttendance = () => {
                   <div className="filters">
                     <div className="right">
                       <div className="icon_dropdown">
-                        <select
+                        <select onChange={handleStaffCahnge}
                         >
-
-
-
-                          <option >
-                            Naman
-                          </option>
-                          <option >
-                            Khushi
-                          </option>
-                          <option >
-                            Rahul
-                          </option>
-                          <option >
-                            Kaartik
-                          </option>
+                          <option value="">All Staff</option>
+                          {options.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
 
                         </select>
                       </div>
@@ -1500,6 +1573,9 @@ const PGHrAttendance = () => {
                             </button>
                             <button className="" onClick={() => getCurrentWeekDates()}>
                               <span>This Week</span>
+                            </button>
+                            <button className="" onClick={() => fetchSelectedMonthRecords("")}>
+                              <span>This Month</span>
                             </button>
                           </nav>
                         </div>
