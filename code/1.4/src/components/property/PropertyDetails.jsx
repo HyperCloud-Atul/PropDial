@@ -2617,7 +2617,8 @@ const PropertyDetails = () => {
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
                           <Link to={`/inspection/${propertyid}`}>
-                            <div className="eicp_single coming_soon">
+                          {/* coming_soon */}
+                            <div className="eicp_single ">
                               <div className="icon">
                                 <span className="material-symbols-outlined">
                                   pageview

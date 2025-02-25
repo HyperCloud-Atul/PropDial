@@ -17,12 +17,17 @@ const AddInspection = () => {
   const { propertyid, inspectionId } = useParams();
   const [searchParams] = useSearchParams();
   const inspectionType = searchParams.get("type");
+  const [rooms, setRooms] = useState([]);
+  const [roomFixtures, setRoomFixtures] = useState({}); // ✅ Initialize State
+  const [selectedRoom, setSelectedRoom] = useState(null); // ✅ State for selected room
+  const [existingImageUrls, setExistingImageUrls] = useState([]);
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { document: propertydoc, error: propertyerror } = useDocument(
     "properties-propdial",
     propertyid
   );
+
 
   const [inspections, setInspections] = useState([
     {
@@ -37,9 +42,7 @@ const AddInspection = () => {
     },
   ]);
 
-  const [rooms, setRooms] = useState([]);
 
-  const [existingImageUrls, setExistingImageUrls] = useState([]);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -48,7 +51,10 @@ const AddInspection = () => {
           .collection("propertylayouts")
           .where("propertyId", "==", propertyid)
           .get();
-        const roomsData = snapshot.docs.map((doc) => doc.data().roomName);
+        const roomsData = snapshot.docs.map((doc) => ({
+          id: doc.id, // Document ID store kar rahe hain
+          roomName: doc.data().roomName,
+        }));
         setRooms(roomsData);
       } catch (error) {
         console.error("Error fetching rooms:", error);
@@ -84,6 +90,20 @@ const AddInspection = () => {
       fetchInspection();
     }
   }, [inspectionId]);
+
+
+
+const handleRoomSelection = (index, room) => {
+  handleInspectionChange(index, "roomName", room.roomName);
+  console.log(`Selected Room Name: ${room.roomName}`);
+  console.log(`Selected Room ID: ${room.id}`);
+
+  setSelectedRoom(room); 
+};
+
+
+
+
 
   const handleInspectionChange = (index, field, value) => {
     const updatedInspections = [...inspections];
@@ -290,7 +310,7 @@ const AddInspection = () => {
                                 </option>
                               ))}
                             </select> */}
-                            <div className="field_box theme_radio_new">
+                            {/* <div className="field_box theme_radio_new">
                               <div className="theme_radio_container">
                                 {rooms
                                   .filter(
@@ -324,7 +344,35 @@ const AddInspection = () => {
                                     </div>
                                   ))}
                               </div>
-                            </div>
+                            </div> */}
+                            <div className="field_box theme_radio_new">
+  <div className="theme_radio_container">
+    {rooms
+      .filter(
+        (room) =>
+          inspections[index].roomName === room.roomName ||
+          !inspections.some(
+            (insp, idx) =>
+              idx !== index && insp.roomName === room.roomName
+          )
+      )
+      .map((room) => (
+        <div className="radio_single" key={room.id}>
+          <input
+            type="radio"
+            name={`roomName-${index}`}
+            id={`room-${room.roomName}-${index}`}
+            value={room.roomName}
+            checked={inspection.roomName === room.roomName}
+            onChange={() => handleRoomSelection(index, room)}
+          />
+          <label htmlFor={`room-${room.roomName}-${index}`}>
+            {room.roomName}
+          </label>
+        </div>
+      ))}
+  </div>
+</div>
                           </div>
                         </div>
                         
