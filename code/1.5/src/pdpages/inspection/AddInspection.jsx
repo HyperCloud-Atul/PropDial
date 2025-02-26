@@ -19,7 +19,8 @@ const AddInspection = () => {
   const inspectionType = searchParams.get("type");
   const [rooms, setRooms] = useState([]);
   const [fixtureDoc, setFixtureDoc] = useState("");
-  const [roomFixtures, setRoomFixtures] = useState({}); // ✅ Initialize State
+  const [roomFixtures, setRoomFixtures] = useState({}); // ✅ Each room will have its own fixture data
+
   const [selectedRoom, setSelectedRoom] = useState(null); // ✅ State for selected room
   const [existingImageUrls, setExistingImageUrls] = useState([]);
   const navigate = useNavigate();
@@ -33,12 +34,13 @@ const AddInspection = () => {
   const [inspections, setInspections] = useState([
     {
       roomName: "",
+      fixturesstatus: [], // ✅ New field
       general: "",
       seepage: "",
       termites: "",
       others: "",
       images: [],
-      imagePreviews: [], // Keep previews separate for each inspection
+      imagePreviews: [],
       createdAt: timestamp.now(),
     },
   ]);
@@ -94,43 +96,119 @@ const AddInspection = () => {
     handleInspectionChange(index, "roomName", room.roomName);
     console.log(`Selected Room Name: ${room.roomName}`);
     console.log(`Selected Room ID: ${room.id}`);
-    fetchFixtures(room.id);
-    setSelectedRoom(room);
+
+    // 🛠 Naya room select hone par sirf uske fixtures load honge
+    fetchFixtures(room.id, room.roomName);
+
+    // 🛠 Multiple rooms ka selected state manage karne ke liye
+    setSelectedRoom((prev) => ({
+      ...prev,
+      [index]: room, // ✅ Har index ke liye alag room store hoga
+    }));
   };
 
-  const fetchFixtures = async (fixtureid) => {
-    console.log("fixtureid", fixtureid);
-
+  const fetchFixtures = async (roomId, roomName, index) => {
     try {
       const recordRef = projectFirestore
         .collection("propertylayouts")
+        .doc(roomId);
+      recordRef.onSnapshot((snapshot) => {
+        if (snapshot.exists) {
+          const roomFixturesData = snapshot.data().roomFixtures || [];
+          setRoomFixtures((prevFixtures) => ({
+            ...prevFixtures,
+            [roomName]: roomFixturesData,
+          }));
 
-        .doc(fixtureid);
-      console.log("recordRef", recordRef);
-
-      const unsubscribe = recordRef.onSnapshot(
-        (snapshot) => {
-          if (!snapshot.empty) {
-            setFixtureDoc({ ...snapshot.data(), id: snapshot.id });
-
-            console.log("layout doc", fixtureDoc);
-          }
-        },
-        (error) => {
-          console.log(error);
+          // Ensure inspection[index] exists before setting fixturesstatus
+          setInspections((prevInspections) => {
+            return prevInspections.map((inspection, idx) => {
+              if (idx === index) {
+                return {
+                  ...inspection,
+                  fixturesstatus: roomFixturesData.map((fixture) => ({
+                    fixture,
+                    status: "", // Default value
+                  })),
+                };
+              }
+              return inspection;
+            });
+          });
+        } else {
+          console.log(`No fixture data found for room: ${roomName}`);
+          handleInspectionChange(index, "fixturesstatus", []);
         }
-      );
-
-      return () => unsubscribe(); // Cleanup listener when component unmounts
+      });
     } catch (error) {
-      console.error("Error fetching second last record:", error);
+      console.error("Error fetching fixtures:", error);
     }
   };
 
   const handleInspectionChange = (index, field, value) => {
-    const updatedInspections = [...inspections];
-    updatedInspections[index][field] = value;
-    setInspections(updatedInspections);
+    setInspections((prevInspections) => {
+      return prevInspections.map((inspection, idx) => {
+        if (idx === index) {
+          return {
+            ...inspection,
+            [field]: value ?? [], // fixturesstatus agar undefined ho to empty array de
+          };
+        }
+        return inspection;
+      });
+    });
+  };
+
+  // const handleFixtureStatusChange = (inspectionIndex, fixture, value, fieldType) => {
+  //   const updatedInspections = [...inspections];
+  //   const existingFixtureIndex = updatedInspections[inspectionIndex].fixturesstatus.findIndex(
+  //     (item) => item.fixture === fixture
+  //   );
+
+  //   if (existingFixtureIndex !== -1) {
+  //     // Agar fixture pehle se exist karta hai, to uska status ya remark update karein
+  //     updatedInspections[inspectionIndex].fixturesstatus[existingFixtureIndex][fieldType] = value;
+  //   } else {
+  //     // Naya fixture add karein agar pehle se nahi hai
+  //     updatedInspections[inspectionIndex].fixturesstatus.push({
+  //       fixture,
+  //       status: fieldType === "status" ? value : "",
+  //       remark: fieldType === "remark" ? value : "",
+  //     });
+  //   }
+
+  //   setInspections(updatedInspections);
+  // };
+
+  const handleFixtureStatusChange = (
+    inspectionIndex,
+    fixture,
+    value,
+    fieldType
+  ) => {
+    setInspections((prevInspections) => {
+      return prevInspections.map((inspection, idx) => {
+        if (idx === inspectionIndex) {
+          const updatedFixtures = [...inspection.fixturesstatus];
+
+          // Check if fixture already exists, update it; otherwise, add new
+          const fixtureIndex = updatedFixtures.findIndex(
+            (item) => item.fixture === fixture
+          );
+          if (fixtureIndex !== -1) {
+            updatedFixtures[fixtureIndex] = {
+              ...updatedFixtures[fixtureIndex],
+              [fieldType]: value,
+            };
+          } else {
+            updatedFixtures.push({ fixture, [fieldType]: value });
+          }
+
+          return { ...inspection, fixturesstatus: updatedFixtures };
+        }
+        return inspection;
+      });
+    });
   };
 
   // const addMoreInspection = () => {
@@ -152,8 +230,8 @@ const AddInspection = () => {
   const addMoreInspection = () => {
     const selectedRooms = inspections.map((insp) => insp.roomName);
     const availableRooms = rooms.filter(
-      (room) => !selectedRooms.includes(room)
-    );
+      (room) => !selectedRooms.includes(room.roomName)
+    ); // ✅ Ensure matching format
 
     if (availableRooms.length === 0) {
       alert("All rooms have been selected.");
@@ -163,7 +241,8 @@ const AddInspection = () => {
     setInspections([
       ...inspections,
       {
-        roomName: "",
+        roomName: "", // ✅ Now room is blank initially
+        fixturesstatus: [],
         general: "",
         seepage: "",
         termites: "",
@@ -205,24 +284,75 @@ const AddInspection = () => {
     setInspections(updatedInspections);
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const inspectionPromises = inspections.map(async (inspection) => {
+  //       const imageUrls = await Promise.all(
+  //         inspection.images.map(async (file) => {
+  //           const storageRef = projectStorage.ref(
+  //             `inspection/${propertyid}/${file.name}`
+  //           );
+  //           await storageRef.put(file);
+  //           return await storageRef.getDownloadURL();
+  //         })
+  //       );
+
+  //       return { ...inspection, images: [...imageUrls, ...existingImageUrls] };
+  //     });
+
+  //     const finalInspections = await Promise.all(inspectionPromises);
+
+  //     if (inspectionId) {
+  //       await projectFirestore
+  //         .collection("inspections")
+  //         .doc(inspectionId)
+  //         .update({
+  //           propertyId: propertyid,
+  //           inspectionType,
+  //           inspections: finalInspections,
+  //           updatedAt: timestamp.now(),
+  //         });
+  //       alert("Inspection updated successfully!");
+  //     } else {
+  //       await projectFirestore.collection("inspections").add({
+  //         propertyId: propertyid,
+  //         inspectionType,
+  //         inspections: finalInspections,
+  //         createdAt: timestamp.now(),
+  //       });
+  //       alert("Inspection added successfully!");
+  //     }
+
+  //     navigate(`/inspection/${propertyid}`);
+  //   } catch (error) {
+  //     console.error("Error submitting inspections:", error);
+  //     alert("Failed to save inspections.");
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const inspectionPromises = inspections.map(async (inspection) => {
-        const imageUrls = await Promise.all(
-          inspection.images.map(async (file) => {
-            const storageRef = projectStorage.ref(
-              `inspection/${propertyid}/${file.name}`
-            );
-            await storageRef.put(file);
-            return await storageRef.getDownloadURL();
-          })
-        );
+      const finalInspections = await Promise.all(
+        inspections.map(async (inspection) => {
+          const imageUrls = await Promise.all(
+            inspection.images.map(async (file) => {
+              const storageRef = projectStorage.ref(
+                `inspection/${propertyid}/${file.name}`
+              );
+              await storageRef.put(file);
+              return await storageRef.getDownloadURL();
+            })
+          );
 
-        return { ...inspection, images: [...imageUrls, ...existingImageUrls] };
-      });
-
-      const finalInspections = await Promise.all(inspectionPromises);
+          return {
+            ...inspection,
+            images: [...imageUrls, ...existingImageUrls],
+            fixturesstatus: inspection.fixturesstatus, // ✅ Include new field
+          };
+        })
+      );
 
       if (inspectionId) {
         await projectFirestore
@@ -270,9 +400,9 @@ const AddInspection = () => {
                         src={
                           inspectionType === "Regular"
                             ? "/assets/img/inspection3.png"
-                            : inspectionType === "Check-In"
+                            : inspectionType === "Move-In"
                             ? "/assets/img/check-in.png"
-                            : inspectionType === "Check-Out"
+                            : inspectionType === "Move-Out"
                             ? "/assets/img/check-out.png"
                             : "/assets/img/inspection1.png" // Default image
                         }
@@ -315,58 +445,7 @@ const AddInspection = () => {
                             >
                               Select Room*
                             </h6>
-                            {/* <select
-                              value={inspection.roomName}
-                              onChange={(e) =>
-                                handleInspectionChange(
-                                  index,
-                                  "roomName",
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <option value="">Select Room</option>
-                              {rooms.map((room, i) => (
-                                <option key={i} value={room}>
-                                  {room}
-                                </option>
-                              ))}
-                            </select> */}
-                            {/* <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                {rooms
-                                  .filter(
-                                    (room) =>
-                                      inspections[index].roomName === room ||
-                                      !inspections.some(
-                                        (insp, idx) =>
-                                          idx !== index &&
-                                          insp.roomName === room
-                                      )
-                                  )
-                                  .map((room, i) => (
-                                    <div className="radio_single">
-                                      <input
-                                        type="radio"
-                                        name={`roomName-${index}`}
-                                        id={`room-${room}-${index}`}
-                                        value={room}
-                                        checked={inspection.roomName === room}
-                                        onChange={(e) =>
-                                          handleInspectionChange(
-                                            index,
-                                            "roomName",
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                      <label htmlFor={`room-${room}-${index}`}>
-                                        {room}
-                                      </label>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div> */}
+
                             <div className="field_box theme_radio_new">
                               <div className="theme_radio_container">
                                 {rooms
@@ -405,7 +484,11 @@ const AddInspection = () => {
                             </div>
                           </div>
                         </div>
-                        {/* <div className="col-md-12">
+                        {inspectionType === "Move-In" && (
+                          <>
+                            {roomFixtures[inspection.roomName]?.map(
+                              (fixture, fixtureIndex) => (
+                        <div className="col-md-4"  key={fixtureIndex}>
                           <div
                             className="form_field w-100"
                             style={{
@@ -422,332 +505,385 @@ const AddInspection = () => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                             Room Fixtures*
-                            </h6>                          
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                              {fixtureDoc?.roomFixtures?.map((fixture, index) => (
-        <div key={index} className="radio_single">
-          <input
-            type="radio"
-            id={`fixture-${index}`}
-            name="roomFixture"
-            value={fixture}
-          />
-          <label htmlFor={`fixture-${index}`}>{fixture}</label>
-        </div>
-      ))}
-                             
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
-                     
-                        <div className="col-md-3">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Seepage*
+                              {fixture}
                             </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`seepage-${index}`}
-                                    id={`seepage-yes${index}`}
-                                    value="Yes"
-                                    checked={inspection.seepage === "Yes"}
+    {/* Status Selection */}
+    <select
                                     onChange={(e) =>
-                                      handleInspectionChange(
+                                      handleFixtureStatusChange(
                                         index,
-                                        "seepage",
-                                        e.target.value
+                                        fixture,
+                                        e.target.value,
+                                        "status"
                                       )
                                     }
-                                  />
-                                  <label htmlFor={`seepage-yes${index}`}>
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`seepage-${index}`}
-                                    value="No"
-                                    id={`seepage-no${index}`}
-                                    checked={inspection.seepage === "No"}
-                                    onChange={(e) =>
-                                      handleInspectionChange(
-                                        index,
-                                        "seepage",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`seepage-no${index}`}>
-                                    No
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Termites*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`termites-${index}`}
-                                    id={`termites-yes${index}`}
-                                    value="Yes"
-                                    checked={inspection.termites === "Yes"}
-                                    onChange={(e) =>
-                                      handleInspectionChange(
-                                        index,
-                                        "termites",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`termites-yes${index}`}>
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`termites-${index}`}
-                                    value="No"
-                                    id={`termites-no${index}`}
-                                    checked={inspection.termites === "No"}
-                                    onChange={(e) =>
-                                      handleInspectionChange(
-                                        index,
-                                        "termites",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`termites-no${index}`}>
-                                    No
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Other Issue*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`other-${index}`}
-                                    id={`other-yes${index}`}
-                                    value="Yes"
-                                    checked={inspection.other === "Yes"}
-                                    onChange={(e) =>
-                                      handleInspectionChange(
-                                        index,
-                                        "other",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`other-yes${index}`}>
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`other-${index}`}
-                                    value="No"
-                                    id={`other-no${index}`}
-                                    checked={inspection.other === "No"}
-                                    onChange={(e) =>
-                                      handleInspectionChange(
-                                        index,
-                                        "other",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`other-no${index}`}>No</label>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Remark*
-                            </h6>
-
-                            <input
-                              type="text"
-                              placeholder="General"
-                              value={inspection.general}
-                              onChange={(e) =>
-                                handleInspectionChange(
-                                  index,
-                                  "general",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-12">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Upload Image
-                            </h6>
-                            <div
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "10px",
-                              }}
-                            >
-                              {inspection.imagePreviews.map((preview, i) => (
-                                <div key={i} style={{ position: "relative" }}>
-                                  <img
-                                    src={preview}
-                                    alt="Preview"
-                                    style={{ width: "100px", height: "100px" }}
-                                  />
-                                  <button
-                                    type="button"
                                     style={{
-                                      position: "absolute",
-                                      top: 0,
-                                      right: 0,
-                                      background: "red",
-                                      color: "white",
-                                      border: "none",
-                                      cursor: "pointer",
+                                      paddingLeft: "10px",                                    
+                                      outline: "none",
                                     }}
-                                    onClick={() => handleRemoveImage(index, i)}
+                                    onFocus={(e) => (e.target.style.border = "1px solid var(--theme-blue)")}
+                                    
                                   >
-                                    X
-                                  </button>
-                                </div>
-                              ))}
+                                    <option value="">Select Status</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Broken">
+                                      Broken
+                                    </option>
+                                    <option value="Bad">Bad</option>
+                                    <option value="Clean">Clean</option>
+                                    <option value="Dirty">Dirty</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Not Working">Not Working</option>
+                                    <option value="Working">Working</option>
 
-                              {inspection.images.length < 3 && (
-                                <button
-                                  type="button"
-                                  style={{
-                                    width: "100px",
-                                    height: "100px",
-                                    fontSize: "24px",
-                                    border: "1px dashed #000",
-                                    background: "none",
-                                    cursor: "pointer",
-                                  }}
-                                  onClick={() =>
-                                    document
-                                      .getElementById(`file-input-${index}`)
-                                      .click()
-                                  }
-                                >
-                                  +
-                                </button>
-                              )}
+                                  </select>
+<div className="vg12"></div>
+                                  {/* Remark Input */}
+                                  <textarea
+                                    type="text"
+                                    placeholder="Enter remark"
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleFixtureStatusChange(
+                                        index,
+                                        fixture,
+                                        e.target.value,
+                                        "remark"
+                                      )
+                                    }
+                                  />
+                         
+                          </div>
+                        </div>
+                            )
+                          )}
+                      
+                              
+                          
+                          </>
+                        )}
+                        {inspectionType === "Regular" && (
+                          <div className="col-md-3">
+                            <div
+                              className="form_field w-100"
+                              style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid rgb(3 70 135 / 22%)",
+                              }}
+                            >
+                              <h6
+                                style={{
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                  marginBottom: "8px",
+                                  color: "var(--theme-blue)",
+                                }}
+                              >
+                                Seepage*
+                              </h6>
+                              <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`seepage-${index}`}
+                                      id={`seepage-yes${index}`}
+                                      value="Yes"
+                                      checked={inspection.seepage === "Yes"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "seepage",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`seepage-yes${index}`}>
+                                      Yes
+                                    </label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`seepage-${index}`}
+                                      value="No"
+                                      id={`seepage-no${index}`}
+                                      checked={inspection.seepage === "No"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "seepage",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`seepage-no${index}`}>
+                                      No
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {inspectionType === "Regular" && (
+                          <div className="col-md-3">
+                            <div
+                              className="form_field w-100"
+                              style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid rgb(3 70 135 / 22%)",
+                              }}
+                            >
+                              <h6
+                                style={{
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                  marginBottom: "8px",
+                                  color: "var(--theme-blue)",
+                                }}
+                              >
+                                Termites*
+                              </h6>
+                              <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`termites-${index}`}
+                                      id={`termites-yes${index}`}
+                                      value="Yes"
+                                      checked={inspection.termites === "Yes"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "termites",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`termites-yes${index}`}>
+                                      Yes
+                                    </label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`termites-${index}`}
+                                      value="No"
+                                      id={`termites-no${index}`}
+                                      checked={inspection.termites === "No"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "termites",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`termites-no${index}`}>
+                                      No
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {inspectionType === "Regular" && (
+                          <div className="col-md-3">
+                            <div
+                              className="form_field w-100"
+                              style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid rgb(3 70 135 / 22%)",
+                              }}
+                            >
+                              <h6
+                                style={{
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                  marginBottom: "8px",
+                                  color: "var(--theme-blue)",
+                                }}
+                              >
+                                Other Issue*
+                              </h6>
+                              <div className="field_box theme_radio_new">
+                                <div className="theme_radio_container">
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`other-${index}`}
+                                      id={`other-yes${index}`}
+                                      value="Yes"
+                                      checked={inspection.other === "Yes"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "other",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`other-yes${index}`}>
+                                      Yes
+                                    </label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name={`other-${index}`}
+                                      value="No"
+                                      id={`other-no${index}`}
+                                      checked={inspection.other === "No"}
+                                      onChange={(e) =>
+                                        handleInspectionChange(
+                                          index,
+                                          "other",
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <label htmlFor={`other-no${index}`}>
+                                      No
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {inspectionType === "Regular" && (
+                          <div className="col-md-3">
+                            <div
+                              className="form_field w-100"
+                              style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid rgb(3 70 135 / 22%)",
+                              }}
+                            >
+                              <h6
+                                style={{
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                  marginBottom: "8px",
+                                  color: "var(--theme-blue)",
+                                }}
+                              >
+                                Remark*
+                              </h6>
 
                               <input
-                                id={`file-input-${index}`}
-                                type="file"
-                                multiple
-                                style={{ display: "none" }}
+                                type="text"
+                                placeholder="General"
+                                value={inspection.general}
                                 onChange={(e) =>
-                                  handleImageUpload(index, e.target.files)
+                                  handleInspectionChange(
+                                    index,
+                                    "general",
+                                    e.target.value
+                                  )
                                 }
                               />
                             </div>
                           </div>
-                        </div>
+                        )}
+                        {inspectionType === "Regular" && (
+                          <div className="col-md-12">
+                            <div
+                              className="form_field w-100"
+                              style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid rgb(3 70 135 / 22%)",
+                              }}
+                            >
+                              <h6
+                                style={{
+                                  fontSize: "15px",
+                                  fontWeight: "500",
+                                  marginBottom: "8px",
+                                  color: "var(--theme-blue)",
+                                }}
+                              >
+                                Upload Image
+                              </h6>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: "10px",
+                                }}
+                              >
+                                {inspection.imagePreviews.map((preview, i) => (
+                                  <div key={i} style={{ position: "relative" }}>
+                                    <img
+                                      src={preview}
+                                      alt="Preview"
+                                      style={{
+                                        width: "100px",
+                                        height: "100px",
+                                      }}
+                                    />
+                                    <button
+                                      type="button"
+                                      style={{
+                                        position: "absolute",
+                                        top: 0,
+                                        right: 0,
+                                        background: "red",
+                                        color: "white",
+                                        border: "none",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        handleRemoveImage(index, i)
+                                      }
+                                    >
+                                      X
+                                    </button>
+                                  </div>
+                                ))}
+
+                                {inspection.images.length < 3 && (
+                                  <button
+                                    type="button"
+                                    style={{
+                                      width: "100px",
+                                      height: "100px",
+                                      fontSize: "24px",
+                                      border: "1px dashed #000",
+                                      background: "none",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      document
+                                        .getElementById(`file-input-${index}`)
+                                        .click()
+                                    }
+                                  >
+                                    +
+                                  </button>
+                                )}
+
+                                <input
+                                  id={`file-input-${index}`}
+                                  type="file"
+                                  multiple
+                                  style={{ display: "none" }}
+                                  onChange={(e) =>
+                                    handleImageUpload(index, e.target.files)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 

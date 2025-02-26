@@ -193,7 +193,7 @@ const ViewInspections = () => {
                        onClick={() => handleAddInspection("Check-In")}
                         className="it_single"
                       >
-                        <span>Check-In Inspection</span>
+                        <span>Move-In Inspection</span>
                         <img src="/assets/img/check-in.png" alt="" />
                       </div>
                       <div

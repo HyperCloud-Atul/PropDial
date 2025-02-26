@@ -251,17 +251,17 @@ const ViewInspections = () => {
                         <img src="/assets/img/inspection3.png" alt="" />
                       </div>
                       <div
-                       onClick={() => handleAddInspection("Check-In")}
+                       onClick={() => handleAddInspection("Move-In")}
                         className="it_single"
                       >
-                        <span>Check-In Inspection</span>
+                        <span>Move-In Inspection</span>
                         <img src="/assets/img/check-in.png" alt="" />
                       </div>
                       <div
-                       onClick={() => handleAddInspection("Check-Out")}
+                       onClick={() => handleAddInspection("Move-Out")}
                         className="it_single"
                       >
-                        <span>Check-Out Inspection</span>
+                        <span>Move-Out Inspection</span>
                         <img src="/assets/img/check-out.png" alt="" />
                       </div>
                       <div
