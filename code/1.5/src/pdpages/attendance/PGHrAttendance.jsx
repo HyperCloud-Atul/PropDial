@@ -299,6 +299,7 @@ const PGHrAttendance = () => {
     let recordRef;
     try {
       if (filterType === "yesterday") {
+        console.log("In filtertype: yesterday")
         const yesterday = new Date();
         yesterday.setDate(today.getDate() - 1);
         const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
@@ -309,6 +310,7 @@ const PGHrAttendance = () => {
           .orderBy("createdAt", "desc")
       }
       else if (filterType === "thismonth") {
+        console.log("In filtertype: thismonth")
         const selectedMonthIndex = months.indexOf(selectedMonth);
 
         const firstDay = new Date(selectedYear, selectedMonthIndex, 1);
@@ -322,8 +324,8 @@ const PGHrAttendance = () => {
           .where("createdAt", "<=", lastDay)
           .orderBy("createdAt", "desc");
       }
-      else if ("thisweek") {
-
+      else if (filterType === "thisweek") {
+        console.log("In filtertype: thisweek")
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", e.target.value)
@@ -333,6 +335,7 @@ const PGHrAttendance = () => {
 
       }
       else {
+        console.log("In filtertype: today")
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", e.target.value)
