@@ -132,7 +132,8 @@ const PGHrAttendance = () => {
   const [endWeekDate, setEndWeekDate] = useState();
   const [activeFilter, setActiveFilter] = useState("today");
   const [greeting, setGreeting] = useState("");
-  // const [attendance, setAttendance] = useState([]);
+  const [filterType, setFilterType] = useState("today");
+  const [staffFilter, setStaffFilter] = useState("all");
   const [punchIn, setPunchIn] = useState(null);
   const [tripStart, setTripStart] = useState(null);
   // const [tripEnd, setTripEnd] = useState(null);
@@ -184,6 +185,7 @@ const PGHrAttendance = () => {
   // console.log("Top Record: ", topRecord)
 
   useEffect(() => {
+
     const getGreeting = () => {
       const currentHour = new Date().getHours(); // Get the current hour (0-23)
 
@@ -210,7 +212,7 @@ const PGHrAttendance = () => {
 
     // fetchCurrentWeekRecords()
 
-    const currentMonthRecord = fetchSelectedMonthRecords(selectedMonth);
+    // fetchSelectedMonthRecords(selectedMonth);
     // console.log("currentMonthRecord: ",)
 
     // fetchTopRecord();
@@ -290,28 +292,69 @@ const PGHrAttendance = () => {
 
   const handleStaffCahnge = (e) => {
     console.log("handleStaffChange: ", e.target.value)
+    console.log("filtertype: ", filterType)
 
+    e.target.value === "" ? setStaffFilter("all") : setStaffFilter(e.target.value)
+
+    let recordRef;
     try {
-      // Step 1: Get the todays record
-      const recordRef = projectFirestore
-        .collection("attendance-propdial")
-        .where("userId", "==", e.target.value)
-        // .where("date", "==", formattedTodaysDate)
-        .orderBy("createdAt", "desc")
+      if (filterType === "yesterday") {
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", e.target.value)
+          .where("date", "==", formattedYesterddayDate)
+          .orderBy("createdAt", "desc")
+      }
+      else if (filterType === "thismonth") {
+        const selectedMonthIndex = months.indexOf(selectedMonth);
+
+        const firstDay = new Date(selectedYear, selectedMonthIndex, 1);
+
+        const lastDay = new Date(selectedYear, selectedMonthIndex + 1, 0, 23, 59, 59);
+
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", e.target.value)
+          .where("createdAt", ">=", firstDay)
+          .where("createdAt", "<=", lastDay)
+          .orderBy("createdAt", "desc");
+      }
+      else if ("thisweek") {
+
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", e.target.value)
+          .where("createdAt", ">=", startWeekDate)
+          .where("createdAt", "<=", endWeekDate)
+          .orderBy("createdAt", "desc");
+
+      }
+      else {
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", e.target.value)
+          .where("date", "==", formattedTodaysDate)
+          .orderBy("createdAt", "desc")
+      }
 
       const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
+          let results = [];
+
           if (!snapshot.empty) {
-            let results = [];
+            console.log("snapshot is not empty")
             snapshot.docs.forEach((doc) => {
               results.push({ ...doc.data(), id: doc.id });
             });
 
             // console.log("todays records: ", results)
-
-            setAttendanceData(results);
-
           }
+
+          setAttendanceData(results);
+
         },
         (error) => {
           console.log(error);
@@ -326,63 +369,28 @@ const PGHrAttendance = () => {
 
   }
 
-  //Fetch Yesterdays Record
-  const fetchYesterdaysRecords = async () => {
-    console.log("In fetchYesterdaysRecords")
-
-    const yesterday = new Date();
-    yesterday.setDate(today.getDate() - 1);
-
-    const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
-    console.log("formattedYesterddayDate", formattedYesterddayDate)
-    // const yearesterdayDayName = days[yesterday.getDay()];
-
-    try {
-      // Step 1: Get the todays record
-      const recordRef = projectFirestore
-        .collection("attendance-propdial")
-        // .where("userId", "==", user.uid)
-        .where("date", "==", formattedYesterddayDate)
-        .orderBy("createdAt", "desc")
-
-
-      const unsubscribe = recordRef.onSnapshot(
-        (snapshot) => {
-          if (!snapshot.empty) {
-            let results = [];
-            snapshot.docs.forEach((doc) => {
-              results.push({ ...doc.data(), id: doc.id });
-            });
-
-            // console.log("todays records: ", results)
-
-            setAttendanceData(results);
-            setAttendanceYesterdayCount(results && results.length)
-          }
-        },
-        (error) => {
-          console.log(error);
-          // setError('could not fetch the data')
-        }
-      );
-
-      return () => unsubscribe(); // Cleanup listener when component unmounts
-    } catch (error) {
-      console.error("Error fetching second last record:", error);
-    }
-  };
-
-
   //Fetch Today's Record
   const fetchTodaysRecords = async () => {
     // console.log("In fetchTodaysRecords")
+    setFilterType("today")
+
     try {
-      // Step 1: Get the todays record
-      const recordRef = projectFirestore
-        .collection("attendance-propdial")
-        // .where("userId", "==", user.uid)
-        .where("date", "==", formattedTodaysDate)
-        .orderBy("createdAt", "desc")
+      let recordRef
+      if (staffFilter === "all") {
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          // .where("userId", "==", user.uid)
+          .where("date", "==", formattedTodaysDate)
+          .orderBy("createdAt", "desc")
+      }
+      else {
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", staffFilter)
+          .where("date", "==", formattedTodaysDate)
+          .orderBy("createdAt", "desc")
+      }
+
 
       // console.log("formattedTodaysDate: ", formattedTodaysDate)
 
@@ -390,7 +398,6 @@ const PGHrAttendance = () => {
         (snapshot) => {
           let results = [];
           if (!snapshot.empty) {
-
             snapshot.docs.forEach((doc) => {
               results.push({ ...doc.data(), id: doc.id });
             });
@@ -414,6 +421,59 @@ const PGHrAttendance = () => {
     }
   };
 
+  //Fetch Yesterdays Record
+  const fetchYesterdaysRecords = async () => {
+    console.log("In fetchYesterdaysRecords")
+    setFilterType("yesterday")
+
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
+    console.log("formattedYesterddayDate", formattedYesterddayDate)
+    // const yearesterdayDayName = days[yesterday.getDay()];
+
+    try {
+      let recordRef
+      if (staffFilter === "all") {
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          // .where("userId", "==", user.uid)
+          .where("date", "==", formattedYesterddayDate)
+          .orderBy("createdAt", "desc")
+      }
+      else {
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", staffFilter)
+          .where("date", "==", formattedYesterddayDate)
+          .orderBy("createdAt", "desc")
+      }
+
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          let results = [];
+          if (!snapshot.empty) {
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)            
+          }
+          setAttendanceData(results);
+          setAttendanceYesterdayCount(results && results.length)
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
 
   // Generate missing records from last recorded date to today
   const ensureMissingRecords = async () => {
@@ -595,49 +655,61 @@ const PGHrAttendance = () => {
     console.log("_startOfWeek: ", _startOfWeek)
     console.log("_endOfWeek: ", _endOfWeek)
     try {
-      const querySnapshot = await projectFirestore
-        .collection("attendance-propdial")
-        // .where("userId", "==", user.uid)
-        .where("createdAt", ">=", _startOfWeek)
-        .where("createdAt", "<=", _endOfWeek)
-        .orderBy("createdAt", "desc");
+      let querySnapshot
+      if (staffFilter === "all") {
+        querySnapshot = await projectFirestore
+          .collection("attendance-propdial")
+          // .where("userId", "==", user.uid)
+          .where("createdAt", ">=", _startOfWeek)
+          .where("createdAt", "<=", _endOfWeek)
+          .orderBy("createdAt", "desc");
+      }
+      else {
+        querySnapshot = await projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", staffFilter)
+          .where("createdAt", ">=", _startOfWeek)
+          .where("createdAt", "<=", _endOfWeek)
+          .orderBy("createdAt", "desc");
+      }
 
       const unsubscribe = querySnapshot.onSnapshot(
         (snapshot) => {
           let results = [];
-          snapshot.docs.forEach((doc) => {
-            results.push({ ...doc.data(), id: doc.id });
-          });
+          if (!snapshot.empty) {
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
 
-          // console.log("current week records: ", results)
+            // console.log("current week records: ", results)
 
-          // // update state
-          // setCurrentWeekRecords(results);
+            // Calculate total work hours
+            const totalMinutes = results?.reduce((acc, record) => {
+              // console.log("record.workHrs? ", record.workHrs)
+              const [hours, minutes] = record.workHrs?.split(":").map(Number); // Convert to numbers
+              // const [hours, minutes] = record.workHrs; // Convert to numbers
+              return acc + hours * 60 + minutes;
+            }, 0);
+
+            // Convert minutes back to HH:mm format
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalMins = totalMinutes % 60;
+            setCurrentWeekWorkedHours(
+              `${String(totalHours).padStart(2, "0")}:${String(
+                totalMins
+              ).padStart(2, "0")}`
+            );
+
+            // Total distance travelled for current week
+            const sumOfDistance = results.reduce(
+              (acc, record) => acc + (record.tripDistance || 0),
+              0
+            );
+            setCurrentWeekDistance(sumOfDistance);
+
+          }
+
           setAttendanceData(results)
-
-          // Calculate total work hours
-          const totalMinutes = results?.reduce((acc, record) => {
-            // console.log("record.workHrs? ", record.workHrs)
-            const [hours, minutes] = record.workHrs?.split(":").map(Number); // Convert to numbers
-            // const [hours, minutes] = record.workHrs; // Convert to numbers
-            return acc + hours * 60 + minutes;
-          }, 0);
-
-          // Convert minutes back to HH:mm format
-          const totalHours = Math.floor(totalMinutes / 60);
-          const totalMins = totalMinutes % 60;
-          setCurrentWeekWorkedHours(
-            `${String(totalHours).padStart(2, "0")}:${String(
-              totalMins
-            ).padStart(2, "0")}`
-          );
-
-          // Total distance travelled for current week
-          const sumOfDistance = results.reduce(
-            (acc, record) => acc + (record.tripDistance || 0),
-            0
-          );
-          setCurrentWeekDistance(sumOfDistance);
 
           // setError(null)
         },
@@ -655,6 +727,8 @@ const PGHrAttendance = () => {
 
   //Fetch Selected Month Record
   const fetchSelectedMonthRecords = async (selmonth) => {
+
+    setFilterType("thismonth")
 
     // console.log("selmonth: ", selmonth)
     // console.log("selectedmonth: ", selectedMonth)
@@ -698,12 +772,23 @@ const PGHrAttendance = () => {
     const lastDay = new Date(selyear, selectedMonthIndex + 1, 0, 23, 59, 59);
 
     try {
-      const querySnapshot = await projectFirestore
-        .collection("attendance-propdial")
-        // .where("userId", "==", user.uid)
-        .where("createdAt", ">=", firstDay)
-        .where("createdAt", "<=", lastDay)
-        .orderBy("createdAt", "desc");
+      let querySnapshot
+      if (staffFilter === "all") {
+        querySnapshot = await projectFirestore
+          .collection("attendance-propdial")
+          // .where("userId", "==", user.uid)
+          .where("createdAt", ">=", firstDay)
+          .where("createdAt", "<=", lastDay)
+          .orderBy("createdAt", "desc");
+      }
+      else {
+        querySnapshot = await projectFirestore
+          .collection("attendance-propdial")
+          .where("userId", "==", staffFilter)
+          .where("createdAt", ">=", firstDay)
+          .where("createdAt", "<=", lastDay)
+          .orderBy("createdAt", "desc");
+      }
 
       const unsubscribe = querySnapshot.onSnapshot(
         (snapshot) => {
@@ -855,6 +940,9 @@ const PGHrAttendance = () => {
   //Fetch the current week dates
   const getCurrentWeekDates = () => {
     console.log("In getCurrentWeekDates")
+
+    setFilterType("thisweek")
+
     const today = new Date();
     const dayOfWeek = today.getDay(); // Get current day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
     const startDiff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust if today is Sunday
@@ -1563,47 +1651,47 @@ const PGHrAttendance = () => {
                         </select>
                       </div>
                       <div className="new_inline">
-      <div className="project-filter">
-        <nav>
-          <button
-            className={activeFilter === "today" ? "active" : ""}
-            onClick={() => {
-              fetchTodaysRecords();
-              setActiveFilter("today");
-            }}
-          >
-            <span>Today ({attendanceTodaysCount})</span>
-          </button>
-          <button
-            className={activeFilter === "yesterday" ? "active" : ""}
-            onClick={() => {
-              fetchYesterdaysRecords();
-              setActiveFilter("yesterday");
-            }}
-          >
-            <span>Yesterday ({attendanceYesterdayCount})</span>
-          </button>
-          <button
-            className={activeFilter === "week" ? "active" : ""}
-            onClick={() => {
-              getCurrentWeekDates();
-              setActiveFilter("week");
-            }}
-          >
-            <span>This Week</span>
-          </button>
-          <button
-            className={activeFilter === "month" ? "active" : ""}
-            onClick={() => {
-              fetchSelectedMonthRecords("");
-              setActiveFilter("month");
-            }}
-          >
-            <span>This Month</span>
-          </button>
-        </nav>
-      </div>
-    </div>
+                        <div className="project-filter">
+                          <nav>
+                            <button
+                              className={activeFilter === "today" ? "active" : ""}
+                              onClick={() => {
+                                fetchTodaysRecords();
+                                setActiveFilter("today");
+                              }}
+                            >
+                              <span>Today ({attendanceTodaysCount})</span>
+                            </button>
+                            <button
+                              className={activeFilter === "yesterday" ? "active" : ""}
+                              onClick={() => {
+                                fetchYesterdaysRecords();
+                                setActiveFilter("yesterday");
+                              }}
+                            >
+                              <span>Yesterday ({attendanceYesterdayCount})</span>
+                            </button>
+                            <button
+                              className={activeFilter === "week" ? "active" : ""}
+                              onClick={() => {
+                                getCurrentWeekDates();
+                                setActiveFilter("week");
+                              }}
+                            >
+                              <span>This Week</span>
+                            </button>
+                            <button
+                              className={activeFilter === "month" ? "active" : ""}
+                              onClick={() => {
+                                fetchSelectedMonthRecords("");
+                                setActiveFilter("month");
+                              }}
+                            >
+                              <span>This Month</span>
+                            </button>
+                          </nav>
+                        </div>
+                      </div>
 
                       <div className="icon_dropdown">
                         <select
