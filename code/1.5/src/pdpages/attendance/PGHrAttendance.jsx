@@ -130,7 +130,7 @@ const PGHrAttendance = () => {
 
   const [startWeekDate, setStartWeekDate] = useState();
   const [endWeekDate, setEndWeekDate] = useState();
-
+  const [activeFilter, setActiveFilter] = useState("today");
   const [greeting, setGreeting] = useState("");
   // const [attendance, setAttendance] = useState([]);
   const [punchIn, setPunchIn] = useState(null);
@@ -1563,23 +1563,47 @@ const PGHrAttendance = () => {
                         </select>
                       </div>
                       <div className="new_inline">
-                        <div className="project-filter">
-                          <nav>
-                            <button className="active" onClick={() => fetchTodaysRecords()}>
-                              <span>Today ({attendanceTodaysCount})</span>
-                            </button>
-                            <button className="" onClick={() => fetchYesterdaysRecords()} >
-                              <span>Yesterday ({attendanceYesterdayCount})</span>
-                            </button>
-                            <button className="" onClick={() => getCurrentWeekDates()}>
-                              <span>This Week</span>
-                            </button>
-                            <button className="" onClick={() => fetchSelectedMonthRecords("")}>
-                              <span>This Month</span>
-                            </button>
-                          </nav>
-                        </div>
-                      </div>
+      <div className="project-filter">
+        <nav>
+          <button
+            className={activeFilter === "today" ? "active" : ""}
+            onClick={() => {
+              fetchTodaysRecords();
+              setActiveFilter("today");
+            }}
+          >
+            <span>Today ({attendanceTodaysCount})</span>
+          </button>
+          <button
+            className={activeFilter === "yesterday" ? "active" : ""}
+            onClick={() => {
+              fetchYesterdaysRecords();
+              setActiveFilter("yesterday");
+            }}
+          >
+            <span>Yesterday ({attendanceYesterdayCount})</span>
+          </button>
+          <button
+            className={activeFilter === "week" ? "active" : ""}
+            onClick={() => {
+              getCurrentWeekDates();
+              setActiveFilter("week");
+            }}
+          >
+            <span>This Week</span>
+          </button>
+          <button
+            className={activeFilter === "month" ? "active" : ""}
+            onClick={() => {
+              fetchSelectedMonthRecords("");
+              setActiveFilter("month");
+            }}
+          >
+            <span>This Month</span>
+          </button>
+        </nav>
+      </div>
+    </div>
 
                       <div className="icon_dropdown">
                         <select

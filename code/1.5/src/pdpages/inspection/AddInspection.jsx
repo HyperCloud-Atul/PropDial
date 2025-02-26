@@ -18,6 +18,7 @@ const AddInspection = () => {
   const [searchParams] = useSearchParams();
   const inspectionType = searchParams.get("type");
   const [rooms, setRooms] = useState([]);
+  const [fixtureDoc, setFixtureDoc] = useState("");
   const [roomFixtures, setRoomFixtures] = useState({}); // ✅ Initialize State
   const [selectedRoom, setSelectedRoom] = useState(null); // ✅ State for selected room
   const [existingImageUrls, setExistingImageUrls] = useState([]);
@@ -27,7 +28,7 @@ const AddInspection = () => {
     "properties-propdial",
     propertyid
   );
-
+  console.log("propertyFixtures", fixtureDoc && fixtureDoc.roomFixtures);
 
   const [inspections, setInspections] = useState([
     {
@@ -41,8 +42,6 @@ const AddInspection = () => {
       createdAt: timestamp.now(),
     },
   ]);
-
-
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -91,19 +90,42 @@ const AddInspection = () => {
     }
   }, [inspectionId]);
 
+  const handleRoomSelection = (index, room) => {
+    handleInspectionChange(index, "roomName", room.roomName);
+    console.log(`Selected Room Name: ${room.roomName}`);
+    console.log(`Selected Room ID: ${room.id}`);
+    fetchFixtures(room.id);
+    setSelectedRoom(room);
+  };
 
+  const fetchFixtures = async (fixtureid) => {
+    console.log("fixtureid", fixtureid);
 
-const handleRoomSelection = (index, room) => {
-  handleInspectionChange(index, "roomName", room.roomName);
-  console.log(`Selected Room Name: ${room.roomName}`);
-  console.log(`Selected Room ID: ${room.id}`);
+    try {
+      const recordRef = projectFirestore
+        .collection("propertylayouts")
 
-  setSelectedRoom(room); 
-};
+        .doc(fixtureid);
+      console.log("recordRef", recordRef);
 
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            setFixtureDoc({ ...snapshot.data(), id: snapshot.id });
 
+            console.log("layout doc", fixtureDoc);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
 
-
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
 
   const handleInspectionChange = (index, field, value) => {
     const updatedInspections = [...inspections];
@@ -291,7 +313,7 @@ const handleRoomSelection = (index, room) => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                              Room Name*
+                              Select Room*
                             </h6>
                             {/* <select
                               value={inspection.roomName}
@@ -346,36 +368,81 @@ const handleRoomSelection = (index, room) => {
                               </div>
                             </div> */}
                             <div className="field_box theme_radio_new">
-  <div className="theme_radio_container">
-    {rooms
-      .filter(
-        (room) =>
-          inspections[index].roomName === room.roomName ||
-          !inspections.some(
-            (insp, idx) =>
-              idx !== index && insp.roomName === room.roomName
-          )
-      )
-      .map((room) => (
-        <div className="radio_single" key={room.id}>
-          <input
-            type="radio"
-            name={`roomName-${index}`}
-            id={`room-${room.roomName}-${index}`}
-            value={room.roomName}
-            checked={inspection.roomName === room.roomName}
-            onChange={() => handleRoomSelection(index, room)}
-          />
-          <label htmlFor={`room-${room.roomName}-${index}`}>
-            {room.roomName}
-          </label>
-        </div>
-      ))}
-  </div>
-</div>
+                              <div className="theme_radio_container">
+                                {rooms
+                                  .filter(
+                                    (room) =>
+                                      inspections[index].roomName ===
+                                        room.roomName ||
+                                      !inspections.some(
+                                        (insp, idx) =>
+                                          idx !== index &&
+                                          insp.roomName === room.roomName
+                                      )
+                                  )
+                                  .map((room) => (
+                                    <div className="radio_single" key={room.id}>
+                                      <input
+                                        type="radio"
+                                        name={`roomName-${index}`}
+                                        id={`room-${room.roomName}-${index}`}
+                                        value={room.roomName}
+                                        checked={
+                                          inspection.roomName === room.roomName
+                                        }
+                                        onChange={() =>
+                                          handleRoomSelection(index, room)
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`room-${room.roomName}-${index}`}
+                                      >
+                                        {room.roomName}
+                                      </label>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        
+                        {/* <div className="col-md-12">
+                          <div
+                            className="form_field w-100"
+                            style={{
+                              padding: "10px",
+                              borderRadius: "5px",
+                              border: "1px solid rgb(3 70 135 / 22%)",
+                            }}
+                          >
+                            <h6
+                              style={{
+                                fontSize: "15px",
+                                fontWeight: "500",
+                                marginBottom: "8px",
+                                color: "var(--theme-blue)",
+                              }}
+                            >
+                             Room Fixtures*
+                            </h6>                          
+                            <div className="field_box theme_radio_new">
+                              <div className="theme_radio_container">
+                              {fixtureDoc?.roomFixtures?.map((fixture, index) => (
+        <div key={index} className="radio_single">
+          <input
+            type="radio"
+            id={`fixture-${index}`}
+            name="roomFixture"
+            value={fixture}
+          />
+          <label htmlFor={`fixture-${index}`}>{fixture}</label>
+        </div>
+      ))}
+                             
+                              </div>
+                            </div>
+                          </div>
+                        </div> */}
+                     
                         <div className="col-md-3">
                           <div
                             className="form_field w-100"
@@ -709,7 +776,7 @@ const handleRoomSelection = (index, room) => {
                     className="theme_btn no_icon btn_fill full_width"
                     onClick={addMoreInspection}
                   >
-                    Add More
+                    Select More Room
                   </button>
                 </div>
               </div>
