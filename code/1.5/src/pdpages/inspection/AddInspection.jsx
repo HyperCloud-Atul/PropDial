@@ -19,9 +19,8 @@ const AddInspection = () => {
   const inspectionType = searchParams.get("type");
   const [rooms, setRooms] = useState([]);
   const [fixtureDoc, setFixtureDoc] = useState("");
-  const [roomFixtures, setRoomFixtures] = useState({}); // ✅ Each room will have its own fixture data
-
-  const [selectedRoom, setSelectedRoom] = useState(null); // ✅ State for selected room
+  const [roomFixtures, setRoomFixtures] = useState({});
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [existingImageUrls, setExistingImageUrls] = useState([]);
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -159,26 +158,7 @@ const AddInspection = () => {
     });
   };
 
-  // const handleFixtureStatusChange = (inspectionIndex, fixture, value, fieldType) => {
-  //   const updatedInspections = [...inspections];
-  //   const existingFixtureIndex = updatedInspections[inspectionIndex].fixturesstatus.findIndex(
-  //     (item) => item.fixture === fixture
-  //   );
 
-  //   if (existingFixtureIndex !== -1) {
-  //     // Agar fixture pehle se exist karta hai, to uska status ya remark update karein
-  //     updatedInspections[inspectionIndex].fixturesstatus[existingFixtureIndex][fieldType] = value;
-  //   } else {
-  //     // Naya fixture add karein agar pehle se nahi hai
-  //     updatedInspections[inspectionIndex].fixturesstatus.push({
-  //       fixture,
-  //       status: fieldType === "status" ? value : "",
-  //       remark: fieldType === "remark" ? value : "",
-  //     });
-  //   }
-
-  //   setInspections(updatedInspections);
-  // };
 
   const handleFixtureStatusChange = (
     inspectionIndex,
@@ -211,21 +191,7 @@ const AddInspection = () => {
     });
   };
 
-  // const addMoreInspection = () => {
-  //   setInspections([
-  //     ...inspections,
-  //     {
-  //       roomName: "",
-  //       general: "",
-  //       seepage: "",
-  //       termites: "",
-  //       others: "",
-  //       images: [],
-  //       imagePreviews: [],
-  //       createdAt: timestamp.now(),
-  //     },
-  //   ]);
-  // };
+  
 
   const addMoreInspection = () => {
     const selectedRooms = inspections.map((insp) => insp.roomName);
@@ -241,7 +207,7 @@ const AddInspection = () => {
     setInspections([
       ...inspections,
       {
-        roomName: "", // ✅ Now room is blank initially
+        roomName: "", 
         fixturesstatus: [],
         general: "",
         seepage: "",
@@ -284,52 +250,7 @@ const AddInspection = () => {
     setInspections(updatedInspections);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const inspectionPromises = inspections.map(async (inspection) => {
-  //       const imageUrls = await Promise.all(
-  //         inspection.images.map(async (file) => {
-  //           const storageRef = projectStorage.ref(
-  //             `inspection/${propertyid}/${file.name}`
-  //           );
-  //           await storageRef.put(file);
-  //           return await storageRef.getDownloadURL();
-  //         })
-  //       );
-
-  //       return { ...inspection, images: [...imageUrls, ...existingImageUrls] };
-  //     });
-
-  //     const finalInspections = await Promise.all(inspectionPromises);
-
-  //     if (inspectionId) {
-  //       await projectFirestore
-  //         .collection("inspections")
-  //         .doc(inspectionId)
-  //         .update({
-  //           propertyId: propertyid,
-  //           inspectionType,
-  //           inspections: finalInspections,
-  //           updatedAt: timestamp.now(),
-  //         });
-  //       alert("Inspection updated successfully!");
-  //     } else {
-  //       await projectFirestore.collection("inspections").add({
-  //         propertyId: propertyid,
-  //         inspectionType,
-  //         inspections: finalInspections,
-  //         createdAt: timestamp.now(),
-  //       });
-  //       alert("Inspection added successfully!");
-  //     }
-
-  //     navigate(`/inspection/${propertyid}`);
-  //   } catch (error) {
-  //     console.error("Error submitting inspections:", error);
-  //     alert("Failed to save inspections.");
-  //   }
-  // };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

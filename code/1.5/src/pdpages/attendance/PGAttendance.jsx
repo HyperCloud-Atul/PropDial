@@ -11,7 +11,7 @@ import { timestamp } from "../../firebase/config";
 import { useExportToExcel } from "../../hooks/useExportToExcel";
 import { format } from "date-fns";
 import dayjs from "dayjs"; // Library for time calculations
-
+import { BeatLoader } from "react-spinners";
 import AttendanceTable from "./AttendanceTable";
 import Popup from "../../components/Popup";
 import PunchInOut from "../../components/attendance/PunchInOut";
@@ -1044,6 +1044,16 @@ const PGAttendance = () => {
 
   // export data in excel
 
+    const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
+
+  
+    const toggleExpand = (id) => {
+      setExpandedCards((prev) => ({
+        ...prev,
+        [id]: !prev[id], // Toggle expand state for the clicked card
+      }));
+    };
+
   return (
     <>
       {user && user.status === "active" ? (
@@ -1411,14 +1421,19 @@ const PGAttendance = () => {
                 </div>
               </div>
               {viewMode === "card_view" && (
-                <div className="previous_punch">
+                <div >
                   {attendanceData && attendanceData.length === 0 ? (
-                    <h1>No data found </h1>
+                    <div className="no_data">
+                      <h6>
+                      No data found
+                      </h6>
+                    </div>
                   ) : (
-                    attendanceData &&
+                  
+                      <div className="previous_punch">
+                        {  attendanceData &&
                     attendanceData.length > 0 &&
                     attendanceData.map((data) => (
-                      <>
                         <div
                           className={`pp_single ${user && user.vehicleStatus ? "" : "v_not"
                             }`}
@@ -1543,7 +1558,9 @@ const PGAttendance = () => {
                           ) : (
                             ""
                           )}
-                          <div className="punch_location">
+                          <div className={`punch_location ${
+                                expandedCards[data.id] ? "expand_text" : ""
+                              }`}>
                             <div className="pl_single">
                               <h6>Punch In Location1</h6>
 
@@ -1578,10 +1595,30 @@ const PGAttendance = () => {
                                   : "--:--"}
                               </h5>
                             </div>
+                            <div  className="expand_location"
+                              onClick={() => toggleExpand(data.id)}
+                              >
+              <span className="material-symbols-outlined">
+               
+              {expandedCards[data.id] ? (
+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+ <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
+</svg>
+) : (
+ 
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+</svg>
+)}
+
+              </span>
+            </div>
                           </div>
                         </div>
-                      </>
-                    ))
+                      ))}
+                      </div>
+                   
                   )}
                 </div>
               )}
@@ -1610,7 +1647,17 @@ const PGAttendance = () => {
               <div className="body">
                 <div className="body_top">
                   <CurrentDateTime />
-                  {topRecord && topRecord.length === 0 ? (
+                  {!topRecord ? (
+                      <div className="punch_button outer">
+                        <div className="inner_one">
+                          <div className="inner_two">
+                            <BeatLoader color="grey" loading={true} />
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                          {topRecord && topRecord.length === 0 ? (
                     <div
                       className="punch_button outer"
                       onClick={handelShowPunchInPopup}
@@ -1663,6 +1710,9 @@ const PGAttendance = () => {
                       </div>
                     </div>
                   )}
+                      </>
+                    )}
+              
                 </div>
 
                 <div className="punch_detail">

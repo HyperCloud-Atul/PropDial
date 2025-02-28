@@ -51,7 +51,7 @@ const PropertyDetails = () => {
     propertyid
   );
   const { documents: inspections, errors: inspectionsError } = useCollection(
-    "propertyinspections",
+    "inspections",
     ["propertyId", "==", propertyid]
   );
   const { documents: enquiryDocs, error: enquiryDocsError } = useCollection(
@@ -2617,7 +2617,7 @@ const PropertyDetails = () => {
                         <SwiperSlide>
                           {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
                           <Link to={`/inspection/${propertyid}`}>
-                            <div className="eicp_single coming_soon">
+                            <div className="eicp_single">
                               <div className="icon">
                                 <span className="material-symbols-outlined">
                                   pageview

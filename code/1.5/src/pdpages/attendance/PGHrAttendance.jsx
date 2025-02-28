@@ -12,7 +12,7 @@ import { timestamp } from "../../firebase/config";
 import { useExportToExcel } from "../../hooks/useExportToExcel";
 import { format } from "date-fns";
 import dayjs from "dayjs"; // Library for time calculations
-
+import { Offcanvas, Button } from "react-bootstrap";
 import AttendanceTable from "./AttendanceTable";
 import Popup from "../../components/Popup";
 import PunchInOut from "../../components/attendance/PunchInOut";
@@ -23,7 +23,7 @@ import ReactTable from "../../components/ReactTable";
 import NineDots from "../../components/NineDots";
 
 // import scss
-import "./PGAttendance.scss";
+// import "./PGAttendance.scss";
 
 const days = [
   "Sunday",
@@ -136,6 +136,16 @@ const PGHrAttendance = () => {
   const [staffFilter, setStaffFilter] = useState("all");
   const [punchIn, setPunchIn] = useState(null);
   const [tripStart, setTripStart] = useState(null);
+  const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
+console.log("filterType", filterType);
+
+  const toggleExpand = (id) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [id]: !prev[id], // Toggle expand state for the clicked card
+    }));
+  };
+
   // const [tripEnd, setTripEnd] = useState(null);
   //Fetch Second Last Record
   const [topRecord, setTopRecord] = useState(null);
@@ -185,7 +195,6 @@ const PGHrAttendance = () => {
   // console.log("Top Record: ", topRecord)
 
   useEffect(() => {
-
     const getGreeting = () => {
       const currentHour = new Date().getHours(); // Get the current hour (0-23)
 
@@ -202,11 +211,11 @@ const PGHrAttendance = () => {
 
     // getLocation();
 
-    getStaffCount()
+    getStaffCount();
 
-    getStaffCountForAttendanceONOFF()
+    getStaffCountForAttendanceONOFF();
 
-    fetchTodaysRecords()
+    fetchTodaysRecords();
 
     // getCurrentWeekDates();
 
@@ -228,12 +237,10 @@ const PGHrAttendance = () => {
     // return () => clearInterval(timer);
   }, [user]); // Run once when the component mounts
 
-
   //Fetch Staff Count
   const getStaffCount = async () => {
     // console.log("In getStaffCount")
     try {
-
       const record = await projectFirestore
         .collection("users-propdial")
         .where("isEmployee", "==", true)
@@ -241,8 +248,7 @@ const PGHrAttendance = () => {
         .get();
 
       // console.log("Total documents:", record.size);
-      setStaffCount(record.size)
-
+      setStaffCount(record.size);
     } catch (error) {
       console.error("Error fetching second last record:", error);
     }
@@ -257,7 +263,7 @@ const PGHrAttendance = () => {
       const recordRef = projectFirestore
         .collection("users-propdial")
         // .where("userId", "==", user.uid)
-        .where("isAttendanceRequired", "==", true)
+        .where("isAttendanceRequired", "==", true);
       // .orderBy("createdAt", "desc")
 
       const unsubscribe = recordRef.onSnapshot(
@@ -274,7 +280,7 @@ const PGHrAttendance = () => {
             // setAttendanceData(results);
             setOptions(results);
 
-            setStaffAttendanceONCount(results && results.length)
+            setStaffAttendanceONCount(results && results.length);
           }
         },
         (error) => {
@@ -287,19 +293,20 @@ const PGHrAttendance = () => {
     } catch (error) {
       console.error("Error fetching second last record:", error);
     }
-
   };
 
   const handleStaffCahnge = (e) => {
-    console.log("handleStaffChange: ", e.target.value)
-    console.log("filtertype: ", filterType)
+    console.log("handleStaffChange: ", e.target.value);
+    console.log("filtertype: ", filterType);
 
-    e.target.value === "" ? setStaffFilter("all") : setStaffFilter(e.target.value)
+    e.target.value === ""
+      ? setStaffFilter("all")
+      : setStaffFilter(e.target.value);
 
     let recordRef;
     try {
       if (filterType === "yesterday") {
-        console.log("In filtertype: yesterday")
+        console.log("In filtertype: yesterday");
         const yesterday = new Date();
         yesterday.setDate(today.getDate() - 1);
         const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
@@ -307,15 +314,21 @@ const PGHrAttendance = () => {
           .collection("attendance-propdial")
           .where("userId", "==", e.target.value)
           .where("date", "==", formattedYesterddayDate)
-          .orderBy("createdAt", "desc")
-      }
-      else if (filterType === "thismonth") {
-        console.log("In filtertype: thismonth")
+          .orderBy("createdAt", "desc");
+      } else if (filterType === "thismonth") {
+        console.log("In filtertype: thismonth");
         const selectedMonthIndex = months.indexOf(selectedMonth);
 
         const firstDay = new Date(selectedYear, selectedMonthIndex, 1);
 
-        const lastDay = new Date(selectedYear, selectedMonthIndex + 1, 0, 23, 59, 59);
+        const lastDay = new Date(
+          selectedYear,
+          selectedMonthIndex + 1,
+          0,
+          23,
+          59,
+          59
+        );
 
         recordRef = projectFirestore
           .collection("attendance-propdial")
@@ -323,24 +336,21 @@ const PGHrAttendance = () => {
           .where("createdAt", ">=", firstDay)
           .where("createdAt", "<=", lastDay)
           .orderBy("createdAt", "desc");
-      }
-      else if (filterType === "thisweek") {
-        console.log("In filtertype: thisweek")
+      } else if (filterType === "thisweek") {
+        console.log("In filtertype: thisweek");
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", e.target.value)
           .where("createdAt", ">=", startWeekDate)
           .where("createdAt", "<=", endWeekDate)
           .orderBy("createdAt", "desc");
-
-      }
-      else {
-        console.log("In filtertype: today")
+      } else {
+        console.log("In filtertype: today");
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", e.target.value)
           .where("date", "==", formattedTodaysDate)
-          .orderBy("createdAt", "desc")
+          .orderBy("createdAt", "desc");
       }
 
       const unsubscribe = recordRef.onSnapshot(
@@ -348,7 +358,7 @@ const PGHrAttendance = () => {
           let results = [];
 
           if (!snapshot.empty) {
-            console.log("snapshot is not empty")
+            console.log("snapshot is not empty");
             snapshot.docs.forEach((doc) => {
               results.push({ ...doc.data(), id: doc.id });
             });
@@ -357,7 +367,6 @@ const PGHrAttendance = () => {
           }
 
           setAttendanceData(results);
-
         },
         (error) => {
           console.log(error);
@@ -369,31 +378,28 @@ const PGHrAttendance = () => {
     } catch (error) {
       console.error("Error fetching second last record:", error);
     }
-
-  }
+  };
 
   //Fetch Today's Record
   const fetchTodaysRecords = async () => {
     // console.log("In fetchTodaysRecords")
-    setFilterType("today")
+    setFilterType("today");
 
     try {
-      let recordRef
+      let recordRef;
       if (staffFilter === "all") {
         recordRef = projectFirestore
           .collection("attendance-propdial")
           // .where("userId", "==", user.uid)
           .where("date", "==", formattedTodaysDate)
-          .orderBy("createdAt", "desc")
-      }
-      else {
+          .orderBy("createdAt", "desc");
+      } else {
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", staffFilter)
           .where("date", "==", formattedTodaysDate)
-          .orderBy("createdAt", "desc")
+          .orderBy("createdAt", "desc");
       }
-
 
       // console.log("formattedTodaysDate: ", formattedTodaysDate)
 
@@ -409,8 +415,7 @@ const PGHrAttendance = () => {
 
           setAttendanceData(results);
 
-          setAttendanceTodaysCount(results && results.length)
-
+          setAttendanceTodaysCount(results && results.length);
         },
         (error) => {
           console.log(error);
@@ -426,31 +431,30 @@ const PGHrAttendance = () => {
 
   //Fetch Yesterdays Record
   const fetchYesterdaysRecords = async () => {
-    console.log("In fetchYesterdaysRecords")
-    setFilterType("yesterday")
+    console.log("In fetchYesterdaysRecords");
+    setFilterType("yesterday");
 
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
 
     const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
-    console.log("formattedYesterddayDate", formattedYesterddayDate)
+    console.log("formattedYesterddayDate", formattedYesterddayDate);
     // const yearesterdayDayName = days[yesterday.getDay()];
 
     try {
-      let recordRef
+      let recordRef;
       if (staffFilter === "all") {
         recordRef = projectFirestore
           .collection("attendance-propdial")
           // .where("userId", "==", user.uid)
           .where("date", "==", formattedYesterddayDate)
-          .orderBy("createdAt", "desc")
-      }
-      else {
+          .orderBy("createdAt", "desc");
+      } else {
         recordRef = projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", staffFilter)
           .where("date", "==", formattedYesterddayDate)
-          .orderBy("createdAt", "desc")
+          .orderBy("createdAt", "desc");
       }
 
       const unsubscribe = recordRef.onSnapshot(
@@ -461,10 +465,10 @@ const PGHrAttendance = () => {
               results.push({ ...doc.data(), id: doc.id });
             });
 
-            // console.log("todays records: ", results)            
+            // console.log("todays records: ", results)
           }
           setAttendanceData(results);
-          setAttendanceYesterdayCount(results && results.length)
+          setAttendanceYesterdayCount(results && results.length);
         },
         (error) => {
           console.log(error);
@@ -654,11 +658,11 @@ const PGHrAttendance = () => {
   //Fetch Current Week Records
   // fetchCurrentWeekRecords(startOfWeek, endOfWeek)
   const fetchCurrentWeekRecords = async (_startOfWeek, _endOfWeek) => {
-    console.log("In fetchCurrentWeekRecords")
-    console.log("_startOfWeek: ", _startOfWeek)
-    console.log("_endOfWeek: ", _endOfWeek)
+    console.log("In fetchCurrentWeekRecords");
+    console.log("_startOfWeek: ", _startOfWeek);
+    console.log("_endOfWeek: ", _endOfWeek);
     try {
-      let querySnapshot
+      let querySnapshot;
       if (staffFilter === "all") {
         querySnapshot = await projectFirestore
           .collection("attendance-propdial")
@@ -666,8 +670,7 @@ const PGHrAttendance = () => {
           .where("createdAt", ">=", _startOfWeek)
           .where("createdAt", "<=", _endOfWeek)
           .orderBy("createdAt", "desc");
-      }
-      else {
+      } else {
         querySnapshot = await projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", staffFilter)
@@ -709,10 +712,9 @@ const PGHrAttendance = () => {
               0
             );
             setCurrentWeekDistance(sumOfDistance);
-
           }
 
-          setAttendanceData(results)
+          setAttendanceData(results);
 
           // setError(null)
         },
@@ -730,15 +732,14 @@ const PGHrAttendance = () => {
 
   //Fetch Selected Month Record
   const fetchSelectedMonthRecords = async (selmonth) => {
-
-    setFilterType("thismonth")
+    setFilterType("thismonth");
 
     // console.log("selmonth: ", selmonth)
     // console.log("selectedmonth: ", selectedMonth)
     // console.log("selectedYear: ", selectedYear)
 
     if (selmonth === "" || selmonth === null)
-      selmonth = months[currentMonthIndex]
+      selmonth = months[currentMonthIndex];
 
     // console.log("selmonth: ", selmonth)
 
@@ -775,7 +776,7 @@ const PGHrAttendance = () => {
     const lastDay = new Date(selyear, selectedMonthIndex + 1, 0, 23, 59, 59);
 
     try {
-      let querySnapshot
+      let querySnapshot;
       if (staffFilter === "all") {
         querySnapshot = await projectFirestore
           .collection("attendance-propdial")
@@ -783,8 +784,7 @@ const PGHrAttendance = () => {
           .where("createdAt", ">=", firstDay)
           .where("createdAt", "<=", lastDay)
           .orderBy("createdAt", "desc");
-      }
-      else {
+      } else {
         querySnapshot = await projectFirestore
           .collection("attendance-propdial")
           .where("userId", "==", staffFilter)
@@ -802,7 +802,7 @@ const PGHrAttendance = () => {
 
           // // update state
           // setCurrentMonthRecords(results);
-          setAttendanceData(results)
+          setAttendanceData(results);
           // setError(null)
         },
         (error) => {
@@ -942,9 +942,9 @@ const PGHrAttendance = () => {
 
   //Fetch the current week dates
   const getCurrentWeekDates = () => {
-    console.log("In getCurrentWeekDates")
+    console.log("In getCurrentWeekDates");
 
-    setFilterType("thisweek")
+    setFilterType("thisweek");
 
     const today = new Date();
     const dayOfWeek = today.getDay(); // Get current day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
@@ -1140,14 +1140,12 @@ const PGHrAttendance = () => {
     }
   };
 
-
-
   //Fetch current location of user : End
 
-  const formatPhoneNumber = phoneNumber => {
+  const formatPhoneNumber = (phoneNumber) => {
     const countryCode = phoneNumber.slice(0, 2);
     const mainNumber = phoneNumber.slice(2);
-    return `+${countryCode} ${mainNumber.replace(/(\d{5})(\d{5})/, '$1-$2')}`;
+    return `+${countryCode} ${mainNumber.replace(/(\d{5})(\d{5})/, "$1-$2")}`;
   };
 
   // previous punches data in table
@@ -1185,22 +1183,26 @@ const PGHrAttendance = () => {
       },
       {
         Header: "Phone Number",
-        accessor: "createdBy",  // Same accessor but unique ID
-        id: "phoneNumber",  // Unique ID to prevent duplicate column errors
+        accessor: "createdBy", // Same accessor but unique ID
+        id: "phoneNumber", // Unique ID to prevent duplicate column errors
         disableFilters: true,
         Cell: ({ value }) => {
           const user = dbUserState?.find((user) => user.id === value);
           return (
             <div className="phone-number mobile_min_width">
-              <span>{user?.phoneNumber ? formatPhoneNumber(user?.phoneNumber) : "--"}</span>
+              <span>
+                {user?.phoneNumber
+                  ? formatPhoneNumber(user?.phoneNumber)
+                  : "--"}
+              </span>
             </div>
           );
         },
       },
       {
         Header: "Designation",
-        accessor: "createdBy",  // Same accessor but unique ID
-        id: "designation",  // Unique ID to prevent duplicate column errors
+        accessor: "createdBy", // Same accessor but unique ID
+        id: "designation", // Unique ID to prevent duplicate column errors
         disableFilters: true,
         Cell: ({ value }) => {
           const user = dbUserState?.find((user) => user.id === value);
@@ -1213,8 +1215,8 @@ const PGHrAttendance = () => {
       },
       {
         Header: "Department",
-        accessor: "createdBy",  // Same accessor but unique ID
-        id: "department",  // Unique ID to prevent duplicate column errors
+        accessor: "createdBy", // Same accessor but unique ID
+        id: "department", // Unique ID to prevent duplicate column errors
         disableFilters: true,
         Cell: ({ value }) => {
           const user = dbUserState?.find((user) => user.id === value);
@@ -1226,8 +1228,6 @@ const PGHrAttendance = () => {
         },
       },
 
-
-
       {
         Header: "Hrs Worked",
         accessor: "workHrs",
@@ -1236,12 +1236,14 @@ const PGHrAttendance = () => {
           <div className="hr_worked mobile_min_width">
             {value !== "00:00"
               ? value.split(":").map((val, index) => (
-                <span key={index}>
-                  {val.trim()}
-                  <span className="unit">{index === 0 ? "hrs" : "min"}</span>
-                  {index === 0 && <span style={{ marginRight: "8px" }}></span>}
-                </span>
-              ))
+                  <span key={index}>
+                    {val.trim()}
+                    <span className="unit">{index === 0 ? "hrs" : "min"}</span>
+                    {index === 0 && (
+                      <span style={{ marginRight: "8px" }}></span>
+                    )}
+                  </span>
+                ))
               : "--:--"}
           </div>
         ),
@@ -1262,10 +1264,12 @@ const PGHrAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                .split(", ")
-                .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-                .slice(0, -1)
-                .join(", ")
+                  .split(", ")
+                  .filter(
+                    (part) => part.trim() !== "undefined" && part.trim() !== ""
+                  )
+                  .slice(0, -1)
+                  .join(", ")
               : "--"}
           </div>
         ),
@@ -1286,10 +1290,12 @@ const PGHrAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                .split(", ")
-                .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-                .slice(0, -1)
-                .join(", ")
+                  .split(", ")
+                  .filter(
+                    (part) => part.trim() !== "undefined" && part.trim() !== ""
+                  )
+                  .slice(0, -1)
+                  .join(", ")
               : "--"}
           </div>
         ),
@@ -1321,12 +1327,6 @@ const PGHrAttendance = () => {
     ];
   }, [dbUserState]); // Dependency array for useMemo
 
-
-
-
-
-
-
   // export data in excel
   const { exportToExcel, response: res } = useExportToExcel();
   const exportExcelFormate = async () => {
@@ -1337,36 +1337,36 @@ const PGHrAttendance = () => {
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
-            .split(":")
-            .map(
-              (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
-            )
-            .join(" ")
+              .split(":")
+              .map(
+                (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
+              )
+              .join(" ")
           : "--:--",
       "Punch In": item.punchIn ? item.punchIn : "--:--",
       "Punch In Location": item.punchInLocation
         ? item.punchInLocation
-          .split(", ")
-          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-          .join(", ")
+            .split(", ")
+            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+            .join(", ")
         : "--:--",
       "Punch Out": item.punchOutLocation
         ? item.punchOutLocation
-          .split(", ")
-          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-          .join(", ")
+            .split(", ")
+            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+            .join(", ")
         : "--:--",
       "Punch Out Location": item.punchOutLocation || "--",
 
       // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
       ...(user && user.vehicleStatus
         ? {
-          "Distance (km)": item.tripDistance
-            ? item.tripDistance + " Km"
-            : "--:--",
-          "Trip Start": item.tripStart ? item.tripStart : "--:--",
-          "Trip End": item.tripEnd ? item.tripEnd : "--:--",
-        }
+            "Distance (km)": item.tripDistance
+              ? item.tripDistance + " Km"
+              : "--:--",
+            "Trip Start": item.tripStart ? item.tripStart : "--:--",
+            "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+          }
         : {}),
     }));
 
@@ -1383,6 +1383,18 @@ const PGHrAttendance = () => {
     { title: "Users List", link: "/userlist", icon: "group" },
   ];
   // nine dots menu end
+
+  // side bar open code start 
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [activeFilters, setActiveFilters] = useState([]);
+  
+  // side bar open code end
+
 
   return (
     <>
@@ -1429,7 +1441,7 @@ const PGHrAttendance = () => {
                         // e.target.value = "45"
                       }}
                       onChange={(e) => setTripStart(e.target.value)}
-                    // value={topRecord && topRecord.tripEnd}
+                      // value={topRecord && topRecord.tripEnd}
                     />
                     {punchInError && (
                       <div className="field_error">
@@ -1475,7 +1487,7 @@ const PGHrAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchIn}
-                // disabled={loading}
+                  // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1507,8 +1519,9 @@ const PGHrAttendance = () => {
                       className="custom-input"
                       style={{ paddingRight: "10px" }}
                       type="number"
-                      placeholder={`Trip Start: ${topRecord && topRecord.tripStart
-                        }`}
+                      placeholder={`Trip Start: ${
+                        topRecord && topRecord.tripStart
+                      }`}
                       maxLength={7}
                       onInput={(e) => {
                         restrictInput(e, 7);
@@ -1517,11 +1530,11 @@ const PGHrAttendance = () => {
                     />
                     <p className="mt-2 text_grey">
                       {Number(tripEnd) >
-                        Number(topRecord && topRecord.tripStart)
+                      Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
-                        (Number(tripEnd) -
-                          Number(topRecord && topRecord.tripStart)) +
-                        " KM"
+                          (Number(tripEnd) -
+                            Number(topRecord && topRecord.tripStart)) +
+                          " KM"
                         : "Note:- Trip End should be greater than Trip Start"}
                     </p>
                     {punchOutError && (
@@ -1552,7 +1565,7 @@ const PGHrAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchOut}
-                // disabled={loading}
+                  // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1585,12 +1598,10 @@ const PGHrAttendance = () => {
                     <p>last week</p>
                   </div> */}
                 </div>
-                <div className="ac_single hr">
+                <div className="ac_single dist">
                   <h6>Staff Count for</h6>
                   <h5>Attendance ON</h5>
-                  <h2>
-                    {staffAttendanceONCount}
-                  </h2>
+                  <h2>{staffAttendanceONCount}</h2>
 
                   <div className="icon">
                     <div className="icon_inner">
@@ -1610,12 +1621,10 @@ const PGHrAttendance = () => {
                   </div> */}
                 </div>
 
-                <div className="ac_single dist">
+                <div className="ac_single hr">
                   <h6>Staff Count for</h6>
                   <h5>Attendance OFF</h5>
-                  <h2>
-                    {staffCount - staffAttendanceONCount}
-                  </h2>
+                  <h2>{staffCount - staffAttendanceONCount}</h2>
 
                   <div className="icon">
                     <div className="icon_inner">
@@ -1632,7 +1641,6 @@ const PGHrAttendance = () => {
                       <p>last week</p>
                     </div> */}
                 </div>
-
               </div>
               <div className="year_month">
                 <div className="left">
@@ -1642,22 +1650,22 @@ const PGHrAttendance = () => {
                   <div className="filters">
                     <div className="right">
                       <div className="icon_dropdown">
-                        <select onChange={handleStaffCahnge}
-                        >
+                        <select onChange={handleStaffCahnge}>
                           <option value="">All Staff</option>
                           {options.map((item) => (
                             <option key={item.id} value={item.id}>
                               {item.name}
                             </option>
                           ))}
-
                         </select>
                       </div>
                       <div className="new_inline">
                         <div className="project-filter">
                           <nav>
                             <button
-                              className={activeFilter === "today" ? "active" : ""}
+                              className={
+                                activeFilter === "today" ? "active" : ""
+                              }
                               onClick={() => {
                                 fetchTodaysRecords();
                                 setActiveFilter("today");
@@ -1666,16 +1674,22 @@ const PGHrAttendance = () => {
                               <span>Today ({attendanceTodaysCount})</span>
                             </button>
                             <button
-                              className={activeFilter === "yesterday" ? "active" : ""}
+                              className={
+                                activeFilter === "yesterday" ? "active" : ""
+                              }
                               onClick={() => {
                                 fetchYesterdaysRecords();
                                 setActiveFilter("yesterday");
                               }}
                             >
-                              <span>Yesterday ({attendanceYesterdayCount})</span>
+                              <span>
+                                Yesterday ({attendanceYesterdayCount})
+                              </span>
                             </button>
                             <button
-                              className={activeFilter === "week" ? "active" : ""}
+                              className={
+                                activeFilter === "week" ? "active" : ""
+                              }
                               onClick={() => {
                                 getCurrentWeekDates();
                                 setActiveFilter("week");
@@ -1684,7 +1698,9 @@ const PGHrAttendance = () => {
                               <span>This Week</span>
                             </button>
                             <button
-                              className={activeFilter === "month" ? "active" : ""}
+                              className={
+                                activeFilter === "month" ? "active" : ""
+                              }
                               onClick={() => {
                                 fetchSelectedMonthRecords("");
                                 setActiveFilter("month");
@@ -1696,49 +1712,20 @@ const PGHrAttendance = () => {
                         </div>
                       </div>
 
-                      <div className="icon_dropdown">
-                        <select
-                          value={selectedMonth}
-                          onChange={(e) =>
-                            fetchSelectedMonthRecords(e.target.value)
-                          }
-                        >
-                          {/* {months.map((month, index) => (
-                                                        <option key={index} value={month}>
-                                                            {month}
-                                                        </option>
-                                                    ))} */}
-
-                          {filteredMonths.map((month, index) => (
-                            <option key={index} value={month}>
-                              {month}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="icon_dropdown">
-                        <select
-                          value={selectedYear}
-                          onChange={(e) =>
-                            fetchSelectedYearRecords(e.target.value)
-                          }
-                        >
-                          {years.map((year) => (
-                            <option key={year} value={year}>
-                              {year}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      <img
+                        src="/assets/img/icons/filter.png"
+                        className="pointer"
+                        alt=""
+                        onClick={handleShow}
+                      />
                       <div className="button_filter diff_views">
                         <div
-                          className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                            }`}
+                          className={`bf_single ${
+                            viewMode === "card_view" ? "active" : ""
+                          }`}
                           onClick={() => handleModeChange("card_view")}
                         >
-                          {/* <span className="material-symbols-outlined">
-                                                        calendar_view_month
-                                                    </span> */}
+                          
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             height="24px"
@@ -1750,13 +1737,12 @@ const PGHrAttendance = () => {
                           </svg>
                         </div>
                         <div
-                          className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                            }`}
+                          className={`bf_single ${
+                            viewMode === "table_view" ? "active" : ""
+                          }`}
                           onClick={() => handleModeChange("table_view")}
                         >
-                          {/* <span className="material-symbols-outlined">
-                                                        view_list
-                                                    </span> */}
+                         
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             height="24px"
@@ -1768,61 +1754,162 @@ const PGHrAttendance = () => {
                           </svg>
                         </div>
                       </div>
+
                       <div
                         className="export pointer"
                         onClick={exportExcelFormate}
                       >
                         <img src="/assets/img/icons/excel_logo.png" alt="" />
                       </div>
+                      <>
+                        <Offcanvas
+                          show={show}
+                          onHide={handleClose}
+                          placement="start"
+                        >
+                          <Offcanvas.Header closeButton >
+                            <Offcanvas.Title>Advance Filters</Offcanvas.Title>
+                          </Offcanvas.Header>
+                          <hr />
+                          <Offcanvas.Body>
+                            <div className="filters side_bar_filters">
+                      
+                      <div className="filter_single">
+                                <h6>Member</h6>
+                                <div className="icon_dropdown">
+                        <select onChange={handleStaffCahnge}>
+                          <option value="">All Staff</option>
+                          {options.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                              </div>
+                              <div className="filter_single">
+                                <h6>Year</h6>
+                                <div className="icon_dropdown">
+                                  <select
+                                    value={selectedMonth}
+                                    onChange={(e) =>
+                                      fetchSelectedMonthRecords(e.target.value)
+                                    }
+                                  >
+                                    {filteredMonths.map((month, index) => (
+                                      <option key={index} value={month}>
+                                        {month}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="filter_single">
+                                <h6>Month</h6>
+                                <div className="icon_dropdown">
+                                  <select
+                                    value={selectedYear}
+                                    onChange={(e) =>
+                                      fetchSelectedYearRecords(e.target.value)
+                                    }
+                                  >
+                                    {years.map((year) => (
+                                      <option key={year} value={year}>
+                                        {year}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </Offcanvas.Body>
+                        </Offcanvas>
+                      </>
                     </div>
                   </div>
                 </div>
               </div>
 
               {viewMode === "card_view" && (
-                <div className="previous_punch">
+                <div >
                   {attendanceData && attendanceData.length === 0 ? (
-                    <h1>No data found </h1>
+                   <div className="no_data">
+                   <h6>
+                   No data found
+                   </h6>
+                 </div>
                   ) : (
-                    attendanceData &&
+                 
+                      <div className="previous_punch">
+                           {attendanceData &&
                     attendanceData.length > 0 &&
                     attendanceData.map((data) => (
-                      <>
                         <div
-                          className={`pp_single ${dbUserState &&
+                          className={`pp_single ${
+                            dbUserState &&
                             dbUserState.find(
                               (user) => user.id === data.createdBy
                             )?.vehicleStatus
-                            ? ""
-                            : "v_not"
-                            }`}
+                              ? ""
+                              : "v_not"
+                          }`}
                         >
                           <div className="u_detail">
                             <div className="ud_single">
                               <h5>
-                                {dbUserState?.find((user) => user.id === data.createdBy)?.fullName}
+                                {
+                                  dbUserState?.find(
+                                    (user) => user.id === data.createdBy
+                                  )?.fullName
+                                }
                               </h5>
                               <h6>
-                                {dbUserState?.find((user) => user.id === data.createdBy)?.designation?.label || "N/A"},{" "}
-                                {dbUserState?.find((user) => user.id === data.createdBy)?.department?.label || "N/A"}
+                                {dbUserState?.find(
+                                  (user) => user.id === data.createdBy
+                                )?.designation?.label || "N/A"}
+                                ,{" "}
+                                {dbUserState?.find(
+                                  (user) => user.id === data.createdBy
+                                )?.department?.label || "N/A"}
                               </h6>
                             </div>
 
                             {(() => {
-                              const user = dbUserState?.find((user) => user.id === data.createdBy);
+                              const user = dbUserState?.find(
+                                (user) => user.id === data.createdBy
+                              );
                               let phoneNumber = user?.phoneNumber;
 
                               if (phoneNumber) {
                                 // Ensure phone number starts with "+"
-                                phoneNumber = phoneNumber.startsWith("+") ? phoneNumber : `+${phoneNumber}`;
+                                phoneNumber = phoneNumber.startsWith("+")
+                                  ? phoneNumber
+                                  : `+${phoneNumber}`;
 
                                 return (
                                   <div className="w_c">
-                                    <a href={`tel:${phoneNumber}`} target="_blank" rel="noopener noreferrer">
-                                      <img src="/assets/img/simple_call.png" alt="Call" />
+                                    <a
+                                      href={`tel:${phoneNumber}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <img
+                                        src="/assets/img/simple_call.png"
+                                        alt="Call"
+                                      />
                                     </a>
-                                    <a href={`https://wa.me/${phoneNumber.replace(/\s+/g, "")}`} target="_blank" rel="noopener noreferrer">
-                                      <img src="/assets/img/whatsapp_simple.png" alt="WhatsApp" />
+                                    <a
+                                      href={`https://wa.me/${phoneNumber.replace(
+                                        /\s+/g,
+                                        ""
+                                      )}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      <img
+                                        src="/assets/img/whatsapp_simple.png"
+                                        alt="WhatsApp"
+                                      />
                                     </a>
                                   </div>
                                 );
@@ -1855,29 +1942,29 @@ const PGHrAttendance = () => {
                                   <h5>
                                     {data.workHrs
                                       ? data.workHrs
-                                        .split(":")
-                                        .map((val, index) => (
-                                          <span key={index}>
-                                            {val.trim()}
-                                            <span className="unit">
-                                              {index === 0 ? "hrs" : "min"}
+                                          .split(":")
+                                          .map((val, index) => (
+                                            <span key={index}>
+                                              {val.trim()}
+                                              <span className="unit">
+                                                {index === 0 ? "hrs" : "min"}
+                                              </span>
+                                              {index === 0 && (
+                                                <span
+                                                  style={{ marginRight: "8px" }}
+                                                ></span>
+                                              )}
                                             </span>
-                                            {index === 0 && (
-                                              <span
-                                                style={{ marginRight: "8px" }}
-                                              ></span>
-                                            )}
-                                          </span>
-                                        ))
+                                          ))
                                       : "--:--"}
                                   </h5>
                                 )}
                               </div>
 
                               {dbUserState &&
-                                dbUserState.find(
-                                  (user) => user.id === data.createdBy
-                                )?.vehicleStatus ? (
+                              dbUserState.find(
+                                (user) => user.id === data.createdBy
+                              )?.vehicleStatus ? (
                                 <div className="r_single">
                                   <h6> Distance</h6>
                                   {data.tripDistance ? (
@@ -1897,19 +1984,21 @@ const PGHrAttendance = () => {
 
                           <div
                             className={`bottom 
-                              ${dbUserState &&
+                              ${
+                                dbUserState &&
                                 dbUserState.find(
                                   (user) => user.id === data.createdBy
                                 )?.vehicleStatus
-                                ? "trip"
-                                : ""
-                              } ${moment(data.date, "DD-MMM-YY").format(
+                                  ? "trip"
+                                  : ""
+                              } ${
+                              moment(data.date, "DD-MMM-YY").format(
                                 "DD-MMM-YY"
                               ) !== moment().format("DD-MMM-YY") &&
-                                !data.punchOut
+                              !data.punchOut
                                 ? "no_punchout"
                                 : ""
-                              }
+                            }
                                 
                             `}
                           >
@@ -1953,11 +2042,13 @@ const PGHrAttendance = () => {
                               )}
                           </div>
 
-                          <div className="punch_location">
+                          <div className={`punch_location ${
+                                expandedCards[data.id] ? "expand_text" : ""
+                              }`}>
                             <div className="pl_single">
                               <h6>Punch In Location</h6>
                               {data.punchInLocation &&
-                                data.punchInLocation ===
+                              data.punchInLocation ===
                                 "Location access denied." ? (
                                 <h5
                                   style={{
@@ -1971,14 +2062,14 @@ const PGHrAttendance = () => {
                                 <h5>
                                   {data.punchInLocation
                                     ? data.punchInLocation
-                                      .split(", ")
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
+                                        .split(", ")
+                                        .filter(
+                                          (part) =>
+                                            part.trim() !== "undefined" &&
+                                            part.trim() !== ""
+                                        )
+                                        .slice(0, -1)
+                                        .join(", ")
                                     : "--:--"}
                                 </h5>
                               )}
@@ -1986,7 +2077,7 @@ const PGHrAttendance = () => {
                             <div className="pl_single">
                               <h6>Punch Out Location </h6>
                               {data.punchOutLocation &&
-                                data.punchOutLocation ===
+                              data.punchOutLocation ===
                                 "Location access denied." ? (
                                 <h5
                                   style={{
@@ -2000,22 +2091,48 @@ const PGHrAttendance = () => {
                                 <h5>
                                   {data.punchOutLocation
                                     ? data.punchOutLocation
-                                      .split(", ")
-                                      .filter(
-                                        (part) =>
-                                          part.trim() !== "undefined" &&
-                                          part.trim() !== ""
-                                      )
-                                      .slice(0, -1)
-                                      .join(", ")
+                                        .split(", ")
+                                        .filter(
+                                          (part) =>
+                                            part.trim() !== "undefined" &&
+                                            part.trim() !== ""
+                                        )
+                                        .slice(0, -1)
+                                        .join(", ")
                                     : "--:--"}
                                 </h5>
                               )}
                             </div>
+                            <div  className="expand_location"
+                              onClick={() => toggleExpand(data.id)}
+                              >
+              <span className="material-symbols-outlined">
+               
+              {expandedCards[data.id] ? (
+ <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+ <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
+</svg>
+) : (
+ 
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+</svg>
+)}
+
+              </span>
+            </div>
+                            <div
+                             
+                             
+                            >
+                            
+                            </div>
                           </div>
                         </div>
-                      </>
-                    ))
+                      ))}
+                      </div>
+                  
                   )}
                 </div>
               )}

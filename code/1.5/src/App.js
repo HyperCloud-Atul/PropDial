@@ -937,7 +937,7 @@ function App() {
                       user?.isEmployee && user?.isAttendanceRequired ? (
                         <PGAttendance />
                       ) : (
-                        <Navigate to="/login" />
+                        <Navigate to="/" />
                       )
                     }
                   ></Route>

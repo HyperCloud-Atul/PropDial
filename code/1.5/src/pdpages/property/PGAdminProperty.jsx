@@ -6,7 +6,7 @@ import { projectFirestore } from "../../firebase/config";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
-import { Offcanvas, Button } from "react-bootstrap";
+
 import Filters from "../../components/Filters"; // Using your existing Filters component
 import InactiveUserCard from "../../components/InactiveUserCard";
 const propertyFilter = ["Residential", "Commercial", "Plot"];
@@ -227,10 +227,7 @@ const PGAdminProperty = () => {
     setHandleMoreOptionsClick(false);
   };
 
-  const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
     <>
@@ -374,24 +371,7 @@ const PGAdminProperty = () => {
                 >
                   Create Property
                 </Link>
-                <>
-                  {/* <Button variant="primary" onClick={handleShow}>
-                    Filters
-                  </Button> */}
-
-                  <Offcanvas show={show} onHide={handleClose} placement="start">
-                    <Offcanvas.Header closeButton>
-                      <Offcanvas.Title>Filters</Offcanvas.Title>
-                    </Offcanvas.Header>
-                    <Offcanvas.Body>
-
-                      <Button variant="outline-secondary">In-Review</Button>
-                      <Button variant="outline-secondary">Active</Button>
-                      <Button variant="outline-secondary">Inactive</Button>
-
-                    </Offcanvas.Body>
-                  </Offcanvas>
-                </>
+              
               </div>
             </div>
             <hr></hr>
