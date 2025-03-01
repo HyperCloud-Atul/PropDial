@@ -523,6 +523,7 @@ const Home = () => {
         <Testimonial></Testimonial>
 
         <Blog></Blog>
+
       </div>
       {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
