@@ -368,7 +368,8 @@ function App() {
                 {/* PWA INSTALLATION CODE END */}
                 <ScrollToTop />
                 <Navbar />
-                <Suspense fallback={<div>Loading...</div>}>
+                {/* <Suspense fallback={<div>Loading...</div>}> */}
+                <Suspense fallback={<span></span>}>
                   <Routes>
                     <Route path="/" element={<Home></Home>}></Route>
                     <Route
