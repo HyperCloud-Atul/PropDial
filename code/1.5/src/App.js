@@ -152,6 +152,13 @@ function App() {
 
   // ---------------- Copy Collection Code - End ------------------------------
 
+  // Start -  Remove the preloader when React mounts: Inside App.js, remove the preloader after React loads:
+  useEffect(() => {
+    document.getElementById("preloader").classList.add("hide-preloader");
+  }, []);
+  // End - Remove the preloader when React mounts: Inside App.js, remove the preloader after React loads:
+
+
   const { authIsReady, user } = useAuthContext();
   const [fcmMessage, setFCMMessage] = useState(null);
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
@@ -479,7 +486,7 @@ function App() {
                     path="/propertydetails/:propertyid"
                     element={<PropertyDetails></PropertyDetails>}
                   ></Route>
-                   <Route
+                  <Route
                     path="/inspection/:propertyid"
                     element={<ViewInspection></ViewInspection>}
                   ></Route>
@@ -929,9 +936,9 @@ function App() {
                       )
                     }
                   ></Route>
-               "
-                  
-                    <Route
+                  "
+
+                  <Route
                     path="/attendance"
                     element={
                       user?.isEmployee && user?.isAttendanceRequired ? (
@@ -942,7 +949,7 @@ function App() {
                     }
                   ></Route>
 
-<Route
+                  <Route
                     path="/attendance-dashboard"
                     element={
                       user && (user.role === "hr" || user.role === "superAdmin") ? (
