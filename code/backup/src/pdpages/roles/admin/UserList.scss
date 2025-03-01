@@ -1,0 +1,138 @@
+.propdial_users {
+  display: grid;
+  grid-column-gap: 14px;
+  grid-row-gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+
+  .pu_single {
+    border: 1px solid #dfdfdf;
+    margin-top: 0px;
+    border-radius: 10px;
+    background: var(--white-color);
+
+    .tc_single {
+      border: none;
+      .inactive_tag {
+        position: absolute;
+        top: 34px;
+        right: 0;
+        font-size: 18px;
+        width: fit-content;
+        color: var(--theme-red);
+        text-transform: uppercase;
+        font-weight: 600;
+        transform: rotate(-45deg);
+        opacity: 0.5;
+        z-index: 1;
+      }
+    }
+
+    .dates {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgb(239, 239, 239);
+      font-size: 10px;
+      color: black;
+      height: 25px;
+      padding: 0px 10px;
+      border-radius: 0px 0px 10px 10px;
+      border-bottom: 1px solid #91b8ff;
+    }
+  }
+}
+
+.access_manage {
+  display: grid;
+  grid-template-columns: 30% 70%;
+
+  .left {
+    padding-right: 11px;
+    border-right: 1px solid var(--theme-grey);
+  }
+
+  .right {
+    padding-left: 11px;
+    max-height: 165px;
+    overflow-y: auto;
+  }
+
+  .theme_checkbox .theme_checkbox_container input[type="checkbox"] + label {
+    min-width: inherit;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .propdial_users {
+    grid-template-columns: repeat(3, 1fr);
+
+    .pu_single {
+      border: 1px solid #dfdfdf;
+      margin-top: 0px;
+      border-radius: 10px;
+      background: var(--white-color);
+
+      .tc_single {
+        border: none;
+      }
+
+      .dates {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgb(239, 239, 239);
+        font-size: 10px;
+        color: black;
+        height: 25px;
+        padding: 0px 10px;
+        border-radius: 0px 0px 10px 10px;
+        border-bottom: 1px solid #91b8ff;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .propdial_users {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .propdial_users {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .user_pg {
+    .filters {
+      .right,
+      .left {
+        width: 100%;
+        justify-content: end;
+      }
+    }
+    .rt_global_search {
+      width: 100%;
+    }
+  }
+  .access_manage {
+    grid-template-columns: 40% 60%;
+  }
+  .user_filters {
+    width: 100%;
+    &.new_inline {
+      .project-filter {
+        width: 100%;
+        nav {
+          flex-wrap: wrap;
+          width: 100%;
+          button {
+            width: 33.33%;
+          }
+          select {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
