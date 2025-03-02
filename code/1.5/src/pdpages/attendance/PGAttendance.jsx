@@ -1044,15 +1044,15 @@ const PGAttendance = () => {
 
   // export data in excel
 
-    const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
+  const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
 
-  
-    const toggleExpand = (id) => {
-      setExpandedCards((prev) => ({
-        ...prev,
-        [id]: !prev[id], // Toggle expand state for the clicked card
-      }));
-    };
+
+  const toggleExpand = (id) => {
+    setExpandedCards((prev) => ({
+      ...prev,
+      [id]: !prev[id], // Toggle expand state for the clicked card
+    }));
+  };
 
   return (
     <>
@@ -1425,200 +1425,199 @@ const PGAttendance = () => {
                   {attendanceData && attendanceData.length === 0 ? (
                     <div className="no_data">
                       <h6>
-                      No data found
+                        No data found
                       </h6>
                     </div>
                   ) : (
-                  
-                      <div className="previous_punch">
-                        {  attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData.map((data) => (
-                        <div
-                          className={`pp_single ${user && user.vehicleStatus ? "" : "v_not"
-                            }`}
-                        >
-                          <div className="top">
-                            <div className="left">
-                              {data.date ? (
-                                <h3>{data.date.slice(0, 2)}</h3>
-                              ) : (
-                                ""
-                              )}
-                              {data.weekDay ? (
-                                <h4>{data.weekDay.slice(0, 3)}</h4>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            <div className="right">
-                              <div className="r_single">
-                                <h6> Hrs Worked</h6>
-                                {data.workHrs === "00:00" ? (
-                                  "--:--"
+
+                    <div className="previous_punch">
+                      {attendanceData &&
+                        attendanceData.length > 0 &&
+                        attendanceData.map((data) => (
+                          <div
+                            className={`pp_single ${user && user.vehicleStatus ? "" : "v_not"
+                              }`}
+                          >
+                            <div className="top">
+                              <div className="left">
+                                {data.date ? (
+                                  <h3>{data.date.slice(0, 2)}</h3>
                                 ) : (
-                                  // <h5>{data.workHrs}</h5>
-                                  <h5>
-                                    {data.workHrs
-                                      ? data.workHrs
-                                        .split(":")
-                                        .map((val, index) => (
-                                          <span key={index}>
-                                            {val.trim()}
-                                            <span className="unit">
-                                              {index === 0 ? "hrs" : "min"}
-                                            </span>
-                                            {index === 0 && (
-                                              <span
-                                                style={{ marginRight: "8px" }}
-                                              ></span>
-                                            )}
-                                          </span>
-                                        ))
-                                      : "--:--"}
-                                  </h5>
+                                  ""
+                                )}
+                                {data.weekDay ? (
+                                  <h4>{data.weekDay.slice(0, 3)}</h4>
+                                ) : (
+                                  ""
                                 )}
                               </div>
-
-                              {user && user.vehicleStatus ? (
+                              <div className="right">
                                 <div className="r_single">
-                                  <h6> Distance</h6>
-                                  {data.tripDistance ? (
-                                    <h5>{data.tripDistance} KM</h5>
-                                  ) : (
+                                  <h6> Hrs Worked</h6>
+                                  {data.workHrs === "00:00" ? (
                                     "--:--"
+                                  ) : (
+                                    // <h5>{data.workHrs}</h5>
+                                    <h5>
+                                      {data.workHrs
+                                        ? data.workHrs
+                                          .split(":")
+                                          .map((val, index) => (
+                                            <span key={index}>
+                                              {val.trim()}
+                                              <span className="unit">
+                                                {index === 0 ? "hrs" : "min"}
+                                              </span>
+                                              {index === 0 && (
+                                                <span
+                                                  style={{ marginRight: "8px" }}
+                                                ></span>
+                                              )}
+                                            </span>
+                                          ))
+                                        : "--:--"}
+                                    </h5>
                                   )}
                                 </div>
-                              ) : (
-                                <div className="r_single">
-                                  <h6> Punch In</h6>
+
+                                {user && user.vehicleStatus ? (
+                                  <div className="r_single">
+                                    <h6> Distance</h6>
+                                    {data.tripDistance ? (
+                                      <h5>{data.tripDistance} KM</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="r_single">
+                                    <h6> Punch In</h6>
+                                    {data.punchIn ? (
+                                      <h5>{data.punchIn}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                )}
+                                {user && user.vehicleStatus ? (
+                                  ""
+                                ) : (
+                                  <div className="r_single">
+                                    <h6> Punch Out</h6>
+                                    {data.punchOut ? (
+                                      <h5>{data.punchOut}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            {user && user.vehicleStatus ? (
+                              <div
+                                className={`bottom ${user && user.vehicleStatus ? "trip" : ""
+                                  }`}
+                              >
+                                <div className="b_single">
+                                  <h6>Punch In</h6>
                                   {data.punchIn ? (
                                     <h5>{data.punchIn}</h5>
                                   ) : (
                                     "--:--"
                                   )}
                                 </div>
-                              )}
-                              {user && user.vehicleStatus ? (
-                                ""
-                              ) : (
-                                <div className="r_single">
-                                  <h6> Punch Out</h6>
+                                <div className="b_single">
+                                  <h6>Punch Out</h6>
                                   {data.punchOut ? (
                                     <h5>{data.punchOut}</h5>
                                   ) : (
                                     "--:--"
                                   )}
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                          {user && user.vehicleStatus ? (
-                            <div
-                              className={`bottom ${user && user.vehicleStatus ? "trip" : ""
-                                }`}
-                            >
-                              <div className="b_single">
-                                <h6>Punch In</h6>
-                                {data.punchIn ? (
-                                  <h5>{data.punchIn}</h5>
-                                ) : (
-                                  "--:--"
+                                {user && user.vehicleStatus && (
+                                  <div className="b_single">
+                                    <h6>Trip Start</h6>
+                                    {data.tripStart ? (
+                                      <h5>{data.tripStart}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                )}
+                                {user && user.vehicleStatus && (
+                                  <div className="b_single">
+                                    <h6>Trip End</h6>
+                                    {data.tripEnd ? (
+                                      <h5>{data.tripEnd}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
                                 )}
                               </div>
-                              <div className="b_single">
-                                <h6>Punch Out</h6>
-                                {data.punchOut ? (
-                                  <h5>{data.punchOut}</h5>
-                                ) : (
-                                  "--:--"
-                                )}
-                              </div>
-                              {user && user.vehicleStatus && (
-                                <div className="b_single">
-                                  <h6>Trip Start</h6>
-                                  {data.tripStart ? (
-                                    <h5>{data.tripStart}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
-                                </div>
-                              )}
-                              {user && user.vehicleStatus && (
-                                <div className="b_single">
-                                  <h6>Trip End</h6>
-                                  {data.tripEnd ? (
-                                    <h5>{data.tripEnd}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          <div className={`punch_location ${
-                                expandedCards[data.id] ? "expand_text" : ""
+                            ) : (
+                              ""
+                            )}
+                            <div className={`punch_location ${expandedCards[data.id] ? "expand_text" : ""
                               }`}>
-                            <div className="pl_single">
-                              <h6>Punch In Location1</h6>
+                              <div className="pl_single">
+                                <h6>Punch In Location</h6>
 
-                              <h5>
-                                {data.punchInLocation
-                                  ? data.punchInLocation
-                                    .split(",")
-                                    .filter(
-                                      (part) =>
-                                        part.trim() !== "undefined" &&
-                                        part.trim() !== ""
-                                    )
-                                    .slice(0, -1)
-                                    .join(", ")
-                                  : "--:--"}
-                              </h5>
-                            </div>
-                            <div className="pl_single">
-                              <h6>Punch Out Location </h6>
+                                <h5>
+                                  {data.punchInLocation
+                                    ? data.punchInLocation
+                                      .split(",")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
+                                    : "--:--"}
+                                </h5>
+                              </div>
+                              <div className="pl_single">
+                                <h6>Punch Out Location </h6>
 
-                              <h5>
-                                {data.punchOutLocation
-                                  ? data.punchOutLocation
-                                    .split(",")
-                                    .filter(
-                                      (part) =>
-                                        part.trim() !== "undefined" &&
-                                        part.trim() !== ""
-                                    )
-                                    .slice(0, -1)
-                                    .join(", ")
-                                  : "--:--"}
-                              </h5>
-                            </div>
-                            <div  className="expand_location"
-                              onClick={() => toggleExpand(data.id)}
+                                <h5>
+                                  {data.punchOutLocation
+                                    ? data.punchOutLocation
+                                      .split(",")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
+                                    : "--:--"}
+                                </h5>
+                              </div>
+                              <div className="expand_location"
+                                onClick={() => toggleExpand(data.id)}
                               >
-              <span className="material-symbols-outlined">
-               
-              {expandedCards[data.id] ? (
- <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
- <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
-</svg>
-) : (
- 
+                                <span className="material-symbols-outlined">
 
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
-<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
-</svg>
-)}
+                                  {expandedCards[data.id] ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+                                      <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
+                                    </svg>
+                                  ) : (
 
-              </span>
-            </div>
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
+                                      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+                                    </svg>
+                                  )}
+
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      </div>
-                   
+                        ))}
+                    </div>
+
                   )}
                 </div>
               )}
@@ -1647,72 +1646,75 @@ const PGAttendance = () => {
               <div className="body">
                 <div className="body_top">
                   <CurrentDateTime />
-                  {!topRecord ? (
-                      <div className="punch_button outer">
-                        <div className="inner_one">
-                          <div className="inner_two">
-                            <BeatLoader color="grey" loading={true} />
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
+                  {
+                    // !topRecord ? 
+                    // (
+                    //     <div className="punch_button outer">
+                    //       <div className="inner_one">
+                    //         <div className="inner_two">
+                    //           <BeatLoader color="grey" loading={true} />
+                    //         </div>
+                    //       </div>
+                    //     </div>
+                    //   ) : 
+                    (
                       <>
-                          {topRecord && topRecord.length === 0 ? (
-                    <div
-                      className="punch_button outer"
-                      onClick={handelShowPunchInPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/hand-pointer.png" alt="" />
-                          <h6>Punch In</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : !topRecord ||
-                    (topRecord &&
-                      (topRecord.createdAt?.toDate() <
-                        new Date().setHours(0, 0, 0, 0) ||
-                        !topRecord?.punchIn)) ? (
-                    <div
-                      className="punch_button outer"
-                      onClick={handelShowPunchInPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/hand-pointer.png" alt="" />
-                          <h6>Punch In</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : topRecord &&
-                    topRecord.date === formattedTodaysDate &&
-                    !topRecord.punchOut ? (
-                    <div
-                      className="punch_button punchout outer"
-                      onClick={handelShowPunchOutPopup}
-                    >
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <img src="/assets/img/punchouthand.png" alt="" />
-                          <h6>Punch Out</h6>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="punch_button pio_done outer">
-                      <div className="inner_one">
-                        <div className="inner_two">
-                          <h6 className="text-center">
-                            Next Punch In Tomorrow
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                        {topRecord && topRecord.length === 0 ? (
+                          <div
+                            className="punch_button outer"
+                            onClick={handelShowPunchInPopup}
+                          >
+                            <div className="inner_one">
+                              <div className="inner_two">
+                                <img src="/assets/img/hand-pointer.png" alt="" />
+                                <h6>Punch In</h6>
+                              </div>
+                            </div>
+                          </div>
+                        ) : !topRecord ||
+                          (topRecord &&
+                            (topRecord.createdAt?.toDate() <
+                              new Date().setHours(0, 0, 0, 0) ||
+                              !topRecord?.punchIn)) ? (
+                          <div
+                            className="punch_button outer"
+                            onClick={handelShowPunchInPopup}
+                          >
+                            <div className="inner_one">
+                              <div className="inner_two">
+                                <img src="/assets/img/hand-pointer.png" alt="" />
+                                <h6>Punch In</h6>
+                              </div>
+                            </div>
+                          </div>
+                        ) : topRecord &&
+                          topRecord.date === formattedTodaysDate &&
+                          !topRecord.punchOut ? (
+                          <div
+                            className="punch_button punchout outer"
+                            onClick={handelShowPunchOutPopup}
+                          >
+                            <div className="inner_one">
+                              <div className="inner_two">
+                                <img src="/assets/img/punchouthand.png" alt="" />
+                                <h6>Punch Out</h6>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="punch_button pio_done outer">
+                            <div className="inner_one">
+                              <div className="inner_two">
+                                <h6 className="text-center">
+                                  Next Punch In Tomorrow
+                                </h6>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </>
                     )}
-              
+
                 </div>
 
                 <div className="punch_detail">
