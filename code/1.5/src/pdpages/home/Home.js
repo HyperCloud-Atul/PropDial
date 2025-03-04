@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
@@ -23,7 +24,7 @@ import PunchInOut from "../../components/attendance/PunchInOut";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 import CollapsibleGroup from "../../components/CollapsibleGroup";
 import AirBnb from "../../components/AirBnb";
-import { Helmet } from "react-helmet";
+
 
 const Home = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -52,6 +53,10 @@ const Home = () => {
         <title>Home Page - My App</title>
         <meta name="description" content="This is the home page of my awesome app." />
       </Helmet> */}
+      <Helmet>
+        <title>Property Management Services 2025 | Buy, Sell & Rent Easily</title>
+        <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+      </Helmet>
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
