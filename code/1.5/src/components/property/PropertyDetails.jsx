@@ -5194,15 +5194,7 @@ const PropertyDetails = () => {
 
                 {propertyDocument && (
                   <div className="property_card_single mobile_full_card">
-                    <div className="row">
-                      <div
-                        className={
-                          propertyDocument.propertyGoogleMap
-                            ? "col-md-11 col-2"
-                            : "col-12"
-                        }
-                      >
-                        <div className="more_detail_card_inner">
+                     <div className="more_detail_card_inner">
                           <h2 className="card_title">Property Address</h2>
                           <div className="p_info">
                             {user &&
@@ -5285,6 +5277,15 @@ const PropertyDetails = () => {
                             )}
                           </div>
                         </div>
+                    {/* <div className="row">
+                      <div
+                        className={
+                          propertyDocument.propertyGoogleMap
+                            ? "col-md-11 col-2"
+                            : "col-12"
+                        }
+                      >
+                       
                       </div>
                       {propertyDocument &&
                         propertyDocument.propertyGoogleMap && (
@@ -5304,7 +5305,7 @@ const PropertyDetails = () => {
                             </Link>
                           </div>
                         )}
-                    </div>
+                    </div> */}
                   </div>
                 )}
 
