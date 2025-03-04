@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Accordion } from "react-bootstrap";
@@ -13,8 +14,12 @@ const Faq = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-
+  <Helmet>
+  <title>Answers to Your Property Management Queries | Propdial FAQs</title>
+  <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+</Helmet>
   return (
+    
     <div>
       <BottomRightFixedIcon />
       <Hero

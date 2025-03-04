@@ -1,4 +1,4 @@
-
+import { Helmet } from "react-helmet-async";
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 // components
@@ -25,7 +25,10 @@ const PGContactUs = () => {
     // Scroll to the contact form when the component mounts
     contactFormRef.current.scrollIntoView({ behavior: 'smooth' });
   }, []); // Empty dependency array ensures this effect runs only once after the initial render
-
+    <><Helmet>
+    <title>Contact Propdial | India’s Trusted Property Management Experts</title>
+    <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+  </Helmet></>
 
   return (
     <div className="pg_contact_us">

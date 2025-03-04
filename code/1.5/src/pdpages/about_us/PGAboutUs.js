@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -18,6 +19,10 @@ const PGAboutUs = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
+  <Helmet>
+  <title>Best Property Management Company in India | Propdial</title>
+  <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+</Helmet>
   return (
     <div className="about_us_pg">
       <BottomRightFixedIcon />

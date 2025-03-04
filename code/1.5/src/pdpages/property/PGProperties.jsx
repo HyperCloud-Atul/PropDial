@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React from "react";
 import { useState, useEffect } from "react";
 import PropertySingleCard from "../../components/property/PropertyCard";
@@ -20,6 +21,10 @@ const PGProperties = () => {
   // console.log('user:', user)
   return (
     <>
+    <Helmet>
+        <title>Explore Properties for Buy, Sell & Rent | Propdial </title>
+        <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+      </Helmet>
       <div>
         {<PGSearchProperty />}
       </div>
