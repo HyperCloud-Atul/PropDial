@@ -19,12 +19,13 @@ const PGAboutUs = () => {
     window.scrollTo(0, 0);
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
-  <Helmet>
-  <title>Best Property Management Company in India | Propdial</title>
-  <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
-</Helmet>
+
   return (
     <div className="about_us_pg">
+        <Helmet>
+  <title>Best Property Management Company in India | Propdial</title>
+  <meta name="description" content="Propdial is a trusted property management company in India, offering hassle-free rental and maintenance solutions for homeowners, NRIs, and investors." />
+</Helmet>
       <BottomRightFixedIcon />
       <Hero
         pageTitle="About Us"

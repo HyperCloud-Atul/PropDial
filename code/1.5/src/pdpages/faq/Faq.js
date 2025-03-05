@@ -14,13 +14,14 @@ const Faq = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-  <Helmet>
-  <title>Answers to Your Property Management Queries | Propdial FAQs</title>
-  <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
-</Helmet>
+
   return (
     
     <div>
+        <Helmet>
+  <title>Answers to Your Property Management Queries | Propdial FAQs</title>
+  <meta name="description" content="Find answers to common questions about Propdial's property management services in India. Learn about rental management, maintenance, tenant handling, and more." />
+</Helmet>
       <BottomRightFixedIcon />
       <Hero
         pageTitle="FAQ"

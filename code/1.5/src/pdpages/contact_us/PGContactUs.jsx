@@ -25,13 +25,15 @@ const PGContactUs = () => {
     // Scroll to the contact form when the component mounts
     contactFormRef.current.scrollIntoView({ behavior: 'smooth' });
   }, []); // Empty dependency array ensures this effect runs only once after the initial render
-    <><Helmet>
-    <title>Contact Propdial | India’s Trusted Property Management Experts</title>
-    <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
-  </Helmet></>
+   
 
   return (
+    
     <div className="pg_contact_us">
+       <Helmet>
+    <title>Contact Propdial | India's Trusted Property Management Experts</title>
+    <meta name="description" content="Reach out to Propdial, India's leading property management company, for expert rental, maintenance, and property solutions. Get in touch with us today!" />
+  </Helmet>
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Hero
         pageTitle="Contact"

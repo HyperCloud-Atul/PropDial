@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from "react-helmet-async";
 import { Link, useLocation } from "react-router-dom";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -45,7 +46,12 @@ useEffect(() => {
 }, [activeNotifications, user]);
 
   return (
+    
     <div className="top_header_pg pg_bg pg_notification">
+          <Helmet>
+        <title>Stay Updated with Propdial | Property Management Notifications</title>
+        <meta name="description" content="Get the latest updates and important notifications from Propdial, India's trusted property management company. Stay informed about your property services today!" />
+      </Helmet>
       <div className={`page_spacing pg_min_height ${activeNotifications && activeNotifications.length === 0 ? "pg_min_height" : ""}`}>
         {activeNotifications && activeNotifications.length === 0 && (
           <div className="pg_msg">

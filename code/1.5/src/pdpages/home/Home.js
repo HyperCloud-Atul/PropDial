@@ -48,14 +48,12 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, []);
   return (
-    <>
-      {/* <Helmet>
-        <title>Home Page - My App</title>
-        <meta name="description" content="This is the home page of my awesome app." />
-      </Helmet> */}
+    <>     
       <Helmet>
-        <title>Property Management Services 2025 | Buy, Sell & Rent Easily</title>
-        <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
+        <title>Property Management Services 2025 | Buy, Sell & Rent Easily</title>    
+        <meta property="og:title"
+  content="Property Management Services 2025 | Buy, Sell & Rent Easily" />    
+        <meta name="description" content="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more." />
       </Helmet>
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
