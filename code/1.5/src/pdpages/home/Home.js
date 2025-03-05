@@ -1,10 +1,12 @@
-import { Helmet } from "react-helmet-async";
+// import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import React from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
+import SEOHelmet from "../../components/SEOHelmet ";
 
 // text 
 import { useFirestore } from "../../hooks/useFirestore";
@@ -47,14 +49,13 @@ const Home = () => {
     // Cleanup the timer if the component is unmounted
     return () => clearTimeout(timer);
   }, []);
+
   return (
-    <>     
-      <Helmet>
-        <title>Property Management Services 2025 | Buy, Sell & Rent Easily</title>    
-        <meta property="og:title"
-  content="Property Management Services 2025 | Buy, Sell & Rent Easily" />    
-        <meta name="description" content="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more." />
-      </Helmet>
+    <>  
+    <SEOHelmet title="Property Management Services 2025 | Buy, Sell & Rent Easily" description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
+    og_description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
+    og_title="Property Management Services 2025 | Buy, Sell & Rent Easily" />   
+  
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>

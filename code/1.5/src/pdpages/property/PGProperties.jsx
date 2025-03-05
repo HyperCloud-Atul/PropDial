@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import React from "react";
 import { useState, useEffect } from "react";
 import PropertySingleCard from "../../components/property/PropertyCard";
@@ -8,6 +8,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import PGSearchProperty from "./PGSearchProperty";
 import PGCustomerProperty from "./PGCustomerProperty";
 import PGAdminProperty from "./PGAdminProperty";
+import SEOHelmet from "../../components/SEOHelmet ";
 
 const PGProperties = () => {
   // Scroll to the top of the page whenever the location changes start
@@ -21,10 +22,10 @@ const PGProperties = () => {
   // console.log('user:', user)
   return (
     <>
-    <Helmet>
-        <title>Explore Properties for Buy, Sell & Rent | Propdial </title>
-        <meta name="description" content="Welcome to our website. Explore our services and latest updates." />
-      </Helmet>
+    
+      <SEOHelmet title="Explore Properties for Buy, Sell & Rent | Propdial" description="Find the best properties for buy, sell & rent with Propdial. Explore top real estate listings in prime locations and get expert property management services."
+    og_description="Find the best properties for buy, sell & rent with Propdial. Explore top real estate listings in prime locations and get expert property management services."
+    og_title="Explore Properties for Buy, Sell & Rent | Propdial" /> 
       <div>
         {<PGSearchProperty />}
       </div>

@@ -4,8 +4,10 @@ import React, { Suspense } from "react";
 import { useAuthContext } from "./hooks/useAuthContext";
 import { useDocument } from "./hooks/useDocument";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { projectMsg, projectFirestore } from "./firebase/config";
 import { useCollection } from "./hooks/useCollection";
+import SEOHelmet from "./components/SEOHelmet ";
 
 import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
 
@@ -123,8 +125,10 @@ import Faq from "./pdpages/faq/Faq";
 const Home = React.lazy(() => import("./pdpages/home/Home"));
 // import Footer from "./components/Footer";
 const Footer = React.lazy(() => import("./components/Footer"));
-
+const defaultTitle = "Propdial - Property Management Services for Rent, Buy, Lease a Property in India";
+const defaultDescription = "Propdial offers expert property management services in India for buy, sell & rent.";
 function App() {
+  const location = useLocation();
   //---------------------- Copy Collection Code - Start -----------------------------------
   // const { documents: dbCollectionDocument, error: dbCollectionDocumentError } =
   //   useCollection("users");  // name of existing documets collection
@@ -303,8 +307,58 @@ function App() {
     };
   }, [dbDisplayModeDocuments]);
 
+
+  // by default add title and description  
+
+  useEffect(() => {
+    const updateMetaTags = () => {
+      // Update title
+      if (!document.querySelector("title") || document.title.trim() === "") {
+        document.title = defaultTitle;
+      }
+  
+      // Update meta description
+      let metaDesc = document.querySelector("meta[name='description']");
+      if (!metaDesc) {
+        metaDesc = document.createElement("meta");
+        metaDesc.setAttribute("name", "description");
+        document.head.appendChild(metaDesc);
+      }
+      if (!metaDesc.getAttribute("content")?.trim()) {
+        metaDesc.setAttribute("content", defaultDescription);
+      }
+  
+      // Update Open Graph (OG) title
+      let ogTitle = document.querySelector("meta[property='og:title']");
+      if (!ogTitle) {
+        ogTitle = document.createElement("meta");
+        ogTitle.setAttribute("property", "og:title");
+        document.head.appendChild(ogTitle);
+      }
+      if (!ogTitle.getAttribute("content")?.trim()) {
+        ogTitle.setAttribute("content", defaultTitle);
+      }
+  
+      // Update Open Graph (OG) description
+      let ogDesc = document.querySelector("meta[property='og:description']");
+      if (!ogDesc) {
+        ogDesc = document.createElement("meta");
+        ogDesc.setAttribute("property", "og:description");
+        document.head.appendChild(ogDesc);
+      }
+      if (!ogDesc.getAttribute("content")?.trim()) {
+        ogDesc.setAttribute("content", defaultDescription);
+      }
+    };
+  
+    updateMetaTags();
+  }, [location.pathname, defaultTitle, defaultDescription]);
+  
+
   return (
     <div className={currentModeStatus === "dark" ? "dark" : "light"}>
+       {/* <HelmetProvider> */}
+       <SEOHelmet/>
       {fcmMessage && (
         <FCMNotification
           icon={fcmMessage.icon}
@@ -319,8 +373,8 @@ function App() {
 
       <div className="page">
         {authIsReady && (
-          <HelmetProvider>
-            <BrowserRouter>
+         
+        
               <div>
                 <div>
                   {isUpdateAvailable && (
@@ -1014,10 +1068,11 @@ function App() {
                   <NavbarBottom></NavbarBottom>
                 </div>
               </div>
-            </BrowserRouter>
-          </HelmetProvider>
+           
+         
         )}
       </div>
+      {/* </HelmetProvider> */}
     </div>
   );
 }

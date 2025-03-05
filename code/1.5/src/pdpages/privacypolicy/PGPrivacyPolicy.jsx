@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import SEOHelmet from "../../components/SEOHelmet ";
 
 // component
 import Hero from "../../components/Hero";
@@ -20,9 +21,12 @@ const PGPriacyPolicy = () => {
     const navigate = useNavigate();
     return (
         <div className="about_us_pg">
+            <SEOHelmet title="Privacy Policy | Propdial - Comprehensive Property Management Services" description="Learn how Propdial, a leading property management company in India, collects, uses, and safeguards your data. Our Privacy Policy ensures transparency and compliance."
+    og_description="Learn how Propdial, a leading property management company in India, collects, uses, and safeguards your data. Our Privacy Policy ensures transparency and compliance."
+    og_title="Privacy Policy | Propdial - Comprehensive Property Management Services" /> 
             <BottomRightFixedIcon />
             <Hero
-                pageTitle="Privacy Policy"
+                pageTitle="Privacy Policy | Propdial"
                 pageSubTitle="Discover Our Policies
         "
                 heroImage="/assets/img/about_us_banner.jpg"

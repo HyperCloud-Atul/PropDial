@@ -185,7 +185,7 @@ export default function Footer() {
                   </Link>
                   <Link
                     className="fsi_single"
-                    to="https://twitter.com/i/flow/login?redirect_after_login=%2Fpropdial"
+                    to="https://x.com/propdial"
                   >
                     <img src="/assets/img/home/twitter_footer.png" alt="Twitter" />
                   </Link>

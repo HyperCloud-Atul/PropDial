@@ -1,8 +1,9 @@
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import SEOHelmet from "../../components/SEOHelmet ";
 
 // component
 import Hero from "../../components/Hero";
@@ -22,10 +23,10 @@ const PGAboutUs = () => {
 
   return (
     <div className="about_us_pg">
-        <Helmet>
-  <title>Best Property Management Company in India | Propdial</title>
-  <meta name="description" content="Propdial is a trusted property management company in India, offering hassle-free rental and maintenance solutions for homeowners, NRIs, and investors." />
-</Helmet>
+       <SEOHelmet title="Best Property Management Company in India | Propdial" description="Propdial is a trusted property management company in India, offering hassle-free rental and maintenance solutions for homeowners, NRIs, and investors."
+    og_description="Propdial is a trusted property management company in India, offering hassle-free rental and maintenance solutions for homeowners, NRIs, and investors."
+    og_title="Best Property Management Company in India | Propdial" />  
+      
       <BottomRightFixedIcon />
       <Hero
         pageTitle="About Us"

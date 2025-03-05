@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 // components
@@ -6,6 +6,7 @@ import Hero from "../../components/Hero";
 import CreateTicket from "../../chatboard/CreateTicket";
 import EnquiryForm from '../../components/EnquiryForm';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import SEOHelmet from '../../components/SEOHelmet ';
 
 // css
 import "./PGContactUs.css";
@@ -31,12 +32,14 @@ const PGContactUs = () => {
     
     <div className="pg_contact_us">
        <Helmet>
-    <title>Contact Propdial | India's Trusted Property Management Experts</title>
-    <meta name="description" content="Reach out to Propdial, India's leading property management company, for expert rental, maintenance, and property solutions. Get in touch with us today!" />
+    
   </Helmet>
+  <SEOHelmet title="Contact Propdial | India's Trusted Property Management Experts" description="Reach out to Propdial, India's leading property management company, for expert rental, maintenance, and property solutions. Get in touch with us today!"
+    og_description="Reach out to Propdial, India's leading property management company, for expert rental, maintenance, and property solutions. Get in touch with us today!"
+    og_title="Contact Propdial | India's Trusted Property Management Experts" /> 
       <BottomRightFixedIcon></BottomRightFixedIcon>
       <Hero
-        pageTitle="Contact"
+        pageTitle="Contact Propdial"
         pageSubTitle="Reach Out to Us"
         heroImage="./assets/img/contact_us_page_hero.jpg"
       ></Hero>

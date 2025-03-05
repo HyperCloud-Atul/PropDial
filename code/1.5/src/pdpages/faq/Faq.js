@@ -1,10 +1,10 @@
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Accordion } from "react-bootstrap";
 import Hero from "../../components/Hero";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
-
+import SEOHelmet from "../../components/SEOHelmet ";
 // css
 import "./Faq.css";
 
@@ -17,14 +17,13 @@ const Faq = () => {
 
   return (
     
-    <div>
-        <Helmet>
-  <title>Answers to Your Property Management Queries | Propdial FAQs</title>
-  <meta name="description" content="Find answers to common questions about Propdial's property management services in India. Learn about rental management, maintenance, tenant handling, and more." />
-</Helmet>
+    <div>        
+<SEOHelmet title="Answers to Your Property Management Queries | Propdial FAQs" description="Find answers to common questions about Propdial's property management services in India. Learn about rental management, maintenance, tenant handling, and more."
+    og_description="Find answers to common questions about Propdial's property management services in India. Learn about rental management, maintenance, tenant handling, and more."
+    og_title="Answers to Your Property Management Queries | Propdial FAQs" /> 
       <BottomRightFixedIcon />
       <Hero
-        pageTitle="FAQ"
+        pageTitle="Propdial FAQs"
         pageSubTitle="Free to ask"
         heroImage="./assets/img/faq_page_hero.jpg"
       />

@@ -44,10 +44,19 @@ function Banner() {
           <div className="banner_content">
             <div className="bc_inner">
               <div className="container">
-                <h1 className="typing_effect">
+                <h1 className="hidden" style={{
+                  fontSize: "0px",
+                  lineHeight: "0px",
+                  visibility: "hidden",
+                  color: "transparent"
+                  
+                }}>
+                Property Management Services In India
+                </h1>
+                <h2 className="typing_effect">
                   <span>Find Your Best House</span>
                   <AutoTypingEffect className="auto_typing_text"></AutoTypingEffect>
-                </h1>
+                </h2>
                 <h6>Discover Your Perfect Property Among Our Million Options</h6>
 
                 {/* <div className="search_area">

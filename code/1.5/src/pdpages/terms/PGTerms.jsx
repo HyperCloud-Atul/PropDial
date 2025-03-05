@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import SEOHelmet from "../../components/SEOHelmet ";
 
 // component
 import Hero from "../../components/Hero";
@@ -19,10 +20,13 @@ const PGTerms = () => {
     // Scroll to the top of the page whenever the location changes end
     const navigate = useNavigate();
     return (
-        <div className="about_us_pg">
+        <div className="about_us_pg tc_pg">
+            <SEOHelmet title="Terms & Conditions | Propdial - Trusted Property Management in India" description="Explore the terms and conditions of Propdial, India's leading property management company. Understand your rights, responsibilities, and service policies."
+    og_description="Explore the terms and conditions of Propdial, India's leading property management company. Understand your rights, responsibilities, and service policies."
+    og_title="Terms & Conditions | Propdial - Trusted Property Management in India" /> 
             <BottomRightFixedIcon />
             <Hero
-                pageTitle="Terms & Conditions"
+                pageTitle="Terms & Conditions | Propdial"
                 pageSubTitle="Discover Our Policies
         "
                 heroImage="/assets/img/about_us_banner.jpg"

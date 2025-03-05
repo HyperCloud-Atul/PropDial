@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import 'core-js/features/global-this';
+import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
 import "./index.scss"
@@ -17,7 +18,9 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
+    <BrowserRouter>
       <App />
+    </BrowserRouter>
     </AuthContextProvider>
   </React.StrictMode>
 );
