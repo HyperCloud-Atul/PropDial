@@ -1,0 +1,56 @@
+<?xml version=""1.0"" encoding=""UTF-8""?>
+<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">
+
+    <!-- Homepage -->
+    <url>
+        <loc>https://propdial.in/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <!-- Important Pages -->
+    <url>
+        <loc>https://propdial.in/about-us/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/services/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/property-listings/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/contact-us/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <!-- Example Property Pages (Can be auto-generated dynamically) -->
+    <url>
+        <loc>https://propdial.in/property-listings/property-1/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/property-listings/property-2/</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+</urlset>
