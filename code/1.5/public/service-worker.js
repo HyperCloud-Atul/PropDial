@@ -2,22 +2,28 @@
 import { precacheAndRoute } from "workbox-precaching";
 import { clientsClaim } from "workbox-core";
 import { registerRoute } from "workbox-routing";
-import { ExpirationPlugin } from "workbox-expiration";
-import { CacheFirst } from "workbox-strategies";
-import { NetworkFirst } from "workbox-strategies";
-import { StaleWhileRevalidate } from "workbox-strategies";
-import { CacheableResponsePlugin } from "workbox-cacheable-response";
-
-//This clientsClaim should be on top level of the service worker
-//not inside of e.g. an event handler
-clientsClaim();
+import { StaleWhileRevalidate, CacheFirst, NetworkFirst } from 'workbox-strategies';
+// import { ExpirationPlugin } from "workbox-expiration";
+// import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 //Not wrapping it in a 'message' event as per the new update
-self.skipWaiting();
+// self.skipWaiting();
+//This clientsClaim should be on top level of the service worker
+//not inside of e.g. an event handler
+// clientsClaim();
 
-precacheAndRoute(self.__WB_MANIFEST);
+// Precaching: Pre-cache all files generated during the build
+precacheAndRoute(self.__WB_MANIFEST || []);
 
 //-------------------------- Strategies -------------------------------------------
+
+// Cache CSS, JavaScript, and Web Fonts using Stale-While-Revalidate
+registerRoute(
+    ({ request }) => request.destination === 'style' || request.destination === 'script' || request.destination === 'worker',
+    new StaleWhileRevalidate({
+        cacheName: 'assets-cache',
+    })
+);
 
 // Register a route to cache Google Fonts URLs with a stale-while-revalidate strategy
 // registerRoute(
@@ -194,3 +200,11 @@ precacheAndRoute(self.__WB_MANIFEST);
 //         ],
 //     })
 // );
+
+// Skip Waiting and Activate New SW Immediately
+self.addEventListener('install', (event) => {
+    self.skipWaiting();
+});
+self.addEventListener('activate', (event) => {
+    event.waitUntil(self.clients.claim());
+});

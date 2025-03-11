@@ -137,7 +137,7 @@ const PGHrAttendance = () => {
   const [punchIn, setPunchIn] = useState(null);
   const [tripStart, setTripStart] = useState(null);
   const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
-  console.log("filterType", filterType);
+  // console.log("filterType", filterType);
 
   const toggleExpand = (id) => {
     setExpandedCards((prev) => ({
