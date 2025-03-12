@@ -564,6 +564,8 @@ const PGAttendance = () => {
         userId: user.uid,
         userName: user.fullName,
         userPhoneNo: user.phoneNumber,
+        userCity: user.city,
+        userEmail: user.email,
         punchIn: formattedPunchinTime,
         punchOut: null,
         workHrs: "00:00",

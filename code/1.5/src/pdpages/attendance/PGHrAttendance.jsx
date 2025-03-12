@@ -1169,6 +1169,14 @@ const PGHrAttendance = () => {
         ),
       },
       {
+        Header: "City",
+        accessor: "userCity",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="date mobile_min_width">{value}</div>
+        ),
+      },
+      {
         Header: "Name",
         accessor: "createdBy",
         disableFilters: true,
@@ -1227,6 +1235,22 @@ const PGHrAttendance = () => {
           );
         },
       },
+      {
+        Header: "Punch In",
+        accessor: "punchIn",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Punch Out",
+        accessor: "punchOut",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
 
       {
         Header: "Hrs Worked",
@@ -1249,13 +1273,30 @@ const PGHrAttendance = () => {
         ),
       },
       {
-        Header: "Punch In",
-        accessor: "punchIn",
+        Header: "Trip Start",
+        accessor: "tripStart",
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
+      {
+        Header: "Trip End",
+        accessor: "tripEnd",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Dist (Km)",
+        accessor: "tripDistance",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+
       {
         Header: "Punch In Location",
         accessor: "punchInLocation",
@@ -1274,14 +1315,7 @@ const PGHrAttendance = () => {
           </div>
         ),
       },
-      {
-        Header: "Punch Out",
-        accessor: "punchOut",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
+
       {
         Header: "Punch Out Location",
         accessor: "punchOutLocation",
@@ -1300,40 +1334,23 @@ const PGHrAttendance = () => {
           </div>
         ),
       },
-      {
-        Header: "Dist (Km)",
-        accessor: "tripDistance",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
-      {
-        Header: "Trip Start",
-        accessor: "tripStart",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
-      {
-        Header: "Trip End",
-        accessor: "tripEnd",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
+
+
     ];
   }, [dbUserState]); // Dependency array for useMemo
 
   // export data in excel
   const { exportToExcel, response: res } = useExportToExcel();
   const exportExcelFormate = async () => {
+    console.log("AttendanceData: ", attendanceData)
     const subsetData = attendanceData.map((item) => ({
       Date: item.date,
+      City: item.userCity,
       Name: item.userName,
       "Contact No": item.userPhoneNo,
+      Email: item.userEmail,
+      "Punch In": item.punchIn ? item.punchIn : "--:--",
+      "Punch Out": item.punchOut ? item.punchOut : "--:--",
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
@@ -1343,29 +1360,30 @@ const PGHrAttendance = () => {
             )
             .join(" ")
           : "--:--",
-      "Punch In": item.punchIn ? item.punchIn : "--:--",
-      "Punch In Location": item.punchInLocation
-        ? item.punchInLocation
-          .split(", ")
-          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-          .join(", ")
-        : "--:--",
-      "Punch Out": item.punchOutLocation
-        ? item.punchOutLocation
-          .split(", ")
-          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-          .join(", ")
-        : "--:--",
-      "Punch Out Location": item.punchOutLocation || "--",
-
+      "Trip Start": item.tripStart ? item.tripStart : "--:--",
+      "Trip End": item.tripEnd ? item.tripEnd : "--:--",
       // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
       ...(user && user.vehicleStatus
         ? {
           "Distance (km)": item.tripDistance
             ? item.tripDistance + " Km"
             : "--:--",
-          "Trip Start": item.tripStart ? item.tripStart : "--:--",
-          "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+          "Punch In Location": item.punchInLocation
+            ? item.punchInLocation
+              .split(", ")
+              .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+              .join(", ")
+            : "--:--",
+          "Punch Out": item.punchOutLocation
+            ? item.punchOutLocation
+              .split(", ")
+              .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+              .join(", ")
+            : "--:--",
+          "Punch Out Location": item.punchOutLocation || "--",
+
+
+
         }
         : {}),
     }));
