@@ -554,6 +554,9 @@ const PGAttendance = () => {
     }
 
     try {
+
+      getLocation();
+
       const formattedPunchinTime = format(today, "hh:mm a");
 
       // Add a punch-in record
@@ -561,6 +564,8 @@ const PGAttendance = () => {
         userId: user.uid,
         userName: user.fullName,
         userPhoneNo: user.phoneNumber,
+        userCity: user.city,
+        userEmail: user.email,
         punchIn: formattedPunchinTime,
         punchOut: null,
         workHrs: "00:00",
@@ -608,6 +613,9 @@ const PGAttendance = () => {
     const formattedPunchoutTime = format(today, "hh:mm a"); // Formats as DD-MMM-YY
 
     try {
+
+      getLocation();
+
       // Find the punch-in record for today
       const record = await projectFirestore
         .collection("attendance-propdial")
@@ -746,7 +754,7 @@ const PGAttendance = () => {
   // view mode control end
 
   // Function to get user's location
-  const getLocation = () => {
+  const getLocation = async () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -898,14 +906,14 @@ const PGAttendance = () => {
           <div className="hr_worked mobile_min_width">
             {value !== "00:00"
               ? value.split(":").map((val, index) => (
-                  <span key={index}>
-                    {val.trim()}
-                    <span className="unit">{index === 0 ? "hrs" : "min"}</span>
-                    {index === 0 && (
-                      <span style={{ marginRight: "8px" }}></span>
-                    )}
-                  </span>
-                ))
+                <span key={index}>
+                  {val.trim()}
+                  <span className="unit">{index === 0 ? "hrs" : "min"}</span>
+                  {index === 0 && (
+                    <span style={{ marginRight: "8px" }}></span>
+                  )}
+                </span>
+              ))
               : "--:--"}
           </div>
         ),
@@ -926,12 +934,12 @@ const PGAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                  .split(",")
-                  .filter(
-                    (part) => part.trim() !== "undefined" && part.trim() !== ""
-                  )
-                  .slice(0, -1)
-                  .join(", ")
+                .split(",")
+                .filter(
+                  (part) => part.trim() !== "undefined" && part.trim() !== ""
+                )
+                .slice(0, -1)
+                .join(", ")
               : "--:--"}
           </div>
         ),
@@ -953,12 +961,12 @@ const PGAttendance = () => {
           <div className="location mobile_min_width">
             {value
               ? value
-                  .split(",")
-                  .filter(
-                    (part) => part.trim() !== "undefined" && part.trim() !== ""
-                  )
-                  .slice(0, -1)
-                  .join(", ")
+                .split(",")
+                .filter(
+                  (part) => part.trim() !== "undefined" && part.trim() !== ""
+                )
+                .slice(0, -1)
+                .join(", ")
               : "--:--"}
           </div>
         ),
@@ -999,36 +1007,36 @@ const PGAttendance = () => {
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
-              .split(":")
-              .map(
-                (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
-              )
-              .join(" ")
+            .split(":")
+            .map(
+              (val, index) => `${val.trim()}${index === 0 ? " hrs" : " min"}`
+            )
+            .join(" ")
           : "--:--",
       "Punch In": item.punchIn ? item.punchIn : "--:--",
       "Punch In Location": item.punchInLocation
         ? item.punchInLocation
-            .split(",")
-            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-            .join(", ")
+          .split(",")
+          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+          .join(", ")
         : "--:--",
       "Punch Out": item.punchOutLocation
         ? item.punchOutLocation
-            .split(",")
-            .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
-            .join(", ")
+          .split(",")
+          .filter((part) => part.trim() !== "undefined" && part.trim() !== "")
+          .join(", ")
         : "--:--",
       "Punch Out Location": item.punchOutLocation || "--",
 
       // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
       ...(user && user.vehicleStatus
         ? {
-            "Distance (km)": item.tripDistance
-              ? item.tripDistance + " Km"
-              : "--:--",
-            "Trip Start": item.tripStart ? item.tripStart : "--:--",
-            "Trip End": item.tripEnd ? item.tripEnd : "--:--",
-          }
+          "Distance (km)": item.tripDistance
+            ? item.tripDistance + " Km"
+            : "--:--",
+          "Trip Start": item.tripStart ? item.tripStart : "--:--",
+          "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+        }
         : {}),
     }));
 
@@ -1094,7 +1102,7 @@ const PGAttendance = () => {
                         // e.target.value = "45"
                       }}
                       onChange={(e) => setTripStart(e.target.value)}
-                      // value={topRecord && topRecord.tripEnd}
+                    // value={topRecord && topRecord.tripEnd}
                     />
                     {punchInError && (
                       <div className="field_error">
@@ -1140,7 +1148,7 @@ const PGAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchIn}
-                  // disabled={loading}
+                // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1186,11 +1194,11 @@ const PGAttendance = () => {
                     />
                     <p className="mt-2 text_grey">
                       {Number(tripEnd) >
-                      Number(topRecord && topRecord.tripStart)
+                        Number(topRecord && topRecord.tripStart)
                         ? "Distance: " +
-                          (Number(tripEnd) -
-                            Number(topRecord && topRecord.tripStart)) +
-                          " KM"
+                        (Number(tripEnd) -
+                          Number(topRecord && topRecord.tripStart)) +
+                        " KM"
                         : "Note:- Trip End should be greater than Trip Start"}
                     </p>
                     {punchOutError && (
@@ -1221,7 +1229,7 @@ const PGAttendance = () => {
                 <div
                   className="done_btn"
                   onClick={handlePunchOut}
-                  // disabled={loading}
+                // disabled={loading}
                 >
                   Confirm
                 </div>
@@ -1264,7 +1272,7 @@ const PGAttendance = () => {
                   <h5>Hrs Worked</h5>
                   <h2>
                     {currentWeekWorkedHours &&
-                    currentWeekWorkedHours === "00:00" ? (
+                      currentWeekWorkedHours === "00:00" ? (
                       "--:--"
                     ) : currentWeekWorkedHours ? (
                       <>
@@ -1371,9 +1379,8 @@ const PGAttendance = () => {
                       </div>
                       <div className="button_filter diff_views">
                         <div
-                          className={`bf_single ${
-                            viewMode === "card_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("card_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1390,9 +1397,8 @@ const PGAttendance = () => {
                           </svg>
                         </div>
                         <div
-                          className={`bf_single ${
-                            viewMode === "table_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("table_view")}
                         >
                           {/* <span className="material-symbols-outlined">
@@ -1431,9 +1437,8 @@ const PGAttendance = () => {
                         attendanceData.length > 0 &&
                         attendanceData.map((data) => (
                           <div
-                            className={`pp_single ${
-                              user && user.vehicleStatus ? "" : "v_not"
-                            }`}
+                            className={`pp_single ${user && user.vehicleStatus ? "" : "v_not"
+                              }`}
                           >
                             <div className="top">
                               <div className="left">
@@ -1458,22 +1463,22 @@ const PGAttendance = () => {
                                     <h5>
                                       {data.workHrs
                                         ? data.workHrs
-                                            .split(":")
-                                            .map((val, index) => (
-                                              <span key={index}>
-                                                {val.trim()}
-                                                <span className="unit">
-                                                  {index === 0 ? "hrs" : "min"}
-                                                </span>
-                                                {index === 0 && (
-                                                  <span
-                                                    style={{
-                                                      marginRight: "8px",
-                                                    }}
-                                                  ></span>
-                                                )}
+                                          .split(":")
+                                          .map((val, index) => (
+                                            <span key={index}>
+                                              {val.trim()}
+                                              <span className="unit">
+                                                {index === 0 ? "hrs" : "min"}
                                               </span>
-                                            ))
+                                              {index === 0 && (
+                                                <span
+                                                  style={{
+                                                    marginRight: "8px",
+                                                  }}
+                                                ></span>
+                                              )}
+                                            </span>
+                                          ))
                                         : "--:--"}
                                     </h5>
                                   )}
@@ -1514,9 +1519,8 @@ const PGAttendance = () => {
                             </div>
                             {user && user.vehicleStatus ? (
                               <div
-                                className={`bottom ${
-                                  user && user.vehicleStatus ? "trip" : ""
-                                }`}
+                                className={`bottom ${user && user.vehicleStatus ? "trip" : ""
+                                  }`}
                               >
                                 <div className="b_single">
                                   <h6>Punch In</h6>
@@ -1559,9 +1563,8 @@ const PGAttendance = () => {
                               ""
                             )}
                             <div
-                              className={`punch_location ${
-                                expandedCards[data.id] ? "expand_text" : ""
-                              }`}
+                              className={`punch_location ${expandedCards[data.id] ? "expand_text" : ""
+                                }`}
                             >
                               <div className="pl_single">
                                 <h6>Punch In Location</h6>
@@ -1569,14 +1572,14 @@ const PGAttendance = () => {
                                 <h5>
                                   {data.punchInLocation
                                     ? data.punchInLocation
-                                        .split(",")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
+                                      .split(",")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
                                     : "--:--"}
                                 </h5>
                               </div>
@@ -1586,14 +1589,14 @@ const PGAttendance = () => {
                                 <h5>
                                   {data.punchOutLocation
                                     ? data.punchOutLocation
-                                        .split(",")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
+                                      .split(",")
+                                      .filter(
+                                        (part) =>
+                                          part.trim() !== "undefined" &&
+                                          part.trim() !== ""
+                                      )
+                                      .slice(0, -1)
+                                      .join(", ")
                                     : "--:--"}
                                 </h5>
                               </div>
@@ -1734,8 +1737,8 @@ const PGAttendance = () => {
                     ) : (
                       <div className="data">
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchIn
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchIn
                           ? topRecord.punchIn
                           : "--:--"}
                       </div>
@@ -1776,17 +1779,17 @@ const PGAttendance = () => {
                     </h6> */}
                       <h6>
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchInLocation
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchInLocation
                           ? topRecord.punchInLocation
-                              .split(",")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
+                            .split(",")
+                            .filter(
+                              (part) =>
+                                part.trim() !== "undefined" &&
+                                part.trim() !== ""
+                            )
+                            .slice(0, -1)
+                            .join(", ")
                           : ""}
                       </h6>
                     </marquee>
@@ -1812,12 +1815,12 @@ const PGAttendance = () => {
                           ? topRecord.workHrs === "00:00"
                             ? "--:--"
                             : topRecord.date === formattedTodaysDate
-                            ? `${parseInt(
+                              ? `${parseInt(
                                 topRecord.workHrs.split(":")[0]
                               )}hrs ${parseInt(
                                 topRecord.workHrs.split(":")[1]
                               )}min`
-                            : "--:--"
+                              : "--:--"
                           : "--:--"}
                       </div>
                     )}
@@ -1830,8 +1833,8 @@ const PGAttendance = () => {
                     ) : (
                       <div className="data">
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOut
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchOut
                           ? topRecord.punchOut
                           : "--:--"}
                       </div>
@@ -1848,17 +1851,17 @@ const PGAttendance = () => {
                     <marquee behavior="" direction="" scrollamount="3">
                       <h6>
                         {topRecord &&
-                        topRecord.date === formattedTodaysDate &&
-                        topRecord.punchOutLocation
+                          topRecord.date === formattedTodaysDate &&
+                          topRecord.punchOutLocation
                           ? topRecord.punchOutLocation
-                              .split(",")
-                              .filter(
-                                (part) =>
-                                  part.trim() !== "undefined" &&
-                                  part.trim() !== ""
-                              )
-                              .slice(0, -1)
-                              .join(", ")
+                            .split(",")
+                            .filter(
+                              (part) =>
+                                part.trim() !== "undefined" &&
+                                part.trim() !== ""
+                            )
+                            .slice(0, -1)
+                            .join(", ")
                           : ""}
                       </h6>
                     </marquee>
@@ -1871,8 +1874,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripStart
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripStart
                             ? topRecord.tripStart
                             : "--:--"}
                         </div>
@@ -1889,8 +1892,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripEnd
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripEnd
                             ? topRecord.tripEnd
                             : "--:--"}
                         </div>
@@ -1906,8 +1909,8 @@ const PGAttendance = () => {
                       ) : (
                         <div className="data">
                           {topRecord &&
-                          topRecord.date === formattedTodaysDate &&
-                          topRecord.tripDistance
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripDistance
                             ? topRecord.tripDistance
                             : "--:--"}
                         </div>
