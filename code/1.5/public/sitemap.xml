@@ -1,5 +1,5 @@
-<?xml version=""1.0"" encoding=""UTF-8""?>
-<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <!-- Homepage -->
     <url>
@@ -38,7 +38,7 @@
         <priority>0.7</priority>
     </url>
 
-    <!-- Example Property Pages (Can be auto-generated dynamically) -->
+    <!-- Example Property Pages -->
     <url>
         <loc>https://propdial.in/property-listings/property-1/</loc>
         <lastmod>2025-02-28</lastmod>

@@ -212,6 +212,7 @@ const AddInspection = () => {
         general: "",
         seepage: "",
         termites: "",
+        
         others: "",
         images: [],
         imagePreviews: [],
@@ -405,7 +406,163 @@ const AddInspection = () => {
                             </div>
                           </div>
                         </div>
-                        {inspectionType === "Move-In" && (
+                        {inspectionType === "Move-In"  && (
+                          <>
+                            {roomFixtures[inspection.roomName]?.map(
+                              (fixture, fixtureIndex) => (
+                        <div className="col-md-4"  key={fixtureIndex}>
+                          <div
+                            className="form_field w-100"
+                            style={{
+                              padding: "10px",
+                              borderRadius: "5px",
+                              border: "1px solid rgb(3 70 135 / 22%)",
+                            }}
+                          >
+                            <h6
+                              style={{
+                                fontSize: "15px",
+                                fontWeight: "500",
+                                marginBottom: "8px",
+                                color: "var(--theme-blue)",
+                              }}
+                            >
+                              {fixture}
+                            </h6>
+    {/* Status Selection */}
+    <select
+                                    onChange={(e) =>
+                                      handleFixtureStatusChange(
+                                        index,
+                                        fixture,
+                                        e.target.value,
+                                        "status"
+                                      )
+                                    }
+                                    style={{
+                                      paddingLeft: "10px",                                    
+                                      outline: "none",
+                                    }}
+                                    onFocus={(e) => (e.target.style.border = "1px solid var(--theme-blue)")}
+                                    
+                                  >
+                                    <option value="">Select Status</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Broken">
+                                      Broken
+                                    </option>
+                                    <option value="Bad">Bad</option>
+                                    <option value="Clean">Clean</option>
+                                    <option value="Dirty">Dirty</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Not Working">Not Working</option>
+                                    <option value="Working">Working</option>
+
+                                  </select>
+<div className="vg12"></div>
+                                  {/* Remark Input */}
+                                  <textarea
+                                    type="text"
+                                    placeholder="Enter remark"
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleFixtureStatusChange(
+                                        index,
+                                        fixture,
+                                        e.target.value,
+                                        "remark"
+                                      )
+                                    }
+                                  />
+                         
+                          </div>
+                        </div>
+                            )
+                          )}
+                      
+                              
+                          
+                          </>
+                        )}
+                          {inspectionType === "Move-Out" && (
+                          <>
+                            {roomFixtures[inspection.roomName]?.map(
+                              (fixture, fixtureIndex) => (
+                        <div className="col-md-4"  key={fixtureIndex}>
+                          <div
+                            className="form_field w-100"
+                            style={{
+                              padding: "10px",
+                              borderRadius: "5px",
+                              border: "1px solid rgb(3 70 135 / 22%)",
+                            }}
+                          >
+                            <h6
+                              style={{
+                                fontSize: "15px",
+                                fontWeight: "500",
+                                marginBottom: "8px",
+                                color: "var(--theme-blue)",
+                              }}
+                            >
+                              {fixture}
+                            </h6>
+    {/* Status Selection */}
+    <select
+                                    onChange={(e) =>
+                                      handleFixtureStatusChange(
+                                        index,
+                                        fixture,
+                                        e.target.value,
+                                        "status"
+                                      )
+                                    }
+                                    style={{
+                                      paddingLeft: "10px",                                    
+                                      outline: "none",
+                                    }}
+                                    onFocus={(e) => (e.target.style.border = "1px solid var(--theme-blue)")}
+                                    
+                                  >
+                                    <option value="">Select Status</option>
+                                    <option value="Average">Average</option>
+                                    <option value="Broken">
+                                      Broken
+                                    </option>
+                                    <option value="Bad">Bad</option>
+                                    <option value="Clean">Clean</option>
+                                    <option value="Dirty">Dirty</option>
+                                    <option value="Excellent">Excellent</option>
+                                    <option value="Not Working">Not Working</option>
+                                    <option value="Working">Working</option>
+
+                                  </select>
+<div className="vg12"></div>
+                                  {/* Remark Input */}
+                                  <textarea
+                                    type="text"
+                                    placeholder="Enter remark"
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleFixtureStatusChange(
+                                        index,
+                                        fixture,
+                                        e.target.value,
+                                        "remark"
+                                      )
+                                    }
+                                  />
+                         
+                          </div>
+                        </div>
+                            )
+                          )}
+                      
+                              
+                          
+                          </>
+                        )}
+                          { inspectionType === "Full" && (
                           <>
                             {roomFixtures[inspection.roomName]?.map(
                               (fixture, fixtureIndex) => (

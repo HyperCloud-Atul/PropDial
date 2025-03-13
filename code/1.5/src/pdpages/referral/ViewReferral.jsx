@@ -68,7 +68,7 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
         </div>
         <div className="right">
           <img
-            src="./assets/img/icons/excel_logo.png"
+            src="/assets/img/icons/excel_logo.png"
             alt="propdial"
             className="excel_dowanload"
           />

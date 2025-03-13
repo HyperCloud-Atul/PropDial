@@ -191,7 +191,7 @@ const ViewInspections = () => {
                 Header: "Action",
                 accessor: "id",
                 Cell: ({ value }) => (
-                  <Link to={value} className="mobile_min_width">
+                  <Link to={`/inspection-report/${value}`} className="mobile_min_width">
                     View
                   </Link>
                 ),

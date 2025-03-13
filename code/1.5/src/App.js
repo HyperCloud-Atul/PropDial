@@ -33,6 +33,7 @@ import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
 import ViewInspection from "./pdpages/inspection/ViewInspection";
+import InspectionDetails from "./pdpages/inspection/InspectionDetails";
 import AddInspection from "./pdpages/inspection/AddInspection";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 import HowUse from "./pdpages/howUse/HowUse";
@@ -119,6 +120,7 @@ import PGReferral from "./pdpages/referral/PGReferral";
 import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
 import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 import Faq from "./pdpages/faq/Faq";
+import PGBlogs from "./pdpages/blogs/PGBlogs";
 // New component import end
 
 // import Home from "./pdpages/home/Home";
@@ -539,6 +541,11 @@ function App() {
                         path="/privacypolicy"
                         element={<PGPriacyPolicy />}
                       ></Route>
+ <Route
+                        path="/blogs"
+                        element={<PGBlogs />}
+                      ></Route>
+
                       <Route path="/terms" element={<PGTerms />}></Route>
                       <Route path="/about-us" element={<PGAboutUs />}></Route>
                       <Route
@@ -614,6 +621,12 @@ function App() {
                         path="/inspection/:propertyid"
                         element={<ViewInspection></ViewInspection>}
                       ></Route>
+                            <Route
+                        path="/inspection-report/:inspectionid"
+                        element={<InspectionDetails></InspectionDetails>}
+                      ></Route>
+
+
                       <Route
                         path="/add-inspection/:propertyid/:inspectionId?"
                         element={<AddInspection />}
