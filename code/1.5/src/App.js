@@ -628,7 +628,7 @@ function App() {
 
 
                       <Route
-                        path="/add-inspection/:propertyid/:inspectionId?"
+                        path="/add-inspection/:inspectionId"
                         element={<AddInspection />}
                       />
                       <Route

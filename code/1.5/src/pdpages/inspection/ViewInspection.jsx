@@ -23,47 +23,69 @@ const ViewInspections = () => {
   const [inspections, setInspections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const navigate = useNavigate();
   const { document: propertydoc, error: propertyerror } = useDocument(
     "properties-propdial",
     propertyid
   );
 
-  const handleAddInspection = (type) => {
+ 
+  const handleAddInspection = async (type) => {
     setShowPopup(false);
-    navigate(`/add-inspection/${propertyid}?type=${type}`);
+    setIsRedirecting(true); // Show loader
+  
+    try {
+      const newInspectionRef = await projectFirestore.collection("inspections").add({
+        propertyId: propertyid,
+        inspectionType: type,
+        createdBy: user.uid,
+        createdAt: new Date(),
+      });
+  
+      const newInspectionId = newInspectionRef.id;
+  
+      // Redirect to new inspection form with created document ID
+      navigate(`/add-inspection/${newInspectionId}`);
+    } catch (error) {
+      console.error("Error creating new inspection document:", error);
+    } finally {
+      setIsRedirecting(false); // Hide loader
+    }
   };
+  
 
   useEffect(() => {
-    const fetchInspections = async () => {
-      try {
-        const snapshot = await projectFirestore
-          .collection("inspections")
-          .where("propertyId", "==", propertyid)
-          .get();
-
-        if (!snapshot.empty) {
-          const inspectionData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setInspections(inspectionData);
-        } else {
-          console.log("No inspections found for this property.");
-          setInspections([]);
+    if (!propertyid) return;
+  
+    // Firestore real-time listener
+    const unsubscribe = projectFirestore
+      .collection("inspections")
+      .where("propertyId", "==", propertyid)
+      .onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const inspectionData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setInspections(inspectionData);
+          } else {
+            console.log("No inspections found for this property.");
+            setInspections([]);
+          }
+          setLoading(false);
+        },
+        (error) => {
+          console.error("Error fetching inspections:", error);
+          setLoading(false);
         }
-      } catch (error) {
-        console.error("Error fetching inspections:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (propertyid) {
-      fetchInspections();
-    }
+      );
+  
+    // Cleanup function to unsubscribe on component unmount
+    return () => unsubscribe();
   }, [propertyid]);
+  
 
   const deleteImagesFromStorage = async (inspectionDoc) => {
     try {
@@ -191,9 +213,14 @@ const ViewInspections = () => {
                 Header: "Action",
                 accessor: "id",
                 Cell: ({ value }) => (
-                  <Link to={`/inspection-report/${value}`} className="mobile_min_width">
+                <div>
+                    <Link to={`/inspection-report/${value}`} className="mobile_min_width">
                     View
                   </Link>
+                  <Link to={`/add-inspection/${value}`} className="mobile_min_width">
+                  Edit
+                </Link>
+                </div>
                 ),
               },
     ],
@@ -209,6 +236,12 @@ const ViewInspections = () => {
   return (
     <>
     <div className="pg_min_height">
+    {isRedirecting && (
+  <div className="loader-overlay">
+    <div className="loader">Redirecting...</div>
+  </div>
+)}
+
     {user && user.status === "active" ? (
         <div className="top_header_pg pg_bg property_keys_pg property_inspection_pg">
           <ScrollToTop />
@@ -292,10 +325,11 @@ const ViewInspections = () => {
                 <div>No Inspection Yet!</div>
               </div>
             )}
-           
+           {inspections && inspections.length !== 0 && (
             <div className="user-single-table table_filter_hide mt-3">
                   <ReactTable tableColumns={columns} tableData={inspections} />
                 </div>
+                 )}
           </div>
         </div>
       ) : (
