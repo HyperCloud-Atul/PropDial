@@ -1,86 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { projectFirestore, timestamp } from "../../firebase/config";
 import { projectStorage } from "../../firebase/config";
-import { FaPlus, FaTrash } from "react-icons/fa"; // Plus aur delete icon ke liye
+import imageCompression from "browser-image-compression";
+import { FaPlus, FaTrash } from "react-icons/fa"; 
+import {
+  BarLoader,
+} from "react-spinners";
 const AddInspection = () => {
   const { inspectionId } = useParams();
   const [rooms, setRooms] = useState([]);
   const [inspectionData, setInspectionData] = useState({});
   const [activeRoom, setActiveRoom] = useState(null);
   const [propertyId, setPropertyId] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState({}); // Track upload progress
+  const [uploadProgress, setUploadProgress] = useState({});
+  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [show, setShow] = useState(false);
 
-//   useEffect(() => {
-//     const fetchInspection = async () => {
-//       try {
-//         const inspectionDoc = await projectFirestore.collection("inspections").doc(inspectionId).get();
-//         if (inspectionDoc.exists) {
-//           const inspectionData = inspectionDoc.data();
-//           setPropertyId(inspectionData.propertyId);
-
-//           if (inspectionData.rooms) {
-//             const formattedRooms = {};
-//             inspectionData.rooms.forEach((room) => {
-//               formattedRooms[room.roomId] = room;
-//             });
-//             setInspectionData(formattedRooms);
-//           }
-//         } else {
-//           console.error("Inspection not found!");
-//         }
-//       } catch (error) {
-//         console.error("Error fetching inspection:", error);
-//       }
-//     };
-
-//     fetchInspection();
-//   }, [inspectionId]);
-
-//   useEffect(() => {
-//     if (!propertyId) return;
-
-//     const fetchRooms = async () => {
-//       try {
-//         const snapshot = await projectFirestore
-//           .collection("propertylayouts")
-//           .where("propertyId", "==", propertyId)
-//           .get();
-
-//         const roomsData = snapshot.docs.map((doc) => ({
-//           id: doc.id,
-//           roomName: doc.data().roomName,
-//         }));
-
-//         setRooms(roomsData);
-
-//         setInspectionData((prevData) => {
-//           const newData = { ...prevData };
-//           roomsData.forEach((room) => {
-//             if (!newData[room.id]) {
-//               newData[room.id] = {
-//                 roomId: room.id,
-//                 roomName: room.roomName,
-//                 seepage: "",
-//                 seepageRemark: "",
-//                 termites: "",
-//                 termitesRemark: "",
-//                 otherIssue: "",
-//                 otherIssueRemark: "",
-//                 generalRemark: "",
-//               };
-//             }
-//           });
-//           return newData;
-//         });
-//       } catch (error) {
-//         console.error("Error fetching rooms:", error);
-//       }
-//     };
-
-//     fetchRooms();
-//   }, [propertyId]);
-
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
 useEffect(() => {
     if (!inspectionId) return;
@@ -148,83 +88,66 @@ useEffect(() => {
       });
   
     return () => unsubscribe();
-  }, [propertyId]);
-  
+  }, [propertyId]); 
 
-  // const handleImageUpload = async (e, roomId) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
   
-  //   const storageRef = projectStorage.ref(`inspection_images/${inspectionId}/${roomId}/${file.name}`);
-  //   const uploadTask = storageRef.put(file);
-  
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       console.log(`Upload Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100}%`);
-  //     },
-  //     (error) => {
-  //       console.error("Error uploading image:", error);
-  //     },
-  //     async () => {
-  //       const url = await storageRef.getDownloadURL();
-  //       setInspectionData((prev) => ({
-  //         ...prev,
-  //         [roomId]: {
-  //           ...prev[roomId],
-  //           images: [...(prev[roomId]?.images || []), { url, name: file.name }],
-  //         },
-  //       }));
-  //     }
-  //   );
-  // };
-  
-  // const handleImageDelete = async (roomId, image) => {
-  //   const storageRef = projectStorage.ref(`inspection_images/${inspectionId}/${roomId}/${image.name}`);
-  
-  //   try {
-  //     await storageRef.delete();
-  //     setInspectionData((prev) => ({
-  //       ...prev,
-  //       [roomId]: {
-  //         ...prev[roomId],
-  //         images: prev[roomId]?.images?.filter((img) => img.url !== image.url),
-  //       },
-  //     }));
-  //     console.log("Image deleted successfully.");
-  //   } catch (error) {
-  //     console.error("Error deleting image:", error);
-  //   }
-  // };
   const handleImageUpload = async (e, roomId) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    const storageRef = projectStorage.ref(`inspection_images/${inspectionId}/${roomId}/${file.name}`);
-    const uploadTask = storageRef.put(file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
-      },
-      (error) => {
-        console.error("Error uploading image:", error);
-      },
-      async () => {
-        const url = await storageRef.getDownloadURL();
-        setInspectionData((prev) => ({
-          ...prev,
-          [roomId]: {
-            ...prev[roomId],
-            images: [...(prev[roomId]?.images || []), { url, name: file.name }],
-          },
-        }));
-        setUploadProgress((prev) => ({ ...prev, [file.name]: 100 })); // Mark upload as complete
-      }
-    );
+  
+    setShow(true); // Start uploading state
+  
+    try {
+      // Image Compression Settings
+      const options = {
+        maxSizeMB: 0.2, // Maximum size 200KB
+        maxWidthOrHeight: 1024, // Resize if necessary
+        useWebWorker: true,
+      };
+  
+      // Compress Image
+      const compressedFile = await imageCompression(file, options);
+  
+      // Upload Process
+      const storageRef = projectStorage.ref(
+        `inspection_images/${inspectionId}/${roomId}/${compressedFile.name}`
+      );
+      const uploadTask = storageRef.put(compressedFile);
+  
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
+        },
+        (error) => {
+          console.error("Error uploading image:", error);
+          setShow(false); // Stop uploading state on error
+        },
+        async () => {
+          try {
+            const url = await storageRef.getDownloadURL();
+            setInspectionData((prev) => ({
+              ...prev,
+              [roomId]: {
+                ...prev[roomId],
+                images: [...(prev[roomId]?.images || []), { url, name: compressedFile.name }],
+              },
+            }));
+            setUploadProgress((prev) => ({ ...prev, [file.name]: 100 })); // Mark upload as complete
+          } catch (error) {
+            console.error("Error getting download URL:", error);
+          } finally {
+            setShow(false); // Stop uploading state after completion
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Image compression error:", error);
+      setShow(false); // Stop uploading state if compression fails
+    }
   };
+  
 
   const handleImageDelete = async (roomId, image) => {
     const storageRef = projectStorage.ref(`inspection_images/${inspectionId}/${roomId}/${image.name}`);
@@ -238,12 +161,11 @@ useEffect(() => {
           images: prev[roomId]?.images?.filter((img) => img.url !== image.url),
         },
       }));
-      console.log("Image deleted successfully.");
+      alert("Image deleted successfully.");
     } catch (error) {
       console.error("Error deleting image:", error);
     }
   };
-
 
   const handleChange = (roomId, field, value) => {
     setInspectionData((prev) => ({
@@ -432,14 +354,9 @@ useEffect(() => {
                   style={{ position: "absolute", top: "5px", right: "5px", cursor: "pointer" }} 
                   onClick={() => handleImageDelete(activeRoom, image)} 
                 />
-                {uploadProgress[image.name] !== undefined && uploadProgress[image.name] < 100 && (
-                  <div style={{ width: "100px", height: "5px", background: "#ccc", marginTop: "5px" }}>
-                    <div 
-                      style={{ 
-                        width: `${uploadProgress[image.name]}%`, 
-                        height: "5px", background: "green" 
-                      }} 
-                    ></div>
+                {isImageUploading && (
+                  <div >
+                    Uploadiiing
                   </div>
                 )}
                 
@@ -456,11 +373,20 @@ useEffect(() => {
                 Final Submit
               </button>
             </div>
+
+
           )}
         </>
       ) : (
         <p>Loading property details...</p>
       )}
+
+<Modal show={show} centered className="uploading_modal">
+   <h6 style={{
+    color:"var(--theme-green2)"
+   }}>Uploading....</h6>    
+<BarLoader color="var(--theme-green2)" loading={true} height={10} />
+      </Modal>
     </div>
   );
 };
