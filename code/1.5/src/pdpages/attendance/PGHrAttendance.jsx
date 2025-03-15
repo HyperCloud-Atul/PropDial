@@ -170,6 +170,7 @@ const PGHrAttendance = () => {
 
   const [staffCount, setStaffCount] = useState();
   const [staffAttendanceONCount, setStaffAttendanceONCount] = useState();
+  const [optionsCity, setOptionsCity] = useState([]);
   const [options, setOptions] = useState([]);
 
   const [currentMonthRecords, setCurrentMonthRecords] = useState();
@@ -269,18 +270,27 @@ const PGHrAttendance = () => {
       const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
           if (!snapshot.empty) {
-            let results = [];
+            let names = [];
+            let cities = []
             snapshot.docs.forEach((doc) => {
               // results.push({ ...doc.data(), id: doc.id });
-              results.push({ name: doc.data().fullName, id: doc.id });
+              names.push({ name: doc.data().fullName, id: doc.id });
+              cities.push({ city: doc.data().city, id: doc.id });
             });
 
             // console.log("Staff for those attendance is ON:  ", results)
 
             // setAttendanceData(results);
-            setOptions(results);
 
-            setStaffAttendanceONCount(results && results.length);
+            const uniqueCities = cities.filter((obj, index, self) =>
+              index === self.findIndex((o) => o.city === obj.city)
+            );
+            console.log("uniqueCities: ", uniqueCities)
+
+            setOptions(names);
+            setOptionsCity(uniqueCities)
+
+            setStaffAttendanceONCount(names && names.length);
           }
         },
         (error) => {
@@ -294,6 +304,101 @@ const PGHrAttendance = () => {
       console.error("Error fetching second last record:", error);
     }
   };
+
+  const handleCityCahnge = (e) => {
+    console.log("handleCityChange: ", e.target.value);
+    console.log("filtertype: ", filterType);
+
+    e.target.value === ""
+      ? setStaffFilter("all")
+      : setStaffFilter(e.target.value);
+
+    let recordRef;
+    try {
+      // recordRef = projectFirestore
+      //   .collection("attendance-propdial")
+      //   .where("userCity", "==", e.target.value)
+      //   // .where("date", "==", formattedYesterddayDate)
+      //   .orderBy("createdAt", "desc");
+
+      if (filterType === "yesterday") {
+        console.log("In filtertype: yesterday");
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("date", "==", formattedYesterddayDate)
+          .orderBy("createdAt", "desc");
+
+      } else if (filterType === "thismonth") {
+        console.log("In filtertype: thismonth");
+        const selectedMonthIndex = months.indexOf(selectedMonth);
+
+        const firstDay = new Date(selectedYear, selectedMonthIndex, 1);
+
+        const lastDay = new Date(
+          selectedYear,
+          selectedMonthIndex + 1,
+          0,
+          23,
+          59,
+          59
+        );
+
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("createdAt", ">=", firstDay)
+          .where("createdAt", "<=", lastDay)
+          .orderBy("createdAt", "desc");
+
+      } else if (filterType === "thisweek") {
+        console.log("In filtertype: thisweek");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("createdAt", ">=", startWeekDate)
+          .where("createdAt", "<=", endWeekDate)
+          .orderBy("createdAt", "desc");
+
+      } else {
+        console.log("In filtertype: today");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("date", "==", formattedTodaysDate)
+          .orderBy("createdAt", "desc");
+      }
+
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          let results = [];
+
+          if (!snapshot.empty) {
+            console.log("snapshot is not empty");
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)
+          }
+
+          setAttendanceData(results);
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+
+  }
 
   const handleStaffCahnge = (e) => {
     console.log("handleStaffChange: ", e.target.value);
@@ -1666,6 +1771,16 @@ const PGHrAttendance = () => {
                 <div className="right">
                   <div className="filters">
                     <div className="right">
+                      <div className="icon_dropdown">
+                        <select onChange={handleCityCahnge}>
+                          <option value="">All City</option>
+                          {optionsCity.map((item) => (
+                            <option key={item.city} value={item.city}>
+                              {item.city}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <div className="icon_dropdown">
                         <select onChange={handleStaffCahnge}>
                           <option value="">All Staff</option>
