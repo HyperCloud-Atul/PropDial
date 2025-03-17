@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore, timestamp } from "../../firebase/config";
+import firebase from "firebase";
 import { useDocument } from "../../hooks/useDocument";
 import { projectStorage } from "../../firebase/config";
 import imageCompression from "browser-image-compression";
@@ -12,13 +15,15 @@ import ScrollToTop from "../../components/ScrollToTop";
 import PropertySummaryCard from "../property/PropertySummaryCard";
 const AddInspection = () => {
   const { inspectionId } = useParams();
+  const { user } = useAuthContext();
   const [rooms, setRooms] = useState([]);
   const [inspectionData, setInspectionData] = useState({});
   const [activeRoom, setActiveRoom] = useState(null);
   const [propertyId, setPropertyId] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({});
-  const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isDataSaving, setIsDataSaving] = useState(false);
   const [show, setShow] = useState(false);
+  const [afterSaveModal, setAfterSaveModal] = useState(false);
   const [propertydoc, setPropertyDoc] = useState(null);
   const [propertyerror, setPropertyError] = useState(null);
   const [inspectionType, setInspectionType] = useState("");
@@ -232,18 +237,67 @@ const AddInspection = () => {
     return className;
   };
 
+  // const handleSave = async () => {
+  //   try {
+  //     await projectFirestore
+  //       .collection("inspections")
+  //       .doc(inspectionId)
+  //       .update({
+  //         rooms: Object.values(inspectionData),
+  //         updatedAt: timestamp.now(),
+  //       });
+  //     alert("Inspection data saved successfully!");
+  //   } catch (error) {
+  //     console.error("Error saving inspection:", error);
+  //   }
+  // };
+
+  // const handleFinalSubmit = async () => {
+  //   if (
+  //     !window.confirm(
+  //       "Final Submit ke baad aap isko edit nahi kar paayenge. Kya aap sure hain?"
+  //     )
+  //   ) {
+  //     return;
+  //   }
+
+  //   try {
+  //     await projectFirestore
+  //       .collection("inspections")
+  //       .doc(inspectionId)
+  //       .update({
+  //         rooms: Object.values(inspectionData),
+  //         finalSubmit: true,
+  //         updatedAt: timestamp.now(),
+  //       });
+  //     alert("Inspection data successfully finalized!");
+  //   } catch (error) {
+  //     console.error("Error in final submit:", error);
+  //   }
+  // };
+
   const handleSave = async () => {
+    setIsDataSaving(true);
+
     try {
       await projectFirestore
         .collection("inspections")
         .doc(inspectionId)
         .update({
           rooms: Object.values(inspectionData),
-          updatedAt: timestamp.now(),
+          lastUpdatedAt: timestamp.now(),
+          lastUpdatedBy: user.uid,
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.uid,
+          }),
         });
-      alert("Inspection data saved successfully!");
+      setIsDataSaving(false);
+      setAfterSaveModal(true);
     } catch (error) {
       console.error("Error saving inspection:", error);
+    } finally {
+      setIsDataSaving(false);
     }
   };
 
@@ -264,6 +318,10 @@ const AddInspection = () => {
           rooms: Object.values(inspectionData),
           finalSubmit: true,
           updatedAt: timestamp.now(),
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.uid,
+          }),
         });
       alert("Inspection data successfully finalized!");
     } catch (error) {
@@ -281,19 +339,17 @@ const AddInspection = () => {
               <div className="row row_reverse_991">
                 <div className="col-lg-6">
                   <div className="title_card with_title mobile_full_575 mobile_gap h-100">
-                    <h2 className="text-center">
-                      {inspectionType} Inspection
-                    </h2>
+                    <h2 className="text-center">{inspectionType} Inspection</h2>
                     <div className="inspection_type_img text-center mt-3">
                       <img
                         src={
                           inspectionType === "Regular"
-                            ? "/assets/img/inspection3.png"
+                            ? "/assets/img/regular.png"
                             : inspectionType === "Move-In"
-                            ? "/assets/img/check-in.png"
+                            ? "/assets/img/movein.png"
                             : inspectionType === "Move-Out"
-                            ? "/assets/img/check-out.png"
-                            : "/assets/img/inspection1.png" // Default image
+                            ? "/assets/img/moveout.png"
+                            : "/assets/img/full.png" // Default image
                         }
                         alt={`${inspectionType} Inspection`}
                       />
@@ -370,7 +426,7 @@ const AddInspection = () => {
                   </button>
                 ))}
               </div>
-<div className="vg22"></div>
+              <div className="vg22"></div>
               {activeRoom && (
                 <div>
                   {/* <h3>
@@ -380,14 +436,14 @@ const AddInspection = () => {
                   <form className="add_inspection_form">
                     <div className="aai_form">
                       <div className="row row_gap_20">
-                        <div className="col-md-3">
+                        <div className="col-xl-3 col-md-6">
                           <div
                             className="form_field w-100"
                             style={{
                               padding: "10px",
                               borderRadius: "5px",
                               border: "1px solid rgb(3 70 135 / 22%)",
-                              background:"white"
+                              background: "white",
                             }}
                           >
                             <h6
@@ -466,14 +522,14 @@ const AddInspection = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-xl-3 col-md-6">
                           <div
                             className="form_field w-100"
                             style={{
                               padding: "10px",
                               borderRadius: "5px",
                               border: "1px solid rgb(3 70 135 / 22%)",
-                              background:"white"
+                              background: "white",
                             }}
                           >
                             <h6
@@ -552,14 +608,14 @@ const AddInspection = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-xl-3 col-md-6">
                           <div
                             className="form_field w-100"
                             style={{
                               padding: "10px",
                               borderRadius: "5px",
                               border: "1px solid rgb(3 70 135 / 22%)",
-                              background:"white"
+                              background: "white",
                             }}
                           >
                             <h6
@@ -642,14 +698,14 @@ const AddInspection = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-xl-3 col-md-6">
                           <div
                             className="form_field w-100"
                             style={{
                               padding: "10px",
                               borderRadius: "5px",
                               border: "1px solid rgb(3 70 135 / 22%)",
-                              background:"white"
+                              background: "white",
                             }}
                           >
                             <h6
@@ -660,13 +716,13 @@ const AddInspection = () => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                              General Remark*
+                              General Remark
                             </h6>
                             <div className="field_box theme_radio_new">
                               <textarea
-                              style={{
-                                minHeight:"104px"
-                              }}
+                                style={{
+                                  minHeight: "104px",
+                                }}
                                 placeholder="General Remark"
                                 value={
                                   inspectionData[activeRoom]?.generalRemark ||
@@ -683,17 +739,17 @@ const AddInspection = () => {
                               />
                             </div>
                           </div>
-
-                        
                         </div>
                         <div className="col-12">
-                            {/* Image Upload and Preview Section */}
-                            <div    style={{
+                          {/* Image Upload and Preview Section */}
+                          <div
+                            style={{
                               padding: "10px",
                               borderRadius: "5px",
                               border: "1px solid rgb(3 70 135 / 22%)",
-                              background:"white"
-                            }}>
+                              background: "white",
+                            }}
+                          >
                             <h6
                               style={{
                                 fontSize: "15px",
@@ -702,90 +758,91 @@ const AddInspection = () => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                              Upload images*
+                              Upload images{" "}
+                              <span
+                                style={{
+                                  fontSize: "13px",
+                                }}
+                              >
+                                (Max 10 images can be uploaded.)
+                              </span>
                             </h6>
                             <div className="add_and_images">
-                            {inspectionData[activeRoom]?.images?.map(
-                              (image, index) => (
+                              {inspectionData[activeRoom]?.images?.map(
+                                (image, index) => (
+                                  <div
+                                    key={index}
+                                    className="uploaded_images relative"
+                                  >
+                                    <img src={image.url} alt="Uploaded" />
+                                    <div className="trash_icon">
+                                      <FaTrash
+                                        size={14}
+                                        color="red"
+                                        onClick={() =>
+                                          handleImageDelete(activeRoom, image)
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                              <div>
                                 <div
-                                  key={index}                                
-                                  className="uploaded_images relative"
+                                  onClick={() =>
+                                    document
+                                      .getElementById(
+                                        `file-input-${activeRoom}`
+                                      )
+                                      .click()
+                                  }
+                                  className="add_icon"
                                 >
-                                  <img
-                                    src={image.url}
-                                    alt="Uploaded"                                   
-                                  />
-                                 <div className="trash_icon">
-                                 <FaTrash
-                                    size={14}
-                                    color="red"                                   
-                                    onClick={() =>
-                                      handleImageDelete(activeRoom, image)
-                                    }
-                                  /> 
-                                  </div>                                 
+                                  <FaPlus size={24} color="#555" />
                                 </div>
-                              )
-                            )}
-                            <div>
-                            <div
-                              onClick={() =>
-                                document
-                                  .getElementById(`file-input-${activeRoom}`)
-                                  .click()
-                              }
-                           
-                              className="add_icon"
-                            >
-                              <FaPlus size={24} color="#555" />
+                                <input
+                                  type="file"
+                                  id={`file-input-${activeRoom}`}
+                                  style={{ display: "none" }}
+                                  onChange={(e) =>
+                                    handleImageUpload(e, activeRoom)
+                                  }
+                                />
+                              </div>
                             </div>
-                            <input
-                              type="file"
-                              id={`file-input-${activeRoom}`}
-                              style={{ display: "none" }}
-                              onChange={(e) => handleImageUpload(e, activeRoom)}
-                            />
-                            </div>
-                            </div>
-                         
                           </div>
-
-                        
-                         
-
-                        
-                        </div>
-                        <div className="col-12">
-
                         </div>
                       </div>
                     </div>
                   </form>
                   <div className="bottom_fixed_button">
-                
+                    <div className="next_btn_back">
+                      <button
+                        className="theme_btn no_icon btn_fill full_width"
+                        onClick={handleFinalSubmit}
+                        disabled={!isFinalSubmitEnabled()}
+                        style={{
+                          opacity: !isFinalSubmitEnabled() ? 0.5 : 1,
+                          cursor: !isFinalSubmitEnabled()
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                      >
+                        Final Submit
+                      </button>
 
-
-                <div className="next_btn_back">
-                <button
-  className="theme_btn no_icon btn_fill full_width"
-  onClick={handleFinalSubmit}
-  disabled={!isFinalSubmitEnabled()}
-  style={{
-    opacity: !isFinalSubmitEnabled() ? 0.4 : 1,
-    cursor: !isFinalSubmitEnabled() ? "not-allowed" : "pointer",
-  }}
->
-  Final Submit
-</button>
-
-                  <button
-                    className="theme_btn no_icon btn_fill full_width"
-                    onClick={handleSave}
-                  >
-                    Save Inspection
-                  </button>
-                </div>
-              </div>
+                      <button
+                        className="theme_btn no_icon btn_fill full_width"
+                        onClick={handleSave}
+                        disabled={isDataSaving}
+                        style={{
+                          opacity: isDataSaving ? "0.5" : "1",
+                        }}
+                      >
+                        {isDataSaving ? "Saving...." : "Save Inspection"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </>
@@ -805,6 +862,98 @@ const AddInspection = () => {
           Uploading....
         </h6>
         <BarLoader color="var(--theme-green2)" loading={true} height={10} />
+      </Modal>
+
+      <Modal
+        show={afterSaveModal}
+        onHide={() => setAfterSaveModal(false)}
+        className="delete_modal inspection_modal"
+        centered
+      >
+        <h5 className="done_div text-center">
+          <img src="/assets/img/icons/check-mark.png" alt=""  style={{
+            height:"65px",
+            width:"auto"
+          }}/>
+          <h5 className="text_green2 mb-0">Saved Successfully</h5>
+        </h5>
+        <h6 className="text-center text_black mb-0">What would you like to do next?</h6>
+        <div className="inspection_types">
+          <Link className="it_single" onClick={() => setAfterSaveModal(false)}>
+            <div
+              className="d-flex align-items-center"
+              style={{
+                gap: "5px",
+              }}
+            >
+              <img src="/assets/img/icons/continuous.png" alt="" />
+              <div>
+                <h5>Continue</h5>
+                <h6>Stay on this page and continue working</h6>
+              </div>
+            </div>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#303030"
+            >
+              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            </svg>
+          </Link>
+          <Link className="it_single" to={`/inspection-report/${inspectionId}`}>
+            <div
+              className="d-flex align-items-center"
+              style={{
+                gap: "5px",
+              }}
+            >
+              <img src="/assets/img/icons/view-report.png" alt="" />
+              <div>
+                <h5>Go to Report</h5>
+                <h6>View and manage the details of this inspection</h6>
+              </div>
+            </div>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#303030"
+            >
+              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            </svg>
+          </Link>
+          <Link className="it_single" to={`/inspection/${propertyId}`}>
+            <div
+              className="d-flex align-items-center"
+              style={{
+                gap: "5px",
+              }}
+
+            >
+              <img src="/assets/img/icons/view-all.png" alt="" />
+              <div>
+                <h5>View All</h5>
+                <h6>Return to the inspections list to see all records</h6>
+                
+              </div>
+            </div>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#303030"
+            >
+              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+            </svg>
+          </Link>
+        </div>
       </Modal>
     </div>
   );

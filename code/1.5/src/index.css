@@ -794,7 +794,7 @@ h2.card_title {
   padding: 22px;
   bottom: 0;
   background: whitesmoke;
-  z-index: 9999;
+  z-index: 999;
 }
 
 .next_btn_back {

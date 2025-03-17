@@ -63,24 +63,82 @@ const ViewInspections = () => {
     return () => unsubscribe();
   }, [propertyid]);
 
-  const handleAddInspection = async (type) => {
-    if (inspections.length > 0) {
-      // Get the last created inspection by sorting inspections by createdAt
-      const lastInspection = inspections
-        .slice()
-        .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())[0];
+  // const handleAddInspection = async (type) => {
+  //   if (inspections.length > 0) {
+  //     // Get the last created inspection by sorting inspections by createdAt
+  //     const lastInspection = inspections
+  //       .slice()
+  //       .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())[0];
   
-      if (lastInspection) {
-        if (lastInspection.inspectionType === type && !lastInspection.finalSubmit) {
-          alert("You cannot add a new inspection until the last one is finished.");
-          return;
+  //     if (lastInspection) {
+  //       if (lastInspection.inspectionType === type && !lastInspection.finalSubmit) {
+  //         alert("You cannot add a new inspection until the last one is finished.");
+  //         return;
+  //       }
+  //     }
+  //   }
+  
+  //   // Proceed with creating the new inspection if conditions are met
+  //   setShowPopup(false);
+  //   setIsRedirecting(true); // Show loader
+  
+  //   try {
+  //     const newInspectionRef = await projectFirestore.collection("inspections").add({
+  //       propertyId: propertyid,
+  //       inspectionType: type,
+  //       createdBy: user.uid,
+  //       createdAt: new Date(),
+  //       finalSubmit: false, // Default to false until submitted
+  //     });
+  
+  //     const newInspectionId = newInspectionRef.id;
+  //     navigate(`/add-inspection/${newInspectionId}`);
+  //   } catch (error) {
+  //     console.error("Error creating new inspection document:", error);
+  //   } finally {
+  //     setIsRedirecting(false);
+  //   }
+  // };
+  
+  const [lastInspections, setLastInspections] = useState({
+    Regular: null,
+    "Move-In": null,
+    "Move-Out": null,
+    Full: null,
+  });
+  
+  useEffect(() => {
+    if (inspections.length > 0) {
+      const lastPending = {
+        Regular: null,
+        "Move-In": null,
+        "Move-Out": null,
+        Full: null,
+      };
+  
+      ["Regular", "Move-In", "Move-Out", "Full"].forEach((type) => {
+        const pending = inspections
+          .filter((insp) => insp.inspectionType === type && !insp.finalSubmit)
+          .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate()); // Newest first
+  
+        if (pending.length > 0) {
+          lastPending[type] = pending[0]; // Latest pending inspection
         }
-      }
+      });
+  
+      setLastInspections(lastPending);
+    }
+  }, [inspections]);
+  const handleAddInspection = async (type) => {
+    if (lastInspections[type]) {
+      // Agar us type ka last inspection pending hai to usi page pe le jao
+      navigate(`/add-inspection/${lastInspections[type].id}`);
+      return;
     }
   
-    // Proceed with creating the new inspection if conditions are met
+    // Naya inspection create karo agar pending nahi hai
     setShowPopup(false);
-    setIsRedirecting(true); // Show loader
+    setIsRedirecting(true);
   
     try {
       const newInspectionRef = await projectFirestore.collection("inspections").add({
@@ -88,19 +146,19 @@ const ViewInspections = () => {
         inspectionType: type,
         createdBy: user.uid,
         createdAt: new Date(),
-        finalSubmit: false, // Default to false until submitted
+        finalSubmit: false, 
       });
   
-      const newInspectionId = newInspectionRef.id;
-      navigate(`/add-inspection/${newInspectionId}`);
+      navigate(`/add-inspection/${newInspectionRef.id}`);
     } catch (error) {
-      console.error("Error creating new inspection document:", error);
+      console.error("Error creating new inspection:", error);
     } finally {
       setIsRedirecting(false);
     }
   };
-  
+    
 
+  
   const deleteImagesFromStorage = async (inspectionDoc) => {
     try {
       const deleteImagePromises = [];
@@ -297,9 +355,9 @@ const ViewInspections = () => {
                     >
                       Add Inspection
                     </div>
-                    <Modal
+                    {/* <Modal
                       show={showPopup}
-                      // onHide={handleConfirmClose}
+                  
                       className="delete_modal inspection_modal"
                       centered
                     >
@@ -319,7 +377,7 @@ const ViewInspections = () => {
                         >
                           <span> Regular Inspection</span>
                           <img
-                            src="/assets/img/inspection3.png"
+                            src="/assets/img/regular.png"
                             alt="propdial"
                           />
                         </div>
@@ -328,14 +386,14 @@ const ViewInspections = () => {
                           className="it_single"
                         >
                           <span>Move-In Inspection</span>
-                          <img src="/assets/img/check-in.png" alt="propdial" />
+                          <img src="/assets/img/movein.png" alt="propdial" />
                         </div>
                         <div
                           onClick={() => handleAddInspection("Move-Out")}
                           className="it_single"
                         >
                           <span>Move-Out Inspection</span>
-                          <img src="/assets/img/check-out.png" alt="propdial" />
+                          <img src="/assets/img/moveout.png" alt="propdial" />
                         </div>
                         <div
                           onClick={() => handleAddInspection("Full")}
@@ -343,12 +401,46 @@ const ViewInspections = () => {
                         >
                           <span>Full Inspection</span>
                           <img
-                            src="/assets/img/inspection1.png"
+                            src="/assets/img/full.png"
                             alt="propdial"
                           />
                         </div>
                       </div>
-                    </Modal>
+ 
+
+                    </Modal> */}
+                    <Modal show={showPopup} className="delete_modal inspection_modal" centered>
+  <span className="material-symbols-outlined modal_close" onClick={() => setShowPopup(false)}>
+    close
+  </span>
+  <h5 className="text_blue text-center">Select Inspection Type</h5>
+
+  <div className="inspection_types">
+    {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
+      <div
+        key={type}
+        onClick={() =>
+          lastInspections[type]
+            ? navigate(`/add-inspection/${lastInspections[type].id}`) 
+            : handleAddInspection(type)
+        }
+        className={`it_single ${lastInspections[type] ? "disabled" : ""}`}
+      >
+        <span>
+          {type} Inspection{" "}
+          {lastInspections[type] && (
+            <div style={{ color: "var(--theme-red)", fontSize: "13px" }}> (Complete the last inspection first)</div>
+          )}
+        </span>
+        <img
+          src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
+          alt="propdial"
+        />
+      </div>
+    ))}
+  </div>
+</Modal>
+
                   </div>
                 </div>
                 <PropertySummaryCard
