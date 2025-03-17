@@ -264,7 +264,8 @@ const PhoneLogin_reCaptchaV2 = () => {
   const verifyOTP = async (e) => {
     if (otp === "" || otp === undefined || otp === null) return;
     try {
-      setIsLoading(true); // Start the loader
+      setIsLoading(true); // Start the loader     
+      
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
         setUser(user)
@@ -278,24 +279,24 @@ const PhoneLogin_reCaptchaV2 = () => {
 
         }
         else {//Existing User
-          console.log("Existing User Signed-In")
-          setIsLoading(false); // Start the loader
+          console.log("Existing User Signed-In")         
           allSliderVisible(false)
           navigate("/dashboard"); //Navigae to dashboard 
         }
       })
-
+      setIsLoading(false); // Start the loader
     }
     catch (error) {
       console.log("error.message", error.message);
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
       );
-
+      setIsLoading(false); // Start the loader
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
       }, 30000);
+     
     }
   }
   const toggleOtpVisibility = () => {
@@ -588,14 +589,14 @@ const PhoneLogin_reCaptchaV2 = () => {
               {isLoading && (
                 <button
                   className="theme_btn btn_fill w_full no_icon"
-                  onClick={verifyOTP}
+                  onClick={verifyOTP}                 
                 >
                   Confirm
                 </button>
               )}
               {!isLoading && (
                 <div className="text-center">
-                  <h6 className="text_green mb-2">Redirecting to Dashboard...</h6>
+                  <h6 className="text_green mb-2">Redirecting...</h6>
                   <BeatLoader color={"#00a8a8"} loading={true} />
                 </div>
               )}
