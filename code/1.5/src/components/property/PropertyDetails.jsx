@@ -30,13 +30,8 @@ import InactiveUserCard from "../InactiveUserCard";
 
 // component
 import PropertyImageGallery from "../PropertyImageGallery";
+import ScrollToTop from "../ScrollToTop";
 const PropertyDetails = () => {
-  // Scroll to the top of the page whenever the location changes start
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-  // Scroll to the top of the page whenever the location changes end
 
   // install Swiper modules
   SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
@@ -1156,6 +1151,7 @@ const PropertyDetails = () => {
 
   return (
     <>
+    <ScrollToTop/>
       {/* Change User Popup - Start */}
       <div
         className={
@@ -2528,6 +2524,22 @@ const PropertyDetails = () => {
                           },
                         }}
                       >
+                          <SwiperSlide>
+                       
+                       <Link to={`/inspection/${propertyid}`}>
+                         <div className="eicp_single">
+                           <div className="icon">
+                             <span className="material-symbols-outlined">
+                               pageview
+                             </span>
+                             <div className="text">
+                               <h6>{inspections && inspections.length}</h6>
+                               <h5>Inspections</h5>
+                             </div>
+                           </div>
+                         </div>
+                       </Link>
+                     </SwiperSlide>
                         {/* Documents */}
                         <SwiperSlide>
                           <Link to={`/propertydocumentdetails/${propertyid}`}>
@@ -2614,22 +2626,7 @@ const PropertyDetails = () => {
                             </div>
                           </Link>
                         </SwiperSlide>
-                        <SwiperSlide>
-                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
-                          <Link to={`/inspection/${propertyid}`}>
-                            <div className="eicp_single">
-                              <div className="icon">
-                                <span className="material-symbols-outlined">
-                                  pageview
-                                </span>
-                                <div className="text">
-                                  <h6>{inspections && inspections.length}</h6>
-                                  <h5>Inspections</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
+                      
                         {/* Transactions */}
                         {/* <SwiperSlide>
                           <Link to={`/transactions/${propertyid}`}>
