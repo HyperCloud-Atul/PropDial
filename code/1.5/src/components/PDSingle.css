@@ -581,8 +581,8 @@
   margin-top: -10px;
   position: relative;
   flex-direction: column;
-  padding-left: 10px;
-  padding-right: 10px;
+  /* padding-left: 10px;
+  padding-right: 10px; */
   border-left: 1px solid #dfdfdf;
   width: 15%;
   /* z-index: 2; */
@@ -601,6 +601,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.all_tenants .tc_single .wha_call_icon.final_submit .call_icon.wc_single{
+  height: 100%;
 }
 
 .all_tenants .tc_single .wha_call_icon .wc_single img {
@@ -628,10 +631,25 @@
   gap: 5px !important;
   width: 75%;
 }
+.all_tenants.inspection_card .tc_single .tenant_detail{
+  width: 100%;
+}
 
 .all_tenants .tc_single .tenant_detail .t_name {
   text-align: inherit;
   margin: 0px;
+}
+.all_tenants .tc_single .tenant_detail .i_areas{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.all_tenants .tc_single .tenant_detail .i_areas span{
+  background: #dfdfdf;
+  border-radius: 30px;
+  font-size: 12px;
+  margin-top: 2px;
+  padding: 4px 12px;
 }
 
 .all_tenants .tc_single .tenant_detail .t_number {
@@ -944,6 +962,9 @@ label.upload_img input {
   margin: auto;
   width: 1px;
   height: 100%;
+}
+.inspection_card .tc_single .wha_call_icon.final_submit:after{
+  content: none;
 }
 
 .owl-carousel .owl-item .wha_call_icon img {

@@ -243,6 +243,213 @@ opacity: 1;
   }
 }
 }
+.inspection_report{
+  .report{
+    .report_header{
+h1{
+  font-size: 25px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--theme-blue);
+  text-align: center;
+}
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24), 0 1px 4px 0 rgba(0, 0, 0, 0.12);  
+      border-radius: 12px;
+      background: white;
+     padding: 15px;
+     .rh_inner{
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-column-gap: 22px;
+      align-items: center;
+     }
+      .i_info {
+        display: flex
+    ;
+        align-items: center;
+        gap: 5px;
+        img{
+          height: 55px;
+        }
+        h6{
+          color: var(--theme-grey);
+          font-size: 16px;
+          font-weight: 400;
+          line-height: normal;
+        }
+        h5{
+          color: var(--light-black);
+          font-size: 18px;
+          font-weight: 500;
+          line-height: normal;
+        }
+    }
+    .logo{
+      text-align: center;
+      img{
+        height: 55px;
+      }
+      .company_address{
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        color: var(--theme-grey);
+        font-size: 12px;
+      }
+    }
+    }
+    .detail_card{
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-column-gap: 22px;
+      align-items: center;
+      .dc_single {
+        border: 1px solid #dfdfdf;       
+        border-radius: 10px;
+        background: var(--white-color);
+        padding: 15px;
+        overflow: hidden;
+        h2{        
+   
+          font-size: 16px;
+          color: var(--theme-blue);
+          font-weight: 500;
+          margin: -15px -15px 6px -15px;
+          padding: 6px 15px;
+          background: #f2f7ff;
+    
+        }
+        h5{
+          font-size: 16px;
+          color: var(--light-black);
+          font-weight: 500;
+        }
+        h6{
+          font-size: 14px;
+          color: var(--theme-grey);
+          font-weight: 400;
+          margin-top: 1px;
+        }
+    }
+    }
+    .room_wise_inspection{
+      .rwi_single{
+        border: 1px solid #dfdfdf;
+    border-radius: 10px;
+    background: var(--white-color);
+ 
+    overflow: hidden;
+    margin-top: 22px;
+    h2{        
+   font-size: 18px;
+      color: var(--light-black);
+      font-weight: 500;    
+      padding: 6px 15px;
+      background: rgb(239, 239, 239);
+      text-align: center;
+      
+
+    }
+    .issues{
+      .top{
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+     border-bottom: 1px solid rgb(209 209 209);
+     .i_single{
+      border-right: 1px solid rgb(209 209 209);
+      text-align: center;
+      padding: 15px;
+      position: relative;
+      &:last-child{
+        border-right: none;
+      }
+      h6{
+        font-size: 17px;
+        color: var(--light-black);
+        font-weight: 500;
+      }
+      h5{
+        width: 60px;
+        height: 25px;
+        border-radius: 5px;
+        display: flex;   
+        align-items: center;
+        
+        justify-content: center;
+        font-size: 16px;
+        margin: auto;
+        margin-top: 6px;
+        text-transform: capitalize;
+        &.no{
+          background: #e4ffe4;
+          color: var(--theme-green2);
+        }
+        &.yes{
+          background: #ffe6e6;
+          color: var(--theme-red);
+        }
+      }
+      p{
+        font-size: 15px;
+        color: var(--light-black);
+        margin-top: 10px;
+      }
+      img{
+        position: absolute;
+        top: 10px;
+        left: 18px;
+        z-index: 0;
+        opacity: 0.3;
+        height: 55px;
+        width: auto;
+      }
+     }
+      }
+      .bottom{
+        border-bottom: 1px solid rgb(209, 209, 209);
+        padding: 15px;
+        text-align: center;
+        h6{
+          font-size: 17px;
+          color: var(--light-black);
+          font-weight: 500;
+        }
+        p{
+          font-size: 15px;
+          color: var(--light-black);
+          margin-top: 10px;
+        }
+      }
+     
+    }
+    .images_area{
+      border-bottom: 1px solid rgb(209, 209, 209);
+      padding: 15px;
+      h6{
+        font-size: 17px;
+        color: var(--light-black);
+        font-weight: 500;
+        text-align: center;
+      }
+      .img_bunch {
+        margin-top: 12px;
+        display: flex
+    ;
+        flex-wrap: wrap;
+        gap: 15px;
+        img{
+          width: 15%;
+          aspect-ratio: 3/2;
+          border-radius: 5px;
+          object-fit: cover;
+
+        }
+    }
+    }
+      }
+    }
+  }
+}
 @media only screen and (max-width: 1199px) {
   .add_inspection_pg {
     .room-buttons {

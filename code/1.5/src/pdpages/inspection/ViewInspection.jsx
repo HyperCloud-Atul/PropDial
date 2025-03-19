@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { projectFirestore, projectStorage } from "../../firebase/config"; // Ensure you have projectStorage for image deletion
+import { projectFirestore, projectStorage } from "../../firebase/config";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useDocument } from "../../hooks/useDocument";
+import { useCollection } from "../../hooks/useCollection";
 import { Modal } from "react-bootstrap";
 import { useMemo } from "react";
-import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { format, subMonths } from "date-fns";
 
 // import component
 import ScrollToTop from "../../components/ScrollToTop";
@@ -22,19 +23,73 @@ const ViewInspections = () => {
   const { propertyid } = useParams();
   const { user } = useAuthContext();
   const [inspections, setInspections] = useState([]);
+  const [filteredInspections, setFilteredInspections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const navigate = useNavigate();
+  // Filters State
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedInspectionTypes, setSelectedInspectionTypes] = useState([]);
+  const [selectedDateRange, setSelectedDateRange] = useState("");
   const { document: propertydoc, error: propertyerror } = useDocument(
     "properties-propdial",
     propertyid
-  );  
+  );
+      // card and table view mode functionality start
+      const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
+  
+      const handleModeChange = (newViewMode) => {
+        setviewMode(newViewMode);
+      };
+      // card and table view mode functionality end
 
+  // fetch user
+  const { documents: dbUsers, error: dbuserserror } = useCollection(
+    "users-propdial",
+    ["status", "==", "active"]
+  );
+  const [dbUserState, setdbUserState] = useState(dbUsers);
+  useEffect(() => {
+    setdbUserState(dbUsers);
+  });
+
+  // useEffect(() => {
+  //   if (!propertyid) return;
+
+  //   // Firestore real-time listener
+  //   const unsubscribe = projectFirestore
+  //     .collection("inspections")
+  //     .where("propertyId", "==", propertyid)
+  //     .orderBy("createdAt", "desc")
+  //     .onSnapshot(
+  //       (snapshot) => {
+  //         if (!snapshot.empty) {
+  //           const inspectionData = snapshot.docs.map((doc) => ({
+  //             id: doc.id,
+  //             ...doc.data(),
+  //           }));
+  //           setInspections(inspectionData);
+  //         } else {
+  //           console.log("No inspections found for this property.");
+  //           setInspections([]);
+  //         }
+  //         setLoading(false);
+  //       },
+  //       (error) => {
+  //         console.error("Error fetching inspections:", error);
+  //         setLoading(false);
+  //       }
+  //     );
+
+  //   // Cleanup function to unsubscribe on component unmount
+  //   return () => unsubscribe();
+  // }, [propertyid]);
+
+  // Fetch Inspections from Firestore
   useEffect(() => {
     if (!propertyid) return;
 
-    // Firestore real-time listener
     const unsubscribe = projectFirestore
       .collection("inspections")
       .where("propertyId", "==", propertyid)
@@ -47,9 +102,10 @@ const ViewInspections = () => {
               ...doc.data(),
             }));
             setInspections(inspectionData);
+            setFilteredInspections(inspectionData);
           } else {
-            console.log("No inspections found for this property.");
             setInspections([]);
+            setFilteredInspections([]);
           }
           setLoading(false);
         },
@@ -59,54 +115,66 @@ const ViewInspections = () => {
         }
       );
 
-    // Cleanup function to unsubscribe on component unmount
     return () => unsubscribe();
   }, [propertyid]);
 
-  // const handleAddInspection = async (type) => {
-  //   if (inspections.length > 0) {
-  //     // Get the last created inspection by sorting inspections by createdAt
-  //     const lastInspection = inspections
-  //       .slice()
-  //       .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())[0];
-  
-  //     if (lastInspection) {
-  //       if (lastInspection.inspectionType === type && !lastInspection.finalSubmit) {
-  //         alert("You cannot add a new inspection until the last one is finished.");
-  //         return;
-  //       }
-  //     }
-  //   }
-  
-  //   // Proceed with creating the new inspection if conditions are met
-  //   setShowPopup(false);
-  //   setIsRedirecting(true); // Show loader
-  
-  //   try {
-  //     const newInspectionRef = await projectFirestore.collection("inspections").add({
-  //       propertyId: propertyid,
-  //       inspectionType: type,
-  //       createdBy: user.uid,
-  //       createdAt: new Date(),
-  //       finalSubmit: false, // Default to false until submitted
-  //     });
-  
-  //     const newInspectionId = newInspectionRef.id;
-  //     navigate(`/add-inspection/${newInspectionId}`);
-  //   } catch (error) {
-  //     console.error("Error creating new inspection document:", error);
-  //   } finally {
-  //     setIsRedirecting(false);
-  //   }
-  // };
-  
+  // **Filter Logic**
+  useEffect(() => {
+    let filtered = inspections;
+
+    // Search Filter
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (insp) =>
+          insp.inspectionType
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          insp.createdBy.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Inspection Type Filter
+    if (selectedInspectionTypes.length > 0) {
+      filtered = filtered.filter((insp) =>
+        selectedInspectionTypes.includes(insp.inspectionType)
+      );
+    }
+
+    // Date Range Filter
+    if (selectedDateRange) {
+      const now = new Date();
+      let filterDate = now;
+
+      if (selectedDateRange === "last3months") {
+        filterDate = subMonths(now, 3);
+      } else if (selectedDateRange === "last6months") {
+        filterDate = subMonths(now, 6);
+      } else if (selectedDateRange === "lastyear") {
+        filterDate = subMonths(now, 12);
+      }
+
+      filtered = filtered.filter(
+        (insp) => insp.createdAt.toDate() >= filterDate
+      );
+    }
+
+    setFilteredInspections(filtered);
+  }, [searchTerm, selectedInspectionTypes, selectedDateRange, inspections]);
+
+  // **Function to Toggle Inspection Type Filter**
+  const toggleInspectionType = (type) => {
+    setSelectedInspectionTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
+
   const [lastInspections, setLastInspections] = useState({
     Regular: null,
     "Move-In": null,
     "Move-Out": null,
     Full: null,
   });
-  
+
   useEffect(() => {
     if (inspections.length > 0) {
       const lastPending = {
@@ -115,40 +183,39 @@ const ViewInspections = () => {
         "Move-Out": null,
         Full: null,
       };
-  
+
       ["Regular", "Move-In", "Move-Out", "Full"].forEach((type) => {
         const pending = inspections
           .filter((insp) => insp.inspectionType === type && !insp.finalSubmit)
           .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate()); // Newest first
-  
+
         if (pending.length > 0) {
           lastPending[type] = pending[0]; // Latest pending inspection
         }
       });
-  
+
       setLastInspections(lastPending);
     }
   }, [inspections]);
   const handleAddInspection = async (type) => {
     if (lastInspections[type]) {
-      // Agar us type ka last inspection pending hai to usi page pe le jao
       navigate(`/add-inspection/${lastInspections[type].id}`);
       return;
     }
-  
-    // Naya inspection create karo agar pending nahi hai
     setShowPopup(false);
     setIsRedirecting(true);
-  
+
     try {
-      const newInspectionRef = await projectFirestore.collection("inspections").add({
-        propertyId: propertyid,
-        inspectionType: type,
-        createdBy: user.uid,
-        createdAt: new Date(),
-        finalSubmit: false, 
-      });
-  
+      const newInspectionRef = await projectFirestore
+        .collection("inspections")
+        .add({
+          propertyId: propertyid,
+          inspectionType: type,
+          createdBy: user.uid,
+          createdAt: new Date(),
+          finalSubmit: false,
+        });
+
       navigate(`/add-inspection/${newInspectionRef.id}`);
     } catch (error) {
       console.error("Error creating new inspection:", error);
@@ -156,9 +223,7 @@ const ViewInspections = () => {
       setIsRedirecting(false);
     }
   };
-    
 
-  
   const deleteImagesFromStorage = async (inspectionDoc) => {
     try {
       const deleteImagePromises = [];
@@ -249,7 +314,7 @@ const ViewInspections = () => {
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
       },
-    
+
       {
         Header: "Inspection Type",
         accessor: "inspectionType",
@@ -262,18 +327,33 @@ const ViewInspections = () => {
         Cell: ({ row }) => {
           const { id, finalSubmit } = row.original; // Get finalSubmit field
           return (
-            <div style={{ display: "flex", alignItems: "center" }} >
-              <Link to={`/inspection-report/${id}`} >
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Link to={`/inspection-report/${id}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#00a8a8"
+                >
                   <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
                 </svg>
               </Link>
               {/* Show Edit Icon only if finalSubmit is false */}
               {!finalSubmit && (
-                <Link to={`/add-inspection/${id}`}  style={{
-                  paddingLeft: "15px",
-                }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8">
+                <Link
+                  to={`/add-inspection/${id}`}
+                  style={{
+                    paddingLeft: "15px",
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#00a8a8"
+                  >
                     <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z" />
                   </svg>
                 </Link>
@@ -311,7 +391,6 @@ const ViewInspections = () => {
           </div>
         ),
       },
-    
     ],
     []
   );
@@ -324,20 +403,21 @@ const ViewInspections = () => {
     );
   }
 
+
+
   return (
     <>
       <div className="pg_min_height">
-      
- <Modal show={isRedirecting} centered className="uploading_modal">
-        <h6
-          style={{
-            color: "var(--theme-green2)",
-          }}
-        >
-        Redirecting...
-        </h6>
-        <BarLoader color="var(--theme-green2)" loading={true} height={10} />
-      </Modal>
+        <Modal show={isRedirecting} centered className="uploading_modal">
+          <h6
+            style={{
+              color: "var(--theme-green2)",
+            }}
+          >
+            Redirecting...
+          </h6>
+          <BarLoader color="var(--theme-green2)" loading={true} height={10} />
+        </Modal>
         {user && user.status === "active" ? (
           <div className="top_header_pg pg_bg property_keys_pg property_inspection_pg">
             <ScrollToTop />
@@ -355,9 +435,8 @@ const ViewInspections = () => {
                     >
                       Add Inspection
                     </div>
-                    {/* <Modal
+                    <Modal
                       show={showPopup}
-                  
                       className="delete_modal inspection_modal"
                       centered
                     >
@@ -370,77 +449,48 @@ const ViewInspections = () => {
                       <h5 className="text_blue text-center">
                         Select Inspection Type
                       </h5>
+
                       <div className="inspection_types">
-                        <div
-                          onClick={() => handleAddInspection("Regular")}
-                          className="it_single"
-                        >
-                          <span> Regular Inspection</span>
-                          <img
-                            src="/assets/img/regular.png"
-                            alt="propdial"
-                          />
-                        </div>
-                        <div
-                          onClick={() => handleAddInspection("Move-In")}
-                          className="it_single"
-                        >
-                          <span>Move-In Inspection</span>
-                          <img src="/assets/img/movein.png" alt="propdial" />
-                        </div>
-                        <div
-                          onClick={() => handleAddInspection("Move-Out")}
-                          className="it_single"
-                        >
-                          <span>Move-Out Inspection</span>
-                          <img src="/assets/img/moveout.png" alt="propdial" />
-                        </div>
-                        <div
-                          onClick={() => handleAddInspection("Full")}
-                          className="it_single"
-                        >
-                          <span>Full Inspection</span>
-                          <img
-                            src="/assets/img/full.png"
-                            alt="propdial"
-                          />
-                        </div>
+                        {["Regular", "Move-In", "Move-Out", "Full"].map(
+                          (type) => (
+                            <div
+                              key={type}
+                              onClick={() =>
+                                lastInspections[type]
+                                  ? navigate(
+                                      `/add-inspection/${lastInspections[type].id}`
+                                    )
+                                  : handleAddInspection(type)
+                              }
+                              className={`it_single ${
+                                lastInspections[type] ? "disabled" : ""
+                              }`}
+                            >
+                              <span>
+                                {type} Inspection{" "}
+                                {lastInspections[type] && (
+                                  <div
+                                    style={{
+                                      color: "var(--theme-red)",
+                                      fontSize: "13px",
+                                    }}
+                                  >
+                                    {" "}
+                                    (Complete the last inspection first)
+                                  </div>
+                                )}
+                              </span>
+                              <img
+                                src={`/assets/img/${type
+                                  .toLowerCase()
+                                  .replace("-", "")}.png`}
+                                alt="propdial"
+                              />
+                            </div>
+                          )
+                        )}
                       </div>
- 
-
-                    </Modal> */}
-                    <Modal show={showPopup} className="delete_modal inspection_modal" centered>
-  <span className="material-symbols-outlined modal_close" onClick={() => setShowPopup(false)}>
-    close
-  </span>
-  <h5 className="text_blue text-center">Select Inspection Type</h5>
-
-  <div className="inspection_types">
-    {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
-      <div
-        key={type}
-        onClick={() =>
-          lastInspections[type]
-            ? navigate(`/add-inspection/${lastInspections[type].id}`) 
-            : handleAddInspection(type)
-        }
-        className={`it_single ${lastInspections[type] ? "disabled" : ""}`}
-      >
-        <span>
-          {type} Inspection{" "}
-          {lastInspections[type] && (
-            <div style={{ color: "var(--theme-red)", fontSize: "13px" }}> (Complete the last inspection first)</div>
-          )}
-        </span>
-        <img
-          src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
-          alt="propdial"
-        />
-      </div>
-    ))}
-  </div>
-</Modal>
-
+                    </Modal>
                   </div>
                 </div>
                 <PropertySummaryCard
@@ -448,7 +498,6 @@ const ViewInspections = () => {
                   propertyId={propertyid}
                 />
               </div>
-
               {inspections && inspections.length === 0 && (
                 <div
                   className="pg_msg"
@@ -460,10 +509,192 @@ const ViewInspections = () => {
                 </div>
               )}
               {inspections && inspections.length !== 0 && (
-                <div className="user-single-table table_filter_hide mt-3">
-                  <ReactTable tableColumns={columns} tableData={inspections} />
+             <>
+             <div className="vg22"></div>
+              <div className="filters">
+                <div className="left">
+                  <div className="rt_global_search search_field">
+                    <input
+                   type="text"
+                   placeholder="Search inspections..."
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <div className="field_icon">
+                      <span className="material-symbols-outlined">search</span>
+                    </div>
+                  </div>
                 </div>
-              )}
+                <div className="right">
+                  <div className="user_filters new_inline">
+                  {/* <div className="form_field">
+              <div className="field_box theme_checkbox">
+                <div
+                  className="theme_checkbox_container"
+                  style={{
+                    padding: "0px",
+                    border: "none",
+                  }}
+                >
+                 {["Regular", "Move-In", "Move-Out", "Full"].map((type) => {
+                    const count = inspections.filter(
+                      (i) => i.inspectionType === type
+                    ).length;
+                    return (
+                      <div
+                        className="radio_single"
+                        key={type}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedInspectionTypes.includes(type)}
+                          onChange={() => toggleInspectionType(type)}
+                          id={type}
+                        />
+                        <label htmlFor={type}>
+                        {type} ({count})
+                        </label>
+                      </div>
+                     );
+                    })}
+                </div>
+              </div>
+            </div> */}
+                 
+                
+                     {/* <select
+                    value={selectedDateRange}
+                    onChange={(e) => setSelectedDateRange(e.target.value)}
+                  >
+                    <option value="">All Time</option>
+                    <option value="last3months">Last 3 Months</option>
+                    <option value="last6months">Last 6 Months</option>
+                    <option value="lastyear">Last 1 Year</option>
+                  </select> */}
+                  {/* <div className="active-filters">
+                  <h4>Active Filters</h4>
+                  {searchTerm && <span>Search: {searchTerm}</span>}
+                  {selectedInspectionTypes.length > 0 && (
+                    <span>
+                      Inspection Types: {selectedInspectionTypes.join(", ")}
+                    </span>
+                  )}
+                  {selectedDateRange && (
+                    <span>Date Range: {selectedDateRange}</span>
+                  )}
+                </div> */}
+                  </div>
+                  <div className="button_filter diff_views">
+                    <div
+                      className={`bf_single ${
+                        viewMode === "card_view" ? "active" : ""
+                      }`}
+                      onClick={() => handleModeChange("card_view")}
+                    >
+                      <span className="material-symbols-outlined">
+                        calendar_view_month
+                      </span>
+                    </div>
+                    <div
+                      className={`bf_single ${
+                        viewMode === "table_view" ? "active" : ""
+                      }`}
+                      onClick={() => handleModeChange("table_view")}
+                    >
+                      <span className="material-symbols-outlined">
+                        view_list
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr></hr>
+              {viewMode === "card_view" && (
+              <div className="propdial_users all_tenants inspection_card">
+                {filteredInspections &&
+                  filteredInspections.map((iDoc) => (
+                    <div className="pu_single">
+                      <div className="tc_single relative item">
+                        <div className="left">
+                          <div className="tenant_detail">
+                            <div className="t_name pointer">
+                              {iDoc.inspectionType} Inspection
+                            </div>
+                            <div className="i_areas">
+                              {iDoc.rooms?.length ? (
+                                iDoc.rooms.map((room, idx) => (
+                                  <span key={idx}>
+                                    {room.roomName || "No Room Name"}
+                                    {idx < iDoc.rooms.length - 1}
+                                  </span>
+                                ))
+                              ) : (
+                                <span>No Inspections Available</span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`wha_call_icon ${iDoc.finalSubmit ? "final_submit" : ""}`}>
+                        
+                          {!iDoc.finalSubmit && (
+ <Link
+ className="wha_icon wc_single"
+ to={`/add-inspection/${iDoc.id}`}
+ 
+>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z"/></svg>
+</Link>
+                          )}
+                       
+                          <Link
+                            className="call_icon wc_single"
+                            to={`/inspection-report/${iDoc.id}`}                            
+                          >
+                           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                          </Link>
+                         
+                        </div>
+                        {iDoc.status === "inactive" && (
+                          <div className="inactive_tag">Inactive</div>
+                        )}
+                      </div>
+                      <div className="dates">
+                        <div className="date_single">
+                          <strong>At</strong>:{" "}
+                          
+                          <span>
+                            {format(iDoc.createdAt.toDate(), "dd-MMM-yy")}
+                          </span>
+                        </div>
+                        <div className="date_single">
+                          <strong>By</strong>:{" "}
+                          <span>
+                            {dbUserState &&
+                              dbUserState.find(
+                                (user) => user.id === iDoc.createdBy
+                              )?.displayName}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+               )}
+               {viewMode === "table_view" && (
+                 <div className="user-single-table table_filter_hide mt-3">
+                  <ReactTable
+                    tableColumns={columns}
+                    tableData={filteredInspections}
+                  />
+                </div>
+                     )}
+             </>
+               )}
+            
+               
+
+          
             </div>
           </div>
         ) : (
