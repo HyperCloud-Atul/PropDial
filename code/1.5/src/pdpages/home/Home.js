@@ -5,12 +5,13 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
 import SEOHelmet from "../../components/SEOHelmet ";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-// text 
+// text
 import { useFirestore } from "../../hooks/useFirestore";
-// text 
+// text
 
 // css
 import "./Home.css";
@@ -27,8 +28,8 @@ import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 import CollapsibleGroup from "../../components/CollapsibleGroup";
 import AirBnb from "../../components/AirBnb";
 
-
 const Home = () => {
+  const { user } = useAuthContext();
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -36,10 +37,21 @@ const Home = () => {
   }, [location]);
   // Scroll to the top of the page whenever the location changes end
 
+  // upcoming inspection reminder modal code  start
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  // upcoming inspection reminder modal code  end
+
+  // reminder for login code
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setShowModal(true);
+    }
+  }, [user]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,14 +63,18 @@ const Home = () => {
   }, []);
 
   return (
-    <>  
-    <SEOHelmet title="Property Management Services 2025 | Buy, Sell & Rent Easily" description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
-    og_description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
-    og_title="Property Management Services 2025 | Buy, Sell & Rent Easily" />   
-  
+    <>
+      <SEOHelmet
+        title="Property Management Services 2025 | Buy, Sell & Rent Easily"
+        description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
+        og_description="Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more."
+        og_title="Property Management Services 2025 | Buy, Sell & Rent Easily"
+      />
+
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
+
         <ProductCarousel></ProductCarousel>
         {/* <PunchInOut/> */}
 
@@ -83,8 +99,9 @@ const Home = () => {
                     </div>
                     <h4>Property On-Boarding</h4>
                     <h5>
-                      Property onboarding initiates by collecting pertinent data: ownership details, property type, and existing leases, fueling our management system efficiently.
-
+                      Property onboarding initiates by collecting pertinent
+                      data: ownership details, property type, and existing
+                      leases, fueling our management system efficiently.
                     </h5>
                   </div>
                 </div>
@@ -96,8 +113,9 @@ const Home = () => {
                     </div>
                     <h4>Inspection & Agreement</h4>
                     <h5>
-                      Propdial initiates a property inspection to evaluate its condition, guiding maintenance decisions. We facilitate lease agreement signings for clarity and mutual consent.
-
+                      Propdial initiates a property inspection to evaluate its
+                      condition, guiding maintenance decisions. We facilitate
+                      lease agreement signings for clarity and mutual consent.
                     </h5>
                   </div>
                 </div>
@@ -109,7 +127,10 @@ const Home = () => {
                     </div>
                     <h4>Financial & Legal Compliance</h4>
                     <h5>
-                      Propdial maintains thorough property financial records, delivering regular statements to owners. We guarantee property compliance with local, state, and government laws.
+                      Propdial maintains thorough property financial records,
+                      delivering regular statements to owners. We guarantee
+                      property compliance with local, state, and government
+                      laws.
                     </h5>
                   </div>
                 </div>
@@ -121,7 +142,9 @@ const Home = () => {
                     </div>
                     <h4>Reporting & Communication</h4>
                     <h5>
-                      Propdial delivers periodic property reports to owners, including updates on property status, financial performance, and noteworthy developments.
+                      Propdial delivers periodic property reports to owners,
+                      including updates on property status, financial
+                      performance, and noteworthy developments.
                     </h5>
                   </div>
                 </div>
@@ -142,28 +165,28 @@ const Home = () => {
                   <div className="col-sm-6">
                     <img
                       src="./assets/img/home/ab_left_img1.jpg"
-                      alt=""
+                      alt="propdial"
                       className="img_1"
                     />
                   </div>
                   <div className="col-sm-6">
                     <img
                       src="./assets/img/home/ab_left_img2.jpg"
-                      alt=""
+                      alt="propdial"
                       className="img_2"
                     />
                   </div>
                   <div className="col-sm-6 mt-4">
                     <img
                       src="./assets/img/home/ab_left_img3.jpg"
-                      alt=""
+                      alt="propdial"
                       className="img_1"
                     />
                   </div>
                   <div className="col-sm-6">
                     <img
                       src="./assets/img/home/ab_left_img4.jpg"
-                      alt=""
+                      alt="propdial"
                       className="img_2"
                     />
                   </div>
@@ -178,9 +201,9 @@ const Home = () => {
                   <h6>
                     Established in 2014, Propdial is a prominent property
                     management services company specializing in comprehensive
-                    property management and care-taking services. We are committed
-                    to delivering excellence and offer a complete 360-degree
-                    solution for property management.
+                    property management and care-taking services. We are
+                    committed to delivering excellence and offer a complete
+                    360-degree solution for property management.
                   </h6>
                   <ul
                     style={{
@@ -192,14 +215,15 @@ const Home = () => {
                       process.
                     </li>
                     <li>
-                      Our meticulous approach includes property inspection, rental
-                      market analysis, tenant screening, lease agreement
+                      Our meticulous approach includes property inspection,
+                      rental market analysis, tenant screening, lease agreement
                       management, and property maintenance.
                     </li>
                     <li>
                       At Propdial, customer satisfaction is our top priority. We
-                      believe in transparent communication, legal compliance, and
-                      regular reporting to keep our clients informed and content.
+                      believe in transparent communication, legal compliance,
+                      and regular reporting to keep our clients informed and
+                      content.
                     </li>
                   </ul>
                   <Link to="/about-us">
@@ -221,9 +245,7 @@ const Home = () => {
 
         <TopCitiesInIndia />
         <AirBnb />
-        <section
-          className="why_us sect_padding"
-        >
+        <section className="why_us sect_padding">
           <div className="container">
             <div className="section_title">
               <div className="section_title_effect">WHY US</div>
@@ -233,7 +255,7 @@ const Home = () => {
               <div className="row oneline_parent">
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_top">
-                    <img src="./assets/img/home/why_1.png" alt="" />
+                    <img src="./assets/img/home/why_1.png" alt="propdial" />
                     <h4 className="wucs_title">Satisfied Customers</h4>
                     <h6 className="wucs_desc">
                       We have a very happy customer base with a high retention
@@ -243,41 +265,41 @@ const Home = () => {
                 </div>
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_bottom">
-                    <img src="./assets/img/home/why_2.png" alt="" />
+                    <img src="./assets/img/home/why_2.png" alt="propdial" />
                     <h4 className="wucs_title">Competitive Pricing</h4>
                     <h6 className="wucs_desc">
                       Propdial offers one of the best pricing for this service
-                      across the industry, without compromising on the quality of
-                      the service offered.
+                      across the industry, without compromising on the quality
+                      of the service offered.
                     </h6>
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_top">
-                    <img src="./assets/img/home/why_3.png" alt="" />
+                    <img src="./assets/img/home/why_3.png" alt="propdial" />
                     <h4 className="wucs_title">Technology At Forefront</h4>
                     <h6 className="wucs_desc">
                       Propdial leverages technology to make the process of
-                      property management very smooth and efficient, with minimal
-                      effort required by the property owners.
+                      property management very smooth and efficient, with
+                      minimal effort required by the property owners.
                     </h6>
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_bottom">
-                    <img src="./assets/img/home/why_4.png" alt="" />
+                    <img src="./assets/img/home/why_4.png" alt="propdial" />
                     <h4 className="wucs_title">Full Transparency</h4>
                     <h6 className="wucs_desc">
-                      Every step of the property management from tenant onboarding
-                      to property inspection and maintenance is documented and
-                      updated online immediately. This lets you have an eye on
-                      your house.
+                      Every step of the property management from tenant
+                      onboarding to property inspection and maintenance is
+                      documented and updated online immediately. This lets you
+                      have an eye on your house.
                     </h6>
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_top">
-                    <img src="./assets/img/home/why_5.png" alt="" />
+                    <img src="./assets/img/home/why_5.png" alt="propdial" />
                     <h4 className="wucs_title">Experienced Co-Founders</h4>
                     <h6 className="wucs_desc">
                       The co-founders including the core team have decades of
@@ -288,7 +310,7 @@ const Home = () => {
                 </div>
                 <div className="col-lg-4 col-md-6 op_child">
                   <div className="wuc_single b_bottom">
-                    <img src="./assets/img/home/why_6.png" alt="" />
+                    <img src="./assets/img/home/why_6.png" alt="propdial" />
                     <h4 className="wucs_title">Our Wide Network</h4>
                     <h6 className="wucs_desc">
                       Our extensive network of offline brokers and vast reach
@@ -324,9 +346,9 @@ const Home = () => {
                     <h3 className="title">Property On Boarding</h3>
                     <p className="description">
                       Once the PMS agreement is signed by the property owner,
-                      propdial assigns a dedicated property manager, who collects
-                      the keys and conducts a full inspection to prepare the
-                      property for renting
+                      propdial assigns a dedicated property manager, who
+                      collects the keys and conducts a full inspection to
+                      prepare the property for renting
                     </p>
                     <Link to="/about-us" className="learn-more">
                       know more
@@ -339,7 +361,9 @@ const Home = () => {
                 <div className="single-service">
                   <div className="content">
                     <span className="icon">
-                      <span className="material-symbols-outlined">manage_search</span>
+                      <span className="material-symbols-outlined">
+                        manage_search
+                      </span>
                     </span>
                     <h3 className="title">Tenant Discovery</h3>
                     <p className="description">
@@ -358,14 +382,16 @@ const Home = () => {
                 <div className="single-service">
                   <div className="content">
                     <span className="icon">
-                      <span className="material-symbols-outlined">handshake</span>
+                      <span className="material-symbols-outlined">
+                        handshake
+                      </span>
                     </span>
                     <h3 className="title">Tenant On Board</h3>
                     <p className="description">
-                      You will never be required to visit the house. We facilitate
-                      a thorough professional background check of tenants to avoid
-                      any surprises. Also, all rental paperwork will be taken care
-                      of by our team in India.
+                      You will never be required to visit the house. We
+                      facilitate a thorough professional background check of
+                      tenants to avoid any surprises. Also, all rental paperwork
+                      will be taken care of by our team in India.
                     </p>
                     <Link to="/about-us" className="learn-more">
                       know more
@@ -384,9 +410,9 @@ const Home = () => {
                     <p className="description">
                       We conduct a thorough property inspection at the time of
                       move-in and move-out and provide detailed reports to the
-                      owner for transparency. In addition to that, we also conduct
-                      issue-based and periodic property inspections and provide
-                      detailed reports to the owner.
+                      owner for transparency. In addition to that, we also
+                      conduct issue-based and periodic property inspections and
+                      provide detailed reports to the owner.
                     </p>
                     <Link to="/about-us" className="learn-more">
                       know more
@@ -399,7 +425,9 @@ const Home = () => {
                 <div className="single-service">
                   <div className="content">
                     <span className="icon">
-                      <span className="material-symbols-outlined">engineering</span>
+                      <span className="material-symbols-outlined">
+                        engineering
+                      </span>
                     </span>
                     <h3 className="title">Maintenance Services</h3>
                     <p className="description">
@@ -419,13 +447,16 @@ const Home = () => {
                 <div className="single-service">
                   <div className="content">
                     <span className="icon">
-                      <span className="material-symbols-outlined">description</span>
+                      <span className="material-symbols-outlined">
+                        description
+                      </span>
                     </span>
                     <h3 className="title">Personalised Dashboard</h3>
                     <p className="description">
-                      Our dashboard includes an online document vault, transaction
-                      history of the tenant, personal expense tracker, inspection
-                      reports, and more, accessible at the click of a button.
+                      Our dashboard includes an online document vault,
+                      transaction history of the tenant, personal expense
+                      tracker, inspection reports, and more, accessible at the
+                      click of a button.
                     </p>
                     <Link to="/about-us" className="learn-more">
                       know more
@@ -454,14 +485,14 @@ const Home = () => {
                     to="https://www.youtube.com/watch?v=RphaFtAR8pw&feature=youtu.be"
                     target="_blank"
                   >
-                    <img src="./assets/img/GP-Interview-new.jpg" alt="" />
+                    <img src="./assets/img/GP-Interview-new.jpg" alt="propdial" />
                   </Link>
                   <Link
                     className="img_div"
                     to="https://www.youtube.com/watch?v=H2bDZ4WLlyA"
                     target="_blank"
                   >
-                    <img src="./assets/img/VP-Interview-new.jpg" alt="" />
+                    <img src="./assets/img/VP-Interview-new.jpg" alt="propdial" />
                   </Link>
                 </div> */}
                   <div className="image_sect">
@@ -527,8 +558,61 @@ const Home = () => {
         <Testimonial></Testimonial>
 
         <Blog></Blog>
-
       </div>
+      {/* Login Modal */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        className="reminder_modal"
+      >
+        <Modal.Header
+          className="justify-content-center"
+          style={{
+            paddingBottom: "0px",
+            border: "none",
+          }}
+          closeButton
+        ></Modal.Header>
+        <Modal.Body
+          className="text-center"
+          style={{
+            color: "#FA6262",
+            fontSize: "20px",
+            border: "none",
+            position: "unset",
+          }}
+        >
+          <img
+            src="/assets/img/login_reminder.png"
+            alt=""
+            style={{
+              position: "absolute",
+              top: "-28px",
+              height: "100px",
+              width: "auto",
+              left: "0",
+              right: "0",
+              margin: "auto",
+            }}
+          />
+        </Modal.Body>
+        <Modal.Footer
+          className=""
+          style={{
+            border: "none",
+            gap: "15px",
+          }}
+        >
+          <Link
+            className="theme_btn btn_fill no_icon text-center w-100 text-decoration-none"
+            to="/login"
+          >
+            Continue with mobile number
+          </Link>
+        </Modal.Footer>
+      </Modal>
+
       {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Reminder</Modal.Title>
@@ -553,7 +637,6 @@ const Home = () => {
 
       </Modal> */}
     </>
-
   );
 };
 

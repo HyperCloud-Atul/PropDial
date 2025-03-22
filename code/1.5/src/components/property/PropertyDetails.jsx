@@ -30,13 +30,8 @@ import InactiveUserCard from "../InactiveUserCard";
 
 // component
 import PropertyImageGallery from "../PropertyImageGallery";
+import ScrollToTop from "../ScrollToTop";
 const PropertyDetails = () => {
-  // Scroll to the top of the page whenever the location changes start
-  const location = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
-  // Scroll to the top of the page whenever the location changes end
 
   // install Swiper modules
   SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
@@ -1156,6 +1151,7 @@ const PropertyDetails = () => {
 
   return (
     <>
+    <ScrollToTop/>
       {/* Change User Popup - Start */}
       <div
         className={
@@ -1363,7 +1359,7 @@ const PropertyDetails = () => {
                     //       <div className="col-6 col-md-3">
                     //         <div className="right">
                     //           <div className="premium text-center">
-                    //             <img src="/assets/img/premium_img.jpg" alt="" />
+                    //             <img src="/assets/img/premium_img.jpg" alt="propdial" />
                     //             <h6>PMS Premium - PMS After Rent</h6>
                     //             <h5>On Boarding 2nd Jan'22</h5>
                     //           </div>
@@ -1380,7 +1376,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/VisitingDays.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -1397,7 +1393,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/package.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -1411,7 +1407,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/property_flag.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -1425,7 +1421,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/property_source.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -1440,7 +1436,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/ownership.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -1809,7 +1805,7 @@ const PropertyDetails = () => {
                           />
                           {/* <div className="p_info_single">
                             <div className="pd_icon">
-                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="" />
+                              <img src="/assets/img/property-detail-icon/Purpose.png" alt="propdial" />
                             </div>
                             <div className="pis_content">
                               <h6>Purpose</h6>
@@ -2007,7 +2003,7 @@ const PropertyDetails = () => {
                             >
                               <img
                                 src="/assets/img/icons/sharearrow.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
 
@@ -2017,7 +2013,7 @@ const PropertyDetails = () => {
                                 handleEnquiryNowClick(propertyDocument)
                               }
                             >
-                              <img src="/assets/img/icons/support.png" alt="" />
+                              <img src="/assets/img/icons/support.png" alt="propdial" />
                             </div>
 
                             {propertyDocument &&
@@ -2031,7 +2027,7 @@ const PropertyDetails = () => {
                                 >
                                   <img
                                     src="/assets/img/icons/youtube.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </Link>
                               )}
@@ -2046,7 +2042,7 @@ const PropertyDetails = () => {
                                 >
                                   <img
                                     src="/assets/img/icons/mappin.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </Link>
                               )}
@@ -2151,7 +2147,7 @@ const PropertyDetails = () => {
                       <div className="pmd_section2 pmd_section3">
                         <div className="pdms_single">
                           <h4>
-                            <img src="/assets/img/superarea.png" alt="" />
+                            <img src="/assets/img/superarea.png" alt="propdial" />
                             {propertyDocument.category === "Residential" ? (
                               <>
                                 {propertyDocument.superArea}
@@ -2528,6 +2524,22 @@ const PropertyDetails = () => {
                           },
                         }}
                       >
+                          <SwiperSlide>
+                       
+                       <Link to={`/inspection/${propertyid}`}>
+                         <div className="eicp_single">
+                           <div className="icon">
+                             <span className="material-symbols-outlined">
+                               pageview
+                             </span>
+                             <div className="text">
+                               <h6>{inspections && inspections.length}</h6>
+                               <h5>Inspections</h5>
+                             </div>
+                           </div>
+                         </div>
+                       </Link>
+                     </SwiperSlide>
                         {/* Documents */}
                         <SwiperSlide>
                           <Link to={`/propertydocumentdetails/${propertyid}`}>
@@ -2614,22 +2626,7 @@ const PropertyDetails = () => {
                             </div>
                           </Link>
                         </SwiperSlide>
-                        <SwiperSlide>
-                          {/* <Link to={`/propertyinspectiondocument/${propertyid}`} > */}
-                          <Link to={`/inspection/${propertyid}`}>
-                            <div className="eicp_single">
-                              <div className="icon">
-                                <span className="material-symbols-outlined">
-                                  pageview
-                                </span>
-                                <div className="text">
-                                  <h6>{inspections && inspections.length}</h6>
-                                  <h5>Inspections</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
+                      
                         {/* Transactions */}
                         {/* <SwiperSlide>
                           <Link to={`/transactions/${propertyid}`}>
@@ -3492,7 +3489,7 @@ const PropertyDetails = () => {
                                                 >
                                                   <img
                                                     src="/assets/img/simple_call.png"
-                                                    alt=""
+                                                    alt="propdial"
                                                   />
                                                 </Link>
                                                 <Link
@@ -3502,7 +3499,7 @@ const PropertyDetails = () => {
                                                 >
                                                   <img
                                                     src="/assets/img/whatsapp_simple.png"
-                                                    alt=""
+                                                    alt="propdial"
                                                   />
                                                 </Link>
                                               </div>
@@ -3725,7 +3722,7 @@ const PropertyDetails = () => {
                                               >
                                                 <img
                                                   src="/assets/img/simple_call.png"
-                                                  alt=""
+                                                  alt="propdial"
                                                 />
                                               </Link>
                                               <Link
@@ -3742,7 +3739,7 @@ const PropertyDetails = () => {
                                               >
                                                 <img
                                                   src="/assets/img/whatsapp_simple.png"
-                                                  alt=""
+                                                  alt="propdial"
                                                 />
                                               </Link>
                                             </div>
@@ -4056,7 +4053,7 @@ const PropertyDetails = () => {
                                                     propUser.photoURL ||
                                                     "/assets/img/dummy_user.png"
                                                   }
-                                                  alt=""
+                                                  alt="propdial"
                                                 />
                                               </div>
                                               <div className="tenant_detail">
@@ -4139,7 +4136,7 @@ const PropertyDetails = () => {
                                               >
                                                 <img
                                                   src="/assets/img/simple_call.png"
-                                                  alt=""
+                                                  alt="propdial"
                                                 />
                                               </Link>
                                               <Link
@@ -4156,7 +4153,7 @@ const PropertyDetails = () => {
                                               >
                                                 <img
                                                   src="/assets/img/whatsapp_simple.png"
-                                                  alt=""
+                                                  alt="propdial"
                                                 />
                                               </Link>
                                             </div>
@@ -4309,7 +4306,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/twin-bed.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -4325,7 +4322,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/furnishing.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -4345,7 +4342,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/bedrooms.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -4366,7 +4363,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/bathrroms.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4388,7 +4385,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/balcony.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4403,7 +4400,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/kitchen.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -4422,7 +4419,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/livingArea.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4439,7 +4436,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/diningArea.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4457,7 +4454,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/livingDining.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
 
@@ -4473,7 +4470,7 @@ const PropertyDetails = () => {
                           <div className="pd_icon">
                             <img
                               src="/assets/img/property-detail-icon/calendar.png"
-                              alt=""
+                              alt="propdial"
                             />
                           </div>
                           <div className="pis_content">
@@ -4490,7 +4487,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/passages.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4507,7 +4504,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/browser.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4524,7 +4521,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4542,7 +4539,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4567,7 +4564,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/yearOfConstruction.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4583,7 +4580,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/ageOfproperty.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4607,7 +4604,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/expire.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4635,7 +4632,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/workstation.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4654,7 +4651,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/cabin.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4671,7 +4668,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/conversation.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4691,7 +4688,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/information-desk.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4710,7 +4707,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/cafetaria.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4728,7 +4725,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/washroom.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4756,7 +4753,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/propertytype.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4772,7 +4769,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/propertysubtype.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4791,7 +4788,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/construction.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4810,7 +4807,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/air.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4833,7 +4830,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/furnishing.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4858,7 +4855,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/bedrooms.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4884,7 +4881,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/public-toilet.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4910,7 +4907,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/kitchen.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4937,7 +4934,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/balcony.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4966,7 +4963,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -4992,7 +4989,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5009,7 +5006,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/yearOfConstruction.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5025,7 +5022,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/ageOfproperty.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5048,7 +5045,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/expire.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5064,7 +5061,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/expire.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5081,7 +5078,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/expire.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5105,7 +5102,7 @@ const PropertyDetails = () => {
                         {propertyDocument && propertyDocument.propertyType && (
                           <div className="p_info_single">
                             <div className="pd_icon">
-                              <img src="/assets/img/propertytype.png" alt="" />
+                              <img src="/assets/img/propertytype.png" alt="propdial" />
                             </div>
                             <div className="pis_content">
                               <h6>Property Type</h6>
@@ -5119,7 +5116,7 @@ const PropertyDetails = () => {
                           propertyDocument.isCornerSidePlot && (
                             <div className="p_info_single">
                               <div className="pd_icon">
-                                <img src="/assets/img/corner.png" alt="" />
+                                <img src="/assets/img/corner.png" alt="propdial" />
                               </div>
                               <div className="pis_content">
                                 <h6>Is corner?</h6>
@@ -5133,7 +5130,7 @@ const PropertyDetails = () => {
                           propertyDocument.isParkFacingPlot && (
                             <div className="p_info_single">
                               <div className="pd_icon">
-                                <img src="/assets/img/park.png" alt="" />
+                                <img src="/assets/img/park.png" alt="propdial" />
                               </div>
                               <div className="pis_content">
                                 <h6>Is Park Facing?</h6>
@@ -5146,7 +5143,7 @@ const PropertyDetails = () => {
                         {propertyDocument && propertyDocument.roadWidth && (
                           <div className="p_info_single">
                             <div className="pd_icon">
-                              <img src="/assets/img/road.png" alt="" />
+                              <img src="/assets/img/road.png" alt="propdial" />
                             </div>
                             <div className="pis_content">
                               <h6>Road Width</h6>
@@ -5162,7 +5159,7 @@ const PropertyDetails = () => {
                         {propertyDocument && propertyDocument.gatedArea && (
                           <div className="p_info_single">
                             <div className="pd_icon">
-                              <img src="/assets/img/gatedcomunity.png" alt="" />
+                              <img src="/assets/img/gatedcomunity.png" alt="propdial" />
                             </div>
                             <div className="pis_content">
                               <h6>Gated Community</h6>
@@ -5178,7 +5175,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5204,7 +5201,7 @@ const PropertyDetails = () => {
                                   <div className="pd_icon">
                                     <img
                                       src="/assets/img/property-detail-icon/unitnumber.png"
-                                      alt=""
+                                      alt="propdial"
                                     />
                                   </div>
                                   <div className="pis_content">
@@ -5217,7 +5214,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/society.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5229,7 +5226,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/locality.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5241,7 +5238,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/city.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5253,7 +5250,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/state.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5266,7 +5263,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/pincode.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5299,7 +5296,7 @@ const PropertyDetails = () => {
                             >
                               <img
                                 src="/assets/img/icons/googlemap_big.png"
-                                alt=""
+                                alt="propdial"
                                 className="w-100"
                               />
                             </Link>
@@ -5322,82 +5319,82 @@ const PropertyDetails = () => {
                                 {item === "Club" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/club.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Garden/Park" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/park.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Children Play Area" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/slide.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Open Gymnasium" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/weightlifter.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Main Road" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/road.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Society Internal Road" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/societyroad.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Swimming Pool" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/swimming.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Central Park" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/central-park.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Forest" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/forest.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "River" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/river.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Golf" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/golf.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Lake" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/lake.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Other Society" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/skyline.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Same Society Tower" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/singletower.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Beach" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/beach.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : item === "Hill View" ? (
                                   <img
                                     src="/assets/img/property-detail-icon/hill.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 ) : (
                                   ""
@@ -5532,32 +5529,32 @@ const PropertyDetails = () => {
                                       {item === "Front Yard" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/frontyard.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : item === "Back Yard" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/backyard.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : item === "Terrace" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/terrace.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : item === "Private Garden" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/privateGarden.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : item === "Garage" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/garage.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : item === "Roof Rights" ? (
                                         <img
                                           src="/assets/img/property-detail-icon/roofing.png"
-                                          alt=""
+                                          alt="propdial"
                                         />
                                       ) : (
                                         ""
@@ -5588,7 +5585,7 @@ const PropertyDetails = () => {
                           <div className="pd_icon">
                             <img
                               src="/assets/img/property-detail-icon/calendar.png"
-                              alt=""
+                              alt="propdial"
                             />
                           </div>
                           <div className="pis_content">
@@ -5608,7 +5605,7 @@ const PropertyDetails = () => {
                           <div className="pd_icon">
                             <img
                               src="/assets/img/property-detail-icon/superArea.png"
-                              alt=""
+                              alt="propdial"
                             />
                           </div>
                           <div className="pis_content">
@@ -5628,7 +5625,7 @@ const PropertyDetails = () => {
                           <div className="pd_icon">
                             <img
                               src="/assets/img/property-detail-icon/buildUpArea.png"
-                              alt=""
+                              alt="propdial"
                             />
                           </div>
                           <div className="pis_content">
@@ -5650,7 +5647,7 @@ const PropertyDetails = () => {
                             <div className="pd_icon">
                               <img
                                 src="/assets/img/property-detail-icon/carpetArea.png"
-                                alt=""
+                                alt="propdial"
                               />
                             </div>
                             <div className="pis_content">
@@ -5683,7 +5680,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5696,7 +5693,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5715,7 +5712,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5728,7 +5725,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5746,7 +5743,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5764,7 +5761,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5800,7 +5797,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5813,7 +5810,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5832,7 +5829,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5845,7 +5842,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/car-parking.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5863,7 +5860,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5881,7 +5878,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/2Wheelerparking.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5913,7 +5910,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/TotalFloors.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5928,7 +5925,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/FloorNumber.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5944,7 +5941,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/apartmentOnFloor.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -5962,7 +5959,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/lift.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5975,7 +5972,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/lift.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -5990,7 +5987,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/PowerBackup.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -6021,7 +6018,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/lift.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -6034,7 +6031,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/lift.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -6049,7 +6046,7 @@ const PropertyDetails = () => {
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/PowerBackup.png"
-                                  alt=""
+                                  alt="propdial"
                                 />
                               </div>
                               <div className="pis_content">
@@ -6081,7 +6078,7 @@ const PropertyDetails = () => {
                                     <div className="pd_icon">
                                       <img
                                         src="/assets/img/property-detail-icon/BachelorBoys.png"
-                                        alt=""
+                                        alt="propdial"
                                       />
                                     </div>
                                     <div className="pis_content">
@@ -6099,7 +6096,7 @@ const PropertyDetails = () => {
                                     <div className="pd_icon">
                                       <img
                                         src="/assets/img/property-detail-icon/BachelorGirls.png"
-                                        alt=""
+                                        alt="propdial"
                                       />
                                     </div>
                                     <div className="pis_content">
@@ -6117,7 +6114,7 @@ const PropertyDetails = () => {
                                     <div className="pd_icon">
                                       <img
                                         src="/assets/img/property-detail-icon/pets.png"
-                                        alt=""
+                                        alt="propdial"
                                       />
                                     </div>
                                     <div className="pis_content">
@@ -6131,7 +6128,7 @@ const PropertyDetails = () => {
                                 <div className="pd_icon">
                                   <img
                                     src="/assets/img/property-detail-icon/restaurant.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <div className="pis_content">
@@ -6159,7 +6156,7 @@ const PropertyDetails = () => {
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/VisitingHrsFrom.png"
-                            alt=""
+                            alt="propdial"
                           />
                         </div>
                         <div className="pis_content">
@@ -6206,7 +6203,7 @@ const PropertyDetails = () => {
                         <div className="pd_icon">
                           <img
                             src="/assets/img/property-detail-icon/VisitingDays.png"
-                            alt=""
+                            alt="propdial"
                           />
                         </div>
                         <div className="pis_content">
@@ -6406,7 +6403,7 @@ const PropertyDetails = () => {
                                 <div className="icon">
                                   <img
                                     src="/assets/img/whatsapp.png"
-                                    alt=""
+                                    alt="propdial"
                                   />
                                 </div>
                                 <h6>Whatsapp</h6>

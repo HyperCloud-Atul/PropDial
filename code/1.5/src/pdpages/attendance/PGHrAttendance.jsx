@@ -137,7 +137,7 @@ const PGHrAttendance = () => {
   const [punchIn, setPunchIn] = useState(null);
   const [tripStart, setTripStart] = useState(null);
   const [expandedCards, setExpandedCards] = useState({}); // Stores expand state for each card
-console.log("filterType", filterType);
+  // console.log("filterType", filterType);
 
   const toggleExpand = (id) => {
     setExpandedCards((prev) => ({
@@ -170,6 +170,7 @@ console.log("filterType", filterType);
 
   const [staffCount, setStaffCount] = useState();
   const [staffAttendanceONCount, setStaffAttendanceONCount] = useState();
+  const [optionsCity, setOptionsCity] = useState([]);
   const [options, setOptions] = useState([]);
 
   const [currentMonthRecords, setCurrentMonthRecords] = useState();
@@ -263,25 +264,126 @@ console.log("filterType", filterType);
       const recordRef = projectFirestore
         .collection("users-propdial")
         // .where("userId", "==", user.uid)
-        .where("isAttendanceRequired", "==", true);
-      // .orderBy("createdAt", "desc")
+        .where("isAttendanceRequired", "==", true)
+        .orderBy("fullName", "asc");
 
       const unsubscribe = recordRef.onSnapshot(
         (snapshot) => {
           if (!snapshot.empty) {
-            let results = [];
+            let names = [];
+            let cities = [];
             snapshot.docs.forEach((doc) => {
               // results.push({ ...doc.data(), id: doc.id });
-              results.push({ name: doc.data().fullName, id: doc.id });
+              names.push({ name: doc.data().fullName, id: doc.id });
+              cities.push({ city: doc.data().city, id: doc.id });
             });
 
             // console.log("Staff for those attendance is ON:  ", results)
 
             // setAttendanceData(results);
-            setOptions(results);
 
-            setStaffAttendanceONCount(results && results.length);
+            const uniqueCities = cities.filter(
+              (obj, index, self) =>
+                index === self.findIndex((o) => o.city === obj.city)
+            );
+            console.log("uniqueCities: ", uniqueCities);
+
+            setOptions(names);
+            setOptionsCity(uniqueCities);
+
+            setStaffAttendanceONCount(names && names.length);
           }
+        },
+        (error) => {
+          console.log(error);
+          // setError('could not fetch the data')
+        }
+      );
+
+      return () => unsubscribe(); // Cleanup listener when component unmounts
+    } catch (error) {
+      console.error("Error fetching second last record:", error);
+    }
+  };
+
+  const handleCityCahnge = (e) => {
+    console.log("handleCityChange: ", e.target.value);
+    console.log("filtertype: ", filterType);
+
+    e.target.value === ""
+      ? setStaffFilter("all")
+      : setStaffFilter(e.target.value);
+
+    let recordRef;
+    try {
+      // recordRef = projectFirestore
+      //   .collection("attendance-propdial")
+      //   .where("userCity", "==", e.target.value)
+      //   // .where("date", "==", formattedYesterddayDate)
+      //   .orderBy("createdAt", "desc");
+
+      if (filterType === "yesterday") {
+        console.log("In filtertype: yesterday");
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        const formattedYesterddayDate = format(yesterday, "dd-MMM-yy");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("date", "==", formattedYesterddayDate)
+          .orderBy("createdAt", "desc");
+      } else if (filterType === "thismonth") {
+        console.log("In filtertype: thismonth");
+        const selectedMonthIndex = months.indexOf(selectedMonth);
+
+        const firstDay = new Date(selectedYear, selectedMonthIndex, 1);
+
+        const lastDay = new Date(
+          selectedYear,
+          selectedMonthIndex + 1,
+          0,
+          23,
+          59,
+          59
+        );
+
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("createdAt", ">=", firstDay)
+          .where("createdAt", "<=", lastDay)
+          .orderBy("createdAt", "desc");
+      } else if (filterType === "thisweek") {
+        console.log("In filtertype: thisweek");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("createdAt", ">=", startWeekDate)
+          .where("createdAt", "<=", endWeekDate)
+          .orderBy("createdAt", "desc");
+      } else {
+        console.log("In filtertype: today");
+        recordRef = projectFirestore
+          .collection("attendance-propdial")
+          .where("userCity", "==", e.target.value)
+          .where("date", "==", formattedTodaysDate)
+          .orderBy("createdAt", "desc");
+      }
+
+      const unsubscribe = recordRef.onSnapshot(
+        (snapshot) => {
+          let results = [];
+
+          if (!snapshot.empty) {
+            console.log("snapshot is not empty");
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
+
+            // console.log("todays records: ", results)
+          }
+
+          setAttendanceData(results);
         },
         (error) => {
           console.log(error);
@@ -1169,6 +1271,14 @@ console.log("filterType", filterType);
         ),
       },
       {
+        Header: "City",
+        accessor: "userCity",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="date mobile_min_width">{value}</div>
+        ),
+      },
+      {
         Header: "Name",
         accessor: "createdBy",
         disableFilters: true,
@@ -1227,6 +1337,22 @@ console.log("filterType", filterType);
           );
         },
       },
+      {
+        Header: "Punch In",
+        accessor: "punchIn",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Punch Out",
+        accessor: "punchOut",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
 
       {
         Header: "Hrs Worked",
@@ -1249,13 +1375,30 @@ console.log("filterType", filterType);
         ),
       },
       {
-        Header: "Punch In",
-        accessor: "punchIn",
+        Header: "Trip Start",
+        accessor: "tripStart",
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="time mobile_min_width">{value || "--:--"}</div>
         ),
       },
+      {
+        Header: "Trip End",
+        accessor: "tripEnd",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+      {
+        Header: "Dist (Km)",
+        accessor: "tripDistance",
+        disableFilters: true,
+        Cell: ({ value }) => (
+          <div className="time mobile_min_width">{value || "--:--"}</div>
+        ),
+      },
+
       {
         Header: "Punch In Location",
         accessor: "punchInLocation",
@@ -1274,14 +1417,7 @@ console.log("filterType", filterType);
           </div>
         ),
       },
-      {
-        Header: "Punch Out",
-        accessor: "punchOut",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
+
       {
         Header: "Punch Out Location",
         accessor: "punchOutLocation",
@@ -1300,40 +1436,21 @@ console.log("filterType", filterType);
           </div>
         ),
       },
-      {
-        Header: "Dist (Km)",
-        accessor: "tripDistance",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
-      {
-        Header: "Trip Start",
-        accessor: "tripStart",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
-      {
-        Header: "Trip End",
-        accessor: "tripEnd",
-        disableFilters: true,
-        Cell: ({ value }) => (
-          <div className="time mobile_min_width">{value || "--:--"}</div>
-        ),
-      },
     ];
   }, [dbUserState]); // Dependency array for useMemo
 
   // export data in excel
   const { exportToExcel, response: res } = useExportToExcel();
   const exportExcelFormate = async () => {
+    console.log("AttendanceData: ", attendanceData);
     const subsetData = attendanceData.map((item) => ({
       Date: item.date,
+      City: item.userCity,
       Name: item.userName,
       "Contact No": item.userPhoneNo,
+      Email: item.userEmail,
+      "Punch In": item.punchIn ? item.punchIn : "--:--",
+      "Punch Out": item.punchOut ? item.punchOut : "--:--",
       "Hrs Worked":
         item.workHrs !== "00:00"
           ? item.workHrs
@@ -1343,7 +1460,11 @@ console.log("filterType", filterType);
               )
               .join(" ")
           : "--:--",
-      "Punch In": item.punchIn ? item.punchIn : "--:--",
+      "Trip Start": item.tripStart ? item.tripStart : "--:--",
+      "Trip End": item.tripEnd ? item.tripEnd : "--:--",
+      // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
+
+      "Distance (km)": item.tripDistance ? item.tripDistance + " Km" : "--:--",
       "Punch In Location": item.punchInLocation
         ? item.punchInLocation
             .split(", ")
@@ -1357,17 +1478,6 @@ console.log("filterType", filterType);
             .join(", ")
         : "--:--",
       "Punch Out Location": item.punchOutLocation || "--",
-
-      // Conditionally adding Distance, Trip Start, and Trip End if vehicleStatus exists
-      ...(user && user.vehicleStatus
-        ? {
-            "Distance (km)": item.tripDistance
-              ? item.tripDistance + " Km"
-              : "--:--",
-            "Trip Start": item.tripStart ? item.tripStart : "--:--",
-            "Trip End": item.tripEnd ? item.tripEnd : "--:--",
-          }
-        : {}),
     }));
 
     let filename = "attendance-report.xlsx";
@@ -1384,7 +1494,7 @@ console.log("filterType", filterType);
   ];
   // nine dots menu end
 
-  // side bar open code start 
+  // side bar open code start
 
   const [show, setShow] = useState(false);
 
@@ -1392,9 +1502,8 @@ console.log("filterType", filterType);
   const handleShow = () => setShow(true);
 
   const [activeFilters, setActiveFilters] = useState([]);
-  
-  // side bar open code end
 
+  // side bar open code end
 
   return (
     <>
@@ -1586,7 +1695,10 @@ console.log("filterType", filterType);
                   <h2>{staffCount}</h2>
                   <div className="icon">
                     <div className="icon_inner">
-                      <img src="/assets/img/edicon/appointment.png" alt="" />
+                      <img
+                        src="/assets/img/edicon/appointment.png"
+                        alt="propdial"
+                      />
                     </div>
                   </div>
                   {/* <div className="trending">
@@ -1605,7 +1717,10 @@ console.log("filterType", filterType);
 
                   <div className="icon">
                     <div className="icon_inner">
-                      <img src="/assets/img/edicon/working-time.png" alt="" />
+                      <img
+                        src="/assets/img/edicon/working-time.png"
+                        alt="propdial"
+                      />
                     </div>
                   </div>
                   {/* <div className="trending">
@@ -1628,7 +1743,10 @@ console.log("filterType", filterType);
 
                   <div className="icon">
                     <div className="icon_inner">
-                      <img src="/assets/img/edicon/distance.png" alt="" />
+                      <img
+                        src="/assets/img/edicon/distance.png"
+                        alt="propdial"
+                      />
                     </div>
                   </div>
                   {/* <div className="trending">
@@ -1649,6 +1767,16 @@ console.log("filterType", filterType);
                 <div className="right">
                   <div className="filters">
                     <div className="right">
+                      <div className="icon_dropdown">
+                        <select onChange={handleCityCahnge}>
+                          <option value="">All City</option>
+                          {optionsCity.map((item) => (
+                            <option key={item.city} value={item.city}>
+                              {item.city}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <div className="icon_dropdown">
                         <select onChange={handleStaffCahnge}>
                           <option value="">All Staff</option>
@@ -1715,7 +1843,7 @@ console.log("filterType", filterType);
                       <img
                         src="/assets/img/icons/filter.png"
                         className="pointer"
-                        alt=""
+                        alt="propdial"
                         onClick={handleShow}
                       />
                       <div className="button_filter diff_views">
@@ -1725,7 +1853,6 @@ console.log("filterType", filterType);
                           }`}
                           onClick={() => handleModeChange("card_view")}
                         >
-                          
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             height="24px"
@@ -1742,7 +1869,6 @@ console.log("filterType", filterType);
                           }`}
                           onClick={() => handleModeChange("table_view")}
                         >
-                         
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             height="24px"
@@ -1759,7 +1885,10 @@ console.log("filterType", filterType);
                         className="export pointer"
                         onClick={exportExcelFormate}
                       >
-                        <img src="/assets/img/icons/excel_logo.png" alt="" />
+                        <img
+                          src="/assets/img/icons/excel_logo.png"
+                          alt="propdial"
+                        />
                       </div>
                       <>
                         <Offcanvas
@@ -1767,25 +1896,24 @@ console.log("filterType", filterType);
                           onHide={handleClose}
                           placement="start"
                         >
-                          <Offcanvas.Header closeButton >
+                          <Offcanvas.Header closeButton>
                             <Offcanvas.Title>Advance Filters</Offcanvas.Title>
                           </Offcanvas.Header>
                           <hr />
                           <Offcanvas.Body>
                             <div className="filters side_bar_filters">
-                      
-                      <div className="filter_single">
+                              <div className="filter_single">
                                 <h6>Member</h6>
                                 <div className="icon_dropdown">
-                        <select onChange={handleStaffCahnge}>
-                          <option value="">All Staff</option>
-                          {options.map((item) => (
-                            <option key={item.id} value={item.id}>
-                              {item.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                                  <select onChange={handleStaffCahnge}>
+                                    <option value="">All Staff</option>
+                                    {options.map((item) => (
+                                      <option key={item.id} value={item.id}>
+                                        {item.name}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
                               <div className="filter_single">
                                 <h6>Year</h6>
@@ -1831,159 +1959,158 @@ console.log("filterType", filterType);
               </div>
 
               {viewMode === "card_view" && (
-                <div >
+                <div>
                   {attendanceData && attendanceData.length === 0 ? (
-                   <div className="no_data">
-                   <h6>
-                   No data found
-                   </h6>
-                 </div>
+                    <div className="no_data">
+                      <h6>No data found</h6>
+                    </div>
                   ) : (
-                 
-                      <div className="previous_punch">
-                           {attendanceData &&
-                    attendanceData.length > 0 &&
-                    attendanceData.map((data) => (
-                        <div
-                          className={`pp_single ${
-                            dbUserState &&
-                            dbUserState.find(
-                              (user) => user.id === data.createdBy
-                            )?.vehicleStatus
-                              ? ""
-                              : "v_not"
-                          }`}
-                        >
-                          <div className="u_detail">
-                            <div className="ud_single">
-                              <h5>
-                                {
-                                  dbUserState?.find(
-                                    (user) => user.id === data.createdBy
-                                  )?.fullName
-                                }
-                              </h5>
-                              <h6>
-                                {dbUserState?.find(
-                                  (user) => user.id === data.createdBy
-                                )?.designation?.label || "N/A"}
-                                ,{" "}
-                                {dbUserState?.find(
-                                  (user) => user.id === data.createdBy
-                                )?.department?.label || "N/A"}
-                              </h6>
-                            </div>
-
-                            {(() => {
-                              const user = dbUserState?.find(
-                                (user) => user.id === data.createdBy
-                              );
-                              let phoneNumber = user?.phoneNumber;
-
-                              if (phoneNumber) {
-                                // Ensure phone number starts with "+"
-                                phoneNumber = phoneNumber.startsWith("+")
-                                  ? phoneNumber
-                                  : `+${phoneNumber}`;
-
-                                return (
-                                  <div className="w_c">
-                                    <a
-                                      href={`tel:${phoneNumber}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <img
-                                        src="/assets/img/simple_call.png"
-                                        alt="Call"
-                                      />
-                                    </a>
-                                    <a
-                                      href={`https://wa.me/${phoneNumber.replace(
-                                        /\s+/g,
-                                        ""
-                                      )}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <img
-                                        src="/assets/img/whatsapp_simple.png"
-                                        alt="WhatsApp"
-                                      />
-                                    </a>
-                                  </div>
-                                );
-                              }
-
-                              return null; // Do not render .w_c if no phone number
-                            })()}
-                          </div>
-
-                          <div className="top">
-                            <div className="left">
-                              {data.date ? (
-                                <h3>{data.date.slice(0, 2)}</h3>
-                              ) : (
-                                ""
-                              )}
-                              {data.weekDay ? (
-                                <h4>{data.weekDay.slice(0, 3)}</h4>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                            <div className="right">
-                              <div className="r_single">
-                                <h6> Hrs Worked</h6>
-                                {data.workHrs === "00:00" ? (
-                                  "--:--"
-                                ) : (
-                                  // <h5>{data.workHrs}</h5>
-                                  <h5>
-                                    {data.workHrs
-                                      ? data.workHrs
-                                          .split(":")
-                                          .map((val, index) => (
-                                            <span key={index}>
-                                              {val.trim()}
-                                              <span className="unit">
-                                                {index === 0 ? "hrs" : "min"}
-                                              </span>
-                                              {index === 0 && (
-                                                <span
-                                                  style={{ marginRight: "8px" }}
-                                                ></span>
-                                              )}
-                                            </span>
-                                          ))
-                                      : "--:--"}
-                                  </h5>
-                                )}
-                              </div>
-
-                              {dbUserState &&
+                    <div className="previous_punch">
+                      {attendanceData &&
+                        attendanceData.length > 0 &&
+                        attendanceData.map((data) => (
+                          <div
+                            className={`pp_single ${
+                              dbUserState &&
                               dbUserState.find(
                                 (user) => user.id === data.createdBy
-                              )?.vehicleStatus ? (
+                              )?.vehicleStatus
+                                ? ""
+                                : "v_not"
+                            }`}
+                          >
+                            <div className="u_detail">
+                              <div className="ud_single">
+                                <h5>
+                                  {
+                                    dbUserState?.find(
+                                      (user) => user.id === data.createdBy
+                                    )?.fullName
+                                  }
+                                </h5>
+                                <h6>
+                                  {dbUserState?.find(
+                                    (user) => user.id === data.createdBy
+                                  )?.designation?.label || "N/A"}
+                                  ,{" "}
+                                  {dbUserState?.find(
+                                    (user) => user.id === data.createdBy
+                                  )?.department?.label || "N/A"}
+                                </h6>
+                              </div>
+
+                              {(() => {
+                                const user = dbUserState?.find(
+                                  (user) => user.id === data.createdBy
+                                );
+                                let phoneNumber = user?.phoneNumber;
+
+                                if (phoneNumber) {
+                                  // Ensure phone number starts with "+"
+                                  phoneNumber = phoneNumber.startsWith("+")
+                                    ? phoneNumber
+                                    : `+${phoneNumber}`;
+
+                                  return (
+                                    <div className="w_c">
+                                      <a
+                                        href={`tel:${phoneNumber}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <img
+                                          src="/assets/img/simple_call.png"
+                                          alt="Call"
+                                        />
+                                      </a>
+                                      <a
+                                        href={`https://wa.me/${phoneNumber.replace(
+                                          /\s+/g,
+                                          ""
+                                        )}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <img
+                                          src="/assets/img/whatsapp_simple.png"
+                                          alt="WhatsApp"
+                                        />
+                                      </a>
+                                    </div>
+                                  );
+                                }
+
+                                return null; // Do not render .w_c if no phone number
+                              })()}
+                            </div>
+
+                            <div className="top">
+                              <div className="left">
+                                {data.date ? (
+                                  <h3>{data.date.slice(0, 2)}</h3>
+                                ) : (
+                                  ""
+                                )}
+                                {data.weekDay ? (
+                                  <h4>{data.weekDay.slice(0, 3)}</h4>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="right">
                                 <div className="r_single">
-                                  <h6> Distance</h6>
-                                  {data.tripDistance ? (
-                                    <h5>{data.tripDistance} KM</h5>
-                                  ) : (
+                                  <h6> Hrs Worked</h6>
+                                  {data.workHrs === "00:00" ? (
                                     "--:--"
+                                  ) : (
+                                    // <h5>{data.workHrs}</h5>
+                                    <h5>
+                                      {data.workHrs
+                                        ? data.workHrs
+                                            .split(":")
+                                            .map((val, index) => (
+                                              <span key={index}>
+                                                {val.trim()}
+                                                <span className="unit">
+                                                  {index === 0 ? "hrs" : "min"}
+                                                </span>
+                                                {index === 0 && (
+                                                  <span
+                                                    style={{
+                                                      marginRight: "8px",
+                                                    }}
+                                                  ></span>
+                                                )}
+                                              </span>
+                                            ))
+                                        : "--:--"}
+                                    </h5>
                                   )}
                                 </div>
-                              ) : (
-                                <div className="r_single nv">
-                                  <h6>No</h6>
-                                  <h5>Vehicle</h5>
-                                </div>
-                              )}
-                            </div>
-                          </div>
 
-                          <div
-                            className={`bottom 
+                                {dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.vehicleStatus ? (
+                                  <div className="r_single">
+                                    <h6> Distance</h6>
+                                    {data.tripDistance ? (
+                                      <h5>{data.tripDistance} KM</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="r_single nv">
+                                    <h6>No</h6>
+                                    <h5>Vehicle</h5>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            <div
+                              className={`bottom 
                               ${
                                 dbUserState &&
                                 dbUserState.find(
@@ -1992,147 +2119,156 @@ console.log("filterType", filterType);
                                   ? "trip"
                                   : ""
                               } ${
-                              moment(data.date, "DD-MMM-YY").format(
-                                "DD-MMM-YY"
-                              ) !== moment().format("DD-MMM-YY") &&
-                              !data.punchOut
-                                ? "no_punchout"
-                                : ""
-                            }
+                                moment(data.date, "DD-MMM-YY").format(
+                                  "DD-MMM-YY"
+                                ) !== moment().format("DD-MMM-YY") &&
+                                !data.punchOut
+                                  ? "no_punchout"
+                                  : ""
+                              }
                                 
                             `}
-                          >
-                            <div className="b_single">
-                              <h6>Punch In</h6>
-                              {data.punchIn ? <h5>{data.punchIn}</h5> : "--:--"}
-                            </div>
-                            <div className="b_single po">
-                              <h6>Punch Out</h6>
-                              {data.punchOut ? (
-                                <h5>{data.punchOut}</h5>
-                              ) : (
-                                "--:--"
-                              )}
-                            </div>
-                            {dbUserState &&
-                              dbUserState.find(
-                                (user) => user.id === data.createdBy
-                              )?.vehicleStatus && (
-                                <div className="b_single">
-                                  <h6>Trip Start</h6>
-                                  {data.tripStart ? (
-                                    <h5>{data.tripStart}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
-                                </div>
-                              )}
-                            {dbUserState &&
-                              dbUserState.find(
-                                (user) => user.id === data.createdBy
-                              )?.vehicleStatus && (
-                                <div className="b_single">
-                                  <h6>Trip End</h6>
-                                  {data.tripEnd ? (
-                                    <h5>{data.tripEnd}</h5>
-                                  ) : (
-                                    "--:--"
-                                  )}
-                                </div>
-                              )}
-                          </div>
-
-                          <div className={`punch_location ${
-                                expandedCards[data.id] ? "expand_text" : ""
-                              }`}>
-                            <div className="pl_single">
-                              <h6>Punch In Location</h6>
-                              {data.punchInLocation &&
-                              data.punchInLocation ===
-                                "Location access denied." ? (
-                                <h5
-                                  style={{
-                                    color: "var(--theme-red)",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  Location access denied
-                                </h5>
-                              ) : (
-                                <h5>
-                                  {data.punchInLocation
-                                    ? data.punchInLocation
-                                        .split(", ")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
-                                    : "--:--"}
-                                </h5>
-                              )}
-                            </div>
-                            <div className="pl_single">
-                              <h6>Punch Out Location </h6>
-                              {data.punchOutLocation &&
-                              data.punchOutLocation ===
-                                "Location access denied." ? (
-                                <h5
-                                  style={{
-                                    color: "var(--theme-red)",
-                                    fontWeight: "500",
-                                  }}
-                                >
-                                  Location access denied
-                                </h5>
-                              ) : (
-                                <h5>
-                                  {data.punchOutLocation
-                                    ? data.punchOutLocation
-                                        .split(", ")
-                                        .filter(
-                                          (part) =>
-                                            part.trim() !== "undefined" &&
-                                            part.trim() !== ""
-                                        )
-                                        .slice(0, -1)
-                                        .join(", ")
-                                    : "--:--"}
-                                </h5>
-                              )}
-                            </div>
-                            <div  className="expand_location"
-                              onClick={() => toggleExpand(data.id)}
-                              >
-              <span className="material-symbols-outlined">
-               
-              {expandedCards[data.id] ? (
- <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
- <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
-</svg>
-) : (
- 
-
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#606060">
-<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
-</svg>
-)}
-
-              </span>
-            </div>
-                            <div
-                             
-                             
                             >
-                            
+                              <div className="b_single">
+                                <h6>Punch In</h6>
+                                {data.punchIn ? (
+                                  <h5>{data.punchIn}</h5>
+                                ) : (
+                                  "--:--"
+                                )}
+                              </div>
+                              <div className="b_single po">
+                                <h6>Punch Out</h6>
+                                {data.punchOut ? (
+                                  <h5>{data.punchOut}</h5>
+                                ) : (
+                                  "--:--"
+                                )}
+                              </div>
+                              {dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.vehicleStatus && (
+                                  <div className="b_single">
+                                    <h6>Trip Start</h6>
+                                    {data.tripStart ? (
+                                      <h5>{data.tripStart}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                )}
+                              {dbUserState &&
+                                dbUserState.find(
+                                  (user) => user.id === data.createdBy
+                                )?.vehicleStatus && (
+                                  <div className="b_single">
+                                    <h6>Trip End</h6>
+                                    {data.tripEnd ? (
+                                      <h5>{data.tripEnd}</h5>
+                                    ) : (
+                                      "--:--"
+                                    )}
+                                  </div>
+                                )}
+                            </div>
+
+                            <div
+                              className={`punch_location ${
+                                expandedCards[data.id] ? "expand_text" : ""
+                              }`}
+                            >
+                              <div className="pl_single">
+                                <h6>Punch In Location</h6>
+                                {data.punchInLocation &&
+                                data.punchInLocation ===
+                                  "Location access denied." ? (
+                                  <h5
+                                    style={{
+                                      color: "var(--theme-red)",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    Location access denied
+                                  </h5>
+                                ) : (
+                                  <h5>
+                                    {data.punchInLocation
+                                      ? data.punchInLocation
+                                          .split(", ")
+                                          .filter(
+                                            (part) =>
+                                              part.trim() !== "undefined" &&
+                                              part.trim() !== ""
+                                          )
+                                          .slice(0, -1)
+                                          .join(", ")
+                                      : "--:--"}
+                                  </h5>
+                                )}
+                              </div>
+                              <div className="pl_single">
+                                <h6>Punch Out Location </h6>
+                                {data.punchOutLocation &&
+                                data.punchOutLocation ===
+                                  "Location access denied." ? (
+                                  <h5
+                                    style={{
+                                      color: "var(--theme-red)",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    Location access denied
+                                  </h5>
+                                ) : (
+                                  <h5>
+                                    {data.punchOutLocation
+                                      ? data.punchOutLocation
+                                          .split(", ")
+                                          .filter(
+                                            (part) =>
+                                              part.trim() !== "undefined" &&
+                                              part.trim() !== ""
+                                          )
+                                          .slice(0, -1)
+                                          .join(", ")
+                                      : "--:--"}
+                                  </h5>
+                                )}
+                              </div>
+                              <div
+                                className="expand_location"
+                                onClick={() => toggleExpand(data.id)}
+                              >
+                                <span className="material-symbols-outlined">
+                                  {expandedCards[data.id] ? (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="24px"
+                                      viewBox="0 -960 960 960"
+                                      width="24px"
+                                      fill="#606060"
+                                    >
+                                      <path d="M480-528 296-344l-56-56 240-240 240 240-56 56-184-184Z" />
+                                    </svg>
+                                  ) : (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="24px"
+                                      viewBox="0 -960 960 960"
+                                      width="24px"
+                                      fill="#606060"
+                                    >
+                                      <path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
+                                    </svg>
+                                  )}
+                                </span>
+                              </div>
+                              <div></div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                      </div>
-                  
+                        ))}
+                    </div>
                   )}
                 </div>
               )}

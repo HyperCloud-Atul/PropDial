@@ -68,8 +68,8 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
         </div>
         <div className="right">
           <img
-            src="./assets/img/icons/excel_logo.png"
-            alt=""
+            src="/assets/img/icons/excel_logo.png"
+            alt="propdial"
             className="excel_dowanload"
           />
         </div>
@@ -81,11 +81,11 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
             <div className="col-xl-5">
               <div className="total_prop_card relative">
                 <div className="bg_icon">
-                  <img src="/assets/img/coin.png" alt="" />
+                  <img src="/assets/img/coin.png" alt="propdial" />
                 </div>
                 <div className="inner">
                   <div className="icon">
-                    <img src="/assets/img/wallet.png" alt="" />
+                    <img src="/assets/img/wallet.png" alt="propdial" />
                   </div>
                   <div className="content">
                     <h4 className="title">Referral Income</h4>

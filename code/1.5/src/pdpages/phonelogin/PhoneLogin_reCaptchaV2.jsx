@@ -264,7 +264,8 @@ const PhoneLogin_reCaptchaV2 = () => {
   const verifyOTP = async (e) => {
     if (otp === "" || otp === undefined || otp === null) return;
     try {
-      setIsLoading(true); // Start the loader
+      setIsLoading(true); // Start the loader     
+      
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
         setUser(user)
@@ -278,24 +279,24 @@ const PhoneLogin_reCaptchaV2 = () => {
 
         }
         else {//Existing User
-          console.log("Existing User Signed-In")
-          setIsLoading(false); // Start the loader
+          console.log("Existing User Signed-In")         
           allSliderVisible(false)
           navigate("/dashboard"); //Navigae to dashboard 
         }
       })
-
+      setIsLoading(false); // Start the loader
     }
     catch (error) {
       console.log("error.message", error.message);
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
       );
-
+      setIsLoading(false); // Start the loader
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
       }, 30000);
+     
     }
   }
   const toggleOtpVisibility = () => {
@@ -393,7 +394,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   return (
     <div className="phone_login two_col_page top_header_pg">
       <div className="right col_right">
-        <img src="/assets/img/login_img2.png" alt="" />
+        <img src="/assets/img/login_img2.png" alt="propdial" />
       </div>
       <div className="left col_left">
 
@@ -401,7 +402,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           <>
             <div className="left_inner col_left_inner">
               {/* <div className="page_inner_logo">
-                <img src="/assets/img/logo_propdial.png" alt="" />
+                <img src="/assets/img/logo_propdial.png" alt="propdial" />
               </div> */}
               <div className="vg22"></div>
               <form action="">
@@ -506,7 +507,7 @@ const PhoneLogin_reCaptchaV2 = () => {
           {otpSliderState && (
             <div className="left_inner col_left_inner">
               {/* <div className="page_inner_logo">
-                <img src="/assets/img/logo_propdial.png" alt="" />
+                <img src="/assets/img/logo_propdial.png" alt="propdial" />
               </div> */}
 
               <div className="vg22"></div>
@@ -526,15 +527,19 @@ const PhoneLogin_reCaptchaV2 = () => {
                   color:"var(--light-black)",
                   fontWeight:"500"
                 }}>{phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}</span>
-                  {/* <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
-                    style={{
-                      position: "absolute",
-                      top: "0",
-                      right: "0"
-                    }}
-                  >
-                    {isOtpHidden ? "Show" : "Hide"}
-                  </span> */}
+                  <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
+                style={{
+                  marginLeft:"5px",
+                  position:"relative",
+                  top:"-2px"
+                }}
+                >
+                  {!isOtpHidden ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
+                  )}
+                </span>
 
                 </label>
                 <OtpInput
@@ -584,14 +589,14 @@ const PhoneLogin_reCaptchaV2 = () => {
               {isLoading && (
                 <button
                   className="theme_btn btn_fill w_full no_icon"
-                  onClick={verifyOTP}
+                  onClick={verifyOTP}                 
                 >
                   Confirm
                 </button>
               )}
               {!isLoading && (
                 <div className="text-center">
-                  <h6 className="text_green mb-2">Redirecting to Dashboard...</h6>
+                  <h6 className="text_green mb-2">Redirecting...</h6>
                   <BeatLoader color={"#00a8a8"} loading={true} />
                 </div>
               )}
@@ -613,7 +618,7 @@ const PhoneLogin_reCaptchaV2 = () => {
             <>
               <div className="left_inner col_left_inner">
                 {/* <div className="page_inner_logo">
-                  <img src="/assets/img/logo_propdial.png" alt="" />
+                  <img src="/assets/img/logo_propdial.png" alt="propdial" />
                 </div> */}
 
                 <div className="vg22"></div>

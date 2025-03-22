@@ -163,8 +163,8 @@ const UserList = () => {
           </div>
           <div className="right">
             <img
-              src="./assets/img/icons/excel_logo.png"
-              alt=""
+              src="/assets/img/icons/excel_logo.png"
+              alt="propdial"
               className="excel_dowanload pointer"
               onClick={exportUsers}
             />
