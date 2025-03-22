@@ -7,7 +7,7 @@ import "./Hero.css"
 const Hero = (props) => {
   const location = useLocation(); // Get the current location
   // hero display none Array 
-  const excludedPaths = ["/", "/about-us", "/contact-us", "/faq", "/privacypolicy", "/terms"];
+  const excludedPaths = ["/", "/about-us", "/contact-us", "/faq", "/privacypolicy", "/terms","/blog","/blogdetails"];
   const shouldHeroHide = excludedPaths.includes(location.pathname);
   const heroClass = `hero_component ${shouldHeroHide ? "" : "hero_display_none"}`;
   // hero display none Array 

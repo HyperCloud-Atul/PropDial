@@ -23,10 +23,11 @@ import PGNotification from "./pdpages/notification/PGNotification";
 import PGAttendance from "./pdpages/attendance/PGAttendance";
 import PGHrAttendance from "./pdpages/attendance/PGHrAttendance";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
+import PGBlog from "./pdpages/blogs/PGBlog";
+import PGBlogDetails from "./pdpages/blogs/PGBlogDetails";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
 import PGTerms from "./pdpages/terms/PGTerms";
 import PGContactUs from "./pdpages/contact_us/PGContactUs";
-
 import PGMoreMenu from "./pdpages/more-menu/PGMoreMenu";
 import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
@@ -485,6 +486,8 @@ function App() {
                       ></Route>
                       <Route path="/terms" element={<PGTerms />}></Route>
                       <Route path="/about-us" element={<PGAboutUs />}></Route>
+                      <Route path="/blog" element={<PGBlog />}></Route>
+                      <Route path="/pgblogdetails" element={<PGBlogDetails />}></Route>
                       <Route
                         path="/contact-us"
                         element={<PGContactUs />}
