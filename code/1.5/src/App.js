@@ -552,7 +552,7 @@ function App() {
                       <Route path="/terms" element={<PGTerms />}></Route>
                       <Route path="/about-us" element={<PGAboutUs />}></Route>
                       <Route path="/blog" element={<PGBlog />}></Route>
-                      <Route path="/pgblogdetails" element={<PGBlogDetails />}></Route>
+                      <Route path="/blogdetails" element={<PGBlogDetails />}></Route>
                       <Route
                         path="/contact-us"
                         element={<PGContactUs />}
