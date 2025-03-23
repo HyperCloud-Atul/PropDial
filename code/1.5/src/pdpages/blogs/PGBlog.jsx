@@ -145,8 +145,7 @@ const PGBlog = () => {
         "Here is the full detail of Sustainable Property Management Practices for 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       comments: [
         { author: "Alice", text: "Great post!" },
-        { author: "Bob", text: "Very informative." },
-      ],
+        { author: "Bob", text: "Very informative." }],
       image: propertyCardImage,
     },
     {
@@ -200,6 +199,18 @@ const PGBlog = () => {
       comments: [{ author: "Frank", text: "Can't wait to travel!" }],
       image: TravelCardImage,
     },
+    {
+      id: 6,
+      category: "Motivation",
+      title: "Top Motivations for 2024",
+      description:
+        "Discover the most breathtaking travel destinations you should visit in 2024.",
+      posted: "8 hours ago",
+      fullContent:
+        "An in-depth guide to Top Travel Destinations for 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      comments: [{ author: "Frank", text: "Can't wait to travel!" }],
+      image: TravelCardImage,
+    },
   ];
 
   // Toggle to show or hide extra posts
@@ -243,7 +254,7 @@ const PGBlog = () => {
                   <div className="footer-links">
                     {/* IMPORTANT: Use v6 syntax for passing 'post' */}
                     <Link
-                      to="/pgblogdetails"
+                      to="/blogdetails"
                       state={{ post }}
                       className="read-more"
                     >
@@ -276,7 +287,7 @@ const PGBlog = () => {
                     <span>{post.posted}</span>
                     <div className="footer-links">
                       <Link
-                        to="/pgblogdetails"
+                        to="/blogdetails"
                         state={{ post }}
                         className="read-more"
                       >
