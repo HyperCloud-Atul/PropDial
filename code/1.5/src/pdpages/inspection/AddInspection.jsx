@@ -9,12 +9,14 @@ import firebase from "firebase";
 import { useDocument } from "../../hooks/useDocument";
 import { projectStorage } from "../../firebase/config";
 import imageCompression from "browser-image-compression";
+import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { BarLoader, ClipLoader } from "react-spinners";
 import ScrollToTop from "../../components/ScrollToTop";
 import PropertySummaryCard from "../property/PropertySummaryCard";
 const AddInspection = () => {
   const { inspectionId } = useParams();
+  const navigate = useNavigate();
   const { user } = useAuthContext();
   const [rooms, setRooms] = useState([]);
   const [inspectionData, setInspectionData] = useState({});
@@ -23,6 +25,8 @@ const AddInspection = () => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [isDataSaving, setIsDataSaving] = useState(false);
   const [show, setShow] = useState(false);
+  const [finalSubmit, setFinalSubmit] = useState(false);
+  const [finalSubmiting, setFinalSubmiting] = useState(false);
   const [afterSaveModal, setAfterSaveModal] = useState(false);
   const [propertydoc, setPropertyDoc] = useState(null);
   const [propertyerror, setPropertyError] = useState(null);
@@ -112,6 +116,7 @@ const AddInspection = () => {
                   otherIssue: "",
                   otherIssueRemark: "",
                   generalRemark: "",
+                  
                 };
               }
             });
@@ -208,74 +213,55 @@ const AddInspection = () => {
   };
 
   const handleChange = (roomId, field, value) => {
-    setInspectionData((prev) => ({
-      ...prev,
-      [roomId]: {
+    setInspectionData((prev) => {
+      const updatedRoomData = {
         ...prev[roomId],
         [field]: value,
-      },
-    }));
+      };  
+      // Check if the field is an issue field (like seepage, termites, or otherIssue)
+      if (field === "seepage" || field === "termites" || field === "otherIssue") {
+        const remarkField = `${field}Remark`; // Derive the corresponding remark field name
+        if (value === "no") {
+          updatedRoomData[remarkField] = "There is no issue";
+        } else if (value === "yes") {
+          updatedRoomData[remarkField] = ""; // Reset to blank if "yes"
+        }
+      }
+  
+      return {
+        ...prev,
+        [roomId]: updatedRoomData,
+      };
+    });
   };
 
   const isFinalSubmitEnabled = () => {
     return Object.values(inspectionData).every(
-      (room) => room.seepage && room.termites && room.otherIssue
+      (room) =>
+        room.seepage &&
+        room.termites &&
+        room.otherIssue &&
+        room.seepageRemark &&
+        room.termitesRemark &&
+        room.otherIssueRemark &&
+        room.generalRemark &&
+        room.images?.length > 0 // Ensures every room has at least 1 image uploaded
     );
   };
 
   const getRoomClass = (roomId) => {
     const room = inspectionData[roomId];
-    const filledFields = [room.seepage, room.termites, room.otherIssue].filter(
+    const filledFields = [room.seepage, room.seepageRemark, room.termites, room.termitesRemark, room.otherIssue, room.otherIssueRemark, room.generalRemark, room.images?.length > 0].filter(
       Boolean
     ).length;
 
     let className = "room-button";
-    if (filledFields === 3) className += " full";
+    if (filledFields === 8) className += " full";
     else if (filledFields > 0) className += " half";
     if (roomId === activeRoom) className += " active";
 
     return className;
   };
-
-  // const handleSave = async () => {
-  //   try {
-  //     await projectFirestore
-  //       .collection("inspections")
-  //       .doc(inspectionId)
-  //       .update({
-  //         rooms: Object.values(inspectionData),
-  //         updatedAt: timestamp.now(),
-  //       });
-  //     alert("Inspection data saved successfully!");
-  //   } catch (error) {
-  //     console.error("Error saving inspection:", error);
-  //   }
-  // };
-
-  // const handleFinalSubmit = async () => {
-  //   if (
-  //     !window.confirm(
-  //       "Final Submit ke baad aap isko edit nahi kar paayenge. Kya aap sure hain?"
-  //     )
-  //   ) {
-  //     return;
-  //   }
-
-  //   try {
-  //     await projectFirestore
-  //       .collection("inspections")
-  //       .doc(inspectionId)
-  //       .update({
-  //         rooms: Object.values(inspectionData),
-  //         finalSubmit: true,
-  //         updatedAt: timestamp.now(),
-  //       });
-  //     alert("Inspection data successfully finalized!");
-  //   } catch (error) {
-  //     console.error("Error in final submit:", error);
-  //   }
-  // };
-
   const handleSave = async () => {
     setIsDataSaving(true);
 
@@ -302,14 +288,7 @@ const AddInspection = () => {
   };
 
   const handleFinalSubmit = async () => {
-    if (
-      !window.confirm(
-        "Final Submit ke baad aap isko edit nahi kar paayenge. Kya aap sure hain?"
-      )
-    ) {
-      return;
-    }
-
+    setFinalSubmiting(true);
     try {
       await projectFirestore
         .collection("inspections")
@@ -323,9 +302,14 @@ const AddInspection = () => {
             updatedBy: user.uid,
           }),
         });
-      alert("Inspection data successfully finalized!");
+      navigate(`/inspection-report/${inspectionId}`);
+      setFinalSubmiting(false);
+      setFinalSubmit(false);
     } catch (error) {
       console.error("Error in final submit:", error);
+    } finally {
+      setFinalSubmiting(false);
+      setFinalSubmit(false);
     }
   };
 
@@ -432,7 +416,6 @@ const AddInspection = () => {
                   {/* <h3>
                     {rooms.find((room) => room.id === activeRoom)?.roomName}
                   </h3> */}
-
                   <form className="add_inspection_form">
                     <div className="aai_form">
                       <div className="row row_gap_20">
@@ -503,22 +486,20 @@ const AddInspection = () => {
                                   </label>
                                 </div>
                               </div>
-                              <div className="vg12"></div>
-                              <textarea
-                                placeholder="Seepage Remark"
-                                className="w-100"
-                                value={
-                                  inspectionData[activeRoom]?.seepageRemark ||
-                                  ""
-                                }
-                                onChange={(e) =>
-                                  handleChange(
-                                    activeRoom,
-                                    "seepageRemark",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              
+                              {inspectionData[activeRoom]?.seepage === "yes" && (
+        <>
+          <div className="vg12"></div>
+          <textarea
+            placeholder="Seepage Remark*"
+            className="w-100"
+            value={inspectionData[activeRoom]?.seepageRemark || ""}
+            onChange={(e) =>
+              handleChange(activeRoom, "seepageRemark", e.target.value)
+            }
+          />
+        </>
+      )}            
                             </div>
                           </div>
                         </div>
@@ -588,23 +569,21 @@ const AddInspection = () => {
                                     No
                                   </label>
                                 </div>
-                              </div>
-                              <div className="vg12"></div>
-                              <textarea
-                                placeholder="Termites Remark"
-                                value={
-                                  inspectionData[activeRoom]?.termitesRemark ||
-                                  ""
-                                }
-                                className="w-100"
-                                onChange={(e) =>
-                                  handleChange(
-                                    activeRoom,
-                                    "termitesRemark",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              </div>                             
+                            
+                              {inspectionData[activeRoom]?.termites === "yes" && (
+        <>
+          <div className="vg12"></div>
+          <textarea
+            placeholder="Termites Remark*"
+            value={inspectionData[activeRoom]?.termitesRemark || ""}
+            className="w-100"
+            onChange={(e) =>
+              handleChange(activeRoom, "termitesRemark", e.target.value)
+            }
+          />
+        </>
+      )}
                             </div>
                           </div>
                         </div>
@@ -678,23 +657,21 @@ const AddInspection = () => {
                                     No
                                   </label>
                                 </div>
-                              </div>
-                              <div className="vg12"></div>
-                              <textarea
-                                placeholder="Other Issue Remark"
-                                value={
-                                  inspectionData[activeRoom]
-                                    ?.otherIssueRemark || ""
-                                }
-                                className="w-100"
-                                onChange={(e) =>
-                                  handleChange(
-                                    activeRoom,
-                                    "otherIssueRemark",
-                                    e.target.value
-                                  )
-                                }
-                              />
+                              </div>                           
+                           
+                                {inspectionData[activeRoom]?.otherIssue === "yes" && (
+        <>
+            <div className="vg12"></div>
+          <textarea
+            placeholder="Other Issue Remark*"
+            value={inspectionData[activeRoom]?.otherIssueRemark || ""}
+            className="w-100"
+            onChange={(e) =>
+              handleChange(activeRoom, "otherIssueRemark", e.target.value)
+            }
+          />
+        </>
+      )}
                             </div>
                           </div>
                         </div>
@@ -716,7 +693,7 @@ const AddInspection = () => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                              General Remark
+                              General Remark*
                             </h6>
                             <div className="field_box theme_radio_new">
                               <textarea
@@ -758,13 +735,13 @@ const AddInspection = () => {
                                 color: "var(--theme-blue)",
                               }}
                             >
-                              Upload images{" "}
+                              Upload images*{" "}
                               <span
                                 style={{
                                   fontSize: "13px",
                                 }}
                               >
-                                (Max 10 images can be uploaded.)
+                                (A minimum of 1 and a maximum of 10 images can be uploaded.)
                               </span>
                             </h6>
                             <div className="add_and_images">
@@ -818,8 +795,8 @@ const AddInspection = () => {
                   <div className="bottom_fixed_button">
                     <div className="next_btn_back">
                       <button
-                        className="theme_btn no_icon btn_fill full_width"
-                        onClick={handleFinalSubmit}
+                        className="theme_btn no_icon btn_fill2 full_width"
+                        onClick={() => setFinalSubmit(true)}
                         disabled={!isFinalSubmitEnabled()}
                         style={{
                           opacity: !isFinalSubmitEnabled() ? 0.5 : 1,
@@ -853,6 +830,7 @@ const AddInspection = () => {
           )}
         </div>
       </div>
+      {/* image upload modal  */}
       <Modal show={show} centered className="uploading_modal">
         <h6
           style={{
@@ -864,6 +842,7 @@ const AddInspection = () => {
         <BarLoader color="var(--theme-green2)" loading={true} height={10} />
       </Modal>
 
+      {/* saved successfully  */}
       <Modal
         show={afterSaveModal}
         onHide={() => setAfterSaveModal(false)}
@@ -871,13 +850,19 @@ const AddInspection = () => {
         centered
       >
         <h5 className="done_div text-center">
-          <img src="/assets/img/icons/check-mark.png" alt=""  style={{
-            height:"65px",
-            width:"auto"
-          }}/>
+          <img
+            src="/assets/img/icons/check-mark.png"
+            alt=""
+            style={{
+              height: "65px",
+              width: "auto",
+            }}
+          />
           <h5 className="text_green2 mb-0">Saved Successfully</h5>
         </h5>
-        <h6 className="text-center text_black mb-0">What would you like to do next?</h6>
+        <h6 className="text-center text_black mb-0">
+          What would you like to do next?
+        </h6>
         <div className="inspection_types">
           <Link className="it_single" onClick={() => setAfterSaveModal(false)}>
             <div
@@ -933,13 +918,11 @@ const AddInspection = () => {
               style={{
                 gap: "5px",
               }}
-
             >
               <img src="/assets/img/icons/view-all.png" alt="" />
               <div>
                 <h5>View All</h5>
                 <h6>Return to the inspections list to see all records</h6>
-                
               </div>
             </div>
 
@@ -954,6 +937,43 @@ const AddInspection = () => {
             </svg>
           </Link>
         </div>
+      </Modal>
+
+      {/* final submit alert  */}
+      <Modal show={finalSubmit} onHide={() => setFinalSubmit(false)} centered>
+        <Modal.Header
+          className="justify-content-center"
+          style={{
+            paddingBottom: "0px",
+            border: "none",
+          }}
+        >
+          <h5>Alert</h5>
+        </Modal.Header>
+        <Modal.Body
+          className="text-center"
+          style={{
+            color: "#FA6262",
+            fontSize: "20px",
+            border: "none",
+          }}
+        >
+          After final submission, you won't be able to edit this inspection.
+        </Modal.Body>
+        <Modal.Footer
+          className="d-flex justify-content-between"
+          style={{
+            border: "none",
+            gap: "15px",
+          }}
+        >
+          <div className="cancel_btn" onClick={() => setFinalSubmit(false)}>
+            Cancel
+          </div>
+          <div className="done_btn" onClick={handleFinalSubmit}>
+            {finalSubmiting ? "Processing..." : "Proceed"}
+          </div>
+        </Modal.Footer>
       </Modal>
     </div>
   );

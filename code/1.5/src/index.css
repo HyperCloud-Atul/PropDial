@@ -145,6 +145,11 @@ a.theme_btn.btn_white {
   border: 1px solid var(--theme-green);
   color: var(--white-color);
 }
+.theme_btn.btn_fill2 {
+  background: var(--theme-green2);
+  border: 1px solid var(--theme-green2);
+  color: var(--white-color);
+}
 
 .theme_btn.min_width {
   min-width: 100px;
