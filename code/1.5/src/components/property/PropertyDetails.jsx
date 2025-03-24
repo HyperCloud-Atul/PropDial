@@ -1149,6 +1149,20 @@ const PropertyDetails = () => {
   //   : [];
   // // Debugging logs to check the filtered results
 
+// inspection click code start
+  const [showLayoutAlert, setShowLayoutAlert] = useState(false);
+
+  const handleInspectionClick = (e) => {
+    if (!propertyLayouts || propertyLayouts.length === 0) {
+      e.preventDefault(); // Prevent default redirect behavior
+      setShowLayoutAlert(true); // Show the modal
+    }
+  };
+  const closeLayoutAlertModal = () => {
+    setShowLayoutAlert(false);
+  };
+  // inspection click code end
+
   return (
     <>
     <ScrollToTop/>
@@ -2526,7 +2540,7 @@ const PropertyDetails = () => {
                       >
                           <SwiperSlide>
                        
-                       <Link to={`/inspection/${propertyid}`}>
+                          <Link to={`/inspection/${propertyid}`} onClick={handleInspectionClick}>
                          <div className="eicp_single">
                            <div className="icon">
                              <span className="material-symbols-outlined">
@@ -2534,11 +2548,12 @@ const PropertyDetails = () => {
                              </span>
                              <div className="text">
                                <h6>{inspections && inspections.length}</h6>
-                               <h5>Inspections</h5>
+                               <h5>Inspections</h5>                                  
                              </div>
                            </div>
                          </div>
                        </Link>
+       
                      </SwiperSlide>
                         {/* Documents */}
                         <SwiperSlide>
@@ -2558,7 +2573,7 @@ const PropertyDetails = () => {
                             </div>
                           </Link>
                         </SwiperSlide>
-                        {/* Inspection  */}
+                       
 
                         {/* Enquiry  */}
                         <SwiperSlide>
@@ -2898,6 +2913,7 @@ const PropertyDetails = () => {
                     }
                   ></PropertyLayoutComponent>
                 )}
+                
                 {propertyDocument &&
                   propertyDocument.category === "Residential" && (
                     <>
@@ -2918,13 +2934,13 @@ const PropertyDetails = () => {
                                   (user.role === "admin" ||
                                     user.role === "superAdmin") && (
                                     <div
-                                      className="col-sm-1 col-2"
+                                      className="col-sm-1 col-2 pointer"
                                       style={{
                                         paddingRight: "0px",
                                       }}
                                     >
                                       <div className="plus_icon">
-                                        <Link
+                                        <div
                                           className="plus_icon_inner"
                                           onClick={
                                             handleShowPropertyLayoutComponent
@@ -2933,7 +2949,7 @@ const PropertyDetails = () => {
                                           <span className="material-symbols-outlined">
                                             add
                                           </span>
-                                        </Link>
+                                        </div>
                                       </div>
                                     </div>
                                   )}
@@ -3351,7 +3367,7 @@ const PropertyDetails = () => {
                           </section>
                         )}
                     </>
-                  )}
+                  )}                  
 
                 {/* property layout section end  */}
 
@@ -6459,6 +6475,30 @@ const PropertyDetails = () => {
                 </div>
               ))} */}
           </div>
+          <Modal show={showLayoutAlert} onHide={closeLayoutAlertModal} centered>
+                <Modal.Header className="justify-content-center" style={{
+                  paddingBottom: "0px",
+                  border: "none"
+                }}>
+                  <h5>
+                  Action Required!
+                  </h5>
+                </Modal.Header>
+                <Modal.Body className="text-center" style={{
+                  color: "#FA6262",
+                  fontSize: "20px",
+                  border: "none"
+                }}>To proceed, Please add a property layout</Modal.Body>
+                <Modal.Footer className="d-flex justify-content-center" style={{
+                  border: "none",
+                  gap: "15px"
+                }}>                 
+                  <div className="done_btn" onClick={closeLayoutAlertModal}>
+                 OKAY
+                  </div>
+                </Modal.Footer>
+              </Modal>
+
         </div>
       </div>
     </>

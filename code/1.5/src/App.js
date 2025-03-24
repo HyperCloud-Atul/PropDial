@@ -432,7 +432,7 @@ function App() {
 
       <div className="page">
         {
-          // authIsReady && 
+          authIsReady && 
           (
 
 
@@ -624,17 +624,36 @@ function App() {
                     ></Route>
                     <Route
                       path="/inspection/:propertyid"
-                      element={<ViewInspection></ViewInspection>}
+                   
+                      element={
+                        user && (user.role === "admin" || user.role === "superAdmin" || user.role === "owner") ? (
+                          <ViewInspection />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
                     ></Route>
                     <Route
-                      path="/inspection-report/:inspectionid"
-                      element={<InspectionDetails></InspectionDetails>}
+                      path="/inspection-report/:inspectionid"                    
+                      element={
+                        user && (user.role === "admin" || user.role === "superAdmin" || user.role === "owner") ? (
+                          <InspectionDetails />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
                     ></Route>
 
 
                     <Route
                       path="/add-inspection/:inspectionId"
-                      element={<AddInspection />}
+                      element={
+                        user && (user.role === "admin" || user.role === "superAdmin") ? (
+                          <AddInspection />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }                     
                     />
                     <Route
                       path="/tenantdetails/:tenantId"

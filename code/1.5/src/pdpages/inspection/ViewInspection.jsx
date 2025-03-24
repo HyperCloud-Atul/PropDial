@@ -8,13 +8,14 @@ import { Modal } from "react-bootstrap";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { format, subMonths } from "date-fns";
+import { ClipLoader, BarLoader } from "react-spinners";
 
 // import component
 import ScrollToTop from "../../components/ScrollToTop";
 import PropertySummaryCard from "../property/PropertySummaryCard";
 import InactiveUserCard from "../../components/InactiveUserCard";
 import ReactTable from "../../components/ReactTable";
-import { ClipLoader, BarLoader } from "react-spinners";
+
 
 // import css
 import "./Inspection.scss";
@@ -36,13 +37,13 @@ const ViewInspections = () => {
     "properties-propdial",
     propertyid
   );
-      // card and table view mode functionality start
-      const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
-  
-      const handleModeChange = (newViewMode) => {
-        setviewMode(newViewMode);
-      };
-      // card and table view mode functionality end
+  // card and table view mode functionality start
+  const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
+
+  const handleModeChange = (newViewMode) => {
+    setviewMode(newViewMode);
+  };
+  // card and table view mode functionality end
 
   // fetch user
   const { documents: dbUsers, error: dbuserserror } = useCollection(
@@ -403,8 +404,6 @@ const ViewInspections = () => {
     );
   }
 
-
-
   return (
     <>
       <div className="pg_min_height">
@@ -418,7 +417,7 @@ const ViewInspections = () => {
           </h6>
           <BarLoader color="var(--theme-green2)" loading={true} height={10} />
         </Modal>
-        {user && user.status === "active" ? (
+        {user?.status === "active" ? (
           <div className="top_header_pg pg_bg property_keys_pg property_inspection_pg">
             <ScrollToTop />
             <div className="page_spacing pg_min_height">
@@ -509,25 +508,27 @@ const ViewInspections = () => {
                 </div>
               )}
               {inspections && inspections.length !== 0 && (
-             <>
-             <div className="vg22"></div>
-              <div className="filters">
-                <div className="left">
-                  <div className="rt_global_search search_field">
-                    <input
-                   type="text"
-                   placeholder="Search inspections..."
-                   value={searchTerm}
-                   onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <div className="field_icon">
-                      <span className="material-symbols-outlined">search</span>
+                <>
+                  <div className="vg22"></div>
+                  <div className="filters">
+                    <div className="left">
+                      <div className="rt_global_search search_field">
+                        <input
+                          type="text"
+                          placeholder="Search inspections..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <div className="field_icon">
+                          <span className="material-symbols-outlined">
+                            search
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="right">
-                  <div className="user_filters new_inline">
-                  {/* <div className="form_field">
+                    <div className="right">
+                      <div className="user_filters new_inline">
+                        {/* <div className="form_field">
               <div className="field_box theme_checkbox">
                 <div
                   className="theme_checkbox_container"
@@ -561,9 +562,8 @@ const ViewInspections = () => {
                 </div>
               </div>
             </div> */}
-                 
-                
-                     {/* <select
+
+                        {/* <select
                     value={selectedDateRange}
                     onChange={(e) => setSelectedDateRange(e.target.value)}
                   >
@@ -572,7 +572,7 @@ const ViewInspections = () => {
                     <option value="last6months">Last 6 Months</option>
                     <option value="lastyear">Last 1 Year</option>
                   </select> */}
-                  {/* <div className="active-filters">
+                        {/* <div className="active-filters">
                   <h4>Active Filters</h4>
                   {searchTerm && <span>Search: {searchTerm}</span>}
                   {selectedInspectionTypes.length > 0 && (
@@ -584,117 +584,136 @@ const ViewInspections = () => {
                     <span>Date Range: {selectedDateRange}</span>
                   )}
                 </div> */}
-                  </div>
-                  <div className="button_filter diff_views">
-                    <div
-                      className={`bf_single ${
-                        viewMode === "card_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("card_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        calendar_view_month
-                      </span>
+                      </div>
+                      <div className="button_filter diff_views">
+                        <div
+                          className={`bf_single ${
+                            viewMode === "card_view" ? "active" : ""
+                          }`}
+                          onClick={() => handleModeChange("card_view")}
+                        >
+                          <span className="material-symbols-outlined">
+                            calendar_view_month
+                          </span>
+                        </div>
+                        <div
+                          className={`bf_single ${
+                            viewMode === "table_view" ? "active" : ""
+                          }`}
+                          onClick={() => handleModeChange("table_view")}
+                        >
+                          <span className="material-symbols-outlined">
+                            view_list
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div
-                      className={`bf_single ${
-                        viewMode === "table_view" ? "active" : ""
-                      }`}
-                      onClick={() => handleModeChange("table_view")}
-                    >
-                      <span className="material-symbols-outlined">
-                        view_list
-                      </span>
-                    </div>
                   </div>
-                </div>
-              </div>
-              <hr></hr>
-              {viewMode === "card_view" && (
-              <div className="propdial_users all_tenants inspection_card">
-                {filteredInspections &&
-                  filteredInspections.map((iDoc) => (
-                    <div className="pu_single">
-                      <div className="tc_single relative item">
-                        <div className="left">
-                          <div className="tenant_detail">
-                            <div className="t_name pointer">
-                              {iDoc.inspectionType} Inspection
-                            </div>
-                            <div className="i_areas">
-                              {iDoc.rooms?.length ? (
-                                iDoc.rooms.map((room, idx) => (
-                                  <span key={idx}>
-                                    {room.roomName || "No Room Name"}
-                                    {idx < iDoc.rooms.length - 1}
-                                  </span>
-                                ))
-                              ) : (
-                                <span>No Inspections Available</span>
+                  <hr></hr>
+                  {viewMode === "card_view" && (
+                    <div className="propdial_users all_tenants inspection_card">
+                      {filteredInspections &&
+                        filteredInspections.map((iDoc) => (
+                          <div className="pu_single">
+                            <div className="tc_single relative item">
+                              <div className="left">
+                                <div className="tenant_detail">
+                                  <div className="t_name pointer">
+                                    {iDoc.inspectionType} Inspection
+                                  </div>
+                                  <div className="i_areas">
+                                    {iDoc.rooms?.length ? (
+                                      iDoc.rooms.map((room, idx) => (
+                                        <span key={idx}>
+                                          {room.roomName || "No Room Name"}
+                                          {idx < iDoc.rooms.length - 1}
+                                        </span>
+                                      ))
+                                    ) : (
+                                      <span>No Inspections Available</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={`wha_call_icon ${
+                                  iDoc.finalSubmit ? "final_submit" : "final_submit"
+                                }`}
+                              >
+                                {!iDoc.finalSubmit && (
+                                  <Link
+                                    className="wha_icon wc_single"
+                                    to={`/add-inspection/${iDoc.id}`}
+                                    style={{
+                                      height:"100%"
+                                    }}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="24px"
+                                      viewBox="0 -960 960 960"
+                                      width="24px"
+                                      fill="#00a8a8"
+                                    >
+                                      <path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z" />
+                                    </svg>
+                                  </Link>
+                                )}
+{iDoc.finalSubmit && (
+                                <Link
+                                  className="call_icon wc_single"
+                                  to={`/inspection-report/${iDoc.id}`}
+                                  style={{
+                                    height:"100%"
+                                  }}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="24px"
+                                    viewBox="0 -960 960 960"
+                                    width="24px"
+                                    fill="#00a8a8"
+                                  >
+                                    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                                  </svg>
+                                </Link>
+                                )}
+                              </div>
+                              {iDoc.status === "inactive" && (
+                                <div className="inactive_tag">Inactive</div>
                               )}
                             </div>
+                            <div className="dates">
+                              <div className="date_single">
+                                <strong>At</strong>:{" "}
+                                <span>
+                                  {format(iDoc.createdAt.toDate(), "dd-MMM-yy")}
+                                </span>
+                              </div>
+                              <div className="date_single">
+                                <strong>By</strong>:{" "}
+                                <span>
+                                  {dbUserState &&
+                                    dbUserState.find(
+                                      (user) => user.id === iDoc.createdBy
+                                    )?.displayName}
+                                </span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className={`wha_call_icon ${iDoc.finalSubmit ? "final_submit" : ""}`}>
-                        
-                          {!iDoc.finalSubmit && (
- <Link
- className="wha_icon wc_single"
- to={`/add-inspection/${iDoc.id}`}
- 
->
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M80 0v-160h800V0H80Zm160-320h56l312-311-29-29-28-28-311 312v56Zm-80 80v-170l448-447q11-11 25.5-17t30.5-6q16 0 31 6t27 18l55 56q12 11 17.5 26t5.5 31q0 15-5.5 29.5T777-687L330-240H160Zm560-504-56-56 56 56ZM608-631l-29-29-28-28 57 57Z"/></svg>
-</Link>
-                          )}
-                       
-                          <Link
-                            className="call_icon wc_single"
-                            to={`/inspection-report/${iDoc.id}`}                            
-                          >
-                           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-                          </Link>
-                         
-                        </div>
-                        {iDoc.status === "inactive" && (
-                          <div className="inactive_tag">Inactive</div>
-                        )}
-                      </div>
-                      <div className="dates">
-                        <div className="date_single">
-                          <strong>At</strong>:{" "}
-                          
-                          <span>
-                            {format(iDoc.createdAt.toDate(), "dd-MMM-yy")}
-                          </span>
-                        </div>
-                        <div className="date_single">
-                          <strong>By</strong>:{" "}
-                          <span>
-                            {dbUserState &&
-                              dbUserState.find(
-                                (user) => user.id === iDoc.createdBy
-                              )?.displayName}
-                          </span>
-                        </div>
-                      </div>
+                        ))}
                     </div>
-                  ))}
-              </div>
-               )}
-               {viewMode === "table_view" && (
-                 <div className="user-single-table table_filter_hide mt-3">
-                  <ReactTable
-                    tableColumns={columns}
-                    tableData={filteredInspections}
-                  />
-                </div>
-                     )}
-             </>
-               )}
-            
-               
-
-          
+                  )}
+                  {viewMode === "table_view" && (
+                    <div className="user-single-table table_filter_hide mt-3">
+                      <ReactTable
+                        tableColumns={columns}
+                        tableData={filteredInspections}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         ) : (

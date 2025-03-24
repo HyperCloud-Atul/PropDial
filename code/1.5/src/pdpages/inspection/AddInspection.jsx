@@ -116,7 +116,6 @@ const AddInspection = () => {
                   otherIssue: "",
                   otherIssueRemark: "",
                   generalRemark: "",
-                  
                 };
               }
             });
@@ -217,9 +216,13 @@ const AddInspection = () => {
       const updatedRoomData = {
         ...prev[roomId],
         [field]: value,
-      };  
+      };
       // Check if the field is an issue field (like seepage, termites, or otherIssue)
-      if (field === "seepage" || field === "termites" || field === "otherIssue") {
+      if (
+        field === "seepage" ||
+        field === "termites" ||
+        field === "otherIssue"
+      ) {
         const remarkField = `${field}Remark`; // Derive the corresponding remark field name
         if (value === "no") {
           updatedRoomData[remarkField] = "There is no issue";
@@ -227,7 +230,7 @@ const AddInspection = () => {
           updatedRoomData[remarkField] = ""; // Reset to blank if "yes"
         }
       }
-  
+
       return {
         ...prev,
         [roomId]: updatedRoomData,
@@ -251,9 +254,16 @@ const AddInspection = () => {
 
   const getRoomClass = (roomId) => {
     const room = inspectionData[roomId];
-    const filledFields = [room.seepage, room.seepageRemark, room.termites, room.termitesRemark, room.otherIssue, room.otherIssueRemark, room.generalRemark, room.images?.length > 0].filter(
-      Boolean
-    ).length;
+    const filledFields = [
+      room.seepage,
+      room.seepageRemark,
+      room.termites,
+      room.termitesRemark,
+      room.otherIssue,
+      room.otherIssueRemark,
+      room.generalRemark,
+      room.images?.length > 0,
+    ].filter(Boolean).length;
 
     let className = "room-button";
     if (filledFields === 8) className += " full";
@@ -262,6 +272,7 @@ const AddInspection = () => {
 
     return className;
   };
+  
   const handleSave = async () => {
     setIsDataSaving(true);
 
@@ -486,20 +497,28 @@ const AddInspection = () => {
                                   </label>
                                 </div>
                               </div>
-                              
-                              {inspectionData[activeRoom]?.seepage === "yes" && (
-        <>
-          <div className="vg12"></div>
-          <textarea
-            placeholder="Seepage Remark*"
-            className="w-100"
-            value={inspectionData[activeRoom]?.seepageRemark || ""}
-            onChange={(e) =>
-              handleChange(activeRoom, "seepageRemark", e.target.value)
-            }
-          />
-        </>
-      )}            
+
+                              {inspectionData[activeRoom]?.seepage ===
+                                "yes" && (
+                                <>
+                                  <div className="vg12"></div>
+                                  <textarea
+                                    placeholder="Seepage Remark*"
+                                    className="w-100"
+                                    value={
+                                      inspectionData[activeRoom]
+                                        ?.seepageRemark || ""
+                                    }
+                                    onChange={(e) =>
+                                      handleChange(
+                                        activeRoom,
+                                        "seepageRemark",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -569,21 +588,30 @@ const AddInspection = () => {
                                     No
                                   </label>
                                 </div>
-                              </div>                             
-                            
-                              {inspectionData[activeRoom]?.termites === "yes" && (
-        <>
-          <div className="vg12"></div>
-          <textarea
-            placeholder="Termites Remark*"
-            value={inspectionData[activeRoom]?.termitesRemark || ""}
-            className="w-100"
-            onChange={(e) =>
-              handleChange(activeRoom, "termitesRemark", e.target.value)
-            }
-          />
-        </>
-      )}
+                              </div>
+
+                              {inspectionData[activeRoom]?.termites ===
+                                "yes" && (
+                                <>
+                                  <div className="vg12"></div>
+                                  <textarea
+                                    // placeholder="Termites Remark*(mandatory)"
+                                    placeholder="Termites Remark*"
+                                    value={
+                                      inspectionData[activeRoom]
+                                        ?.termitesRemark || ""
+                                    }
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleChange(
+                                        activeRoom,
+                                        "termitesRemark",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -657,21 +685,29 @@ const AddInspection = () => {
                                     No
                                   </label>
                                 </div>
-                              </div>                           
-                           
-                                {inspectionData[activeRoom]?.otherIssue === "yes" && (
-        <>
-            <div className="vg12"></div>
-          <textarea
-            placeholder="Other Issue Remark*"
-            value={inspectionData[activeRoom]?.otherIssueRemark || ""}
-            className="w-100"
-            onChange={(e) =>
-              handleChange(activeRoom, "otherIssueRemark", e.target.value)
-            }
-          />
-        </>
-      )}
+                              </div>
+
+                              {inspectionData[activeRoom]?.otherIssue ===
+                                "yes" && (
+                                <>
+                                  <div className="vg12"></div>
+                                  <textarea
+                                    placeholder="Other Issue Remark*"
+                                    value={
+                                      inspectionData[activeRoom]
+                                        ?.otherIssueRemark || ""
+                                    }
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleChange(
+                                        activeRoom,
+                                        "otherIssueRemark",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -741,7 +777,8 @@ const AddInspection = () => {
                                   fontSize: "13px",
                                 }}
                               >
-                                (A minimum of 1 and a maximum of 10 images can be uploaded.)
+                                (A minimum of 1 and a maximum of 10 images can
+                                be uploaded.)
                               </span>
                             </h6>
                             <div className="add_and_images">
