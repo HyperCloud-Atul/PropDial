@@ -22,12 +22,17 @@ const PropertyUtilityBills = () => {
   );
 
   // add document
-  const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("utilityBills");
+  const { addDocument, updateDocument, deleteDocument, error } = useFirestore(
+    "utilityBills-propdial"
+  );
 
-  // get adv document
+  // get utility bill document
   const { documents: utilityBillsDoc, errors: utilityBillsDocError } =
-    useCollection("utilityBills", ["propertyId", "==", propertyId]);
+    useCollection(
+      "utilityBills-propdial",
+      ["propertyId", "==", propertyId],
+      ["createdAt", "desc"]
+    );
 
   // all use states
   const [showAIForm, setShowAIForm] = useState(false);
@@ -37,6 +42,7 @@ const PropertyUtilityBills = () => {
   const [billId, setBillId] = useState("");
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const [amountDue, setAmountDue] = useState("");
+  const [billStatus, setBillStatus] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [rawDate, setRawDate] = useState(""); // For the raw date input
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -53,7 +59,7 @@ const PropertyUtilityBills = () => {
     setAmountDue("");
     setDueDate("");
     setRawDate("");
-
+    setBillStatus("");
     setErrors([]);
   };
 
@@ -82,6 +88,13 @@ const PropertyUtilityBills = () => {
     setSelectedPaymentType(event.target.value);
     if (errors.selectedPaymentType) {
       setErrors((prevErrors) => ({ ...prevErrors, selectedPaymentType: "" }));
+    }
+  };
+
+  const handleBillStatusChange = (event) => {
+    setBillStatus(event.target.value);
+    if (errors.billStatus) {
+      setErrors((prevErrors) => ({ ...prevErrors, billStatus: "" }));
     }
   };
 
@@ -156,14 +169,17 @@ const PropertyUtilityBills = () => {
     const newErrors = {};
 
     if (!selectedBillType)
-      newErrors.selectedBillType = "Please select an advertisement portal.";
-    if (!authorityName)
-      newErrors.authorityName = "Please enter the property ID";
-    if (!billId) newErrors.billId = "Please select the property type.";
+      newErrors.selectedBillType = "Please select bill type";
+    if (!authorityName) newErrors.authorityName = "Please enter authority name";
+    if (!billId) newErrors.billId = "Please enter bill ID";
     if (!selectedPaymentType)
-      newErrors.selectedPaymentType = "Please enter a valid URL.";
-    if (!amountDue) newErrors.amountDue = "Please enter a valid URL.";
-    if (!rawDate) newErrors.rawDate = "Please enter a valid URL.";
+      newErrors.selectedPaymentType = "Please select payment type";
+    if (!selectedPaymentType)
+      newErrors.selectedPaymentType = "Please select payment type";
+    // plz don't delete this comment
+    // if (!amountDue) newErrors.amountDue = "Please enter amount due";
+    // if (!rawDate) newErrors.rawDate = "Please select due date";
+    // if (!billStatus) newErrors.billStatus = "Please select bill status";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Returns true if no errors
@@ -178,6 +194,8 @@ const PropertyUtilityBills = () => {
     if (billId) setErrors((prevErrors) => ({ ...prevErrors, billId: "" }));
     if (selectedPaymentType)
       setErrors((prevErrors) => ({ ...prevErrors, selectedPaymentType: "" }));
+    if (billStatus)
+      setErrors((prevErrors) => ({ ...prevErrors, billStatus: "" }));
     if (amountDue)
       setErrors((prevErrors) => ({ ...prevErrors, amountDue: "" }));
     if (rawDate) setErrors((prevErrors) => ({ ...prevErrors, rawDate: "" }));
@@ -185,6 +203,7 @@ const PropertyUtilityBills = () => {
     selectedBillType,
     authorityName,
     billId,
+    billStatus,
     selectedPaymentType,
     amountDue,
     rawDate,
@@ -202,6 +221,7 @@ const PropertyUtilityBills = () => {
         billId,
         paymentType: selectedPaymentType,
         amountDue,
+        billStatus,
         dueDate,
         pid: propertydoc.pid,
         propertyId,
@@ -214,6 +234,7 @@ const PropertyUtilityBills = () => {
       setAmountDue("");
       setDueDate("");
       setRawDate("");
+      setBillStatus("");
       setIsUploading(false);
       setShowAIForm(!showAIForm);
       // setNewDocId(docRef.id);
@@ -224,6 +245,7 @@ const PropertyUtilityBills = () => {
       setBillId("");
       setSelectedPaymentType("");
       setAmountDue("");
+      setBillStatus("");
       setDueDate("");
       setRawDate("");
       setIsUploading(false);
@@ -289,6 +311,15 @@ const PropertyUtilityBills = () => {
       id: "postpaid",
       value: "Post Paid",
       label: "Post Paid",
+    },
+  ];
+
+  const billStatusType = [
+    { id: "paid", value: "Paid", label: "Paid" },
+    {
+      id: "unpaid",
+      value: "Unpaid",
+      label: "Unpaid",
     },
   ];
 
@@ -370,7 +401,7 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-lg-4">
                         <div
                           className="form_field w-100"
                           style={{
@@ -411,7 +442,7 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-lg-4 col-md-6">
                         <div
                           className="form_field w-100"
                           style={{
@@ -446,7 +477,7 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-md-4">
+                      <div className="col-lg-4 col-md-6">
                         <div
                           className="form_field w-100"
                           style={{
@@ -489,6 +520,51 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
+
+                      {/* plz don't delete this comment  */}
+                      {/* <div className="col-md-4">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Bill Status*
+                          </h6>
+                          <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container">
+                              {billStatusType.map((bt) => (
+                                <div className="radio_single" key={bt.id}>
+                                  <input
+                                    type="radio"
+                                    name="bill_status"
+                                    id={bt.id}
+                                    value={bt.value}
+                                    onChange={handleBillStatusChange}
+                                    checked={billStatus === bt.value}
+                                  />
+                                  <label htmlFor={bt.id}>{bt.label}</label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {errors.billStatus && (
+                            <div className="field_error w-100">
+                              {errors.billStatus}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                       <div className="col-md-4">
                         <div
                           className="form_field w-100"
@@ -525,7 +601,6 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
-
                       <div className="col-md-4">
                         <div
                           className="form_field w-100"
@@ -561,7 +636,8 @@ const PropertyUtilityBills = () => {
                             </div>
                           )}
                         </div>
-                      </div>
+                      </div> */}
+                      {/* plz don't delete this comment  */}
 
                       <div className="col-12">
                         <div className="row">
@@ -611,10 +687,16 @@ const PropertyUtilityBills = () => {
             <div className="my_small_card_parent">
               {utilityBillsDoc &&
                 utilityBillsDoc.map((doc, index) => (
-                  <div className="my_small_card notification_card" key={index}>
+                  <div className="my_small_card notification_card" key={index} style={{
+                    borderBottom: "1px solid #afafff"
+                  }}>
                     {user && user.role === "superAdmin" && (
                       <span
                         className="material-symbols-outlined delete_icon_top"
+                        style={{
+                          top:"0",
+                          right:"0"
+                        }}
                         onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
                       >
                         delete_forever
@@ -655,7 +737,10 @@ const PropertyUtilityBills = () => {
                             alt="propdial"
                           />
                         ) : doc.billType.toLowerCase() === "club" ? (
-                          <img src="/assets/img/icons/clubill.png" alt="propdial" />
+                          <img
+                            src="/assets/img/icons/clubill.png"
+                            alt="propdial"
+                          />
                         ) : doc.billType === "Common Area Electricity (CAE)" ||
                           doc.billType.toLowerCase() === "electricity" ? (
                           <img
@@ -663,13 +748,25 @@ const PropertyUtilityBills = () => {
                             alt="propdial"
                           />
                         ) : doc.billType.toLowerCase() === "water" ? (
-                          <img src="/assets/img/icons/waterbill.png" alt="propdial" />
+                          <img
+                            src="/assets/img/icons/waterbill.png"
+                            alt="propdial"
+                          />
                         ) : doc.billType === "PNG/LPG" ? (
-                          <img src="/assets/img/icons/lpgbill.png" alt="propdial" />
+                          <img
+                            src="/assets/img/icons/lpgbill.png"
+                            alt="propdial"
+                          />
                         ) : doc.billType === "Power Back-up" ? (
-                          <img src="/assets/img/icons/powerbackup.png" alt="propdial" />
+                          <img
+                            src="/assets/img/icons/powerbackup.png"
+                            alt="propdial"
+                          />
                         ) : doc.billType === "Property Tax" ? (
-                          <img src="/assets/img/icons/propertytax.png" alt="propdial" />
+                          <img
+                            src="/assets/img/icons/propertytax.png"
+                            alt="propdial"
+                          />
                         ) : doc.billType === "Main + Elect + Water" ||
                           doc.billType === "CAM & CAE & Water" ? (
                           <img src="/assets/img/icons/emw.png" alt="propdial" />
@@ -694,14 +791,15 @@ const PropertyUtilityBills = () => {
                         </h6>
                       </div>
                     </div>
-                    <h4 className="top_right_content">
+                    {/* plz don't delete this comment  */}
+                    {/* <h4 className="top_right_content">
                       <span>
                         {format(doc.createdAt.toDate(), "dd-MMM-yy hh:mm a")}
                       </span>
-                    </h4>
-
+                    </h4> */}
                     <div className="top_tag_left working">{doc.billType}</div>
-                    <div className="bottom_strip">
+                    {/* plz don't delete this comment */}
+                    {/* <div className="bottom_strip">
                       <div className="bs_left">
                         <h5>
                           {doc.dueDate}
@@ -712,7 +810,7 @@ const PropertyUtilityBills = () => {
                       <div className="bs_right">
                         <h4>₹ {formatNumberWithCommas(doc.amountDue)}</h4>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 ))}
             </div>

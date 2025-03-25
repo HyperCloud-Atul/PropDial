@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import SEOHelmet from "../../components/SEOHelmet ";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
+
 // text
 import { useFirestore } from "../../hooks/useFirestore";
 // text
@@ -29,7 +30,7 @@ import CollapsibleGroup from "../../components/CollapsibleGroup";
 import AirBnb from "../../components/AirBnb";
 
 const Home = () => {
-  const { user } = useAuthContext();
+  const { authIsReady, user } = useAuthContext();
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
@@ -48,10 +49,15 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      setShowModal(true);
+    if (authIsReady) { // Ensure authIsReady is true before checking the user
+      if (!user) {
+        setShowModal(true); // Show modal if no user is logged in
+      } else {
+        setShowModal(false); // Hide modal if user is logged in
+      }
     }
-  }, [user]);
+  }, [authIsReady, user]);
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import { useParams } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
 import { useDocument } from "../../hooks/useDocument";
@@ -6,10 +6,13 @@ import { useCollection } from "../../hooks/useCollection";
 import { ClipLoader } from "react-spinners";
 import format from "date-fns/format";
 import { Link } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 const InspectionDetails = () => {
   const { inspectionid } = useParams(); // Get ID from URL
+  const reportRef = useRef(); // Reference for capturing UI
   const [propertyDocument, setPropertyDocument] = useState(null);
-
+  const [billDocument, setBillDocument] = useState([]); // Initialize as an array
   const { document: inspectionDoc, error: inspectionDocError } = useDocument(
     "inspections",
     inspectionid
@@ -38,6 +41,37 @@ const InspectionDetails = () => {
     return () => unsubscribe(); // Unsubscribe to avoid memory leaks
   }, [inspectionDoc]);
 
+  useEffect(() => {
+    if (!inspectionDoc?.propertyId) return;
+  
+    const unsubscribe = projectFirestore
+      .collection("utilityBills-propdial")
+      .where("propertyId", "==", inspectionDoc.propertyId) // Match propertyId
+      .onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const documents = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            setBillDocument(documents); // Store all matching documents
+          } else {
+            console.warn("No bill documents found for this property!");
+            setBillDocument([]); // Set as an empty array to handle in UI
+          }
+        },
+        (error) => {
+          console.error("Error fetching bill documents:", error);
+        }
+      );
+  
+    return () => unsubscribe(); // Unsubscribe to avoid memory leaks
+  }, [inspectionDoc]);
+  
+
+  console.log("billDocument", billDocument);
+  
+
   // fetch user
   const { documents: dbUsers, error: dbuserserror } = useCollection(
     "users-propdial",
@@ -48,12 +82,32 @@ const InspectionDetails = () => {
     setdbUserState(dbUsers);
   });
 
+
+    // Function to generate PDF
+    const generatePDF = () => {
+      const input = reportRef.current;
+      html2canvas(input, { scale: 2 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.save("inspection-report.pdf");
+      });
+    };
+
   return (
     <div className="pg_property pd_single pg_bg inspection_report">
       <div className="page_spacing relative">
         {propertyDocument && propertyDocument.unitNumber ? (
           inspectionDoc && (
-            <div className="report">
+            <div className="report" ref={reportRef}>
+                 {/* Generate PDF Button */}
+            <div className="pdf-button-container" style={{ marginTop: "20px" }}>
+              <button onClick={generatePDF} className="btn btn-primary">
+                Download PDF
+              </button>
+            </div>
               <div className="report_header">
                 <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
                 <div className="rh_inner">
@@ -294,42 +348,47 @@ const InspectionDetails = () => {
               <div className="bill_card">
                 <h2>Bill Details</h2>
                 <div className="bcard_inner">
-                  <div className="bc_single">
-                    <div className="left">
-                      <h6>Electricity Bill</h6>
-                      <h5 className="paid">Paid</h5>
-                    </div>
-                    <div className="right">
-                      <h4 className="paid">₹ 500</h4>
-                    </div>
-                  </div>
-                  <div className="bc_single">
-                    <div className="left">
-                      <h6>Property Tax</h6>
-                      <h5 className="unpaid">Unpaid</h5>
-                    </div>
-                    <div className="right">
-                      <h4 className="unpaid">₹ 100</h4>
-                    </div>
-                  </div>
-                  <div className="bc_single">
-                    <div className="left">
-                      <h6>Water Bill</h6>
-                      <h5 className="paid">Paid</h5>
-                    </div>
-                    <div className="right">
-                      <h4 className="paid">₹ 200</h4>
-                    </div>
-                  </div>
-                  <div className="bc_single">
-                    <div className="left">
-                      <h6>Other Bill</h6>
-                      <h5 className="paid">Paid</h5>
-                    </div>
-                    <div className="right">
-                      <h4 className="paid">₹ 900</h4>
-                    </div>
-                  </div>
+                {billDocument && billDocument.length > 0 ? (
+        billDocument.map((billDoc, index) => (
+          <div className="bc_single" key={index}>
+            <div className="left">
+              <h6>{billDoc.billType} | {billDoc.authorityName}</h6>
+              
+             <div className="d-flex mt-2" style={{
+              gap:"5px",
+              flexWrap: "wrap",
+              alignItems: "center"
+             }}>
+             <div className="pid_badge " style={{
+                fontSize: "13px"
+              }}>
+                Bill ID: {billDoc.billId}
+              </div>
+              <h5 className={billDoc?.billStatus?.toLowerCase() || ""}>{billDoc.billStatus}</h5>
+             </div>   
+             <div style={{
+              fontSize:"14px",
+              marginTop: "3px",
+              
+              color:"var(--light-black)"
+             }}>
+             Due Date: {billDoc.dueDate} 
+              </div>         
+            </div>   
+            
+           
+            <div className="right">
+            <h4 className={billDoc?.billStatus?.toLowerCase() || ""}>₹ {billDoc?.amountDue || 0}</h4>
+
+            </div>
+          </div>
+        ))
+      ) : (
+        <p>No bill found</p>
+      )}
+                <div>
+     
+    </div>
                 </div>
               </div>
               <div className="room_wise_inspection">

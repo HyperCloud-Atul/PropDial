@@ -4,13 +4,14 @@ import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
+
 export default function PropertyLayoutComponent(props) {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const layoutid = props.layoutid == null ? "1234" : props.layoutid;
   const { document: propertyLayoutDoc, error: propertyLayoutDocError } =
     useDocument("propertylayouts", layoutid);
-
+    const [isProcess, setIsProcess] = useState(false);
   const {
     addDocument: addPropertyLayoutDocument,
     updateDocument: updatePropertyLayoutDocument,
@@ -150,6 +151,7 @@ export default function PropertyLayoutComponent(props) {
   const handlePropertyLayout = async (e) => {
     e.preventDefault();
     if (!validateFields()) return;
+    setIsProcess(true);
     const roomData = {
       propertyId: props.propertyid,
       roomType: propertyLayout.RoomType,
@@ -178,6 +180,8 @@ export default function PropertyLayoutComponent(props) {
     } catch (ex) {
       console.log("response error:", ex.message);
       navigate("/login");
+    } finally {
+      setIsProcess(false);
     }
 
     if (propertyLayoutDocumentError) {
@@ -459,14 +463,20 @@ export default function PropertyLayoutComponent(props) {
                   </div>
                 </div>
                 <div className="col-7">
-                  <div
+                  <button
                     className="theme_btn btn_fill text-center no_icon full_width"
                     onClick={handlePropertyLayout}
+                    disabled={isProcess}
+                    style={{
+                      cursor: isProcess ? "not-allowed" : "pointer",
+                      opacity: isProcess ? 0.7 : 1,
+                    }}
                   >
                     {props.layoutid === "1234" || props.layoutid === null
-                      ? "Add"
-                      : "Edit"}
-                  </div>
+                      ? isProcess ? "Adding..." : "Add"
+                      : isProcess
+                      ? "Updating..." : "Update"}
+                  </button>
                 </div>
               </div>
             </div>

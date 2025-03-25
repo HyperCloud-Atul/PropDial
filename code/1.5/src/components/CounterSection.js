@@ -12,10 +12,10 @@ const CounterSection = () => {
 
   // Counter configurations for each counter
   const countersConfig = [
-    { start: 0, end: 10, duration: 2 },
+    { start: 0, end: 15, duration: 2 },
     { start: 0, end: 20, duration: 3 },
-    { start: 0, end: 30, duration: 1 },
-    { start: 0, end: 40, duration: 4 },
+    { start: 0, end: 25, duration: 1 },
+    { start: 0, end: 10, duration: 4 },
   ];
 
   useEffect(() => {
@@ -66,6 +66,26 @@ const CounterSection = () => {
         <section className="counter sect_padding">
           <div className="container">
             <div className="row">
+            <div className="col-lg-3">
+                <div className="count_single relative">
+                  <div className="cs_inner">
+                    <div className="number_count">
+                      <CountUp
+                        start={countersConfig[3].start}
+                        end={countersConfig[3].end}
+                        duration={countersConfig[3].duration}
+                      />
+                      K+
+                    </div>
+                    <div className="count_which">
+                      <h6>Beautiful</h6>
+                      <h5>Properties</h5>
+                    </div>
+                  </div>
+                  <div className="count_bg_number">10</div>
+                </div>
+                {/* <p>Current Count: {counts[1]}</p> */}
+              </div>
               <div className="col-lg-3">
                 <div className="count_single relative">
                   <div className="cs_inner">
@@ -83,7 +103,7 @@ const CounterSection = () => {
                       <h5>Experience</h5>
                     </div>
                   </div>
-                  <div className="count_bg_number">10</div>
+                  <div className="count_bg_number">15</div>
                 </div>
                 {/* <p>Current Count: {counts[0]}</p> */}
               </div>
@@ -124,30 +144,11 @@ const CounterSection = () => {
                       <h5>Customers</h5>
                     </div>
                   </div>
-                  <div className="count_bg_number">30</div>
+                  <div className="count_bg_number">25</div>
                 </div>
                 {/* <p>Current Count: {counts[1]}</p> */}
               </div>
-              <div className="col-lg-3">
-                <div className="count_single relative">
-                  <div className="cs_inner">
-                    <div className="number_count">
-                      <CountUp
-                        start={countersConfig[3].start}
-                        end={countersConfig[3].end}
-                        duration={countersConfig[3].duration}
-                      />
-                      K+
-                    </div>
-                    <div className="count_which">
-                      <h6>Beautiful</h6>
-                      <h5>Properties</h5>
-                    </div>
-                  </div>
-                  <div className="count_bg_number">40</div>
-                </div>
-                {/* <p>Current Count: {counts[1]}</p> */}
-              </div>
+             
 
             </div>
           </div>

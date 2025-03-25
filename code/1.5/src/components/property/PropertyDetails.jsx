@@ -139,7 +139,7 @@ const PropertyDetails = () => {
   // console.log("advDocList: ", advDocList && advDocList.length);
 
   const { documents: utilityBillList, errors: utilityBillListError } =
-    useCollection("utilityBills", ["propertyId", "==", propertyid]);
+    useCollection("utilityBills-propdial", ["propertyId", "==", propertyid]);
 
   const { documents: propertyKeysList, errors: propertyKeysListError } =
     useCollection("propertyKeys", ["propertyId", "==", propertyid]);
@@ -1149,19 +1149,37 @@ const PropertyDetails = () => {
   //   : [];
   // // Debugging logs to check the filtered results
 
-// inspection click code start
-  const [showLayoutAlert, setShowLayoutAlert] = useState(false);
+// Inspection click code start
+const [showLayoutAlert, setShowLayoutAlert] = useState(false);
 
-  const handleInspectionClick = (e) => {
-    if (!propertyLayouts || propertyLayouts.length === 0) {
-      e.preventDefault(); // Prevent default redirect behavior
-      setShowLayoutAlert(true); // Show the modal
-    }
-  };
-  const closeLayoutAlertModal = () => {
-    setShowLayoutAlert(false);
-  };
-  // inspection click code end
+const handleInspectionClick = (e) => {
+  const isMissingPropertyLayout = !propertyLayouts || propertyLayouts.length === 0;
+  const isMissingUtilityBill = !utilityBillList || utilityBillList.length === 0;
+
+  if (isMissingPropertyLayout || isMissingUtilityBill) {
+    e.preventDefault(); // Prevent default redirect behavior
+    setShowLayoutAlert(true); // Show the modal
+  }
+};
+
+const closeLayoutAlertModal = () => setShowLayoutAlert(false);
+// Inspection click code end
+
+// Helper function to generate alert message on inspection click start
+const getAlertMessage = () => {
+  const isMissingPropertyLayout = !propertyLayouts || propertyLayouts.length === 0;
+  const isMissingUtilityBill = !utilityBillList || utilityBillList.length === 0;
+
+  if (isMissingPropertyLayout && isMissingUtilityBill) {
+    return "To proceed, Please add a Property Layout and Utility Bill.";
+  } else if (isMissingPropertyLayout) {
+    return "To proceed, Please add a Property Layout.";
+  } else if (isMissingUtilityBill) {
+    return "To proceed, Please add a Utility Bill.";
+  }
+  return "";
+};
+// Helper function to generate alert message on inspection click start
 
   return (
     <>
@@ -2538,6 +2556,23 @@ const PropertyDetails = () => {
                           },
                         }}
                       >
+                         <SwiperSlide>
+                          <Link to={`/property-utility-bills/${propertyid}`}>
+                            <div className="eicp_single">
+                              <div className="icon">
+                                <span className="material-symbols-outlined">
+                                  receipt_long
+                                </span>
+                                <div className="text">
+                                  <h6>
+                                    {utilityBillList && utilityBillList.length}
+                                  </h6>
+                                  <h5>Utility Bills</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        </SwiperSlide>
                           <SwiperSlide>
                        
                           <Link to={`/inspection/${propertyid}`} onClick={handleInspectionClick}>
@@ -2609,23 +2644,7 @@ const PropertyDetails = () => {
                             </div>
                           </Link>
                         </SwiperSlide>
-                        <SwiperSlide>
-                          <Link to={`/property-utility-bills/${propertyid}`}>
-                            <div className="eicp_single">
-                              <div className="icon">
-                                <span className="material-symbols-outlined">
-                                  receipt_long
-                                </span>
-                                <div className="text">
-                                  <h6>
-                                    {utilityBillList && utilityBillList.length}
-                                  </h6>
-                                  <h5>Utility Bills</h5>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
+                       
                         <SwiperSlide>
                           <Link to={`/property-ads/${propertyid}`}>
                             <div className="eicp_single">
@@ -6476,28 +6495,31 @@ const PropertyDetails = () => {
               ))} */}
           </div>
           <Modal show={showLayoutAlert} onHide={closeLayoutAlertModal} centered>
-                <Modal.Header className="justify-content-center" style={{
-                  paddingBottom: "0px",
-                  border: "none"
-                }}>
-                  <h5>
-                  Action Required!
-                  </h5>
-                </Modal.Header>
-                <Modal.Body className="text-center" style={{
-                  color: "#FA6262",
-                  fontSize: "20px",
-                  border: "none"
-                }}>To proceed, Please add a property layout</Modal.Body>
-                <Modal.Footer className="d-flex justify-content-center" style={{
-                  border: "none",
-                  gap: "15px"
-                }}>                 
-                  <div className="done_btn" onClick={closeLayoutAlertModal}>
-                 OKAY
-                  </div>
-                </Modal.Footer>
-              </Modal>
+      <Modal.Header className="justify-content-center" style={{ paddingBottom: 0, border: "none" }}>
+        <h5>Action Required!</h5>
+      </Modal.Header>
+      <Modal.Body
+        className="text-center"
+        style={{
+          color: "#FA6262",
+          fontSize: "20px",
+          border: "none",
+        }}
+      >
+        {getAlertMessage()}
+      </Modal.Body>
+      <Modal.Footer
+        className="d-flex justify-content-center"
+        style={{
+          border: "none",
+          gap: "15px",
+        }}
+      >
+        <div className="done_btn" onClick={closeLayoutAlertModal}>
+          OKAY
+        </div>
+      </Modal.Footer>
+    </Modal>
 
         </div>
       </div>
