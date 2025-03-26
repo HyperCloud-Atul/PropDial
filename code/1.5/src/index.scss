@@ -2077,7 +2077,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 0;
+  left: 5px;
   font-size: 18px;
   font-weight: 500;
   color: #666;
@@ -2092,7 +2092,7 @@
 }
 
 .price_input input {
-  padding-left: 13px !important;
+  padding-left: 18px !important;
 }
 
 @media only screen and (max-width: 1199px) {

@@ -6,8 +6,9 @@ import Modal from "react-bootstrap/Modal";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore, timestamp } from "../../firebase/config";
 import firebase from "firebase";
-import { useDocument } from "../../hooks/useDocument";
 import { projectStorage } from "../../firebase/config";
+import { useDocument } from "../../hooks/useDocument";
+
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash } from "react-icons/fa";
@@ -31,6 +32,7 @@ const AddInspection = () => {
   const [propertydoc, setPropertyDoc] = useState(null);
   const [propertyerror, setPropertyError] = useState(null);
   const [inspectionType, setInspectionType] = useState("");
+  const [activeInspection, setActiveInspection] = useState("layout");
 
   useEffect(() => {
     if (!propertyId) return; // Agar propertyId na ho toh return kar do
@@ -89,7 +91,6 @@ const AddInspection = () => {
 
   useEffect(() => {
     if (!propertyId) return;
-
     const unsubscribe = projectFirestore
       .collection("propertylayouts")
       .where("propertyId", "==", propertyId)
@@ -238,17 +239,34 @@ const AddInspection = () => {
     });
   };
 
+  //   const isFinalSubmitEnabled = () => {
+  //     return Object.values(inspectionData).every(
+  //       (room) =>
+  //         room.seepage &&
+  //         room.termites &&
+  //         room.otherIssue &&
+  //         room.seepageRemark &&
+  //         room.termitesRemark &&
+  //         room.otherIssueRemark &&
+  //         room.generalRemark &&
+  //         room.images?.length > 0 // Ensures every room has at least 1 image uploaded
+  //     );
+  //   };
+
   const isFinalSubmitEnabled = () => {
-    return Object.values(inspectionData).every(
-      (room) =>
-        room.seepage &&
-        room.termites &&
-        room.otherIssue &&
-        room.seepageRemark &&
-        room.termitesRemark &&
-        room.otherIssueRemark &&
-        room.generalRemark &&
-        room.images?.length > 0 // Ensures every room has at least 1 image uploaded
+    return (
+      allBillInspectionComplete && // Ensures all bill inspections are complete
+      Object.values(inspectionData).every(
+        (room) =>
+          room.seepage &&
+          room.termites &&
+          room.otherIssue &&
+          room.seepageRemark &&
+          room.termitesRemark &&
+          room.otherIssueRemark &&
+          room.generalRemark &&
+          room.images?.length > 0 // Ensures every room has at least 1 image uploaded
+      )
     );
   };
 
@@ -272,7 +290,7 @@ const AddInspection = () => {
 
     return className;
   };
-  
+
   const handleSave = async () => {
     setIsDataSaving(true);
 
@@ -324,6 +342,182 @@ const AddInspection = () => {
     }
   };
 
+  // bill inspection code start
+  const [bills, setBills] = useState([]);
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [isBillAvailable, setIsBillAvailable] = useState(null);
+  const [amount, setAmount] = useState("");
+  const [remark, setRemark] = useState("");
+  const [isBillDataSaving, setIsBillDataSaving] = useState(false);
+  const [billInspectionData, setBillInspectionData] = useState({});
+  const [allBillInspectionComplete, setAllBillInspectionComplete] =
+    useState(false);
+
+  // Function to check if all bills are "full"
+  useEffect(() => {
+    const allBillInspectionFull = bills.every((bill) => bill.status === "full");
+    setAllBillInspectionComplete(allBillInspectionFull);
+  }, [bills]);
+
+  // Fetch bills and preload inspection data
+  useEffect(() => {
+    if (!propertyId || !inspectionId) return;
+
+    const fetchData = async () => {
+      try {
+        // Fetch bills
+        const billsSnapshot = await projectFirestore
+          .collection("utilityBills-propdial")
+          .where("propertyId", "==", propertyId)
+          .get();
+
+        const billsData = billsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          billType: doc.data().billType,
+          billId: doc.data().billId,
+          authorityName: doc.data().authorityName,
+        }));
+
+        setBills(billsData);
+
+        // Fetch inspection data
+        const inspectionDoc = await projectFirestore
+          .collection("inspections")
+          .doc(inspectionId)
+          .get();
+
+        if (inspectionDoc.exists) {
+          setBillInspectionData(inspectionDoc.data()?.bills || {});
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [propertyId, inspectionId]);
+
+  // Handle Bill Type Button Click (No unnecessary re-rendering)
+  const handleBillTypeClick = (bill) => {
+    if (selectedBill?.id === bill.id) return; // Do nothing if the same bill is clicked
+
+    setSelectedBill(bill);
+
+    // Load data for the selected bill
+    const billData = billInspectionData?.[bill.id] || {};
+    setIsBillAvailable(billData.isBillAvailable ?? null);
+    setAmount(billData.amount || "");
+    setRemark(billData.remark || "");
+  };
+
+  // Track bill field changes
+  useEffect(() => {
+    if (!selectedBill) return;
+
+    // Temporary state update for UI feedback
+    setBillInspectionData((prevData) => ({
+      ...prevData,
+      [selectedBill.id]: {
+        ...(prevData[selectedBill.id] || {}),
+        isBillAvailable,
+        amount,
+        remark,
+      },
+    }));
+  }, [isBillAvailable, amount, remark, selectedBill]);
+
+  // Function to check if all bills are "full"
+  useEffect(() => {
+    const allBillInspectionFull =
+      bills.length > 0 &&
+      bills.every((bill) => {
+        const billData = billInspectionData?.[bill.id] || {};
+        return (
+          billData.isBillAvailable !== null &&
+          (!billData.isBillAvailable ||
+            (billData.amount && billData.amount > 0)) &&
+          billData.remark
+        );
+      });
+
+    setAllBillInspectionComplete(allBillInspectionFull);
+  }, [bills, billInspectionData]);
+
+  // Function to calculate the progress-based class for a bill button
+  const getBillButtonClass = (bill) => {
+    const billData = billInspectionData?.[bill.id] || {};
+
+    // Checking availability properly
+    const isAvailable =
+      billData.isBillAvailable !== undefined ? billData.isBillAvailable : null;
+    const amountValid = billData.amount && billData.amount > 0;
+    const hasRemark = billData.remark && billData.remark.trim() !== "";
+
+    // Check if all fields are filled properly
+    const isAllFieldsFilled =
+      isAvailable !== null &&
+      (isAvailable === "no" || amountValid) &&
+      hasRemark;
+    const isAnyFieldFilled = isAvailable !== null || amountValid || hasRemark;
+
+    let className = "room-button";
+
+    if (isAllFieldsFilled) {
+      className += " full"; // Sabhi fields bharne par full class
+    } else if (isAnyFieldFilled) {
+      className += " half"; // Koi bhi ek field bharne par half class
+    }
+
+    if (selectedBill?.id === bill.id) {
+      className += " active";
+    }
+
+    return className;
+  };
+
+  // Save Data
+  const handleSaveBill = async () => {
+    if (!selectedBill) return;
+
+    setIsBillDataSaving(true);
+
+    try {
+      const updatedBillData = {
+        billId: selectedBill.billId,
+        billType: selectedBill.billType,
+        authorityName: selectedBill.authorityName,
+        isBillAvailable,
+        amount: isBillAvailable ? amount : null,
+        remark,
+        lastUpdatedAt: timestamp.now(),
+        lastUpdatedBy: user.uid,
+        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+          updatedAt: timestamp.now(),
+          updatedBy: user.uid,
+        }),
+      };
+
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
+          [`bills.${selectedBill.id}`]: updatedBillData,
+        });
+
+      // Update local state to reflect changes
+      setBillInspectionData((prevData) => ({
+        ...prevData,
+        [selectedBill.id]: updatedBillData,
+      }));
+
+      setAfterSaveModal(true);
+    } catch (error) {
+      console.error("Error saving bill data:", error);
+    } finally {
+      setIsBillDataSaving(false);
+    }
+  };
+
   return (
     <div className="pg_min_height">
       <ScrollToTop />
@@ -335,7 +529,7 @@ const AddInspection = () => {
                 <div className="col-lg-6">
                   <div className="title_card with_title mobile_full_575 mobile_gap h-100">
                     <h2 className="text-center">{inspectionType} Inspection</h2>
-                    <div className="inspection_type_img text-center mt-3">
+                    {/* <div className="inspection_type_img text-center mt-3">
                       <img
                         src={
                           inspectionType === "Regular"
@@ -348,6 +542,24 @@ const AddInspection = () => {
                         }
                         alt={`${inspectionType} Inspection`}
                       />
+                    </div> */}
+                    <div className="inspection_type_buttons">
+                      <button
+                        onClick={() => setActiveInspection("layout")}
+                        className={` ${
+                          activeInspection === "layout" ? "active" : ""
+                        }`}
+                      >
+                        Layout Inspection
+                      </button>
+                      <button
+                        onClick={() => setActiveInspection("bill")}
+                        className={` ${
+                          activeInspection === "bill" ? "active" : ""
+                        }`}
+                      >
+                        Bill Inspection
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -356,507 +568,758 @@ const AddInspection = () => {
                   propertyId={propertyId}
                 />
               </div>
-              <div className="room-buttons">
-                {rooms.map((room) => (
-                  <button
-                    key={room.id}
-                    onClick={() => setActiveRoom(room.id)}
-                    className={getRoomClass(room.id)}
-                  >
-                    <div className="active_hand">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="20px"
-                        viewBox="0 -960 960 960"
-                        width="20px"
-                        fill="#FFFFFF"
+              {activeInspection === "layout" && (
+                <>
+                  <div className="room-buttons">
+                    {rooms.map((room) => (
+                      <button
+                        key={room.id}
+                        onClick={() => setActiveRoom(room.id)}
+                        className={getRoomClass(room.id)}
                       >
-                        <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
-                      </svg>
-                    </div>
-                    <div className="icon_text">
-                      <div className="btn_icon">
-                        <div className="bi_icon add">
+                        <div className="active_hand">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            height="30px"
+                            height="20px"
                             viewBox="0 -960 960 960"
-                            width="30px"
-                            fill="#3F5E98"
-                            stroke-width="40"
+                            width="20px"
+                            fill="#FFFFFF"
                           >
-                            <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />
+                            <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
                           </svg>
                         </div>
-                        <div className="bi_icon half">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="24px"
-                            viewBox="0 -960 960 960"
-                            width="24px"
-                            fill="#FFC107"
-                          >
-                            <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" />
-                          </svg>
+                        <div className="icon_text">
+                          <div className="btn_icon">
+                            <div className="bi_icon add">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="30px"
+                                viewBox="0 -960 960 960"
+                                width="30px"
+                                fill="#3F5E98"
+                                stroke-width="40"
+                              >
+                                <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />
+                              </svg>
+                            </div>
+                            <div className="bi_icon half">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#FFC107"
+                              >
+                                <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" />
+                              </svg>
+                            </div>
+                            <div className="bi_icon full">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#00a300"
+                              >
+                                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="btn_text">
+                            <h6 className="add">Start</h6>
+                            <h6 className="half">In Progress</h6>
+                            <h6 className="full">Completed</h6>
+                          </div>
                         </div>
-                        <div className="bi_icon full">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            height="24px"
-                            viewBox="0 -960 960 960"
-                            width="24px"
-                            fill="#00a300"
-                          >
-                            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                          </svg>
-                        </div>
-                      </div>
-                      <div className="btn_text">
-                        <h6 className="add">Start</h6>
-                        <h6 className="half">In Progress</h6>
-                        <h6 className="full">Completed</h6>
-                      </div>
-                    </div>
-                    <div className="room_name">{room.roomName}</div>
-                  </button>
-                ))}
-              </div>
-              <div className="vg22"></div>
-              {activeRoom && (
-                <div>
-                  {/* <h3>
+                        <div className="room_name">{room.roomName}</div>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="vg22"></div>
+                  {activeRoom && (
+                    <div>
+                      {/* plz don,t remove this commented code  */}
+                      {/* <h3>
                     {rooms.find((room) => room.id === activeRoom)?.roomName}
                   </h3> */}
-                  <form className="add_inspection_form">
-                    <div className="aai_form">
-                      <div className="row row_gap_20">
-                        <div className="col-xl-3 col-md-6">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                              background: "white",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Seepage*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`seepage-${activeRoom}`}
-                                    id={`seepage-yes-${activeRoom}`}
-                                    value="yes"
-                                    checked={
-                                      inspectionData[activeRoom]?.seepage ===
-                                      "yes"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "seepage",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`seepage-yes-${activeRoom}`}>
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name={`seepage-${activeRoom}`}
-                                    value="no"
-                                    id={`seepage-no-${activeRoom}`}
-                                    checked={
-                                      inspectionData[activeRoom]?.seepage ===
-                                      "no"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "seepage",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`seepage-no-${activeRoom}`}>
-                                    No
-                                  </label>
-                                </div>
-                              </div>
-
-                              {inspectionData[activeRoom]?.seepage ===
-                                "yes" && (
-                                <>
-                                  <div className="vg12"></div>
-                                  <textarea
-                                    placeholder="Seepage Remark*"
-                                    className="w-100"
-                                    value={
-                                      inspectionData[activeRoom]
-                                        ?.seepageRemark || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "seepageRemark",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-md-6">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                              background: "white",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Termites*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    id={`Termites-yes-${activeRoom}`}
-                                    name={`termites-${activeRoom}`}
-                                    value="yes"
-                                    checked={
-                                      inspectionData[activeRoom]?.termites ===
-                                      "yes"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "termites",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`Termites-yes-${activeRoom}`}>
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    id={`Termites-no-${activeRoom}`}
-                                    type="radio"
-                                    name={`termites-${activeRoom}`}
-                                    value="no"
-                                    checked={
-                                      inspectionData[activeRoom]?.termites ===
-                                      "no"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "termites",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label htmlFor={`Termites-no-${activeRoom}`}>
-                                    No
-                                  </label>
-                                </div>
-                              </div>
-
-                              {inspectionData[activeRoom]?.termites ===
-                                "yes" && (
-                                <>
-                                  <div className="vg12"></div>
-                                  <textarea
-                                    // placeholder="Termites Remark*(mandatory)"
-                                    placeholder="Termites Remark*"
-                                    value={
-                                      inspectionData[activeRoom]
-                                        ?.termitesRemark || ""
-                                    }
-                                    className="w-100"
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "termitesRemark",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-md-6">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                              background: "white",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Other Issue*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <div className="theme_radio_container">
-                                <div className="radio_single">
-                                  <input
-                                    id={`other-issue-yes-${activeRoom}`}
-                                    type="radio"
-                                    name={`otherIssue-${activeRoom}`}
-                                    value="yes"
-                                    checked={
-                                      inspectionData[activeRoom]?.otherIssue ===
-                                      "yes"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "otherIssue",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={`other-issue-yes-${activeRoom}`}
-                                  >
-                                    Yes
-                                  </label>
-                                </div>
-                                <div className="radio_single">
-                                  <input
-                                    id={`other-issue-no-${activeRoom}`}
-                                    type="radio"
-                                    name={`otherIssue-${activeRoom}`}
-                                    value="no"
-                                    checked={
-                                      inspectionData[activeRoom]?.otherIssue ===
-                                      "no"
-                                    }
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "otherIssue",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={`other-issue-no-${activeRoom}`}
-                                  >
-                                    No
-                                  </label>
-                                </div>
-                              </div>
-
-                              {inspectionData[activeRoom]?.otherIssue ===
-                                "yes" && (
-                                <>
-                                  <div className="vg12"></div>
-                                  <textarea
-                                    placeholder="Other Issue Remark*"
-                                    value={
-                                      inspectionData[activeRoom]
-                                        ?.otherIssueRemark || ""
-                                    }
-                                    className="w-100"
-                                    onChange={(e) =>
-                                      handleChange(
-                                        activeRoom,
-                                        "otherIssueRemark",
-                                        e.target.value
-                                      )
-                                    }
-                                  />
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-md-6">
-                          <div
-                            className="form_field w-100"
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                              background: "white",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              General Remark*
-                            </h6>
-                            <div className="field_box theme_radio_new">
-                              <textarea
+                      <form className="add_inspection_form">
+                        <div className="aai_form">
+                          <div className="row row_gap_20">
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
                                 style={{
-                                  minHeight: "104px",
-                                }}
-                                placeholder="General Remark"
-                                value={
-                                  inspectionData[activeRoom]?.generalRemark ||
-                                  ""
-                                }
-                                className="w-100"
-                                onChange={(e) =>
-                                  handleChange(
-                                    activeRoom,
-                                    "generalRemark",
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-12">
-                          {/* Image Upload and Preview Section */}
-                          <div
-                            style={{
-                              padding: "10px",
-                              borderRadius: "5px",
-                              border: "1px solid rgb(3 70 135 / 22%)",
-                              background: "white",
-                            }}
-                          >
-                            <h6
-                              style={{
-                                fontSize: "15px",
-                                fontWeight: "500",
-                                marginBottom: "8px",
-                                color: "var(--theme-blue)",
-                              }}
-                            >
-                              Upload images*{" "}
-                              <span
-                                style={{
-                                  fontSize: "13px",
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
                                 }}
                               >
-                                (A minimum of 1 and a maximum of 10 images can
-                                be uploaded.)
-                              </span>
-                            </h6>
-                            <div className="add_and_images">
-                              {inspectionData[activeRoom]?.images?.map(
-                                (image, index) => (
-                                  <div
-                                    key={index}
-                                    className="uploaded_images relative"
-                                  >
-                                    <img src={image.url} alt="Uploaded" />
-                                    <div className="trash_icon">
-                                      <FaTrash
-                                        size={14}
-                                        color="red"
-                                        onClick={() =>
-                                          handleImageDelete(activeRoom, image)
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  Seepage*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <div className="theme_radio_container">
+                                    <div className="radio_single">
+                                      <input
+                                        type="radio"
+                                        name={`seepage-${activeRoom}`}
+                                        id={`seepage-yes-${activeRoom}`}
+                                        value="yes"
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.seepage === "yes"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "seepage",
+                                            e.target.value
+                                          )
                                         }
                                       />
+                                      <label
+                                        htmlFor={`seepage-yes-${activeRoom}`}
+                                      >
+                                        Yes
+                                      </label>
+                                    </div>
+                                    <div className="radio_single">
+                                      <input
+                                        type="radio"
+                                        name={`seepage-${activeRoom}`}
+                                        value="no"
+                                        id={`seepage-no-${activeRoom}`}
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.seepage === "no"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "seepage",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`seepage-no-${activeRoom}`}
+                                      >
+                                        No
+                                      </label>
                                     </div>
                                   </div>
-                                )
-                              )}
-                              <div>
-                                <div
-                                  onClick={() =>
-                                    document
-                                      .getElementById(
-                                        `file-input-${activeRoom}`
-                                      )
-                                      .click()
-                                  }
-                                  className="add_icon"
-                                >
-                                  <FaPlus size={24} color="#555" />
+
+                                  {inspectionData[activeRoom]?.seepage ===
+                                    "yes" && (
+                                    <>
+                                      <div className="vg12"></div>
+                                      <textarea
+                                        placeholder="Seepage Remark*"
+                                        className="w-100"
+                                        value={
+                                          inspectionData[activeRoom]
+                                            ?.seepageRemark || ""
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "seepageRemark",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                    </>
+                                  )}
                                 </div>
-                                <input
-                                  type="file"
-                                  id={`file-input-${activeRoom}`}
-                                  style={{ display: "none" }}
-                                  onChange={(e) =>
-                                    handleImageUpload(e, activeRoom)
-                                  }
-                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  Termites*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <div className="theme_radio_container">
+                                    <div className="radio_single">
+                                      <input
+                                        type="radio"
+                                        id={`Termites-yes-${activeRoom}`}
+                                        name={`termites-${activeRoom}`}
+                                        value="yes"
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.termites === "yes"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "termites",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`Termites-yes-${activeRoom}`}
+                                      >
+                                        Yes
+                                      </label>
+                                    </div>
+                                    <div className="radio_single">
+                                      <input
+                                        id={`Termites-no-${activeRoom}`}
+                                        type="radio"
+                                        name={`termites-${activeRoom}`}
+                                        value="no"
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.termites === "no"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "termites",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`Termites-no-${activeRoom}`}
+                                      >
+                                        No
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  {inspectionData[activeRoom]?.termites ===
+                                    "yes" && (
+                                    <>
+                                      <div className="vg12"></div>
+                                      <textarea
+                                        // placeholder="Termites Remark*(mandatory)"
+                                        placeholder="Termites Remark*"
+                                        value={
+                                          inspectionData[activeRoom]
+                                            ?.termitesRemark || ""
+                                        }
+                                        className="w-100"
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "termitesRemark",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  Other Issue*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <div className="theme_radio_container">
+                                    <div className="radio_single">
+                                      <input
+                                        id={`other-issue-yes-${activeRoom}`}
+                                        type="radio"
+                                        name={`otherIssue-${activeRoom}`}
+                                        value="yes"
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.otherIssue === "yes"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "otherIssue",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`other-issue-yes-${activeRoom}`}
+                                      >
+                                        Yes
+                                      </label>
+                                    </div>
+                                    <div className="radio_single">
+                                      <input
+                                        id={`other-issue-no-${activeRoom}`}
+                                        type="radio"
+                                        name={`otherIssue-${activeRoom}`}
+                                        value="no"
+                                        checked={
+                                          inspectionData[activeRoom]
+                                            ?.otherIssue === "no"
+                                        }
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "otherIssue",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                      <label
+                                        htmlFor={`other-issue-no-${activeRoom}`}
+                                      >
+                                        No
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  {inspectionData[activeRoom]?.otherIssue ===
+                                    "yes" && (
+                                    <>
+                                      <div className="vg12"></div>
+                                      <textarea
+                                        placeholder="Other Issue Remark*"
+                                        value={
+                                          inspectionData[activeRoom]
+                                            ?.otherIssueRemark || ""
+                                        }
+                                        className="w-100"
+                                        onChange={(e) =>
+                                          handleChange(
+                                            activeRoom,
+                                            "otherIssueRemark",
+                                            e.target.value
+                                          )
+                                        }
+                                      />
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  General Remark*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <textarea
+                                    style={{
+                                      minHeight: "104px",
+                                    }}
+                                    placeholder="General Remark"
+                                    value={
+                                      inspectionData[activeRoom]
+                                        ?.generalRemark || ""
+                                    }
+                                    className="w-100"
+                                    onChange={(e) =>
+                                      handleChange(
+                                        activeRoom,
+                                        "generalRemark",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-12">
+                              {/* Image Upload and Preview Section */}
+                              <div
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  Upload images*{" "}
+                                  <span
+                                    style={{
+                                      fontSize: "13px",
+                                    }}
+                                  >
+                                    (A minimum of 1 and a maximum of 10 images
+                                    can be uploaded.)
+                                  </span>
+                                </h6>
+                                <div className="add_and_images">
+                                  {inspectionData[activeRoom]?.images?.map(
+                                    (image, index) => (
+                                      <div
+                                        key={index}
+                                        className="uploaded_images relative"
+                                      >
+                                        <img src={image.url} alt="Uploaded" />
+                                        <div className="trash_icon">
+                                          <FaTrash
+                                            size={14}
+                                            color="red"
+                                            onClick={() =>
+                                              handleImageDelete(
+                                                activeRoom,
+                                                image
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                  <div>
+                                    <div
+                                      onClick={() =>
+                                        document
+                                          .getElementById(
+                                            `file-input-${activeRoom}`
+                                          )
+                                          .click()
+                                      }
+                                      className="add_icon"
+                                    >
+                                      <FaPlus size={24} color="#555" />
+                                    </div>
+                                    <input
+                                      type="file"
+                                      id={`file-input-${activeRoom}`}
+                                      style={{ display: "none" }}
+                                      onChange={(e) =>
+                                        handleImageUpload(e, activeRoom)
+                                      }
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
+                        </div>
+                      </form>
+                      <div className="bottom_fixed_button">
+                        <div className="next_btn_back">
+                          <button
+                            className="theme_btn no_icon btn_fill2 full_width"
+                            onClick={() => setFinalSubmit(true)}
+                            disabled={!isFinalSubmitEnabled()}
+                            style={{
+                              opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                              cursor: !isFinalSubmitEnabled()
+                                ? "not-allowed"
+                                : "pointer",
+                            }}
+                          >
+                            Final Submit
+                          </button>
+
+                          <button
+                            className="theme_btn no_icon btn_fill full_width"
+                            onClick={handleSave}
+                            disabled={isDataSaving}
+                            style={{
+                              opacity: isDataSaving ? "0.5" : "1",
+                            }}
+                          >
+                            {isDataSaving ? "Saving...." : "Save Inspection"}
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </form>
-                  <div className="bottom_fixed_button">
-                    <div className="next_btn_back">
-                      <button
-                        className="theme_btn no_icon btn_fill2 full_width"
-                        onClick={() => setFinalSubmit(true)}
-                        disabled={!isFinalSubmitEnabled()}
-                        style={{
-                          opacity: !isFinalSubmitEnabled() ? 0.5 : 1,
-                          cursor: !isFinalSubmitEnabled()
-                            ? "not-allowed"
-                            : "pointer",
-                        }}
-                      >
-                        Final Submit
-                      </button>
+                  )}
+                </>
+              )}
 
+              {activeInspection === "bill" && (
+                <div className="bill_inspection">
+                  {/* {allBillInspectionComplete && (
+                    <h1 style={{ color: "green", fontWeight: "bold" }}>
+                      All Done
+                    </h1>
+                  )} */}
+
+                  {/* Display Bill Type Buttons */}
+                  <div className="room-buttons">
+                    {bills.map((bill) => (
                       <button
-                        className="theme_btn no_icon btn_fill full_width"
-                        onClick={handleSave}
-                        disabled={isDataSaving}
-                        style={{
-                          opacity: isDataSaving ? "0.5" : "1",
-                        }}
+                        key={bill.id}
+                        onClick={() => handleBillTypeClick(bill)}
+                        className={` ${getBillButtonClass(bill)}`}
                       >
-                        {isDataSaving ? "Saving...." : "Save Inspection"}
+                        <div className="active_hand">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="20px"
+                            viewBox="0 -960 960 960"
+                            width="20px"
+                            fill="#FFFFFF"
+                          >
+                            <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
+                          </svg>
+                        </div>
+                        <div className="icon_text">
+                          <div className="btn_icon">
+                            <div className="bi_icon add">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="30px"
+                                viewBox="0 -960 960 960"
+                                width="30px"
+                                fill="#3F5E98"
+                                stroke-width="40"
+                              >
+                                <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />
+                              </svg>
+                            </div>
+                            <div className="bi_icon half">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#FFC107"
+                              >
+                                <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" />
+                              </svg>
+                            </div>
+                            <div className="bi_icon full">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#00a300"
+                              >
+                                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="btn_text">
+                            <h6 className="add">Start</h6>
+                            <h6 className="half">In Progress</h6>
+                            <h6 className="full">Completed</h6>
+                          </div>
+                        </div>
+                        <div className="room_name">{bill.billType}</div>
                       </button>
-                    </div>
+                    ))}
                   </div>
+                  <div className="vg22"></div>
+                  {/* Display Bill Fields */}
+                  {selectedBill && (
+                    <div className="bill_fields">
+                      <div className="id_name">
+                        <div className="idn_single">
+                          <h6>Bill ID</h6>
+                          <h5>{selectedBill.billId}</h5>
+                        </div>
+                        <div className="idn_single">
+                          <h6>Authority name</h6>
+                          <h5>{selectedBill.authorityName}</h5>
+                        </div>
+                      </div>
+                      <div className="vg22"></div>
+                      <form className="add_inspection_form">
+                        <div className="aai_form">
+                          <div className="row row_gap_20">
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  Is Bill Available*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <div className="theme_radio_container">
+                                    <div className="radio_single">
+                                      <input
+                                        type="radio"
+                                        value="Yes"
+                                        id={`yes-${selectedBill.billType}`}
+                                        checked={isBillAvailable === true}
+                                        onChange={() => {
+                                          setIsBillAvailable(true);
+                                        }}
+                                      />
+                                      <label
+                                        htmlFor={`yes-${selectedBill.billType}`}
+                                      >
+                                        Yes
+                                      </label>
+                                    </div>
+                                    <div className="radio_single">
+                                      <input
+                                        type="radio"
+                                        value="No"
+                                        id={`no-${selectedBill.billType}`}
+                                        checked={isBillAvailable === false}
+                                        onChange={() => {
+                                          setIsBillAvailable(false);
+                                          setAmount(""); // Amount field blank on "No"
+                                        }}
+                                      />
+                                      <label
+                                        htmlFor={`no-${selectedBill.billType}`}
+                                      >
+                                        No
+                                      </label>
+                                    </div>
+                                  </div>
+
+                                  {isBillAvailable && (
+                                    <>
+                                      <div className="vg12"></div>
+                                      <div className="price_input relative">
+                                        <input
+                                          type="number"
+                                          value={amount}
+                                          onChange={(e) =>
+                                            setAmount(e.target.value)
+                                          }
+                                          placeholder="Bill amount"
+                                          className="w-100"
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-xl-3 col-md-6">
+                              <div
+                                className="form_field w-100"
+                                style={{
+                                  padding: "10px",
+                                  borderRadius: "5px",
+                                  border: "1px solid rgb(3 70 135 / 22%)",
+                                  background: "white",
+                                }}
+                              >
+                                <h6
+                                  style={{
+                                    fontSize: "15px",
+                                    fontWeight: "500",
+                                    marginBottom: "8px",
+                                    color: "var(--theme-blue)",
+                                  }}
+                                >
+                                  General Remark*
+                                </h6>
+                                <div className="field_box theme_radio_new">
+                                  <textarea
+                                    className="w-100"
+                                    value={remark}
+                                    onChange={(e) => setRemark(e.target.value)}
+                                  ></textarea>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <div className="bottom_fixed_button">
+                        <div className="next_btn_back">
+                          <button
+                            className="theme_btn no_icon btn_fill2 full_width"
+                            onClick={() => setFinalSubmit(true)}
+                            disabled={!isFinalSubmitEnabled()}
+                            style={{
+                              opacity: !isFinalSubmitEnabled() ? 0.5 : 1,
+                              cursor: !isFinalSubmitEnabled()
+                                ? "not-allowed"
+                                : "pointer",
+                            }}
+                          >
+                            Final Submit
+                          </button>
+
+                          <button
+                            className="theme_btn no_icon btn_fill full_width"
+                            onClick={handleSaveBill}
+                            disabled={isBillDataSaving}
+                            style={{
+                              opacity: isBillDataSaving ? "0.5" : "1",
+                            }}
+                          >
+                            {isBillDataSaving
+                              ? "Saving...."
+                              : "Save Inspection"}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </>
@@ -925,7 +1388,7 @@ const AddInspection = () => {
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </svg>
           </Link>
-          <Link className="it_single" to={`/inspection-report/${inspectionId}`}>
+          {/* <Link className="it_single" to={`/inspection-report/${inspectionId}`}>
             <div
               className="d-flex align-items-center"
               style={{
@@ -948,7 +1411,7 @@ const AddInspection = () => {
             >
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </svg>
-          </Link>
+          </Link> */}
           <Link className="it_single" to={`/inspection/${propertyId}`}>
             <div
               className="d-flex align-items-center"

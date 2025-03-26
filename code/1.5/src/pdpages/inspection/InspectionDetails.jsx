@@ -103,11 +103,11 @@ const InspectionDetails = () => {
           inspectionDoc && (
             <div className="report" ref={reportRef}>
                  {/* Generate PDF Button */}
-            <div className="pdf-button-container" style={{ marginTop: "20px" }}>
+            {/* <div className="pdf-button-container" style={{ marginTop: "20px" }}>
               <button onClick={generatePDF} className="btn btn-primary">
                 Download PDF
               </button>
-            </div>
+            </div> */}
               <div className="report_header">
                 <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
                 <div className="rh_inner">
@@ -348,44 +348,52 @@ const InspectionDetails = () => {
               <div className="bill_card">
                 <h2>Bill Details</h2>
                 <div className="bcard_inner">
-                {billDocument && billDocument.length > 0 ? (
-        billDocument.map((billDoc, index) => (
-          <div className="bc_single" key={index}>
-            <div className="left">
-              <h6>{billDoc.billType} | {billDoc.authorityName}</h6>
-              
-             <div className="d-flex mt-2" style={{
-              gap:"5px",
-              flexWrap: "wrap",
-              alignItems: "center"
-             }}>
-             <div className="pid_badge " style={{
-                fontSize: "13px"
-              }}>
-                Bill ID: {billDoc.billId}
-              </div>
-              <h5 className={billDoc?.billStatus?.toLowerCase() || ""}>{billDoc.billStatus}</h5>
-             </div>   
-             <div style={{
-              fontSize:"14px",
-              marginTop: "3px",
-              
-              color:"var(--light-black)"
-             }}>
-             Due Date: {billDoc.dueDate} 
-              </div>         
-            </div>   
-            
-           
-            <div className="right">
-            <h4 className={billDoc?.billStatus?.toLowerCase() || ""}>₹ {billDoc?.amountDue || 0}</h4>
+                {Object.values(inspectionDoc?.bills || {}).map((billDoc, index) => (
+  <div className="bc_single" key={index}>
+    <div className="left">
+      <h6>{billDoc.billType} | {billDoc.authorityName}</h6>
+      
+      <div className="d-flex mt-2" style={{
+        gap: "5px",
+        flexWrap: "wrap",
+        alignItems: "center"
+      }}>
+        <div className="pid_badge">
+          Bill ID: {billDoc.billId}
+        </div>
+        {billDoc?.amount && (
+        <h5 className="pid_badge">Amount: ₹{billDoc?.amount}</h5>
+        )}
+      </div>   
+      <div style={{
+        fontSize: "14px",
+        marginTop: "3px",
+        color: "var(--light-black)"
+      }}>
+        Last update at: {format(
+                          billDoc.lastUpdatedAt.toDate(),
+                          "dd-MMM-yy"
+                        )}
+                      
+      </div>
+      <div style={{
+        fontSize: "14px",
+        marginTop: "3px",
+        color: "var(--light-black)"
+      }}>
+        {/* Last update at: {format(
+                          billDoc.lastUpdatedAt.toDate(),
+                          "dd-MMM-yy"
+                        )} */}
+                        Remark: {billDoc.remark}
+      </div>         
+    </div>    
 
-            </div>
-          </div>
-        ))
-      ) : (
-        <p>No bill found</p>
-      )}
+    
+   
+  </div>
+))}
+
                 <div>
      
     </div>

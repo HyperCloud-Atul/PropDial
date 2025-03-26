@@ -702,32 +702,7 @@ const PropertyUtilityBills = () => {
                         delete_forever
                       </span>
                     )}
-                    <Modal
-                      show={showConfirmModal}
-                      onHide={handleConfirmClose}
-                      className="delete_modal"
-                      centered
-                    >
-                      <div className="alert_text text-center">Alert</div>
-
-                      <div className="sure_content text-center">
-                        Are you sure you want to remove this utility bill?
-                      </div>
-                      <div className="yes_no_btn">
-                        <div
-                          className="theme_btn full_width no_icon text-center btn_border"
-                          onClick={confirmDeleteDocument} // Confirm and delete
-                        >
-                          Yes
-                        </div>
-                        <div
-                          className="theme_btn full_width no_icon text-center btn_fill"
-                          onClick={handleConfirmClose} // Close modal without deleting
-                        >
-                          No
-                        </div>
-                      </div>
-                    </Modal>
+                  
                     <div className="left">
                       <div className="img_div">
                         {doc.billType === "Common Area Maintenance (CAM)" ||
@@ -815,6 +790,32 @@ const PropertyUtilityBills = () => {
                 ))}
             </div>
           </div>
+          <Modal
+                      show={showConfirmModal}
+                      onHide={handleConfirmClose}
+                      className="delete_modal"
+                      centered
+                    >
+                      <div className="alert_text text-center">Alert</div>
+
+                      <div className="sure_content text-center">
+                        Are you sure you want to remove this utility bill?
+                      </div>
+                      <div className="yes_no_btn">
+                        <div
+                          className="theme_btn full_width no_icon text-center btn_border"
+                          onClick={confirmDeleteDocument} // Confirm and delete
+                        >
+                          Yes
+                        </div>
+                        <div
+                          className="theme_btn full_width no_icon text-center btn_fill"
+                          onClick={handleConfirmClose} // Close modal without deleting
+                        >
+                          No
+                        </div>
+                      </div>
+                    </Modal>
         </div>
       ) : (
         <InactiveUserCard />

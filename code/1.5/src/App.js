@@ -9,6 +9,7 @@ import { projectMsg, projectFirestore } from "./firebase/config";
 import { useCollection } from "./hooks/useCollection";
 import SEOHelmet from "./components/SEOHelmet ";
 
+
 import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
 
 // components
@@ -504,6 +505,9 @@ function App() {
                   path="/notification"
                   element={<PGNotification />}
                 ></Route>
+
+
+
                 <Route path="/how-use" element={<HowUse />}></Route>
                 <Route
                   path="/privacypolicy"
