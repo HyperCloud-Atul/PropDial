@@ -31,6 +31,9 @@ const PGBlogs1 = () => {
         "
         heroImage="/assets/img/about_us_banner.jpg"
       ></Hero>
+      <Link to="/add-blog" className="theme_btn btn_fill text-center m-2 no_icon">
+        Add Blog
+      </Link>
       <section className="blog_sect">
         <div className="container">
         {blogDoc && blogDoc.length === 0 && <p>Loading blogs...</p>}
