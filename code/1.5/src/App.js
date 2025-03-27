@@ -527,7 +527,7 @@ function App() {
                 
                
                 <Route path="/blog/:id" element={<BlogDetail />}></Route>
-                <Route path="/blogs/edit/:id" element={<BlogEdit />}></Route>
+                <Route path="/blog-edit/:id" element={<BlogEdit />}></Route>
                 <Route path="/add-blog" element={<BlogAdd />}></Route>
                  
                 {/* Restricted Routes start  */}

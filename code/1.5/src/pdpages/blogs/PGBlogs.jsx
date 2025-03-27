@@ -62,6 +62,19 @@ const PGBlogs1 = () => {
                     >
                       Read More
                     </Link>
+                    <Link
+                      className="pointer"
+                      to={`/blog-edit/${blog.id}`}
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "500",
+                        color: "var(--theme-green)",
+                      }}
+                    >
+                      Edit
+                    </Link>
+
+                    
                   </div>
                 </div>
               </div>
