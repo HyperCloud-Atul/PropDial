@@ -24,8 +24,7 @@ import PGNotification from "./pdpages/notification/PGNotification";
 import PGAttendance from "./pdpages/attendance/PGAttendance";
 import PGHrAttendance from "./pdpages/attendance/PGHrAttendance";
 import PGAboutUs from "./pdpages/about_us/PGAboutUs";
-import PGBlog from "./pdpages/blogs/PGBlog";
-import PGBlogDetails from "./pdpages/blogs/PGBlogDetails";
+
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
 import PGTerms from "./pdpages/terms/PGTerms";
 import PGContactUs from "./pdpages/contact_us/PGContactUs";
@@ -39,7 +38,9 @@ import InspectionDetails from "./pdpages/inspection/InspectionDetails";
 import AddInspection from "./pdpages/inspection/AddInspection";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 import HowUse from "./pdpages/howUse/HowUse";
-
+import BlogDetail from "./pdpages/blogs/BlogDetail";
+import BlogEdit from "./pdpages/blogs/BlogEdit";
+import BlogAdd from "./pdpages/blogs/BlogAdd";
 // ------------------------------------------------------------------------------------
 
 // pages
@@ -484,7 +485,6 @@ function App() {
             <Suspense fallback={<span></span>}>
               <Routes>
                 <Route path="/" element={<Home></Home>}></Route>
-
                 <Route
                   path="/login"
                   element={user ? <Navigate to="/profile" /> : <PhoneLogin />}
@@ -505,19 +505,14 @@ function App() {
                   path="/notification"
                   element={<PGNotification />}
                 ></Route>
-
-
-
                 <Route path="/how-use" element={<HowUse />}></Route>
                 <Route
                   path="/privacypolicy"
                   element={<PGPriacyPolicy />}
-                ></Route>
-                <Route path="/blogs" element={<PGBlogs />}></Route>
+                ></Route>               
                 <Route path="/terms" element={<PGTerms />}></Route>
-                <Route path="/about-us" element={<PGAboutUs />}></Route>
-                <Route path="/blog" element={<PGBlog />}></Route>
-                <Route path="/blogdetails" element={<PGBlogDetails />}></Route>
+                <Route path="/about-us" element={<PGAboutUs />}></Route>       
+                
                 <Route path="/contact-us" element={<PGContactUs />}></Route>
                 <Route path="/faq" element={<Faq></Faq>}></Route>
                 <Route path="/properties" element={<PGProperties />}></Route>
@@ -526,6 +521,15 @@ function App() {
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
 
+
+{/* blog pages route  */}
+<Route path="/blogs" element={<PGBlogs />}></Route>
+                
+               
+                <Route path="/blog/:id" element={<BlogDetail />}></Route>
+                <Route path="/blogs/edit/:id" element={<BlogEdit />}></Route>
+                <Route path="/add-blog" element={<BlogAdd />}></Route>
+                 
                 {/* Restricted Routes start  */}
                 {authIsReady && (
                   <>

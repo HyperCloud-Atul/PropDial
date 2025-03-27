@@ -1,0 +1,25 @@
+.blog_page_css{
+    .blog_sect{
+        .blog_inner{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 22px;
+            margin: 22px 0px;
+            .card-container{
+                margin-top: 0px;
+            }
+    .card-body{
+        padding: 15px;
+        h3{
+            font-size: 18px;
+            margin: 0px !important;
+            line-height: normal;
+        }
+        p{
+            font-size: 15px;
+        }
+    }
+        }
+    }
+ 
+}
