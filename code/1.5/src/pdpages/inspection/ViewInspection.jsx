@@ -16,7 +16,6 @@ import PropertySummaryCard from "../property/PropertySummaryCard";
 import InactiveUserCard from "../../components/InactiveUserCard";
 import ReactTable from "../../components/ReactTable";
 
-
 // import css
 import "./Inspection.scss";
 
@@ -637,7 +636,9 @@ const ViewInspections = () => {
                               </div>
                               <div
                                 className={`wha_call_icon ${
-                                  iDoc.finalSubmit ? "final_submit" : "final_submit"
+                                  iDoc.finalSubmit
+                                    ? "final_submit"
+                                    : "final_submit"
                                 }`}
                               >
                                 {!iDoc.finalSubmit && (
@@ -645,7 +646,7 @@ const ViewInspections = () => {
                                     className="wha_icon wc_single"
                                     to={`/add-inspection/${iDoc.id}`}
                                     style={{
-                                      height:"100%"
+                                      height: "100%",
                                     }}
                                   >
                                     <svg
@@ -659,24 +660,24 @@ const ViewInspections = () => {
                                     </svg>
                                   </Link>
                                 )}
-{iDoc.finalSubmit && (
-                                <Link
-                                  className="call_icon wc_single"
-                                  to={`/inspection-report/${iDoc.id}`}
-                                  style={{
-                                    height:"100%"
-                                  }}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    height="24px"
-                                    viewBox="0 -960 960 960"
-                                    width="24px"
-                                    fill="#00a8a8"
+                                {iDoc.finalSubmit && (
+                                  <Link
+                                    className="call_icon wc_single"
+                                    to={`/inspection-report/${iDoc.id}`}
+                                    style={{
+                                      height: "100%",
+                                    }}
                                   >
-                                    <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
-                                  </svg>
-                                </Link>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="24px"
+                                      viewBox="0 -960 960 960"
+                                      width="24px"
+                                      fill="#00a8a8"
+                                    >
+                                      <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                                    </svg>
+                                  </Link>
                                 )}
                               </div>
                               {iDoc.status === "inactive" && (

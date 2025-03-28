@@ -101,8 +101,7 @@ const SearchProperty = ({
                         (property.category === "Residential" ? (
                           <>
                             {property.bhk} {property.furnishing && "|"}{" "}
-                            {property.furnishing &&
-                              `${property.furnishing}`}{" "}
+                            {property.furnishing && `${property.furnishing}`}{" "}
                             {property.purpose && " | "}
                             For{" "}
                             {property.purpose.toLowerCase() === "rentsaleboth"

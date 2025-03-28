@@ -99,12 +99,14 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                       formatNumberWithCommas(propertydoc.demandPriceSale)
                     : propertydoc.demandPriceSale &&
                       formatNumberWithCommas(propertydoc.demandPriceSale)}
-<span  style={{
-                       marginLeft:"3px"
-                        }}>
-  Demand for {propertydoc.purpose}
-</span>
-                    {/* {propertydoc.maintenancecharges !== "" && (
+                  <span
+                    style={{
+                      marginLeft: "3px",
+                    }}
+                  >
+                    Demand for {propertydoc.purpose}
+                  </span>
+                  {/* {propertydoc.maintenancecharges !== "" && (
                       <span
                         style={{
                           fontSize: "10px",
@@ -114,44 +116,40 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                         {propertydoc.maintenancechargesfrequency})
                       </span>
                     )} */}
-                    
                 </h6>
                 <h6>
                   {propertydoc.unitNumber} | {propertydoc.society}{" "}
                 </h6>
                 <h6>
-                {propertydoc &&
-                            (propertydoc.category === "Residential" ? (
-                              <>
-                                {propertydoc.bhk}{" "}
-                                {propertydoc.furnishing && "|"}{" "}
-                                {propertydoc.furnishing &&
-                                  `${propertydoc.furnishing}`}{" "}
-                               
-                             
-                              </>
-                            ) : propertydoc.category === "Commercial" ? (
-                              <>
-                              Your perfect {propertydoc.propertyType} awaits—on{" "}
-                               {propertydoc.purpose.toLowerCase() === "rentsaleboth"
-                                 ? "Rent / Lease Now"
-                                 : propertydoc.purpose.toLowerCase() === "rent"
-                                 ? "Lease Now"
-                                 : propertydoc.purpose.toLowerCase() === "sale"
-                                 ? "Sale Now"
-                                 : ""}
-                             </>
-                            ) : propertydoc.category === "Plot" ? (
-                              <>{propertydoc.propertyType} Plot | For{" "}
-                              {propertydoc.purpose.toLowerCase() === "rentsaleboth"
-                                 ? "Rent / Lease"
-                                 : propertydoc.purpose.toLowerCase() === "rent"
-                                 ? "Lease"
-                                 : propertydoc.purpose.toLowerCase() === "sale"
-                                 ? "Sale"
-                                 : ""}
-                              </>
-                            ) : null)}
+                  {propertydoc &&
+                    (propertydoc.category === "Residential" ? (
+                      <>
+                        {propertydoc.bhk} {propertydoc.furnishing && "|"}{" "}
+                        {propertydoc.furnishing && `${propertydoc.furnishing}`}{" "}
+                      </>
+                    ) : propertydoc.category === "Commercial" ? (
+                      <>
+                        Your perfect {propertydoc.propertyType} awaits—on{" "}
+                        {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                          ? "Rent / Lease Now"
+                          : propertydoc.purpose.toLowerCase() === "rent"
+                          ? "Lease Now"
+                          : propertydoc.purpose.toLowerCase() === "sale"
+                          ? "Sale Now"
+                          : ""}
+                      </>
+                    ) : propertydoc.category === "Plot" ? (
+                      <>
+                        {propertydoc.propertyType} Plot | For{" "}
+                        {propertydoc.purpose.toLowerCase() === "rentsaleboth"
+                          ? "Rent / Lease"
+                          : propertydoc.purpose.toLowerCase() === "rent"
+                          ? "Lease"
+                          : propertydoc.purpose.toLowerCase() === "sale"
+                          ? "Sale"
+                          : ""}
+                      </>
+                    ) : null)}
                 </h6>
                 <h6>
                   {propertydoc.locality}, {propertydoc.city} |{" "}

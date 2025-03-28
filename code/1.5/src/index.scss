@@ -2,7 +2,7 @@
 // .modal-backdrop {
 //   background-color: rgb(0 0 0 / 40%) !important;
 // }
-.page_loader{
+.page_loader {
   height: calc(100vh - 125px);
   display: flex;
   align-items: center;
@@ -20,8 +20,8 @@
   margin-bottom: 8px !important;
   // text-transform: capitalize;
 }
-.uploading_modal{
-  .modal-content{
+.uploading_modal {
+  .modal-content {
     margin: auto;
     width: fit-content;
     text-align: center;
@@ -320,28 +320,28 @@
 .theme_radio_new {
   &.tab_type_radio {
     .theme_radio_container {
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         border-radius: 8px 8px 0px 0px !important;
         border-color: var(--theme-grey);
         border-bottom: none;
         background: whitesmoke;
       }
 
-      input[type="radio"]:checked+label {
+      input[type="radio"]:checked + label {
         border-bottom: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"]+label::before {
+      input[type="radio"] + label::before {
         content: none;
       }
 
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         position: relative;
       }
 
-      input[type="radio"]:checked+label::before {
+      input[type="radio"]:checked + label::before {
         content: "";
         position: absolute;
         bottom: -9px;
@@ -370,7 +370,7 @@
       display: none;
     }
 
-    input[type="radio"]+label {
+    input[type="radio"] + label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -382,10 +382,9 @@
       text-transform: capitalize;
       background-color: var(--white-color);
       background: var(--white-color);
-
     }
 
-    input[type="radio"]:checked+label {
+    input[type="radio"]:checked + label {
       background-color: var(--theme-blue);
       background: var(--theme-blue);
       color: var(--white-color);
@@ -397,21 +396,23 @@
     }
 
     .male {
-      input[type="radio"]+label::before {
+      input[type="radio"] + label::before {
         content: none;
         /* Unicode for Male face */
       }
 
-      input[type="radio"]:checked+label::before {}
+      input[type="radio"]:checked + label::before {
+      }
     }
 
     .female {
-      input[type="radio"]+label::before {
+      input[type="radio"] + label::before {
         content: none;
         /* Unicode for Female face */
       }
 
-      input[type="radio"]:checked+label::before {}
+      input[type="radio"]:checked + label::before {
+      }
     }
 
     .gender_single {
@@ -451,14 +452,14 @@
       }
     }
 
-    input[type="radio"]+label::before {
+    input[type="radio"] + label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="radio"]:checked+label::before {
+    input[type="radio"]:checked + label::before {
       content: "\2713";
       /* Check mark icon */
       display: inline-block;
@@ -483,20 +484,20 @@
 
   &.active_right {
     .theme_radio_container {
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         border-radius: 8px 0px 0px 8px !important;
         border-bottom: 1px solid;
         border-right: 3px solid transparent;
       }
 
-      input[type="radio"]:checked+label {
+      input[type="radio"]:checked + label {
         border-bottom: 1px solid;
         border-right: 3px solid var(--theme-orange);
         background: whitesmoke;
         color: var(--text-black);
       }
 
-      input[type="radio"]:checked+label::before {
+      input[type="radio"]:checked + label::before {
         bottom: inherit;
         right: -10px;
         top: 50%;
@@ -536,7 +537,7 @@
       display: none;
     }
 
-    input[type="checkbox"]+label {
+    input[type="checkbox"] + label {
       cursor: pointer;
       padding: 3px 10px;
       border: 1px solid #498fff;
@@ -548,19 +549,19 @@
       text-transform: capitalize;
     }
 
-    input[type="checkbox"]:checked+label {
+    input[type="checkbox"]:checked + label {
       background-color: var(--theme-blue);
       color: var(--white-color);
     }
 
-    input[type="checkbox"]+label::before {
+    input[type="checkbox"] + label::before {
       content: "\002B";
       display: inline-block;
       margin-right: 5px;
       font-size: 15px;
     }
 
-    input[type="checkbox"]:checked+label::before {
+    input[type="checkbox"]:checked + label::before {
       content: "\2713";
       /* Check mark icon */
       display: inline-block;
@@ -1239,7 +1240,6 @@
     margin-right: -10px;
     margin-bottom: -10px;
   }
-
 }
 
 .pg_utility_bill {
@@ -1411,7 +1411,7 @@
       border-top-color: #91b8ff;
 
       .top {
-        background: rgb(226 226 226);
+        background: rgb(232 240 255);
         padding: 8px 15px;
         text-align: center;
         font-size: 14px;
@@ -1443,6 +1443,11 @@
               color: var(--light-black);
               font-size: 14px;
               font-weight: 400;
+            }
+            h5 {
+              color: var(--light-black);
+              font-size: 15px;
+              font-weight: 500;
             }
           }
 
@@ -1860,16 +1865,14 @@
       font-size: 15px;
       justify-content: center;
       padding: 5px 15px;
-      svg{
+      svg {
         fill: var(--theme-grey);
-        
       }
-     
 
       &.active {
         color: var(--white-color);
         background: var(--theme-blue);
-        svg{
+        svg {
           fill: var(--white-color);
         }
       }
@@ -2164,7 +2167,7 @@
   .theme_radio_new {
     &.tab_type_radio {
       .theme_radio_container {
-        input[type="radio"]+label {
+        input[type="radio"] + label {
           font-size: 12px;
           padding: 8px;
         }
@@ -2174,7 +2177,7 @@
 
   .theme_radio_new {
     .theme_radio_container {
-      input[type="radio"]+label {
+      input[type="radio"] + label {
         padding: 3px 12px;
         font-size: 13px;
       }
@@ -2368,7 +2371,7 @@
     }
   }
 
-  .row.form_full>* {
+  .row.form_full > * {
     padding-left: 0px;
     padding-right: 0px;
   }
@@ -2478,8 +2481,6 @@
             }
 
             .remark_info {
-              right: 15px;
-
               span {
                 font-size: 14px;
               }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef  } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
 import { useDocument } from "../../hooks/useDocument";
@@ -43,7 +43,7 @@ const InspectionDetails = () => {
 
   useEffect(() => {
     if (!inspectionDoc?.propertyId) return;
-  
+
     const unsubscribe = projectFirestore
       .collection("utilityBills-propdial")
       .where("propertyId", "==", inspectionDoc.propertyId) // Match propertyId
@@ -64,13 +64,11 @@ const InspectionDetails = () => {
           console.error("Error fetching bill documents:", error);
         }
       );
-  
+
     return () => unsubscribe(); // Unsubscribe to avoid memory leaks
   }, [inspectionDoc]);
-  
 
   console.log("billDocument", billDocument);
-  
 
   // fetch user
   const { documents: dbUsers, error: dbuserserror } = useCollection(
@@ -82,19 +80,18 @@ const InspectionDetails = () => {
     setdbUserState(dbUsers);
   });
 
-
-    // Function to generate PDF
-    const generatePDF = () => {
-      const input = reportRef.current;
-      html2canvas(input, { scale: 2 }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const imgWidth = 210;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-        pdf.save("inspection-report.pdf");
-      });
-    };
+  // Function to generate PDF
+  const generatePDF = () => {
+    const input = reportRef.current;
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("inspection-report.pdf");
+    });
+  };
 
   return (
     <div className="pg_property pd_single pg_bg inspection_report">
@@ -102,8 +99,8 @@ const InspectionDetails = () => {
         {propertyDocument && propertyDocument.unitNumber ? (
           inspectionDoc && (
             <div className="report" ref={reportRef}>
-                 {/* Generate PDF Button */}
-            {/* <div className="pdf-button-container" style={{ marginTop: "20px" }}>
+              {/* Generate PDF Button */}
+              {/* <div className="pdf-button-container" style={{ marginTop: "20px" }}>
               <button onClick={generatePDF} className="btn btn-primary">
                 Download PDF
               </button>
@@ -157,15 +154,22 @@ const InspectionDetails = () => {
               </div>
               <div className="vg22"></div>
               <div className="detail_card">
-                <Link className="dc_single" to={`/propertydetails/${propertyDocument.id}`}>
-                  <h2 className="d-flex" style={{
-                    justifyContent: "space-between",
-                    gap: "10px",
-                    alignItems: "center"
-                  }}>Property Address 
-                  <span className="pid_badge" style={{ fontSize: "13px" }}>
-                            PID: {" " + propertyDocument.pid}
-                          </span>
+                <Link
+                  className="dc_single"
+                  to={`/propertydetails/${propertyDocument.id}`}
+                >
+                  <h2
+                    className="d-flex"
+                    style={{
+                      justifyContent: "space-between",
+                      gap: "10px",
+                      alignItems: "center",
+                    }}
+                  >
+                    Property Address
+                    <span className="pid_badge" style={{ fontSize: "13px" }}>
+                      PID: {" " + propertyDocument.pid}
+                    </span>
                   </h2>
                   {propertyDocument && (
                     <>
@@ -174,54 +178,54 @@ const InspectionDetails = () => {
                         {propertyDocument.society}
                       </h5>
                       <h5>
-                      {propertyDocument &&
-                            (propertyDocument.category === "Residential" ? (
-                              <>
-                                {propertyDocument.bhk}{" "}
-                                {propertyDocument.furnishing && "|"}{" "}
-                                {propertyDocument.furnishing &&
-                                  `${propertyDocument.furnishing}`}{" "}
-                                {propertyDocument.purpose && " | "}
-                                For{" "}
-                                {propertyDocument.purpose.toLowerCase() ===
-                                "rentsaleboth"
-                                  ? "Rent / Sale"
-                                  : propertyDocument.purpose}
-                              </>
-                            ) : propertyDocument.category === "Commercial" ? (
-                              <>
-                                Your perfect {propertyDocument.propertyType}{" "}
-                                awaits—on{" "}
-                                {propertyDocument.purpose.toLowerCase() ===
-                                "rentsaleboth"
-                                  ? "Rent / Lease Now"
-                                  : propertyDocument.purpose.toLowerCase() ===
-                                    "rent"
-                                  ? "Lease Now"
-                                  : propertyDocument.purpose.toLowerCase() ===
-                                    "sale"
-                                  ? "Sale Now"
-                                  : ""}
-                              </>
-                            ) : propertyDocument.category === "Plot" ? (
-                              <>
-                                {propertyDocument.propertyType} Plot | For{" "}
-                                {propertyDocument.purpose.toLowerCase() ===
-                                "rentsaleboth"
-                                  ? "Rent / Lease"
-                                  : propertyDocument.purpose.toLowerCase() ===
-                                    "rent"
-                                  ? "Lease"
-                                  : propertyDocument.purpose.toLowerCase() ===
-                                    "sale"
-                                  ? "Sale"
-                                  : ""}
-                              </>
-                            ) : null)}
+                        {propertyDocument &&
+                          (propertyDocument.category === "Residential" ? (
+                            <>
+                              {propertyDocument.bhk}{" "}
+                              {propertyDocument.furnishing && "|"}{" "}
+                              {propertyDocument.furnishing &&
+                                `${propertyDocument.furnishing}`}{" "}
+                              {propertyDocument.purpose && " | "}
+                              For{" "}
+                              {propertyDocument.purpose.toLowerCase() ===
+                              "rentsaleboth"
+                                ? "Rent / Sale"
+                                : propertyDocument.purpose}
+                            </>
+                          ) : propertyDocument.category === "Commercial" ? (
+                            <>
+                              Your perfect {propertyDocument.propertyType}{" "}
+                              awaits—on{" "}
+                              {propertyDocument.purpose.toLowerCase() ===
+                              "rentsaleboth"
+                                ? "Rent / Lease Now"
+                                : propertyDocument.purpose.toLowerCase() ===
+                                  "rent"
+                                ? "Lease Now"
+                                : propertyDocument.purpose.toLowerCase() ===
+                                  "sale"
+                                ? "Sale Now"
+                                : ""}
+                            </>
+                          ) : propertyDocument.category === "Plot" ? (
+                            <>
+                              {propertyDocument.propertyType} Plot | For{" "}
+                              {propertyDocument.purpose.toLowerCase() ===
+                              "rentsaleboth"
+                                ? "Rent / Lease"
+                                : propertyDocument.purpose.toLowerCase() ===
+                                  "rent"
+                                ? "Lease"
+                                : propertyDocument.purpose.toLowerCase() ===
+                                  "sale"
+                                ? "Sale"
+                                : ""}
+                            </>
+                          ) : null)}
                       </h5>
                       <h5>
-                      {propertyDocument.locality}, {propertyDocument.city},{" "}
-                      {propertyDocument.state}
+                        {propertyDocument.locality}, {propertyDocument.city},{" "}
+                        {propertyDocument.state}
                       </h5>
                     </>
                   )}
@@ -348,55 +352,63 @@ const InspectionDetails = () => {
               <div className="bill_card">
                 <h2>Bill Details</h2>
                 <div className="bcard_inner">
-                {Object.values(inspectionDoc?.bills || {}).map((billDoc, index) => (
-  <div className="bc_single" key={index}>
-    <div className="left">
-      <h6>{billDoc.billType} | {billDoc.authorityName}</h6>
-      
-      <div className="d-flex mt-2" style={{
-        gap: "5px",
-        flexWrap: "wrap",
-        alignItems: "center"
-      }}>
-        <div className="pid_badge">
-          Bill ID: {billDoc.billId}
-        </div>
-        {billDoc?.amount && (
-        <h5 className="pid_badge">Amount: ₹{billDoc?.amount}</h5>
-        )}
-      </div>   
-      <div style={{
-        fontSize: "14px",
-        marginTop: "3px",
-        color: "var(--light-black)"
-      }}>
-        Last update at: {format(
-                          billDoc.lastUpdatedAt.toDate(),
-                          "dd-MMM-yy"
-                        )}
-                      
-      </div>
-      <div style={{
-        fontSize: "14px",
-        marginTop: "3px",
-        color: "var(--light-black)"
-      }}>
-        {/* Last update at: {format(
+                  {Object.values(inspectionDoc?.bills || {}).map(
+                    (billDoc, index) => (
+                      <div className="bc_single" key={index}>
+                        <div className="left">
+                          <h6>
+                            {billDoc.billType} | {billDoc.authorityName}
+                          </h6>
+
+                          <div
+                            className="d-flex mt-2"
+                            style={{
+                              gap: "5px",
+                              flexWrap: "wrap",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div className="pid_badge">
+                              Bill ID: {billDoc.billId}
+                            </div>
+                            {billDoc?.amount && (
+                              <h5 className="pid_badge">
+                                Amount: ₹{billDoc?.amount}
+                              </h5>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              marginTop: "3px",
+                              color: "var(--light-black)",
+                            }}
+                          >
+                            Last update at:{" "}
+                            {format(
+                              billDoc.lastUpdatedAt.toDate(),
+                              "dd-MMM-yy"
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              marginTop: "3px",
+                              color: "var(--light-black)",
+                            }}
+                          >
+                            {/* Last update at: {format(
                           billDoc.lastUpdatedAt.toDate(),
                           "dd-MMM-yy"
                         )} */}
-                        Remark: {billDoc.remark}
-      </div>         
-    </div>    
+                            Remark: {billDoc.remark}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
 
-    
-   
-  </div>
-))}
-
-                <div>
-     
-    </div>
+                  <div></div>
                 </div>
               </div>
               <div className="room_wise_inspection">
