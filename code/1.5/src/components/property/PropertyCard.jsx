@@ -366,7 +366,7 @@ const PropertyCard = ({ propertyid }) => {
                         <>
                           {propertydoc.bhk} {propertydoc.furnishing && "|"}{" "}
                           {propertydoc.furnishing &&
-                            `${propertydoc.furnishing} Furnished`}{" "}
+                            `${propertydoc.furnishing}`}{" "}
                           {propertydoc.purpose && " | "}
                           For{" "}
                           {propertydoc.purpose.toLowerCase() === "rentsaleboth"

@@ -126,7 +126,7 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                                 {propertydoc.bhk}{" "}
                                 {propertydoc.furnishing && "|"}{" "}
                                 {propertydoc.furnishing &&
-                                  `${propertydoc.furnishing} Furnished`}{" "}
+                                  `${propertydoc.furnishing}`}{" "}
                                
                              
                               </>
@@ -222,7 +222,7 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                     {propertydoc.bhk} | {propertydoc.propertyType}{" "}
                     {propertydoc.furnishing === ""
                       ? ""
-                      : " | " + propertydoc.furnishing + "Furnished"}{" "}
+                      : " | " + propertydoc.furnishing + ""}{" "}
                   </h6>
                   <h6>
                     {propertydoc.locality}, {propertydoc.city} |{" "}

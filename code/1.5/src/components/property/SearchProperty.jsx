@@ -102,7 +102,7 @@ const SearchProperty = ({
                           <>
                             {property.bhk} {property.furnishing && "|"}{" "}
                             {property.furnishing &&
-                              `${property.furnishing} Furnished`}{" "}
+                              `${property.furnishing}`}{" "}
                             {property.purpose && " | "}
                             For{" "}
                             {property.purpose.toLowerCase() === "rentsaleboth"

@@ -1981,7 +1981,7 @@ const getAlertMessage = () => {
                                 {propertyDocument.bhk}{" "}
                                 {propertyDocument.furnishing && "|"}{" "}
                                 {propertyDocument.furnishing &&
-                                  `${propertyDocument.furnishing} Furnished`}{" "}
+                                  `${propertyDocument.furnishing}`}{" "}
                                 {propertyDocument.purpose && " | "}
                                 For{" "}
                                 {propertyDocument.purpose.toLowerCase() ===
@@ -4547,51 +4547,7 @@ const getAlertMessage = () => {
                                   <h5>{propertyDocument.entranceGallery}</h5>
                                 </div>
                               </div>
-                            )}
-                          {/* Main Door Facing  */}
-                          {propertyDocument &&
-                            propertyDocument.category === "Residential" &&
-                            propertyDocument.mainDoorFacing && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
-                                    alt="propdial"
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>Main Door Facing</h6>
-                                  <h5>{propertyDocument.mainDoorFacing}</h5>
-                                </div>
-                              </div>
-                            )}
-                          {/* Balcony facing  */}
-                          {propertyDocument &&
-                            propertyDocument.category === "Residential" &&
-                            propertyDocument.numberOfBalcony !== 0 &&
-                            propertyDocument.balconyFacing && (
-                              <div className="p_info_single">
-                                <div className="pd_icon">
-                                  <img
-                                    src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
-                                    alt="propdial"
-                                  />
-                                </div>
-                                <div className="pis_content">
-                                  <h6>
-                                    Balcony({propertyDocument.numberOfBalcony})
-                                    Facing
-                                  </h6>
-                                  <h5>
-                                    {propertyDocument.balconyFacing
-                                      ? propertyDocument.balconyFacing.join(
-                                          ", "
-                                        )
-                                      : ""}
-                                  </h5>
-                                </div>
-                              </div>
-                            )}
+                            )}                        
                           {/* Year Of Consturction  */}
                           {propertyDocument &&
                             propertyDocument.yearOfConstruction && (
@@ -5346,8 +5302,52 @@ const getAlertMessage = () => {
                   propertyDocument.overLooking.length > 0 && (
                     <div className="property_card_single mobile_full_card">
                       <div className="more_detail_card_inner">
-                        <h2 className="card_title">overLooking</h2>
+                        <h2 className="card_title">Facing and Overlooking</h2>
                         <div className="p_info">
+                            {/* Main Door Facing  */}
+                            {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.mainDoorFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/mainDoorFacing.png"
+                                    alt="propdial"
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>Main Door Facing</h6>
+                                  <h5>{propertyDocument.mainDoorFacing}</h5>
+                                </div>
+                              </div>
+                            )}
+                          {/* Balcony facing  */}
+                          {propertyDocument &&
+                            propertyDocument.category === "Residential" &&
+                            propertyDocument.numberOfBalcony !== 0 &&
+                            propertyDocument.balconyFacing && (
+                              <div className="p_info_single">
+                                <div className="pd_icon">
+                                  <img
+                                    src="/assets/img/property-detail-icon/balcony_windowsFacing.png"
+                                    alt="propdial"
+                                  />
+                                </div>
+                                <div className="pis_content">
+                                  <h6>
+                                    Balcony({propertyDocument.numberOfBalcony})
+                                    Facing
+                                  </h6>
+                                  <h5>
+                                    {propertyDocument.balconyFacing
+                                      ? propertyDocument.balconyFacing.join(
+                                          ", "
+                                        )
+                                      : ""}
+                                  </h5>
+                                </div>
+                              </div>
+                            )}
                           {propertyDocument.overLooking.map((item) => (
                             <div className="p_info_single">
                               <div className="pd_icon">

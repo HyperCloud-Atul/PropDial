@@ -180,7 +180,7 @@ const InspectionDetails = () => {
                                 {propertyDocument.bhk}{" "}
                                 {propertyDocument.furnishing && "|"}{" "}
                                 {propertyDocument.furnishing &&
-                                  `${propertyDocument.furnishing} Furnished`}{" "}
+                                  `${propertyDocument.furnishing}`}{" "}
                                 {propertyDocument.purpose && " | "}
                                 For{" "}
                                 {propertyDocument.purpose.toLowerCase() ===
