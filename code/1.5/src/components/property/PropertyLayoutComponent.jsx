@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useAuthContext } from "../../hooks/useAuthContext";
-
+import { projectStorage } from "../../firebase/config";
 
 export default function PropertyLayoutComponent(props) {
   const navigate = useNavigate();
@@ -11,7 +11,13 @@ export default function PropertyLayoutComponent(props) {
   const layoutid = props.layoutid == null ? "1234" : props.layoutid;
   const { document: propertyLayoutDoc, error: propertyLayoutDocError } =
     useDocument("propertylayouts", layoutid);
+     const { document: propertyDocument, error: propertyDocError } = useDocument(
+        "properties-propdial",
+        props.propertyid
+      );
     const [isProcess, setIsProcess] = useState(false);
+    console.log("propertyDocument", propertyDocument);
+    
   const {
     addDocument: addPropertyLayoutDocument,
     updateDocument: updatePropertyLayoutDocument,
@@ -134,7 +140,7 @@ export default function PropertyLayoutComponent(props) {
     return true;
   };
   
-  // Function to clear the field error when it's updated
+ 
   const clearFieldError = (field) => {
     if (errors[field]) {
       const updatedErrors = { ...errors };
@@ -220,41 +226,278 @@ export default function PropertyLayoutComponent(props) {
                           </h6>
                   <div className="field_box theme_radio_new">
                     <div className="theme_radio_container">                   
-                       <div className="theme_radio_container">
-                    {["Bedroom", "Bathroom", "Kitchen", "Living Room", "Dining Room", "Balcony", "Basement"].map((type) => (
-                      <div key={type} className="radio_single">
-                        <input
-                          type="radio"
-                          name="roomType"
-                          id={type}
-                          onClick={() => {
-                            setPropertyLayout({ ...propertyLayout, RoomType: type });
-                            clearFieldError("RoomType");
-                          }}
-                          checked={propertyLayout.RoomType === type}
-                        />
-                        <label htmlFor={type}>{type}</label>
-                      </div>
-                    ))}
-                  </div>
+                    <div className="theme_radio_container">
+  {propertyDocument && (
+    <>
+    {/* Bedrooms */}
+{propertyDocument.numberOfBedrooms > 0 && (
+  <div>
+    <h4>Bedrooms</h4>
+    {[...Array(propertyDocument.numberOfBedrooms)].map((_, index) => (
+      <div key={`Bedroom${index + 1}`} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={`Bedroom${index + 1}`}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: propertyDocument.numberOfBedrooms === 1 ? "Bedroom" : `Bedroom ${index + 1}` });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === (propertyDocument.numberOfBedrooms === 1 ? "Bedroom" : `Bedroom ${index + 1}`)}
+        />
+        <label htmlFor={`Bedroom${index + 1}`}>
+          {propertyDocument.numberOfBedrooms === 1 ? "Bedroom" : `Bedroom ${index + 1}`}
+        </label>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* Bathrooms */}
+{propertyDocument.numberOfBathrooms > 0 && (
+  <div>
+    <h4>Bathrooms</h4>
+    {[...Array(propertyDocument.numberOfBathrooms)].map((_, index) => (
+      <div key={`Bathroom${index + 1}`} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={`Bathroom${index + 1}`}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: propertyDocument.numberOfBathrooms === 1 ? "Bathroom" : `Bathroom ${index + 1}` });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === (propertyDocument.numberOfBathrooms === 1 ? "Bathroom" : `Bathroom ${index + 1}`)}
+        />
+        <label htmlFor={`Bathroom${index + 1}`}>
+          {propertyDocument.numberOfBathrooms === 1 ? "Bathroom" : `Bathroom ${index + 1}`}
+        </label>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* Kitchens */}
+{propertyDocument.numberOfKitchen > 0 && (
+  <div>
+    <h4>Kitchens</h4>
+    {[...Array(propertyDocument.numberOfKitchen)].map((_, index) => (
+      <div key={`Kitchen${index + 1}`} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={`Kitchen${index + 1}`}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: propertyDocument.numberOfKitchen === 1 ? "Kitchen" : `Kitchen ${index + 1}` });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === (propertyDocument.numberOfKitchen === 1 ? "Kitchen" : `Kitchen ${index + 1}`)}
+        />
+        <label htmlFor={`Kitchen${index + 1}`}>
+          {propertyDocument.numberOfKitchen === 1 ? "Kitchen" : `Kitchen ${index + 1}`}
+        </label>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* Balconies */}
+{propertyDocument.numberOfBalcony > 0 && (
+  <div>
+    <h4>Balconies</h4>
+    {[...Array(propertyDocument.numberOfBalcony)].map((_, index) => (
+      <div key={`Balcony${index + 1}`} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={`Balcony${index + 1}`}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: propertyDocument.numberOfBalcony === 1 ? "Balcony" : `Balcony ${index + 1}` });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === (propertyDocument.numberOfBalcony === 1 ? "Balcony" : `Balcony ${index + 1}`)}
+        />
+        <label htmlFor={`Balcony${index + 1}`}>
+          {propertyDocument.numberOfBalcony === 1 ? "Balcony" : `Balcony ${index + 1}`}
+        </label>
+      </div>
+    ))}
+  </div>
+)}
+
+
+{/* Living and Dining Logic */}
+{propertyDocument.livingAndDining === "Yes" ? (
+  <div>
+    <h4>Living and Dining</h4>
+    {/* Living Room */}
+    <div className="radio_single">
+      <input
+        type="radio"
+        name="roomType"
+        id="Living"
+        onClick={() => {
+          setPropertyLayout({ ...propertyLayout, RoomType: "Living" });
+          clearFieldError("RoomType");
+        }}
+        checked={propertyLayout.RoomType === "Living"}
+      />
+      <label htmlFor="Living">Living Area</label>
+    </div>
+
+    {/* Dining Room */}
+    <div className="radio_single">
+      <input
+        type="radio"
+        name="roomType"
+        id="Dining"
+        onClick={() => {
+          setPropertyLayout({ ...propertyLayout, RoomType: "Dining" });
+          clearFieldError("RoomType");
+        }}
+        checked={propertyLayout.RoomType === "Dining"}
+      />
+      <label htmlFor="Dining">Dining Area</label>
+    </div>
+  </div>
+) : (
+  <div>
+    {/* Check Living Area */}
+    {propertyDocument.livingArea === "Yes" && (
+      <div>
+        <h4>Living Area</h4>
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="roomType"
+            id="Living"
+            onClick={() => {
+              setPropertyLayout({ ...propertyLayout, RoomType: "Living" });
+              clearFieldError("RoomType");
+            }}
+            checked={propertyLayout.RoomType === "Living"}
+          />
+          <label htmlFor="Living">Living Area</label>
+        </div>
+      </div>
+    )}
+
+    {/* Check Dining Area */}
+    {propertyDocument.diningArea === "Yes" && (
+      <div>
+        <h4>Dining Area</h4>
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="roomType"
+            id="Dining"
+            onClick={() => {
+              setPropertyLayout({ ...propertyLayout, RoomType: "Dining" });
+              clearFieldError("RoomType");
+            }}
+            checked={propertyLayout.RoomType === "Dining"}
+          />
+          <label htmlFor="Dining">Dining Area</label>
+        </div>
+      </div>
+    )}
+  </div>
+)}
+
+ 
+      {/* Dynamically create radio buttons for additionalArea */}
+{propertyDocument.additionalArea && propertyDocument.additionalArea.length > 0 && (
+  <div>
+    <h4>Additional Areas</h4>
+    {propertyDocument.additionalArea.map((area) => (
+      <div key={area} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={area}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: area });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === area}
+        />
+        <label htmlFor={area}>{area}</label>
+      </div>
+    ))}
+  </div>
+)}
+
+{/* Dynamically create radio buttons for additionalRooms */}
+{propertyDocument.additionalRooms && propertyDocument.additionalRooms.length > 0 && (
+  <div>
+    <h4>Additional Rooms</h4>
+    {propertyDocument.additionalRooms.map((room) => (
+      <div key={room} className="radio_single">
+        <input
+          type="radio"
+          name="roomType"
+          id={room}
+          onClick={() => {
+            setPropertyLayout({ ...propertyLayout, RoomType: room });
+            clearFieldError("RoomType");
+          }}
+          checked={propertyLayout.RoomType === room}
+        />
+        <label htmlFor={room}>{room}</label>
+      </div>
+    ))}
+  </div>
+)}
+{/* Check and display Entrance Gallery if it's "Yes" */}
+{propertyDocument.entranceGallery === "Yes" && (
+  <div>
+    <h4>Entrance Gallery</h4>
+    <div className="radio_single">
+      <input
+        type="radio"
+        name="roomType"
+        id="entranceGallery"
+        onClick={() => {
+          setPropertyLayout({ ...propertyLayout, RoomType: "Entrance Gallery" });
+          clearFieldError("RoomType");
+        }}
+        checked={propertyLayout.RoomType === "Entrance Gallery"}
+      />
+      <label htmlFor="entranceGallery">Entrance Gallery</label>
+    </div>
+  </div>
+)}
+
+{/* Check and display Passage if it's "Yes" */}
+{propertyDocument.passage === "Yes" && (
+  <div>
+    <h4>Passage</h4>
+    <div className="radio_single">
+      <input
+        type="radio"
+        name="roomType"
+        id="passage"
+        onClick={() => {
+          setPropertyLayout({ ...propertyLayout, RoomType: "Passage" });
+          clearFieldError("RoomType");
+        }}
+        checked={propertyLayout.RoomType === "Passage"}
+      />
+      <label htmlFor="passage">Passage</label>
+    </div>
+  </div>
+)}
+
+
+    </>
+  )}
+</div>
+
                     </div>
                   </div>
                   {errors.RoomType && <div className="field_error">{errors.RoomType}</div>}
                 </div>
-              </div>
-              {/* <div className="col-md-1">
-                      <div className="form_field_upload">
-                        <label htmlFor="upload">
-                          <div className="text-center">
-                            <span className="material-symbols-outlined">
-                              upload
-                            </span>
-                            <p>Upload image</p>
-                          </div>
-                        </label>
-                        <input type="file" id="upload" />
-                      </div>
-                    </div> */}
+              </div>            
               <div className="col-md-12">
                 <div className="add_info_text">
                   <div className="form_field" 
