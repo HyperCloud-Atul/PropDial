@@ -225,15 +225,15 @@ export default function PropertyLayoutComponent(props) {
                             Select Room Type*
                           </h6>
                   <div className="field_box theme_radio_new">
-                    <div className="theme_radio_container">                   
+                                    
                     <div className="theme_radio_container">
   {propertyDocument && (
     <>
     {/* Bedrooms */}
 {propertyDocument.numberOfBedrooms > 0 && (
-  <div>
-    <h4>Bedrooms</h4>
-    {[...Array(propertyDocument.numberOfBedrooms)].map((_, index) => (
+ 
+    
+    [...Array(propertyDocument.numberOfBedrooms)].map((_, index) => (
       <div key={`Bedroom${index + 1}`} className="radio_single">
         <input
           type="radio"
@@ -249,15 +249,15 @@ export default function PropertyLayoutComponent(props) {
           {propertyDocument.numberOfBedrooms === 1 ? "Bedroom" : `Bedroom ${index + 1}`}
         </label>
       </div>
-    ))}
-  </div>
+    ))
+
 )}
 
 {/* Bathrooms */}
 {propertyDocument.numberOfBathrooms > 0 && (
-  <div>
-    <h4>Bathrooms</h4>
-    {[...Array(propertyDocument.numberOfBathrooms)].map((_, index) => (
+ 
+    
+    [...Array(propertyDocument.numberOfBathrooms)].map((_, index) => (
       <div key={`Bathroom${index + 1}`} className="radio_single">
         <input
           type="radio"
@@ -273,15 +273,14 @@ export default function PropertyLayoutComponent(props) {
           {propertyDocument.numberOfBathrooms === 1 ? "Bathroom" : `Bathroom ${index + 1}`}
         </label>
       </div>
-    ))}
-  </div>
+    ))
+  
 )}
 
 {/* Kitchens */}
 {propertyDocument.numberOfKitchen > 0 && (
-  <div>
-    <h4>Kitchens</h4>
-    {[...Array(propertyDocument.numberOfKitchen)].map((_, index) => (
+  
+    [...Array(propertyDocument.numberOfKitchen)].map((_, index) => (
       <div key={`Kitchen${index + 1}`} className="radio_single">
         <input
           type="radio"
@@ -297,15 +296,14 @@ export default function PropertyLayoutComponent(props) {
           {propertyDocument.numberOfKitchen === 1 ? "Kitchen" : `Kitchen ${index + 1}`}
         </label>
       </div>
-    ))}
-  </div>
+    ))
+ 
 )}
 
 {/* Balconies */}
 {propertyDocument.numberOfBalcony > 0 && (
-  <div>
-    <h4>Balconies</h4>
-    {[...Array(propertyDocument.numberOfBalcony)].map((_, index) => (
+  
+    [...Array(propertyDocument.numberOfBalcony)].map((_, index) => (
       <div key={`Balcony${index + 1}`} className="radio_single">
         <input
           type="radio"
@@ -321,51 +319,35 @@ export default function PropertyLayoutComponent(props) {
           {propertyDocument.numberOfBalcony === 1 ? "Balcony" : `Balcony ${index + 1}`}
         </label>
       </div>
-    ))}
-  </div>
+    ))
 )}
 
 
 {/* Living and Dining Logic */}
 {propertyDocument.livingAndDining === "Yes" ? (
-  <div>
-    <h4>Living and Dining</h4>
-    {/* Living Room */}
+ 
+    
     <div className="radio_single">
       <input
         type="radio"
         name="roomType"
-        id="Living"
+        id="Living&Dining"
         onClick={() => {
-          setPropertyLayout({ ...propertyLayout, RoomType: "Living" });
+          setPropertyLayout({ ...propertyLayout, RoomType: "Living&Dining" });
           clearFieldError("RoomType");
         }}
-        checked={propertyLayout.RoomType === "Living"}
+        checked={propertyLayout.RoomType === "Living&Dining"}
       />
-      <label htmlFor="Living">Living Area</label>
+      <label htmlFor="Living&Dining">Living & Dining</label>
     </div>
 
-    {/* Dining Room */}
-    <div className="radio_single">
-      <input
-        type="radio"
-        name="roomType"
-        id="Dining"
-        onClick={() => {
-          setPropertyLayout({ ...propertyLayout, RoomType: "Dining" });
-          clearFieldError("RoomType");
-        }}
-        checked={propertyLayout.RoomType === "Dining"}
-      />
-      <label htmlFor="Dining">Dining Area</label>
-    </div>
-  </div>
+  
+
 ) : (
   <div>
     {/* Check Living Area */}
     {propertyDocument.livingArea === "Yes" && (
-      <div>
-        <h4>Living Area</h4>
+      
         <div className="radio_single">
           <input
             type="radio"
@@ -379,13 +361,12 @@ export default function PropertyLayoutComponent(props) {
           />
           <label htmlFor="Living">Living Area</label>
         </div>
-      </div>
+    
     )}
 
     {/* Check Dining Area */}
     {propertyDocument.diningArea === "Yes" && (
-      <div>
-        <h4>Dining Area</h4>
+     
         <div className="radio_single">
           <input
             type="radio"
@@ -399,7 +380,7 @@ export default function PropertyLayoutComponent(props) {
           />
           <label htmlFor="Dining">Dining Area</label>
         </div>
-      </div>
+     
     )}
   </div>
 )}
@@ -407,9 +388,8 @@ export default function PropertyLayoutComponent(props) {
  
       {/* Dynamically create radio buttons for additionalArea */}
 {propertyDocument.additionalArea && propertyDocument.additionalArea.length > 0 && (
-  <div>
-    <h4>Additional Areas</h4>
-    {propertyDocument.additionalArea.map((area) => (
+ 
+    propertyDocument.additionalArea.map((area) => (
       <div key={area} className="radio_single">
         <input
           type="radio"
@@ -423,15 +403,14 @@ export default function PropertyLayoutComponent(props) {
         />
         <label htmlFor={area}>{area}</label>
       </div>
-    ))}
-  </div>
+    ))
+
 )}
 
 {/* Dynamically create radio buttons for additionalRooms */}
 {propertyDocument.additionalRooms && propertyDocument.additionalRooms.length > 0 && (
-  <div>
-    <h4>Additional Rooms</h4>
-    {propertyDocument.additionalRooms.map((room) => (
+  
+    propertyDocument.additionalRooms.map((room) => (
       <div key={room} className="radio_single">
         <input
           type="radio"
@@ -445,13 +424,12 @@ export default function PropertyLayoutComponent(props) {
         />
         <label htmlFor={room}>{room}</label>
       </div>
-    ))}
-  </div>
+    ))
+  
 )}
 {/* Check and display Entrance Gallery if it's "Yes" */}
 {propertyDocument.entranceGallery === "Yes" && (
-  <div>
-    <h4>Entrance Gallery</h4>
+  
     <div className="radio_single">
       <input
         type="radio"
@@ -465,13 +443,12 @@ export default function PropertyLayoutComponent(props) {
       />
       <label htmlFor="entranceGallery">Entrance Gallery</label>
     </div>
-  </div>
+  
 )}
 
 {/* Check and display Passage if it's "Yes" */}
 {propertyDocument.passage === "Yes" && (
-  <div>
-    <h4>Passage</h4>
+ 
     <div className="radio_single">
       <input
         type="radio"
@@ -485,7 +462,7 @@ export default function PropertyLayoutComponent(props) {
       />
       <label htmlFor="passage">Passage</label>
     </div>
-  </div>
+ 
 )}
 
 
@@ -493,7 +470,7 @@ export default function PropertyLayoutComponent(props) {
   )}
 </div>
 
-                    </div>
+                   
                   </div>
                   {errors.RoomType && <div className="field_error">{errors.RoomType}</div>}
                 </div>

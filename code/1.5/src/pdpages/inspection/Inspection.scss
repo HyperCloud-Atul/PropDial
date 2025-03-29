@@ -222,6 +222,9 @@
         }
         .bi_icon.full {
           display: none;
+        }      
+        .bi_icon.notallowed {
+          display: none;
         }
       }
       .btn_text {
@@ -234,6 +237,9 @@
             display: none;
           }
           &.full {
+            display: none;
+          }
+          &.notallowed {
             display: none;
           }
         }
@@ -262,6 +268,12 @@
           .bi_icon.full {
             display: block;
           }
+          .bi_icon.half {
+            display: none;
+          }
+          .bi_icon.notallowed {
+            display: none;
+          }
         }
         .btn_text {
           h6 {
@@ -270,6 +282,47 @@
               display: none;
             }
             &.full {
+              display: block;
+            }
+            &.notallowed {
+              display: none;
+            }
+            &.half {
+              display: none;
+            }
+          }
+        }
+      }
+      &.notallowed {
+        background: #ffe5e5;
+        .btn_icon {
+          border: 2px solid var(--theme-red);
+          .bi_icon.add {
+            display: none;
+          }
+          .bi_icon.full {
+            display: none;
+          }
+          .bi_icon.half {
+            display: none;
+          }
+          .bi_icon.notallowed {
+            display: block;
+          }
+        }
+        .btn_text {
+          h6 {
+            color: var(--theme-red);
+            &.add {
+              display: none;
+            }
+            &.full {
+              display: none;
+            }
+            &.half {
+              display: none;
+            }
+            &.notallowed {
               display: block;
             }
           }
@@ -288,6 +341,9 @@
           .bi_icon.full {
             display: none;
           }
+          .bi_icon.notallowed {
+            display: none;
+          }
         }
         .btn_text {
           h6 {
@@ -300,6 +356,9 @@
             }
             &.half {
               display: block;
+            }
+            &.notallowed {
+              display: none;
             }
           }
         }
