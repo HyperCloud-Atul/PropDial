@@ -623,12 +623,12 @@ export default function PGProfile() {
               <div className="form_field_container">
                 <div
                   className="radio_group"
-                  style={{ display: "flex", alignItems: "center" }}
+                  style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
                 >
                   {user.roles.map((userrole) => (
                     <div
                       className="radio_group_single"
-                      style={{ width: "100%" }}
+                      style={{ width: "fit-content", minWidth:"35%" }}
                     >
                       <div
                         className={`custom_radio_button ${
