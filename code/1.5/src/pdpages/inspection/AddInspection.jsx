@@ -25,6 +25,7 @@ const AddInspection = () => {
   const [uploadProgress, setUploadProgress] = useState({});
   const [isDataSaving, setIsDataSaving] = useState(false);
   const [show, setShow] = useState(false);
+  const [imageActionStatus, setImageActionStatus] = useState(null);
   const [finalSubmit, setFinalSubmit] = useState(false);
   const [finalSubmiting, setFinalSubmiting] = useState(false);
   const [afterSaveModal, setAfterSaveModal] = useState(false);
@@ -32,6 +33,10 @@ const AddInspection = () => {
   const [propertyerror, setPropertyError] = useState(null);
   const [inspectionType, setInspectionType] = useState("");
   const [activeInspection, setActiveInspection] = useState("layout");
+    const { document: inspectionDocument, error: inspectionDocumentError } = useDocument(
+      "inspections",
+      inspectionId
+    );
 
   useEffect(() => {
     if (!propertyId) return; // Agar propertyId na ho toh return kar do
@@ -136,7 +141,7 @@ const AddInspection = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setShow(true); // Start uploading state
+    setImageActionStatus("uploading");
 
     try {
       // Image Compression Settings
@@ -164,7 +169,7 @@ const AddInspection = () => {
         },
         (error) => {
           console.error("Error uploading image:", error);
-          setShow(false); // Stop uploading state on error
+          setImageActionStatus(null);
         },
         async () => {
           try {
@@ -183,7 +188,7 @@ const AddInspection = () => {
           } catch (error) {
             console.error("Error getting download URL:", error);
           } finally {
-            setShow(false); // Stop uploading state after completion
+            setImageActionStatus(null);
           }
         }
       );
@@ -194,6 +199,7 @@ const AddInspection = () => {
   };
 
   const handleImageDelete = async (roomId, image) => {
+    setImageActionStatus("deleting");
     const storageRef = projectStorage.ref(
       `inspection_images/${inspectionId}/${roomId}/${image.name}`
     );
@@ -207,9 +213,10 @@ const AddInspection = () => {
           images: prev[roomId]?.images?.filter((img) => img.url !== image.url),
         },
       }));
-      alert("Image deleted successfully.");
+      setImageActionStatus(null);
     } catch (error) {
       console.error("Error deleting image:", error);
+      setImageActionStatus(null);
     }
   };
 
@@ -394,6 +401,7 @@ const AddInspection = () => {
 
   const handleFinalSubmit = async () => {
     setFinalSubmiting(true);
+    handleSaveBill(); // Save bills before final submit
     try {
       await projectFirestore
         .collection("inspections")
@@ -417,61 +425,6 @@ const AddInspection = () => {
       setFinalSubmit(false);
     }
   };
-//   const handleFinalSubmit = async () => {
-//     setFinalSubmiting(true);
-
-//     try {
-//         // Pehle saare bills save karo
-//         for (const bill of bills) {
-//             const billData = billInspectionData[bill.id];
-//             if (billData) {
-//                 const updatedBillData = {
-//                     billId: bill.billId,
-//                     billType: bill.billType,
-//                     authorityName: bill.authorityName,
-//                     amount: billData.amount || "",
-//                     remark: billData.remark || "",
-//                     imageUrl: billData.imageUrl || null,
-//                     lastUpdatedAt: timestamp.now(),
-//                     lastUpdatedBy: user.uid,
-//                     updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-//                         updatedAt: timestamp.now(),
-//                         updatedBy: user.uid,
-//                     }),
-//                 };
-
-//                 await projectFirestore
-//                     .collection("inspections")
-//                     .doc(inspectionId)
-//                     .update({
-//                         [`bills.${bill.id}`]: updatedBillData,
-//                     });
-//             }
-//         }
-
-//         // Uske baad final submit karo
-//         await projectFirestore
-//             .collection("inspections")
-//             .doc(inspectionId)
-//             .update({
-//                 rooms: Object.values(inspectionData),
-//                 finalSubmit: true,
-//                 updatedAt: timestamp.now(),
-//                 updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-//                     updatedAt: timestamp.now(),
-//                     updatedBy: user.uid,
-//                 }),
-//             });
-
-//         navigate(`/inspection-report/${inspectionId}`);
-//     } catch (error) {
-//         console.error("Error in final submit:", error);
-//     } finally {
-//         setFinalSubmiting(false);
-//         setFinalSubmit(false);
-//     }
-// };
-
 
   // bill inspection code start
   const [bills, setBills] = useState([]);
@@ -710,75 +663,75 @@ const AddInspection = () => {
     return className;
   };
 
-  const handleBillImageUpload = async (e, billId) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // const handleBillImageUpload = async (e, billId) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
   
-    try {
-      // Compress the image
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: 1, // Maximum file size in MB
-        maxWidthOrHeight: 1024, // Resize image if required
-        useWebWorker: true, // Use web worker for better performance
-      });
+  //   try {
+  //     // Compress the image
+  //     const compressedFile = await imageCompression(file, {
+  //       maxSizeMB: 1, // Maximum file size in MB
+  //       maxWidthOrHeight: 1024, // Resize image if required
+  //       useWebWorker: true, // Use web worker for better performance
+  //     });
   
-      // Generate file path
-      const filePath = `billImages/${billId}-${Date.now()}`;
-      const storageRef = projectStorage.ref(filePath);
-      const uploadTask = storageRef.put(compressedFile);
+  //     // Generate file path
+  //     const filePath = `billImages/${billId}-${Date.now()}`;
+  //     const storageRef = projectStorage.ref(filePath);
+  //     const uploadTask = storageRef.put(compressedFile);
   
-      uploadTask.on(
-        "state_changed",
-        null,
-        (error) => console.error("Upload error:", error),
-        async () => {
-          try {
-            // Get download URL once upload is complete
-            const url = await storageRef.getDownloadURL();
+  //     uploadTask.on(
+  //       "state_changed",
+  //       null,
+  //       (error) => console.error("Upload error:", error),
+  //       async () => {
+  //         try {
+  //           // Get download URL once upload is complete
+  //           const url = await storageRef.getDownloadURL();
   
-            // Update the selected bill with the image URL
-            setBillInspectionData((prevData) => ({
-              ...prevData,
-              [billId]: {
-                ...(prevData[billId] || {}),
-                imageUrl: url,
-              },
-            }));
-          } catch (error) {
-            console.error("Error getting download URL:", error);
-          }
-        }
-      );
-    } catch (error) {
-      console.error("Image compression error:", error);
-    }
-  };
+  //           // Update the selected bill with the image URL
+  //           setBillInspectionData((prevData) => ({
+  //             ...prevData,
+  //             [billId]: {
+  //               ...(prevData[billId] || {}),
+  //               imageUrl: url,
+  //             },
+  //           }));
+  //         } catch (error) {
+  //           console.error("Error getting download URL:", error);
+  //         }
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error("Image compression error:", error);
+  //   }
+  // };
   
-  const handleBillImageDelete = async (billId) => {
-    const billData = billInspectionData?.[billId];
-    const imageUrl = billData?.imageUrl;
+  // const handleBillImageDelete = async (billId) => {
+  //   const billData = billInspectionData?.[billId];
+  //   const imageUrl = billData?.imageUrl;
   
-    if (!imageUrl) return;
+  //   if (!imageUrl) return;
   
-    try {
-      const filePath = decodeURIComponent(
-        imageUrl.split("/").slice(-1)[0].split("?")[0]
-      );
-      const storageRef = projectStorage.ref(filePath);
-      await storageRef.delete();
+  //   try {
+  //     const filePath = decodeURIComponent(
+  //       imageUrl.split("/").slice(-1)[0].split("?")[0]
+  //     );
+  //     const storageRef = projectStorage.ref(filePath);
+  //     await storageRef.delete();
   
-      // Remove the image URL from the bill data
-      setBillInspectionData((prevData) => ({
-        ...prevData,
-        [billId]: {
-          ...(prevData[billId] || {}),
-          imageUrl: "",
-        },
-      }));
-    } catch (error) {
-      console.error("Error deleting image:", error);
-    }
-  };
+  //     // Remove the image URL from the bill data
+  //     setBillInspectionData((prevData) => ({
+  //       ...prevData,
+  //       [billId]: {
+  //         ...(prevData[billId] || {}),
+  //         imageUrl: "",
+  //       },
+  //     }));
+  //   } catch (error) {
+  //     console.error("Error deleting image:", error);
+  //   }
+  // };
   
   
   // const handleSaveBill = async () => {
@@ -865,6 +818,85 @@ const AddInspection = () => {
   //   }
   // };
 
+  const handleBillImageUpload = async (e, billId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+  
+    try {
+      setImageActionStatus("uploading"); // Start uploading modal
+  
+      // Compress the image
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1024,
+        useWebWorker: true,
+      });
+  
+      const filePath = `billImages/${billId}-${Date.now()}`;
+      const storageRef = projectStorage.ref(filePath);
+      const uploadTask = storageRef.put(compressedFile);
+  
+      uploadTask.on(
+        "state_changed",
+        null,
+        (error) => {
+          console.error("Upload error:", error);
+          setImageActionStatus(null); // Hide modal on error
+        },
+        async () => {
+          try {
+            const url = await storageRef.getDownloadURL();
+            setBillInspectionData((prevData) => ({
+              ...prevData,
+              [billId]: {
+                ...(prevData[billId] || {}),
+                imageUrl: url,
+              },
+            }));
+            setImageActionStatus(null); // Hide modal on success
+          } catch (error) {
+            console.error("Error getting download URL:", error);
+            setImageActionStatus(null); // Hide modal on error
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Image compression error:", error);
+      setImageActionStatus(null); // Hide modal on error
+    }
+  };
+  
+  const handleBillImageDelete = async (billId) => {
+    const billData = billInspectionData?.[billId];
+    const imageUrl = billData?.imageUrl;
+    if (!imageUrl) return;
+  
+    try {
+      setImageActionStatus("deleting"); // Start deleting modal
+  
+      const filePath = decodeURIComponent(
+        imageUrl.split("/").slice(-1)[0].split("?")[0]
+      );
+      const storageRef = projectStorage.ref(filePath);
+      await storageRef.delete();
+  
+      setBillInspectionData((prevData) => ({
+        ...prevData,
+        [billId]: {
+          ...(prevData[billId] || {}),
+          imageUrl: "",
+        },
+      }));
+  
+      setImageActionStatus(null); // Hide modal on success
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      setImageActionStatus(null); // Hide modal on error
+    }
+  };
+  
+
+
   const handleSaveBill = async () => {
     if (!bills.length) return;
   
@@ -899,7 +931,17 @@ const AddInspection = () => {
       setIsBillDataSaving(false);
     }
   };
+
+
+  // if final submit redirect to viewall inspection page 
+
+  useEffect(() => {
+    if (inspectionDocument?.finalSubmit) {
+      navigate(`/inspection/${propertyId}`);
+    }
+  }, [inspectionDocument?.finalSubmit, navigate]);
   
+
   
 
   return (
@@ -1051,7 +1093,7 @@ const AddInspection = () => {
                                     color: "var(--theme-blue)",
                                   }}
                                 >
-                                  Is Allowed for Inspection*
+                                  Tenant Allowed for Inspection*
                                 </h6>
                                 <div className="field_box theme_radio_new">
                                   <div className="theme_radio_container">
@@ -1918,16 +1960,38 @@ const AddInspection = () => {
         </div>
       </div>
       {/* image upload modal  */}
-      <Modal show={show} centered className="uploading_modal">
-        <h6
-          style={{
-            color: "var(--theme-green2)",
-          }}
-        >
-          Uploading....
-        </h6>
-        <BarLoader color="var(--theme-green2)" loading={true} height={10} />
-      </Modal>
+     <Modal
+                show={imageActionStatus !== null}
+                centered
+                className="uploading_modal"
+              >
+                <h6
+                  style={{
+                    color:
+                      imageActionStatus === "uploading"
+                        ? "var(--theme-green2)"
+                        : imageActionStatus === "deleting"
+                        ? "var(--theme-red)"
+                        : "var(--theme-blue)", // Default fallback color
+                  }}
+                >
+                  {imageActionStatus === "uploading"
+                    ? "Uploading..."
+                    : "Deleting..."}
+                </h6>
+
+                <BarLoader
+                  color={
+                    imageActionStatus === "uploading"
+                      ? "var(--theme-green2)"
+                      : imageActionStatus === "deleting"
+                      ? "var(--theme-red)"
+                      : "var(--theme-blue)" // Default fallback color
+                  }
+                  loading={true}
+                  height={10}
+                />
+              </Modal>
 
       {/* saved successfully  */}
       <Modal

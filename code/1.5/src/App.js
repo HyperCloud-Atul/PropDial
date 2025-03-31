@@ -618,6 +618,7 @@ function App() {
                         user &&
                         (user.role === "admin" ||
                           user.role === "superAdmin" ||
+                          user.role === "executive" ||
                           user.role === "owner") ? (
                           <ViewInspection />
                         ) : (
@@ -631,6 +632,7 @@ function App() {
                         user &&
                         (user.role === "admin" ||
                           user.role === "superAdmin" ||
+                          user.role === "executive" ||
                           user.role === "owner") ? (
                           <InspectionDetails />
                         ) : (
@@ -643,6 +645,7 @@ function App() {
                       element={
                         user &&
                         (user.role === "admin" ||
+                          user.role === "executive" ||
                           user.role === "superAdmin") ? (
                           <AddInspection />
                         ) : (

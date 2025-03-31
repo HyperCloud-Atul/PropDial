@@ -2214,7 +2214,7 @@ export default function PGUserProfileDetails2() {
                 <div className="row row_gap">
                   <div className="col-lg-4 col-md-6 col-sm-12">
                     <div className="form_field label_top">
-                      <label>City123</label>
+                      <label>City</label>
                       <div className="form_field_inner">
                         <Select
                           className=""

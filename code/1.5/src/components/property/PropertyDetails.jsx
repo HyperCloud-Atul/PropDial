@@ -2560,11 +2560,12 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
-                  {user &&
-                    user.status === "active" &&
-                    (user.role === "owner" ||
-                      user.role === "coowner" ||
+                  {user && 
+                    user.status === "active" &&                   
+                    
+                    (propertyOwners?.filter((doc) => doc.userId === user?.uid).length > 0 ||
                       user.role === "admin" ||
+                      user.role === "executive" ||
                       user.role === "superAdmin") && (
                       <div className="extra_info_card_property">
                         <Swiper
@@ -2985,7 +2986,7 @@ const PropertyDetails = () => {
                                   {user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
-                                      user.role === "superAdmin") && (
+                                      user.role === "superAdmin" || user.role === "executive") && (
                                       <div
                                         className="col-sm-1 col-2 pointer"
                                         style={{
@@ -3009,7 +3010,7 @@ const PropertyDetails = () => {
                                   <div
                                     className={`${user &&
                                         user.status === "active" &&
-                                        (user.role === "admin" ||
+                                        (user.role === "admin" || user.role === "executive" ||
                                           user.role === "superAdmin")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
@@ -3450,7 +3451,7 @@ const PropertyDetails = () => {
                               tenantDocument.length > 0) ||
                             (user &&
                               (user.role === "admin" ||
-                                user.role === "superAdmin"))) && (
+                                user.role === "superAdmin" || user.role === "executive"))) && (
                             <section className="property_card_single full_width_sec with_orange">
                               <span className="verticall_title">
                                 Tenants
@@ -3461,7 +3462,7 @@ const PropertyDetails = () => {
                                   {user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
-                                      user.role === "superAdmin") && (
+                                      user.role === "superAdmin" || user.role === "executive") && (
                                       <div
                                         className="col-sm-1 col-2"
                                         style={{
@@ -3484,7 +3485,7 @@ const PropertyDetails = () => {
                                     className={`${user &&
                                         user.status === "active" &&
                                         (user.role === "admin" ||
-                                          user.role === "superAdmin")
+                                          user.role === "superAdmin" || user.role === "executive")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
                                       }`}
@@ -3602,7 +3603,7 @@ const PropertyDetails = () => {
                       (user && user.role === "coowner") ||
                       (user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin"))) && (
+                          user.role === "superAdmin" || user.role === "executive"))) && (
                       <>
                         <section className="property_card_single full_width_sec with_blue property_user">
                           <span className="verticall_title">
@@ -3764,8 +3765,7 @@ const PropertyDetails = () => {
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&
-                                                    (user.role === "admin" ||
-                                                      user.role ===
+                                                    (user.role ===
                                                       "superAdmin") && (
                                                       <h6
                                                         className="text_red pointer"
@@ -3867,7 +3867,7 @@ const PropertyDetails = () => {
                                       border: "none",
                                     }}
                                   >
-                                    <div className="radio_single">
+                                    {/* <div className="radio_single">
                                       <input
                                         type="radio"
                                         name="prop_user"
@@ -3878,7 +3878,7 @@ const PropertyDetails = () => {
                                         }
                                       />
                                       <label htmlFor="Admin">Admin</label>
-                                    </div>
+                                    </div> */}
                                     {/* checked={selectedPropUser.userTag === "Admin"}  */}
                                     <div className="radio_single">
                                       <input
@@ -4021,7 +4021,7 @@ const PropertyDetails = () => {
                         tenantDocument.length > 0) ||
                       (user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin"))) && (
+                          user.role === "superAdmin" || user.role === "executive"))) && (
                       <>
                         <section className="property_card_single full_width_sec with_orange property_user">
                           <span className="verticall_title">
@@ -4184,8 +4184,7 @@ const PropertyDetails = () => {
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&
-                                                    (user.role === "admin" ||
-                                                      user.role ===
+                                                    (user.role ===
                                                       "superAdmin") && (
                                                       <h6
                                                         className="text_red pointer"

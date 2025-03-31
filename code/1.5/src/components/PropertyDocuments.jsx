@@ -243,22 +243,27 @@ const PropertyDocuments = () => {
   // render jsx code in short form start
 
   const docCategories = [
-    { id: "prop_doc", value: "Property Document", label: "Property Document" },
+    { id: "prop_doc", value: "Property Document", label: "Property Doc" },
     {
       id: "prop_main",
       value: "Maintainance Document",
-      label: "Maintainance Document",
+      label: "Maintenance Doc",
     },
     {
       id: "utility_bill",
       value: "Utility Document",
-      label: "Utility Document",
+      label: "Utility Doc",
     },
     { id: "property_tax", value: "Property Tax", label: "Property Tax" },
     {
       id: "approved_rent_agreement",
       value: "Approved Rent Agreement",
       label: "Approved Rent Agreement",
+    },
+    {
+      id: "propdial_documents",
+      value: "Propdial Document",
+      label: "Propdial Doc",
     },
   ];
 
@@ -349,13 +354,21 @@ const PropertyDocuments = () => {
   const filteredPropertyTaxLength = filteredPropertyPropertyTax.length;
   // filter for property utility document end
 
-  // filter for property utility document start
+  // filter for approved rent agrement start
   const filteredPropertyApprovedRentAgreement = propertyDocument
     ? propertyDocument.filter((doc) => doc.docCat === "Approved Rent Agreement")
     : [];
   const filteredApprovedRentAgreementLength =
     filteredPropertyApprovedRentAgreement.length;
-  // filter for property utility document end
+  // filter for approved rent agrement end
+
+    // filter for Propdial Document start
+    const filteredPropdialDocument = propertyDocument
+    ? propertyDocument.filter((doc) => doc.docCat === "Propdial Document")
+    : [];
+  const filteredPropdialDocumentLength =
+    filteredPropdialDocument.length;
+  // filter for Propdial Document end
 
   // filters end
 
@@ -712,13 +725,13 @@ const PropertyDocuments = () => {
                   <div className="tab_and_mode">
                     <TabList className="tabs">
                       <Tab className="pointer">
-                        Property Documents ({filteredPropDocLength})
+                      Property Docs ({filteredPropDocLength})
                       </Tab>
                       <Tab className="pointer">
-                        Maintainance Documents ({filteredMaintainanceDocLength})
+                      Maintenance Docs ({filteredMaintainanceDocLength})
                       </Tab>
                       <Tab className="pointer">
-                        Utility Documents ({filteredUtilityDocLength})
+                      Utility Docs ({filteredUtilityDocLength})
                       </Tab>
                       <Tab className="pointer">
                         Property Tax ({filteredPropertyTaxLength})
@@ -726,6 +739,10 @@ const PropertyDocuments = () => {
                       <Tab className="pointer">
                         Approved Rent Agreements (
                         {filteredApprovedRentAgreementLength})
+                      </Tab>
+                      <Tab className="pointer">
+                      Propdial Docs (
+                        {filteredPropdialDocumentLength})
                       </Tab>
                     </TabList>
                     <div className="filters">
@@ -1382,6 +1399,125 @@ const PropertyDocuments = () => {
                           {filteredPropertyApprovedRentAgreement && (
                             <PropertyDocumentTable
                               filterDoc={filteredPropertyApprovedRentAgreement}
+                              dbUserState={dbUserState}
+                            />
+                          )}
+                        </>
+                        // <h5 className="text-center text_green">Coming Soon....</h5>
+                      )}
+                  </TabPanel>
+                  <TabPanel>
+                    {filteredPropdialDocumentLength === 0 && (
+                      <h5 className="m20 text_red mt-4">No data found</h5>
+                    )}
+                    {viewMode === "card_view" && (
+                      <div className="blog_sect">
+                        <div className="row">
+                          {filteredPropdialDocument.map(
+                            (doc, index) => (
+                              <div className="col-xl-4 col-md-6" key={index}>
+                                <div
+                                  className="item card-container relative"
+                                  style={{
+                                    overflow: "inherit",
+                                  }}
+                                >
+                                  <div className="card-image relative">
+                                    {uploadingDocId !== doc.id && (
+                                      <label
+                                        htmlFor={`upload_img_${doc.id}`}
+                                        className="upload_img click_text by_text"
+                                      >
+                                        Upload PDF or Img
+                                        <input
+                                          type="file"
+                                          onChange={(e) =>
+                                            handleFileChange(e, doc.id)
+                                          }
+                                          ref={fileInputRef}
+                                          id={`upload_img_${doc.id}`}
+                                        />
+                                      </label>
+                                    )}
+                                    {uploadingDocId === doc.id ? (
+                                      <div
+                                        className="loader d-flex justify-content-center align-items-center"
+                                        style={{
+                                          width: "100%",
+                                          height: "100%",
+                                        }}
+                                      >
+                                        <BeatLoader
+                                          color={"#FF5733"}
+                                          loading={true}
+                                        />
+                                      </div>
+                                    ) : doc.mediaType === "pdf" ? (
+                                      <iframe
+                                        title="PDF Viewer"
+                                        src={doc.documentUrl}
+                                        style={{
+                                          width: "100%",
+                                          aspectRatio: "3/2",
+                                        }}
+                                      ></iframe>
+                                    ) : (
+                                      <img
+                                        src={
+                                          doc.documentUrl ||
+                                          "/assets/img/image_small_placeholder.png"
+                                        }
+                                        alt="Document"
+                                      />
+                                    )}
+                                  </div>
+                                  <div className="card-body">
+                                    <h3 className="text-center">
+                                      {doc.idNumber}
+                                    </h3>
+                                    <div className="added_by">
+                                      <div>
+                                        <h6>Added at</h6>
+                                        <h5>
+                                          {format(
+                                            doc.createdAt.toDate(),
+                                            "dd-MMM-yyyy"
+                                          )}
+                                        </h5>
+                                      </div>
+                                      <div>
+                                        <h6>Added By</h6>
+                                        <h5>
+                                          {dbUserState &&
+                                            dbUserState.find(
+                                              (user) =>
+                                                user.id === doc.createdBy
+                                            )?.fullName}
+                                        </h5>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {user && user.role === "superAdmin" && (
+                                    <span
+                                      class="material-symbols-outlined delete_icon_top"
+                                      onClick={() => handleDeleteClick(doc.id)}
+                                    >
+                                      delete_forever
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {viewMode === "table_view" &&
+                      filteredPropdialDocumentLength !== 0 && (
+                        <>
+                          {filteredPropdialDocument && (
+                            <PropertyDocumentTable
+                              filterDoc={filteredPropdialDocument}
                               dbUserState={dbUserState}
                             />
                           )}

@@ -706,16 +706,7 @@ export default function MasterCityList() {
                 className="left"
                 style={{ display: "flex", alignItems: "center", flexWrap:"wrap", gap:"15px" }}
               >
-                <div className="rt_global_search search_field">
-                  <input
-                    placeholder="Search"
-                    value={searchInput}
-                    onChange={handleSearchInputChange}
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">search</span>
-                  </div>
-                </div>
+              
                 <div>
                   <Select
                     className=""
@@ -739,6 +730,16 @@ export default function MasterCityList() {
                       }),
                     }}
                   />
+                </div>
+                <div className="rt_global_search search_field">
+                  <input
+                    placeholder="Search"
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
+                  />
+                  <div className="field_icon">
+                    <span className="material-symbols-outlined">search</span>
+                  </div>
                 </div>
               </div>
               <div className="right">

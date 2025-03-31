@@ -6,9 +6,11 @@ import { useCollection } from "../../hooks/useCollection";
 import { ClipLoader } from "react-spinners";
 import format from "date-fns/format";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 const InspectionDetails = () => {
+  const navigate = useNavigate();
   const { inspectionid } = useParams(); // Get ID from URL
   const reportRef = useRef(); // Reference for capturing UI
   const [propertyDocument, setPropertyDocument] = useState(null);
@@ -17,6 +19,65 @@ const InspectionDetails = () => {
     "inspections",
     inspectionid
   );
+
+  // get owner and executive detail code start
+  const [ownerData, setOwnerData] = useState(null);
+  const [coOwnerData, setCoOwnerData] = useState(null);
+  const [managerData, setManagerData] = useState(null);
+  const [executiveData, setExecutiveData] = useState(null);
+  
+  
+  useEffect(() => {
+    if (!inspectionDoc?.propertyId) return;
+  
+    const unsubscribe = projectFirestore
+      .collection("propertyusers")
+      .where("propertyId", "==", inspectionDoc.propertyId)
+      .onSnapshot(
+        async (snapshot) => {
+          let ownerId = null;
+          let coOwnerId = null;
+          let managerId = null;
+          let executiveId = null;
+  
+          snapshot.forEach((doc) => {
+            const userData = doc.data();
+            if (userData.userTag === "Owner") ownerId = userData.userId;
+            if (userData.userTag === "Co-Owner") coOwnerId = userData.userId;
+            if (userData.userTag === "Manager") managerId = userData.userId;
+            if (userData.userTag === "Executive") executiveId = userData.userId;
+          });
+  
+          // ✅ Function to fetch single user details
+          const fetchUserData = async (userId) => {
+            if (!userId) return null;
+            const docSnap = await projectFirestore.collection("users-propdial").doc(userId).get();
+            return docSnap.exists ? { id: docSnap.id, ...docSnap.data() } : null;
+          };
+  
+          // 🔥 Fetch all user details
+          const ownerData = await fetchUserData(ownerId);
+          const coOwnerData = await fetchUserData(coOwnerId);
+          const managerData = await fetchUserData(managerId);
+          const executiveData = await fetchUserData(executiveId);
+  
+          // ✅ Set individual states
+          setOwnerData(ownerData);
+          setCoOwnerData(coOwnerData);
+          setManagerData(managerData);
+          setExecutiveData(executiveData);
+        },
+        (error) => {
+          console.error("❌ Error fetching property users:", error);
+        }
+      );
+  
+    return () => unsubscribe(); // Cleanup
+  }, [inspectionDoc]);
+  
+  // get owner and executive detail code end 
+  
+  
 
   useEffect(() => {
     if (!inspectionDoc?.propertyId) return;
@@ -230,19 +291,29 @@ const InspectionDetails = () => {
                     </>
                   )}
                 </Link>
-
-                <div className="dc_single">
-                  <h2>Property Owner</h2>
-                  <h5>Ravi Sharma</h5>
-                  <h6>+91 89589-98956</h6>
-                  <h6>ravisharma125@gmail.com</h6>
-                </div>
-                <div className="dc_single">
-                  <h2>Executive</h2>
-                  <h5>Sankar Solanki</h5>
-                  <h6>+91 87705-34650</h6>
-                  <h6>solankisanskar88@gmail.com</h6>
-                </div>
+{ownerData && (
+  <div className="dc_single">
+  <h2>Property Owner</h2>
+  <h5>{ownerData.fullName}</h5>
+  <h6>  {ownerData.phoneNumber.replace(
+        /(\d{2})(\d{5})(\d{5})/,
+        "+$1 $2-$3"
+      )}</h6>
+  <h6>{ownerData.email}</h6>
+</div>
+)}
+              
+              {executiveData && (
+  <div className="dc_single">
+  <h2>Executive</h2>
+  <h5>{executiveData.fullName}</h5>
+  <h6>  {executiveData.phoneNumber.replace(
+        /(\d{2})(\d{5})(\d{5})/,
+        "+$1 $2-$3"
+      )}</h6>
+  <h6>{executiveData.email}</h6>
+</div>
+)}
               </div>
               <div className="vg22"></div>
               <div className="tenant_card ">

@@ -395,6 +395,19 @@ const ViewInspections = () => {
     []
   );
 
+  // role wise inspection visiblity 
+  const userRolesWithFullAccess = ["admin", "superAdmin", "executive"];
+
+const visibleInspections = filteredInspections?.filter((iDoc) => {
+  // Admin, SuperAdmin, Executive ke liye sab dikhega
+  if (userRolesWithFullAccess.includes(user?.role)) {
+    return true;
+  }
+  // Baaki users ke liye sirf finalSubmit true ho tab dikhao
+  return iDoc.finalSubmit === true;
+});
+
+
   if (loading) {
     return (
       <div className="page_loader">
@@ -427,12 +440,16 @@ const ViewInspections = () => {
                       OnePlace for Property Inspection
                     </h2>
 
+                   {user && (
+                    user.role === "admin" || user.role === "superAdmin" || user.role === "executive"
+                   ) && (
                     <div
-                      className="theme_btn btn_fill no_icon text-center short_btn"
-                      onClick={() => setShowPopup(true)}
-                    >
-                      Add Inspection
-                    </div>
+                    className="theme_btn btn_fill no_icon text-center short_btn"
+                    onClick={() => setShowPopup(true)}
+                  >
+                    Add Inspection
+                  </div>
+                   )}
                     <Modal
                       show={showPopup}
                       className="delete_modal inspection_modal"
@@ -564,8 +581,8 @@ const ViewInspections = () => {
                       </div>
                     </div>
                     <div className="right">
-                      <div className="user_filters new_inline">
-                        {/* <div className="form_field">
+                      {/* <div className="user_filters new_inline">
+                        <div className="form_field">
               <div className="field_box theme_checkbox">
                 <div
                   className="theme_checkbox_container"
@@ -598,9 +615,9 @@ const ViewInspections = () => {
                     })}
                 </div>
               </div>
-            </div> */}
+            </div>
 
-                        {/* <select
+                        <select
                     value={selectedDateRange}
                     onChange={(e) => setSelectedDateRange(e.target.value)}
                   >
@@ -608,8 +625,8 @@ const ViewInspections = () => {
                     <option value="last3months">Last 3 Months</option>
                     <option value="last6months">Last 6 Months</option>
                     <option value="lastyear">Last 1 Year</option>
-                  </select> */}
-                        {/* <div className="active-filters">
+                  </select>
+                        <div className="active-filters">
                   <h4>Active Filters</h4>
                   {searchTerm && <span>Search: {searchTerm}</span>}
                   {selectedInspectionTypes.length > 0 && (
@@ -620,8 +637,8 @@ const ViewInspections = () => {
                   {selectedDateRange && (
                     <span>Date Range: {selectedDateRange}</span>
                   )}
-                </div> */}
-                      </div>
+                </div>
+                      </div> */}
                       <div className="button_filter diff_views">
                         <div
                           className={`bf_single ${
@@ -649,8 +666,8 @@ const ViewInspections = () => {
                   <hr></hr>
                   {viewMode === "card_view" && (
                     <div className="propdial_users all_tenants inspection_card">
-                      {filteredInspections &&
-                        filteredInspections.map((iDoc) => (
+                      {visibleInspections &&
+                        visibleInspections.map((iDoc) => (
                           <div className="pu_single">
                             <div className="tc_single relative item">
                               <div className="left">
@@ -679,7 +696,7 @@ const ViewInspections = () => {
                                     : "final_submit"
                                 }`}
                               >
-                                {!iDoc.finalSubmit && (
+                                {user && !iDoc.finalSubmit && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
                                   <Link
                                     className="wha_icon wc_single"
                                     to={`/add-inspection/${iDoc.id}`}
@@ -747,7 +764,7 @@ const ViewInspections = () => {
                     <div className="user-single-table table_filter_hide mt-3">
                       <ReactTable
                         tableColumns={columns}
-                        tableData={filteredInspections}
+                        tableData={visibleInspections}
                       />
                     </div>
                   )}

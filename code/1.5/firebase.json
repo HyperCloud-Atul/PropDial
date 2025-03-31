@@ -11,6 +11,15 @@
             "value": "gzip"
           }
         ]
+      },
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript"
+          }
+        ]
       }
     ],
     "ignore": [
