@@ -447,9 +447,9 @@ const ViewInspections = () => {
                       <h5 className="text_blue text-center">
                         Select Inspection Type
                       </h5>
-
-                      <div className="inspection_types">
-                        {["Regular", "Move-In", "Move-Out", "Full"].map(
+{/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
+                      {/* <div className="inspection_types">
+                        {["Regular", "Move-In", "Move-Out", "Full", "Issue Based"].map(
                           (type) => (
                             <div
                               key={type}
@@ -487,7 +487,45 @@ const ViewInspections = () => {
                             </div>
                           )
                         )}
-                      </div>
+                      </div> */}
+                      <div className="inspection_types">
+  {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
+    <div
+      key={type}
+      onClick={() =>
+        type === "Regular"
+          ? lastInspections[type]
+            ? navigate(`/add-inspection/${lastInspections[type].id}`)
+            : handleAddInspection(type)
+          : null
+      }
+      className={`it_single ${type !== "Regular" ? "disabled" : ""}`}
+      style={type !== "Regular" ? { cursor: "not-allowed", opacity: 0.6 } : {}}
+    >
+      <span>
+        {type} Inspection{" "}
+        {type === "Regular" && lastInspections[type] && (
+          <div
+            style={{
+              color: "var(--theme-red)",
+              fontSize: "13px",
+            }}
+          >
+            (Complete the last inspection first)
+          </div>
+        )}
+      </span>
+      {type !== "Regular" && (
+        <div style={{ color: "gray", fontSize: "12px" }}>Coming Soon</div>
+      )}
+      <img
+        src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
+        alt="propdial"
+      />
+    </div>
+  ))}
+</div>
+
                     </Modal>
                   </div>
                 </div>

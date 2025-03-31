@@ -5,7 +5,8 @@ import { useAuthContext } from "./hooks/useAuthContext";
 import { useDocument } from "./hooks/useDocument";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { projectMsg, projectFirestore } from "./firebase/config";
+// import { projectMsg, projectFirestore } from "./firebase/config";
+// import { projectFirestore } from "./firebase/config";
 import { useCollection } from "./hooks/useCollection";
 import SEOHelmet from "./components/SEOHelmet ";
 
@@ -116,7 +117,7 @@ import PGAdminProperty from "./pdpages/property/PGAdminProperty";
 import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
 import ScrollToTop from "./components/ScrollToTop";
-import FCMNotification from "./components/FCMNotification";
+// import FCMNotification from "./components/FCMNotification";
 import PGExportExcel from "./pdpages/util/PGImportExcel";
 import PGReferral from "./pdpages/referral/PGReferral";
 // import { Login } from "@mui/icons-material";
@@ -133,7 +134,7 @@ const Footer = React.lazy(() => import("./components/Footer"));
 const defaultTitle =
   "Propdial - Property Management Services for Rent, Buy, Lease a Property in India";
 const defaultDescription =
-  "Propdial offers expert property management services in India for buy, sell & rent.";
+  "Propdial offers expert property management services in India for buy, sell & rent. With 10+ years of experience, we serve Delhi NCR, Gurugram, Bangalore, Pune & more.";
 function App() {
   const location = useLocation();
   //---------------------- Copy Collection Code - Start -----------------------------------
@@ -173,7 +174,7 @@ function App() {
   // End - Remove the preloader when React mounts: Inside App.js, remove the preloader after React loads:
 
   const { authIsReady, user } = useAuthContext();
-  const [fcmMessage, setFCMMessage] = useState(null);
+  // const [fcmMessage, setFCMMessage] = useState(null);
   const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
   console.log("authIsReady", authIsReady);
 
@@ -203,48 +204,48 @@ function App() {
   };
 
   //FCM Messaging User Request Permission and get the user token
-  const requestPermission = async () => {
-    try {
-      await Notification.requestPermission();
-      console.log("Notification permission granted.");
+  // const requestPermission = async () => {
+  //   try {
+  //     await Notification.requestPermission();
+  //     console.log("Notification permission granted.");
 
-      // Get the token if permission is granted
-      if (Notification.permission === "granted") {
-        const token = await projectMsg.getToken();
-        console.log("FCM Token:", token);
-        // Save this token to your server/database as required
-      }
-    } catch (error) {
-      console.error("Unable to get permission to notify.", error);
-    }
-  };
+  //     // Get the token if permission is granted
+  //     if (Notification.permission === "granted") {
+  //       const token = await projectMsg.getToken();
+  //       console.log("FCM Token:", token);
+  //       // Save this token to your server/database as required
+  //     }
+  //   } catch (error) {
+  //     console.error("Unable to get permission to notify.", error);
+  //   }
+  // };
 
-  const handleIncomingMessages = () => {
-    projectMsg.onMessage((payload) => {
-      console.log("Message received. ", payload);
-      // Show notification to the user or update UI
-      // alert(`${payload.notification.title}` + `${payload.notification.body}`);
-      // alert(`${payload.notification.icon}`);
+  // const handleIncomingMessages = () => {
+  //   projectMsg.onMessage((payload) => {
+  //     console.log("Message received. ", payload);
+  //     // Show notification to the user or update UI
+  //     // alert(`${payload.notification.title}` + `${payload.notification.body}`);
+  //     // alert(`${payload.notification.icon}`);
 
-      // Display the message using a toast notification
-      // toast(payload.notification.title, {
-      //   icon: "🔔",
-      //   // icon: "/assets/img/logo_propdial.png",
-      //   body: payload.notification.body,
-      // });
+  //     // Display the message using a toast notification
+  //     // toast(payload.notification.title, {
+  //     //   icon: "🔔",
+  //     //   // icon: "/assets/img/logo_propdial.png",
+  //     //   body: payload.notification.body,
+  //     // });
 
-      setFCMMessage({
-        // icon: "🔔",
-        icon: "/assets/img/logo_propdial.png",
-        title: payload.notification.title,
-        body: payload.notification.body,
-      });
-    });
-  };
+  //     setFCMMessage({
+  //       // icon: "🔔",
+  //       icon: "/assets/img/logo_propdial.png",
+  //       title: payload.notification.title,
+  //       body: payload.notification.body,
+  //     });
+  //   });
+  // };
 
-  const handleCloseFCMNotification = () => {
-    setFCMMessage(null);
-  };
+  // const handleCloseFCMNotification = () => {
+  //   setFCMMessage(null);
+  // };
 
   useEffect(() => {
     //FCM Message Permission by End Users and get the user token
@@ -421,14 +422,14 @@ function App() {
     <div className={currentModeStatus === "dark" ? "dark" : "light"}>
       {/* <HelmetProvider> */}
       <SEOHelmet />
-      {fcmMessage && (
+      {/* {fcmMessage && (
         <FCMNotification
           icon={fcmMessage.icon}
           title={fcmMessage.title}
           body={fcmMessage.body}
           onClose={handleCloseFCMNotification}
         />
-      )}
+      )} */}
 
       {/* Copy Collection Button  */}
       {/* <button onClick={handleCopy}>Copy Collection docs to other collection</button> */}

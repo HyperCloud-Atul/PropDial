@@ -67,7 +67,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [gender, setGender] = useState("");
   const [whoAmI, setWhoAmI] = useState("");
   const [error, setError] = useState("");
-  const [otptimer, setOtpTimer] = useState(20);
+  const [otptimer, setOtpTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(false);
   const { setUpRecapcha, resendOTP } = useSignupPhone();
   const [confirmObj, setConfirmObj] = useState("");
@@ -78,6 +78,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [genderSlider, setGenderSlider] = useState(false);
   const [personalInfoSlider, setPersonalInfoSlider] = useState(false);
   const [whoAmISlider, setWhoAmISlider] = useState(false);
+  const [isConfirmDisabled, setIsConfirmDisabled] = useState(true);
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState(false);
   const [sendOTPFlag, setSendOTPFlag] = useState(true);
@@ -95,23 +96,25 @@ const PhoneLogin_reCaptchaV2 = () => {
     e.preventDefault();
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     let interval;
+    
     if (otpSliderState && otptimer > 0) {
       interval = setInterval(() => {
         setOtpTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } else if (otptimer === 0) {
-      setIsResendDisabled(false); // Enable the Resend button when the timer reaches zero
+    } 
+    else if (otptimer === 0) {
+      setIsResendDisabled(false); // Jab timer 0 ho tabhi enable ho
     }
-
+  
     return () => clearInterval(interval);
-  }, [activeTab, otptimer]);
-
+  }, [otpSliderState, otptimer]); // Dependency fix
+  
   const handleResendOtp = () => {
-    // Logic to resend OTP
-    setOtpTimer(20);
-    setIsResendDisabled(true);
+handleGoBack()
+    setOtpTimer(60);
+    setIsResendDisabled(true);  // Timer restart ke sath hi disable bhi ho
   };
 
   // Google authentication
@@ -260,9 +263,18 @@ const PhoneLogin_reCaptchaV2 = () => {
     }
   }
 
+  // OTP change hote hi Confirm button enable/disable hoga
+  useEffect(() => {
+    if (!otp || otp.length !== 6) {
+      setIsConfirmDisabled(true);
+    } else {
+      setIsConfirmDisabled(false);
+    }
+  }, [otp]);
+
   // OTP verify
   const verifyOTP = async (e) => {
-    if (otp === "" || otp === undefined || otp === null) return;
+    if (isConfirmDisabled) return; 
     try {
       setIsLoading(true); // Start the loader     
       
@@ -284,21 +296,24 @@ const PhoneLogin_reCaptchaV2 = () => {
           navigate("/dashboard"); //Navigae to dashboard 
         }
       })
-      setIsLoading(false); // Start the loader
+      setIsLoading(false); // stop   the loader
     }
     catch (error) {
+      setIsLoading(false); // stop the loader
       console.log("error.message", error.message);
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
       );
-      setIsLoading(false); // Start the loader
+     
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
-      }, 30000);
+      }, 10000);
      
     }
   }
+
+  
   const toggleOtpVisibility = () => {
     setIsOtpHidden(!isOtpHidden); // Toggles the OTP visibility
   };
@@ -387,9 +402,14 @@ const PhoneLogin_reCaptchaV2 = () => {
       const handleGoBack = () => {
           setmobilenoSliderState(true)
           setotpSliderState(false)
-          setIsLoading(false)          
+          setIsLoading(false) 
+          setOtp("");     
+          setIsOtpHidden(true)    
+          setOtpTimer(80);
       };
       // goback code
+    
+      
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -566,40 +586,51 @@ const PhoneLogin_reCaptchaV2 = () => {
                     />
                   )}
                 />
-                {error && <div className="field_error">{error}</div>}
+                {error && <>
+                  <div className="field_error">{error}</div>
+                  <div className="vg10"></div>
+                </>}
               </div>
-              {/* <p className="resend_otp_timer">
-                            Haven't received the OTP?{" "}
-                            {otptimer > 0 ? (
-                              <span>Resend In {otptimer} seconds</span>
-                            ) : (
-                              <span
-                                onClick={handleResendOtp}
-                                style={{
-                                  cursor: isResendDisabled
-                                    ? "not-allowed"
-                                    : "pointer",
-                                }}
-                              >
-                                <a style={{ color: "blue" }}> Resend Now</a>{" "}
-                              </span>
-                            )}
-                          </p> */}
-              <div className="vg10"></div>
-              {isLoading && (
-                <button
+              <p className="resend_otp_timer">
+    Haven't received the OTP?{" "}
+    {otptimer > 0 ? (
+      <span>Resend In {otptimer}sec</span>
+    ) : (
+      <span
+        onClick={!isResendDisabled ? handleResendOtp : undefined}
+        style={{ cursor: isResendDisabled ? "not-allowed" : "pointer" }}
+      >
+        <a style={{ color: "var(--theme-green)" }}> Resend OTP</a>
+      </span>
+    )}
+  </p>
+              <div className="vg22"></div>
+              {/* {isLoading && ( */}
+                {/* <button
                   className="theme_btn btn_fill w_full no_icon"
                   onClick={verifyOTP}                 
                 >
                   Confirm
-                </button>
-              )}
-              {!isLoading && (
-                <div className="text-center">
-                  <h6 className="text_green mb-2">Redirecting...</h6>
-                  <BeatLoader color={"#00a8a8"} loading={true} />
-                </div>
-              )}
+                </button> */}
+                <button 
+  className="theme_btn btn_fill w_full no_icon"
+  onClick={verifyOTP}
+  disabled={isConfirmDisabled} // Disable logic apply
+  style={{   
+    cursor: isConfirmDisabled ? "not-allowed" : "pointer",
+    opacity: isConfirmDisabled ? 0.5 : 1,
+  }}
+>
+  Confirm
+</button>
+
+              {/* )} */}
+              {/* {!isLoading && ( 
+                // <div className="text-center">
+                //   <h6 className="text_green mb-2">Redirecting...</h6>
+                //   <BeatLoader color={"#00a8a8"} loading={true} />
+                // </div>
+              )}   */}
                  <div className="vg10"></div>
              
                 <button

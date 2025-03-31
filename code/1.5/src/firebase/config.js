@@ -3,7 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/functions";
-import "firebase/messaging";
+// import "firebase/messaging";
 
 // import { getFunctions, httpsCallable } from 'firebase/functions'
 
@@ -38,7 +38,7 @@ const projectAuth = firebase.auth();
 const projectAuthObj = firebase.auth;
 const projectStorage = firebase.storage();
 const projectFunctions = firebase.functions();
-const projectMsg = firebase.messaging();
+// const projectMsg = firebase.messaging();
 const projectID = app.options.projectId;
 
 // timestamp
@@ -51,7 +51,7 @@ export {
   projectAuthObj,
   projectStorage,
   projectFunctions,
-  projectMsg,
+  // projectMsg,
   projectID,
   timestamp,
 };

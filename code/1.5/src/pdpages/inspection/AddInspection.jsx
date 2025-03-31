@@ -417,6 +417,61 @@ const AddInspection = () => {
       setFinalSubmit(false);
     }
   };
+//   const handleFinalSubmit = async () => {
+//     setFinalSubmiting(true);
+
+//     try {
+//         // Pehle saare bills save karo
+//         for (const bill of bills) {
+//             const billData = billInspectionData[bill.id];
+//             if (billData) {
+//                 const updatedBillData = {
+//                     billId: bill.billId,
+//                     billType: bill.billType,
+//                     authorityName: bill.authorityName,
+//                     amount: billData.amount || "",
+//                     remark: billData.remark || "",
+//                     imageUrl: billData.imageUrl || null,
+//                     lastUpdatedAt: timestamp.now(),
+//                     lastUpdatedBy: user.uid,
+//                     updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+//                         updatedAt: timestamp.now(),
+//                         updatedBy: user.uid,
+//                     }),
+//                 };
+
+//                 await projectFirestore
+//                     .collection("inspections")
+//                     .doc(inspectionId)
+//                     .update({
+//                         [`bills.${bill.id}`]: updatedBillData,
+//                     });
+//             }
+//         }
+
+//         // Uske baad final submit karo
+//         await projectFirestore
+//             .collection("inspections")
+//             .doc(inspectionId)
+//             .update({
+//                 rooms: Object.values(inspectionData),
+//                 finalSubmit: true,
+//                 updatedAt: timestamp.now(),
+//                 updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+//                     updatedAt: timestamp.now(),
+//                     updatedBy: user.uid,
+//                 }),
+//             });
+
+//         navigate(`/inspection-report/${inspectionId}`);
+//     } catch (error) {
+//         console.error("Error in final submit:", error);
+//     } finally {
+//         setFinalSubmiting(false);
+//         setFinalSubmit(false);
+//     }
+// };
+
 
   // bill inspection code start
   const [bills, setBills] = useState([]);
@@ -503,21 +558,32 @@ const AddInspection = () => {
   }, [isBillAvailable, amount, remark, selectedBill]);
 
   // Function to check if all bills are "full"
+  // useEffect(() => {
+  //   const allBillInspectionFull =
+  //     bills.length > 0 &&
+  //     bills.every((bill) => {
+  //       const billData = billInspectionData?.[bill.id] || {};
+  //       return (
+  //         billData.isBillAvailable !== null &&
+  //         (!billData.isBillAvailable ||
+  //           (billData.amount && billData.amount > 0)) &&
+  //         billData.remark
+  //       );
+  //     });
+
+  //   setAllBillInspectionComplete(allBillInspectionFull);
+  // }, [bills, billInspectionData]);
   useEffect(() => {
     const allBillInspectionFull =
       bills.length > 0 &&
       bills.every((bill) => {
         const billData = billInspectionData?.[bill.id] || {};
-        return (
-          billData.isBillAvailable !== null &&
-          (!billData.isBillAvailable ||
-            (billData.amount && billData.amount > 0)) &&
-          billData.remark
-        );
+        return billData.amount && billData.amount && billData.remark;
       });
 
     setAllBillInspectionComplete(allBillInspectionFull);
-  }, [bills, billInspectionData]);
+}, [bills, billInspectionData]);
+
 
   // Function to calculate the progress-based class for a bill button
   // const getBillButtonClass = (bill) => {
@@ -758,46 +824,82 @@ const AddInspection = () => {
   //   }
   // };
 
+  // const handleSaveBill = async () => {
+  //   if (!selectedBill) return;
+  
+  //   setIsBillDataSaving(true);
+  
+  //   try {
+  //     const updatedBillData = {
+  //       billId: selectedBill.billId,
+  //       billType: selectedBill.billType,
+  //       authorityName: selectedBill.authorityName,
+  //       amount,
+  //       remark,
+  //       imageUrl: billInspectionData[selectedBill.id]?.imageUrl || null,
+  //       lastUpdatedAt: timestamp.now(),
+  //       lastUpdatedBy: user.uid,
+  //       updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+  //         updatedAt: timestamp.now(),
+  //         updatedBy: user.uid,
+  //       }),
+  //     };
+  
+  //     await projectFirestore
+  //       .collection("inspections")
+  //       .doc(inspectionId)
+  //       .update({
+  //         [`bills.${selectedBill.id}`]: updatedBillData,
+  //       });
+  
+  //     setBillInspectionData((prevData) => ({
+  //       ...prevData,
+  //       [selectedBill.id]: updatedBillData,
+  //     }));
+  
+  //     setAfterSaveModal(true);
+  //   } catch (error) {
+  //     console.error("Error saving bill data:", error);
+  //   } finally {
+  //     setIsBillDataSaving(false);
+  //   }
+  // };
+
   const handleSaveBill = async () => {
-    if (!selectedBill) return;
+    if (!bills.length) return;
   
     setIsBillDataSaving(true);
   
     try {
-      const updatedBillData = {
-        billId: selectedBill.billId,
-        billType: selectedBill.billType,
-        authorityName: selectedBill.authorityName,
-        amount,
-        remark,
-        imageUrl: billInspectionData[selectedBill.id]?.imageUrl || null,
-        lastUpdatedAt: timestamp.now(),
-        lastUpdatedBy: user.uid,
-        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-          updatedAt: timestamp.now(),
-          updatedBy: user.uid,
-        }),
-      };
+      const updatedBills = {};
+  
+      bills.forEach((bill) => {
+        if (billInspectionData[bill.id]) {
+          updatedBills[`bills.${bill.id}`] = {
+            ...billInspectionData[bill.id],
+            lastUpdatedAt: timestamp.now(),
+            lastUpdatedBy: user.uid,
+            updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+              updatedAt: timestamp.now(),
+              updatedBy: user.uid,
+            }),
+          };
+        }
+      });
   
       await projectFirestore
         .collection("inspections")
         .doc(inspectionId)
-        .update({
-          [`bills.${selectedBill.id}`]: updatedBillData,
-        });
-  
-      setBillInspectionData((prevData) => ({
-        ...prevData,
-        [selectedBill.id]: updatedBillData,
-      }));
+        .update(updatedBills);
   
       setAfterSaveModal(true);
     } catch (error) {
-      console.error("Error saving bill data:", error);
+      console.error("Error saving all bill data:", error);
     } finally {
       setIsBillDataSaving(false);
     }
   };
+  
   
 
   return (
