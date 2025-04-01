@@ -140,6 +140,13 @@ const AddInspection = () => {
   const handleImageUpload = async (e, roomId) => {
     const file = e.target.files[0];
     if (!file) return;
+    
+  // Allowed image formats
+  const allowedTypes = ["image/jpeg", "image/png"];
+  if (!allowedTypes.includes(file.type)) {
+    alert("Only JPG and PNG files are allowed.");
+    return;
+  }
 
     setImageActionStatus("uploading");
 
@@ -288,7 +295,7 @@ const AddInspection = () => {
   //   return className;
   // };
 
-  const getRoomClass = (roomId) => {
+  const getRoomClass = (roomId, field) => {
     const room = inspectionData[roomId];
     let className = "room-button";
   
@@ -304,13 +311,20 @@ const AddInspection = () => {
         room.termitesRemark,
         room.otherIssue,
         room.otherIssueRemark,
-        room.generalRemark,
+        // room.generalRemark,
         room.cleanRemark,
         room.images?.length > 0,
       ].filter(Boolean).length;
   
-      if (filledFields === 9) className += " full";
+      if (filledFields === 8) className += " full";
       else if (filledFields > 0) className += " half";
+
+        // Add class for each individual field
+    if (room[field]) {
+      className += ` filled`;
+    } else {
+      className += ` notfilled`;
+    }
     }
   
     // Add 'active' if this roomId matches activeRoom
@@ -319,13 +333,26 @@ const AddInspection = () => {
     return className;
   };
 
+  const getFieldClass = (roomId, field) => {
+    const roomData = inspectionData?.[roomId] || {};
+  
+    if (field === "image") {
+      return roomData.images && roomData.images.length > 0 ? "filled" : "notfilled";
+    }
+  
+    return roomData[field] && roomData[field].trim() !== "" ? "filled" : "notfilled";
+  };
+  
+  
+
   const isFinalSubmitEnabled = () => {
     return (
       allBillInspectionComplete && // Ensures all bill inspections are complete
       Object.values(inspectionData).every((room) => {
         // If inspection is not allowed, skip field validation
         if (room.isAllowForInspection === "no") {
-          return true;
+          // return true;
+          return room.generalRemark;
         }
   
         // For allowed rooms, perform field validation
@@ -336,7 +363,7 @@ const AddInspection = () => {
           room.seepageRemark &&
           room.termitesRemark &&
           room.otherIssueRemark &&
-          room.generalRemark &&
+          // room.generalRemark &&
           room.cleanRemark &&
           room.images?.length > 0 // Ensures every allowed room has at least 1 image uploaded
         );
@@ -460,6 +487,7 @@ const AddInspection = () => {
           billType: doc.data().billType,
           billId: doc.data().billId,
           authorityName: doc.data().authorityName,
+          billWebsiteLink: doc.data().billWebsiteLink,
         }));
 
         setBills(billsData);
@@ -662,7 +690,11 @@ const AddInspection = () => {
   
     return className;
   };
-
+  const getBillFieldClass = (billId, field) => {
+    const billData = billInspectionData?.[billId] || {};
+    return billData[field] && billData[field].trim() !== "" ? "filled" : "notfilled";
+  };
+  
   // const handleBillImageUpload = async (e, billId) => {
   //   const file = e.target.files[0];
   //   if (!file) return;
@@ -821,7 +853,12 @@ const AddInspection = () => {
   const handleBillImageUpload = async (e, billId) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+    // Allowed image formats
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Only JPG and PNG files are allowed.");
+      return;
+    }
     try {
       setImageActionStatus("uploading"); // Start uploading modal
   
@@ -894,7 +931,6 @@ const AddInspection = () => {
       setImageActionStatus(null); // Hide modal on error
     }
   };
-  
 
 
   const handleSaveBill = async () => {
@@ -1077,11 +1113,10 @@ const AddInspection = () => {
                           <div className="row row_gap_20">
                             <div className="col-xl-3 col-md-6">
                               <div
-                                className="form_field w-100"
+                                className={`form_field w-100 ${getFieldClass(activeRoom, "isAllowForInspection")}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
-                                  border: "1px solid rgb(3 70 135 / 22%)",
                                   background: "white",
                                 }}
                               >
@@ -1151,11 +1186,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                  className="form_field w-100"
+                                  className={`form_field w-100 ${getFieldClass(activeRoom, "seepage")}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
-                                    border: "1px solid rgb(3 70 135 / 22%)",
                                     background: "white",
                                   }}
                                 >
@@ -1227,7 +1261,7 @@ const AddInspection = () => {
                                         <div className="vg12"></div>
                                         <textarea
                                           placeholder="Seepage Remark*"
-                                          className="w-100"
+                                          className={`w-100 ${getFieldClass(activeRoom, "seepageRemark")}`}
                                           value={
                                             inspectionData[activeRoom]
                                               ?.seepageRemark || ""
@@ -1250,11 +1284,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                  className="form_field w-100"
+                                   className={`form_field w-100 ${getFieldClass(activeRoom, "termites")}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
-                                    border: "1px solid rgb(3 70 135 / 22%)",
                                     background: "white",
                                   }}
                                 >
@@ -1331,7 +1364,7 @@ const AddInspection = () => {
                                             inspectionData[activeRoom]
                                               ?.termitesRemark || ""
                                           }
-                                          className="w-100"
+                                          className={`w-100 ${getFieldClass(activeRoom, "termitesRemark")}`}
                                           onChange={(e) =>
                                             handleChange(
                                               activeRoom,
@@ -1350,11 +1383,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                  className="form_field w-100"
+                                   className={`form_field w-100 ${getFieldClass(activeRoom, "otherIssue")}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
-                                    border: "1px solid rgb(3 70 135 / 22%)",
                                     background: "white",
                                   }}
                                 >
@@ -1430,7 +1462,7 @@ const AddInspection = () => {
                                             inspectionData[activeRoom]
                                               ?.otherIssueRemark || ""
                                           }
-                                          className="w-100"
+                                          className={`w-100 ${getFieldClass(activeRoom, "otherIssueRemark")}`}
                                           onChange={(e) =>
                                             handleChange(
                                               activeRoom,
@@ -1448,12 +1480,11 @@ const AddInspection = () => {
                             {inspectionData[activeRoom]
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
-                                <div
-                                  className="form_field w-100"
+                                <div                                 
+                                  className={`form_field w-100 ${getFieldClass(activeRoom, "cleanRemark")}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
-                                    border: "1px solid rgb(3 70 135 / 22%)",
                                     background: "white",
                                   }}
                                 >
@@ -1493,11 +1524,14 @@ const AddInspection = () => {
 
                             <div className="col-xl-3 col-md-6">
                               <div
-                                className="form_field w-100"
+                               className={`form_field w-100 ${
+                                inspectionData[activeRoom]?.isAllowForInspection === "yes"
+                                  ? "filled"
+                                  : getFieldClass(activeRoom, "generalRemark")
+                              }`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
-                                  border: "1px solid rgb(3 70 135 / 22%)",
                                   background: "white",
                                 }}
                               >
@@ -1510,7 +1544,7 @@ const AddInspection = () => {
                                   }}
                                 >
                                   General Remark{inspectionData[activeRoom]
-                              ?.isAllowForInspection === "yes" ? ("*") : ""}
+                              ?.isAllowForInspection === "yes" ? ("") : "*"}
                                 </h6>
                                 <div className="field_box theme_radio_new">
                                   <textarea
@@ -1542,9 +1576,9 @@ const AddInspection = () => {
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
-                                    border: "1px solid rgb(3 70 135 / 22%)",
                                     background: "white",
                                   }}
+                                  className={`form_field w-100 ${getFieldClass(activeRoom, "image")}`}
                                 >
                                   <h6
                                     style={{
@@ -1618,6 +1652,7 @@ const AddInspection = () => {
                       </form>
                       <div className="bottom_fixed_button">
                         <div className="next_btn_back">
+                          
                           <button
                             className="theme_btn no_icon btn_fill2 full_width"
                             onClick={() => setFinalSubmit(true)}
@@ -1736,18 +1771,40 @@ const AddInspection = () => {
                           <h6>Authority name</h6>
                           <h5>{selectedBill.authorityName}</h5>
                         </div>
+                        {selectedBill.billWebsiteLink && (
+                          <div className="idn_single">
+                          <h6>Bill Website Link</h6>
+                          <h5 style={{
+                            fontWeight:"400"
+                          }}>
+                            <Link 
+                                                    className="sub_title text_green" 
+                                                    target="_blank" 
+                                                    to={selectedBill.billWebsiteLink}
+                                                    style={{
+                                                      display: "-webkit-box",
+                                                      WebkitLineClamp: 1,
+                                                      WebkitBoxOrient: "vertical",
+                                                      overflow: "hidden"
+                                                    }}
+                                                  >
+                                                    {selectedBill.billWebsiteLink}
+                                                  </Link>
+                          </h5>
+                        </div>
+                        )}
+                        
                       </div>
                       <div className="vg22"></div>
                       <form className="add_inspection_form">
                         <div className="aai_form">
                           <div className="row row_gap_20">
                             <div className="col-xl-3 col-md-6">
-                              <div
-                                className="form_field w-100"
+                              <div                                
+                                className={`form_field w-100 ${getBillFieldClass(selectedBill?.id, "amount")}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
-                                  border: "1px solid rgb(3 70 135 / 22%)",
                                   background: "white",
                                 }}
                               >
@@ -1819,11 +1876,10 @@ const AddInspection = () => {
                             </div>
                             <div className="col-xl-3 col-md-6">
                               <div
-                                className="form_field w-100"
+                                className={`form_field w-100 ${getBillFieldClass(selectedBill?.id, "remark")}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
-                                  border: "1px solid rgb(3 70 135 / 22%)",
                                   background: "white",
                                 }}
                               >
@@ -1852,7 +1908,6 @@ const AddInspection = () => {
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
-                                  border: "1px solid rgb(3 70 135 / 22%)",
                                   background: "white",
                                 }}>
                                      <h6
@@ -2011,10 +2066,11 @@ const AddInspection = () => {
           />
           <h5 className="text_green2 mb-0">Saved Successfully</h5>
         </h5>
-        <h6 className="text-center text_black mb-0">
+        {/* don't delete this commented code  */}
+        {/* <h6 className="text-center text_black mb-0">
           What would you like to do next?
-        </h6>
-        <div className="inspection_types">
+        </h6> */}
+        {/* <div className="inspection_types">
           <Link className="it_single" onClick={() => setAfterSaveModal(false)}>
             <div
               className="d-flex align-items-center"
@@ -2039,7 +2095,7 @@ const AddInspection = () => {
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </svg>
           </Link>
-          {/* <Link className="it_single" to={`/inspection-report/${inspectionId}`}>
+          <Link className="it_single" to={`/inspection-report/${inspectionId}`}>
             <div
               className="d-flex align-items-center"
               style={{
@@ -2062,7 +2118,7 @@ const AddInspection = () => {
             >
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </svg>
-          </Link> */}
+          </Link>
           <Link className="it_single" to={`/inspection/${propertyId}`}>
             <div
               className="d-flex align-items-center"
@@ -2087,6 +2143,10 @@ const AddInspection = () => {
               <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
             </svg>
           </Link>
+        </div> */}
+       
+        <div className="theme_btn btn_border w-100 no_icon text-center mb-4 mt-4" onClick={() => setAfterSaveModal(false)}>
+          Okay
         </div>
       </Modal>
 

@@ -40,6 +40,7 @@ const PropertyUtilityBills = () => {
   const [selectedBillType, setSelectedBillType] = useState("");
   const [authorityName, setAuthorityName] = useState("");
   const [billId, setBillId] = useState("");
+  const [billWebsiteLink, setBillWebsiteLink] = useState("");
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const [amountDue, setAmountDue] = useState("");
   const [billStatus, setBillStatus] = useState("");
@@ -55,6 +56,7 @@ const PropertyUtilityBills = () => {
     setSelectedBillType("");
     setAuthorityName("");
     setBillId("");
+    setBillWebsiteLink("");
     setSelectedPaymentType("");
     setAmountDue("");
     setDueDate("");
@@ -80,7 +82,14 @@ const PropertyUtilityBills = () => {
   const handleBillIdChange = (event) => {
     setBillId(event.target.value);
     if (errors.billId) {
-      setErrors((prevErrors) => ({ ...prevErrors, billId: "" })); // Corrected key
+      setErrors((prevErrors) => ({ ...prevErrors, billId: "" }));
+    }
+  };
+
+  const handleBillWebsiteLinkChange = (event) => {
+    setBillWebsiteLink(event.target.value);
+    if (errors.billWebsiteLink) {
+      setErrors((prevErrors) => ({ ...prevErrors, billWebsiteLink: "" }));
     }
   };
 
@@ -203,6 +212,7 @@ const PropertyUtilityBills = () => {
     selectedBillType,
     authorityName,
     billId,
+
     billStatus,
     selectedPaymentType,
     amountDue,
@@ -219,6 +229,7 @@ const PropertyUtilityBills = () => {
         billType: selectedBillType,
         authorityName,
         billId,
+        billWebsiteLink,
         paymentType: selectedPaymentType,
         amountDue,
         billStatus,
@@ -230,6 +241,7 @@ const PropertyUtilityBills = () => {
       setSelectedBillType("");
       setAuthorityName("");
       setBillId("");
+      setBillWebsiteLink("");
       setSelectedPaymentType("");
       setAmountDue("");
       setDueDate("");
@@ -243,6 +255,7 @@ const PropertyUtilityBills = () => {
       setSelectedBillType("");
       setAuthorityName("");
       setBillId("");
+      setBillWebsiteLink("");
       setSelectedPaymentType("");
       setAmountDue("");
       setBillStatus("");
@@ -521,6 +534,41 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Bill Website Link
+                          </h6>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={billWebsiteLink}
+                              onChange={handleBillWebsiteLinkChange}
+                              placeholder="Enter bill ID"
+                              className="w-100"
+                            />
+                          </div>
+                          {/* {errors.billId && (
+                            <div className="field_error w-100">
+                              {errors.billId}
+                            </div>
+                          )} */}
+                        </div>
+                      </div>
 
                       {/* plz don't delete this comment  */}
                       {/* <div className="col-md-4">
@@ -767,6 +815,23 @@ const PropertyUtilityBills = () => {
                         <h6 className="sub_title">
                           Payment Type: {doc.paymentType}
                         </h6>
+                        {doc.billWebsiteLink && (
+                        <Link 
+                        className="sub_title text_green" 
+                        target="_blank" 
+                        to={doc.billWebsiteLink}
+                        style={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 1,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden"
+                        }}
+                      >
+                        Website: {doc.billWebsiteLink}
+                      </Link>
+                      
+                        )}
+                        
                       </div>
                     </div>
                     {/* plz don't delete this comment  */}

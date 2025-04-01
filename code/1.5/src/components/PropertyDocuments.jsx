@@ -272,6 +272,9 @@ const PropertyDocuments = () => {
       { id: "indexii", value: "Index II", label: "Index II" },
       { id: "layout", value: "Layout", label: "Layout" },
       { id: "blueprint", value: "Blue Print", label: "Blue Print" },
+      { id: "saledeed", value: "Sale Deed", label: "Sale Deed" },
+      { id: "conveyancedeed", value: "Conveyance Deed", label: "Conveyance Deed" },
+      { id: "parkingletter", value: "Parking Letter", label: "Parking Letter" },
       {
         id: "powerofattorney",
         value: "Power of Attorney",
@@ -583,7 +586,7 @@ const PropertyDocuments = () => {
                                   marginBottom: "8px",
                                 }}
                               >
-                                Select Document Type
+                                Select Document Type*
                               </h6>
                               <div className="field_box theme_radio_new">
                                 <div className="theme_radio_container">

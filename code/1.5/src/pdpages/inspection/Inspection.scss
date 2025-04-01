@@ -105,6 +105,20 @@
   display: flex;
   flex-direction: column;
   gap: 22px;
+  .form_field{
+    &.filled{
+      border: 1px solid rgba(3, 70, 135, 0.22);
+    }
+    &.notfilled{
+      border: 1px solid var(--theme-red);
+    }
+  .filled{
+      border: 1px solid rgba(3, 70, 135, 0.22);
+    }
+    .notfilled{
+      border: 1px solid var(--theme-red);
+    }
+  }
 }
 .add_inspection_pg {
   .bill_inspection {
