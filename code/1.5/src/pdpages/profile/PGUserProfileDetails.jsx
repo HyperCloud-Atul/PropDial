@@ -149,51 +149,185 @@ export default function PGUserProfileDetails2() {
     // console.log('state.id:', option.value)
   };
 
+  const [isOwnedCitySaving, setIsOwnedCitySaving] = useState(false);
+  const [isOwnedCityEditing, setIsOwnedCityEditing] = useState(false);
+  const [saveOwnedCityMessage, setSaveOwnedCityMessage] = useState("");
+  const [ownedCityMessageType, setOwnedCityMessageType] = useState("");
+  const [originalCity, setOriginalCity] = useState([]); 
+  
+  const handleOwnedCityEditClick = () => {
+    if (!isOwnedCityEditing) {
+      // Start editing -> Save the original value
+      setOriginalCity(city);
+    } else {
+      // Cancel editing -> Restore original value
+      setCity(originalCity);
+    }
+    setIsOwnedCityEditing(!isOwnedCityEditing);
+  };
   // handleSavePropertyOwnedInCities
   const handleSavePropertyOwnedInCities = async () => {
-    console.log("selected cities", city);
+    if (!city || city.length === 0) {
+      setSaveOwnedCityMessage("Please select at least one city.");
+      setOwnedCityMessageType("error_msg");
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
+      return;
+    }
+  
+    if (JSON.stringify(city) === JSON.stringify(userProfileDoc?.propertiesOwnedInCities || [])) {
+      setSaveOwnedCityMessage("No changes detected. Please update before saving.");
+      setOwnedCityMessageType("error_msg");
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
+      return;
+    }
+  
     const updatedData = {
       propertiesOwnedInCities: city,
     };
-
-    // console.log("updatedData: ", updatedData);
-
+  
+    setIsOwnedCitySaving(true);
+    setSaveOwnedCityMessage("");
+  
     try {
       await updateDocument(userProfileId, updatedData);
+      setOwnedCityMessageType("success_msg");
+      setSaveOwnedCityMessage("Cities updated successfully!");
+      setOriginalCity(city); // 🔥 Save updated value
+      setTimeout(() => {
+        setIsOwnedCityEditing(false);
+      }, 4000);
     } catch (error) {
-      console.error("Error updating details:", error);
+      console.error("Error updating cities:", error);
+      setOwnedCityMessageType("error_msg");
+      setSaveOwnedCityMessage("Failed to update cities. Please try again.");
     } finally {
+      setIsOwnedCitySaving(false);
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
     }
   };
+  
+
+  // handleSavePropertyOwnedInCities
+  // old code don,t delete 
+  // const handleSavePropertyOwnedInCities = async () => { 
+  //   const updatedData = {
+  //     propertiesOwnedInCities: city,
+  //   };
+  //   try {
+  //     await updateDocument(userProfileId, updatedData);
+  //   } catch (error) {
+  //     console.error("Error updating details:", error);
+  //   } finally {
+  //   }
+  // };
+
 
   // Save Access Mgmt details
-  const handleSaveAccessMgmt = async () => {
-    console.log("selected country", country);
-    console.log("selected state", state);
 
-    const updatedData = {
-      accessType: "state",
-      accessValue: state,
-    };
 
-    console.log("updatedData: ", updatedData);
 
-    try {
-      // const updatedData = {
-      //   ...userProfileDoc,
-      //   bankDetail: bankDetailFormData,
-      // };
+  // const handleSaveAccessMgmt = async () => {
+  //   console.log("selected country", country);
+  //   console.log("selected state", state);
 
-      await updateDocument(userProfileId, updatedData);
-    } catch (error) {
-      console.error("Error updating details:", error);
-    } finally {
-    }
+  //   const updatedData = {
+  //     accessType: "state",
+  //     accessValue: state,
+  //   };
+
+  //   console.log("updatedData: ", updatedData);
+
+  //   try {
+  //     // const updatedData = {
+  //     //   ...userProfileDoc,
+  //     //   bankDetail: bankDetailFormData,
+  //     // };
+
+  //     await updateDocument(userProfileId, updatedData);
+  //   } catch (error) {
+  //     console.error("Error updating details:", error);
+  //   } finally {
+  //   }
+  // };
+  const [isAccessMgmtSaving, setIsAccessMgmtSaving] = useState(false);
+const [isAccessMgmtEditing, setIsAccessMgmtEditing] = useState(false);
+const [saveAccessMgmtMessage, setSaveAccessMgmtMessage] = useState("");
+const [accessMgmtMessageType, setAccessMgmtMessageType] = useState("");
+const [originalState, setOriginalState] = useState([]); // Store original state
+
+const handleAccessMgmtEditClick = () => {
+  if (!isAccessMgmtEditing) {
+    setOriginalState(state);
+  } else {
+    setState(originalState);
+  }
+  setIsAccessMgmtEditing(!isAccessMgmtEditing);
+};
+
+const handleSaveAccessMgmt = async () => {
+  if (!state || state.length === 0) {
+    setSaveAccessMgmtMessage("Please select at least one state.");
+    setAccessMgmtMessageType("error_msg");
+    setTimeout(() => {
+      setSaveAccessMgmtMessage("");
+      setAccessMgmtMessageType("");
+    }, 4000);
+    return;
+  }
+
+  if (JSON.stringify(state) === JSON.stringify(userProfileDoc?.accessValue || [])) {
+    setSaveAccessMgmtMessage("No changes detected. Please update before saving.");
+    setAccessMgmtMessageType("error_msg");
+    setTimeout(() => {
+      setSaveAccessMgmtMessage("");
+      setAccessMgmtMessageType("");
+    }, 4000);
+    return;
+  }
+
+  const updatedData = {
+    accessType: "state",
+    accessValue: state,
   };
+
+  setIsAccessMgmtSaving(true);
+  setSaveAccessMgmtMessage("");
+
+  try {
+    await updateDocument(userProfileId, updatedData);
+    setAccessMgmtMessageType("success_msg");
+    setSaveAccessMgmtMessage("Access management updated successfully!");
+    setOriginalState(state);
+    setTimeout(() => {
+      setIsAccessMgmtEditing(false);
+    }, 4000);
+  } catch (error) {
+    console.error("Error updating access management details:", error);
+    setAccessMgmtMessageType("error_msg");
+    setSaveAccessMgmtMessage("Failed to update access management. Please try again.");
+  } finally {
+    setIsAccessMgmtSaving(false);
+    setTimeout(() => {
+      setSaveAccessMgmtMessage("");
+      setAccessMgmtMessageType("");
+    }, 4000);
+  }
+};
+
 
   useEffect(() => {
     setdbUserState(dbUsers);
   }, [dbUsers]);
+
 
   // code for active inactive start
   // Make sure that userProfileDoc is not null before using it
@@ -1490,7 +1624,7 @@ export default function PGUserProfileDetails2() {
         </div> */}
       </div>
       <div className="detail_info pd_single">
-        <div className="property_card_single mobile_full_card overflow_unset">
+        <div className="property_card_single mobile_full_card overflow_unset onboarded_card">
           <div className="more_detail_card_inner">
             <div className="p_info">
               <div className="p_info_single">
@@ -1504,7 +1638,7 @@ export default function PGUserProfileDetails2() {
                   <h6>On-Boarded</h6>
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
-                      ? format(userProfileDoc.createdAt.toDate(), "dd-MMM-yyyy")
+                      ? format(userProfileDoc.createdAt.toDate(), "dd-MMM-yyyy, hh:mm a")
                       : ""}
                   </h5>
                 </div>
@@ -1519,7 +1653,7 @@ export default function PGUserProfileDetails2() {
                     {userProfileDoc && userProfileDoc.createdAt
                       ? format(
                           userProfileDoc.lastLoginTimestamp.toDate(),
-                          "dd-MMM-yyyy hh:mm a"
+                          "dd-MMM-yyyy, hh:mm a"
                         )
                       : ""}
                   </h5>
@@ -1528,7 +1662,7 @@ export default function PGUserProfileDetails2() {
             </div>
             <div className="card_blue_divider">
               <div className="active_inactive">
-                <div className="form_field outline blue_single">
+                <div className="form_field outline blue_single makeai">
                   <div className="field_box theme_radio_new">
                     <div
                       className="theme_radio_container"
@@ -1653,7 +1787,214 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 </div>
+             
+              </div>
+              <div className="blue_single is_employee currentrole">
+                <h5>Current Role </h5>
+                <h6 className="text_blue text-capitalize">
+                  {userProfileDoc && userProfileDoc.rolePropDial}
+                </h6>
+              </div>
+              <div className="blue_single is_employee mode">
+                <h5>Mode</h5>
+                <h6
+                  className={` ${
+                    userProfileDoc && userProfileDoc.online
+                      ? "text_green2"
+                      : "text_red"
+                  }`}
+                >
+                  {userProfileDoc && userProfileDoc.online
+                    ? "Online"
+                    : "Offline"}
+                </h6>
+              </div>
+              <div className="blue_single is_employee is_employeecard">
+                <h5>Is Employee?</h5>
+                <div className="form_field">
+                  <div className="field_box theme_radio_new">
+                    <div
+                      className="theme_radio_container"
+                      style={{
+                        padding: "0px",
+                        border: "none",
+                        background: "transparent",
+                      }}
+                    >
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isemployee"
+                          value="yes"
+                          id="yes"
+                          checked={
+                            userProfileDoc && userProfileDoc.isEmployee === true
+                          }
+                          onChange={() => handleRadioChange("yes")}
+                        />
+                        <label htmlFor="yes">yes</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isemployee"
+                          value="no"
+                          id="no"
+                          checked={
+                            userProfileDoc &&
+                            userProfileDoc.isEmployee === false
+                          }
+                          onChange={() => handleRadioChange("no")}
+                        />
+                        <label htmlFor="no">no</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <Modal
+                  show={showConfirmationPopup}
+                  onHide={() => setShowConfirmationPopup(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{
+                      paddingBottom: "0px",
+                      border: "none",
+                    }}
+                  >
+                    <h5>Confirmation</h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to mark this user as{" "}
+                    {selectedEmployeeStatus === "yes"
+                      ? "an employee"
+                      : "not an employee"}
+                    ?
+                  </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{
+                      border: "none",
+                      gap: "15px",
+                    }}
+                  >
+                    <div
+                      className="cancel_btn"
+                      onClick={handleUpdateIsEmployee}
+                      disabled={loading}
+                    >
+                      {loading ? "Saving..." : "Yes, Update"}
+                    </div>
+                    <div
+                      className="done_btn"
+                      onClick={() => setShowConfirmationPopup(false)}
+                    >
+                      No
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+              </div>           
+              {userProfileDoc && userProfileDoc.isEmployee && (
+              <div className="blue_single  is_employee is_attendance_required">
+                <h5>Is Attendance Required?</h5>
+                <div className="form_field">
+                  <div className="field_box theme_radio_new">
+                    <div
+                      className="theme_radio_container"
+                      style={{
+                        padding: "0px",
+                        border: "none",
+                        background: "transparent",
+                      }}
+                    >
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isar"
+                          value="yes"
+                          id="isaryes"
+                          checked={
+                            userProfileDoc?.isAttendanceRequired === true
+                          } // Fixed checked condition
+                          onChange={() => handleArRadioChange("yes")}
+                        />
+                        <label htmlFor="isaryes">yes</label>
+                      </div>
+                      <div className="radio_single">
+                        <input
+                          type="radio"
+                          name="isar"
+                          value="no"
+                          id="isarno"
+                          checked={
+                            userProfileDoc?.isAttendanceRequired === false
+                          } // Fixed checked condition
+                          onChange={() => handleArRadioChange("no")}
+                        />
+                        <label htmlFor="isarno">no</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Confirmation Modal */}
+                <Modal
+                  show={showConfirmationPopupAr}
+                  onHide={() => setShowConfirmationPopupAr(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{ paddingBottom: "0px", border: "none" }}
+                  >
+                    <h5>Confirmation</h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to mark this user as{" "}
+                    {selectedAttendanceRequiredStatus === "yes"
+                      ? "attendance required"
+                      : "not attendance required"}
+                    ?
+                  </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{ border: "none", gap: "15px" }}
+                  >
+                    <div
+                      className="cancel_btn"
+                      onClick={handleUpdateIsAttendanceRequired}
+                      disabled={loading}
+                    >
+                      {loading ? "Saving..." : "Yes, Update"}
+                    </div>
+                    <div
+                      className="done_btn"
+                      onClick={() => setShowConfirmationPopupAr(false)}
+                    >
+                      No
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+              </div>
+              )}
+            </div>
+            <Modal
                   show={showPopup}
                   onHide={() => setShowPopup(false)}
                   centered
@@ -1817,213 +2158,6 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </Modal.Footer>
                 </Modal>
-              </div>
-              <div className="blue_single is_employee">
-                <h5>Is Employee?</h5>
-                <div className="form_field">
-                  <div className="field_box theme_radio_new">
-                    <div
-                      className="theme_radio_container"
-                      style={{
-                        padding: "0px",
-                        border: "none",
-                        background: "transparent",
-                      }}
-                    >
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isemployee"
-                          value="yes"
-                          id="yes"
-                          checked={
-                            userProfileDoc && userProfileDoc.isEmployee === true
-                          }
-                          onChange={() => handleRadioChange("yes")}
-                        />
-                        <label htmlFor="yes">yes</label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isemployee"
-                          value="no"
-                          id="no"
-                          checked={
-                            userProfileDoc &&
-                            userProfileDoc.isEmployee === false
-                          }
-                          onChange={() => handleRadioChange("no")}
-                        />
-                        <label htmlFor="no">no</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Modal
-                  show={showConfirmationPopup}
-                  onHide={() => setShowConfirmationPopup(false)}
-                  centered
-                >
-                  <Modal.Header
-                    className="justify-content-center"
-                    style={{
-                      paddingBottom: "0px",
-                      border: "none",
-                    }}
-                  >
-                    <h5>Confirmation</h5>
-                  </Modal.Header>
-                  <Modal.Body
-                    className="text-center"
-                    style={{
-                      color: "#FA6262",
-                      fontSize: "20px",
-                      border: "none",
-                    }}
-                  >
-                    Are you sure you want to mark this user as{" "}
-                    {selectedEmployeeStatus === "yes"
-                      ? "an employee"
-                      : "not an employee"}
-                    ?
-                  </Modal.Body>
-                  <Modal.Footer
-                    className="d-flex justify-content-between"
-                    style={{
-                      border: "none",
-                      gap: "15px",
-                    }}
-                  >
-                    <div
-                      className="cancel_btn"
-                      onClick={handleUpdateIsEmployee}
-                      disabled={loading}
-                    >
-                      {loading ? "Saving..." : "Yes, Update"}
-                    </div>
-                    <div
-                      className="done_btn"
-                      onClick={() => setShowConfirmationPopup(false)}
-                    >
-                      No
-                    </div>
-                  </Modal.Footer>
-                </Modal>
-              </div>
-
-              <div className="blue_single is_employee">
-                <h5>Current Role - </h5>
-                <h6 className="text_blue text-capitalize">
-                  {userProfileDoc && userProfileDoc.rolePropDial}
-                </h6>
-              </div>
-              <div className="blue_single is_employee">
-                <h5>Mode - </h5>
-                <h6
-                  className={` ${
-                    userProfileDoc && userProfileDoc.online
-                      ? "text_green2"
-                      : "text_red"
-                  }`}
-                >
-                  {userProfileDoc && userProfileDoc.online
-                    ? "Online"
-                    : "Offline"}
-                </h6>
-              </div>
-              {userProfileDoc && userProfileDoc.isEmployee && (
-              <div className="blue_single  is_employee is_attendance_required">
-                <h5>Is Attendance Required?</h5>
-                <div className="form_field">
-                  <div className="field_box theme_radio_new">
-                    <div
-                      className="theme_radio_container"
-                      style={{
-                        padding: "0px",
-                        border: "none",
-                        background: "transparent",
-                      }}
-                    >
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isar"
-                          value="yes"
-                          id="isaryes"
-                          checked={
-                            userProfileDoc?.isAttendanceRequired === true
-                          } // Fixed checked condition
-                          onChange={() => handleArRadioChange("yes")}
-                        />
-                        <label htmlFor="isaryes">yes</label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isar"
-                          value="no"
-                          id="isarno"
-                          checked={
-                            userProfileDoc?.isAttendanceRequired === false
-                          } // Fixed checked condition
-                          onChange={() => handleArRadioChange("no")}
-                        />
-                        <label htmlFor="isarno">no</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Confirmation Modal */}
-                <Modal
-                  show={showConfirmationPopupAr}
-                  onHide={() => setShowConfirmationPopupAr(false)}
-                  centered
-                >
-                  <Modal.Header
-                    className="justify-content-center"
-                    style={{ paddingBottom: "0px", border: "none" }}
-                  >
-                    <h5>Confirmation</h5>
-                  </Modal.Header>
-                  <Modal.Body
-                    className="text-center"
-                    style={{
-                      color: "#FA6262",
-                      fontSize: "20px",
-                      border: "none",
-                    }}
-                  >
-                    Are you sure you want to mark this user as{" "}
-                    {selectedAttendanceRequiredStatus === "yes"
-                      ? "attendance required"
-                      : "not attendance required"}
-                    ?
-                  </Modal.Body>
-                  <Modal.Footer
-                    className="d-flex justify-content-between"
-                    style={{ border: "none", gap: "15px" }}
-                  >
-                    <div
-                      className="cancel_btn"
-                      onClick={handleUpdateIsAttendanceRequired}
-                      disabled={loading}
-                    >
-                      {loading ? "Saving..." : "Yes, Update"}
-                    </div>
-                    <div
-                      className="done_btn"
-                      onClick={() => setShowConfirmationPopupAr(false)}
-                    >
-                      No
-                    </div>
-                  </Modal.Footer>
-                </Modal>
-              </div>
-              )}
-            </div>
           </div>
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
@@ -2209,7 +2343,16 @@ export default function PGUserProfileDetails2() {
               userProfileDoc.rolesPropDial.includes("owner"))) && (
             <div className="property_card_single mobile_full_card overflow_unset">
               <div className="more_detail_card_inner">
-                <h2 className="card_title">Properties owned within the city</h2>
+                <h2 className="card_title">Properties owned within the city
+                <span
+                className={`material-symbols-outlined action_icon ${
+                  isOwnedCityEditing ? "text_red" : "text_green"
+                }`}
+                onClick={handleOwnedCityEditClick}
+              >
+                {isOwnedCityEditing ? "close" : "border_color"}
+              </span>
+                </h2>
                 <div className="vg12"></div>
                 <div className="row row_gap">
                   <div className="col-lg-4 col-md-6 col-sm-12">
@@ -2228,6 +2371,7 @@ export default function PGUserProfileDetails2() {
                           isMulti
                           options={cityOptions.current}
                           value={city}
+                          isDisabled={!isOwnedCityEditing}
                           // styles={{
                           //   control: (baseStyles, state) => ({
                           //     ...baseStyles,
@@ -2244,26 +2388,33 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 </div>
-                <div className="vg12"></div>
-                <div className="btn_msg_area">
-                  {/* <button
-                // onClick={handleEdCancelClick}
-                // disabled={isEdUpdating}
-                className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
-                  }`}
-              >
-                Cancel
-              </button> */}
-                  <button
-                    onClick={handleSavePropertyOwnedInCities}
-                    // disabled={isEdUpdating}
-                    className={`theme_btn btn_fill no_icon min_width ${
-                      isEdUpdating ? "disabled" : ""
-                    }`}
-                  >
-                    Save
-                  </button>
-                </div>
+                
+               {isOwnedCityEditing && (
+                 <div className="btn_msg_area">
+                    {saveOwnedCityMessage && (
+                  <p className={`msg_area ${ownedCityMessageType}`}>
+                    {saveOwnedCityMessage}
+                  </p>
+                )}
+                 <button
+               onClick={handleOwnedCityEditClick}
+               disabled={isOwnedCitySaving}
+               className={`theme_btn btn_border no_icon min_width ${isOwnedCitySaving ? "disabled" : ""
+                 }`}
+             >
+               Cancel
+             </button>
+                 <button
+                   onClick={handleSavePropertyOwnedInCities}
+                   disabled={isOwnedCitySaving}
+                   className={`theme_btn btn_fill no_icon min_width ${
+                     isOwnedCitySaving ? "disabled" : ""
+                   }`}
+                 >
+                   {isOwnedCitySaving ? "Saving..." : "Save"}
+                 </button>
+               </div>
+               )}
               </div>
             </div>
           )}
@@ -2271,7 +2422,17 @@ export default function PGUserProfileDetails2() {
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
-              <h2 className="card_title">Access Management</h2>
+              <h2 className="card_title">Access Management
+              <span
+                className={`material-symbols-outlined action_icon ${
+                  isAccessMgmtEditing ? "text_red" : "text_green"
+                }`}
+                onClick={handleAccessMgmtEditClick}
+              >
+                {isAccessMgmtEditing ? "close" : "border_color"}
+              </span>
+
+              </h2>
               <div className="form_field">
                 <div className="field_box theme_radio_new">
                   <div
@@ -2317,6 +2478,7 @@ export default function PGUserProfileDetails2() {
                         options={countryOptions.current}
                         value={country}
                         placeholder="Select Country"
+                        isDisabled={!isAccessMgmtEditing}
                       />
                     </div>
                   </div>
@@ -2336,6 +2498,7 @@ export default function PGUserProfileDetails2() {
                           // options={countryOptions.current}
                           // value={country}
                           placeholder="Select Region"
+                          isDisabled={!isAccessMgmtEditing}
                         />
                       </div>
                     </div>
@@ -2353,6 +2516,7 @@ export default function PGUserProfileDetails2() {
                           options={stateOptions.current}
                           value={state}
                           placeholder="Select state"
+                          isDisabled={!isAccessMgmtEditing}
                         />
                       </div>
                     </div>
@@ -2368,6 +2532,7 @@ export default function PGUserProfileDetails2() {
                           // onChange={setDesignation}
                           // options={designationOptions}
                           placeholder="Select city"
+                          isDisabled={!isAccessMgmtEditing}
                         />
                       </div>
                     </div>
@@ -2375,26 +2540,36 @@ export default function PGUserProfileDetails2() {
                 )}
               </div>
               <div className="vg12"></div>
-              <div className="btn_msg_area">
+{isAccessMgmtEditing && (
+                <div className="btn_msg_area">
+                {saveAccessMgmtMessage && (
+                  <p className={`msg_area ${accessMgmtMessageType}`}>
+                    {saveAccessMgmtMessage}
+                  </p>
+                )}
+                
                 <button
-                  // onClick={handleEdCancelClick}
-                  // disabled={isEdUpdating}
+                  onClick={handleAccessMgmtEditClick}
+                  disabled={isAccessMgmtSaving}
                   className={`theme_btn btn_border no_icon min_width ${
-                    isEdUpdating ? "disabled" : ""
+                    isAccessMgmtSaving ? "disabled" : ""
                   }`}
                 >
                   Cancel
                 </button>
+                
                 <button
                   onClick={handleSaveAccessMgmt}
-                  // disabled={isEdUpdating}
+                  disabled={isAccessMgmtSaving}
                   className={`theme_btn btn_fill no_icon min_width ${
-                    isEdUpdating ? "disabled" : ""
+                    isAccessMgmtSaving ? "disabled" : ""
                   }`}
                 >
-                  Save
+                  {isAccessMgmtSaving ? "Saving..." : "Save"}
                 </button>
               </div>
+)}
+
             </div>
           </div>
         )}

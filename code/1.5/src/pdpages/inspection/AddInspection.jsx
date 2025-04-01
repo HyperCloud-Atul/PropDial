@@ -1465,14 +1465,14 @@ const AddInspection = () => {
                                       color: "var(--theme-blue)",
                                     }}
                                   >
-                                    Clean Remark*
+                                    Cleaning Remark*
                                   </h6>
                                   <div className="field_box theme_radio_new">
                                     <textarea
                                       style={{
                                         minHeight: "104px",
                                       }}
-                                      placeholder="Clean Remark"
+                                      placeholder="Cleaning Remark"
                                       value={
                                         inspectionData[activeRoom]
                                           ?.cleanRemark || ""

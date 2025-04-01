@@ -21,10 +21,10 @@ const InspectionDetails = () => {
   );
 
   // get owner and executive detail code start
-  const [ownerData, setOwnerData] = useState(null);
-  const [coOwnerData, setCoOwnerData] = useState(null);
-  const [managerData, setManagerData] = useState(null);
-  const [executiveData, setExecutiveData] = useState(null);
+  const [ownersData, setOwnersData] = useState([]);
+  const [coOwnersData, setCoOwnersData] = useState([]);
+  const [managersData, setManagersData] = useState([]);
+  const [executivesData, setExecutivesData] = useState([]);
   
   
   useEffect(() => {
@@ -35,37 +35,44 @@ const InspectionDetails = () => {
       .where("propertyId", "==", inspectionDoc.propertyId)
       .onSnapshot(
         async (snapshot) => {
-          let ownerId = null;
-          let coOwnerId = null;
-          let managerId = null;
-          let executiveId = null;
+          let ownerIds = [];
+          let coOwnerIds = [];
+          let managerIds = [];
+          let executiveIds = [];
   
           snapshot.forEach((doc) => {
             const userData = doc.data();
-            if (userData.userTag === "Owner") ownerId = userData.userId;
-            if (userData.userTag === "Co-Owner") coOwnerId = userData.userId;
-            if (userData.userTag === "Manager") managerId = userData.userId;
-            if (userData.userTag === "Executive") executiveId = userData.userId;
+            if (userData.userTag === "Owner") ownerIds.push(userData.userId);
+            if (userData.userTag === "Co-Owner") coOwnerIds.push(userData.userId);
+            if (userData.userTag === "Manager") managerIds.push(userData.userId);
+            if (userData.userTag === "Executive") executiveIds.push(userData.userId);
           });
   
-          // ✅ Function to fetch single user details
-          const fetchUserData = async (userId) => {
-            if (!userId) return null;
-            const docSnap = await projectFirestore.collection("users-propdial").doc(userId).get();
-            return docSnap.exists ? { id: docSnap.id, ...docSnap.data() } : null;
+          // ✅ Fetch user details using document IDs
+          const fetchUserData = async (userIds) => {
+            if (userIds.length === 0) return [];
+            
+            const userDataArray = await Promise.all(
+              userIds.map(async (id) => {
+                const docSnap = await projectFirestore.collection("users-propdial").doc(id).get();
+                return docSnap.exists ? { id: docSnap.id, ...docSnap.data() } : null;
+              })
+            );
+  
+            return userDataArray.filter(user => user !== null); // Remove null values
           };
   
-          // 🔥 Fetch all user details
-          const ownerData = await fetchUserData(ownerId);
-          const coOwnerData = await fetchUserData(coOwnerId);
-          const managerData = await fetchUserData(managerId);
-          const executiveData = await fetchUserData(executiveId);
+          // 🔥 Fetch all user data
+          const ownersData = await fetchUserData(ownerIds);
+          const coOwnersData = await fetchUserData(coOwnerIds);
+          const managersData = await fetchUserData(managerIds);
+          const executivesData = await fetchUserData(executiveIds);
   
-          // ✅ Set individual states
-          setOwnerData(ownerData);
-          setCoOwnerData(coOwnerData);
-          setManagerData(managerData);
-          setExecutiveData(executiveData);
+          // ✅ Update states
+          setOwnersData(ownersData);
+          setCoOwnersData(coOwnersData);
+          setManagersData(managersData);
+          setExecutivesData(executivesData);
         },
         (error) => {
           console.error("❌ Error fetching property users:", error);
@@ -74,6 +81,12 @@ const InspectionDetails = () => {
   
     return () => unsubscribe(); // Cleanup
   }, [inspectionDoc]);
+  
+  console.log("ownersData", ownersData);
+  console.log("coOwnersData", coOwnersData);
+  console.log("managersData", managersData);
+  console.log("executivesData", executivesData);
+  
   
   // get owner and executive detail code end 
   
@@ -291,29 +304,35 @@ const InspectionDetails = () => {
                     </>
                   )}
                 </Link>
-{ownerData && (
+                {ownersData?.length > 0 && (
   <div className="dc_single">
-  <h2>Property Owner</h2>
-  <h5>{ownerData.fullName}</h5>
-  <h6>  {ownerData.phoneNumber.replace(
+    <h2>Property Owner</h2>
+    <h5>{ownersData[0].fullName}</h5>
+    <h6>
+      {ownersData[0].phoneNumber.replace(
         /(\d{2})(\d{5})(\d{5})/,
         "+$1 $2-$3"
-      )}</h6>
-  <h6>{ownerData.email}</h6>
-</div>
+      )}
+    </h6>
+    <h6>{ownersData[0].email}</h6>
+  </div>
 )}
+
               
-              {executiveData && (
+{executivesData?.length > 0 && (
   <div className="dc_single">
-  <h2>Executive</h2>
-  <h5>{executiveData.fullName}</h5>
-  <h6>  {executiveData.phoneNumber.replace(
+    <h2>Executive</h2>
+    <h5>{executivesData[0].fullName}</h5>
+    <h6>
+      {executivesData[0].phoneNumber.replace(
         /(\d{2})(\d{5})(\d{5})/,
         "+$1 $2-$3"
-      )}</h6>
-  <h6>{executiveData.email}</h6>
-</div>
+      )}
+    </h6>
+    <h6>{executivesData[0].email}</h6>
+  </div>
 )}
+
               </div>
               <div className="vg22"></div>
               <div className="tenant_card ">

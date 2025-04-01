@@ -128,7 +128,7 @@
       gap: 22px;
       flex-wrap: wrap;
       .active_inactive {
-        width: 30%;
+        width: 290px;
         .blue_single {
           width: 100%;
           .theme_radio_container {
@@ -196,15 +196,21 @@
         gap: 15px;
         margin-top: 12px;
       }
+
       .p_info_single {
         width: 18%;
         h5 {
           text-transform: capitalize;
         }
       }
+      &.onboarded_card{
+        .p_info_single {
+          width: 25%;         
+        }
+      }
       .for_ref {
         .p_info_single {
-          width: 32%;
+          width: 30%;
           &.address {
             width: 65%;
           }
@@ -334,8 +340,60 @@
     min-height: auto;
     padding: 0px;
     width: 100%;
+    .property_card_single {
+      .p_info_single {
+        width: 30%;         
+      }
+     
+      
+    }
    
 }
+  }
+}
+@media only screen and (max-width: 767px) {
+  .user_detail_pg { 
+    .detail_info {  
+     .card_blue_divider {   
+        margin-top: 15px;
+        gap: 15px;  
+        .blue_single {
+          h5 {
+            font-size: 14px;
+          }
+          h6{
+            font-size: 14px;
+          }
+        }  
+        .active_inactive {
+          width: 272px;
+        }    
+    }
+      .property_card_single {
+        .p_info_single {
+          width: 47%;         
+        }
+        &.onboarded_card{
+          .p_info_single {
+            width: 47%;         
+          }
+        }
+        .for_ref {
+          .p_info_single {
+            width: 47%;
+            &.address {
+              width: 100%;
+            }
+          
+          }
+        }
+      }
+      .employee_docs {  
+        grid-template-columns: repeat(1, 1fr);
+        gap: 15px;
+    }
+    
+    }
   }
 }
 /* For Webkit-based browsers (Chrome, Edge, Safari) */

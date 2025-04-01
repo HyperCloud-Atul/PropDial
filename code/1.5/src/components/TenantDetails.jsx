@@ -292,6 +292,7 @@ const TenantDetails = () => {
       { id: "aadhar", value: "Aadhar Card", label: "Aadhar Card" },
       { id: "pan_card", value: "Pan Card", label: "Pan Card" },
       { id: "voter_id", value: "Voter ID", label: "Voter ID" },
+      { id: "passport", value: "Passport", label: "Passport" },
       {
         id: "driving_licence",
         value: "Driving Licence",

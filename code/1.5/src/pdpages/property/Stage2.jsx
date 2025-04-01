@@ -2830,7 +2830,7 @@ const Stage2 = (props) => {
                 <label htmlFor="">Rooms</label>
                 <div className="increase_input_parent">
                   <div className="plus_minus_input_wrapper">
-                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Rooms</span> : <span className="pmi_label">Bedrooms</span>}
+                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Rooms</span> : <span className="pmi_label">Bedroom</span>}
                     <div className="plus_minus_input">
                       <div
                         className="left-minus-button pmbutton"
@@ -2860,7 +2860,7 @@ const Stage2 = (props) => {
                     </div>
                   </div>
                   <div className="plus_minus_input_wrapper">
-                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bathrooms</span>}
+                    {propertyDetails.Category === 'Commercial' ? <span className="pmi_label">Toilets</span> : <span className="pmi_label">Bathroom</span>}
                     <div className="plus_minus_input">
                       <div
                         className="left-minus-button pmbutton"
