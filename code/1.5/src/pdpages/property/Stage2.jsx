@@ -2251,9 +2251,9 @@ const Stage2 = (props) => {
               <label htmlFor="">Property Readiness</label>
               <div
                 className="radio_group"
-                style={{ display: "flex", alignItems: "center" }}
+                style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}
               >
-                <div className="radio_group_single" style={{ width: "100%" }}>
+                <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Readiness === "Ready to Move-In"
                       ? "radiochecked"
@@ -2284,7 +2284,7 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ width: "100%" }}>
+                <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Readiness === "Under Construction"
                       ? "radiochecked"
@@ -2327,40 +2327,9 @@ const Stage2 = (props) => {
               <label htmlFor="">Furnishing</label>
               <div
                 className="radio_group"
-                style={{ display: "flex", alignItems: "center" }}
+                style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}
               >
-                <div className="radio_group_single" style={{ width: "100%" }}>
-                  <div
-                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi-Furnished"
-                      ? "radiochecked"
-                      : ""
-                      }`}
-                  >
-                    <input
-                      type="radio"
-                      name="group_furnishing"
-                      id="semi_furnished"
-                      onClick={(e) => {
-                        setPropertyDetails({
-                          ...propertyDetails,
-                          Furnishing: "Semi-Furnished",
-                        });
-                      }}
-                    />
-                    <label htmlFor="semi_furnished">
-                      <div className="radio_icon">
-                        <span className="material-symbols-outlined add">
-                          add
-                        </span>
-                        <span className="material-symbols-outlined check">
-                          done
-                        </span>
-                      </div>
-                      <h6>Semi-Furnished</h6>
-                    </label>
-                  </div>
-                </div>
-                <div className="radio_group_single" style={{ width: "100%" }}>
+                 <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully-Furnished"
                       ? "radiochecked"
@@ -2391,7 +2360,39 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-                <div className="radio_group_single" style={{ width: "100%" }}>
+                <div className="radio_group_single">
+                  <div
+                    className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Semi-Furnished"
+                      ? "radiochecked"
+                      : ""
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="group_furnishing"
+                      id="semi_furnished"
+                      onClick={(e) => {
+                        setPropertyDetails({
+                          ...propertyDetails,
+                          Furnishing: "Semi-Furnished",
+                        });
+                      }}
+                    />
+                    <label htmlFor="semi_furnished">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6>Semi-Furnished</h6>
+                    </label>
+                  </div>
+                </div>
+               
+                <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Unfurnished"
                       ? "radiochecked"

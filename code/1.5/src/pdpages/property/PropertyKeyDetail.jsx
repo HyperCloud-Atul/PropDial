@@ -165,7 +165,7 @@ const PropertyKeyDetail = () => {
   const addOrUpdatePropertyKey = async () => {
     if (keyRows.some((row) => !row.keyFor || !row.numberOfKey)) {
       alert(
-        "Key name, key number and number of key are required for each row!"
+        "Key name and number of key are required for each row!"
       );
       return;
     }
@@ -327,7 +327,7 @@ const PropertyKeyDetail = () => {
                                         );
                                       }
                                     }}
-                                    placeholder="Key number*"
+                                    placeholder="Key number"
                                     className="w-100"
                                   />
                                 </div>
@@ -531,7 +531,7 @@ const PropertyKeyDetail = () => {
                                   Key Num:{" "}
                                   {keySingle.keyNumber
                                     ? keySingle.keyNumber
-                                    : "No key number"}
+                                    : ""}
                                 </h6>
                               </div>
                               <div className="right">

@@ -273,6 +273,7 @@ const PropertyUtilityBills = () => {
       label: "Common Area Maintenance (CAM)",
     },
     { id: "electricity", value: "Electricity", label: "Electricity" },
+    { id: "electricityandusagecharges", value: "Electricity and Usage Charges", label: "Electricity and Usage Charges" },
     {
       id: "electricitywater",
       value: "Electricity & Water",
@@ -717,6 +718,8 @@ const PropertyUtilityBills = () => {
                             alt="propdial"
                           />
                         ) : doc.billType === "Common Area Electricity (CAE)" ||
+                        doc.billType === "Electricity and Usage Charges"                        
+                        ||
                           doc.billType.toLowerCase() === "electricity" ? (
                           <img
                             src="/assets/img/icons/electicitybill.png"

@@ -222,7 +222,7 @@ export default function PropertyLayoutComponent(props) {
                               marginBottom: "8px",
                             }}
                           >
-                            Select Room Type*
+                            Select Type*
                           </h6>
                   <div className="field_box theme_radio_new">
                                     
@@ -491,7 +491,7 @@ export default function PropertyLayoutComponent(props) {
                               marginBottom: "8px",
                             }}
                           >
-                            Room Name*
+                            Name*
                           </h6>
                     <input
                       type="text"
@@ -518,7 +518,7 @@ export default function PropertyLayoutComponent(props) {
                                 marginBottom: "8px",
                               }}
                             >
-                              Room Length* <span style={{
+                              Length* <span style={{
                                 fontSize: "12px",
                               }}>(In Feet)</span>
                             </h6>
@@ -555,7 +555,7 @@ export default function PropertyLayoutComponent(props) {
                               marginBottom: "8px",
                             }}
                           >
-                            Room Width* <span style={{
+                            Width* <span style={{
                               fontSize: "12px",
                             }}>(In Feet)</span>
                           </h6>
