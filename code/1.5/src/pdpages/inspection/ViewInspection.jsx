@@ -742,12 +742,16 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                             <div className="dates">
                               <div className="date_single">
                                 <strong>At</strong>:{" "}
-                                <span>
+                                {iDoc.lastUpdatedAt ? (<span>
+                                  {format(iDoc.lastUpdatedAt.toDate(), "dd-MMM-yy")}
+                                </span>) : (<span>
                                   {format(iDoc.createdAt.toDate(), "dd-MMM-yy")}
-                                </span>
+                                </span>)}
+                                
                               </div>
                               <div className="date_single">
                                 <strong>By</strong>:{" "}
+                                
                                 <span>
                                   {dbUserState &&
                                     dbUserState.find(

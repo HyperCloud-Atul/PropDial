@@ -9,8 +9,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import './Inspection-report.scss'
-const InspectionDetails = () => {
+const InspectionDetailsOld = () => {
   const navigate = useNavigate();
   const { inspectionid } = useParams(); // Get ID from URL
   const reportRef = useRef(); // Reference for capturing UI
@@ -619,4 +618,4 @@ Bill Website Link 👈
   );
 };
 
-export default InspectionDetails;
+export default InspectionDetailsOld;

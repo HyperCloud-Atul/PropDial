@@ -7,6 +7,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { projectFirestore, timestamp } from "../../firebase/config";
 import firebase from "firebase";
 import { projectStorage } from "../../firebase/config";
+import { useCallback } from "react";
 import { useDocument } from "../../hooks/useDocument";
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
@@ -33,10 +34,8 @@ const AddInspection = () => {
   const [propertyerror, setPropertyError] = useState(null);
   const [inspectionType, setInspectionType] = useState("");
   const [activeInspection, setActiveInspection] = useState("layout");
-    const { document: inspectionDocument, error: inspectionDocumentError } = useDocument(
-      "inspections",
-      inspectionId
-    );
+  const { document: inspectionDocument, error: inspectionDocumentError } =
+    useDocument("inspections", inspectionId);
 
   useEffect(() => {
     if (!propertyId) return; // Agar propertyId na ho toh return kar do
@@ -118,6 +117,7 @@ const AddInspection = () => {
                   seepageRemark: "",
                   termites: "",
                   termitesRemark: "",
+                  thisLayoutUpdateAt: timestamp.now(),
                   otherIssue: "",
                   otherIssueRemark: "",
                   generalRemark: "",
@@ -140,13 +140,13 @@ const AddInspection = () => {
   const handleImageUpload = async (e, roomId) => {
     const file = e.target.files[0];
     if (!file) return;
-    
-  // Allowed image formats
-  const allowedTypes = ["image/jpeg", "image/png"];
-  if (!allowedTypes.includes(file.type)) {
-    alert("Only JPG and PNG files are allowed.");
-    return;
-  }
+
+    // Allowed image formats
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Only JPG and PNG files are allowed.");
+      return;
+    }
 
     setImageActionStatus("uploading");
 
@@ -290,7 +290,6 @@ const AddInspection = () => {
   //   if (filledFields === 9) className += " full";
   //   else if (filledFields > 0) className += " half";
   //   if (roomId === activeRoom) className += " active";
-    
 
   //   return className;
   // };
@@ -298,7 +297,7 @@ const AddInspection = () => {
   const getRoomClass = (roomId, field) => {
     const room = inspectionData[roomId];
     let className = "room-button";
-  
+
     // If isAllowForInspection is "no", only add "notallowed" class
     if (room.isAllowForInspection === "no") {
       className += " notallowed";
@@ -315,35 +314,37 @@ const AddInspection = () => {
         room.cleanRemark,
         room.images?.length > 0,
       ].filter(Boolean).length;
-  
+
       if (filledFields === 8) className += " full";
       else if (filledFields > 0) className += " half";
 
-        // Add class for each individual field
-    if (room[field]) {
-      className += ` filled`;
-    } else {
-      className += ` notfilled`;
+      // Add class for each individual field
+      if (room[field]) {
+        className += ` filled`;
+      } else {
+        className += ` notfilled`;
+      }
     }
-    }
-  
+
     // Add 'active' if this roomId matches activeRoom
     if (roomId === activeRoom) className += " active";
-  
+
     return className;
   };
 
   const getFieldClass = (roomId, field) => {
     const roomData = inspectionData?.[roomId] || {};
-  
+
     if (field === "image") {
-      return roomData.images && roomData.images.length > 0 ? "filled" : "notfilled";
+      return roomData.images && roomData.images.length > 0
+        ? "filled"
+        : "notfilled";
     }
-  
-    return roomData[field] && roomData[field].trim() !== "" ? "filled" : "notfilled";
+
+    return roomData[field] && roomData[field].trim() !== ""
+      ? "filled"
+      : "notfilled";
   };
-  
-  
 
   const isFinalSubmitEnabled = () => {
     return (
@@ -354,7 +355,7 @@ const AddInspection = () => {
           // return true;
           return room.generalRemark;
         }
-  
+
         // For allowed rooms, perform field validation
         return (
           room.seepage &&
@@ -371,16 +372,50 @@ const AddInspection = () => {
     );
   };
 
-  // general remark ko no krne pr remark ko mandatory krna 
+  // code for check is all layoutinsection done or not start
+  const [layoutInspectionDone, setLayoutInspectionDone] = useState(false);
+
+  const isAllLayoutInspectionDone = useCallback(() => {
+    const allRoomsInspected = Object.values(inspectionData).every((room) => {
+      if (room.isAllowForInspection === "no") {
+        return Boolean(room.generalRemark); // Ensures generalRemark is truthy
+      }
+
+      return (
+        Boolean(room.seepage) &&
+        Boolean(room.termites) &&
+        Boolean(room.otherIssue) &&
+        Boolean(room.seepageRemark) &&
+        Boolean(room.termitesRemark) &&
+        Boolean(room.otherIssueRemark) &&
+        Boolean(room.cleanRemark) &&
+        room.images?.length > 0 // Ensures at least 1 image uploaded
+      );
+    });
+
+    if (layoutInspectionDone !== allRoomsInspected) {
+      setLayoutInspectionDone(allRoomsInspected); // Update state only if needed
+    }
+
+    return allRoomsInspected;
+  }, [inspectionData, layoutInspectionDone]);
+
+  useEffect(() => {
+    isAllLayoutInspectionDone();
+  }, [inspectionData]);
+
+  // code for check is all layoutinsection done or not end
+
+  // general remark ko no krne pr remark ko mandatory krna
   // const isFinalSubmitEnabled = () => {
   //   if (!allBillInspectionComplete) return false; // Ensure all bill inspections are done
-  
+
   //   return Object.values(inspectionData).every((room) => {
   //     const isNotAllowed = room.isAllowForInspection === "no";
-      
+
   //     // If inspection is not allowed, only 'remark' is required
   //     if (isNotAllowed) return room.generalRemark?.trim() !== "";
-  
+
   //     // If inspection is allowed, check all required fields
   //     const requiredFields = [
   //       room.seepage,
@@ -393,13 +428,10 @@ const AddInspection = () => {
   //       room.cleanRemark,
   //       room.images?.length > 0,
   //     ];
-  
+
   //     return requiredFields.every(Boolean);
   //   });
   // };
-  
-  
-  
 
   const handleSave = async () => {
     setIsDataSaving(true);
@@ -412,6 +444,7 @@ const AddInspection = () => {
           rooms: Object.values(inspectionData),
           lastUpdatedAt: timestamp.now(),
           lastUpdatedBy: user.uid,
+          layoutInspectionDone,
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
             updatedBy: user.uid,
@@ -436,6 +469,7 @@ const AddInspection = () => {
         .update({
           rooms: Object.values(inspectionData),
           finalSubmit: true,
+          layoutInspectionDone,
           updatedAt: timestamp.now(),
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
@@ -484,6 +518,7 @@ const AddInspection = () => {
 
         const billsData = billsSnapshot.docs.map((doc) => ({
           id: doc.id,
+          billDocId: doc.id,
           billType: doc.data().billType,
           billId: doc.data().billId,
           authorityName: doc.data().authorityName,
@@ -563,8 +598,7 @@ const AddInspection = () => {
       });
 
     setAllBillInspectionComplete(allBillInspectionFull);
-}, [bills, billInspectionData]);
-
+  }, [bills, billInspectionData]);
 
   // Function to calculate the progress-based class for a bill button
   // const getBillButtonClass = (bill) => {
@@ -599,106 +633,105 @@ const AddInspection = () => {
   // };
   // const getBillButtonClass = (bill) => {
   //   const billData = billInspectionData?.[bill.id] || {};
-  
+
   //   // Checking availability
   //   const isAvailable = billData.isBillAvailable;
   //   const hasRemark = billData.remark?.trim() !== "";
-  
+
   //   // Only check amount if bill is available
   //   const amountValid = isAvailable === "yes" ? billData.amount && billData.amount > 0 : true;
-  
+
   //   // If isAvailable is "no", only remark needs to be filled
   //   const isAllFieldsFilled = isAvailable !== undefined && amountValid && hasRemark;
-  
+
   //   const isAnyFieldFilled = isAvailable !== undefined || hasRemark || billData.amount;
-  
+
   //   let className = "room-button";
-  
+
   //   if (isAllFieldsFilled) {
   //     className += " full"; // Sabhi fields bharne par full class
   //   } else if (isAnyFieldFilled) {
   //     className += " half"; // Koi bhi ek field bharne par half class
   //   }
-  
+
   //   if (selectedBill?.id === bill.id) {
   //     className += " active";
   //   }
-  
+
   //   return className;
   // };
   // const getBillButtonClass = (bill) => {
   //   const billData = billInspectionData?.[bill.id] || {};
-  
+
   //   // Checking availability
   //   const isAvailable = billData.isBillAvailable; // 'yes' or 'no'
   //   const hasRemark = billData.remark?.trim() !== "";
-  
+
   //   // Check amount only if available is 'yes'
   //   const amountValid = isAvailable === "yes" ? billData.amount && billData.amount > 0 : true;
-  
+
   //   // Final logic for all fields filled
   //   const isAllFieldsFilled =
   //     isAvailable !== undefined && // Ensure availability is selected
   //     hasRemark && // Remark must be filled
   //     (isAvailable === "no" || amountValid); // Amount check only when 'yes'
-  
+
   //   const isAnyFieldFilled = isAvailable !== undefined || hasRemark || billData.amount;
-  
+
   //   let className = "room-button";
-  
+
   //   if (isAllFieldsFilled) {
   //     className += " full"; // All required fields are filled
   //   } else if (isAnyFieldFilled) {
   //     className += " half"; // Some fields are filled
   //   }
-  
+
   //   if (selectedBill?.id === bill.id) {
   //     className += " active";
   //   }
-  
+
   //   return className;
   // };
-  
-  
-  
 
   // Save Data
   const getBillButtonClass = (bill) => {
     const billData = billInspectionData?.[bill.id] || {};
-  
+
     // Check if amount and remark are valid
     const amountValid = billData.amount && billData.amount; // Amount must be greater than 0
     const hasRemark = billData.remark && billData.remark.trim() !== ""; // Remark must not be empty
-  
+
     // Check if all required fields are filled
     const isAllFieldsFilled = amountValid && hasRemark;
-  
+
     // Check if any field is filled
     const isAnyFieldFilled = amountValid || hasRemark;
-  
+
     let className = "room-button";
-  
+
     if (isAllFieldsFilled) {
       className += " full"; // Sabhi fields bharne par full class
     } else if (isAnyFieldFilled) {
       className += " half"; // Koi bhi ek field bharne par half class
     }
-  
+
     if (selectedBill?.id === bill.id) {
       className += " active"; // Active class for selected bill
     }
-  
+
     return className;
   };
   const getBillFieldClass = (billId, field) => {
     const billData = billInspectionData?.[billId] || {};
-    return billData[field] && billData[field].trim() !== "" ? "filled" : "notfilled";
+    return billData[field] && billData[field].trim() !== ""
+      ? "filled"
+      : "notfilled";
   };
-  
+
   // const handleBillImageUpload = async (e, billId) => {
   //   const file = e.target.files[0];
   //   if (!file) return;
-  
+
   //   try {
   //     // Compress the image
   //     const compressedFile = await imageCompression(file, {
@@ -706,12 +739,12 @@ const AddInspection = () => {
   //       maxWidthOrHeight: 1024, // Resize image if required
   //       useWebWorker: true, // Use web worker for better performance
   //     });
-  
+
   //     // Generate file path
   //     const filePath = `billImages/${billId}-${Date.now()}`;
   //     const storageRef = projectStorage.ref(filePath);
   //     const uploadTask = storageRef.put(compressedFile);
-  
+
   //     uploadTask.on(
   //       "state_changed",
   //       null,
@@ -720,7 +753,7 @@ const AddInspection = () => {
   //         try {
   //           // Get download URL once upload is complete
   //           const url = await storageRef.getDownloadURL();
-  
+
   //           // Update the selected bill with the image URL
   //           setBillInspectionData((prevData) => ({
   //             ...prevData,
@@ -738,20 +771,20 @@ const AddInspection = () => {
   //     console.error("Image compression error:", error);
   //   }
   // };
-  
+
   // const handleBillImageDelete = async (billId) => {
   //   const billData = billInspectionData?.[billId];
   //   const imageUrl = billData?.imageUrl;
-  
+
   //   if (!imageUrl) return;
-  
+
   //   try {
   //     const filePath = decodeURIComponent(
   //       imageUrl.split("/").slice(-1)[0].split("?")[0]
   //     );
   //     const storageRef = projectStorage.ref(filePath);
   //     await storageRef.delete();
-  
+
   //     // Remove the image URL from the bill data
   //     setBillInspectionData((prevData) => ({
   //       ...prevData,
@@ -764,8 +797,7 @@ const AddInspection = () => {
   //     console.error("Error deleting image:", error);
   //   }
   // };
-  
-  
+
   // const handleSaveBill = async () => {
   //   if (!selectedBill) return;
 
@@ -811,9 +843,9 @@ const AddInspection = () => {
 
   // const handleSaveBill = async () => {
   //   if (!selectedBill) return;
-  
+
   //   setIsBillDataSaving(true);
-  
+
   //   try {
   //     const updatedBillData = {
   //       billId: selectedBill.billId,
@@ -829,19 +861,19 @@ const AddInspection = () => {
   //         updatedBy: user.uid,
   //       }),
   //     };
-  
+
   //     await projectFirestore
   //       .collection("inspections")
   //       .doc(inspectionId)
   //       .update({
   //         [`bills.${selectedBill.id}`]: updatedBillData,
   //       });
-  
+
   //     setBillInspectionData((prevData) => ({
   //       ...prevData,
   //       [selectedBill.id]: updatedBillData,
   //     }));
-  
+
   //     setAfterSaveModal(true);
   //   } catch (error) {
   //     console.error("Error saving bill data:", error);
@@ -861,18 +893,18 @@ const AddInspection = () => {
     }
     try {
       setImageActionStatus("uploading"); // Start uploading modal
-  
+
       // Compress the image
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 1,
         maxWidthOrHeight: 1024,
         useWebWorker: true,
       });
-  
+
       const filePath = `billImages/${billId}-${Date.now()}`;
       const storageRef = projectStorage.ref(filePath);
       const uploadTask = storageRef.put(compressedFile);
-  
+
       uploadTask.on(
         "state_changed",
         null,
@@ -902,21 +934,21 @@ const AddInspection = () => {
       setImageActionStatus(null); // Hide modal on error
     }
   };
-  
+
   const handleBillImageDelete = async (billId) => {
     const billData = billInspectionData?.[billId];
     const imageUrl = billData?.imageUrl;
     if (!imageUrl) return;
-  
+
     try {
       setImageActionStatus("deleting"); // Start deleting modal
-  
+
       const filePath = decodeURIComponent(
         imageUrl.split("/").slice(-1)[0].split("?")[0]
       );
       const storageRef = projectStorage.ref(filePath);
       await storageRef.delete();
-  
+
       setBillInspectionData((prevData) => ({
         ...prevData,
         [billId]: {
@@ -924,7 +956,7 @@ const AddInspection = () => {
           imageUrl: "",
         },
       }));
-  
+
       setImageActionStatus(null); // Hide modal on success
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -932,33 +964,137 @@ const AddInspection = () => {
     }
   };
 
+  // const handleSaveBill = async () => {
+  //   if (!bills.length) return;
+
+  //   setIsBillDataSaving(true);
+
+  //   try {
+  //     const updatedBills = {};
+
+  //     bills.forEach((bill) => {
+  //       if (billInspectionData[bill.id]) {
+  //         updatedBills[`bills.${bill.id}`] = {
+  //           ...billInspectionData[bill.id],
+  //           lastUpdatedAt: timestamp.now(),
+  //           lastUpdatedBy: user.uid,
+  //           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+  //             updatedAt: timestamp.now(),
+  //             updatedBy: user.uid,
+  //           }),
+  //         };
+  //       }
+  //     });
+
+  //     await projectFirestore
+  //       .collection("inspections")
+  //       .doc(inspectionId)
+  //       .update(updatedBills);
+
+  //     setAfterSaveModal(true);
+  //   } catch (error) {
+  //     console.error("Error saving all bill data:", error);
+  //   } finally {
+  //     setIsBillDataSaving(false);
+  //   }
+  // };
+
+  // const handleSaveBill = async () => {
+  //   if (!bills.length) return;
+
+  //   setIsBillDataSaving(true);
+
+  //   try {
+  //     const updatedBills = { ...billInspectionData };
+
+  //     bills.forEach((bill) => {
+  //       updatedBills[bill.id] = {
+  //         ...(billInspectionData[bill.id] || {}),
+  //         billId: bill.billId,
+  //         billDocId: bill.billDocId,
+  //         billType: bill.billType,
+  //         authorityName: bill.authorityName,
+  //         billWebsiteLink: bill.billWebsiteLink,
+  //         billUpdatedAt: timestamp.now(),
+  //         billUpdatedBy: user.uid,
+
+  //       };
+  //     });
+
+  //     await projectFirestore
+  //       .collection("inspections")
+  //       .doc(inspectionId)
+  //       .update({
+  //         bills: updatedBills, // ✅ Object format maintain kiya
+  //         lastUpdatedAt: timestamp.now(),
+  //         lastUpdatedBy: user.uid,
+  //         allBillInspectionComplete,
+  //         updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+  //           updatedAt: timestamp.now(),
+  //           updatedBy: user.uid,
+  //         }),
+  //       });
+
+  //     setAfterSaveModal(true);
+  //   } catch (error) {
+  //     console.error("Error saving all bill data:", error);
+  //   } finally {
+  //     setIsBillDataSaving(false);
+  //   }
+  // };
 
   const handleSaveBill = async () => {
-    if (!bills.length) return;
+    if (!bills.length) return; // 🔹 Agar koi bill hi nahi hai to kuch mat karo
   
     setIsBillDataSaving(true);
   
     try {
-      const updatedBills = {};
+      const updatedBills = { ...billInspectionData }; // 🔹 Pehle ka data preserve karein
   
       bills.forEach((bill) => {
-        if (billInspectionData[bill.id]) {
-          updatedBills[`bills.${bill.id}`] = {
-            ...billInspectionData[bill.id],
-            lastUpdatedAt: timestamp.now(),
-            lastUpdatedBy: user.uid,
-            updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-              updatedAt: timestamp.now(),
-              updatedBy: user.uid,
-            }),
-          };
+        const prevBillData = billInspectionData[bill.id] || {}; // 🔹 Existing data
+        const newBillData = {
+          billId: bill.billId,
+          billDocId: bill.billDocId,
+          billType: bill.billType,
+          authorityName: bill.authorityName,
+          billWebsiteLink: bill.billWebsiteLink,
+        };
+  
+        // ✅ **Sirf wahi fields update karo jo change hui hain**
+        const changedFields = {};
+        Object.keys(newBillData).forEach((key) => {
+          if (newBillData[key] !== prevBillData[key]) {
+            changedFields[key] = newBillData[key];
+          }
+        });
+  
+        // ✅ **Agar koi field change hui hai to `thisBillUpdatedAt` aur `thisBillUpdatedBy` bhi update ho**
+        if (Object.keys(changedFields).length > 0) {
+          changedFields.thisBillUpdatedAt = timestamp.now();
+          changedFields.thisBillUpdatedBy = user.uid;
         }
+  
+        updatedBills[bill.id] = {
+          ...(prevBillData || {}), // 🔹 Pehle ka data rakho
+          ...changedFields, // 🔹 Sirf changed fields update ho
+        };
       });
   
+      // ✅ **Firestore me saara data update ho ek saath**
       await projectFirestore
         .collection("inspections")
         .doc(inspectionId)
-        .update(updatedBills);
+        .update({
+          bills: updatedBills, // ✅ **Pura `bills` object update ho raha hai**
+          lastUpdatedAt: timestamp.now(),
+          lastUpdatedBy: user.uid,
+          allBillInspectionComplete,
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.uid,
+          }),
+        });
   
       setAfterSaveModal(true);
     } catch (error) {
@@ -968,16 +1104,43 @@ const AddInspection = () => {
     }
   };
 
+  
 
-  // if final submit redirect to viewall inspection page 
-
+  // if final submit redirect to viewall inspection page
   useEffect(() => {
     if (inspectionDocument?.finalSubmit) {
       navigate(`/inspection/${propertyId}`);
     }
   }, [inspectionDocument?.finalSubmit, navigate]);
-  
 
+  // fetch realtime database data of inspection
+  const [inspectionDatabaseData, setInspectionDatabaseData] = useState(null); // 🔹 Firestore data store karega
+
+  useEffect(() => {
+    if (!inspectionId) return; // ✅ Agar `inspectionId` nahi hai to kuch mat karo
+  
+    const timeoutId = setTimeout(() => {
+      const unsubscribe = projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .onSnapshot(
+          (doc) => {
+            if (doc.exists) {
+              setInspectionDatabaseData(doc.data()); // ✅ Real-time update hoga
+            } else {
+              console.warn("Inspection document not found.");
+            }
+          },
+          (error) => {
+            console.error("Error fetching real-time inspection data:", error);
+          }
+        );
+  
+      return () => unsubscribe(); // ✅ Cleanup function for memory optimization
+    }, 3000); // ⏳ **3-second delay**
+  
+    return () => clearTimeout(timeoutId); // ✅ Cleanup timeout on unmount
+  }, [inspectionId]); // 🔥 Jab bhi `inspectionId` change hoga, ye effect trigger hoga
   
 
   return (
@@ -1008,19 +1171,22 @@ const AddInspection = () => {
                     <div className="inspection_type_buttons">
                       <button
                         onClick={() => setActiveInspection("layout")}
-                        className={` ${
-                          activeInspection === "layout" ? "active" : ""
-                        }`}
+                        className={`${
+                          activeInspection === "layout" ? "active " : ""
+                        }${layoutInspectionDone ? "done" : ""}`}
                       >
                         Layout Inspection
+                        <img src="/assets/img/icons/check-mark.png" alt="" />
                       </button>
+
                       <button
                         onClick={() => setActiveInspection("bill")}
-                        className={` ${
-                          activeInspection === "bill" ? "active" : ""
-                        }`}
+                        className={`${
+                          activeInspection === "bill" ? "active " : ""
+                        }${allBillInspectionComplete ? "done" : ""}`}
                       >
                         Bill Inspection
+                        <img src="/assets/img/icons/check-mark.png" alt="" />
                       </button>
                     </div>
                   </div>
@@ -1087,7 +1253,15 @@ const AddInspection = () => {
                               </svg>
                             </div>
                             <div className="bi_icon notallowed">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FA6262"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L228-676q-33 42-50.5 92T160-480q0 134 93 227t227 93Zm252-124q33-42 50.5-92T800-480q0-134-93-227t-227-93q-54 0-104 17.5T284-732l448 448Z"/></svg>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                height="24px"
+                                viewBox="0 -960 960 960"
+                                width="24px"
+                                fill="#FA6262"
+                              >
+                                <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L228-676q-33 42-50.5 92T160-480q0 134 93 227t227 93Zm252-124q33-42 50.5-92T800-480q0-134-93-227t-227-93q-54 0-104 17.5T284-732l448 448Z" />
+                              </svg>
                             </div>
                           </div>
                           <div className="btn_text">
@@ -1113,7 +1287,10 @@ const AddInspection = () => {
                           <div className="row row_gap_20">
                             <div className="col-xl-3 col-md-6">
                               <div
-                                className={`form_field w-100 ${getFieldClass(activeRoom, "isAllowForInspection")}`}
+                                className={`form_field w-100 ${getFieldClass(
+                                  activeRoom,
+                                  "isAllowForInspection"
+                                )}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
@@ -1186,7 +1363,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                  className={`form_field w-100 ${getFieldClass(activeRoom, "seepage")}`}
+                                  className={`form_field w-100 ${getFieldClass(
+                                    activeRoom,
+                                    "seepage"
+                                  )}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
@@ -1261,7 +1441,10 @@ const AddInspection = () => {
                                         <div className="vg12"></div>
                                         <textarea
                                           placeholder="Seepage Remark*"
-                                          className={`w-100 ${getFieldClass(activeRoom, "seepageRemark")}`}
+                                          className={`w-100 ${getFieldClass(
+                                            activeRoom,
+                                            "seepageRemark"
+                                          )}`}
                                           value={
                                             inspectionData[activeRoom]
                                               ?.seepageRemark || ""
@@ -1284,7 +1467,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                   className={`form_field w-100 ${getFieldClass(activeRoom, "termites")}`}
+                                  className={`form_field w-100 ${getFieldClass(
+                                    activeRoom,
+                                    "termites"
+                                  )}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
@@ -1364,7 +1550,10 @@ const AddInspection = () => {
                                             inspectionData[activeRoom]
                                               ?.termitesRemark || ""
                                           }
-                                          className={`w-100 ${getFieldClass(activeRoom, "termitesRemark")}`}
+                                          className={`w-100 ${getFieldClass(
+                                            activeRoom,
+                                            "termitesRemark"
+                                          )}`}
                                           onChange={(e) =>
                                             handleChange(
                                               activeRoom,
@@ -1383,7 +1572,10 @@ const AddInspection = () => {
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
                                 <div
-                                   className={`form_field w-100 ${getFieldClass(activeRoom, "otherIssue")}`}
+                                  className={`form_field w-100 ${getFieldClass(
+                                    activeRoom,
+                                    "otherIssue"
+                                  )}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
@@ -1462,7 +1654,10 @@ const AddInspection = () => {
                                             inspectionData[activeRoom]
                                               ?.otherIssueRemark || ""
                                           }
-                                          className={`w-100 ${getFieldClass(activeRoom, "otherIssueRemark")}`}
+                                          className={`w-100 ${getFieldClass(
+                                            activeRoom,
+                                            "otherIssueRemark"
+                                          )}`}
                                           onChange={(e) =>
                                             handleChange(
                                               activeRoom,
@@ -1480,8 +1675,11 @@ const AddInspection = () => {
                             {inspectionData[activeRoom]
                               ?.isAllowForInspection === "yes" && (
                               <div className="col-xl-3 col-md-6">
-                                <div                                 
-                                  className={`form_field w-100 ${getFieldClass(activeRoom, "cleanRemark")}`}
+                                <div
+                                  className={`form_field w-100 ${getFieldClass(
+                                    activeRoom,
+                                    "cleanRemark"
+                                  )}`}
                                   style={{
                                     padding: "10px",
                                     borderRadius: "5px",
@@ -1524,11 +1722,12 @@ const AddInspection = () => {
 
                             <div className="col-xl-3 col-md-6">
                               <div
-                               className={`form_field w-100 ${
-                                inspectionData[activeRoom]?.isAllowForInspection === "yes"
-                                  ? "filled"
-                                  : getFieldClass(activeRoom, "generalRemark")
-                              }`}
+                                className={`form_field w-100 ${
+                                  inspectionData[activeRoom]
+                                    ?.isAllowForInspection === "yes"
+                                    ? "filled"
+                                    : getFieldClass(activeRoom, "generalRemark")
+                                }`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
@@ -1543,8 +1742,11 @@ const AddInspection = () => {
                                     color: "var(--theme-blue)",
                                   }}
                                 >
-                                  General Remark{inspectionData[activeRoom]
-                              ?.isAllowForInspection === "yes" ? ("") : "*"}
+                                  General Remark
+                                  {inspectionData[activeRoom]
+                                    ?.isAllowForInspection === "yes"
+                                    ? ""
+                                    : "*"}
                                 </h6>
                                 <div className="field_box theme_radio_new">
                                   <textarea
@@ -1578,7 +1780,10 @@ const AddInspection = () => {
                                     borderRadius: "5px",
                                     background: "white",
                                   }}
-                                  className={`form_field w-100 ${getFieldClass(activeRoom, "image")}`}
+                                  className={`form_field w-100 ${getFieldClass(
+                                    activeRoom,
+                                    "image"
+                                  )}`}
                                 >
                                   <h6
                                     style={{
@@ -1650,22 +1855,30 @@ const AddInspection = () => {
                           </div>
                         </div>
                       </form>
-                      <div className="bottom_fixed_button">
+                      <div
+                        className="bottom_fixed_button"
+                        style={{
+                          zIndex: "1000",
+                        }}
+                      >
                         <div className="next_btn_back">
-                          
-                          <button
-                            className="theme_btn no_icon btn_fill2 full_width"
-                            onClick={() => setFinalSubmit(true)}
-                            disabled={!isFinalSubmitEnabled()}
-                            style={{
-                              opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
-                              cursor: !isFinalSubmitEnabled()
-                                ? "not-allowed"
-                                : "pointer",
-                            }}
-                          >
-                            Final Submit
-                          </button>
+                        {inspectionDatabaseData &&
+                            inspectionDatabaseData.layoutInspectionDone &&
+                            inspectionDatabaseData.allBillInspectionComplete && (
+                              <button
+                                className="theme_btn no_icon btn_fill2 full_width"
+                                onClick={() => setFinalSubmit(true)}
+                                disabled={!isFinalSubmitEnabled()}
+                                style={{
+                                  opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                                  cursor: !isFinalSubmitEnabled()
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                              >
+                                Final Submit
+                              </button>
+                            )}
 
                           <button
                             className="theme_btn no_icon btn_fill full_width"
@@ -1772,36 +1985,45 @@ const AddInspection = () => {
                           <h5>{selectedBill.authorityName}</h5>
                         </div>
                         {selectedBill.billWebsiteLink && (
-                          <div className="idn_single">
-                          <h6>Bill Website Link</h6>
-                          <h5 style={{
-                            fontWeight:"400"
-                          }}>
-                            <Link 
-                                                    className="sub_title text_green" 
-                                                    target="_blank" 
-                                                    to={selectedBill.billWebsiteLink}
-                                                    style={{
-                                                      display: "-webkit-box",
-                                                      WebkitLineClamp: 1,
-                                                      WebkitBoxOrient: "vertical",
-                                                      overflow: "hidden"
-                                                    }}
-                                                  >
-                                                    {selectedBill.billWebsiteLink}
-                                                  </Link>
-                          </h5>
-                        </div>
+                          <div
+                            className="idn_single"
+                            style={{
+                              maxWidth: "200px",
+                            }}
+                          >
+                            <h6>Bill Website Link</h6>
+                            <h5
+                              style={{
+                                fontWeight: "400",
+                              }}
+                            >
+                              <Link
+                                className="sub_title text_green"
+                                target="_blank"
+                                to={selectedBill.billWebsiteLink}
+                                style={{
+                                  display: "-webkit-box",
+                                  WebkitLineClamp: 1,
+                                  WebkitBoxOrient: "vertical",
+                                  overflow: "hidden",
+                                }}
+                              >
+                                {selectedBill.billWebsiteLink}
+                              </Link>
+                            </h5>
+                          </div>
                         )}
-                        
                       </div>
                       <div className="vg22"></div>
                       <form className="add_inspection_form">
                         <div className="aai_form">
                           <div className="row row_gap_20">
                             <div className="col-xl-3 col-md-6">
-                              <div                                
-                                className={`form_field w-100 ${getBillFieldClass(selectedBill?.id, "amount")}`}
+                              <div
+                                className={`form_field w-100 ${getBillFieldClass(
+                                  selectedBill?.id,
+                                  "amount"
+                                )}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
@@ -1856,27 +2078,30 @@ const AddInspection = () => {
                                   </div> */}
 
                                   {/* {isBillAvailable && ( */}
-                                    <>
-                                      <div className="vg12"></div>
-                                      <div className="price_input relative">
-                                        <input
-                                          type="number"
-                                          value={amount}
-                                          onChange={(e) =>
-                                            setAmount(e.target.value)
-                                          }
-                                          placeholder="Bill amount"
-                                          className="w-100"
-                                        />
-                                      </div>
-                                    </>
+                                  <>
+                                    <div className="vg12"></div>
+                                    <div className="price_input relative">
+                                      <input
+                                        type="number"
+                                        value={amount}
+                                        onChange={(e) =>
+                                          setAmount(e.target.value)
+                                        }
+                                        placeholder="Bill amount"
+                                        className="w-100"
+                                      />
+                                    </div>
+                                  </>
                                   {/* // )} */}
                                 </div>
                               </div>
                             </div>
                             <div className="col-xl-3 col-md-6">
                               <div
-                                className={`form_field w-100 ${getBillFieldClass(selectedBill?.id, "remark")}`}
+                                className={`form_field w-100 ${getBillFieldClass(
+                                  selectedBill?.id,
+                                  "remark"
+                                )}`}
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
@@ -1902,15 +2127,17 @@ const AddInspection = () => {
                                 </div>
                               </div>
                             </div>
-                            
+
                             <div className="col-12">
-                              <div className="form_field w-100"
+                              <div
+                                className="form_field w-100"
                                 style={{
                                   padding: "10px",
                                   borderRadius: "5px",
                                   background: "white",
-                                }}>
-                                     <h6
+                                }}
+                              >
+                                <h6
                                   style={{
                                     fontSize: "15px",
                                     fontWeight: "500",
@@ -1921,72 +2148,97 @@ const AddInspection = () => {
                                   Upload bill image
                                 </h6>
                                 <div className="image_upload_container">
-  {billInspectionData[selectedBill.id]?.imageUrl ? (
-    <div className="image_preview">
-      <div className="image_container">
-        <img
-          src={billInspectionData[selectedBill.id]?.imageUrl}
-          alt="Bill Preview"
-        />
-        <div className="trash_icon">
-          <FaTrash
-            size={14}
-            color="red"
-            onClick={() => handleBillImageDelete(selectedBill.id)}
-          />
-        </div>
-      </div>
-      <label className="upload_icon">
-        <div>
-          <input
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={(e) => handleBillImageUpload(e, selectedBill.id)}
-            style={{ display: "none" }}
-          />
-          <FaRetweet size={24} color="#555" />
-          <h6>Replace Image</h6>
-        </div>
-      </label>
-    </div>
-  ) : (
-    <label className="upload_icon">
-      <div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => handleBillImageUpload(e, selectedBill.id)}
-          style={{ display: "none" }}
-        />
-        <FaPlus size={24} color="#555" />
-        <h6>Add Image</h6>
-      </div>
-    </label>
-  )}
-</div>
+                                  {billInspectionData[selectedBill.id]
+                                    ?.imageUrl ? (
+                                    <div className="image_preview">
+                                      <div className="image_container">
+                                        <img
+                                          src={
+                                            billInspectionData[selectedBill.id]
+                                              ?.imageUrl
+                                          }
+                                          alt="Bill Preview"
+                                        />
+                                        <div className="trash_icon">
+                                          <FaTrash
+                                            size={14}
+                                            color="red"
+                                            onClick={() =>
+                                              handleBillImageDelete(
+                                                selectedBill.id
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      </div>
+                                      <label className="upload_icon">
+                                        <div>
+                                          <input
+                                            type="file"
+                                            accept="image/*"
+                                            capture="environment"
+                                            onChange={(e) =>
+                                              handleBillImageUpload(
+                                                e,
+                                                selectedBill.id
+                                              )
+                                            }
+                                            style={{ display: "none" }}
+                                          />
+                                          <FaRetweet size={24} color="#555" />
+                                          <h6>Replace Image</h6>
+                                        </div>
+                                      </label>
+                                    </div>
+                                  ) : (
+                                    <label className="upload_icon">
+                                      <div>
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          onChange={(e) =>
+                                            handleBillImageUpload(
+                                              e,
+                                              selectedBill.id
+                                            )
+                                          }
+                                          style={{ display: "none" }}
+                                        />
+                                        <FaPlus size={24} color="#555" />
+                                        <h6>Add Image</h6>
+                                      </div>
+                                    </label>
+                                  )}
+                                </div>
                               </div>
- 
-
                             </div>
                           </div>
                         </div>
                       </form>
-                      <div className="bottom_fixed_button">
+                      <div
+                        className="bottom_fixed_button"
+                        style={{
+                          zIndex: "1000",
+                        }}
+                      >
                         <div className="next_btn_back">
-                          <button
-                            className="theme_btn no_icon btn_fill2 full_width"
-                            onClick={() => setFinalSubmit(true)}
-                            disabled={!isFinalSubmitEnabled()}
-                            style={{
-                              opacity: !isFinalSubmitEnabled() ? 0.5 : 1,
-                              cursor: !isFinalSubmitEnabled()
-                                ? "not-allowed"
-                                : "pointer",
-                            }}
-                          >
-                            Final Submit
-                          </button>
+                          {inspectionDatabaseData &&
+                            inspectionDatabaseData.layoutInspectionDone &&
+                            inspectionDatabaseData.allBillInspectionComplete && (
+                              <button
+                                className="theme_btn no_icon btn_fill2 full_width"
+                                onClick={() => setFinalSubmit(true)}
+                                disabled={!isFinalSubmitEnabled()}
+                                style={{
+                                  opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                                  cursor: !isFinalSubmitEnabled()
+                                    ? "not-allowed"
+                                    : "pointer",
+                                }}
+                              >
+                                Final Submit
+                              </button>
+                            )}
 
                           <button
                             className="theme_btn no_icon btn_fill full_width"
@@ -2006,6 +2258,27 @@ const AddInspection = () => {
                   )}
                 </div>
               )}
+ {inspectionDatabaseData &&
+                            inspectionDatabaseData.layoutInspectionDone &&
+                            inspectionDatabaseData.allBillInspectionComplete && (
+              <div className="bottom_fixed_button">
+                <div className="next_btn_back">
+                  <button
+                    className="theme_btn no_icon btn_fill2 full_width"
+                    onClick={() => setFinalSubmit(true)}
+                    disabled={!isFinalSubmitEnabled()}
+                    style={{
+                      opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                      cursor: !isFinalSubmitEnabled()
+                        ? "not-allowed"
+                        : "pointer",
+                    }}
+                  >
+                    Final Submit
+                  </button>
+                </div>
+              </div>
+                            )}
             </>
           ) : (
             <div className="page_loader">
@@ -2015,38 +2288,36 @@ const AddInspection = () => {
         </div>
       </div>
       {/* image upload modal  */}
-     <Modal
-                show={imageActionStatus !== null}
-                centered
-                className="uploading_modal"
-              >
-                <h6
-                  style={{
-                    color:
-                      imageActionStatus === "uploading"
-                        ? "var(--theme-green2)"
-                        : imageActionStatus === "deleting"
-                        ? "var(--theme-red)"
-                        : "var(--theme-blue)", // Default fallback color
-                  }}
-                >
-                  {imageActionStatus === "uploading"
-                    ? "Uploading..."
-                    : "Deleting..."}
-                </h6>
+      <Modal
+        show={imageActionStatus !== null}
+        centered
+        className="uploading_modal"
+      >
+        <h6
+          style={{
+            color:
+              imageActionStatus === "uploading"
+                ? "var(--theme-green2)"
+                : imageActionStatus === "deleting"
+                ? "var(--theme-red)"
+                : "var(--theme-blue)", // Default fallback color
+          }}
+        >
+          {imageActionStatus === "uploading" ? "Uploading..." : "Deleting..."}
+        </h6>
 
-                <BarLoader
-                  color={
-                    imageActionStatus === "uploading"
-                      ? "var(--theme-green2)"
-                      : imageActionStatus === "deleting"
-                      ? "var(--theme-red)"
-                      : "var(--theme-blue)" // Default fallback color
-                  }
-                  loading={true}
-                  height={10}
-                />
-              </Modal>
+        <BarLoader
+          color={
+            imageActionStatus === "uploading"
+              ? "var(--theme-green2)"
+              : imageActionStatus === "deleting"
+              ? "var(--theme-red)"
+              : "var(--theme-blue)" // Default fallback color
+          }
+          loading={true}
+          height={10}
+        />
+      </Modal>
 
       {/* saved successfully  */}
       <Modal
@@ -2144,8 +2415,11 @@ const AddInspection = () => {
             </svg>
           </Link>
         </div> */}
-       
-        <div className="theme_btn btn_border w-100 no_icon text-center mb-4 mt-4" onClick={() => setAfterSaveModal(false)}>
+
+        <div
+          className="theme_btn btn_border w-100 no_icon text-center mb-4 mt-4"
+          onClick={() => setAfterSaveModal(false)}
+        >
           Okay
         </div>
       </Modal>
