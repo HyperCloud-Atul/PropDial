@@ -162,9 +162,9 @@ const UserList = () => {
           <div className="left">
             <h2 className="m22">
               User List{" "}
-              {/* <span className="r14 light_black">
+              <span className="r14 light_black">
                 ( Application's filtered users : {users && users.length} )
-              </span> */}
+              </span>
             </h2>
           </div>
           <div className="right">
@@ -178,6 +178,22 @@ const UserList = () => {
         </div>
         <div className="vg12"></div>
         <div className="filters">
+          <div className="left">
+            <div className="rt_global_search search_field">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={handleSearchInputChange}
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
+              </div>
+            </div>
+            <span className="r14 light_black">
+              ( Filtered users : {users && users.length} )
+            </span>
+          </div>
 
           <div className="right">
             <div className="user_filters new_inline">
@@ -211,7 +227,7 @@ const UserList = () => {
         </div>
         <hr></hr>
         {error && <p className="error">{error}</p>}
-        {users && users.length === 0 ? (
+        {users && users.length === 0 && (
           <p
             className="text_red medium text-center"
             style={{
@@ -220,23 +236,7 @@ const UserList = () => {
           >
             No Users Yet!
           </p>
-        ) :
-          <div className="left">
-            <div className="rt_global_search search_field">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchInput}
-                onChange={handleSearchInputChange}
-              />
-              <div className="field_icon">
-                <span className="material-symbols-outlined">search</span>
-              </div>
-            </div>
-            <span className="r14 light_black">
-              ( Filtered users : {users && users.length} )
-            </span>
-          </div>
+        )
         }
 
         {viewMode === "card_view" && (
