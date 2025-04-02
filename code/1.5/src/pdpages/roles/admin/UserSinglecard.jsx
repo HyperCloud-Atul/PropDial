@@ -17,7 +17,7 @@ const UserSinglecard = ({ users }) => {
     setSelectedUser(userObj);
     setShow(true);
   };
-  console.log("In user single card");
+  // console.log("In user single card");
   //   modal code end
 
   // image modal code start
@@ -115,14 +115,14 @@ const UserSinglecard = ({ users }) => {
                     className="pointer"
                   />
                 </div>
-                <div className="tenant_detail">              
-               
+                <div className="tenant_detail">
+
                   <Link to={`/profiledetails/${userObj.id}`}
-                   className="t_name pointer"
-                   // onClick={() => handleShow(userObj)} click to open popup don't delete it
-                   >
-                  {userObj.fullName}
-                  <span className="material-symbols-outlined click_icon text_near_icon">
+                    className="t_name pointer"
+                  // onClick={() => handleShow(userObj)} click to open popup don't delete it
+                  >
+                    {userObj.fullName}
+                    <span className="material-symbols-outlined click_icon text_near_icon">
                       edit
                     </span>
                   </Link>
