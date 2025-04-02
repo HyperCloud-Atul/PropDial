@@ -190,9 +190,9 @@ const UserList = () => {
                 <span className="material-symbols-outlined">search</span>
               </div>
             </div>
-            <span className="r14 light_black">
+            {/* <span className="r14 light_black">
               ( Filtered users : {users && users.length} )
-            </span>
+            </span> */}
           </div>
 
           <div className="right">
