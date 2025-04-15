@@ -101,6 +101,9 @@ import CreateTicket from "./chatboard/CreateTicket";
 import TicketDetail from "./chatboard/TicketDetail";
 import PGSingleProperty from "./pages/property/PGSingleProperty";
 import PropertyDetails from "./components/property/PropertyDetails";
+import AddPropertyLayout from "./components/property/AddPropertyLayout";
+import ViewPropertyLayout from "./components/property/ViewPropertyLayout";
+import PropertyImages from "./components/property/PropertyImages";
 import PGDashboard from "./pdpages/dashboard/PGDashboard";
 import UserList from "./pdpages/roles/admin/UserList";
 import PropdialAllProperties from "./components/property/PropdialAllProperties";
@@ -528,8 +531,30 @@ function App() {
                 
                
                 <Route path="/blog/:id" element={<BlogDetail />}></Route>
-                <Route path="/blog-edit/:id" element={<BlogEdit />}></Route>
-                <Route path="/add-blog" element={<BlogAdd />}></Route>
+                <Route path="/blog-edit/:id"
+                  element={
+                    user &&
+                    (user.role === "executive" ||
+                      user.role === "admin" || user.role === "hr" ||
+                      user.role === "superAdmin") ? (
+                      <BlogEdit />
+                    ) : (
+                      <Navigate to="/blogs" />
+                    )
+                  }
+                ></Route>
+                <Route path="/add-blog" 
+                   element={
+                    user &&
+                    (user.role === "executive" ||
+                      user.role === "admin" || user.role === "hr" ||
+                      user.role === "superAdmin") ? (
+                      <BlogAdd />
+                    ) : (
+                      <Navigate to="/blogs" />
+                    )
+                  }
+                ></Route>
                  
                 {/* Restricted Routes start  */}
                 {authIsReady && (
@@ -612,6 +637,20 @@ function App() {
                       path="/propertydetails/:propertyid"
                       element={<PropertyDetails></PropertyDetails>}
                     ></Route>
+                      <Route
+                      path="/add-property-layout/:propertyLayoutId"
+                      element={<AddPropertyLayout></AddPropertyLayout>}
+                    ></Route>
+                     <Route
+                      path="/view-layout/:propertyLayoutId"
+                      element={<ViewPropertyLayout></ViewPropertyLayout>}
+                    ></Route>
+                    
+                     <Route
+                      path="/property-images/:propertyId"
+                      element={<PropertyImages></PropertyImages>}
+                    ></Route>
+                    
                     <Route
                       path="/inspection/:propertyid"
                       element={

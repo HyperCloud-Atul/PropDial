@@ -5,7 +5,7 @@ import React from "react";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 
-const PDSingle = () => {
+const ReactGallery = () => {
   const images = [
     {
       original: "./assets/img/p_img/fullview.jpg",
@@ -37,4 +37,4 @@ const PDSingle = () => {
   );
 };
 
-export default PDSingle;
+export default ReactGallery;

@@ -273,6 +273,8 @@ Need to make a document in firebase setting - > name "PWA" field status equal to
 
 .page_spacing {
     padding: 22px;
+    /* max-width: 1440px;
+    margin: 0 auto; */
 }
 .page_spacing.pg_min_height {
     min-height: 80vh; 
@@ -386,7 +388,7 @@ img.excel_dowanload {
     height: 58px;
     margin: auto;
     aspect-ratio: 1 / 1;
-    color: var(--light-black);
+    color: var(--theme-green);
     border: 1px solid;
     display: block;
     border-radius: 50%;

@@ -442,19 +442,22 @@ const InspectionDetails = () => {
                           <h6>
                             {billDoc.billType} | {billDoc.authorityName}
                           </h6>
-                          <div
-                            style={{
-                              fontSize: "14px",
-                              marginTop: "3px",
-                              color: "var(--light-black)",
-                            }}
-                          >
-                            Last update at:{" "}
-                            {format(
-                              billDoc.thisBillUpdatedAt.toDate(),
-                              "dd-MMM-yyyy"
-                            )}
-                          </div>
+                          {billDoc.thisBillUpdatedAt && (
+  <div
+  style={{
+    fontSize: "14px",
+    marginTop: "3px",
+    color: "var(--light-black)",
+  }}
+>
+  Last update at:{" "}
+  {format(
+    billDoc.thisBillUpdatedAt.toDate(),
+    "dd-MMM-yyyy"
+  )}
+</div>
+                          )}
+                        
                           <div
                             className="d-flex mt-2"
                             style={{
@@ -532,7 +535,7 @@ Bill Website Link 👈
                   <div className="rwi_single" key={idx}>
                     <h2>{room.roomName}
                     {room.isAllowForInspection === "no" && (
- <h3>Not allowed for inspection</h3>
+ <h3>Not allowed by tenant for inspection</h3>
                     )}
                     </h2>
                   

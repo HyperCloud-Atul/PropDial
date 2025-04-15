@@ -92,20 +92,75 @@ const AddInspection = () => {
     return () => unsubscribe();
   }, [inspectionId]);
 
+  // fetch property layout room name old code don't delte this 
+  // useEffect(() => {
+  //   if (!propertyId) return;
+  //   const unsubscribe = projectFirestore
+  //     .collection("propertylayouts")
+  //     .where("propertyId", "==", propertyId)
+  //     .onSnapshot(
+  //       (snapshot) => {
+  //         const roomsData = snapshot.docs.map((doc) => ({
+  //           id: doc.id,
+  //           roomName: doc.data().roomName,
+  //         }));
+
+  //         setRooms(roomsData);
+
+  //         setInspectionData((prevData) => {
+  //           const newData = { ...prevData };
+  //           roomsData.forEach((room) => {
+  //             if (!newData[room.id]) {
+  //               newData[room.id] = {
+  //                 roomId: room.id,
+  //                 roomName: room.roomName,
+  //                 seepage: "",
+  //                 seepageRemark: "",
+  //                 termites: "",
+  //                 termitesRemark: "",
+  //                 thisLayoutUpdateAt: timestamp.now(),
+  //                 otherIssue: "",
+  //                 otherIssueRemark: "",
+  //                 generalRemark: "",
+  //                 cleanRemark: "",
+  //                 isAllowForInspection: "yes",
+  //               };
+  //             }
+  //           });
+  //           return newData;
+  //         });
+  //       },
+  //       (error) => {
+  //         console.error("Error fetching rooms:", error);
+  //       }
+  //     );
+
+  //   return () => unsubscribe();
+  // }, [propertyId]);
+
   useEffect(() => {
     if (!propertyId) return;
+  
     const unsubscribe = projectFirestore
-      .collection("propertylayouts")
+      .collection("property-layout-propdial")
       .where("propertyId", "==", propertyId)
       .onSnapshot(
         (snapshot) => {
-          const roomsData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            roomName: doc.data().roomName,
-          }));
-
+          let roomsData = [];
+  
+          snapshot.forEach((doc) => {
+            const layouts = doc.data().layouts || {};
+  
+            Object.entries(layouts).forEach(([roomKey, roomValue]) => {
+              roomsData.push({
+                id: `${doc.id}_${roomKey}`, // unique room id
+                roomName: roomValue.roomName || roomKey, // roomName field ya fallback to key
+              });
+            });
+          });
+  
           setRooms(roomsData);
-
+  
           setInspectionData((prevData) => {
             const newData = { ...prevData };
             roomsData.forEach((room) => {
@@ -133,9 +188,11 @@ const AddInspection = () => {
           console.error("Error fetching rooms:", error);
         }
       );
-
+  
     return () => unsubscribe();
   }, [propertyId]);
+  
+  
 
   const handleImageUpload = async (e, roomId) => {
     const file = e.target.files[0];
@@ -1696,7 +1753,7 @@ const AddInspection = () => {
                                   >
                                     Cleaning Remark*
                                   </h6>
-                                  <div className="field_box theme_radio_new">
+                                  <div className="field_box">
                                     <textarea
                                       style={{
                                         minHeight: "104px",

@@ -4,7 +4,8 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
 import { projectStorage } from "../../firebase/config";
 import Switch from "react-switch";
-import { ClipLoader } from "react-spinners";
+import imageCompression from "browser-image-compression";
+import { ClipLoader, BarLoader } from "react-spinners";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
@@ -53,6 +54,11 @@ const PropertyDetails = () => {
     "enquiry-propdial",
     ["propId", "==", propertyid]
   );
+  const { documents: layoutDoc, error: layoutDocError } = useCollection(
+    "property-layout-propdial",
+    ["propertyId", "==", propertyid]
+  );
+
   // get user collection
   const [propertyManagerDoc, setpropertyManagerDoc] = useState(null);
   const [propertyOwnerDoc, setpropertyOwnerDoc] = useState(null);
@@ -114,6 +120,9 @@ const PropertyDetails = () => {
       ["propertyId", "==", propertyid],
       ["createdAt", "desc"]
     );
+
+  const { documents: propertyLayoutsNew, errors: propertyLayoutsNewError } =
+    useCollection("property-layout-propdial", ["propertyId", "==", propertyid]);
 
   const { documents: allPropertyUsers, errors: propertyUsersError } =
     useCollection("propertyusers", ["propertyId", "==", propertyid]);
@@ -707,32 +716,96 @@ const PropertyDetails = () => {
   // 9 dots controls
 
   // START CODE FOR ADD NEW IMAGES
+  // const fileInputRef = useRef(null);
+  // const [productImages, setProductImages] = useState([]);
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  // const [isUploading, setIsUploading] = useState(false);
+  // const handleAddMoreImages = () => {
+  //   fileInputRef.current.click();
+  // };
+
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setSelectedImage(URL.createObjectURL(file));
+  //     setIsConfirmVisible(true);
+  //   }
+  // };
+
+  // const handleConfirmUpload = async () => {
+  //   if (selectedImage) {
+  //     setIsUploading(true); // Set isUploading to false when upload completes
+  //     try {
+  //       const file = fileInputRef.current.files[0];
+  //       const storageRef = projectStorage.ref(
+  //         `properties/${propertyid}/${file.name}`
+  //       );
+  //       await storageRef.put(file);
+
+  //       const downloadURL = await storageRef.getDownloadURL();
+  //       const updatedImages = [...(propertyDocument.images || []), downloadURL];
+
+  //       await projectFirestore
+  //         .collection("properties-propdial")
+  //         .doc(propertyid)
+  //         .update({ images: updatedImages });
+  //       setProductImages(updatedImages);
+
+  //       setSelectedImage(null);
+  //       setIsConfirmVisible(false);
+  //       setIsUploading(false); // Set isUploading to false when upload completes
+  //     } catch (error) {
+  //       console.error("Error uploading image:", error);
+  //     }
+  //   }
+  // };
+
+  // STATES
   const fileInputRef = useRef(null);
   const [productImages, setProductImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+
+  // Function to handle file selection
   const handleAddMoreImages = () => {
     fileInputRef.current.click();
   };
 
-  const handleImageChange = (event) => {
+  // Function to compress & preview image
+  const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      setSelectedImage(URL.createObjectURL(file));
-      setIsConfirmVisible(true);
+      try {
+        const options = {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        const compressedBlobUrl = URL.createObjectURL(compressedFile);
+
+        setSelectedImage(compressedBlobUrl);
+        setSelectedFile(compressedFile);
+        setIsConfirmVisible(true);
+      } catch (error) {
+        console.error("Image compression error:", error);
+      }
     }
   };
 
+  // Upload compressed image to Firebase
   const handleConfirmUpload = async () => {
-    if (selectedImage) {
-      setIsUploading(true); // Set isUploading to false when upload completes
+    if (selectedFile) {
+      setIsUploading(true);
       try {
-        const file = fileInputRef.current.files[0];
+        const fileName = `compressed_${Date.now()}_${selectedFile.name}`;
         const storageRef = projectStorage.ref(
-          `properties/${propertyid}/${file.name}`
+          `properties/${propertyid}/${fileName}`
         );
-        await storageRef.put(file);
+        await storageRef.put(selectedFile);
 
         const downloadURL = await storageRef.getDownloadURL();
         const updatedImages = [...(propertyDocument.images || []), downloadURL];
@@ -741,18 +814,36 @@ const PropertyDetails = () => {
           .collection("properties-propdial")
           .doc(propertyid)
           .update({ images: updatedImages });
+
         setProductImages(updatedImages);
 
+        // Reset state
         setSelectedImage(null);
+        setSelectedFile(null);
         setIsConfirmVisible(false);
-        setIsUploading(false); // Set isUploading to false when upload completes
       } catch (error) {
         console.error("Error uploading image:", error);
+      } finally {
+        setIsUploading(false);
       }
     }
   };
 
-  const images = (propertyDocument && propertyDocument.images) || [];
+  // Remove selected preview image
+  const handleRemoveSelectedImage = () => {
+    setSelectedImage(null);
+    setSelectedFile(null);
+    setIsConfirmVisible(false);
+  };
+
+  const images = [
+    ...(propertyDocument?.images || []),
+    ...(propertyDocument?.layoutImages
+      ? Object.values(propertyDocument.layoutImages).flatMap((category) =>
+          category.map((img) => img.url)
+        )
+      : []),
+  ];
   // END CODE FOR ADD NEW IMAGES
 
   //Property Users / Owners - Starts
@@ -827,17 +918,17 @@ const PropertyDetails = () => {
     const isAlreadyExist =
       _usertype === "propertyowner"
         ? propertyOwners &&
-        propertyOwners.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        )
+          propertyOwners.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          )
         : propertyManagers &&
-        propertyManagers.filter(
-          (propuser) =>
-            propuser.userId === propertyDocument.createdBy &&
-            propuser.userType === _usertype
-        );
+          propertyManagers.filter(
+            (propuser) =>
+              propuser.userId === propertyDocument.createdBy &&
+              propuser.userType === _usertype
+          );
 
     // console.log('isAlreadyExist: ', isAlreadyExist)
 
@@ -897,7 +988,7 @@ const PropertyDetails = () => {
   const [ownerInstructionvalue, setOwnerInstrucitonValue] = useState(
     RichTextEditor.createValueFromString(
       propertyDocument &&
-      propertyDocument.ownerInstructions + editedOwnerInstruction,
+        propertyDocument.ownerInstructions + editedOwnerInstruction,
       "html"
     )
   );
@@ -1007,8 +1098,9 @@ const PropertyDetails = () => {
   const [showRoomModal, setShowRoomModal] = useState(false);
 
   const handleRoomModalClose = () => setShowRoomModal(false);
-  const handleShowRoomModal = (room) => {
-    setSelectedRoom(room);
+  const handleShowRoomModal = (roomKey) => {
+    const roomType = roomKey.replace(/\d+/g, "").trim();
+    setSelectedRoom({ roomType: roomType });
     setShowRoomModal(true);
   };
   // confirm room delete
@@ -1154,7 +1246,7 @@ const PropertyDetails = () => {
 
   const handleInspectionClick = (e) => {
     const isMissingPropertyLayout =
-      !propertyLayouts || propertyLayouts.length === 0;
+      !propertyLayoutsNew || propertyLayoutsNew.length === 0;
     const isMissingUtilityBill =
       !utilityBillList || utilityBillList.length === 0;
 
@@ -1170,7 +1262,7 @@ const PropertyDetails = () => {
   // Helper function to generate alert message on inspection click start
   const getAlertMessage = () => {
     const isMissingPropertyLayout =
-      !propertyLayouts || propertyLayouts.length === 0;
+      !propertyLayoutsNew || propertyLayoutsNew.length === 0;
     const isMissingUtilityBill =
       !utilityBillList || utilityBillList.length === 0;
 
@@ -1185,9 +1277,40 @@ const PropertyDetails = () => {
   };
   // Helper function to generate alert message on inspection click start
 
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const handleAddPropertyLayout = async () => {
+    setIsRedirecting(true);
+    try {
+      const newLayoutRef = await projectFirestore
+        .collection("property-layout-propdial")
+        .add({
+          createdBy: user && user.uid, // Assuming you have user object
+          createdAt: new Date(),
+          finalSubmit: false,
+          propertyId: propertyid,
+        });
+
+      navigate(`/add-property-layout/${newLayoutRef.id}`);
+    } catch (error) {
+      console.error("Error creating new property layout:", error);
+    } finally {
+      setIsRedirecting(false);
+    }
+  };
+
   return (
     <>
       <ScrollToTop />
+      <Modal show={isRedirecting} centered className="uploading_modal">
+        <h6
+          style={{
+            color: "var(--theme-green2)",
+          }}
+        >
+          Redirecting...
+        </h6>
+        <BarLoader color="var(--theme-green2)" loading={true} height={10} />
+      </Modal>
       {/* Change User Popup - Start */}
 
       {propertyDocument ? (
@@ -1372,9 +1495,10 @@ const PropertyDetails = () => {
             )}
 
             <div
-              className={`top_right_badge ${propertyDocument &&
+              className={`top_right_badge ${
+                propertyDocument &&
                 propertyDocument.isActiveInactiveReview.toLowerCase()
-                }`}
+              }`}
             >
               {propertyDocument && propertyDocument.category}
             </div>
@@ -1504,7 +1628,7 @@ const PropertyDetails = () => {
                                       <div
                                         className={
                                           propertyDocument.isActiveInactiveReview ===
-                                            "In-Review"
+                                          "In-Review"
                                             ? "custom_radio_button radiochecked"
                                             : "custom_radio_button"
                                         }
@@ -1545,7 +1669,7 @@ const PropertyDetails = () => {
                                           <div className="d-flex justify-content-between w-100 align-items-center">
                                             <div>
                                               {propertyDocument.isActiveInactiveReview ===
-                                                "In-Review"
+                                              "In-Review"
                                                 ? "In-Review"
                                                 : "Make In-Review"}
                                             </div>
@@ -1591,7 +1715,7 @@ const PropertyDetails = () => {
                                       <div
                                         className={
                                           propertyDocument.isActiveInactiveReview ===
-                                            "Active"
+                                          "Active"
                                             ? "custom_radio_button radiochecked"
                                             : "custom_radio_button"
                                         }
@@ -1615,7 +1739,7 @@ const PropertyDetails = () => {
                                           style={{
                                             background:
                                               propertyDocument.isActiveInactiveReview ===
-                                              "Active" &&
+                                                "Active" &&
                                               "var(--success-color)",
                                           }}
                                           className="pointer"
@@ -1631,7 +1755,7 @@ const PropertyDetails = () => {
                                           <div className="d-flex justify-content-between w-100 align-items-center">
                                             <div>
                                               {propertyDocument.isActiveInactiveReview ===
-                                                "Active"
+                                              "Active"
                                                 ? "Active"
                                                 : "Make Active"}
                                             </div>
@@ -1705,8 +1829,8 @@ const PropertyDetails = () => {
                                                 ? "var(--theme-green2)"
                                                 : selectedAorROption ===
                                                   "In-Review"
-                                                  ? "var(--theme-blue)"
-                                                  : "inherit",
+                                                ? "var(--theme-blue)"
+                                                : "inherit",
                                           }}
                                         >
                                           Make This {selectedAorROption}?
@@ -1727,8 +1851,9 @@ const PropertyDetails = () => {
                                           No
                                         </div>
                                         <div
-                                          className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
-                                            }`}
+                                          className={`theme_btn btn_fill no_icon text-center ${
+                                            isProcessing && "disabled"
+                                          }`}
                                           onClick={
                                             !isProcessing ? handleConfirm : null
                                           } // Disable click when processing
@@ -1743,7 +1868,7 @@ const PropertyDetails = () => {
                                       <div
                                         className={
                                           propertyDocument.isActiveInactiveReview ===
-                                            "Inactive"
+                                          "Inactive"
                                             ? "custom_radio_button radiochecked"
                                             : "custom_radio_button"
                                         }
@@ -1755,7 +1880,7 @@ const PropertyDetails = () => {
                                           }
                                           onClick={
                                             propertyDocument.isActiveInactiveReview ===
-                                              "Inactive"
+                                            "Inactive"
                                               ? null // Disable onClick if already inactive
                                               : handleShowWhyInactive
                                           }
@@ -1768,7 +1893,7 @@ const PropertyDetails = () => {
                                           style={{
                                             background:
                                               propertyDocument.isActiveInactiveReview ===
-                                              "Inactive" &&
+                                                "Inactive" &&
                                               "var(--theme-red)",
                                           }}
                                           className="pointer"
@@ -1784,7 +1909,7 @@ const PropertyDetails = () => {
                                           <div className="d-flex justify-content-between w-100 align-items-center">
                                             <div>
                                               {propertyDocument.isActiveInactiveReview ===
-                                                "Inactive"
+                                              "Inactive"
                                                 ? "Inactive"
                                                 : "Make Inactive"}
                                             </div>
@@ -1873,7 +1998,10 @@ const PropertyDetails = () => {
                     <div className="pcs_inner pointer" to="/pdsingle">
                       <div className="pcs_image_area relative">
                         {images.length > 0 ? (
-                          <div className="bigimage_container">
+                          <Link
+                            className="bigimage_container"
+                            to={`/property-images/${propertyid}`}
+                          >
                             <Gallery
                               style={{ background: "red" }}
                               items={images
@@ -1884,7 +2012,7 @@ const PropertyDetails = () => {
                                 }))}
                               slideDuration={1000}
                             />
-                          </div>
+                          </Link>
                         ) : (
                           <img
                             className="default_prop_img"
@@ -1892,14 +2020,14 @@ const PropertyDetails = () => {
                               propertyDocument.category === "Plot"
                                 ? "/assets/img/plot.jpg"
                                 : propertyDocument.category === "Commercial"
-                                  ? "/assets/img/commercial.jpg"
-                                  : "/assets/img/admin_banner.jpg"
+                                ? "/assets/img/commercial.jpg"
+                                : "/assets/img/admin_banner.jpg"
                             }
                             alt="Default"
                           />
                         )}
 
-                        {user &&
+                        {/* {user &&
                           user.status === "active" &&
                           (user.role === "admin" ||
                             user.role === "superAdmin") && (
@@ -1945,6 +2073,63 @@ const PropertyDetails = () => {
                                 >
                                   {isUploading ? "Uploading..." : "Confirm"}
                                 </button>
+                              )}
+                            </div>
+                          )} */}
+                        {user &&
+                          user.status === "active" &&
+                          (user.role === "admin" ||
+                            user.role === "superAdmin") && (
+                            <div
+                              className="d-flex align-items-center justify-content-center gap-2"
+                              style={{ margin: "15px 0px" }}
+                            >
+                              <input
+                                type="file"
+                                accept="image/*"
+                                id="imageInput"
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                                ref={fileInputRef}
+                              />
+
+                              {!isUploading && (
+                                <button
+                                  className="theme_btn btn_fill no_icon"
+                                  onClick={handleAddMoreImages}
+                                >
+                                  {isConfirmVisible
+                                    ? "Replace Image"
+                                    : "Add More Images"}
+                                </button>
+                              )}
+
+                              {selectedImage && (
+                                <>
+                                  <img
+                                    src={selectedImage}
+                                    alt="Selected img"
+                                    style={{
+                                      maxWidth: "100px",
+                                      maxHeight: "100px",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                  <button
+                                    className="theme_btn btn_fill no_icon"
+                                    onClick={handleConfirmUpload}
+                                    disabled={!isConfirmVisible || isUploading}
+                                  >
+                                    {isUploading ? "Uploading..." : "Confirm"}
+                                  </button>
+                                  <button
+                                    className="theme_btn btn_outline no_icon"
+                                    onClick={handleRemoveSelectedImage}
+                                    disabled={isUploading}
+                                  >
+                                    Remove
+                                  </button>
+                                </>
                               )}
                             </div>
                           )}
@@ -2005,7 +2190,7 @@ const PropertyDetails = () => {
                                   {propertyDocument.purpose && " | "}
                                   For{" "}
                                   {propertyDocument.purpose.toLowerCase() ===
-                                    "rentsaleboth"
+                                  "rentsaleboth"
                                     ? "Rent / Sale"
                                     : propertyDocument.purpose}
                                 </>
@@ -2014,29 +2199,29 @@ const PropertyDetails = () => {
                                   Your perfect {propertyDocument.propertyType}{" "}
                                   awaits—on{" "}
                                   {propertyDocument.purpose.toLowerCase() ===
-                                    "rentsaleboth"
+                                  "rentsaleboth"
                                     ? "Rent / Lease Now"
                                     : propertyDocument.purpose.toLowerCase() ===
                                       "rent"
-                                      ? "Lease Now"
-                                      : propertyDocument.purpose.toLowerCase() ===
-                                        "sale"
-                                        ? "Sale Now"
-                                        : ""}
+                                    ? "Lease Now"
+                                    : propertyDocument.purpose.toLowerCase() ===
+                                      "sale"
+                                    ? "Sale Now"
+                                    : ""}
                                 </>
                               ) : propertyDocument.category === "Plot" ? (
                                 <>
                                   {propertyDocument.propertyType} Plot | For{" "}
                                   {propertyDocument.purpose.toLowerCase() ===
-                                    "rentsaleboth"
+                                  "rentsaleboth"
                                     ? "Rent / Lease"
                                     : propertyDocument.purpose.toLowerCase() ===
                                       "rent"
-                                      ? "Lease"
-                                      : propertyDocument.purpose.toLowerCase() ===
-                                        "sale"
-                                        ? "Sale"
-                                        : ""}
+                                    ? "Lease"
+                                    : propertyDocument.purpose.toLowerCase() ===
+                                      "sale"
+                                    ? "Sale"
+                                    : ""}
                                 </>
                               ) : null)}
                           </h4>
@@ -2111,25 +2296,25 @@ const PropertyDetails = () => {
                               <span className="currency">₹</span>
                               {propertyDocument.flag.toLowerCase() ===
                                 "pms only" ||
-                                propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                                 "available for rent" ||
-                                propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                                 "rented out"
                                 ? new Intl.NumberFormat("en-IN").format(
-                                  propertyDocument.demandPriceRent
-                                )
+                                    propertyDocument.demandPriceRent
+                                  )
                                 : propertyDocument.flag.toLowerCase() ===
-                                  "rent and sale" ||
+                                    "rent and sale" ||
                                   propertyDocument.flag.toLowerCase() ===
-                                  "rented but sale"
-                                  ? new Intl.NumberFormat("en-IN").format(
+                                    "rented but sale"
+                                ? new Intl.NumberFormat("en-IN").format(
                                     propertyDocument.demandPriceRent
                                   ) +
                                   " / ₹" +
                                   new Intl.NumberFormat("en-IN").format(
                                     propertyDocument.demandPriceSale
                                   )
-                                  : new Intl.NumberFormat("en-IN").format(
+                                : new Intl.NumberFormat("en-IN").format(
                                     propertyDocument.demandPriceSale
                                   )}
 
@@ -2143,26 +2328,26 @@ const PropertyDetails = () => {
                             <h6>
                               {propertyDocument.flag.toLowerCase() ===
                                 "pms only" ||
-                                propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                                 "available for rent" ||
-                                propertyDocument.flag.toLowerCase() ===
+                              propertyDocument.flag.toLowerCase() ===
                                 "rented out"
                                 ? "Demand Price"
                                 : propertyDocument.flag.toLowerCase() ===
-                                  "rent and sale" ||
+                                    "rent and sale" ||
                                   propertyDocument.flag.toLowerCase() ===
-                                  "rented but sale"
-                                  ? "Demand Rent / Sale"
-                                  : "Demand Price"}
+                                    "rented but sale"
+                                ? "Demand Rent / Sale"
+                                : "Demand Price"}
                             </h6>
                           </div>
                           {propertyDocument &&
                             (propertyDocument.purpose.toLowerCase() ===
                               "rent" ||
                               propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth") &&
+                                "rentsaleboth") &&
                             (propertyDocument.maintenanceFlag.toLowerCase() ===
-                              "included" ? (
+                            "included" ? (
                               <div className="pdms_single">
                                 <h4>Included</h4>
                                 <h6>Maintenance</h6>
@@ -2190,7 +2375,7 @@ const PropertyDetails = () => {
                             (propertyDocument.purpose.toLowerCase() ===
                               "rent" ||
                               propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth") && (
+                                "rentsaleboth") && (
                               <div className="pdms_single">
                                 <h4>
                                   <span className="currency">₹</span>
@@ -2215,8 +2400,8 @@ const PropertyDetails = () => {
                                 <>
                                   {propertyDocument.superArea}
                                   {propertyDocument.superArea &&
-                                    propertyDocument.carpetArea &&
-                                    propertyDocument.carpetArea !== "0"
+                                  propertyDocument.carpetArea &&
+                                  propertyDocument.carpetArea !== "0"
                                     ? "/"
                                     : ""}
                                   {propertyDocument.carpetArea}
@@ -2253,8 +2438,8 @@ const PropertyDetails = () => {
                                 <>
                                   {propertyDocument.superArea && "Super Area"}
                                   {propertyDocument.superArea &&
-                                    propertyDocument.carpetArea &&
-                                    propertyDocument.carpetArea !== "0"
+                                  propertyDocument.carpetArea &&
+                                  propertyDocument.carpetArea !== "0"
                                     ? " / "
                                     : ""}
                                   {propertyDocument.carpetArea &&
@@ -2278,15 +2463,15 @@ const PropertyDetails = () => {
                                   propertyDocument.category === "Residential"
                                     ? "/assets/img/new_bedroom.png"
                                     : propertyDocument.category === "Commercial"
-                                      ? "/assets/img/new_carpet.png"
-                                      : propertyDocument.category === "Plot"
-                                        ? "/assets/img/park.png"
-                                        : "/assets/img/default.png"
+                                    ? "/assets/img/new_carpet.png"
+                                    : propertyDocument.category === "Plot"
+                                    ? "/assets/img/park.png"
+                                    : "/assets/img/default.png"
                                 }
                               ></img>
                               {propertyDocument.category === "Residential" ? (
                                 propertyDocument.numberOfBedrooms === 0 ||
-                                  propertyDocument.numberOfBedrooms === "0" ? (
+                                propertyDocument.numberOfBedrooms === "0" ? (
                                   "Yet to be added"
                                 ) : (
                                   propertyDocument.numberOfBedrooms
@@ -2318,10 +2503,10 @@ const PropertyDetails = () => {
                               {propertyDocument.category === "Residential"
                                 ? "Bedroom"
                                 : propertyDocument.category === "Commercial"
-                                  ? "Carpet Area"
-                                  : propertyDocument.category === "Plot"
-                                    ? "Park Facing"
-                                    : ""}
+                                ? "Carpet Area"
+                                : propertyDocument.category === "Plot"
+                                ? "Park Facing"
+                                : ""}
                             </h6>
                           </div>
 
@@ -2332,10 +2517,10 @@ const PropertyDetails = () => {
                                   propertyDocument.category === "Residential"
                                     ? "/assets/img/new_bathroom.png"
                                     : propertyDocument.category === "Commercial"
-                                      ? "/assets/img/directions.png"
-                                      : propertyDocument.category === "Plot"
-                                        ? "/assets/img/directions.png"
-                                        : "/assets/img/default.png"
+                                    ? "/assets/img/directions.png"
+                                    : propertyDocument.category === "Plot"
+                                    ? "/assets/img/directions.png"
+                                    : "/assets/img/default.png"
                                 }
                               ></img>
                               {propertyDocument.category === "Residential"
@@ -2345,17 +2530,17 @@ const PropertyDetails = () => {
                                   : propertyDocument.numberOfBathrooms
                                 : propertyDocument.category === "Commercial" ||
                                   propertyDocument.category === "Plot"
-                                  ? propertyDocument.mainDoorFacing ||
+                                ? propertyDocument.mainDoorFacing ||
                                   "Yet to be added"
-                                  : null}
+                                : null}
                             </h4>
                             <h6>
                               {propertyDocument.category === "Residential"
                                 ? "Bathroom"
                                 : propertyDocument.category === "Commercial" ||
                                   propertyDocument.category === "Plot"
-                                  ? "Direction Facing"
-                                  : ""}
+                                ? "Direction Facing"
+                                : ""}
                             </h6>
                           </div>
                         </div>
@@ -2368,10 +2553,10 @@ const PropertyDetails = () => {
                                   propertyDocument.category === "Residential"
                                     ? "/assets/img/floor.png"
                                     : propertyDocument.category === "Commercial"
-                                      ? "/assets/img/propertytype.png"
-                                      : propertyDocument.category === "Plot"
-                                        ? "/assets/img/corner.png"
-                                        : "/assets/img/default.png"
+                                    ? "/assets/img/propertytype.png"
+                                    : propertyDocument.category === "Plot"
+                                    ? "/assets/img/corner.png"
+                                    : "/assets/img/default.png"
                                 }
                               ></img>
                               {propertyDocument.category === "Residential"
@@ -2379,37 +2564,38 @@ const PropertyDetails = () => {
                                   ? propertyDocument.floorNo === "Ground"
                                     ? "Ground"
                                     : propertyDocument.floorNo === "Stilt"
-                                      ? "Stilt"
-                                      : propertyDocument.floorNo === "Basement"
-                                        ? "Basement"
-                                        : `${propertyDocument.floorNo}${propertyDocument.numberOfFloors
+                                    ? "Stilt"
+                                    : propertyDocument.floorNo === "Basement"
+                                    ? "Basement"
+                                    : `${propertyDocument.floorNo}${
+                                        propertyDocument.numberOfFloors
                                           ? " of " +
-                                          propertyDocument.numberOfFloors
+                                            propertyDocument.numberOfFloors
                                           : ""
-                                        }`
+                                      }`
                                   : ""
                                 : propertyDocument.category === "Commercial"
-                                  ? propertyDocument.propertyType ||
+                                ? propertyDocument.propertyType ||
                                   "Yet to be added"
-                                  : propertyDocument.category === "Plot"
-                                    ? propertyDocument.isCornerSidePlot ||
-                                    "Yet to be added"
-                                    : ""}
+                                : propertyDocument.category === "Plot"
+                                ? propertyDocument.isCornerSidePlot ||
+                                  "Yet to be added"
+                                : ""}
                             </h4>
                             <h6>
                               {propertyDocument.category === "Residential"
                                 ? propertyDocument.floorNo
                                   ? ["Ground", "Stilt", "Basement"].includes(
-                                    propertyDocument.floorNo
-                                  )
+                                      propertyDocument.floorNo
+                                    )
                                     ? "Floor"
                                     : "Floor no"
                                   : ""
                                 : propertyDocument.category === "Commercial"
-                                  ? "Property Type"
-                                  : propertyDocument.category === "Plot"
-                                    ? "Is Corner?"
-                                    : ""}
+                                ? "Property Type"
+                                : propertyDocument.category === "Plot"
+                                ? "Is Corner?"
+                                : ""}
                             </h6>
                           </div>
                           <div className="pdms_single">
@@ -2419,33 +2605,33 @@ const PropertyDetails = () => {
                                   propertyDocument.category === "Residential"
                                     ? "/assets/img/new_bhk.png"
                                     : propertyDocument.category === "Commercial"
-                                      ? "/assets/img/propertysubtype.png"
-                                      : propertyDocument.category === "Plot"
-                                        ? "/assets/img/gatedcomunity.png"
-                                        : "/assets/img/default.png"
+                                    ? "/assets/img/propertysubtype.png"
+                                    : propertyDocument.category === "Plot"
+                                    ? "/assets/img/gatedcomunity.png"
+                                    : "/assets/img/default.png"
                                 }
                                 alt="bhk icon"
                               />
                               {propertyDocument.category === "Residential"
                                 ? propertyDocument.bhk || "Yet to be added"
                                 : propertyDocument.category === "Commercial"
-                                  ? propertyDocument.additionalRooms &&
-                                    propertyDocument.additionalRooms.length > 0
-                                    ? propertyDocument.additionalRooms[0]
-                                    : "Yet to be added"
-                                  : propertyDocument.category === "Plot"
-                                    ? propertyDocument.gatedArea ||
-                                    "Yet to be added"
-                                    : ""}
+                                ? propertyDocument.additionalRooms &&
+                                  propertyDocument.additionalRooms.length > 0
+                                  ? propertyDocument.additionalRooms[0]
+                                  : "Yet to be added"
+                                : propertyDocument.category === "Plot"
+                                ? propertyDocument.gatedArea ||
+                                  "Yet to be added"
+                                : ""}
                             </h4>
                             <h6>
                               {propertyDocument.category === "Residential"
                                 ? "BHK"
                                 : propertyDocument.category === "Commercial"
-                                  ? "Property Sub-Type"
-                                  : propertyDocument.category === "Plot"
-                                    ? "Gated Community"
-                                    : ""}
+                                ? "Property Sub-Type"
+                                : propertyDocument.category === "Plot"
+                                ? "Gated Community"
+                                : ""}
                             </h6>
                           </div>
 
@@ -2456,17 +2642,17 @@ const PropertyDetails = () => {
                                   propertyDocument.category === "Residential"
                                     ? "/assets/img/new_furniture.png"
                                     : propertyDocument.category === "Commercial"
-                                      ? "/assets/img/new_furniture.png"
-                                      : propertyDocument.category === "Plot"
-                                        ? "/assets/img/road.png"
-                                        : "/assets/img/default.png"
+                                    ? "/assets/img/new_furniture.png"
+                                    : propertyDocument.category === "Plot"
+                                    ? "/assets/img/road.png"
+                                    : "/assets/img/default.png"
                                 }
                                 alt="furnishing icon"
                               />
                               {propertyDocument.category === "Residential" ||
-                                propertyDocument.category === "Commercial" ? (
+                              propertyDocument.category === "Commercial" ? (
                                 propertyDocument.furnishing?.toLowerCase() ===
-                                  "raw" ? (
+                                "raw" ? (
                                   "Unfurnished"
                                 ) : (
                                   propertyDocument.furnishing ||
@@ -2493,11 +2679,11 @@ const PropertyDetails = () => {
                             </h4>
                             <h6>
                               {propertyDocument.category === "Residential" ||
-                                propertyDocument.category === "Commercial"
+                              propertyDocument.category === "Commercial"
                                 ? "Furnishing"
                                 : propertyDocument.category === "Plot"
-                                  ? "Road Width"
-                                  : ""}
+                                ? "Road Width"
+                                : ""}
                             </h6>
                           </div>
                         </div>
@@ -2560,10 +2746,10 @@ const PropertyDetails = () => {
                     </div>
                   )}
 
-                  {user && 
-                    user.status === "active" &&                   
-                    
-                    (propertyOwners?.filter((doc) => doc.userId === user?.uid).length > 0 ||
+                  {user &&
+                    user.status === "active" &&
+                    (propertyOwners?.filter((doc) => doc.userId === user?.uid)
+                      .length > 0 ||
                       user.role === "admin" ||
                       user.role === "executive" ||
                       user.role === "superAdmin") && (
@@ -2971,22 +3157,47 @@ const PropertyDetails = () => {
                   {propertyDocument &&
                     propertyDocument.category === "Residential" && (
                       <>
-                        {propertyLayouts &&
-                          (propertyLayouts.length > 0 ||
+                        {propertyLayoutsNew &&
+                          (propertyLayoutsNew.length > 0 ||
                             (user &&
                               (user.role === "admin" ||
                                 user.role === "superAdmin"))) && (
                             <section className="property_card_single full_width_sec with_blue">
                               <span className="verticall_title">
                                 Layout :{" "}
-                                {propertyLayouts && propertyLayouts.length}
+                                {
+                                  Object.keys(
+                                    propertyLayoutsNew[0]?.layouts || {}
+                                  ).length
+                                }
                               </span>
                               <div className="more_detail_card_inner">
                                 <div className="row">
                                   {user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
-                                      user.role === "superAdmin" || user.role === "executive") && (
+                                      user.role === "superAdmin" ||
+                                      user.role === "executive") && (
+                                      // <div
+                                      //   className="col-sm-1 col-2 pointer"
+                                      //   style={{
+                                      //     paddingRight: "0px",
+                                      //   }}
+                                      // >
+                                      //   <div className="plus_icon">
+                                      //     <div
+                                      //       className="plus_icon_inner"
+                                      //       onClick={
+                                      //         handleShowPropertyLayoutComponent
+                                      //       }
+                                      //     >
+                                      //       <span className="material-symbols-outlined">
+                                      //         add
+                                      //       </span>
+                                      //     </div>
+                                      //   </div>
+                                      // </div>
+
                                       <div
                                         className="col-sm-1 col-2 pointer"
                                         style={{
@@ -2994,27 +3205,42 @@ const PropertyDetails = () => {
                                         }}
                                       >
                                         <div className="plus_icon">
-                                          <div
-                                            className="plus_icon_inner"
-                                            onClick={
-                                              handleShowPropertyLayoutComponent
-                                            }
-                                          >
-                                            <span className="material-symbols-outlined">
-                                              add
-                                            </span>
-                                          </div>
+                                          {layoutDoc &&
+                                          layoutDoc[0]?.propertyId ===
+                                            propertyid ? (
+                                            <Link
+                                              className="plus_icon_inner"
+                                              to={`/add-property-layout/${
+                                                layoutDoc && layoutDoc[0]?.id
+                                              }`}
+                                            >
+                                              <span className="material-symbols-outlined">
+                                                border_color
+                                              </span>
+                                            </Link>
+                                          ) : (
+                                            <div
+                                              className="plus_icon_inner"
+                                              onClick={handleAddPropertyLayout}
+                                            >
+                                              <span className="material-symbols-outlined">
+                                                add
+                                              </span>
+                                            </div>
+                                          )}
                                         </div>
                                       </div>
                                     )}
                                   <div
-                                    className={`${user &&
-                                        user.status === "active" &&
-                                        (user.role === "admin" || user.role === "executive" ||
-                                          user.role === "superAdmin")
+                                    className={`${
+                                      user &&
+                                      user.status === "active" &&
+                                      (user.role === "admin" ||
+                                        user.role === "executive" ||
+                                        user.role === "superAdmin")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
-                                      }`}
+                                    }`}
                                   >
                                     <div className="property_layout_card">
                                       <Swiper
@@ -3038,98 +3264,114 @@ const PropertyDetails = () => {
                                           },
                                         }}
                                       >
-                                        {propertyLayouts &&
-                                          propertyLayouts.map((room, index) => (
+                                        {propertyLayoutsNew &&
+                                          Object.entries(
+                                            propertyLayoutsNew[0]?.layouts || {}
+                                          ).map(([roomKey, room], index) => (
                                             <SwiperSlide key={index}>
-                                              <div className="ai_detail_show">
+                                              <div className="ai_detail_show pointer">
+                                                {/* onClick={() =>
+                                                        handleShowRoomModal(
+                                                          roomKey
+                                                        )
+                                                      } */}
                                                 <div className="left relative">
+                                                  {/* {(() => {
+                                                    const roomType = roomKey
+                                                      .replace(/\d+$/, "")
+                                                      .toLowerCase(); // remove number and lowercase
+
+                                                    const imageMap = {
+                                                      bedroom:
+                                                        "/assets/img/icons/illustrate_bedroom.jpg",
+                                                      kitchen:
+                                                        "/assets/img/icons/illustrate_kitchen.jpg",
+                                                      "living room":
+                                                        "/assets/img/icons/illustrate_livingroom.jpg",
+                                                      bathroom:
+                                                        "/assets/img/icons/illustrate_bathroom.jpg",
+                                                      "dining room":
+                                                        "/assets/img/icons/illustrate_dining.jpg",
+                                                      balcony:
+                                                        "/assets/img/icons/illustrate_balcony.jpg",
+                                                    };
+
+                                                    const imageSrc =
+                                                      imageMap[roomType] ||
+                                                      "/assets/img/icons/illustrate_basment.jpg";
+
+                                                    return (
+                                                      <img
+                                                        src={imageSrc}
+                                                        alt={roomType}
+                                                      />
+                                                    );
+                                                  })()} */}
                                                   {(() => {
-                                                    if (
-                                                      room.roomType ===
-                                                      "Bedroom"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_bedroom.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else if (
-                                                      room.roomType ===
-                                                      "Kitchen"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_kitchen.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else if (
-                                                      room.roomType ===
-                                                      "Living Room"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_livingroom.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else if (
-                                                      room.roomType ===
-                                                      "Bathroom"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_bathroom.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else if (
-                                                      room.roomType ===
-                                                      "Dining Room"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_dining.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else if (
-                                                      room.roomType ===
-                                                      "Balcony"
-                                                    ) {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_balcony.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    } else {
-                                                      return (
-                                                        <img
-                                                          src="/assets/img/icons/illustrate_basment.jpg"
-                                                          alt={room.roomType}
-                                                        />
-                                                      );
-                                                    }
-                                                  })()}
+  const roomType = roomKey.replace(/\d+$/, "").toLowerCase();
+
+  const defaultImageMap = {
+    bedroom: "/assets/img/icons/illustrate_bedroom.jpg",
+    kitchen: "/assets/img/icons/illustrate_kitchen.jpg",
+    "living room": "/assets/img/icons/illustrate_livingroom.jpg",
+    bathroom: "/assets/img/icons/illustrate_bathroom.jpg",
+    "dining room": "/assets/img/icons/illustrate_dining.jpg",
+    balcony: "/assets/img/icons/illustrate_balcony.jpg",
+  };
+
+  const hasRoomImages =
+    room.images && Array.isArray(room.images) && room.images.length > 0;
+
+  const imageSrc = hasRoomImages
+    ? room.images[0]?.url
+    : defaultImageMap[roomType] || "/assets/img/icons/illustrate_basment.jpg";
+
+  return (
+    <img
+      src={imageSrc}
+      alt={roomType}
+    />
+  );
+})()}
+
                                                 </div>
                                                 <div className="right">
-                                                  <h5>{room.roomName}</h5>
+                                                  <h5>
+                                                    {room.roomName || roomKey}
+                                                  </h5>
+                                                  {/* <h5>{(room.roomName || roomKey)?.replace(/\d+$/, '')}</h5> */}
                                                   <div className="in_detail">
-                                                    <span className="in_single">
-                                                      Area: {room.roomTotalArea}{" "}
-                                                      SqFt
-                                                    </span>
-                                                    <span className="in_single">
-                                                      Length: {room.roomLength}{" "}
-                                                      Ft
-                                                    </span>
-                                                    <span className="in_single">
-                                                      Width: {room.roomWidth} Ft
-                                                    </span>
-                                                    {room.roomFixtures &&
-                                                      room.roomFixtures.map(
+                                                    {room.length &&
+                                                      room.width && (
+                                                        <span className="in_single">
+                                                          Area:{" "}
+                                                          {
+                                                            +(
+                                                              parseFloat(
+                                                                room.length
+                                                              ) *
+                                                              parseFloat(
+                                                                room.width
+                                                              )
+                                                            ).toFixed(2)
+                                                          }{" "}
+                                                          SqFt
+                                                        </span>
+                                                      )}
+
+                                                    {room.length && (
+                                                      <span className="in_single">
+                                                        Length: {room.length} Ft
+                                                      </span>
+                                                    )}
+                                                    {room.width && (
+                                                      <span className="in_single">
+                                                        Width: {room.width} Ft
+                                                      </span>
+                                                    )}
+
+                                                    {room.fixtureBySelect &&
+                                                      room.fixtureBySelect.map(
                                                         (fixture, findex) => (
                                                           <span
                                                             className="in_single"
@@ -3140,7 +3382,8 @@ const PropertyDetails = () => {
                                                         )
                                                       )}
                                                   </div>
-                                                  <div
+                                                  {/* plz don't remove this  */}
+                                                  {/* <div
                                                     className="view_edit d-flex justify-content-between mt-2"
                                                     style={{
                                                       marginLeft: "7px",
@@ -3148,10 +3391,10 @@ const PropertyDetails = () => {
                                                   >
                                                     {user &&
                                                       user.status ===
-                                                      "active" &&
+                                                        "active" &&
                                                       (user.role === "admin" ||
                                                         user.role ===
-                                                        "superAdmin") && (
+                                                          "superAdmin") && (
                                                         <span
                                                           className="click_text pointer"
                                                           onClick={() =>
@@ -3167,13 +3410,13 @@ const PropertyDetails = () => {
                                                       className="click_text pointer"
                                                       onClick={() =>
                                                         handleShowRoomModal(
-                                                          room
+                                                          roomKey
                                                         )
                                                       }
                                                     >
                                                       View More
                                                     </span>
-                                                  </div>
+                                                  </div> */}
                                                 </div>
                                               </div>
                                             </SwiperSlide>
@@ -3316,26 +3559,30 @@ const PropertyDetails = () => {
                                                     SqFt
                                                   </span>
                                                 </div>
-                                                <div className="md_single">
-                                                  Length:{" "}
-                                                  <span className="value">
-                                                    {selectedRoom.roomLength}
-                                                  </span>
-                                                  <span className="unit">
-                                                    {" "}
-                                                    Ft
-                                                  </span>
-                                                </div>
-                                                <div className="md_single">
-                                                  Width:{" "}
-                                                  <span className="value">
-                                                    {selectedRoom.roomWidth}
-                                                  </span>
-                                                  <span className="unit">
-                                                    {" "}
-                                                    Ft
-                                                  </span>
-                                                </div>
+                                                {selectedRoom.lenght && (
+                                                  <div className="md_single">
+                                                    Length:{" "}
+                                                    <span className="value">
+                                                      {selectedRoom.lenght}
+                                                    </span>
+                                                    <span className="unit">
+                                                      {" "}
+                                                      Ft
+                                                    </span>
+                                                  </div>
+                                                )}
+                                                {selectedRoom.width && (
+                                                  <div className="md_single">
+                                                    Width:{" "}
+                                                    <span className="value">
+                                                      {selectedRoom.width}
+                                                    </span>
+                                                    <span className="unit">
+                                                      {" "}
+                                                      Ft
+                                                    </span>
+                                                  </div>
+                                                )}
                                               </div>
                                               <div className="more_detail">
                                                 {selectedRoom.roomFixtures &&
@@ -3351,28 +3598,28 @@ const PropertyDetails = () => {
                                                   )}
                                               </div>
                                             </div>
-                                            {selectedRoom.roomAttachments
+                                            {/* {selectedRoom.roomAttachments
                                               .length !== 0 && (
-                                                <div className="attached_with">
-                                                  {selectedRoom.roomAttachments && (
-                                                    <h6 className="text-center text_black">
-                                                      Attached with
-                                                    </h6>
-                                                  )}
-                                                  <div className="more_detail">
-                                                    {selectedRoom.roomAttachments &&
-                                                      selectedRoom.roomAttachments.map(
-                                                        (attachment, findex) => (
-                                                          <span className="more_detail_single">
-                                                            {attachment}
-                                                          </span>
-                                                        )
-                                                      )}
-                                                  </div>
+                                              <div className="attached_with">
+                                                {selectedRoom.roomAttachments && (
+                                                  <h6 className="text-center text_black">
+                                                    Attached with
+                                                  </h6>
+                                                )}
+                                                <div className="more_detail">
+                                                  {selectedRoom.roomAttachments &&
+                                                    selectedRoom.roomAttachments.map(
+                                                      (attachment, findex) => (
+                                                        <span className="more_detail_single">
+                                                          {attachment}
+                                                        </span>
+                                                      )
+                                                    )}
                                                 </div>
-                                              )}
+                                              </div>
+                                            )} */}
 
-                                            {user &&
+                                            {/* {user &&
                                               user.status === "active" &&
                                               user.role === "superAdmin" && (
                                                 <div className="modal_footer">
@@ -3386,10 +3633,10 @@ const PropertyDetails = () => {
                                                     <span>Delete</span>
                                                   </div>
                                                 </div>
-                                              )}
+                                              )} */}
                                           </Modal>
 
-                                          <Modal
+                                          {/* <Modal
                                             show={showConfirmModal}
                                             onHide={handleConfirmClose}
                                             className="delete_modal"
@@ -3420,10 +3667,27 @@ const PropertyDetails = () => {
                                                 No
                                               </div>
                                             </div>
-                                          </Modal>
+                                          </Modal> */}
                                         </>
                                       )}
                                     </div>
+                                    {Object.keys(
+                                      propertyLayoutsNew[0]?.layouts || {}
+                                    ).length > 0 && (
+                                      <div className="text-center mt-3">
+                                        <Link
+                                          to={`/view-layout/${
+                                            layoutDoc && layoutDoc[0]?.id
+                                          }`}
+                                          className="theme_btn btn_border no_icon text-center"
+                                          style={{
+                                            display: "inline-block",
+                                          }}
+                                        >
+                                          View all property layout
+                                        </Link>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -3451,7 +3715,8 @@ const PropertyDetails = () => {
                               tenantDocument.length > 0) ||
                             (user &&
                               (user.role === "admin" ||
-                                user.role === "superAdmin" || user.role === "executive"))) && (
+                                user.role === "superAdmin" ||
+                                user.role === "executive"))) && (
                             <section className="property_card_single full_width_sec with_orange">
                               <span className="verticall_title">
                                 Tenants
@@ -3462,7 +3727,8 @@ const PropertyDetails = () => {
                                   {user &&
                                     user.status === "active" &&
                                     (user.role === "admin" ||
-                                      user.role === "superAdmin" || user.role === "executive") && (
+                                      user.role === "superAdmin" ||
+                                      user.role === "executive") && (
                                       <div
                                         className="col-sm-1 col-2"
                                         style={{
@@ -3482,13 +3748,15 @@ const PropertyDetails = () => {
                                       </div>
                                     )}
                                   <div
-                                    className={`${user &&
-                                        user.status === "active" &&
-                                        (user.role === "admin" ||
-                                          user.role === "superAdmin" || user.role === "executive")
+                                    className={`${
+                                      user &&
+                                      user.status === "active" &&
+                                      (user.role === "admin" ||
+                                        user.role === "superAdmin" ||
+                                        user.role === "executive")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
-                                      }`}
+                                    }`}
                                   >
                                     <div className="tenant_card">
                                       <Swiper
@@ -3521,10 +3789,11 @@ const PropertyDetails = () => {
                                             (tenant, index) => (
                                               <SwiperSlide key={index}>
                                                 <div
-                                                  className={`tc_single relative item ${tenant.status === "inactive"
+                                                  className={`tc_single relative item ${
+                                                    tenant.status === "inactive"
                                                       ? "t_inactive"
                                                       : ""
-                                                    }`}
+                                                  }`}
                                                 >
                                                   <Link
                                                     className="left"
@@ -3540,11 +3809,12 @@ const PropertyDetails = () => {
                                                       />
                                                     </div>
                                                     <div
-                                                      className={`tenant_detail ${editingTenantId ===
-                                                          tenant.id
+                                                      className={`tenant_detail ${
+                                                        editingTenantId ===
+                                                        tenant.id
                                                           ? "td_edit"
                                                           : ""
-                                                        }`}
+                                                      }`}
                                                     >
                                                       <h6 className="t_name">
                                                         {tenant.name
@@ -3603,7 +3873,8 @@ const PropertyDetails = () => {
                       (user && user.role === "coowner") ||
                       (user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin" || user.role === "executive"))) && (
+                          user.role === "superAdmin" ||
+                          user.role === "executive"))) && (
                       <>
                         <section className="property_card_single full_width_sec with_blue property_user">
                           <span className="verticall_title">
@@ -3640,13 +3911,14 @@ const PropertyDetails = () => {
                                   </div>
                                 )}
                               <div
-                                className={`${user &&
-                                    user.status === "active" &&
-                                    (user.role === "admin" ||
-                                      user.role === "superAdmin")
+                                className={`${
+                                  user &&
+                                  user.status === "active" &&
+                                  (user.role === "admin" ||
+                                    user.role === "superAdmin")
                                     ? "col-sm-11 col-10"
                                     : "col-12"
-                                  }`}
+                                }`}
                               >
                                 <div className="tenant_card">
                                   <Swiper
@@ -3683,15 +3955,15 @@ const PropertyDetails = () => {
                                                 className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                                 onClick={
                                                   user &&
-                                                    user.status === "active" &&
-                                                    (user.role === "admin" ||
-                                                      user.role === "superAdmin")
+                                                  user.status === "active" &&
+                                                  (user.role === "admin" ||
+                                                    user.role === "superAdmin")
                                                     ? (e) =>
-                                                      handleShowOwnerTags(
-                                                        e,
-                                                        propUser,
-                                                        "propowner"
-                                                      )
+                                                        handleShowOwnerTags(
+                                                          e,
+                                                          propUser,
+                                                          "propowner"
+                                                        )
                                                     : null
                                                 }
                                               >
@@ -3700,7 +3972,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <span
                                                       className="material-symbols-outlined click_icon text_near_icon"
                                                       style={{
@@ -3725,33 +3997,34 @@ const PropertyDetails = () => {
                                                   <h5
                                                     onClick={
                                                       user &&
-                                                        user.status ===
+                                                      user.status ===
                                                         "active" &&
-                                                        (user.role === "admin" ||
-                                                          user.role ===
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                           "superAdmin")
                                                         ? () =>
-                                                          openChangeUser(
-                                                            propUser.id,
-                                                            "owner"
-                                                          )
+                                                            openChangeUser(
+                                                              propUser.id,
+                                                              "owner"
+                                                            )
                                                         : ""
                                                     }
-                                                    className={`t_name ${user &&
-                                                        (user.role === "admin" ||
-                                                          user.role ===
+                                                    className={`t_name ${
+                                                      user &&
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                           "superAdmin")
                                                         ? "pointer"
                                                         : ""
-                                                      }`}
+                                                    }`}
                                                   >
                                                     {propUser.fullName}
                                                     {user &&
                                                       user.status ===
-                                                      "active" &&
+                                                        "active" &&
                                                       (user.role === "admin" ||
                                                         user.role ===
-                                                        "superAdmin") && (
+                                                          "superAdmin") && (
                                                         <span className="material-symbols-outlined click_icon text_near_icon">
                                                           edit
                                                         </span>
@@ -3765,8 +4038,8 @@ const PropertyDetails = () => {
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&
-                                                    (user.role ===
-                                                      "superAdmin") && (
+                                                    user.role ===
+                                                      "superAdmin" && (
                                                       <h6
                                                         className="text_red pointer"
                                                         style={{
@@ -3794,9 +4067,9 @@ const PropertyDetails = () => {
                                                   to={
                                                     propUser
                                                       ? `tel:+${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                          /\D/g,
+                                                          ""
+                                                        )}`
                                                       : "#"
                                                   }
                                                 >
@@ -3810,9 +4083,9 @@ const PropertyDetails = () => {
                                                   to={
                                                     propUser
                                                       ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                          /\D/g,
+                                                          ""
+                                                        )}`
                                                       : "#"
                                                   }
                                                   target="_blank"
@@ -4021,7 +4294,8 @@ const PropertyDetails = () => {
                         tenantDocument.length > 0) ||
                       (user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin" || user.role === "executive"))) && (
+                          user.role === "superAdmin" ||
+                          user.role === "executive"))) && (
                       <>
                         <section className="property_card_single full_width_sec with_orange property_user">
                           <span className="verticall_title">
@@ -4058,12 +4332,13 @@ const PropertyDetails = () => {
                                   </div>
                                 )}
                               <div
-                                className={`${user &&
-                                    (user.role === "admin" ||
-                                      user.role === "superAdmin")
+                                className={`${
+                                  user &&
+                                  (user.role === "admin" ||
+                                    user.role === "superAdmin")
                                     ? "col-sm-11 col-10"
                                     : "col-12"
-                                  }`}
+                                }`}
                               >
                                 <div className="tenant_card">
                                   <Swiper
@@ -4104,7 +4379,7 @@ const PropertyDetails = () => {
                                                     user.status === "active" &&
                                                     (user.role === "admin" ||
                                                       user.role ===
-                                                      "superAdmin")
+                                                        "superAdmin")
                                                   ) {
                                                     handleShowOwnerTags(
                                                       e,
@@ -4119,7 +4394,7 @@ const PropertyDetails = () => {
                                                   user.status === "active" &&
                                                   (user.role === "admin" ||
                                                     user.role ===
-                                                    "superAdmin") && (
+                                                      "superAdmin") && (
                                                     <span
                                                       className="material-symbols-outlined click_icon text_near_icon"
                                                       style={{
@@ -4144,33 +4419,34 @@ const PropertyDetails = () => {
                                                   <h5
                                                     onClick={
                                                       user &&
-                                                        user.status ===
+                                                      user.status ===
                                                         "active" &&
-                                                        (user.role === "admin" ||
-                                                          user.role ===
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                           "superAdmin")
                                                         ? () =>
-                                                          openChangeUser(
-                                                            propUser.id,
-                                                            "admin"
-                                                          )
+                                                            openChangeUser(
+                                                              propUser.id,
+                                                              "admin"
+                                                            )
                                                         : ""
                                                     }
-                                                    className={`t_name ${user &&
-                                                        (user.role === "admin" ||
-                                                          user.role ===
+                                                    className={`t_name ${
+                                                      user &&
+                                                      (user.role === "admin" ||
+                                                        user.role ===
                                                           "superAdmin")
                                                         ? "pointer"
                                                         : ""
-                                                      }`}
+                                                    }`}
                                                   >
                                                     {propUser.fullName}
                                                     {user &&
                                                       user.status ===
-                                                      "active" &&
+                                                        "active" &&
                                                       (user.role === "admin" ||
                                                         user.role ===
-                                                        "superAdmin") && (
+                                                          "superAdmin") && (
                                                         <span className="material-symbols-outlined click_icon text_near_icon">
                                                           edit
                                                         </span>
@@ -4184,8 +4460,8 @@ const PropertyDetails = () => {
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&
-                                                    (user.role ===
-                                                      "superAdmin") && (
+                                                    user.role ===
+                                                      "superAdmin" && (
                                                       <h6
                                                         className="text_red pointer"
                                                         style={{
@@ -4213,9 +4489,9 @@ const PropertyDetails = () => {
                                                   to={
                                                     propUser
                                                       ? `tel:+${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                          /\D/g,
+                                                          ""
+                                                        )}`
                                                       : "#"
                                                   }
                                                 >
@@ -4229,9 +4505,9 @@ const PropertyDetails = () => {
                                                   to={
                                                     propUser
                                                       ? `https://wa.me/+${propUser.phoneNumber.replace(
-                                                        /\D/g,
-                                                        ""
-                                                      )}`
+                                                          /\D/g,
+                                                          ""
+                                                        )}`
                                                       : "#"
                                                   }
                                                   target="_blank"
@@ -4421,7 +4697,7 @@ const PropertyDetails = () => {
                                     <h6>Furnishing</h6>
                                     <h5>
                                       {propertyDocument.furnishing.toLowerCase() ===
-                                        "raw"
+                                      "raw"
                                         ? "Unfurnished"
                                         : propertyDocument.furnishing}
                                     </h5>
@@ -4441,7 +4717,7 @@ const PropertyDetails = () => {
                                 <h6>Bedroom</h6>
                                 <h5>
                                   {propertyDocument.numberOfBedrooms === 0 ||
-                                    propertyDocument.numberOfBedrooms === "0"
+                                  propertyDocument.numberOfBedrooms === "0"
                                     ? "Yet to be added"
                                     : propertyDocument.numberOfBedrooms}
                                 </h5>
@@ -4463,7 +4739,7 @@ const PropertyDetails = () => {
                                     <h5>
                                       {propertyDocument.numberOfBathrooms ===
                                         0 ||
-                                        propertyDocument.numberOfBathrooms === "0"
+                                      propertyDocument.numberOfBathrooms === "0"
                                         ? "Yet to be added"
                                         : propertyDocument.numberOfBathrooms}
                                     </h5>
@@ -4542,7 +4818,7 @@ const PropertyDetails = () => {
                             {propertyDocument &&
                               propertyDocument.category === "Residential" &&
                               propertyDocument.livingAndDining.toLowerCase() ===
-                              "yes" && (
+                                "yes" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
@@ -4640,10 +4916,10 @@ const PropertyDetails = () => {
                                       {" "}
                                       {propertyDocument &&
                                         new Date().getFullYear() -
-                                        Number(
-                                          propertyDocument.yearOfConstruction
-                                        ) +
-                                        " Years"}{" "}
+                                          Number(
+                                            propertyDocument.yearOfConstruction
+                                          ) +
+                                          " Years"}{" "}
                                     </h5>
                                   </div>
                                 </div>
@@ -4877,9 +5153,9 @@ const PropertyDetails = () => {
                             {/* Furnishing */}
                             {propertyDocument &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "land" &&
+                                "land" &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "other" &&
+                                "other" &&
                               propertyDocument.furnishing && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
@@ -4892,7 +5168,7 @@ const PropertyDetails = () => {
                                     <h6>Furnishing</h6>
                                     <h5>
                                       {propertyDocument.furnishing.toLowerCase() ===
-                                        "raw"
+                                      "raw"
                                         ? "Unfurnished"
                                         : propertyDocument.furnishing}
                                     </h5>
@@ -4982,9 +5258,9 @@ const PropertyDetails = () => {
                             {propertyDocument &&
                               propertyDocument.numberOfBalcony !== 0 &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "land" &&
+                                "land" &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "other" && (
+                                "other" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
@@ -4997,7 +5273,7 @@ const PropertyDetails = () => {
 
                                     <h5>
                                       {propertyDocument.numberOfBalcony === 0 ||
-                                        propertyDocument.numberOfBalcony === "0"
+                                      propertyDocument.numberOfBalcony === "0"
                                         ? "No"
                                         : propertyDocument.numberOfBalcony}
                                     </h5>
@@ -5011,9 +5287,9 @@ const PropertyDetails = () => {
                                 propertyDocument.numberOfBalcony !== "0") &&
                               propertyDocument.balconyFacing &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "land" &&
+                                "land" &&
                               propertyDocument.propertyType.toLowerCase() !==
-                              "other" && (
+                                "other" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
@@ -5029,8 +5305,8 @@ const PropertyDetails = () => {
                                     <h5>
                                       {propertyDocument.balconyFacing
                                         ? propertyDocument.balconyFacing.join(
-                                          ", "
-                                        )
+                                            ", "
+                                          )
                                         : ""}
                                     </h5>
                                   </div>
@@ -5088,10 +5364,10 @@ const PropertyDetails = () => {
                                       {" "}
                                       {propertyDocument &&
                                         new Date().getFullYear() -
-                                        Number(
-                                          propertyDocument.yearOfConstruction
-                                        ) +
-                                        " Years"}{" "}
+                                          Number(
+                                            propertyDocument.yearOfConstruction
+                                          ) +
+                                          " Years"}{" "}
                                     </h5>
                                   </div>
                                 </div>
@@ -5424,8 +5700,8 @@ const PropertyDetails = () => {
                                     <h5>
                                       {propertyDocument.balconyFacing
                                         ? propertyDocument.balconyFacing.join(
-                                          ", "
-                                        )
+                                            ", "
+                                          )
                                         : ""}
                                     </h5>
                                   </div>
@@ -5795,8 +6071,8 @@ const PropertyDetails = () => {
                             {/* Covered Parking  */}
                             {(propertyDocument &&
                               propertyDocument.numberOfCoveredCarParking ===
-                              0) ||
-                              propertyDocument.numberOfCoveredCarParking ===
+                                0) ||
+                            propertyDocument.numberOfCoveredCarParking ===
                               "0" ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
@@ -5829,7 +6105,7 @@ const PropertyDetails = () => {
                             {/* Open car parking  */}
                             {(propertyDocument &&
                               propertyDocument.numberOfOpenCarParking === 0) ||
-                              propertyDocument.numberOfOpenCarParking === "0" ? (
+                            propertyDocument.numberOfOpenCarParking === "0" ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -5880,7 +6156,7 @@ const PropertyDetails = () => {
                             {propertyDocument &&
                               propertyDocument.evChargingPointStatus &&
                               propertyDocument.evChargingPointStatus.toLowerCase() ===
-                              "yes" && (
+                                "yes" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
@@ -5908,7 +6184,7 @@ const PropertyDetails = () => {
                     propertyDocument.category === "Commercial" &&
                     (propertyDocument.propertyType.toLowerCase() !== "land" ||
                       propertyDocument.propertyType.toLowerCase() !==
-                      "other") && (
+                        "other") && (
                       <div className="property_card_single mobile_full_card">
                         <div className="more_detail_card_inner">
                           <h2 className="card_title">Parking</h2>
@@ -5916,8 +6192,8 @@ const PropertyDetails = () => {
                             {/* Covered Parking  */}
                             {(propertyDocument &&
                               propertyDocument.numberOfCoveredCarParking ===
-                              0) ||
-                              propertyDocument.numberOfCoveredCarParking ===
+                                0) ||
+                            propertyDocument.numberOfCoveredCarParking ===
                               "0" ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
@@ -5950,7 +6226,7 @@ const PropertyDetails = () => {
                             {/* Open car parking  */}
                             {(propertyDocument &&
                               propertyDocument.numberOfOpenCarParking === 0) ||
-                              propertyDocument.numberOfOpenCarParking === "0" ? (
+                            propertyDocument.numberOfOpenCarParking === "0" ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -6001,7 +6277,7 @@ const PropertyDetails = () => {
                             {propertyDocument &&
                               propertyDocument.evChargingPointStatus &&
                               propertyDocument.evChargingPointStatus.toLowerCase() ===
-                              "yes" && (
+                                "yes" && (
                                 <div className="p_info_single">
                                   <div className="pd_icon">
                                     <img
@@ -6082,7 +6358,7 @@ const PropertyDetails = () => {
                               )}
                             {/* number of lifts  */}
                             {propertyDocument &&
-                              propertyDocument.numberOfLifts == 0 ? (
+                            propertyDocument.numberOfLifts == 0 ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
@@ -6135,14 +6411,14 @@ const PropertyDetails = () => {
                     propertyDocument.category === "Commercial" &&
                     (propertyDocument.propertyType.toLowerCase() !== "land" ||
                       propertyDocument.propertyType.toLowerCase() !==
-                      "other") && (
+                        "other") && (
                       <div className="property_card_single mobile_full_card">
                         <div className="more_detail_card_inner">
                           <h2 className="card_title">Building</h2>
                           <div className="p_info">
                             {/* number of lifts  */}
                             {propertyDocument &&
-                              propertyDocument.numberOfLifts == 0 ? (
+                            propertyDocument.numberOfLifts == 0 ? (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img

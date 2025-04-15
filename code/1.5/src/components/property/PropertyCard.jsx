@@ -294,7 +294,7 @@ const PropertyCard = ({ propertyid }) => {
             >
               <div className="img_container">
                 {/* <img src="/assets/img/admin_banner.jpg" alt="propdial" /> */}
-                {propertydoc.images.length > 0 ? (
+                {propertydoc.images?.length > 0 ? (
                   <img src={propertydoc.images[0]} alt={propertydoc.bhk} />
                 ) : propertydoc.category === "Residential" ? (
                   <img

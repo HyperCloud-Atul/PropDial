@@ -1,0 +1,123 @@
+.property_layout_pg {
+  .room_layouts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 22px;
+    grid-row-gap: 22px;
+    .room_layout_single {
+      padding: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      background: var(--white);
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      .bigimage_container {
+        overflow: hidden;
+        border-radius: 22px;
+      }
+      .top {
+        h3 {
+          background: var(--theme-blue-bg);
+          color: var(--theme-blue);
+          font-size: 20px;
+          font-weight: 500;
+          padding: 12px;
+          margin: -12px -12px 12px -12px;
+        }
+      }
+      .bottom {
+        position: relative;
+        .show_more_arrow{
+            align-items: center;
+            background: #e1e1e1;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex
+        ;
+            height: 100%;
+            justify-content: center;
+            padding: 2px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            span{
+                color: #606060;
+    font-size: 18px;
+            }
+        }
+    
+        .detail_box {
+          display: grid;
+          gap: 8px;
+          grid-template-columns: repeat(3, 1fr);
+
+          .detail_single {
+            display: flex;
+            gap: 4px;
+            .icon {
+              img {
+                height: 30px;
+                object-fit: contain;
+                opacity: 0.9;
+                width: 30px;
+              }
+            }
+            .left {
+              h6 {
+                color: #606060;
+                font-weight: 400;
+                margin-bottom: 0px;
+                font-size: 11px;
+                text-transform: uppercase;
+              }
+              h5 {
+                color: #303030;
+                font-weight: 500;
+                font-size: 13px;
+                margin-top: 2px !important;
+                margin-bottom: 0px;
+              }
+            }
+          }
+        }
+        .box_bg {
+          background: #f5f5f5;
+          border-radius: 8px;
+          margin: 12px 35px 12px 0;
+          padding: 8px;
+          h6 {
+            color: #606060;
+            font-weight: 400;
+            margin-bottom: 0px;
+            font-size: 11px;
+            text-transform: uppercase;
+          }
+          h5 {
+            color: #303030;
+            font-weight: 500;
+            font-size: 13px;
+            margin-top: 2px !important;
+            margin-bottom: 0px;
+          }
+          .fixtures_list{
+            display: flex
+            ;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 3px;
+            .fixture_single{
+                background: #dfdfdf;
+                border-radius: 30px;
+                font-size: 12px;
+                margin-top: 2px;
+                padding: 4px 12px;
+                font-weight: 500;
+            }
+          }
+         
+        }
+      }
+    }
+  }
+}

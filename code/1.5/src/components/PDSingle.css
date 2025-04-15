@@ -535,6 +535,7 @@
   text-transform: capitalize;
   width: fit-content;
   height: fit-content;
+  color: var(--light-black);
 }
 
 .ai_detail_show .in_detail {
@@ -1076,7 +1077,7 @@ label.upload_img input {
   text-transform: capitalize;
   min-height: 65px;
   text-align: center;
-  z-index: 1;
+  z-index: 5;
 }
 .top_right_badge.in-review{
   background: var(--theme-blue);

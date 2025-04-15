@@ -154,15 +154,15 @@ export default function Footer() {
                 </div>
               </div>
               <div className="col-lg-3 col-md-4 col-sm-6">
-                <div className="footer_single_title">Quick Links</div>
+                <div className="footer_single_title">Properties In</div>
                 <div className="footer_link">
-                  <Link to="properties">Property in Delhi</Link>
-                  <Link to="properties">Property in Noida</Link>
-                  <Link to="properties">Property in Gurugram</Link>
-                  <Link to="properties">Property in Pune</Link>
-                  <Link to="properties">Property in Mumbai</Link>
-                  <Link to="properties">Property in Bangalore</Link>
-                  <Link to="properties">Property in Hyderabad</Link>
+                  <Link to="properties">Delhi</Link>
+                  <Link to="properties">Noida</Link>
+                  <Link to="properties">Gurugram</Link>
+                  <Link to="properties">Pune</Link>
+                  <Link to="properties">Mumbai</Link>
+                  <Link to="properties">Bangalore</Link>
+                  <Link to="properties">Hyderabad</Link>
                 </div>
               </div>
               <div className="col-lg-3 col-md-4 col-sm-12">
