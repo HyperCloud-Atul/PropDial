@@ -658,24 +658,25 @@ const AddPropertyLayout = () => {
                                   )
                                 }
                               /> */}
-                              <input
-                                type="number"
-                                step="0.01"
-                                className="w-100"
-                                placeholder="Enter room length"
-                                value={layouts[openField]?.length || ""}
-                                onInput={(e) => {
-                                  const value = e.target.value;
-                                  // Allow only 2 digits after decimal
-                                  const regex = /^\d*\.?\d{0,2}$/;
-                                  if (!regex.test(value)) {
-                                    e.target.value =
-                                      layouts[openField]?.length || "";
-                                    return;
-                                  }
-                                  handleChange(openField, "length", value);
-                                }}
-                              />
+                            <input
+  type="number"
+  step="0.01"
+  className="w-100"
+  placeholder="Enter room length"
+  value={layouts[openField]?.length || ""}
+  onInput={(e) => {
+    const value = e.target.value;
+    const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
+
+    if (!regex.test(value)) {
+      e.target.value = layouts[openField]?.length || "";
+      return;
+    }
+
+    handleChange(openField, "length", value);
+  }}
+/>
+
 
                               <div className="unit">Ft</div>
                             </div>
@@ -708,8 +709,8 @@ const AddPropertyLayout = () => {
                                 value={layouts[openField]?.width || ""}
                                 onInput={(e) => {
                                   const value = e.target.value;
-                                  // Allow only 2 digits after decimal
-                                  const regex = /^\d*\.?\d{0,2}$/;
+                                  
+                                  const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
                                   if (!regex.test(value)) {
                                     e.target.value =
                                       layouts[openField]?.width || "";

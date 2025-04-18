@@ -185,10 +185,19 @@ const PropertyUtilityBills = () => {
       newErrors.selectedPaymentType = "Please select payment type";
     if (!selectedPaymentType)
       newErrors.selectedPaymentType = "Please select payment type";
+    if (
+      billWebsiteLink &&
+      !/^https:\/\/.+\..+/.test(billWebsiteLink.trim())
+    ) {
+      newErrors.billWebsiteLink =
+        "Website link must start with https:// and be valid";
+    }
     // plz don't delete this comment
     // if (!amountDue) newErrors.amountDue = "Please enter amount due";
     // if (!rawDate) newErrors.rawDate = "Please select due date";
     // if (!billStatus) newErrors.billStatus = "Please select bill status";
+      // Optional: Bill website link must be a valid URL format if entered
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // Returns true if no errors
@@ -208,11 +217,13 @@ const PropertyUtilityBills = () => {
     if (amountDue)
       setErrors((prevErrors) => ({ ...prevErrors, amountDue: "" }));
     if (rawDate) setErrors((prevErrors) => ({ ...prevErrors, rawDate: "" }));
+    if (billWebsiteLink)
+      setErrors((prevErrors) => ({ ...prevErrors, billWebsiteLink: "" }));
   }, [
     selectedBillType,
     authorityName,
     billId,
-
+    billWebsiteLink,
     billStatus,
     selectedPaymentType,
     amountDue,
@@ -562,11 +573,12 @@ const PropertyUtilityBills = () => {
                               className="w-100"
                             />
                           </div>
-                          {/* {errors.billId && (
+                          {errors.billWebsiteLink && (
                             <div className="field_error w-100">
-                              {errors.billId}
+                              {errors.billWebsiteLink}
                             </div>
-                          )} */}
+                          )}
+                      
                         </div>
                       </div>
 
