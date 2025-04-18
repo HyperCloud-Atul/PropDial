@@ -4730,7 +4730,7 @@ const Stage2 = (props) => {
                   (propertyDetails.Category === "Residential" && ((propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> :
                     ((propertyDetails.Category === "Residential" || propertyDetails.Category === "Commercial") &&
                       (propertyDetails.SuperArea !== "") && propertyDetails.CarpetArea !== "") &&
-                      (Number(propertyDetails.SuperArea) < Number(propertyDetails.CarpetArea)) ?
+                      (Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) ?
                       <div className="field_error">Super Area should be greater than Carpet Area  </div> :
                       (propertyDetails.Category === "Commercial" && (propertyDetails.CarpetArea === "" || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Carpet Area & Unit is mandatory</div> : ""}
               </div>
