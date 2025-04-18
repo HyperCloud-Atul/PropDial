@@ -2091,14 +2091,18 @@ const PropertyDetails = () => {
         alt="First"
         style={{ width: "100%", height: "100%", borderRadius: "8px" }}
       /> */}
-      <span  
+      <span  className="number"
       >
         {images.filter((url) => url).length >= 100
           ? "+99"
           : images.filter((url) => url).length} 
           <h6>
-          Photos
+          Photos 
           </h6>
+          <div>
+          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M630-444H192v-72h438L429-717l51-51 288 288-288 288-51-51 201-201Z"/></svg>
+          </div>
+
       </span>
     </div>
   )}

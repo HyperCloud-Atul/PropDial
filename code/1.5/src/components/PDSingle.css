@@ -13,8 +13,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   background: var(--theme-green);
   border-radius: 8px;
   display: flex
@@ -25,7 +25,7 @@
   color: white;
   border: 3px solid white;
 }
-.pd_single .pcs_inner .pcs_image_area .property_image span{
+.pd_single .pcs_inner .pcs_image_area .property_image .number{
   font-size: 18px;
   font-weight: 600;
 }
