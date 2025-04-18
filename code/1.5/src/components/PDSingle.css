@@ -543,8 +543,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  height: 66px;
-  overflow: hidden;
+  /* height: 66px; */
+  /* overflow: hidden; */
 }
 
 /* tenant css start  */
@@ -1439,7 +1439,7 @@ label.upload_img input {
   }
 
   .ai_detail_show .in_detail {
-    height: 52px;
+    /* height: 52px; */
   }
 
   .plus_icon .plus_icon_inner {

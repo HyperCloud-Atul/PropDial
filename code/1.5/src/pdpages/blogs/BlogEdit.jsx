@@ -423,21 +423,29 @@ const BlogEdit = () => {
               </div>
             </div>
           </div>
-          <div className="vg22"></div>
-          <button
+          <div
+                className="bottom_fixed_button"
+               
+              >
+                <div className="next_btn_back">
+                  <button
+                    type="button"
+                    className="theme_btn btn_border w-100 text-center no_icon"
+                    onClick={() => navigate(-1)}                 
+                  >
+                  View 
+                  </button>
+                <button
             type="submit"
             disabled={isUploading}
-            className="theme_btn btn_fill w-100 text-center no_icon update-blog-btn"
-            style={{
-              background: "#008080",
-              border: "none",
-              color: "#fff",
-              padding: "12px",
-              fontSize: "16px",
-            }}
+            className="theme_btn btn_fill w-100 text-center no_icon"
+       
           >
             Update Blog
           </button>
+                </div>
+              </div>
+        
         </form>
       </div>
       <style>{`

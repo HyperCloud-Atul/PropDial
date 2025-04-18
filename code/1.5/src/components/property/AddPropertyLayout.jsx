@@ -108,35 +108,72 @@ const AddPropertyLayout = () => {
   // Fetch fixtures from Firestore
   const defaultFixtures = ["Walls", "Roof", "Floor", "Switches & Sockets"];
 
-  const fetchFixtureOptions = async () => {
-    try {
-      const fixtureRef = projectFirestore
-        .collection("m_fixtures")
-        .doc("6jEq6BbUQiEOFPUGoEKJ");
-      const fixtureSnap = await fixtureRef.get();
+  // const fetchFixtureOptions = async () => {
+  //   try {
+  //     const fixtureRef = projectFirestore
+  //       .collection("m_fixtures")
+  //       .doc("6jEq6BbUQiEOFPUGoEKJ");
+  //     const fixtureSnap = await fixtureRef.get();
 
-      if (fixtureSnap.exists) {
-        const fixturesFromDB = fixtureSnap.data().fixtures || [];
+  //     if (fixtureSnap.exists) {
+  //       const fixturesFromDB = fixtureSnap.data().fixtures || [];
 
-        // Merge DB and default options without duplicates
-        const mergedFixtures = Array.from(
-          new Set([...fixturesFromDB, ...defaultFixtures])
-        );
+  //       // Merge DB and default options without duplicates
+  //       const mergedFixtures = Array.from(
+  //         new Set([...fixturesFromDB, ...defaultFixtures])
+  //       );
 
-        // Sort A-Z
-        const sortedFixtures = mergedFixtures.sort((a, b) =>
-          a.localeCompare(b)
-        );
+  //       // Sort A-Z
+  //       const sortedFixtures = mergedFixtures.sort((a, b) =>
+  //         a.localeCompare(b)
+  //       );
 
-        // Set for React Select
-        setFixtureOptions(
-          sortedFixtures.map((fixture) => ({ value: fixture, label: fixture }))
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching fixtures:", error);
-    }
+  //       // Set for React Select
+  //       setFixtureOptions(
+  //         sortedFixtures.map((fixture) => ({ value: fixture, label: fixture }))
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching fixtures:", error);
+  //   }
+  // };
+
+  const fetchFixtureOptions = () => {
+    return projectFirestore
+      .collection("m_fixtures")
+      .limit(1)
+      .onSnapshot((snapshot) => {
+        if (!snapshot.empty) {
+          const fixtureDoc = snapshot.docs[0];
+          const fixturesFromDB = fixtureDoc.data().fixtures || [];
+  
+          const mergedFixtures = Array.from(
+            new Set([...fixturesFromDB, ...defaultFixtures])
+          );
+  
+          const sortedFixtures = mergedFixtures.sort((a, b) =>
+            a.localeCompare(b)
+          );
+  
+          setFixtureOptions(
+            sortedFixtures.map((fixture) => ({
+              value: fixture,
+              label: fixture,
+            }))
+          );
+        }
+      }, (error) => {
+        console.error("Realtime fixture fetch error:", error);
+      });
   };
+  
+  useEffect(() => {
+    const unsubscribe = fetchFixtureOptions();
+  
+    return () => unsubscribe(); // clean up
+  }, []);
+  
+  
 
   const toggleField = (key) => {
     setOpenField((prev) => (prev === key ? null : key));
@@ -550,18 +587,24 @@ const AddPropertyLayout = () => {
                               </svg>
                             </div> */}
                               </div>
-                              {/* <div className="btn_text">
-                            <h6 className="add">Start</h6>
-                            <h6 className="half">In Progress</h6>
+                              <div className="btn_text">
+                            {/* <h6 className="add">{layouts[roomKey]?.roomName}</h6> */}
+                            {/* <h6 className="half">In Progress</h6>
                             <h6 className="full">Completed</h6>
-                            <h6 className="notallowed">Not Allowed</h6>
-                          </div> */}
+                            <h6 className="notallowed">Not Allowed</h6> */}
+                          </div>
                             </div>
-                            <div className="room_name">
+                            <div className="room_name mt-2">
                               {" "}
-                              {room.count === 1
+                            {layouts[roomKey]?.roomName ? layouts[roomKey]?.roomName : room.count === 1
                                 ? room.key
-                                : `${room.key} ${index + 1}`}
+                                : `${room.key} ${index + 1}` }
+                              {/* {room.count === 1
+                                ? room.key
+                                : `${room.key} ${index + 1}`} */}
+                            </div>
+                            <div className="room_name_new">
+                              
                             </div>
                           </button>
                         );

@@ -87,6 +87,8 @@ const PropertyDetails = () => {
     ["rolePropDial", "==", "manager"]
   );
 
+
+
   const {
     documents: users_Executive_Manager,
     error: users_Executive_ManagerError,
@@ -1556,7 +1558,27 @@ const PropertyDetails = () => {
                                 {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
                               </div>
                             </div>
-
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/user.png"
+                                  alt="propdial"
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Property Added By</h6>
+                                <h5>                                 
+                                        {dbUserState &&
+                                                            dbUserState.find(
+                                                              (user) =>
+                                                                user.id ===
+                                                                propertyDocument.createdBy
+                                                            )?.fullName}
+                                </h5>
+                                {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
+                              </div>
+                            </div>
+                        
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
@@ -1585,7 +1607,7 @@ const PropertyDetails = () => {
                                 </h5>
                               </div>
                             </div>
-                            <div className="p_info_single">
+                            {/* <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
                                   src="/assets/img/property-detail-icon/property_source.png"
@@ -1599,7 +1621,7 @@ const PropertyDetails = () => {
                                   {propertyDocument && propertyDocument.source}
                                 </h5>
                               </div>
-                            </div>
+                            </div> */}
                             <div className="p_info_single">
                               <div className="pd_icon">
                                 <img
@@ -3309,7 +3331,6 @@ const PropertyDetails = () => {
                                                   })()} */}
                                                   {(() => {
   const roomType = roomKey.replace(/\d+$/, "").toLowerCase();
-
   const defaultImageMap = {
     bedroom: "/assets/img/icons/illustrate_bedroom.jpg",
     kitchen: "/assets/img/icons/illustrate_kitchen.jpg",
@@ -3344,7 +3365,7 @@ const PropertyDetails = () => {
                                                     {room.length &&
                                                       room.width && (
                                                         <span className="in_single">
-                                                          Area:{" "}
+                                                         Carpet Area:{" "}
                                                           {
                                                             +(
                                                               parseFloat(
@@ -3357,8 +3378,22 @@ const PropertyDetails = () => {
                                                           }{" "}
                                                           SqFt
                                                         </span>
-                                                      )}
+                                                      )}                                                   
 
+                                                    {/* {room.fixtureBySelect &&
+                                                      room.fixtureBySelect.map(
+                                                        (fixture, findex) => (
+                                                          <span
+                                                            className="in_single"
+                                                            key={findex}
+                                                          >
+                                                            {fixture}
+                                                          </span>
+                                                        )
+                                                      )} */}
+                                                  </div>
+                                                  <div className="in_detail">
+                                                   
                                                     {room.length && (
                                                       <span className="in_single">
                                                         Length: {room.length} Ft
@@ -3370,17 +3405,7 @@ const PropertyDetails = () => {
                                                       </span>
                                                     )}
 
-                                                    {room.fixtureBySelect &&
-                                                      room.fixtureBySelect.map(
-                                                        (fixture, findex) => (
-                                                          <span
-                                                            className="in_single"
-                                                            key={findex}
-                                                          >
-                                                            {fixture}
-                                                          </span>
-                                                        )
-                                                      )}
+                                                   
                                                   </div>
                                                   {/* plz don't remove this  */}
                                                   {/* <div
