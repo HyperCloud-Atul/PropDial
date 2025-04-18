@@ -369,12 +369,15 @@ const PGAdminProperty = () => {
                       </span>
                     </div>
                   </div>
-                  <Link
-                    to="/newproperty"
-                    className="theme_btn btn_fill no_icon header_btn"
-                  >
-                    Create Property
-                  </Link>
+                  {user?.status === "active" && (user?.role === "admin" || user?.role === "superAdmin") && (
+                     <Link
+                     to="/newproperty"
+                     className="theme_btn btn_fill no_icon header_btn"
+                   >
+                     Create Property
+                   </Link>
+                  )}
+                 
                 </div>
               </div>
               <hr></hr>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
-import { Link } from "react-router-dom";
-import "./Blog.scss";
+import "./blogdetail.scss";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 const loaderStyle = {
@@ -35,7 +34,7 @@ const BlogDetail = () => {
         if (doc.exists) {
           setBlog({ id: doc.id, ...doc.data() });
         }
-    
+
         const snapshot = await projectFirestore.collection("blogs").get();
         const blogs = snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -49,8 +48,6 @@ const BlogDetail = () => {
     };
     fetchBlog();
   }, [id]);
-
-  const canAddBlog = !!(user && user.uid);
 
   // If still loading, return null
   if (loading) {
@@ -76,19 +73,24 @@ const BlogDetail = () => {
   }
 
   return (
-    <>
-      <div className="blog-detail-wrapper">
+    <div className="top_header_pg pg_bg pgblogdetail">
+      <div className="blog-detail-wrapper page_spacing pg_min_height">
         <div className="blog-detail-main">
-          {/* Blog Image Container with Edit button positioned on top-right */}
-          <div className="blog-image-container" style={{ position: "relative" }}>
+          {/* Blog Image Container with Edit button rendered only when logged in */}
+          <div
+            className="blog-image-container"
+            style={{ position: "relative" }}
+          >
             <img src={blog.image.url} alt={blog.title} className="blog-image" />
-            <div className="author-right">
-              <Link className="edit" to={`/blog-edit/${blog.id}`}>
-                Edit
-              </Link>
-            </div>
+            {user && (
+              <div className="author-right">
+                <Link className="edit" to={`/blog-edit/${blog.id}`}>
+                  Edit
+                </Link>
+              </div>
+            )}
           </div>
-          
+
           <div className="blog-box">
             <div className="title-container">
               <h1 className="blog-title">{blog.title}</h1>
@@ -109,7 +111,11 @@ const BlogDetail = () => {
           <div className="related-cards">
             {relatedBlogs.map((rblog) => (
               <Link to={`/blog/${rblog.id}`} key={rblog.id}>
-                <div className={`related-card ${rblog.id === id ? "selected" : ""}`}>
+                <div
+                  className={`related-card ${
+                    rblog.id === id ? "selected" : ""
+                  }`}
+                >
                   <div className="related-card-image">
                     <img src={rblog.image.url} alt={rblog.title} />
                   </div>
@@ -123,53 +129,19 @@ const BlogDetail = () => {
         </div>
       </div>
 
-      {/* Floating Add Blog Button at bottom right moved a bit left */}
-      {canAddBlog && (
-        <Link className="add-blog-btn-circle" to="/add-blog" title="Add Blog">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            fill="currentColor"
-            className="bi bi-patch-plus"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5"
-            />
-            <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z" />
-          </svg>
-        </Link>
-      )}
+      {/* Floating Add Blog Button, visible only when logged in */}
+      {user &&
+        user.status === "active" &&
+        (user.role === "admin" ||
+          user.role === "superAdmin" ||
+          user.role === "executive") && (
+          <Link to="/add-blog" className="property-list-add-property ">
+            <span className="material-symbols-outlined">add</span>
+          </Link>
+        )}
 
       <style>{`
         ${spinnerKeyframes}
-
-        /* Floating Add Blog Button Styles */
-        .add-blog-btn-circle {
-          position: fixed;
-          bottom: 20px;
-          right: 40px; /* Moved from 20px to 40px to shift left */
-          background-color: rgb(18, 146, 146);
-          border: 1px solid #006666;
-          color: #fff;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          transition: background-color 0.3s ease;
-          z-index: 1000;
-        }
-
-        .add-blog-btn-circle:hover {
-          background-color: #006666;
-        }
-
         /* Edit button styles positioned at the top right of the image container */
         .author-right {
           position: absolute;
@@ -192,7 +164,7 @@ const BlogDetail = () => {
           background-color: rgba(0, 0, 0, 0.8);
         }
       `}</style>
-    </>
+    </div>
   );
 };
 
