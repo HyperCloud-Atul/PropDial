@@ -2251,7 +2251,7 @@ const Stage2 = (props) => {
               <label htmlFor="">Property Readiness</label>
               <div
                 className="radio_group"
-                style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}
+                style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
               >
                 <div className="radio_group_single">
                   <div
@@ -2327,9 +2327,9 @@ const Stage2 = (props) => {
               <label htmlFor="">Furnishing</label>
               <div
                 className="radio_group"
-                style={{ display: "flex", alignItems: "center", flexWrap:"wrap" }}
+                style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
               >
-                 <div className="radio_group_single">
+                <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Fully-Furnished"
                       ? "radiochecked"
@@ -2391,7 +2391,7 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
-               
+
                 <div className="radio_group_single">
                   <div
                     className={`custom_radio_button ${propertyDetails && propertyDetails.Furnishing === "Unfurnished"
@@ -4727,8 +4727,12 @@ const Stage2 = (props) => {
               </div>
               <div>
                 {(propertyDetails.Category === "Plot") ? <div className="field_error">Please enter Area & Unit</div> :
-                  (propertyDetails.Category === "Residential" && ((propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> : ((propertyDetails.Category === "Residential" || propertyDetails.Category === "Commercial") && (Number(propertyDetails.SuperArea) < Number(propertyDetails.CarpetArea))) ? <div className="field_error">Super Area should be greater than Carpet Area  </div> :
-                    (propertyDetails.Category === "Commercial" && (propertyDetails.CarpetArea === "" || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Carpet Area & Unit is mandatory</div> : ""}
+                  (propertyDetails.Category === "Residential" && ((propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> :
+                    ((propertyDetails.Category === "Residential" || propertyDetails.Category === "Commercial") &&
+                      (propertyDetails.SuperArea !== "") && propertyDetails.CarpetArea !== "") &&
+                      (Number(propertyDetails.SuperArea) < Number(propertyDetails.CarpetArea)) ?
+                      <div className="field_error">Super Area should be greater than Carpet Area  </div> :
+                      (propertyDetails.Category === "Commercial" && (propertyDetails.CarpetArea === "" || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Carpet Area & Unit is mandatory</div> : ""}
               </div>
             </div>
 
