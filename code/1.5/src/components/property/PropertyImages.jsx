@@ -108,7 +108,7 @@ const PropertyImages = () => {
           style={{
             padding: "10px 15px",
             border: "none",
-            borderBottom: activeTab === "Outdoors" ? "3px solid blue" : "none",
+            borderBottom: activeTab === "Outdoors" ? "3px solid var(--theme-blue)" : "none",
             background: "none",
             cursor: "pointer",
             fontWeight: "bold",
@@ -137,13 +137,16 @@ const PropertyImages = () => {
 
       <div
         className="page_spacing pg_min_height"
-        style={{ paddingTop: `${navbarHeight + headerTabHeight + 20}px` }}
+        // style={{ paddingTop: `${navbarHeight + headerTabHeight + 20}px` }}
+        style={{
+          paddingTop:"68px"
+        }}
       >
         {/* ✅ Outdoors */}
         <div
           ref={(el) => (sectionRefs.current["Outdoors"] = el)}
           className="property_card_single mobile_full_card overflow_unset"
-          style={{ paddingTop: "20px" }}
+          
         >
           <div className="more_detail_card_inner">
             <h2 className="card_title">Outdoors</h2>
@@ -151,7 +154,7 @@ const PropertyImages = () => {
               className="image_gallery_grid"
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(32%, 1fr))",
                 gap: "15px",
               }}
             >
@@ -171,11 +174,12 @@ const PropertyImages = () => {
                       alt={`Property Image ${index + 1}`}
                       style={{
                         width: "100%",
-                        height: "200px",
+                        height: "auto",
+                        aspectRatio:"1/1",
                         objectFit: "cover",
                       }}
                     />
-                    <FaTrashAlt
+                    {/* <FaTrashAlt
                       onClick={() =>
                         setImageToDelete({ type: "images", index })
                       }
@@ -189,7 +193,7 @@ const PropertyImages = () => {
                         padding: "5px",
                         cursor: "pointer",
                       }}
-                    />
+                    /> */}
                   </div>
                 ))
               ) : (
@@ -205,7 +209,7 @@ const PropertyImages = () => {
             key={layoutName}
             ref={(el) => (sectionRefs.current[layoutName] = el)}
             className="property_card_single mobile_full_card overflow_unset"
-            style={{ paddingTop: "20px" }}
+            
           >
             <div className="more_detail_card_inner">
               <h2 className="card_title">{layoutName}</h2>
@@ -213,7 +217,7 @@ const PropertyImages = () => {
                 className="image_gallery_grid"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(32%, 1fr))",
                   gap: "15px",
                 }}
               >
@@ -233,11 +237,12 @@ const PropertyImages = () => {
                         alt={img.name}
                         style={{
                           width: "100%",
-                          height: "200px",
+                          height: "auto",
+                          aspectRatio: "1/1",
                           objectFit: "cover",
                         }}
                       />
-                      <FaTrashAlt
+                      {/* <FaTrashAlt
                         onClick={() =>
                           setImageToDelete({
                             type: "layoutImages",
@@ -255,7 +260,7 @@ const PropertyImages = () => {
                           padding: "5px",
                           cursor: "pointer",
                         }}
-                      />
+                      /> */}
                     </div>
                   ))
                 ) : (

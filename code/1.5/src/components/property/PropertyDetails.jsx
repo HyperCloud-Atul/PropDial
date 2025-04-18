@@ -2069,9 +2069,9 @@ const PropertyDetails = () => {
                     <div className="pcs_inner pointer" to="/pdsingle">
                       <div className="pcs_image_area relative">
                         {images.length > 0 ? (
-                          <Link
-                            className="bigimage_container"
-                            to={`/property-images/${propertyid}`}
+                          <div
+                            className="bigimage_container relative"
+                            
                           >
                             <Gallery
                               style={{ background: "red" }}
@@ -2083,7 +2083,27 @@ const PropertyDetails = () => {
                                 }))}
                               slideDuration={1000}
                             />
-                          </Link>
+                           <Link className="property_image" to={`/property-images/${propertyid}`}>
+  {images.filter((url) => url)[0] && (
+    <div style={{ position: "relative", display: "inline-block" }} className="property_image_inner">
+      {/* <img
+        src={images.filter((url) => url)[0]}
+        alt="First"
+        style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+      /> */}
+      <span  
+      >
+        {images.filter((url) => url).length >= 100
+          ? "+99"
+          : images.filter((url) => url).length} 
+          <h6>
+          Photos
+          </h6>
+      </span>
+    </div>
+  )}
+</Link>
+                          </div>
                         ) : (
                           <img
                             className="default_prop_img"

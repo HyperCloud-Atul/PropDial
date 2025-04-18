@@ -7,8 +7,32 @@
 
 .pd_single .pcs_inner .pcs_image_area {
   width: 40%;
-}
 
+}
+.pd_single .pcs_inner .pcs_image_area .property_image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 72px;
+  height: 72px;
+  background: var(--theme-green);
+  border-radius: 8px;
+  display: flex
+;
+  align-items: center;
+  justify-content: center;
+  text-align: center; 
+  color: white;
+  border: 3px solid white;
+}
+.pd_single .pcs_inner .pcs_image_area .property_image span{
+  font-size: 18px;
+  font-weight: 600;
+}
+.pd_single .pcs_inner .pcs_image_area .property_image h6{
+  font-size: 13px;
+  font-weight: 400;
+}
 .pd_single .pcs_inner .pcs_image_area .default_prop_img {
   width: 100%;
   aspect-ratio: 3/2;
