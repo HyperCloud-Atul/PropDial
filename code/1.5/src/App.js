@@ -633,14 +633,25 @@ function App() {
                         )
                       }
                     ></Route>
+                        <Route
+                      path="/add-property-layout/:propertyLayoutId"
+                      element={
+                        user &&
+                        (user.role === "admin" ||
+                          user.role === "superAdmin" ||
+                          user.role === "executive") ? (
+                          <AddPropertyLayout />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
+                      
+                    ></Route>
                     <Route
                       path="/propertydetails/:propertyid"
                       element={<PropertyDetails></PropertyDetails>}
                     ></Route>
-                      <Route
-                      path="/add-property-layout/:propertyLayoutId"
-                      element={<AddPropertyLayout></AddPropertyLayout>}
-                    ></Route>
+                  
                      <Route
                       path="/view-layout/:propertyLayoutId"
                       element={<ViewPropertyLayout></ViewPropertyLayout>}

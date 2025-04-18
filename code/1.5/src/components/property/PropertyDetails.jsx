@@ -66,6 +66,8 @@ const PropertyDetails = () => {
   const [propertyPOCDoc, setpropertyPOCDoc] = useState(null);
   const [propertyOnboardingDateFormatted, setPropertyOnboardingDateFormatted] =
     useState();
+    const [propertyUpdateDateFormatted, setPropertyUpdateDateFormatted] =
+    useState();
 
   const { documents: dbUsers, error: dbuserserror } = useCollection(
     "users-propdial",
@@ -381,6 +383,17 @@ const PropertyDetails = () => {
       // console.log('Property Onboarding Date after:', propertyOnboardingDate)
       setPropertyOnboardingDateFormatted(
         format(propertyOnboardingDate, "dd MMMM, yyyy")
+      );
+      // console.log('Property Onboarding Date formatted:', propertyOnboardingDateFormatted)
+    }
+
+    if (propertyDocument) {
+      const propertyUpdateDate = new Date(
+        propertyDocument.updatedAt.seconds * 1000
+      );
+      // console.log('Property Onboarding Date after:', propertyOnboardingDate)
+      setPropertyUpdateDateFormatted(
+        format(propertyUpdateDate, "dd MMMM, yyyy")
       );
       // console.log('Property Onboarding Date formatted:', propertyOnboardingDateFormatted)
     }
@@ -1550,7 +1563,7 @@ const PropertyDetails = () => {
                                 />
                               </div>
                               <div className="pis_content">
-                                <h6>Property Added Date</h6>
+                                <h6>Property Added At</h6>
                                 <h5>
                                   {propertyDocument &&
                                     propertyOnboardingDateFormatted}
@@ -1637,6 +1650,42 @@ const PropertyDetails = () => {
                                       "Yet to be added"}
                                   </h5>
                                 )}
+                              </div>
+                            </div>
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/VisitingDays.png"
+                                  alt="propdial"
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Last Updated At</h6>
+                                <h5>
+                                  {propertyDocument &&
+                                    propertyUpdateDateFormatted}
+                                </h5>
+                                {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
+                              </div>
+                            </div>
+                            <div className="p_info_single">
+                              <div className="pd_icon">
+                                <img
+                                  src="/assets/img/property-detail-icon/user.png"
+                                  alt="propdial"
+                                />
+                              </div>
+                              <div className="pis_content">
+                                <h6>Last Updated By</h6>
+                                <h5>                                 
+                                        {dbUserState &&
+                                                            dbUserState.find(
+                                                              (user) =>
+                                                                user.id ===
+                                                                propertyDocument.updatedBy
+                                                            )?.fullName}
+                                </h5>
+                                {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}
                               </div>
                             </div>
                             {user &&
@@ -2020,9 +2069,9 @@ const PropertyDetails = () => {
                     <div className="pcs_inner pointer" to="/pdsingle">
                       <div className="pcs_image_area relative">
                         {images.length > 0 ? (
-                          <Link
-                            className="bigimage_container"
-                            to={`/property-images/${propertyid}`}
+                          <div
+                            className="bigimage_container relative"
+                            
                           >
                             <Gallery
                               style={{ background: "red" }}
@@ -2034,7 +2083,31 @@ const PropertyDetails = () => {
                                 }))}
                               slideDuration={1000}
                             />
-                          </Link>
+                           <Link className="property_image" to={`/property-images/${propertyid}`}>
+  {images.filter((url) => url)[0] && (
+    <div style={{ position: "relative", display: "inline-block" }} className="property_image_inner">
+      {/* <img
+        src={images.filter((url) => url)[0]}
+        alt="First"
+        style={{ width: "100%", height: "100%", borderRadius: "8px" }}
+      /> */}
+      <span  className="number"
+      >
+        {images.filter((url) => url).length >= 100
+          ? "+99"
+          : images.filter((url) => url).length} 
+          <h6>
+          Photos 
+          </h6>
+          <div>
+          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M630-444H192v-72h438L429-717l51-51 288 288-288 288-51-51 201-201Z"/></svg>
+          </div>
+
+      </span>
+    </div>
+  )}
+</Link>
+                          </div>
                         ) : (
                           <img
                             className="default_prop_img"

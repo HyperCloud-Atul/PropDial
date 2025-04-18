@@ -43,6 +43,11 @@ const MakeInactivePopup = ({
       value: "Unreachable",
       label: "Unreachable",
     },
+    {
+      id: "testing/dummy",
+      value: "Testing/Dummy",
+      label: "Testing/Dummy",      
+    },
     { id: "other", value: "Other", label: "Other" },
   ];
 
