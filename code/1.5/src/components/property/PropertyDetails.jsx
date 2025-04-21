@@ -389,7 +389,7 @@ const PropertyDetails = () => {
 
     if (propertyDocument) {
       const propertyUpdateDate = new Date(
-        propertyDocument.updatedAt.seconds * 1000
+        propertyDocument?.updatedAt?.seconds * 1000
       );
       // console.log('Property Onboarding Date after:', propertyOnboardingDate)
       setPropertyUpdateDateFormatted(

@@ -27,7 +27,7 @@ const PGBlogs1 = () => {
         <Hero
           pageTitle="Propdial Blogs"
           pageSubTitle="Discover Our Blogs"
-          heroImage="/assets/img/blog-head-img.jpg"
+          heroImage="/assets/img/about_main_content_bg.jpg"
         />
       </div>
 
