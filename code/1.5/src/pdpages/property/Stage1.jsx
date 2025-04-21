@@ -262,7 +262,7 @@ const Stage1 = (props) => {
     Package: "",
     Flag: "",
     Source: "",
-    OwnerShip: "",
+    // OwnerShip: "",
     Category: "",
     UnitNumber: "",
     DemandPriceRent: "",
@@ -300,7 +300,7 @@ const Stage1 = (props) => {
         Package: propertyDocument.package,
         Flag: propertyDocument.flag,
         Source: propertyDocument.source,
-        OwnerShip: propertyDocument.ownership,
+        // OwnerShip: propertyDocument.ownership,
         Category: propertyDocument.category
           ? propertyDocument.category
           : "Residential",
@@ -735,9 +735,9 @@ const Stage1 = (props) => {
       errorFlag = true;
     }
 
-    if (propertyDetails.OwnerShip === "") {
-      errorFlag = true;
-    }
+    // if (propertyDetails.OwnerShip === "") {
+    //   errorFlag = true;
+    // }
 
     if (propertyDetails.Purpose === "Rent" && propertyDetails.SecurityDeposit === "") {
       errorFlag = true;
@@ -805,7 +805,7 @@ const Stage1 = (props) => {
       package: propertyDetails.Package,
       flag: propertyDetails.Flag,
       source: propertyDetails.Source,
-      ownership: propertyDetails.OwnerShip,
+      // ownership: propertyDetails.OwnerShip,
       category: propertyDetails.Category
         ? propertyDetails.Category
         : "Residential",
@@ -855,7 +855,7 @@ const Stage1 = (props) => {
       const newProperty = {
         ...property,
         //Stage 2 fields-createhere        
-        ownership: "",
+        // ownership: "",
         propertyType: "",
         bhk: "",
         numberOfBedrooms: "0",
@@ -1643,7 +1643,7 @@ const Stage1 = (props) => {
             </div>
           </div>
           {/* Ownership */}
-          <div className="col-xl-4 col-lg-6">
+          {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">Ownership</label>
               <div className="form_field_inner">
@@ -1791,7 +1791,7 @@ const Stage1 = (props) => {
               </div>
               {(propertyDetails.OwnerShip === "") ? <div className="field_error">Please select Ownership</div> : ""}
             </div>
-          </div>
+          </div> */}
           {/* <div className="col-xl-4 col-lg-6">
             <div className="form_field st-2 label_top">
               <label htmlFor="">
