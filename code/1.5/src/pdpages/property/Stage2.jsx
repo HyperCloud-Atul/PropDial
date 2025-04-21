@@ -83,6 +83,7 @@ const Stage2 = (props) => {
   const [propertyDetails, setPropertyDetails] = useState({
     // All select type
     Category: "",
+    OwnerShip: "",
     PropertyType: "",
     Bhk: "",
     SuperArea: "",
@@ -156,6 +157,7 @@ const Stage2 = (props) => {
 
       setPropertyDetails({
         // All select type
+        OwnerShip: propertyDocument.ownership,
         PropertyType: propertyDocument.propertyType
           ? propertyDocument.propertyType
           : "Select Property Type",
@@ -364,166 +366,6 @@ const Stage2 = (props) => {
     props.setStateFlag("stage1");
   };
 
-  // function incrementInput(input) {
-  //   var inputValue = document.getElementById(input).value;
-  //   if (inputValue === "99") {
-  //     //Don't do anything
-  //   } else {
-  //     inputValue++;
-  //     if (input === "bedroomNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBedrooms: inputValue,
-  //       });
-  //     } else if (input === "bathroomNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBathrooms: inputValue,
-  //       });
-  //     } else if (input === "balconyNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBalcony: inputValue,
-  //       });
-  //     } else if (input === "kitchenNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfKitchen: inputValue,
-  //       });
-  //     } else if (input === "livingAreaNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfLivingArea: inputValue,
-  //       });
-  //     } else if (input === "basementNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBasement: inputValue,
-  //       });
-  //     } else if (input === "floorNoInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         FloorNo: inputValue,
-  //       });
-  //     } else if (input === "numberOfFloorsInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfFloors: inputValue,
-  //       });
-  //     } else if (input === "numberOfFlatsOnFloorInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfFlatsOnFloor: inputValue,
-  //       });
-  //     } else if (input === "numberOfLiftsInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfLifts: inputValue,
-  //       });
-  //     } else if (input === "numberOfOpenCarParkingInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfOpenCarParking: inputValue,
-  //       });
-  //     } else if (input === "numberOfCoveredCarParkingInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfCoveredCarParking: inputValue,
-  //       });
-  //     } else if (input === "lockinperiodInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         LockinPeriod: inputValue,
-  //       });
-  //     }
-  //   }
-  // }
-
-  // function decrementInput(input) {
-  //   var inputValue = document.getElementById(input).value;
-  //   console.log("input value in decrementInput:", inputValue)
-  //   if (inputValue === "0") {
-  //     //Don't do anything
-  //   } else {
-  //     inputValue--;
-  //     if (input === "bedroomNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBedrooms: inputValue,
-  //       });
-  //     } else if (input === "bathroomNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBathrooms: inputValue,
-  //       });
-  //     } else if (input === "balconyNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBalcony: inputValue,
-  //       });
-  //     }
-  //     else if (input === "kitchenNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfKitchen: inputValue,
-  //       });
-  //     }
-  //     else if (input === "livingAreaNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfLivingArea: inputValue,
-  //       });
-  //     }
-  //     else if (input === "basementNumberInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfBasement: inputValue,
-  //       });
-  //     }
-  //     else if (input === "floorNoInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         FloorNo: inputValue,
-  //       });
-  //     }
-  //     else if (input === "numberOfFloorsInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfFloors: inputValue,
-  //       });
-  //     }
-  //     else if (input === "numberOfFlatsOnFloorInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfFlatsOnFloor: inputValue,
-  //       });
-  //     }
-  //     else if (input === "numberOfLiftsInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfLifts: inputValue,
-  //       });
-  //     }
-  //     else if (input === "numberOfOpenCarParkingInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfOpenCarParking: inputValue,
-  //       });
-  //     }
-  //     else if (input === "numberOfCoveredCarParkingInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         NumberOfCoveredCarParking: inputValue,
-  //       });
-  //     }
-  //     else if (input === "lockinperiodInput") {
-  //       setPropertyDetails({
-  //         ...propertyDetails,
-  //         LockinPeriod: inputValue,
-  //       });
-  //     }
-  //   }
-  // }
 
   function incrementInput(input) {
     var inputValue = document.getElementById(input).value;
@@ -751,6 +593,10 @@ const Stage2 = (props) => {
     let errorFlag = false;
     let errorMsg = "Please resolve ERRORs before proceeding...";
 
+    if (propertyDetails.OwnerShip === "" || propertyDetails.OwnerShip === undefined || propertyDetails.OwnerShip === null) {
+      errorFlag = true;
+    }
+
     if (
       propertyDetails.PropertyType.toUpperCase() === "SELECT PROPERTY TYPE" ||
       propertyDetails.PropertyType === ""
@@ -781,8 +627,6 @@ const Stage2 = (props) => {
       // else errorMsg = errorMsg + ", Furnishing";
       errorFlag = true;
     }
-
-
 
     //SuperArea & CarpetArea Value
     if (propertyDetails && propertyDetails.Category === 'Commercial') {
@@ -845,9 +689,6 @@ const Stage2 = (props) => {
       errorFlag = true;
     }
 
-
-
-
     //EV Charging Type
     // if (
     //   propertyDetails.Category !== 'Plot' && (propertyDetails.EVChargingPointType === "" && propertyDetails.EVChargingPointStatus.toLowerCase() === 'yes')
@@ -899,10 +740,12 @@ const Stage2 = (props) => {
 
     }
 
+
     if (errorFlag) setFormError(errorMsg);
     else setFormError("");
 
     const property = {
+      ownership: propertyDetails.OwnerShip,
       propertyType: propertyDetails.PropertyType,
       bhk: propertyDetails.Bhk,
 
@@ -1010,15 +853,15 @@ const Stage2 = (props) => {
 
     // console.log('property:', property)
 
-    if (propertyid !== "new") {
-      const updatedProperty = {
-        ...property,
-        updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
-      };
+    if (!errorFlag) {
+      // console.log("Error Flag: ", errorFlag)
+      if (propertyid !== "new") {
+        const updatedProperty = {
+          ...property,
+          updatedAt: timestamp.fromDate(new Date()),
+          updatedBy: user.uid,
+        };
 
-      if (!errorFlag) {
-        console.log("Error Flag: ", errorFlag)
         console.log("Property id: ", propertyid, " and updatedProperty Object: ", updatedProperty);
 
         await updateDocument(propertyid, updatedProperty);
@@ -1029,9 +872,9 @@ const Stage2 = (props) => {
           props.setStateFlag("stage3");
         }
       }
-      else {
-        console.log("Error Flag: ", errorFlag)
-      }
+    }
+    else {
+      console.log("Error Flag: ", errorFlag)
     }
   };
   function addFloorNumber(floorno) {
@@ -1084,6 +927,158 @@ const Stage2 = (props) => {
     <form>
       <div className="add_property_fields">
         <div className="row row_gap form_full">
+          {/* Ownership */}
+          <div className="col-xl-4 col-lg-6">
+            <div className="form_field st-2 label_top">
+              <label htmlFor="">Ownership</label>
+              <div className="form_field_inner">
+                <div className="form_field_container">
+                  <div className="radio_group">
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Freehold"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_freehold"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Freehold"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_freehold"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Freehold
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Leasehold"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_leasehold"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Leasehold"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_leasehold"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Leasehold
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Co-operative society"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_co-operative_society"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Co-operative society"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_co-operative_society"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Co-operative society
+                        </label>
+                      </div>
+                    </div>}
+                    {<div className="radio_group_single">
+                      <div
+                        className={
+                          propertyDetails.OwnerShip === "Power of attorney"
+                            ? "custom_radio_button radiochecked"
+                            : "custom_radio_button"
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          id="ownership_power_of_attorney"
+                          onClick={(e) => {
+                            setPropertyDetails({
+                              ...propertyDetails,
+                              OwnerShip: "Power of attorney"
+                            });
+                          }}
+                        />
+                        <label
+                          htmlFor="ownership_power_of_attorney"
+                          style={{ paddingTop: "7px" }}
+                        >
+                          <div className="radio_icon">
+                            <span className="material-symbols-outlined add">
+                              add
+                            </span>
+                            <span className="material-symbols-outlined check">
+                              done
+                            </span>
+                          </div>
+                          Power of attorney
+                        </label>
+                      </div>
+                    </div>}
+
+                  </div>
+                </div>
+              </div>
+              {(propertyDetails.OwnerShip === "" || propertyDetails.OwnerShip === undefined || propertyDetails.OwnerShip === null) ? <div className="field_error">Please select Ownership</div> : ""}
+            </div>
+          </div>
+
+
           {/* Property Type */}
           <div className="col-xl-4 col-lg-6 col-md-4">
             <div className="form_field label_top">
@@ -4730,7 +4725,7 @@ const Stage2 = (props) => {
                   (propertyDetails.Category === "Residential" && ((propertyDetails.SuperArea === "" && propertyDetails.CarpetArea === "") || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Please enter Super or Carpet Area & Unit  </div> :
                     ((propertyDetails.Category === "Residential" || propertyDetails.Category === "Commercial") &&
                       (propertyDetails.SuperArea !== "") && propertyDetails.CarpetArea !== "") &&
-                      (Number(propertyDetails.SuperArea) < Number(propertyDetails.CarpetArea)) ?
+                      (Number(propertyDetails.SuperArea) <= Number(propertyDetails.CarpetArea)) ?
                       <div className="field_error">Super Area should be greater than Carpet Area  </div> :
                       (propertyDetails.Category === "Commercial" && (propertyDetails.CarpetArea === "" || propertyDetails.SuperAreaUnit === "")) ? <div className="field_error">Carpet Area & Unit is mandatory</div> : ""}
               </div>
