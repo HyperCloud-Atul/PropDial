@@ -892,6 +892,8 @@ const CreateProperty = () => {
           pid: formattedId,
           createdBy: user ? user.uid : "guest",
           createdAt: timestamp.fromDate(new Date()),
+          updatedAt: timestamp.fromDate(new Date()),
+          updatedBy: user ? user.uid : "guest"
         };
 
         console.log("_propertyWithSeqCounter: ", _propertyWithSeqCounter);
@@ -913,16 +915,22 @@ const CreateProperty = () => {
           setFormSuccess(null);
         }, 3000);
         //Add created by id into propertyusers list
-        const propertyUserData = {
-          propertyId: newpropid,
-          userId: user.uid,
-          userTag: "Admin",
-          userType: "propertyowner",
-        };
+
+
+        //No need to assign by default to Admin - start
+
+        // const propertyUserData = {
+        //   propertyId: newpropid,
+        //   userId: user.uid,
+        //   userTag: "Admin",
+        //   userType: "propertyowner",
+        // };
 
         // console.log("New Property Data: ", propertyUserData)
+        // await addProperyUsersDocument(propertyUserData);
 
-        await addProperyUsersDocument(propertyUserData);
+        //No need to assign by default to Admin - end
+
         setIsAdding(false);
         if (addNewPropertyDocumentResponse.error) {
           navigate("/");
