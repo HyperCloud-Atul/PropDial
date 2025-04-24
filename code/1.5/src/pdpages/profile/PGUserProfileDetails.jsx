@@ -13,6 +13,7 @@ import { projectStorage } from "../../firebase/config";
 import PhoneInput from "react-phone-input-2";
 import { useCollection } from "../../hooks/useCollection";
 import { projectFirestore } from "../../firebase/config";
+import NineDots from "../../components/NineDots";
 
 // import scss
 import "./PGUserProfileDetails.scss";
@@ -1552,8 +1553,19 @@ const handleSaveAccessMgmt = async () => {
       <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />
     );
   };
+
+   // nine dots menu start
+
+   const nineDotsMenu = [
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
+    { title: "User List", link: "/userlist", icon: "groups" },
+    { title: "Attendance Dashboard", link: "/attendance-dashboard", icon: "alarm" },
+   
+  ];
+  // nine dots menu end
   return (
     <div className="top_header_pg pg_bg user_detail_pg relative">
+      <NineDots nineDotsMenu={nineDotsMenu} />
       <div className="basic_info">
         <div
           className="pic_are relative"
@@ -4117,3 +4129,5 @@ const handleSaveAccessMgmt = async () => {
     </div>
   );
 }
+
+
