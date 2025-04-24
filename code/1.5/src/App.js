@@ -678,16 +678,8 @@ function App() {
                     ></Route>
                     <Route
                       path="/inspection-report/:inspectionid"
-                      element={
-                        user &&
-                        (user.role === "admin" ||
-                          user.role === "superAdmin" ||
-                          user.role === "executive" ||
-                          user.role === "owner") ? (
-                          <InspectionDetails />
-                        ) : (
-                          <Navigate to="/" />
-                        )
+                      element={                      
+                          <InspectionDetails />                     
                       }
                     ></Route>
                     <Route

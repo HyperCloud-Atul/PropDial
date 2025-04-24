@@ -454,6 +454,7 @@ const AddBlog = () => {
               </div>
             </div>
           </div>
+          <div className="vg22"></div>
           <button type="submit" disabled={isUploading} className="theme_btn btn_fill w-100 text-center no_icon">
             Add Blog
           </button>

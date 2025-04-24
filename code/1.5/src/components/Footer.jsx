@@ -15,6 +15,7 @@ export default function Footer() {
   const logoClick = () => {
     navigate("/");
   };
+  const isInspectionReportPage = location.pathname.startsWith("/inspection-report/");
   //  display none Array
   const excludedPaths = ["/", "aboutus", "contactus", "more-menu"];
   const shouldHide = excludedPaths.includes(location.pathname);
@@ -45,6 +46,7 @@ export default function Footer() {
   }, []);
 
   return (
+    <div className={`${isInspectionReportPage ? "hide_footer" : ""}`}>
     <div className={pageFooterClassName}>
       <CollapsibleGroup></CollapsibleGroup>
       <FooterBefore></FooterBefore>
@@ -215,6 +217,6 @@ export default function Footer() {
           </div>
         </div>
       </section>
-    </div>
+    </div>  </div>
   );
 }

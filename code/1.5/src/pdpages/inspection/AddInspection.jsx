@@ -92,7 +92,7 @@ const AddInspection = () => {
     return () => unsubscribe();
   }, [inspectionId]);
 
-  // fetch property layout room name old code don't delte this 
+  // fetch property layout room name old code don't delte this
   // useEffect(() => {
   //   if (!propertyId) return;
   //   const unsubscribe = projectFirestore
@@ -140,17 +140,17 @@ const AddInspection = () => {
 
   useEffect(() => {
     if (!propertyId) return;
-  
+
     const unsubscribe = projectFirestore
       .collection("property-layout-propdial")
       .where("propertyId", "==", propertyId)
       .onSnapshot(
         (snapshot) => {
           let roomsData = [];
-  
+
           snapshot.forEach((doc) => {
             const layouts = doc.data().layouts || {};
-  
+
             Object.entries(layouts).forEach(([roomKey, roomValue]) => {
               roomsData.push({
                 id: `${doc.id}_${roomKey}`, // unique room id
@@ -158,9 +158,9 @@ const AddInspection = () => {
               });
             });
           });
-  
+
           setRooms(roomsData);
-  
+
           setInspectionData((prevData) => {
             const newData = { ...prevData };
             roomsData.forEach((room) => {
@@ -188,11 +188,9 @@ const AddInspection = () => {
           console.error("Error fetching rooms:", error);
         }
       );
-  
+
     return () => unsubscribe();
   }, [propertyId]);
-  
-  
 
   const handleImageUpload = async (e, roomId) => {
     const file = e.target.files[0];
@@ -1102,12 +1100,12 @@ const AddInspection = () => {
 
   const handleSaveBill = async () => {
     if (!bills.length) return; // 🔹 Agar koi bill hi nahi hai to kuch mat karo
-  
+
     setIsBillDataSaving(true);
-  
+
     try {
       const updatedBills = { ...billInspectionData }; // 🔹 Pehle ka data preserve karein
-  
+
       bills.forEach((bill) => {
         const prevBillData = billInspectionData[bill.id] || {}; // 🔹 Existing data
         const newBillData = {
@@ -1117,7 +1115,7 @@ const AddInspection = () => {
           authorityName: bill.authorityName,
           billWebsiteLink: bill.billWebsiteLink,
         };
-  
+
         // ✅ **Sirf wahi fields update karo jo change hui hain**
         const changedFields = {};
         Object.keys(newBillData).forEach((key) => {
@@ -1125,19 +1123,19 @@ const AddInspection = () => {
             changedFields[key] = newBillData[key];
           }
         });
-  
+
         // ✅ **Agar koi field change hui hai to `thisBillUpdatedAt` aur `thisBillUpdatedBy` bhi update ho**
         if (Object.keys(changedFields).length > 0) {
           changedFields.thisBillUpdatedAt = timestamp.now();
           changedFields.thisBillUpdatedBy = user.uid;
         }
-  
+
         updatedBills[bill.id] = {
           ...(prevBillData || {}), // 🔹 Pehle ka data rakho
           ...changedFields, // 🔹 Sirf changed fields update ho
         };
       });
-  
+
       // ✅ **Firestore me saara data update ho ek saath**
       await projectFirestore
         .collection("inspections")
@@ -1152,7 +1150,7 @@ const AddInspection = () => {
             updatedBy: user.uid,
           }),
         });
-  
+
       setAfterSaveModal(true);
     } catch (error) {
       console.error("Error saving all bill data:", error);
@@ -1160,8 +1158,6 @@ const AddInspection = () => {
       setIsBillDataSaving(false);
     }
   };
-
-  
 
   // if final submit redirect to viewall inspection page
   useEffect(() => {
@@ -1175,7 +1171,7 @@ const AddInspection = () => {
 
   useEffect(() => {
     if (!inspectionId) return; // ✅ Agar `inspectionId` nahi hai to kuch mat karo
-  
+
     const timeoutId = setTimeout(() => {
       const unsubscribe = projectFirestore
         .collection("inspections")
@@ -1192,13 +1188,12 @@ const AddInspection = () => {
             console.error("Error fetching real-time inspection data:", error);
           }
         );
-  
+
       return () => unsubscribe(); // ✅ Cleanup function for memory optimization
     }, 3000); // ⏳ **3-second delay**
-  
+
     return () => clearTimeout(timeoutId); // ✅ Cleanup timeout on unmount
   }, [inspectionId]); // 🔥 Jab bhi `inspectionId` change hoga, ye effect trigger hoga
-  
 
   return (
     <div className="pg_min_height">
@@ -1883,6 +1878,7 @@ const AddInspection = () => {
                                         </div>
                                       )
                                     )}
+                              {(inspectionData[activeRoom]?.images?.length || 0) < 10 && (
                                     <div>
                                       <div
                                         onClick={() =>
@@ -1905,6 +1901,7 @@ const AddInspection = () => {
                                         }
                                       />
                                     </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -1919,7 +1916,7 @@ const AddInspection = () => {
                         }}
                       >
                         <div className="next_btn_back">
-                        {inspectionDatabaseData &&
+                          {inspectionDatabaseData &&
                             inspectionDatabaseData.layoutInspectionDone &&
                             inspectionDatabaseData.allBillInspectionComplete && (
                               <button
@@ -2228,12 +2225,11 @@ const AddInspection = () => {
                                           />
                                         </div>
                                       </div>
-                                      <label className="upload_icon">
+                                      {/* <label className="upload_icon">
                                         <div>
                                           <input
                                             type="file"
-                                            accept="image/*"
-                                            capture="environment"
+                                          
                                             onChange={(e) =>
                                               handleBillImageUpload(
                                                 e,
@@ -2245,26 +2241,79 @@ const AddInspection = () => {
                                           <FaRetweet size={24} color="#555" />
                                           <h6>Replace Image</h6>
                                         </div>
-                                      </label>
+                                      </label> */}
+
+                                      <div
+                                        onClick={() =>
+                                          document
+                                            .getElementById(
+                                              `bill-file-input-${selectedBill.id}`
+                                            )
+                                            .click()
+                                        }
+                                        className="upload_icon"
+                                      >
+                                        <FaRetweet size={24} color="#555" />
+                                        <h6>Replace Image</h6>
+                                      </div>
+
+                                      <input
+                                        type="file"
+                                        id={`bill-file-input-${selectedBill.id}`}
+                                        style={{ display: "none" }}
+                                        onChange={(e) =>
+                                          handleBillImageUpload(
+                                            e,
+                                            selectedBill.id
+                                          )
+                                        }
+                                      />
                                     </div>
                                   ) : (
-                                    <label className="upload_icon">
-                                      <div>
-                                        <input
-                                          type="file"
-                                          accept="image/*"
-                                          onChange={(e) =>
-                                            handleBillImageUpload(
-                                              e,
-                                              selectedBill.id
+                                    // <label className="upload_icon">
+                                    //   <div>
+                                    //     <input
+                                    //       type="file"
+                                    //       accept="image/*"
+                                    //       onChange={(e) =>
+                                    //         handleBillImageUpload(
+                                    //           e,
+                                    //           selectedBill.id
+                                    //         )
+                                    //       }
+                                    //       style={{ display: "none" }}
+                                    //     />
+                                    //     <FaPlus size={24} color="#555" />
+                                    //     <h6>Add Image</h6>
+                                    //   </div>
+                                    // </label>
+                                    <>
+                                      <div
+                                        onClick={() =>
+                                          document
+                                            .getElementById(
+                                              `bill-add-file-input-${selectedBill.id}`
                                             )
-                                          }
-                                          style={{ display: "none" }}
-                                        />
+                                            .click()
+                                        }
+                                        className="upload_icon"
+                                      >
                                         <FaPlus size={24} color="#555" />
                                         <h6>Add Image</h6>
                                       </div>
-                                    </label>
+
+                                      <input
+                                        type="file"
+                                        id={`bill-add-file-input-${selectedBill.id}`}
+                                        style={{ display: "none" }}
+                                        onChange={(e) =>
+                                          handleBillImageUpload(
+                                            e,
+                                            selectedBill.id
+                                          )
+                                        }
+                                      />
+                                    </>
                                   )}
                                 </div>
                               </div>
@@ -2315,27 +2364,27 @@ const AddInspection = () => {
                   )}
                 </div>
               )}
- {inspectionDatabaseData &&
-                            inspectionDatabaseData.layoutInspectionDone &&
-                            inspectionDatabaseData.allBillInspectionComplete && (
-              <div className="bottom_fixed_button">
-                <div className="next_btn_back">
-                  <button
-                    className="theme_btn no_icon btn_fill2 full_width"
-                    onClick={() => setFinalSubmit(true)}
-                    disabled={!isFinalSubmitEnabled()}
-                    style={{
-                      opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
-                      cursor: !isFinalSubmitEnabled()
-                        ? "not-allowed"
-                        : "pointer",
-                    }}
-                  >
-                    Final Submit
-                  </button>
-                </div>
-              </div>
-                            )}
+              {inspectionDatabaseData &&
+                inspectionDatabaseData.layoutInspectionDone &&
+                inspectionDatabaseData.allBillInspectionComplete && (
+                  <div className="bottom_fixed_button">
+                    <div className="next_btn_back">
+                      <button
+                        className="theme_btn no_icon btn_fill2 full_width"
+                        onClick={() => setFinalSubmit(true)}
+                        disabled={!isFinalSubmitEnabled()}
+                        style={{
+                          opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                          cursor: !isFinalSubmitEnabled()
+                            ? "not-allowed"
+                            : "pointer",
+                        }}
+                      >
+                        Final Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
             </>
           ) : (
             <div className="page_loader">

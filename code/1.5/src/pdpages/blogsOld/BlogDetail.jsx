@@ -82,7 +82,7 @@ const BlogDetail = () => {
             style={{ position: "relative" }}
           >
             <img src={blog.image.url} alt={blog.title} className="blog-image" />
-            {user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
+            {user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive")  (
               <div className="author-right">
                 <Link className="edit" to={`/blog-edit/${blog.id}`}>
                   Edit

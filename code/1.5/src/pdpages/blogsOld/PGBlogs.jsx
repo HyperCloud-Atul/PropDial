@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import Hero from "../../components/Hero";
+// import Hero from "../../components/Hero";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../../components/Blog.css";
@@ -18,15 +18,17 @@ const PGBlogs1 = () => {
   }, [location, user]);
 
   // Check if user exists and has a UID before allowing any additions
+  
+
   return (
     <div className="blog_page blog_page_css">
       {/* Hero Section */}
       <div className="blog_head">
-        <Hero
+        {/* <Hero
           pageTitle="Propdial Blogs"
           pageSubTitle="Discover Our Blogs"
-          heroImage="/assets/img/blog-head-img.jpg"
-        />
+          heroImage="/assets/img/about_main_content_bg.jpg"
+        /> */}
       </div>
 
       {/* Blog List */}
@@ -50,10 +52,10 @@ const PGBlogs1 = () => {
                       </div>
                     )}
                   </div>
-                  <Link className="card-body" to={`/blog/${blog.id}`}>
+                  <div className="card-body">
                     <h3>{blog.title}</h3>
                     <p className="card-subtitle">{blog.subTitle}</p>
-                  </Link>
+                  </div>
                   <div className="card-author">
                     <div className="author-left">
                       <Link className="read-more" to={`/blog/${blog.id}`}>

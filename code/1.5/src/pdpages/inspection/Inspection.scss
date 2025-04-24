@@ -31,7 +31,7 @@
       }
     }
   }
-  label.upload_icon {
+  .upload_icon {
     border: 1px dashed grey;
     border-radius: 5px;
     width: 90px;
@@ -41,6 +41,7 @@
     justify-content: center;
     text-align: center;
     padding: 2px;
+    flex-direction: column;
     cursor: pointer;
     h6 {
       font-size: 12px;

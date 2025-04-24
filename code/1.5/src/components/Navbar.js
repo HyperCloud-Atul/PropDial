@@ -13,7 +13,7 @@ export default function Navbar() {
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
-
+  const isInspectionReportPage = location.pathname.startsWith("/inspection-report/");
   const showHome = () => {
     navigate("/");
   };
@@ -347,7 +347,8 @@ export default function Navbar() {
  
   
   return (
-    <div className={navbarHideClass}>
+    // <div className={navbarHideClass}>
+    <div className={`${isInspectionReportPage ? "hide_navbar" : ""}`}>
       <header className={navbarClassName}>
         <nav className={navClass}>
           <ul>
