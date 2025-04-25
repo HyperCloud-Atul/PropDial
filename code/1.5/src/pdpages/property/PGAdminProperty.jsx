@@ -19,11 +19,11 @@ const PGAdminProperty = () => {
 
   // const { documents: allproperties, error: propertieserror } =
   //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
-  const { documents: allproperties, error: propertieserror } = useCollection(
-    "properties-propdial",
-    "",
-    ["createdAt", "desc"]
-  );
+  // const { documents: allproperties, error: propertieserror } = useCollection(
+  //   "properties-propdial",
+  //   "",
+  //   ["createdAt", "desc"]
+  // );
 
   const {
     documents: assignedPopertyUserList,
@@ -43,7 +43,7 @@ const PGAdminProperty = () => {
   };
 
   // // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("In-Review"); // Default to 'In-Review'
+  const [status, setStatus] = useState("Active"); // Default to 'active'
   const changeStatusFilter = (newStatus) => {
     setStatus(newStatus);
   };
@@ -53,6 +53,96 @@ const PGAdminProperty = () => {
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+
+  const ITEMS_PER_PAGE = 10;
+  // const [pdProperties, setAllproperties] = useState([]);
+  const [allproperties, setAllproperties] = useState([]);
+  const [lastVisiblePDDoc, setLastVisiblePDDoc] = useState(null);
+  const [hasMorePDDoc, setHasMorePDDoc] = useState(true);
+  
+// Initial Load
+useEffect(() => {
+  async function fetchData() {
+      // You can await here
+      await fetchProperties(null, status);      
+  }
+  fetchData();
+}, [status]);
+
+//Call merged function in case of any change of pa or pd properties
+// useEffect(() => {
+//   async function fetchData() {
+//       // You can await here
+//       await mergedPAPDProperties();
+//       // ...
+//   }
+//   fetchData();
+
+// }, [paProperties, pdProperties]);
+
+  // // Loading state
+  const fetchProperties = async (
+    _lastVisibleDoc = null,
+    _status = "Active",
+    
+) => {
+
+    try {
+        // console.log("Purpose: ", _purpose)
+
+        // setLoading(true);
+
+        let query = projectFirestore
+            .collection("properties-propdial")
+            // .where("propertyManagerID", " !=", user?.uid)
+            // .where("purpose", "==", _purpose)
+            .where("status", "==", _status)
+            // .where("createdBy", "!=", user?.uid)
+            // .orderBy("createdBy", "asc")
+            .orderBy("createdAt", "desc")
+            .limit(ITEMS_PER_PAGE);
+
+        if (_lastVisibleDoc) {
+            query = query.startAfter(_lastVisibleDoc);
+            // console.log('query start after: ', query)
+        }
+
+        const snapshot = await query.get();
+        const PDProperties = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+
+        if (_lastVisibleDoc) {
+            setAllproperties((prevItems) => [...prevItems, ...PDProperties]);
+        } else {
+            setAllproperties(PDProperties);
+        }
+        setLastVisiblePDDoc(snapshot.docs[snapshot.docs.length - 1]);
+        setHasMorePDDoc(snapshot.docs.length === ITEMS_PER_PAGE);
+
+        // console.log("PAProperties: ", PAProperties);
+
+    }
+    catch (error) {
+        console.log("Error in function fetchPropertiesOfPropDial: ", error)
+    }
+
+};
+
+
+const handleLoadMore = () => {
+  // if (loading) return;
+
+  // console.log("hasMorePADoc: ", hasMorePADoc)
+  // console.log("hasMorePDDoc: ", hasMorePDDoc)
+
+  // setLoading(true);
+
+  if (hasMorePDDoc) fetchProperties(lastVisiblePDDoc, status);
+
+};
 
   useEffect(() => {
     let _properties = null;

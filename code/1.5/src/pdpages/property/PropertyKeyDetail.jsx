@@ -264,7 +264,7 @@ const PropertyKeyDetail = () => {
                 <div className="col-lg-6">
                   <div className="title_card mobile_full_575 mobile_gap h-100">
                     <h2 className="text-center mb-4">
-                      OnePlace for Property Keys
+                      OnePlace for Property Keys 2
                     </h2>
                     {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
                     {!showAIForm && (
@@ -390,8 +390,7 @@ const PropertyKeyDetail = () => {
                                     <div>
                                       <input
                                         type="file"
-                                        accept="image/*"
-                                        capture="environment" 
+                                       
                                         onChange={(e) =>
                                           handleImageUpload(e, index)
                                         }
@@ -406,8 +405,7 @@ const PropertyKeyDetail = () => {
                                 <label className="upload_icon">
                                   <div>
                                     <input
-                                      type="file"
-                                      accept="image/*"
+                                      type="file"                                   
                                       onChange={(e) =>
                                         handleImageUpload(e, index)
                                       }

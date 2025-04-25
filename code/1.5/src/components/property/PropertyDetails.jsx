@@ -373,7 +373,7 @@ const PropertyDetails = () => {
   };
 
   // upload tenant code end
-
+ 
   // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
     if (propertyDocument) {
@@ -387,17 +387,22 @@ const PropertyDetails = () => {
       // console.log('Property Onboarding Date formatted:', propertyOnboardingDateFormatted)
     }
 
-    console.log("propertyDocument: ", propertyDocument)
-    if (propertyDocument) {
-      const propertyUpdateDate = new Date(
-        propertyDocument?.updatedAt?.seconds * 1000
-      );
-      // console.log('Property Onboarding Date after:', propertyOnboardingDate)
-      setPropertyUpdateDateFormatted(
-        format(propertyUpdateDate, "dd MMMM, yyyy")
-      );
-      // console.log('Property Onboarding Date formatted:', propertyOnboardingDateFormatted)
+    if (propertyDocument?.updatedAt?.seconds) {
+      const propertyUpdateDate = new Date(propertyDocument.updatedAt.seconds * 1000);
+      if (!isNaN(propertyUpdateDate)) {
+        setPropertyUpdateDateFormatted(format(propertyUpdateDate, "dd MMMM, yyyy"));
+      }
     }
+
+    console.log("propertyDocument: ", propertyDocument)
+    // if (propertyDocument) {
+    //   const propertyUpdateDate = new Date(
+    //     propertyDocument?.updatedAt?.seconds * 1000
+    //   );    
+    //   setPropertyUpdateDateFormatted(
+    //     format(propertyUpdateDate, "dd MMMM, yyyy")
+    //   );     
+    // }
 
     if (propertyDocument && propertyDocument.propertyManager) {
       const propertyManagerRef = projectFirestore
@@ -1662,7 +1667,7 @@ const PropertyDetails = () => {
                               <div className="pis_content">
                                 <h6>Last Updated At</h6>
                                 <h5>
-                                  {propertyDocument &&
+                                  {propertyDocument && propertyDocument.updatedAt &&
                                     propertyUpdateDateFormatted}
                                 </h5>
                                 {/* <h5>{propertyDocument && new Date(propertyDocument.onboardingDate.seconds * 1000)}</h5> */}

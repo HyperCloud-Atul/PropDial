@@ -497,7 +497,7 @@ function App() {
                 <Route
                   path="/referrallogin/:referralCode/:referredBy"
                   element={
-                    // user ? <Navigate to="/alreadylogin" /> :
+                    user ? <Navigate to="/alreadylogin" /> :
                     <ReferralLogin />
                   }
                 ></Route>
