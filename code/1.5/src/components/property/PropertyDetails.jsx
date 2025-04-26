@@ -541,11 +541,13 @@ const PropertyDetails = () => {
   };
 
   const confirmChangeUser = async () => {
+    console.log("selectedUser", selectedUser);
+    
     const updatedPropertyUser = {
-      userId: selectedUser,
+      userId: selectedUser.id,
       updatedAt: timestamp.fromDate(new Date()),
       updatedBy: user.uid,
-      userTag: "Owner",
+      userTag: selectedUser.rolePropDial,
     };
 
     // console.log('updateDocId: ', changedUser)
@@ -644,8 +646,8 @@ const PropertyDetails = () => {
     setFilteredUsers(filtered);
   };
 
-  const handleUserSelect = (userId) => {
-    setSelectedUser(userId);
+  const handleUserSelect = (_user) => {
+    setSelectedUser(_user);
   };
 
   //------------ End of Change Property Manager ---------
@@ -1396,8 +1398,10 @@ const PropertyDetails = () => {
                                 // type="checkbox"
                                 // checked={selectedUsers.includes(user.id)}
                                 type="radio"
-                                checked={selectedUser === user.id}
-                                onChange={() => handleUserSelect(user.id)}
+                                // checked={selectedUser === user.id}
+                                checked={selectedUser?.id === user.id}
+                                // onChange={() => handleUserSelect(user.id)}
+                                onChange={() => handleUserSelect(user)}
                               />
                               <div>
                                 <strong>
