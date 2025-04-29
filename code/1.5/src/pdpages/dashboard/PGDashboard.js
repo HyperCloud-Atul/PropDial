@@ -30,7 +30,7 @@ const PGDaashboard = () => {
                 {user && user.role.toLowerCase() === 'tenant' && <PGTenantDashboard />}
             </div> */}
             <div>
-                {user && user.role.toLowerCase() === 'manager' && <PGManagerDashboard />}
+                {user && (user.role.toLowerCase() === 'executive' || user.role.toLowerCase() === 'manager') && <PGManagerDashboard />}
             </div>
             <div>
                 {user && (user.role.toLowerCase() === 'admin' || user.role === 'superAdmin') && <PGAdminDashboard />}

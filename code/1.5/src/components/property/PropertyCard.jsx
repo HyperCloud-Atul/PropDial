@@ -312,7 +312,7 @@ const PropertyCard = ({ propertyid }) => {
               </div>
               <div className="left_side relative">
                 {user &&
-                  (user.role === "admin" || user.role === "superAdmin") && (
+                  (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
                     <Link
                       className="prop_edit"
                       to={`/updateproperty/${propertydoc.id}`}

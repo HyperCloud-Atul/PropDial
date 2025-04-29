@@ -63,14 +63,14 @@ const PGManagerDashboard = () => {
   //   ))
 
   const activeProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
+    filteredproperties && filteredproperties?.map((propdoc) => (
       propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
     ))
 
   const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
 
   const pendingProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
+    filteredproperties && filteredproperties?.map((propdoc) => (
       propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
     ))
 
@@ -156,9 +156,11 @@ const PGManagerDashboard = () => {
       <div className="top_header_pg pg_bg propagent_dashboard">
         <div className="page_spacing">
           <div className="pg_header">
-            <h2 className="m22 mb-1">Manager Dashboard</h2>
+            <h2 className="m22 mb-1" style={{
+              textTransform: "capitalize",
+            }}>{user?.role} Dashboard</h2>
             <h4 className="r18 light_black">
-              Welcome <b> {user.displayName} </b>to Propdial
+              Welcome <b> {user?.displayName} </b>to Propdial
             </h4>
           </div>
           <div className="vg22"></div>
