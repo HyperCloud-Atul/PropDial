@@ -1107,11 +1107,11 @@ const PropertyDetails = () => {
     if (option === "Active") {
       updatedProperty.isActiveInactiveReview = option;
       updatedProperty.isActiveUpdatedAt = timestamp.fromDate(new Date());
-      updatedProperty.isActiveUpdatedBy = user.uid;
+      updatedProperty.isActiveUpdatedBy = user.phoneNumber;
     } else if (option === "In-Review") {
       updatedProperty.isActiveInactiveReview = option;
       updatedProperty.isReviewUpdatedAt = timestamp.fromDate(new Date());
-      updatedProperty.isReviewUpdatedBy = user.uid;
+      updatedProperty.isReviewUpdatedBy = user.phoneNumber;
     }
 
     // Optionally, you can log the updated object for debugging
@@ -1158,8 +1158,6 @@ const PropertyDetails = () => {
     if (_option === "save") {
       const updatedTag = {
         userTag: selectedUserTag,
-        updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
       };
 
       // console.log('updatedTag: ', updatedTag)
@@ -1241,7 +1239,7 @@ const PropertyDetails = () => {
       resonForInactiveProperty: selectedReason,
       remarkForInactiveProperty: inactiveRemark,
       isInactiveUpdatedAt: timestamp.fromDate(new Date()),
-      isInactiveUpdatedBy: user.uid,
+      isInactiveUpdatedBy: user.phoneNumber,
     };
 
     // console.log("updatedProperty", updatedProperty);
@@ -1313,7 +1311,7 @@ const PropertyDetails = () => {
       const newLayoutRef = await projectFirestore
         .collection("property-layout-propdial")
         .add({
-          createdBy: user && user.uid, // Assuming you have user object
+          createdBy: user && user.phoneNumber, // Assuming you have user object
           createdAt: new Date(),
           finalSubmit: false,
           propertyId: propertyid,
@@ -2856,7 +2854,7 @@ const PropertyDetails = () => {
 
                   {user &&
                     user.status === "active" &&
-                    (propertyOwners?.filter((doc) => doc.userId === user?.uid)
+                    (propertyOwners?.filter((doc) => doc.userId === user?.phoneNumber)
                       .length > 0 ||
                       user.role === "admin" ||
                       user.role === "executive" ||
