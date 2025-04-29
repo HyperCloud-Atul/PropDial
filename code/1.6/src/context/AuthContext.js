@@ -25,9 +25,11 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsub = projectAuth.onAuthStateChanged((user) => {
       // update online status
-      
+
       if (user) {
-        const documentRef = projectFirestore.collection("users-propdial").doc(user.phoneNumber);
+        const phone = user.phoneNumber.slice(1)
+        const documentRef = projectFirestore.collection("users-propdial")
+          .doc(phone);
         const unsubscribe = documentRef.onSnapshot((snapshot) => {
           // need to make sure the doc exists & has data
           if (snapshot.data()) {
@@ -65,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
             let vehicleDetails = snapshot.data().vehicleDetails;
             let isEmployee = snapshot.data().isEmployee;
             let isAttendanceRequired = snapshot.data().isAttendanceRequired;
-            
+
 
             let userData = {
               ...user,
