@@ -10,8 +10,8 @@ import { ClipLoader } from "react-spinners";
 import Filters from "../../components/Filters"; // Using your existing Filters component
 import InactiveUserCard from "../../components/InactiveUserCard";
 const propertyFilter = ["Residential", "Commercial", "Plot"];
-const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
-
+// const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
+const statusFilter = [ "Active","In-Review", "Inactive"];
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { filterOption } = useParams();
@@ -43,7 +43,7 @@ const PGAdminProperty = () => {
   };
 
   // // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("Active"); // Default to 'active'
+  const [status, setStatus] = useState("active"); // Default to 'active'
   const changeStatusFilter = (newStatus) => {
     setStatus(newStatus);
   };

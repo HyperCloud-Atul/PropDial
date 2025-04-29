@@ -1501,7 +1501,7 @@ const PropertyDetails = () => {
             {/* 9 dots html end*/}
             {user &&
               user.status === "active" &&
-              (user.role === "admin" || user.role === "superAdmin") && (
+              (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
                 <Link
                   to={`/updateproperty/${propertyid}`}
                   className="property-list-add-property with_9dot"
@@ -3263,7 +3263,7 @@ const PropertyDetails = () => {
                           (propertyLayoutsNew.length > 0 ||
                             (user &&
                               (user.role === "admin" ||
-                                user.role === "superAdmin"))) && (
+                                user.role === "superAdmin" || user.role === "executive"))) && (
                             <section className="property_card_single full_width_sec with_blue">
                               <span className="verticall_title">
                                 Layout :{" "}
