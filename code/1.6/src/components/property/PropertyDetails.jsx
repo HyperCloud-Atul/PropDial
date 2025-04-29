@@ -373,7 +373,7 @@ const PropertyDetails = () => {
   };
 
   // upload tenant code end
- 
+
   // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
     if (propertyDocument) {
@@ -541,18 +541,23 @@ const PropertyDetails = () => {
   };
 
   const confirmChangeUser = async () => {
-    console.log("selectedUser", selectedUser);
-    
+    // console.log("selectedUser", selectedUser);
+
     const updatedPropertyUser = {
       userId: selectedUser.id,
-      updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
       userTag: selectedUser.rolePropDial,
     };
 
     // console.log('updateDocId: ', changedUser)
 
     await updateProperyUsersDocument(changedUser, updatedPropertyUser);
+
+    const selectedUserRole = selectedUser.rolePropDial
+    if (selectedUserRole.toLowerCase() === 'executive' || selectedUserRole.toLowerCase() === 'manager') {
+      await updateDocument(propertyid, {
+        propertyManagerID: selectedUser.phoneNumber,
+      });
+    }
 
     setchangeManagerPopup(false);
   };
@@ -964,6 +969,7 @@ const PropertyDetails = () => {
       };
 
       await addProperyUsersDocument(propertyUserData);
+
       if (errProperyUsersDocument) {
         console.log("response error: ", errProperyUsersDocument);
       }
