@@ -872,7 +872,7 @@ function App() {
                       element={
                         user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin") ? (
+                          user.role === "superAdmin" || user.role === "executive") ? (
                           <PGUpdateProperty />
                         ) : (
                           <Navigate to="/login" />
