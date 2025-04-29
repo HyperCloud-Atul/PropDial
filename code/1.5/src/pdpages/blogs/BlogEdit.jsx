@@ -431,7 +431,7 @@ const BlogEdit = () => {
                   <button
                     type="button"
                     className="theme_btn btn_border w-100 text-center no_icon"
-                    onClick={() => navigate(-1)}                 
+                    onClick={() => navigate(`/blog/${id}`)}               
                   >
                   View 
                   </button>

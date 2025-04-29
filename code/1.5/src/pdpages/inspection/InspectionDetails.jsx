@@ -200,18 +200,18 @@ const InspectionDetails = () => {
 
   const handleDownloadPDF = async () => {
     const element = document.getElementById("print-section");
-  
+
     const canvas = await html2canvas(element, {
       scale: 2, // increase quality
       useCORS: true, // allow cross-origin images (e.g., fonts)
     });
-  
+
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF("p", "mm", "a4");
-  
+
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
+
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("page.pdf");
   };
@@ -230,30 +230,32 @@ const InspectionDetails = () => {
       alert("Share not supported in your browser.");
     }
   };
-  
+
   return (
-    <div className=" pd_single pg_bg inspection_report">      
+    <div className=" pd_single pg_bg inspection_report">
       <div className="page_spacing relative">
-         {/* 9 dots html  */}
-                {user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
-                  <>
-                    <div
-                    onClick={handleShare}
-                    className="property-list-add-property with_9dot"
-                  >
-                    <span className="material-symbols-outlined">share</span>
-                  </div>
-                  <div
-                    onClick={() => navigate(-1)}
-                    className="property-list-add-property"
-                  >
-                    <span class="material-symbols-outlined">
-arrow_back
-</span>
-                  </div></>
-                )}
-                 
-                  {/* 9 dots html  */}
+        {/* 9 dots html  */}
+        {user &&
+          (user.role === "admin" ||
+            user.role === "superAdmin" ||
+            user.role === "executive") && (
+            <>
+              <div
+                onClick={handleShare}
+                className="property-list-add-property with_9dot"
+              >
+                <span className="material-symbols-outlined">share</span>
+              </div>
+              <div
+                onClick={() => navigate(-1)}
+                className="property-list-add-property"
+              >
+                <span class="material-symbols-outlined">arrow_back</span>
+              </div>
+            </>
+          )}
+
+        {/* 9 dots html  */}
         {propertyDocument && propertyDocument.unitNumber ? (
           inspectionDoc && (
             <div className="report" ref={reportRef} id="print-section">
@@ -263,14 +265,13 @@ arrow_back
                 Download PDF
               </button>
             </div> */}
-          
-                {/* <button onClick={handleDownloadPDF}>Download as PDF</button> */}
-               
-             
+
+              {/* <button onClick={handleDownloadPDF}>Download as PDF</button> */}
+
               <div className="report_header">
                 <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
                 <div className="rh_inner">
-                  <div className="date i_info">
+                  <div className="inner date i_info">
                     <img src="/assets/img/icons/start-date.png" alt="" />
                     <div className="right">
                       <h6>Date & Time</h6>
@@ -282,7 +283,7 @@ arrow_back
                       </h5>
                     </div>
                   </div>
-                  <div className="logo">
+                  <div className="inner logo">
                     <img src="/assets/img/logo_propdial.png" alt="" />
                     <div className="company_address">
                       <span>
@@ -294,12 +295,11 @@ arrow_back
                       </span>
                     </div>
                   </div>
-                  <div
-                    className="createdBy i_info"
+                  <div className="inner createdBy i_info"
                     style={{
-                      justifyContent: "end",
+                      // justifyContent: "end",
                     }}
-                  >
+                  > 
                     <img src="/assets/img/icons/add-user.png" alt="" />
                     <div className="right">
                       <h6>Inspection By</h6>
@@ -311,6 +311,7 @@ arrow_back
                           )?.fullName}
                       </h5>
                     </div>
+                 
                   </div>
                 </div>
               </div>
