@@ -53,7 +53,7 @@ const PhoneLogin_reCaptchaV2 = () => {
   };
 
   const { documents: dbUsers, error: dbuserserror } =
-  useCollection("users-propdial");
+    useCollection("users-propdial");
 
   // login with phone code start
   // use states
@@ -100,23 +100,23 @@ const PhoneLogin_reCaptchaV2 = () => {
     e.preventDefault();
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     let interval;
-    
+
     if (otpSliderState && otptimer > 0) {
       interval = setInterval(() => {
         setOtpTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } 
+    }
     else if (otptimer === 0) {
       setIsResendDisabled(false); // Jab timer 0 ho tabhi enable ho
     }
-  
+
     return () => clearInterval(interval);
   }, [otpSliderState, otptimer]); // Dependency fix
-  
+
   const handleResendOtp = () => {
-handleGoBack()
+    handleGoBack()
     setOtpTimer(60);
     setIsResendDisabled(true);  // Timer restart ke sath hi disable bhi ho
   };
@@ -141,7 +141,7 @@ handleGoBack()
           // Extract the first name
           let firstName = splitName[0];
 
-          let imgUrl = "/assets/img/dummy_user.png";
+          let imgUrl = "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2";
 
           await user.updateProfile({
             phoneNumber: phone,
@@ -253,22 +253,22 @@ handleGoBack()
     }
 
     const checkExistingUser =
-    // dbUsers && dbUsers.filter((item) => item.phoneNumber === phone);
-    dbUsers && dbUsers.filter((item) => item.id === phone);
-  console.log("checkExistingUser:", checkExistingUser);
+      // dbUsers && dbUsers.filter((item) => item.phoneNumber === phone);
+      dbUsers && dbUsers.filter((item) => item.id === phone);
+    console.log("checkExistingUser:", checkExistingUser);
 
-  if (checkExistingUser && checkExistingUser.length > 0) {
-    // console.log("checkExistingUser[0].status:", checkExistingUser[0].status);
-    if (checkExistingUser[0].status === "inactive") {
-      navigate("/inactiveuser");
-      return;
+    if (checkExistingUser && checkExistingUser.length > 0) {
+      // console.log("checkExistingUser[0].status:", checkExistingUser[0].status);
+      if (checkExistingUser[0].status === "inactive") {
+        navigate("/inactiveuser");
+        return;
+      }
+      // console.log('existing user')
+      setIsNewUser(false);
+    } else {
+      console.log("set new user");
+      setIsNewUser(true);
     }
-    // console.log('existing user')
-    setIsNewUser(false);
-  } else {
-    console.log("set new user");
-    setIsNewUser(true);
-  }
 
     try {
       setIsLoading(true); // Start the loader
@@ -297,10 +297,10 @@ handleGoBack()
 
   // OTP verify
   const verifyOTP = async (e) => {
-    if (isConfirmDisabled) return; 
+    if (isConfirmDisabled) return;
     try {
       setIsLoading(true); // Start the loader     
-      
+
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
         setUser(user)
@@ -314,7 +314,7 @@ handleGoBack()
 
         }
         else {//Existing User
-          console.log("Existing User Signed-In")         
+          console.log("Existing User Signed-In")
           allSliderVisible(false)
           console.log("existing user:", user);
           console.log("phone: ", phone)
@@ -352,16 +352,16 @@ handleGoBack()
       setError(
         "Given OTP is not valid, please enter the valid OTP sent to your mobile"
       );
-     
+
       setTimeout(function () {
         setError("");
         setResendOTPFlag(true);
       }, 10000);
-     
+
     }
   }
 
-  
+
   const toggleOtpVisibility = () => {
     setIsOtpHidden(!isOtpHidden); // Toggles the OTP visibility
   };
@@ -448,19 +448,19 @@ handleGoBack()
     setCountryName(countryData.name);
   };
 
-    // goback code
-   
-      const handleGoBack = () => {
-          setmobilenoSliderState(true)
-          setotpSliderState(false)
-          setIsLoading(false) 
-          setOtp("");     
-          setIsOtpHidden(true)    
-          setOtpTimer(80);
-      };
-      // goback code
-    
-      
+  // goback code
+
+  const handleGoBack = () => {
+    setmobilenoSliderState(true)
+    setotpSliderState(false)
+    setIsLoading(false)
+    setOtp("");
+    setIsOtpHidden(true)
+    setOtpTimer(80);
+  };
+  // goback code
+
+
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -481,7 +481,7 @@ handleGoBack()
                   <label htmlFor="" className="text-center">
                     Mobile Number
                   </label>
-                 
+
                   <div>
                     <PhoneInput
                       country={"in"}
@@ -582,7 +582,7 @@ handleGoBack()
               </div> */}
 
               <div className="vg22"></div>
-              
+
               <div className="otp_input"
                 style={{
                   width: "fit-content",
@@ -591,26 +591,26 @@ handleGoBack()
               >
                 <h5>OTP Verification</h5>
                 <label htmlFor="" className="w-100 relative" style={{
-                  color:"var(--theme-grey)",
-                  maxWidth:"260px",
-                  marginTop:"4px"
+                  color: "var(--theme-grey)",
+                  maxWidth: "260px",
+                  marginTop: "4px"
                 }}>Enter the code from the sms we sent to <span className="mobile" style={{
-                  color:"var(--light-black)",
-                  fontWeight:"500"
+                  color: "var(--light-black)",
+                  fontWeight: "500"
                 }}>{phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}</span>
                   <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
-                style={{
-                  marginLeft:"5px",
-                  position:"relative",
-                  top:"-2px"
-                }}
-                >
-                  {!isOtpHidden ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
-                  )}
-                </span>
+                    style={{
+                      marginLeft: "5px",
+                      position: "relative",
+                      top: "-2px"
+                    }}
+                  >
+                    {!isOtpHidden ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" /></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" /></svg>
+                    )}
+                  </span>
 
                 </label>
                 <OtpInput
@@ -643,37 +643,37 @@ handleGoBack()
                 </>}
               </div>
               <p className="resend_otp_timer">
-    Haven't received the OTP?{" "}
-    {otptimer > 0 ? (
-      <span>Resend In {otptimer}sec</span>
-    ) : (
-      <span
-        onClick={!isResendDisabled ? handleResendOtp : undefined}
-        style={{ cursor: isResendDisabled ? "not-allowed" : "pointer" }}
-      >
-        <a style={{ color: "var(--theme-green)" }}> Resend OTP</a>
-      </span>
-    )}
-  </p>
+                Haven't received the OTP?{" "}
+                {otptimer > 0 ? (
+                  <span>Resend In {otptimer}sec</span>
+                ) : (
+                  <span
+                    onClick={!isResendDisabled ? handleResendOtp : undefined}
+                    style={{ cursor: isResendDisabled ? "not-allowed" : "pointer" }}
+                  >
+                    <a style={{ color: "var(--theme-green)" }}> Resend OTP</a>
+                  </span>
+                )}
+              </p>
               <div className="vg22"></div>
               {/* {isLoading && ( */}
-                {/* <button
+              {/* <button
                   className="theme_btn btn_fill w_full no_icon"
                   onClick={verifyOTP}                 
                 >
                   Confirm
                 </button> */}
-                <button 
-  className="theme_btn btn_fill w_full no_icon"
-  onClick={verifyOTP}
-  disabled={isConfirmDisabled} // Disable logic apply
-  style={{   
-    cursor: isConfirmDisabled ? "not-allowed" : "pointer",
-    opacity: isConfirmDisabled ? 0.5 : 1,
-  }}
->
-  Confirm
-</button>
+              <button
+                className="theme_btn btn_fill w_full no_icon"
+                onClick={verifyOTP}
+                disabled={isConfirmDisabled} // Disable logic apply
+                style={{
+                  cursor: isConfirmDisabled ? "not-allowed" : "pointer",
+                  opacity: isConfirmDisabled ? 0.5 : 1,
+                }}
+              >
+                Confirm
+              </button>
 
               {/* )} */}
               {/* {!isLoading && ( 
@@ -682,15 +682,15 @@ handleGoBack()
                 //   <BeatLoader color={"#00a8a8"} loading={true} />
                 // </div>
               )}   */}
-                 <div className="vg10"></div>
-             
-                <button
-                  className="theme_btn btn_border w_full no_icon"
-                  onClick={handleGoBack}
-                >
-                 Change Number
-                </button>
-              
+              <div className="vg10"></div>
+
+              <button
+                className="theme_btn btn_border w_full no_icon"
+                onClick={handleGoBack}
+              >
+                Change Number
+              </button>
+
             </div>
           )}
         </div>
