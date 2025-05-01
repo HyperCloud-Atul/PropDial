@@ -59,7 +59,7 @@ const PGExportExcel = () => {
                 // locality: _locality === '' ? [] : _localityList,
                 // country: 'India',
                 createdAt: new Date(),
-                createdBy: user && user.uid
+                createdBy: user && user.phoneNumber
 
             }
             console.log('record', record)

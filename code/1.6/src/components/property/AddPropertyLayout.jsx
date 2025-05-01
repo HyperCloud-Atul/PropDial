@@ -418,7 +418,7 @@ const AddPropertyLayout = () => {
   const saveData = () => {
     const newUpdate = {
       updatedAt: new Date().toISOString(),
-      updatedBy: user && user.uid,
+      updatedBy: user && user.phoneNumber,
     };
     setIsLayoutSaving(true);
     setUpdateInfo([...updateInfo, newUpdate]);

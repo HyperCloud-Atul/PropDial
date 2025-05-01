@@ -498,11 +498,11 @@ const AddInspection = () => {
         .update({
           rooms: Object.values(inspectionData),
           lastUpdatedAt: timestamp.now(),
-          lastUpdatedBy: user.uid,
+          lastUpdatedBy: user.phoneNumber,
           layoutInspectionDone,
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
-            updatedBy: user.uid,
+            updatedBy: user.phoneNumber,
           }),
         });
       setIsDataSaving(false);
@@ -528,7 +528,7 @@ const AddInspection = () => {
           updatedAt: timestamp.now(),
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
-            updatedBy: user.uid,
+            updatedBy: user.phoneNumber,
           }),
         });
       navigate(`/inspection-report/${inspectionId}`);
@@ -1127,7 +1127,7 @@ const AddInspection = () => {
         // ✅ **Agar koi field change hui hai to `thisBillUpdatedAt` aur `thisBillUpdatedBy` bhi update ho**
         if (Object.keys(changedFields).length > 0) {
           changedFields.thisBillUpdatedAt = timestamp.now();
-          changedFields.thisBillUpdatedBy = user.uid;
+          changedFields.thisBillUpdatedBy = user.phoneNumber;
         }
 
         updatedBills[bill.id] = {
@@ -1143,11 +1143,11 @@ const AddInspection = () => {
         .update({
           bills: updatedBills, // ✅ **Pura `bills` object update ho raha hai**
           lastUpdatedAt: timestamp.now(),
-          lastUpdatedBy: user.uid,
+          lastUpdatedBy: user.phoneNumber,
           allBillInspectionComplete,
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
-            updatedBy: user.uid,
+            updatedBy: user.phoneNumber,
           }),
         });
 

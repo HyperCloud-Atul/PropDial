@@ -83,7 +83,7 @@ export default function AdminSettings() {
       serverPwd: emailServerPwd,
       status: "active",
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
     await projectFirestore.collection("settings").doc("SETTINGS").update({
       EMAIL,
@@ -103,7 +103,7 @@ export default function AdminSettings() {
       mode: pgMode,
       status: "active",
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
     await projectFirestore.collection("settings").doc("SETTINGS").update({
       PAYMENTGATEWAY,
@@ -115,7 +115,7 @@ export default function AdminSettings() {
       minBalance: walletMinBalance,
       status: "active",
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
     await projectFirestore.collection("settings").doc("SETTINGS").update({
       WALLET,

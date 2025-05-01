@@ -61,7 +61,7 @@ const AddNotification = () => {
       const updatedNotification = {
         ...notification,
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user ? user.uid : "guest",
+        updatedBy: user ? user.phoneNumber : "guest",
       };
 
       await updateDocument(notificationid, updatedNotification);

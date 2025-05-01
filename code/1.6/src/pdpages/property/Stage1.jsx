@@ -893,7 +893,7 @@ const Stage1 = (props) => {
         ...property,
 
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
 
       if (!errorFlag) {

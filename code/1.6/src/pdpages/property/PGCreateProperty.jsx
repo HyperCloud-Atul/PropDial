@@ -890,10 +890,10 @@ const CreateProperty = () => {
         const _propertyWithSeqCounter = {
           ..._newProperty,
           pid: formattedId,
-          createdBy: user ? user.uid : "guest",
+          createdBy: user ? user.phoneNumber : "guest",
           createdAt: timestamp.fromDate(new Date()),
           updatedAt: timestamp.fromDate(new Date()),
-          updatedBy: user ? user.uid : "guest"
+          updatedBy: user ? user.phoneNumber : "guest"
         };
 
         console.log("_propertyWithSeqCounter: ", _propertyWithSeqCounter);

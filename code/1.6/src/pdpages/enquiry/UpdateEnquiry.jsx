@@ -200,7 +200,7 @@ const UpdateEnquiry = () => {
         updateType,
         updateForOwner,
         visitDate,
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
 
       const updatedDocument = {

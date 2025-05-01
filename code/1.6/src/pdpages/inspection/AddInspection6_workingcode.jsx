@@ -283,10 +283,10 @@ const AddInspection = () => {
         .update({
           rooms: Object.values(inspectionData),
           lastUpdatedAt: timestamp.now(),
-          lastUpdatedBy: user.uid,
+          lastUpdatedBy: user.phoneNumber,
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
-            updatedBy: user.uid,
+            updatedBy: user.phoneNumber,
           }),
         });
       setIsDataSaving(false);
@@ -310,7 +310,7 @@ const AddInspection = () => {
           updatedAt: timestamp.now(),
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
-            updatedBy: user.uid,
+            updatedBy: user.phoneNumber,
           }),
         });
       navigate(`/inspection-report/${inspectionId}`);

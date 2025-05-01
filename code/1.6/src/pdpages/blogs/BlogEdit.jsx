@@ -135,7 +135,7 @@ const BlogEdit = () => {
       content: content.toString("html"),
       image,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
 
     try {
