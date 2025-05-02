@@ -295,11 +295,14 @@ const InspectionDetails = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="inner createdBy i_info"
-                    style={{
-                      // justifyContent: "end",
-                    }}
-                  > 
+                  <div
+                    className="inner createdBy i_info"
+                    style={
+                      {
+                        // justifyContent: "end",
+                      }
+                    }
+                  >
                     <img src="/assets/img/icons/add-user.png" alt="" />
                     <div className="right">
                       <h6>Inspection By</h6>
@@ -311,7 +314,6 @@ const InspectionDetails = () => {
                           )?.fullName}
                       </h5>
                     </div>
-                 
                   </div>
                 </div>
               </div>
@@ -517,11 +519,11 @@ const InspectionDetails = () => {
                                 color: "var(--light-black)",
                               }}
                             >
-                              Last update at:{" "}
+                              <span>Last update at:{" "}
                               {format(
                                 billDoc.thisBillUpdatedAt.toDate(),
                                 "dd-MMM-yyyy"
-                              )}
+                              )}</span>
                             </div>
                           )}
 
@@ -541,7 +543,7 @@ const InspectionDetails = () => {
                                 background: "#eeeeee",
                               }}
                             >
-                              Bill ID: {billDoc.billId}
+                             Bill ID: {billDoc.billId}
                             </div>
                             {billDoc?.amount && (
                               <h5
@@ -552,7 +554,7 @@ const InspectionDetails = () => {
                                   background: "#eeeeee",
                                 }}
                               >
-                                Amount: ₹{billDoc?.amount}
+                               Amount: ₹{billDoc?.amount}
                               </h5>
                             )}
                           </div>
@@ -580,7 +582,7 @@ const InspectionDetails = () => {
                                     color: "var(--theme-green)",
                                   }}
                                 >
-                                  Bill Website Link 👈
+                                  <span>Bill Website Link 👈</span>
                                 </Link>
                               </div>
                             </div>
