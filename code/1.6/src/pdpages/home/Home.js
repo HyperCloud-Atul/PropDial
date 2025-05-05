@@ -89,9 +89,9 @@ const Home = () => {
         <DuplicateCollection/>
         <UpdateMulitpleFiled/>
         <UpdateSameDoc/> */}
-        <ProductCarousel></ProductCarousel>
+        <ProductCarousel/>
         {/* <PunchInOut/> */}
-       
+      
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

@@ -2246,7 +2246,7 @@ const PropertyDetails = () => {
                           <h4 className="padd_right">
                             {user &&
                               user.status === "active" &&
-                              user.role !== "guest" && (
+                              (user.role === "superAdmin" || user.role === "admin" || user.role === "executive") && (
                                 <>{propertyDocument.unitNumber},</>
                               )}{" "}
                             {propertyDocument.society}
@@ -3811,14 +3811,15 @@ const PropertyDetails = () => {
                       <>
                         {user &&
                           user.status === "active" &&
-                          ((user &&
-                            user.role === "owner" &&
-                            tenantDocument &&
-                            tenantDocument.length > 0) ||
-                            (user &&
-                              user.role === "coowner" &&
-                              tenantDocument &&
-                              tenantDocument.length > 0) ||
+                          (
+                            // (user &&
+                            // user.role === "owner" &&
+                            // tenantDocument &&
+                            // tenantDocument.length > 0) ||
+                            // (user &&
+                            //   user.role === "coowner" &&
+                            //   tenantDocument &&
+                            //   tenantDocument.length > 0) ||
                             (user &&
                               (user.role === "admin" ||
                                 user.role === "superAdmin" ||
@@ -3972,8 +3973,9 @@ const PropertyDetails = () => {
                   {/* property user card  start */}
                   {user &&
                     user.status === "active" &&
-                    ((user && user.role === "owner") ||
-                      (user && user.role === "coowner") ||
+                    (
+                      // (user && user.role === "owner") ||
+                      // (user && user.role === "coowner") ||
                       (user &&
                         (user.role === "admin" ||
                           user.role === "superAdmin" ||
@@ -4385,14 +4387,15 @@ const PropertyDetails = () => {
                   {/* propdial managers / users card  start */}
                   {user &&
                     user.status === "active" &&
-                    ((user &&
-                      user.role === "owner" &&
-                      tenantDocument &&
-                      tenantDocument.length > 0) ||
-                      (user &&
-                        user.role === "coowner" &&
-                        tenantDocument &&
-                        tenantDocument.length > 0) ||
+                    (
+                      // (user &&
+                      // user.role === "owner" &&
+                      // tenantDocument &&
+                      // tenantDocument.length > 0) ||
+                      // (user &&
+                      //   user.role === "coowner" &&
+                      //   tenantDocument &&
+                      //   tenantDocument.length > 0) ||
                       (user &&
                         (user.role === "admin" ||
                           user.role === "superAdmin" ||
@@ -5645,7 +5648,7 @@ const PropertyDetails = () => {
                         <div className="p_info">
                           {user &&
                             user.status === "active" &&
-                            user.role !== "guest" && (
+                            (user.role === "superAdmin" || user.role === "admin" || user.role === "executive") && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img
