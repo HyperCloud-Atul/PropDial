@@ -74,7 +74,7 @@ const PunchInOut = () => {
   const { documents: attendanceData, errors: attendanceDataError } =
     useCollection(
       "attendance-propdial",
-      ["userId", "==", user.uid],
+      ["userId", "==", user.phoneNumber],
       ["date", "desc"],
       ["5"]
     );
@@ -200,7 +200,7 @@ const PunchInOut = () => {
       // Add a punch-in record  
       console.log("punch in click");
       const data = {
-        userId: user.uid,
+        userId: user.phoneNumber,
         punchIn: formattedPunchinTime,
         punchOut: null,
         workHrs: null,
@@ -231,7 +231,7 @@ const PunchInOut = () => {
       // Find the punch-in record for today
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .where("date", "==", formattedTodaysDate)
         .get();
 
@@ -276,7 +276,7 @@ const PunchInOut = () => {
     // Find the punch-in record for today
     const record = await projectFirestore
       .collection("attendance-propdial")
-      .where("userId", "==", user.uid)
+      .where("userId", "==", user.phoneNumber)
       // .where("date", "==", formattedTodaysDate)
       .limit(5)
       .get();
@@ -295,7 +295,7 @@ const PunchInOut = () => {
         // Step 1: Get the latest record
         const latestRecordRef = projectFirestore
           .collection("attendance-propdial")
-          .where("userId", "==", user.uid)
+          .where("userId", "==", user.phoneNumber)
           .orderBy("date", "desc")
           .limit(1);
 
@@ -311,7 +311,7 @@ const PunchInOut = () => {
         // Step 2: Get the second last record, skipping the latest one
         const secondLastRecordRef = projectFirestore
           .collection("attendance-propdial")
-          .where("userId", "==", user.uid)
+          .where("userId", "==", user.phoneNumber)
           .orderBy("date", "desc")
           .startAfter(latestDoc) // Skip the latest record
           .limit(1);

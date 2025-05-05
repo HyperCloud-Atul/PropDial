@@ -6,7 +6,7 @@ const UpdateCreatedByComponent = () => {
 
   const handleUpdate = async () => {
     setLoading(true);
-    const utilityBillRef = projectFirestore.collection("tenants");
+    const utilityBillRef = projectFirestore.collection("docs-propdial");
     const userRef = projectFirestore.collection("users-propdial");
 
     const fallbackNumber = "918749001111";

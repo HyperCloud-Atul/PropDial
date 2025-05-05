@@ -5,8 +5,8 @@ const DuplicateCollection = () => {
   const [status, setStatus] = useState("");
 
   const duplicateCollection = async () => {
-    const sourceCollection = "tenants"; // 🔁 change this
-    const targetCollection = "tenants-new"; // 🔁 change this
+    const sourceCollection = "attendance-propdial"; // 🔁 change this
+    const targetCollection = "attendance-propdial-old"; // 🔁 change this
 
     try {
       setStatus("Copying...");

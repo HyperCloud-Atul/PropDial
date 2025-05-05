@@ -56,7 +56,7 @@ const PropdialAllProperties = () => {
         let propList = [];
         const activepropertiesdocuments =
             user &&
-            user.uid &&
+            user.phoneNumber &&
             dbpropertiesdocuments &&
             dbpropertiesdocuments.filter(
                 (item) => (item.status.toUpperCase() === "ACTIVE" && item.postedBy.toUpperCase() === 'AGENT')

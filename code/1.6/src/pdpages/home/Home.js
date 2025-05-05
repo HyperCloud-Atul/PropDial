@@ -30,6 +30,8 @@ import AirBnb from "../../components/AirBnb";
 import CreateNewDoc from "../../components/CreateNewDoc";
 import UpdateCreatedByComponent from "../../hooks/UpdateCreatedByComponent";
 import DuplicateCollection from "../../hooks/DuplicateCollection";
+import UpdateMulitpleFiled from "../../hooks/UpdateMulitpleFiled";
+import UpdateSameDoc from "../../hooks/UpdateSameDoc";
 
 const Home = () => {
   const { authIsReady, user } = useAuthContext();
@@ -83,11 +85,13 @@ const Home = () => {
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
         {/* <CreateNewDoc/> */}
-        <UpdateCreatedByComponent/>
+        {/* <UpdateCreatedByComponent/>
         <DuplicateCollection/>
+        <UpdateMulitpleFiled/>
+        <UpdateSameDoc/> */}
         <ProductCarousel></ProductCarousel>
         {/* <PunchInOut/> */}
-
+       
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

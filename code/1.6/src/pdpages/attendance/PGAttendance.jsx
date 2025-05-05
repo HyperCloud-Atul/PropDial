@@ -207,7 +207,7 @@ const PGAttendance = () => {
 
     // Cleanup the interval on component unmount
     // return () => clearInterval(timer);
-  }, [user.uid]); // Run once when the component mounts
+  }, [user.phoneNumber]); // Run once when the component mounts
 
   // Generate missing records from last recorded date to today
   const ensureMissingRecords = async () => {
@@ -215,7 +215,7 @@ const PGAttendance = () => {
       // Step 1: Get the latest record
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .orderBy("createdAt", "desc")
         .limit(1)
         .get();
@@ -264,7 +264,7 @@ const PGAttendance = () => {
               const data = {
                 // createdAt: (new Date(dateStr)),
                 createdAt: date.toDate(),
-                userId: user.uid,
+                userId: user.phoneNumber,
                 punchIn: null,
                 punchOut: null,
                 workHrs: "00:00",
@@ -359,7 +359,7 @@ const PGAttendance = () => {
       // Step 1: Get the latest record
       const latestRecordRef = projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .orderBy("createdAt", "desc")
         .limit(1);
 
@@ -393,7 +393,7 @@ const PGAttendance = () => {
     try {
       const querySnapshot = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .where("createdAt", ">=", _startOfWeek)
         .where("createdAt", "<=", _endOfWeek)
         .orderBy("createdAt", "desc");
@@ -485,7 +485,7 @@ const PGAttendance = () => {
     try {
       const querySnapshot = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .where("createdAt", ">=", firstDay)
         .where("createdAt", "<=", lastDay)
         .orderBy("createdAt", "desc");
@@ -561,7 +561,7 @@ const PGAttendance = () => {
 
       // Add a punch-in record
       const data = {
-        userId: user.uid,
+        userId: user.phoneNumber,
         userName: user.fullName,
         userPhoneNo: user.phoneNumber,
         userCity: user.city,
@@ -578,7 +578,7 @@ const PGAttendance = () => {
       // Find the punch-in record for today
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .where("date", "==", formattedTodaysDate)
         .get();
 
@@ -619,7 +619,7 @@ const PGAttendance = () => {
       // Find the punch-in record for today
       const record = await projectFirestore
         .collection("attendance-propdial")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", user.phoneNumber)
         .where("date", "==", formattedTodaysDate)
         .get();
 

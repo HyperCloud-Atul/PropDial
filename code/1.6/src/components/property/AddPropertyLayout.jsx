@@ -454,7 +454,7 @@ const AddPropertyLayout = () => {
             <div className="row row_reverse_991">
               <div className="col-lg-6">
                 <div className="title_card with_title mobile_full_575 mobile_gap h-100">
-                  <h2 className="text-center">Property Layout 2</h2>
+                  <h2 className="text-center">Property Layout</h2>
                 </div>
               </div>
               <PropertySummaryCard
@@ -658,7 +658,7 @@ const AddPropertyLayout = () => {
                                   )
                                 }
                               /> */}
-                            <input
+                            {/* <input
                               type="number"
                               step="0.01"
                               className="w-100"
@@ -676,7 +676,26 @@ const AddPropertyLayout = () => {
 
                                 handleChange(openField, "length", value);
                               }}
-                            />
+                            /> */}
+<input
+  type="number"
+  step="0.01"
+  className="w-100"
+  placeholder="Enter room length"
+  value={layouts[openField]?.length || ""}
+  onInput={(e) => {
+    const value = e.target.value;
+    const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
+
+    // Reject if value is exactly "0"
+    if (value === "0" || !regex.test(value)) {
+      e.target.value = layouts[openField]?.length || "";
+      return;
+    }
+
+    handleChange(openField, "length", value);
+  }}
+/>
 
                             <div className="unit">Ft</div>
                           </div>
@@ -701,7 +720,7 @@ const AddPropertyLayout = () => {
                                   )
                                 }
                               /> */}
-                            <input
+                            {/* <input
                               type="number"
                               step="0.01"
                               className="w-100"
@@ -718,7 +737,28 @@ const AddPropertyLayout = () => {
                                 }
                                 handleChange(openField, "width", value);
                               }}
-                            />
+                            /> */}
+                            <input
+  type="number"
+  step="0.01"
+  className="w-100"
+  placeholder="Enter room width"
+  value={layouts[openField]?.width || ""}
+  onInput={(e) => {
+    const value = e.target.value;
+
+    const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
+
+    // Disallow if value is exactly "0"
+    if (value === "0" || !regex.test(value)) {
+      e.target.value = layouts[openField]?.width || "";
+      return;
+    }
+
+    handleChange(openField, "width", value);
+  }}
+/>
+
 
                             <div className="unit">Ft</div>
                           </div>

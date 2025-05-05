@@ -37,9 +37,9 @@ const PGNotification = () => {
 useEffect(() => {
   if (activeNotifications && user) {
     activeNotifications.forEach(async (notification) => {
-      if (!notification.viewedBy.includes(user.uid)) {
+      if (!notification.viewedBy.includes(user.phoneNumber)) {
         await updateDocument(notification.id, {
-          viewedBy: [...notification.viewedBy, user.uid],
+          viewedBy: [...notification.viewedBy, user.phoneNumber],
         });
       }
     });
