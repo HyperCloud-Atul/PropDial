@@ -42,7 +42,7 @@ const PGBlogs1 = () => {
                       <img src={blog.image.url} alt={blog.title} />
                     </Link>
                     {/* Show edit button if user is logged in */}
-                    {user && (
+                    {user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
                       <div className="author-right">
                         <Link className="edit" to={`/blog-edit/${blog.id}`}>
                           Edit
