@@ -2813,7 +2813,7 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                   </div>
-                  {user && (
+                  {user && (user.role === "admin" || user.role === "superAdmin") && (
                     <div className="extra_info_card_property mobile_full_card">
                       <div className="card_upcoming">
                         <div className="parent">

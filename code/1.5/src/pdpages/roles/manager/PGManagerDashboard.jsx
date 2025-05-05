@@ -50,9 +50,16 @@ const PGManagerDashboard = () => {
   // );
 
 
-  const filteredproperties = myproperties && myproperties.map((doc) => (
-    properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
-  ))
+  // const filteredproperties = myproperties && myproperties.map((doc) => (
+  //   properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
+  // ))
+  const filteredproperties =
+  myproperties && properties
+    ? myproperties
+        .map((doc) => properties.find((prop) => prop.id === doc.propertyId))
+        .filter(Boolean) // removes null or undefined
+    : [];
+
 
   console.log('filteredproperties: ', filteredproperties)
 
@@ -62,43 +69,63 @@ const PGManagerDashboard = () => {
   //     // propdoc.filter((item) => item.isActiveInactiveReview.toUpperCase() === 'ACTIVE')
   //   ))
 
-  const activeProperties =
-    filteredproperties && filteredproperties?.map((propdoc) => (
-      propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
-    ))
+  // const activeProperties =
+  //   filteredproperties && filteredproperties?.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
+  //   ))
+  const activeProperties = filteredproperties.filter(
+    (prop) => prop.isActiveInactiveReview?.toUpperCase() === "ACTIVE"
+  );
+  
+  const pendingProperties = filteredproperties.filter(
+    (prop) => prop.isActiveInactiveReview?.toUpperCase() === "IN-REVIEW"
+  );
+  
+  const inactiveProperties = filteredproperties.filter(
+    (prop) => prop.isActiveInactiveReview?.toUpperCase() === "INACTIVE"
+  );
+  
+  const residentialProperties = filteredproperties.filter(
+    (prop) => prop.category?.toUpperCase() === "RESIDENTIAL"
+  );
+  
+  const commercialProperties = filteredproperties.filter(
+    (prop) => prop.category?.toUpperCase() === "COMMERCIAL"
+  );
+  
 
   const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
 
-  const pendingProperties =
-    filteredproperties && filteredproperties?.map((propdoc) => (
-      propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
-    ))
+  // const pendingProperties =
+  //   filteredproperties && filteredproperties?.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
+  //   ))
 
   const pendingPropertieslengthWithoutNulls = pendingProperties && pendingProperties.filter(element => element !== null).length;
   // console.log('pendingPropertieslengthWithoutNulls: ', pendingPropertieslengthWithoutNulls)
 
-  const inactiveProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
-      propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
-    ))
+  // const inactiveProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
+  //   ))
 
   const inactivePropertieslengthWithoutNulls = inactiveProperties && inactiveProperties.filter(element => element !== null).length;
 
   // const inactiveProperties =
   //   filteredproperties && filteredproperties[0].filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
 
-  const residentialProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
-      propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
-    ))
+  // const residentialProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
+  //   ))
 
   const residentialPropertieslengthWithoutNulls = residentialProperties && residentialProperties.filter(element => element !== null).length;
 
   // commercialProperties
-  const commercialProperties =
-    filteredproperties && filteredproperties.map((propdoc) => (
-      propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
-    ))
+  // const commercialProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
+  //   ))
   const commercialPropertieslengthWithoutNulls = commercialProperties && commercialProperties.filter(element => element !== null).length;
 
   // const commercialProperties =
