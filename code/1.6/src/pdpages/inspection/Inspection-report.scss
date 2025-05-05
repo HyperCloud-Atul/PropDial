@@ -1,4 +1,14 @@
 .inspection_report {
+  .page_spacing{
+    padding: 15px;
+  }
+  @media (max-width: 575px) {
+    .page_spacing{
+      padding: 0px !important;
+    }
+    
+
+  }
     .report {
       .report_header {
         h1 {
@@ -56,7 +66,7 @@
             margin-top: 10px;
           }
         }
-        
+       
         
         .date{
           min-width: 160px ;
@@ -166,13 +176,12 @@
             font-size: 24px;
           }
         }
-      // @media (max-width: 480px) {
-      //   .report_header {
-      //     margin: 0;
-      //     padding: 0;
-      //     border-radius: 0;
-      //   }
-      // }
+      @media (max-width: 575px) {
+        .report_header {
+         
+          border-radius: 0;
+       }
+      }
       }
       .detail_card {
         display: grid;
@@ -221,6 +230,11 @@
             
           }
         }
+        @media (max-width: 992px) {
+          .dc_single {
+            border-radius: 0px;
+          }
+        }
         @media (max-width: 355px) {
           .d-flex{
             font-size: 12px !important;
@@ -251,7 +265,7 @@
         // }
       }
     
-    @media (max-width: 480px) {
+    @media (max-width: 575px) {
       .detail_card {
         grid-template-columns: 1fr;
       }
@@ -438,12 +452,13 @@
             }
           }
         }
-      }
-      @media (max-width: 632px) {
-        .room_wise_inspection {
-          
+        @media (max-width: 575px) {
+          .rwi_single {
+             border-radius: 0px;
+          }
         }
       }
+      
       .tenant_card {
         border: 1px solid #dfdfdf;
         border-radius: 10px;
@@ -453,16 +468,21 @@
           font-size: 17px;
           color: var(--theme-blue);
           font-weight: 500;
-          padding: 6px 15px;
+          padding: 6px 10px;
           background: #f2f7ff;
           text-align: center;
         }
         .tc_inner {
-          padding: 15px;
+          
+          padding: 10px;
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px,400px));
           gap: 15px;
-          
+          .tc_single{min-width: 320px !important;
+            .tcs_img_container{
+              max-width: 100px;
+            }
+          }
           
         }
         .summary {
@@ -471,6 +491,11 @@
           font-size: 17px;
           font-weight: 500;
           color: var(--theme-green2);
+        }
+      }
+      @media (max-width: 575px) {
+        .tenant_card {
+          border-radius: 0px;
         }
       }
       .bill_card {
@@ -565,6 +590,11 @@
             font-size: 13px;
           }
           
+        }
+      }
+      @media (max-width: 575px) {
+        .bill_card {
+       border-radius: 0px;
         }
       }
       
