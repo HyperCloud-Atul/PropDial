@@ -2,7 +2,17 @@
   .blog_head {
     position: relative;
   }
-
+.published_date{
+  position: absolute;
+bottom: 0;
+left: 0;
+padding: 8px 16px;
+background: rgba(0, 0, 0, 0.4); 
+backdrop-filter: blur(6px);    
+-webkit-backdrop-filter: blur(6px); 
+color: white; 
+border-radius: 4px; 
+}
   .blog_sect {
     .blog_inner {
       display: grid !important;
@@ -204,6 +214,17 @@
 
   //Blog Detail Page CSS
   .pgblogdetail{
+    .published_date{
+      position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(6px);    
+    -webkit-backdrop-filter: blur(6px); 
+    color: white; 
+    border-radius: 4px; 
+    }
   .blog-detail-sidebar {
     .sidebar-title {
       margin-bottom: 10px;

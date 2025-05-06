@@ -21,10 +21,10 @@ const UpdateSameDoc = () => {
         // Only proceed if userPhoneNo exists
         if (phoneNo) {
           await collectionRef.doc(doc.id).update({
-            createdBy: phoneNo,
+            userId: phoneNo,
           });
           updatedCount++;
-          console.log(`✅ Updated doc ${doc.id}: createdBy → ${phoneNo}`);
+          console.log(`✅ Updated doc ${doc.id}: userId → ${phoneNo}`);
         }
       }
 
@@ -50,7 +50,7 @@ const UpdateSameDoc = () => {
           cursor: loading ? "not-allowed" : "pointer",
         }}
       >
-        {loading ? "Updating..." : "Replace createdBy with userPhoneNo"}
+        {loading ? "Updating..." : "Replace userId with userPhoneNo"}
       </button>
     </div>
   );
