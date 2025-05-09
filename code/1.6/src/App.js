@@ -42,6 +42,7 @@ import HowUse from "./pdpages/howUse/HowUse";
 import BlogDetail from "./pdpages/blogs/BlogDetail";
 import BlogEdit from "./pdpages/blogs/BlogEdit";
 import BlogAdd from "./pdpages/blogs/BlogAdd";
+import Societies from "./pdpages/society/Societies";
 // ------------------------------------------------------------------------------------
 
 // pages
@@ -524,7 +525,7 @@ function App() {
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
-
+                  <Route path="/societies" element={<Societies />}></Route>
 
 {/* blog pages route  */}
 <Route path="/blogs" element={<PGBlogs />}></Route>
