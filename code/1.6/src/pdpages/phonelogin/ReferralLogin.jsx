@@ -180,18 +180,12 @@ const ReferralLogin = () => {
           console.log("Existing user signed in with Google");
           console.log("existing user:", user);
           let role = "owner";
-          const docRef = projectFirestore.collection("users-propdial").doc(phone);
-          // Get the document snapshot
-          const docSnapshot = await docRef.get();
-          // Check if the document exists
-          if (docSnapshot.exists) {
-            // Extract the data from the document snapshot
-            // const data = docSnapshot.data();
+          const docRef = projectFirestore.collection("users-propdial").doc(phone);       
+          const docSnapshot = await docRef.get();       
+          if (docSnapshot.exists) {          
             if (docSnapshot.data().rolePropDial === "na") role = "owner";
             else role = docSnapshot.data().rolePropDial;
           }
-
-          // console.log('role: ', role)
           await user.updateProfile({
             email: user.email,
           });
@@ -202,38 +196,29 @@ const ReferralLogin = () => {
             email: user.email,
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
-        }
-
-        // navigate("/profile");
+        }       
       })
-      .catch((error) => {
-        // Handle Errors here.
+      .catch((error) => {      
         console.error(error);
       });
-  };
-
-  //Link Google Account with phone number
+  };  
   const linkGoogleAccount = (curuser) => {
     const provider = new projectAuthObj.GoogleAuthProvider();
 
     curuser
       .linkWithPopup(provider)
       .then(async (result) => {
-        const user = result.user;
-        // Accounts successfully linked
+        const user = result.user;       
         console.log("Accounts successfully linked", user);
         await updateDocument(phone, {
           email: user.email,
         });
       })
-      .catch((error) => {
-        // Handle Errors here.
+      .catch((error) => {   
         console.error("Error linking accounts", error);
       });
   };
 
-
-  //New optimized code 
   const allSliderVisible = (state) => {
     setmobilenoSliderState(state)
     setotpSliderState(state)
@@ -371,14 +356,6 @@ const ReferralLogin = () => {
 
     let splitName = name.split(" ");
     displayName = splitName.length > 0 ? splitName[0] : name;
-    // console.log("User Display or First Name: ", displayName)
-    // console.log("User Full Name: ", name)
-    // console.log("User Gender: ", gender)
-    // console.log("User Email: ", email)
-    // console.log("User City: ", city)
-    // console.log("User WhoAmI: ", whoAmI)
-
-
     let imgUrl = "/assets/img/dummy_user.png";
 
     try {
@@ -522,20 +499,7 @@ const ReferralLogin = () => {
                   style={{
                     marginTop: "20px",
                   }}
-                ></div>
-                {/* <div className="ordiv">
-                  <span>
-                    Or
-                  </span>
-                </div> */}
-                {/* <div onClick={signInWithGoogle} className="theme_btn btn_border d-flex align-items-center justify-content-center mb-3">
-                  <img src="./assets/img/icons/google.png" alt="google_img" style={{
-                    height: "23px",
-                    width: "auto",
-                    marginRight: "7px"
-                  }} />
-                  Sign-in with Google
-                </div> */}
+                ></div>                
                 {!isLoading && (
                   <>
                     <div
@@ -576,10 +540,7 @@ const ReferralLogin = () => {
         {/* OTP Slider */}
         <div>
           {otpSliderState && (
-            <div className="left_inner col_left_inner">
-              {/* <div className="page_inner_logo">
-                <img src="/assets/img/logo_propdial.png" alt="propdial" />
-              </div> */}
+            <div className="left_inner col_left_inner">           
 
               <div className="vg22"></div>
 
@@ -655,14 +616,7 @@ const ReferralLogin = () => {
                   </span>
                 )}
               </p>
-              <div className="vg22"></div>
-              {/* {isLoading && ( */}
-              {/* <button
-                  className="theme_btn btn_fill w_full no_icon"
-                  onClick={verifyOTP}                 
-                >
-                  Confirm
-                </button> */}
+              <div className="vg22"></div>             
               <button
                 className="theme_btn btn_fill w_full no_icon"
                 onClick={verifyOTP}
@@ -673,17 +627,8 @@ const ReferralLogin = () => {
                 }}
               >
                 Confirm
-              </button>
-
-              {/* )} */}
-              {/* {!isLoading && ( 
-                // <div className="text-center">
-                //   <h6 className="text_green mb-2">Redirecting...</h6>
-                //   <BeatLoader color={"#00a8a8"} loading={true} />
-                // </div>
-              )}   */}
+              </button>          
               <div className="vg10"></div>
-
               <button
                 className="theme_btn btn_border w_full no_icon"
                 onClick={handleGoBack}
@@ -698,10 +643,7 @@ const ReferralLogin = () => {
         <div>
           {newUserSliderState && (
             <>
-              <div className="left_inner col_left_inner">
-                {/* <div className="page_inner_logo">
-                  <img src="/assets/img/logo_propdial.png" alt="propdial" />
-                </div> */}
+              <div className="left_inner col_left_inner">            
 
                 <div className="vg22"></div>
                 <div></div>

@@ -6,6 +6,7 @@ import { useDocument } from "../../hooks/useDocument";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
+import { generateSlug } from "../../utils/generateSlug";
 
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
@@ -186,6 +187,9 @@ const PropertyCard = ({ propertyid }) => {
     await updateDocument(propertyid, updatedProperty);
   };
 
+
+
+
   return (
     <>
       {/* Change User Popup - Start */}
@@ -288,7 +292,8 @@ const PropertyCard = ({ propertyid }) => {
           </div>} */}
           {propertydoc && (
             <Link
-              to={`/propertydetails/${propertydoc.id}`}
+              // to={`/propertydetails/${propertydoc.id}`}
+               to={`/propertydetails/${generateSlug(propertydoc)}`}
               key={propertydoc.id}
               className="top relative"
             >

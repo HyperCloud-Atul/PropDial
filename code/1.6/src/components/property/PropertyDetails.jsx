@@ -38,7 +38,11 @@ const PropertyDetails = () => {
   SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
   // get user from useauthcontext
-  const { propertyid } = useParams();
+  const { slug } = useParams();
+
+  // Get the last part after the final dash
+  const parts = slug?.split("-");
+  const propertyid = parts[parts.length - 1]; // 'abc123'
   // console.log("property id: ", propertyid)
   const { user } = useAuthContext();
   const navigate = useNavigate();

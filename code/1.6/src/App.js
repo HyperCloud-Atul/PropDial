@@ -505,6 +505,13 @@ function App() {
                   }
                 ></Route>
                 <Route
+                  path="/referrallogin"
+                  element={
+                    user ? <Navigate to="/alreadylogin" /> :
+                    <ReferralLogin />
+                  }
+                ></Route>
+                <Route
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
@@ -657,7 +664,7 @@ function App() {
                       
                     ></Route>
                     <Route
-                      path="/propertydetails/:propertyid"
+                     path="/propertydetails/:slug"
                       element={<PropertyDetails></PropertyDetails>}
                     ></Route>
                   

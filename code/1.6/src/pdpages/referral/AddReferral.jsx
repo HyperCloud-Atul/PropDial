@@ -137,7 +137,7 @@ const handleAddDoc = async () => {
         email,
         phone,
         referalCode: "",
-        referedBy: user.uid,
+        referedBy: user.phoneNumber,
         isAccept: false,
         promoCode: selectedPromo || "",
       });
