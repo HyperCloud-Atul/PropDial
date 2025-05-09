@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useFirestore } from "../../hooks/useFirestore";
 import EnquiryAddModal from "../EnquiryAddModal";
+import { generateSlug } from "../../utils/generateSlug";
 
 const SearchProperty = ({
   propertiesdocuments,
@@ -60,7 +61,9 @@ const SearchProperty = ({
             <div className="left relative">
               <Link
                 className="pcs_inner pointer"
-                to={`/propertydetails/${property.id}`}
+                // to={`/propertydetails/${property.id}`}
+                 to={`/propertydetails/${generateSlug(property)}`}
+                
               >
                 <div className="pcs_image_area">
                   {property.images.length > 0 ? (

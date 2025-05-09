@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { generateSlug } from "../../utils/generateSlug";
 
 const PropertySummaryCard = ({ propertydoc, propertyId }) => {
   const [expanded, setExpanded] = useState(true);
@@ -11,7 +12,7 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
 
   const handleClick = (e) => {
     if (window.innerWidth > 575) {
-      navigate(`/propertydetails/${propertyId}`);
+      navigate(`/propertydetails/${generateSlug(propertydoc)}`);     
     } else {
       e.preventDefault();
     }
@@ -168,7 +169,8 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                     <img src="/assets/img/admin_banner.jpg" alt="propdial" />
                   )}
                   <Link
-                    to={`/propertydetails/${propertyId}`}
+                    // to={`/propertydetails/${propertyId}`}
+                     to={`/propertydetails/${generateSlug(propertydoc)}`}
                     className="text_green text-center"
                     style={{
                       flexGrow: "1",

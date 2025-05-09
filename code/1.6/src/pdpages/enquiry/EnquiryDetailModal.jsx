@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { generateSlug } from "../../utils/generateSlug";
 
 const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
   const [previousStatus, setPreviousStatus] = useState("");
@@ -146,7 +147,8 @@ const EnquiryDetailModal = ({ show, handleClose, selectedEnquiry, user }) => {
               {selectedEnquiry.pid ? (
                 <Link
                   className="click_text"
-                  to={`/propertydetails/${selectedEnquiry.propId}`}
+                  // to={`/propertydetails/${selectedEnquiry.propId}`}
+                  to={`/propertydetails/${generateSlug(selectedEnquiry)}`}
                 >
                   {selectedEnquiry.pid}
                 </Link>

@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { generateSlug } from "../../utils/generateSlug";
 
 const SearchPropAgentProperty = ({ activeOption, propagentProperties }) => {
   // console.log('activeOption: ', activeOption)
@@ -28,7 +29,9 @@ const SearchPropAgentProperty = ({ activeOption, propagentProperties }) => {
       {propagentProperties.map((property) => (
         <Link
           className="pp_sidebarcard_single relative"
-          to={`/propertydetails/${property.id}`}
+          // to={`/propertydetails/${property.id}`}
+          to={`/propertydetails/${generateSlug(property)}`}
+          
         >
           <div className="ppss_img">
             {property.images.length > 0 ? (

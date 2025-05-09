@@ -5,6 +5,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { timestamp, projectStorage } from "../../firebase/config";
+import { generateSlug } from "../../utils/generateSlug";
 import RichTextEditor from "react-rte";
 import Accordion from "react-bootstrap/Accordion";
 // import Adcarousel from "../../../Components/Ads";
@@ -488,7 +489,7 @@ export default function Stage3(props) {
         navigate("/");
       } else {
         props.setStateFlag("stage4");
-        navigate("/propertydetails/" + propertyid);
+        navigate(`/propertydetails/${generateSlug(propertyDocument)}`); 
       }
     }
   };

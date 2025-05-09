@@ -4,6 +4,7 @@ import { projectFirestore } from "../../firebase/config";
 import { useDocument } from "../../hooks/useDocument";
 import { useCollection } from "../../hooks/useCollection";
 import { ClipLoader } from "react-spinners";
+import { generateSlug } from "../../utils/generateSlug";
 import format from "date-fns/format";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -321,7 +322,8 @@ const InspectionDetails = () => {
               <div className="detail_card">
                 <Link
                   className="dc_single"
-                  to={`/propertydetails/${propertyDocument.id}`}
+                  // to={`/propertydetails/${propertyDocument.id}`}
+                  to={`/propertydetails/${generateSlug(propertyDocument)}`}
                 >
                   <h2
                     className="d-flex"

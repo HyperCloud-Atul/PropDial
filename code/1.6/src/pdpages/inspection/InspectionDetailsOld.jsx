@@ -257,7 +257,8 @@ const InspectionDetailsOld = () => {
               <div className="detail_card">
                 <Link
                   className="dc_single"
-                  to={`/propertydetails/${propertyDocument.id}`}
+                  // to={`/propertydetails/${propertyDocument.id}`}
+                  to={`/propertydetails/${generateSlug(propertyDocument)}`}
                 >
                   <h2
                     className="d-flex"
