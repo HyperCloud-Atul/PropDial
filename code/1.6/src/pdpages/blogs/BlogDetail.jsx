@@ -22,8 +22,11 @@ const spinnerKeyframes = `
 `;
 
 const BlogDetail = () => {
-  const { idSlug } = useParams();
-  const id = idSlug.split("-")[0];  
+  const { slug } = useParams();
+
+  // Extract id from slug using regex or split
+  const match = slug.match(/-blogid(.+)$/);
+  const id = match ? match[1] : null;
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -117,10 +120,11 @@ const BlogDetail = () => {
           <h3 className="sidebar-title">Related Blogs</h3>
           <div className="related-cards">
             {relatedBlogs.map((rblog) => (
-              <Link to={`/blog/${rblog.id}-${rblog.title
+              <Link   to={`/blog/${rblog.title
                 .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, "")  
-                .replace(/\s+/g, "-")}`}  key={rblog.id}>
+                .replace(/[^a-z0-9\s-]/g, "")
+                .replace(/\s+/g, "-")}-blogid${rblog.id}`}
+                >
                   
                 <div
                   className={`related-card ${

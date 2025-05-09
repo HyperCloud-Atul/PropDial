@@ -530,7 +530,10 @@ function App() {
 <Route path="/blogs" element={<PGBlogs />}></Route>
                 
                
-<Route path="/blog/:idSlug" element={<BlogDetail />} />
+<Route path="/blog/:slug" element={<BlogDetail />} />
+
+
+
 
                 <Route path="/blog-edit/:id"
                   element={
