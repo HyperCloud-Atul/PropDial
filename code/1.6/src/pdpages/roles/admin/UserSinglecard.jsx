@@ -55,7 +55,7 @@ const UserSinglecard = ({ users }) => {
       const updatedUser = {
         ...selectedUser,
         updatedAt: new Date(),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
 
       await updateDocument(selectedUser.id, updatedUser);

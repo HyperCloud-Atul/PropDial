@@ -867,10 +867,10 @@ const Stage1 = (props) => {
         carpetArea: "",
         carpetAreaUnit: "",
         imgURL: [],
-        propertyManager: user.uid,
-        propertyCoManager: user.uid,
-        propertySalesManager: user.uid,
-        propertyOwner: user.uid,
+        propertyManager: user.phoneNumber,
+        propertyCoManager: user.phoneNumber,
+        propertySalesManager: user.phoneNumber,
+        propertyOwner: user.phoneNumber,
         propertyCoOwner: "",
         propertyPOC: "",
         tenantList: [],
@@ -893,7 +893,7 @@ const Stage1 = (props) => {
         ...property,
 
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
 
       if (!errorFlag) {

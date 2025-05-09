@@ -102,7 +102,7 @@ const PropertyCard = ({ propertyid }) => {
     const updatedProperty = {
       propertyManager: selectedUser,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
 
     // console.log('updatedProperty', updatedProperty)
@@ -177,7 +177,7 @@ const PropertyCard = ({ propertyid }) => {
     const updatedProperty = {
       isActiveInactiveReview: option,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
     };
 
     // console.log("updatedProperty", updatedProperty);

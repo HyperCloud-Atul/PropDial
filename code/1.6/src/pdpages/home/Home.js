@@ -9,7 +9,6 @@ import Modal from "react-bootstrap/Modal";
 import SEOHelmet from "../../components/SEOHelmet ";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-
 // text
 import { useFirestore } from "../../hooks/useFirestore";
 // text
@@ -28,6 +27,11 @@ import PunchInOut from "../../components/attendance/PunchInOut";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 import CollapsibleGroup from "../../components/CollapsibleGroup";
 import AirBnb from "../../components/AirBnb";
+import CreateNewDoc from "../../components/CreateNewDoc";
+import UpdateCreatedByComponent from "../../hooks/UpdateCreatedByComponent";
+import DuplicateCollection from "../../hooks/DuplicateCollection";
+import UpdateMulitpleFiled from "../../hooks/UpdateMulitpleFiled";
+import UpdateSameDoc from "../../hooks/UpdateSameDoc";
 
 const Home = () => {
   const { authIsReady, user } = useAuthContext();
@@ -49,7 +53,8 @@ const Home = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (authIsReady) { // Ensure authIsReady is true before checking the user
+    if (authIsReady) {
+      // Ensure authIsReady is true before checking the user
       if (!user) {
         setShowModal(true); // Show modal if no user is logged in
       } else {
@@ -57,7 +62,6 @@ const Home = () => {
       }
     }
   }, [authIsReady, user]);
-  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,10 +84,14 @@ const Home = () => {
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
-
-        <ProductCarousel></ProductCarousel>
+        {/* <CreateNewDoc/> */}
+        {/* <UpdateCreatedByComponent/>
+        <DuplicateCollection/>
+        <UpdateMulitpleFiled/>
+        <UpdateSameDoc/> */}
+        <ProductCarousel/>
         {/* <PunchInOut/> */}
-
+       
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

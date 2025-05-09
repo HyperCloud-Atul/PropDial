@@ -211,7 +211,7 @@ const ViewInspections = () => {
         .add({
           propertyId: propertyid,
           inspectionType: type,
-          createdBy: user.uid,
+          createdBy: user.phoneNumber,
           createdAt: new Date(),
           finalSubmit: false,
         });

@@ -36,7 +36,7 @@ const PGOwnerDashboard = () => {
   // console.log('user: ', user)
   const { documents: myproperties, error: errMyProperties } = useCollection(
     "propertyusers",
-    ["userId", "==", user.uid]
+    ["userId", "==", user.phoneNumber]
   );
 
   // const { documents: properties, error: propertieserror } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);

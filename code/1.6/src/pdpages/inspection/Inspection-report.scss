@@ -1,4 +1,19 @@
+@media (max-width: 1199px) {
+  .inspection_report{
+    margin-top: -68px;
+  }
+}
 .inspection_report {
+  .page_spacing{
+    padding: 15px;
+  }
+  @media (max-width: 575px) {
+    .page_spacing{
+      padding: 0px !important;
+    }
+    
+
+  }
     .report {
       .report_header {
         h1 {
@@ -42,17 +57,30 @@
         .createdBy {
           display: flex;
           justify-content: end;
+          border: none;
         }
         
         @media (max-width: 632px) {
           .createdBy {
             justify-content: flex-start !important;
+            border-bottom: 1px solid var(--theme-grey);
+            border-top: 1px solid var(--theme-grey);
+            padding-bottom: 10px;
+            padding-top: 10px;
+            margin-right: 20px;
+            margin-top: 10px;
           }
         }
-        
+       
         
         .date{
           min-width: 160px ;
+        }
+        @media (max-width: 632px) {
+          .date {
+           margin-top: 0; 
+           padding-bottom: 0;
+          }
         }
       
         .i_info {
@@ -86,12 +114,34 @@
         }
         @media (max-width: 632px) {
           .i_info {
-            margin-top: 15px;
+            margin-top: 5px;
+            margin-left: 20px;
+            margin-right: 20px;
             display: flex;
             flex-direction: row;
             justify-content: baseline !important;
             width: 100%;
             left: 0;
+            padding: 10px;
+            h5{
+              font-size: 17px;
+            }
+            h6{
+              font-size: 16px;
+            }
+          }
+        }
+        .createdBy{
+          border: none;
+        }
+        @media (max-width: 632px) {
+          .createdBy{
+            border-bottom: 1px solid var(--theme-grey);
+            border-top: 1px solid var(--theme-grey);
+            padding-bottom: 15px;
+            padding-top: 15px;
+            margin-right: 20px;
+            margin-top: 10px;
           }
         }
         
@@ -117,6 +167,9 @@
               margin-top: 15px;
               width: 100%;
               justify-content: center;
+              span{
+                font-size: 15px;
+              }
             }
           }
         }
@@ -125,15 +178,15 @@
         .report_header {
           h1{
             margin-bottom: 15px;
+            font-size: 24px;
           }
         }
-      // @media (max-width: 480px) {
-      //   .report_header {
-      //     margin: 0;
-      //     padding: 0;
-      //     border-radius: 0;
-      //   }
-      // }
+      @media (max-width: 575px) {
+        .report_header {
+         
+          border-radius: 0;
+       }
+      }
       }
       .detail_card {
         display: grid;
@@ -166,6 +219,37 @@
             font-weight: 400;
             margin-top: 1px;
           }
+
+        }
+        @media (max-width: 992px) {
+          .dc_single {
+            h2{
+              font-size: 14px;
+            }
+            h5{
+              font-size: 13px;
+            }
+            .pid_badge{
+              font-size: 12px !important;
+            }
+            
+          }
+        }
+        @media (max-width: 992px) {
+          .dc_single {
+            border-radius: 0px;
+          }
+        }
+        @media (max-width: 355px) {
+          .d-flex{
+            font-size: 12px !important;
+          }
+          .dc_single {
+            .pid_badge{
+              font-size: 10px !important;
+            }
+            
+          }
         }
       }
       @media (max-width: 992px) {
@@ -173,9 +257,12 @@
           grid-template-columns: repeat(2, 1fr) !important;
         }
       }
-      @media (max-width: 600px) {
+      @media (max-width: 632px) {
         .detail_card {
           grid-template-columns: 1fr !important;
+          h2{
+
+          }
         }
         // .add-blog-btn-circle {
         //   right: 20px;
@@ -183,7 +270,7 @@
         // }
       }
     
-    @media (max-width: 480px) {
+    @media (max-width: 575px) {
       .detail_card {
         grid-template-columns: 1fr;
       }
@@ -208,6 +295,7 @@
               color: var(--theme-red);
               margin-top: 5px;
             }
+           
           }
           .issues {
             .top {
@@ -227,6 +315,7 @@
                   font-size: 17px;
                   color: var(--light-black);
                   font-weight: 500;
+                  margin-bottom: 10px;
                 }
                 h5 {
                   width: 60px;
@@ -256,12 +345,27 @@
                 }
                 img {
                   position: absolute;
-                  top: 10px;
-                  right: 18px;
+                  top: 28%;
+                  right: 25px;
                   z-index: 0;
                   opacity: 0.3;
                   height: 40px;
                   width: auto;
+                }
+              }
+            }
+            @media (max-width: 632px) {
+              .top {
+                .i_single{
+                  h6{
+                    font-size: 17px !important;
+                  }
+                  p{
+                    font-size: 12px !important;
+                  }
+                  h5{
+                    font-size: 15px !important;
+                  }
                 }
               }
             }
@@ -277,6 +381,21 @@
                 font-size: 15px;
                 color: var(--light-black);
                 margin-top: 10px;
+              }
+            }
+            @media (max-width: 632px) {
+              .bottom {
+              
+                  h6{
+                    font-size: 15px !important;
+                  }
+                  p{
+                    font-size: 12px !important;
+                  }
+                  h5{
+                    font-size: 13px !important;
+                  
+                }
               }
             }
           }
@@ -295,8 +414,8 @@
               flex-wrap: wrap;
               gap: 15px;
               img {
-                width: 17%;
-                aspect-ratio: 3/2;
+                width: 10%;
+                aspect-ratio: 2/2;
                 border-radius: 5px;
                 object-fit: cover;
               }
@@ -305,8 +424,9 @@
               .img_bunch {
                 
                 img {
-                  width: 35%;
-                  aspect-ratio: 3/2;
+                  width: 25%;
+
+                  aspect-ratio: 2/2;
                   border-radius: 5px;
                   object-fit: cover;
                 }
@@ -317,8 +437,8 @@
               .img_bunch {
                 
                 img {
-                  width: 45%;
-                  aspect-ratio: 3/2;
+                  width: 25%;
+                  aspect-ratio: 2/2;
                   border-radius: 5px;
                   object-fit: cover;
                 }
@@ -327,7 +447,23 @@
             }
           }
         }
+        @media (max-width: 632px) {
+          .rwi_single {
+            h2{
+              font-size: 15px;
+              h3{
+                font-size: 14px;
+              }
+            }
+          }
+        }
+        @media (max-width: 575px) {
+          .rwi_single {
+             border-radius: 0px;
+          }
+        }
       }
+      
       .tenant_card {
         border: 1px solid #dfdfdf;
         border-radius: 10px;
@@ -337,16 +473,21 @@
           font-size: 17px;
           color: var(--theme-blue);
           font-weight: 500;
-          padding: 6px 15px;
+          padding: 6px 10px;
           background: #f2f7ff;
           text-align: center;
         }
         .tc_inner {
-          padding: 15px;
+          
+          padding: 10px;
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px,400px));
           gap: 15px;
-          
+          .tc_single{min-width: 320px !important;
+            .tcs_img_container{
+              max-width: 100px;
+            }
+          }
           
         }
         .summary {
@@ -355,6 +496,11 @@
           font-size: 17px;
           font-weight: 500;
           color: var(--theme-green2);
+        }
+      }
+      @media (max-width: 575px) {
+        .tenant_card {
+          border-radius: 0px;
         }
       }
       .bill_card {
@@ -428,8 +574,35 @@
               }
             }
           }
+          @media (max-width: 632px) {
+            .bc_single  {
+              h5{
+                font-size: 14px !important;
+              }
+              h6{
+                font-size: 13px !important;
+              }
+              span{
+                font-size: 12px !important;
+              }
+            }
+          }
         }
       }
+      @media (max-width: 632px) {
+        .bill_card {
+          h2{
+            font-size: 13px;
+          }
+          
+        }
+      }
+      @media (max-width: 575px) {
+        .bill_card {
+       border-radius: 0px;
+        }
+      }
+      
     }
     @media (max-width: 992px) {
         .blog_inner {

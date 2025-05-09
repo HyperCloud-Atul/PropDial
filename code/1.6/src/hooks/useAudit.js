@@ -71,7 +71,7 @@ export const useFirestore = (collection) => {
       // }    
       // console.log("doc data: ", doc)
       console.log("doc id: ", _customDocId)
-      const createdBy = user ? user.uid : "guest";
+      const createdBy = user ? user.phoneNumber : "guest";
       const createdAt = timestamp.fromDate(new Date());
       // const addedDocument = await ref.add({ ...doc, createdAt, createdBy });
       await ref.doc(_customDocId).set({ ...doc, createdAt, createdBy });
@@ -108,7 +108,7 @@ export const useFirestore = (collection) => {
       //   photoURL: user.photoURL
       // }    
       // console.log("doc data: ", doc)
-      const createdBy = user ? user.uid : "guest";
+      const createdBy = user ? user.phoneNumber : "guest";
       const createdAt = timestamp.fromDate(new Date());
       const addedDocument = await ref.add({ ...doc, createdAt, createdBy });
 

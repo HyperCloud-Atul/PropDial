@@ -478,7 +478,7 @@ export default function Stage3(props) {
       const updatedProperty = {
         ...property,
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
       console.log("updatedProperty:", updatedProperty);
       // console.log('propertyid:', propertyid)

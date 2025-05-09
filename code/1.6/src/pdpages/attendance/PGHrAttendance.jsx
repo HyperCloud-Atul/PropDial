@@ -639,7 +639,7 @@ const PGHrAttendance = () => {
               const data = {
                 // createdAt: (new Date(dateStr)),
                 createdAt: date.toDate(),
-                userId: user.uid,
+                userId: user.phoneNumber,
                 punchIn: null,
                 punchOut: null,
                 workHrs: "00:00",
@@ -964,7 +964,7 @@ const PGHrAttendance = () => {
     try {
       // Add a punch-in record
       const data = {
-        userId: user.uid,
+        userId: user.phoneNumber,
         punchIn: formattedPunchinTime,
         punchOut: null,
         workHrs: "00:00",

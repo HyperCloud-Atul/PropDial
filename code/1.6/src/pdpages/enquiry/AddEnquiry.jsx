@@ -173,7 +173,7 @@ const AddEnquiry = ({ enquiryAdded }) => {
       const newStatusUpdate = {
         status: "open",
         updatedAt: new Date(),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
         updateForOwner: "New inquiry received, our executive will follow up and update you",
         updateType: "general"
       };

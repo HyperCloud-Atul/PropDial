@@ -4,6 +4,7 @@ import Hero from "../../components/Hero";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import "../../components/Blog.css";
+import { format } from "date-fns";
 import "./Blog.scss";
 
 const PGBlogs1 = () => {
@@ -17,7 +18,16 @@ const PGBlogs1 = () => {
     console.log("User object:", user);
   }, [location, user]);
 
-  // Check if user exists and has a UID before allowing any additions
+  // ✅ Slug Generator (Handles empty title case)
+  const generateSlug = (title, id) => {
+    if (!title || title.trim() === "") return `/blog/blogid${id}`;
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
+    return `/blog/${slug}-blogid${id}`;
+  };
+
   return (
     <div className="blog_page blog_page_css">
       {/* Hero Section */}
@@ -35,51 +45,58 @@ const PGBlogs1 = () => {
           {!blogDoc && <p>Loading blogs...</p>}
           <div className="blog_inner relative">
             {blogDoc &&
-              blogDoc.map((blog) => (
-                <div key={blog.id} className="item card-container">
-                  <div className="card-image">
-                    <Link to={`/blog/${blog.id}`}>
-                      <img src={blog.image.url} alt={blog.title} />
+              blogDoc.map((blog) => {
+                const blogUrl = generateSlug(blog.title, blog.id);
+                return (
+                  <div key={blog.id} className="item card-container">
+                    <div className="card-image">
+                      <Link to={blogUrl}>
+                        <img src={blog.image.url} alt={blog.title} />
+                        <div className="published_date">
+                          {blog.updatedAt?.toDate
+                            ? format(blog.updatedAt.toDate(), "dd-MMM-yyyy")
+                            : format(blog.createdAt.toDate(), "dd-MMM-yyyy")}
+                        </div>
+                      </Link>
+                      {user &&
+                        (user.role === "admin" ||
+                          user.role === "superAdmin" ||
+                          user.role === "executive") && (
+                          <div className="author-right">
+                            <Link className="edit" to={`/blog-edit/${blog.id}`}>
+                              Edit
+                            </Link>
+                          </div>
+                        )}
+                    </div>
+                    <Link className="card-body" to={blogUrl}>
+                      <h3>{blog.title}</h3>
+                      <p className="card-subtitle">{blog.subTitle}</p>
                     </Link>
-                    {/* Show edit button if user is logged in */}
-                    {user && (
-                      <div className="author-right">
-                        <Link className="edit" to={`/blog-edit/${blog.id}`}>
-                          Edit
+                    <div className="card-author">
+                      <div className="author-left">
+                        <Link className="read-more" to={blogUrl}>
+                          Read More <span className="arrow">&rarr;</span>
                         </Link>
                       </div>
-                    )}
-                  </div>
-                  <Link className="card-body" to={`/blog/${blog.id}`}>
-                    <h3>{blog.title}</h3>
-                    <p className="card-subtitle">{blog.subTitle}</p>
-                  </Link>
-                  <div className="card-author">
-                    <div className="author-left">
-                      <Link className="read-more" to={`/blog/${blog.id}`}>
-                        Learn More <span className="arrow">&rarr;</span>
-                      </Link>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </section>
 
-      {/* Floating Add Blog Button (visible only if logged in) */}
+      {/* Floating Add Blog Button */}
       {user &&
-          user.status === "active" &&
-          (user.role === "admin" || user.role === "superAdmin" || user.role === "executive" ) && (
-            <Link
-              to="/add-blog"
-              className="property-list-add-property "
-            >
-              <span className="material-symbols-outlined">
-                add
-              </span>
-            </Link>
-          )}
+        user.status === "active" &&
+        (user.role === "admin" ||
+          user.role === "superAdmin" ||
+          user.role === "executive") && (
+          <Link to="/add-blog" className="property-list-add-property ">
+            <span className="material-symbols-outlined">add</span>
+          </Link>
+        )}
     </div>
   );
 };

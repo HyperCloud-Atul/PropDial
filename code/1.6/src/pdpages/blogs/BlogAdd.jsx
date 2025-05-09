@@ -113,7 +113,7 @@ const AddBlog = () => {
       content: content.toString("html"),
       image, // Single image
       createdAt: timestamp.fromDate(new Date()),
-      createdBy: user.uid,
+      createdBy: user.phoneNumber,
     };
 
     try {

@@ -75,7 +75,7 @@ const AddNotification = () => {
       const updatedNotification = {
         ...notification,
         updatedAt: timestamp.fromDate(new Date()),
-        updatedBy: user.uid,
+        updatedBy: user.phoneNumber,
       };
 
       if (!errorFlag) {

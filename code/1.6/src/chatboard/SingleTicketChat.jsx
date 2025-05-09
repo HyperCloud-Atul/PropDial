@@ -23,7 +23,7 @@ const SingleTicketChat = ({ ticket, backToChatList }) => {
     const response = {
       message: document.getElementById('id_message').value,
       createdAt: timestamp.fromDate(new Date()),
-      createdBy: user.uid,
+      createdBy: user.phoneNumber,
     }
 
     responseArray.push(response)
@@ -31,7 +31,7 @@ const SingleTicketChat = ({ ticket, backToChatList }) => {
     const ticketObj = {
       ...ticket,
       updatedAt: timestamp.fromDate(new Date()),
-      updatedBy: user.uid,
+      updatedBy: user.phoneNumber,
       response: responseArray
 
     }

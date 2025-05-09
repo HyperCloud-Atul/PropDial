@@ -15,8 +15,10 @@ export const useLogout = () => {
     try {
       // update online status
       const { uid } = projectAuth.currentUser
-      // console.log('User in Logout: ', uid)
-      await projectFirestore.collection("users-propdial").doc(uid).update({ online: false })
+      const { phoneNumber } = projectAuth.currentUser;     
+      const phone = phoneNumber.slice(1)
+   
+      await projectFirestore.collection("users-propdial").doc(phone).update({ online: false })
 
       // sign the user out
       await projectAuth.signOut()

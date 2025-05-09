@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
 import "./blogdetail.scss";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { format } from "date-fns";
 
 const loaderStyle = {
   border: "8px solid #f3f3f3",
@@ -21,7 +22,11 @@ const spinnerKeyframes = `
 `;
 
 const BlogDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
+
+  // Extract id from slug using regex or split
+  const match = slug.match(/-blogid(.+)$/);
+  const id = match ? match[1] : null;
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,6 +94,11 @@ const BlogDetail = () => {
                 </Link>
               </div>
             )}
+             <div className="published_date">
+                                    {blog.updatedAt?.toDate
+                                      ? format(blog.updatedAt.toDate(), "dd-MMM-yyyy")
+                                      : format(blog.createdAt.toDate(), "dd-MMM-yyyy")}
+                                  </div>
           </div>
 
           <div className="blog-box">
@@ -110,7 +120,12 @@ const BlogDetail = () => {
           <h3 className="sidebar-title">Related Blogs</h3>
           <div className="related-cards">
             {relatedBlogs.map((rblog) => (
-              <Link to={`/blog/${rblog.id}`} key={rblog.id}>
+              <Link   to={`/blog/${rblog.title
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, "")
+                .replace(/\s+/g, "-")}-blogid${rblog.id}`}
+                >
+                  
                 <div
                   className={`related-card ${
                     rblog.id === id ? "selected" : ""

@@ -859,7 +859,7 @@ const Stage2 = (props) => {
         const updatedProperty = {
           ...property,
           updatedAt: timestamp.fromDate(new Date()),
-          updatedBy: user.uid,
+          updatedBy: user.phoneNumber,
         };
 
         console.log("Property id: ", propertyid, " and updatedProperty Object: ", updatedProperty);
