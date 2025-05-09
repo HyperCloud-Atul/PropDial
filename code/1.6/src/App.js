@@ -34,6 +34,8 @@ import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
+import PGSocietyForm from "./pdpages/property/PGSocietyForm";
+import PGSocietyPage from "./pdpages/property/PGSocietyPage";
 import ViewInspection from "./pdpages/inspection/ViewInspection";
 import InspectionDetails from "./pdpages/inspection/InspectionDetails";
 import AddInspection from "./pdpages/inspection/AddInspection";
@@ -520,6 +522,8 @@ function App() {
                 <Route path="/contact-us" element={<PGContactUs />}></Route>
                 <Route path="/faq" element={<Faq></Faq>}></Route>
                 <Route path="/properties" element={<PGProperties />}></Route>
+                <Route path="/society-form" element={<PGSocietyForm />}></Route>
+                <Route path="/society-page" element={<PGSocietyPage />}></Route>
                 <Route
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}
