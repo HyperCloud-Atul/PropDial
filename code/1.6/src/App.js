@@ -10,7 +10,6 @@ import { useLocation } from "react-router-dom";
 import { useCollection } from "./hooks/useCollection";
 import SEOHelmet from "./components/SEOHelmet ";
 
-
 import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
 
 // components
@@ -131,6 +130,7 @@ import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
 import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 import Faq from "./pdpages/faq/Faq";
 import PGBlogs from "./pdpages/blogs/PGBlogs";
+import { ToastContainer } from "react-toastify";
 // New component import end
 
 // import Home from "./pdpages/home/Home";
@@ -500,8 +500,7 @@ function App() {
                 <Route
                   path="/referrallogin/:referralCode/:referredBy"
                   element={
-                    user ? <Navigate to="/alreadylogin" /> :
-                    <ReferralLogin />
+                    user ? <Navigate to="/alreadylogin" /> : <ReferralLogin />
                   }
                 ></Route>
                 <Route
@@ -523,10 +522,10 @@ function App() {
                 <Route
                   path="/privacypolicy"
                   element={<PGPriacyPolicy />}
-                ></Route>               
+                ></Route>
                 <Route path="/terms" element={<PGTerms />}></Route>
-                <Route path="/about-us" element={<PGAboutUs />}></Route>       
-                
+                <Route path="/about-us" element={<PGAboutUs />}></Route>
+
                 <Route path="/contact-us" element={<PGContactUs />}></Route>
                 <Route path="/faq" element={<Faq></Faq>}></Route>
                 <Route path="/properties" element={<PGProperties />}></Route>
@@ -536,22 +535,20 @@ function App() {
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
-                  <Route path="/societies" element={<Societies />}></Route>
+                <Route path="/societies" element={<Societies />}></Route>
 
-{/* blog pages route  */}
-<Route path="/blogs" element={<PGBlogs />}></Route>
-                
-               
-<Route path="/blog/:slug" element={<BlogDetail />} />
+                {/* blog pages route  */}
+                <Route path="/blogs" element={<PGBlogs />}></Route>
 
+                <Route path="/blog/:slug" element={<BlogDetail />} />
 
-
-
-                <Route path="/blog-edit/:id"
+                <Route
+                  path="/blog-edit/:id"
                   element={
                     user &&
                     (user.role === "executive" ||
-                      user.role === "admin" || user.role === "hr" ||
+                      user.role === "admin" ||
+                      user.role === "hr" ||
                       user.role === "superAdmin") ? (
                       <BlogEdit />
                     ) : (
@@ -559,11 +556,13 @@ function App() {
                     )
                   }
                 ></Route>
-                <Route path="/add-blog" 
-                   element={
+                <Route
+                  path="/add-blog"
+                  element={
                     user &&
                     (user.role === "executive" ||
-                      user.role === "admin" || user.role === "hr" ||
+                      user.role === "admin" ||
+                      user.role === "hr" ||
                       user.role === "superAdmin") ? (
                       <BlogAdd />
                     ) : (
@@ -571,7 +570,7 @@ function App() {
                     )
                   }
                 ></Route>
-                 
+
                 {/* Restricted Routes start  */}
                 {authIsReady && (
                   <>
@@ -649,7 +648,7 @@ function App() {
                         )
                       }
                     ></Route>
-                        <Route
+                    <Route
                       path="/add-property-layout/:propertyLayoutId"
                       element={
                         user &&
@@ -661,23 +660,22 @@ function App() {
                           <Navigate to="/" />
                         )
                       }
-                      
                     ></Route>
                     <Route
                      path="/propertydetails/:slug"
                       element={<PropertyDetails></PropertyDetails>}
                     ></Route>
-                  
-                     <Route
+
+                    <Route
                       path="/view-layout/:propertyLayoutId"
                       element={<ViewPropertyLayout></ViewPropertyLayout>}
                     ></Route>
-                    
-                     <Route
+
+                    <Route
                       path="/property-images/:propertyId"
                       element={<PropertyImages></PropertyImages>}
                     ></Route>
-                    
+
                     <Route
                       path="/inspection/:propertyid"
                       element={
@@ -694,9 +692,7 @@ function App() {
                     ></Route>
                     <Route
                       path="/inspection-report/:inspectionid"
-                      element={                      
-                          <InspectionDetails />                     
-                      }
+                      element={<InspectionDetails />}
                     ></Route>
                     <Route
                       path="/add-inspection/:inspectionId"
@@ -888,7 +884,8 @@ function App() {
                       element={
                         user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin" || user.role === "executive") ? (
+                          user.role === "superAdmin" ||
+                          user.role === "executive") ? (
                           <PGUpdateProperty />
                         ) : (
                           <Navigate to="/login" />
@@ -1199,6 +1196,7 @@ function App() {
             {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
             {/* <Footer></Footer> */}
             <NavbarBottom></NavbarBottom>
+            <ToastContainer />
           </div>
         </div>
       </div>

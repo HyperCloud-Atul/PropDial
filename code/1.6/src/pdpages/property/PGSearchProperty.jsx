@@ -11,10 +11,15 @@ import Banner from "../../components/Banner";
 import BottomRightFixedIcon from "../../components/BottomRightFixedIcon";
 import PropdialPropertyCard from "../../components/property/SearchProperty";
 import PropAgentPropertyCard from "../../components/property/SearchPropAgentProperty";
+import CitySelector from "../../components/CitySelector";
+import { useCity } from "../../hooks/useCity";
+import { Loader, MapPin } from "lucide-react";
 
 const PGSearchProperty = () => {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
+  const { city, setOpenCityModal } = useCity();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
@@ -29,8 +34,8 @@ const PGSearchProperty = () => {
     useCollection("properties-propdial", "", ["createdAt", "desc"]);
 
   // const { documents: propagentProperties, error: propagentPropertiesError } = useCollection("properties-propagent", ["postedBy", "==", "Agent"]);
-  const { documents: propagentProperties, error: propagentPropertiesError } =
-    useCollection("properties-propagent");
+  // const { documents: propagentProperties, error: propagentPropertiesError } =
+  //   useCollection("properties-propagent");
 
   // functionality for fav start
   // const [favoritedProperties, setFavoritedProperties] = useState([]);
@@ -212,6 +217,9 @@ const PGSearchProperty = () => {
   const handleOptionClick = (option) => {
     setActiveOption(option);
   };
+  if (!city) {
+    setOpenCityModal(true);
+  }
   return (
     <div className="pg_property aflbg guest_property">
       {/* <Banner></Banner> */}
@@ -228,18 +236,61 @@ const PGSearchProperty = () => {
                 }}
               >
                 <div className="top_search_bar">
-                  <div className="property_search_parent">
-                    <input
-                      type="search"
-                      value={searchQuery}
-                      className="property_search"
-                      onChange={handleSearchChange}
-                      placeholder="Search By Society, Locality, City, State... "
-                    />
-                    <div className="icon">
-                      <span className="material-symbols-outlined">search</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      alignItems: "center",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div className="property_search_parent">
+                      <input
+                        type="search"
+                        value={searchQuery}
+                        className="property_search"
+                        onChange={handleSearchChange}
+                        placeholder="Search By Society, Locality, City, State... "
+                      />
+                      <div className="icon">
+                        <span className="material-symbols-outlined">
+                          search
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        className="location"
+                        style={{
+                          cursor: "pointer",
+                          display: "flex",
+                          gap: "5px",
+                          alignItems: "center",
+                          justifyContent: "end",
+                          border: "none",
+                          background: "white",
+                          width: "100%",
+                          padding: "8px",
+                          borderRadius: "5px",
+                        }}
+                        onClick={() => setOpenCityModal(true)}
+                      >
+                        <MapPin style={{ width: "16px", height: "16px" }} />
+                        <span
+                          style={{
+                            fontSize: "14px",
+                            marginTop: "3px",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {city}
+                        </span>
+                      </button>
+                      <CitySelector />
                     </div>
                   </div>
+
                   <div className="new_inline">
                     {/* <div className="mobile_size residentail_commercial">
                         <label className={checked ? "on" : "off"}>
@@ -410,14 +461,20 @@ const PGSearchProperty = () => {
                     )} */}
                 </div>
                 <TabPanel>
-                  <div className="property_card_left">
-                    {filteredPropdialProperties && (
-                      <PropdialPropertyCard
-                        propertiesdocuments={filteredPropdialProperties}
-                        activeOption={activeOption}
-                      />
-                    )}
-                  </div>
+                  {city ? (
+                    <div className="property_card_left">
+                      {filteredPropdialProperties && (
+                        <PropdialPropertyCard
+                          propertiesdocuments={filteredPropdialProperties}
+                          activeOption={activeOption}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="loader">
+                      <Loader className="loader-icon" />
+                    </div>
+                  )}
                 </TabPanel>
                 <TabPanel>
                   <div className="property_card_left">
@@ -444,19 +501,21 @@ const PGSearchProperty = () => {
                   padding: "0px",
                 }}
               >
-              <div className="header">
-              <div className="section_title_effect">Just Listed</div>
-               <h6>See what's newly added</h6>
-              </div>
+                <div className="header">
+                  <div className="section_title_effect">Just Listed</div>
+                  <h6>See what's newly added</h6>
+                </div>
                 <div className="pp_sidebar">
-                  <div className="pp_sidebar_cards">
-                    {filteredPropdialPropertiesRecent && (
-                      <PropAgentPropertyCard
-                        propagentProperties={filteredPropdialPropertiesRecent}
-                        activeOption={activeOption}
-                      />
-                    )}
-                  </div>
+                  {city && (
+                    <div className="pp_sidebar_cards">
+                      {filteredPropdialPropertiesRecent && (
+                        <PropAgentPropertyCard
+                          propagentProperties={filteredPropdialPropertiesRecent}
+                          activeOption={activeOption}
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               {/* Recent Properties end*/}
