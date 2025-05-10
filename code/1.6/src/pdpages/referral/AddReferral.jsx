@@ -151,7 +151,7 @@ const handleAddDoc = async () => {
         promoCode: selectedPromo || "",
       });
   
-      const referralLink = `https://yourdomain.com/signup?ref=${docRef.id}`;
+      const referralLink = `https://propdial-dev-aa266.web.app/referrallogin/${docRef.id}`;
   
       if (docRef.id) {
         await updateDocument(docRef.id, { referalCode: docRef.id });

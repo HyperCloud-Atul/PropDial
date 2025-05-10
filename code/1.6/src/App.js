@@ -500,9 +500,9 @@ function App() {
                 <Route
                   path="/referrallogin/:referralCode"
                   element={
-                    user ? <Navigate to="/alreadylogin" /> : <ReferralLogin />
-                    // // user ? <Navigate to="/alreadylogin" /> :
-                    // <ReferralLogin />
+                    // user ? <Navigate to="/alreadylogin" /> : 
+                    <ReferralLogin />
+                   
                   }
                 ></Route>
                 <Route
