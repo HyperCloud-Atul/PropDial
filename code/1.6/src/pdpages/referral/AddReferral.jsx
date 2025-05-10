@@ -26,14 +26,21 @@ const AddReferral = () => {
   const [promoCodes, setPromoCodes] = useState([]);
   const [selectedPromo, setSelectedPromo] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+const [nationalNumber, setNationalNumber] = useState("");
+
 
   // Input handlers
   const handleNameChange = (e) => setName(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
-  const handlePhoneChange = (value) => {
-    setPhone(value);
-    setPhoneError(""); // reset error while typing
-  };
+const handlePhoneChange = (value, data) => {
+  setPhone(value);
+  setCountryCode(data.dialCode || ""); // e.g., "91"
+  const numberWithoutCountryCode = value.replace(data.dialCode, "").replace(/^\+/, "");
+  setNationalNumber(numberWithoutCountryCode);
+  setPhoneError(""); // reset error while typing
+};
+
   const handlePromoChange = (e) => setSelectedPromo(e.target.value);
 
   // Fetch active promo codes
@@ -136,6 +143,8 @@ const handleAddDoc = async () => {
         name,
         email,
         phone,
+         countryCode,
+  nationalNumber,
         referalCode: "",
         referedBy: user.phoneNumber,
         isAccept: false,

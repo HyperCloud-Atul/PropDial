@@ -498,16 +498,11 @@ function App() {
                 ></Route>
                 <Route path="/alreadylogin" element={<AlreadyLogin />}></Route>
                 <Route
-                  path="/referrallogin/:referralCode/:referredBy"
+                  path="/referrallogin/:referralCode"
                   element={
                     user ? <Navigate to="/alreadylogin" /> : <ReferralLogin />
-                  }
-                ></Route>
-                <Route
-                  path="/referrallogin"
-                  element={
-                    user ? <Navigate to="/alreadylogin" /> :
-                    <ReferralLogin />
+                    // // user ? <Navigate to="/alreadylogin" /> :
+                    // <ReferralLogin />
                   }
                 ></Route>
                 <Route
@@ -662,7 +657,7 @@ function App() {
                       }
                     ></Route>
                     <Route
-                     path="/propertydetails/:slug"
+                      path="/propertydetails/:slug"
                       element={<PropertyDetails></PropertyDetails>}
                     ></Route>
 
