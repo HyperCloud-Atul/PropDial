@@ -498,19 +498,12 @@ function App() {
                 ></Route>
                 <Route path="/alreadylogin" element={<AlreadyLogin />}></Route>
                 <Route
-                  path="/referrallogin/:referralCode/:referredBy"
+                  path="/referrallogin/:referralCode"
                   element={
-                    user ? <Navigate to="/alreadylogin" /> :
+                    // user ? <Navigate to="/alreadylogin" /> :
                     <ReferralLogin />
                   }
-                ></Route>
-                <Route
-                  path="/referrallogin"
-                  element={
-                    user ? <Navigate to="/alreadylogin" /> :
-                    <ReferralLogin />
-                  }
-                ></Route>
+                ></Route>               
                 <Route
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}

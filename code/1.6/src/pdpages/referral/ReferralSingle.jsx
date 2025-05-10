@@ -43,7 +43,7 @@ const ReferralSingle = ({ referralDoc, user }) => {
                 )} */}
                 {doc && doc.referalCode && (
                   <Link
-                    to={`/referrallogin/${doc.referalCode}/${doc.referedBy}`}
+                    to={`/referrallogin/${doc.referalCode}`}
                     style={{
                       fontSize:"14px",
                       color:"var(--theme-green)",
