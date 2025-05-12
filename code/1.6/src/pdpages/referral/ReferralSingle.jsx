@@ -1,17 +1,22 @@
 import React from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import "./ReferralSingle.scss";
+import { Calendar, Gift, Mail, Phone } from "lucide-react";
 const ReferralSingle = ({ referralDoc, user }) => {
+  console.log(referralDoc);
   return (
     <>
       {referralDoc &&
         referralDoc.map((doc, index) => (
           <div
-            className={`my_small_card notification_card pointer ${
-              user && (user.role === "admin" || user.role === "superAdmin")
-                ? "right_gap"
-                : ""
-            }`}
+            className={`referral_card `}
+            //   ${
+            //   user && (user.role === "admin" || user.role === "superAdmin")
+            //     ? "right_gap"
+            //     : ""
+            // }
+
             key={index}
             // onClick={() => handleShowEnquriyModal(doc)}
           >
@@ -19,15 +24,20 @@ const ReferralSingle = ({ referralDoc, user }) => {
             <span>{format(new Date(doc.createdAt), "dd-MMM-yy hh:mm a")}</span>
           </h4> */}
             {/* {doc.isAccept && ( */}
-            <div
+
+            {/*commented by rahul aggarwal*/}
+            {/* <div
               className={`top_tag_left ${
                 doc.isAccept ? "successful" : "working"
               }`}
             >
               {doc.isAccept ? "Converted" : "Pending"}
-            </div>
+            </div> */}
+
             {/* )} */}
-            <div className="left">
+
+            {/*commented by rahul aggarwal*/}
+            {/* <div className="left">
               <div className="inner">
                 <h5 className="title">{doc.name}</h5>
                 <h6 className="sub_title">
@@ -37,24 +47,27 @@ const ReferralSingle = ({ referralDoc, user }) => {
                         "+$1 ****** $3"
                       )
                     : doc.phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}
-                </h6>
-                {/* {doc.email && (
+                </h6> */}
+
+            {/* {doc.email && (
                   <h6 className="sub_title text-capitalize">{doc.email}</h6>
                 )} */}
-                {doc && doc.referalCode && (
+
+            {/*commented by rahul aggarwal*/}
+            {/* {doc && doc.referalCode && (
                   <Link
                     to={`/referrallogin/${doc.referalCode}`}
                     style={{
-                      fontSize:"14px",
-                      color:"var(--theme-green)",
-                      wordBreak:"break-all",
-                      display:"-webkit-box",
-                      WebkitLineClamp:"1",
-                      WebkitBoxOrient:"vertical",
-                      overflow:"hidden"
+                      fontSize: "14px",
+                      color: "var(--theme-green)",
+                      wordBreak: "break-all",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "1",
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
                     }}
                   >
-                   {doc.email}
+                    {doc.email}
                   </Link>
                 )}
 
@@ -64,7 +77,8 @@ const ReferralSingle = ({ referralDoc, user }) => {
                   </h6>
                 )}
               </div>
-            </div>
+            </div> */}
+
             {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
             <div className="wha_call_icon">
               <Link
@@ -110,6 +124,45 @@ const ReferralSingle = ({ referralDoc, user }) => {
             </span>
        
           )} */}
+
+            <div className="referral_card_inner">
+              <div className="referral_card_inner_header">
+                <div className="header-user-status">
+                  <h5>{doc.name}</h5>
+                  <p className={doc.isAccept ? "accepted" : "pending"}>
+                    {doc.isAccept ? "Accepted" : "Pending"}
+                  </p>
+                </div>
+                <div className="header-user-contact">
+                  <p>
+                    <Phone className="lucide-icon" />
+                    <span>
+                      +{doc.countryCode}-{doc.nationalNumber}
+                    </span>
+                  </p>
+                  <p>
+                    <Mail className="lucide-icon" />
+                    <span>{doc.email}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="referral_card_inner_body">
+                <div className="body_item">
+                  <Gift className="lucide-icon" />
+                  <div className="body_item_content">
+                    <h6>Promo code</h6>
+                    <p>{doc.promoCode}</p>
+                  </div>
+                </div>
+                <div className="body_item">
+                  <Calendar className="lucide-icon" />
+                  <div className="body_item_content">
+                    <h6>Referred on</h6>
+                    <p>{format(doc.createdAt.toDate(), "MMM dd, yyyy")}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       {/* <EnquiryDetailModal

@@ -37,91 +37,72 @@ const PGReferral = () => {
   // nine dots menu end
 
   return (
-   
-        <div>
-        <ScrollToTop />
-        {user && user.status === "active" ? (
-          <div className="top_header_pg pg_bg pg_referral">
-            <div className="page_spacing pg_min_height">
-              {/* nine dot menu and plus icons start  */}
-              <NineDots nineDotsMenu={nineDotsMenu} />
-              <Link className="property-list-add-property with_9dot">
-                <span
-                  className="material-symbols-outlined"
-                  onClick={handleShowAIForm}
-                >
-                  {showAIForm ? "close" : "add"}
-                </span>
-              </Link>
-              {/* nine dot menu and plus icons start  */}
-  
-              {/* if no referral doc available start */}
-              {referralDoc && referralDoc.length === 0 && (
-                <div className={`pg_msg ${showAIForm && "d-none"}`}>
-                  <div>
-                    No Reference Yet!
-                    <div
-                      onClick={handleShowAIForm}
-                      className={`theme_btn no_icon header_btn mt-3 ${showAIForm ? "btn_border" : "btn_fill"
-                        }`}
-                    >
-                      {showAIForm ? "Cancel" : "Add New"}
-                    </div>
+    <div>
+      <ScrollToTop />
+      {user && user.status === "active" ? (
+        <div className="top_header_pg pg_bg pg_referral">
+          <div className="page_spacing pg_min_height">
+            {/* nine dot menu and plus icons start  */}
+            <NineDots nineDotsMenu={nineDotsMenu} />
+            <Link className="property-list-add-property with_9dot">
+              <span
+                className="material-symbols-outlined"
+                onClick={handleShowAIForm}
+              >
+                {showAIForm ? "close" : "add"}
+              </span>
+            </Link>
+            {/* nine dot menu and plus icons start  */}
+
+            {/* if no referral doc available start */}
+            {referralDoc && referralDoc.length === 0 && (
+              <div className={`pg_msg ${showAIForm && "d-none"}`}>
+                <div>
+                  No Reference Yet!
+                  <div
+                    onClick={handleShowAIForm}
+                    className={`theme_btn no_icon header_btn mt-3 ${
+                      showAIForm ? "btn_border" : "btn_fill"
+                    }`}
+                  >
+                    {showAIForm ? "Cancel" : "Add New"}
                   </div>
                 </div>
-              )}
-              {/* if no referral doc available end  */}
-  
-              {/* view agent start  */}
-              {referralDoc && referralDoc.length !== 0 && (
-                <>
-                  {!showAIForm && (
-                    <ViewReferral
-                      referralDoc={referralDoc}
-                      handleShowAIForm={handleShowAIForm}
-                      user={user}
-                    />
-                  )}
-                </>
-              )}
-              {/* view agent end  */}
-  
-              {/* add agent start  */}
-              {showAIForm && (
-                <>
-                  <div className="pg_header d-flex justify-content-between">
-                    <div
-                      className="left d-flex align-items-center pointer"
-                      style={{
-                        gap: "5px",
-                      }}
-                    >
-                      <span
-                        className="material-symbols-outlined pointer"
-                        onClick={handleShowAIForm}
-                      >
-                        arrow_back
-                      </span>
-                      <h2 className="m22">Give Reference</h2>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="vg12"></div>
-                  <AddReferral
-                    showAIForm={showAIForm}
-                    setShowAIForm={setShowAIForm}
-                    handleShowAIForm={handleShowAIForm}                    
+              </div>
+            )}
+            {/* if no referral doc available end  */}
+
+            {/* view agent start  */}
+            {referralDoc && referralDoc.length !== 0 && (
+              <>
+                {!showAIForm && (
+                  <ViewReferral
+                    referralDoc={referralDoc}
+                    handleShowAIForm={handleShowAIForm}
+                    user={user}
                   />
-                   
-                </>
-              )}
-              {/* add agent end     */}
-            </div>
+                )}
+              </>
+            )}
+            {/* view agent end  */}
+
+            {/* add agent start  */}
+            {showAIForm && (
+              <>
+                <AddReferral
+                  showAIForm={showAIForm}
+                  setShowAIForm={setShowAIForm}
+                  handleShowAIForm={handleShowAIForm}
+                />
+              </>
+            )}
+            {/* add agent end     */}
           </div>
-        ) : (
-          <InactiveUserCard />
-        )}
-      </div>
+        </div>
+      ) : (
+        <InactiveUserCard />
+      )}
+    </div>
   );
 };
 
