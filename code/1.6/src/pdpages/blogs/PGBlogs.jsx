@@ -19,13 +19,15 @@ const PGBlogs1 = () => {
   }, [location, user]);
 
   // ✅ Slug Generator (Handles empty title case)
-  const generateSlug = (title, id) => {
-    if (!title || title.trim() === "") return `/blog/blogid${id}`;
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-");
-    return `/blog/${slug}-blogid${id}`;
+  const generateSlug = (title) => {
+    if (!title || title.trim() === "") return `/blog/untitled`;
+    return (
+      `/blog/` +
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+    );
   };
 
   return (
@@ -50,7 +52,7 @@ const PGBlogs1 = () => {
                 return (
                   <div key={blog.id} className="item card-container">
                     <div className="card-image">
-                      <Link to={blogUrl}>
+                      <Link to={blogUrl} state={{ id: blog.id }}>
                         <img src={blog.image.url} alt={blog.title} />
                         <div className="published_date">
                           {blog.updatedAt?.toDate
@@ -58,6 +60,7 @@ const PGBlogs1 = () => {
                             : format(blog.createdAt.toDate(), "dd-MMM-yyyy")}
                         </div>
                       </Link>
+
                       {user &&
                         (user.role === "admin" ||
                           user.role === "superAdmin" ||
@@ -69,13 +72,23 @@ const PGBlogs1 = () => {
                           </div>
                         )}
                     </div>
-                    <Link className="card-body" to={blogUrl}>
+
+                    <Link
+                      className="card-body"
+                      to={blogUrl}
+                      state={{ id: blog.id }}
+                    >
                       <h3>{blog.title}</h3>
                       <p className="card-subtitle">{blog.subTitle}</p>
                     </Link>
+
                     <div className="card-author">
                       <div className="author-left">
-                        <Link className="read-more" to={blogUrl}>
+                        <Link
+                          className="read-more"
+                          to={blogUrl}
+                          state={{ id: blog.id }}
+                        >
                           Read More <span className="arrow">&rarr;</span>
                         </Link>
                       </div>
