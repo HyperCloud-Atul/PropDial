@@ -20,10 +20,12 @@ import {
   timestamp,
 } from "../../firebase/config";
 import { fetchSignInMethodsForEmail } from "firebase/auth";
+import { displayName } from "react-quill";
 
 // css
 import "./PhoneLogin.scss";
-import { displayName } from "react-quill";
+import "./ReferralLogin.scss";
+import { ChevronRight, User } from "lucide-react";
 
 function camelCase(str) {
   return (
@@ -58,6 +60,8 @@ const ReferralLogin = () => {
     referralCode
   );
 
+  console.log(referDoc);
+
   const { documents: dbUsers, error: dbuserserror } =
     useCollection("users-propdial");
 
@@ -67,19 +71,19 @@ const ReferralLogin = () => {
   const [activeTab, setActiveTab] = useState(1);
   const [isNewUser, setIsNewUser] = useState(false);
   const [otp, setOtp] = useState("");
-const [phone, setPhone] = useState("");
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [countryCode, setCountryCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("");
 
-useEffect(() => {
-  if (referDoc) {
-    if (referDoc.phone) setPhone(referDoc.phone);
-    if (referDoc.name) setName(referDoc.name);
-    if (referDoc.email) setEmail(referDoc.email);
-    if (referDoc.countryCode) setCountryCode(referDoc.countryCode);
-  }
-}, [referDoc]);
+  useEffect(() => {
+    if (referDoc) {
+      if (referDoc.phone) setPhone(referDoc.phone);
+      if (referDoc.name) setName(referDoc.name);
+      if (referDoc.email) setEmail(referDoc.email);
+      if (referDoc.countryCode) setCountryCode(referDoc.countryCode);
+    }
+  }, [referDoc]);
 
   const [city, setCity] = useState("");
 
@@ -112,7 +116,16 @@ useEffect(() => {
   const { updateDocument, response: responseUpdateDocument } =
     useFirestore("users-propdial");
 
-  const { updateDocument: updateReferralDoc } = useFirestore("referrals-propdial");
+  const { updateDocument: updateReferralDoc } =
+    useFirestore("referrals-propdial");
+
+  const findReferredByUser = () => {
+    const user = dbUsers?.find((user) => user.id === referDoc?.referedBy);
+    if (user) {
+      return user;
+    }
+    return null;
+  };
 
   const handleWheel = (e) => {
     // Prevent scrolling changes
@@ -403,7 +416,7 @@ useEffect(() => {
           propertyManagerID: phone,
           countryCode,
           referralCode,
-          // referedBy: referDoc?.referedBy,          
+          // referedBy: referDoc?.referedBy,
           photoURL: imgUrl,
           // rolePropAgent: "agent",
           rolePropDial: "owner",
@@ -427,22 +440,23 @@ useEffect(() => {
           aadhaar: "",
         });
 
-           // 2. ✅ Update referral status in "referrals-propdial"
-  if (referralCode) {
-  const refDoc = projectFirestore.collection("referrals-propdial").doc(referralCode);
-  const docSnap = await refDoc.get();
+      // 2. ✅ Update referral status in "referrals-propdial"
+      if (referralCode) {
+        const refDoc = projectFirestore
+          .collection("referrals-propdial")
+          .doc(referralCode);
+        const docSnap = await refDoc.get();
 
-  if (docSnap.exists) {
-    await refDoc.update({
-      isAccept: true,
-      acceptAt: timestamp.fromDate(new Date()),
-    });
-    console.log("Referral marked as accepted");
-  } else {
-    console.log("Referral code does not exist in Firestore");
-  }
-}
-
+        if (docSnap.exists) {
+          await refDoc.update({
+            isAccept: true,
+            acceptAt: timestamp.fromDate(new Date()),
+          });
+          console.log("Referral marked as accepted");
+        } else {
+          console.log("Referral code does not exist in Firestore");
+        }
+      }
 
       console.log("User Created Successfully");
 
@@ -452,7 +466,7 @@ useEffect(() => {
     }
   };
 
-  const handlePhoneChange = (value, countryData) => { 
+  const handlePhoneChange = (value, countryData) => {
     setPhone(value);
     setCountryCode(countryData.countryCode);
     setCountryName(countryData.name);
@@ -471,56 +485,94 @@ useEffect(() => {
   // goback code
 
   return (
-    <div className="phone_login two_col_page top_header_pg">
-      <div className="right col_right">
+    <div className="referralLogin top_header_pg">
+      {/* <div className="right col_right">
         <img src="/assets/img/login_img2.png" alt="propdial" />
+      </div> */}
+      <div className="referralLogin_header">
+        <h1>Welcome aboard 👋</h1>
+        <p>
+          You have been referred by your friend{" "}
+          <span
+            style={{
+              fontWeight: "bold",
+              textDecoration: "underline",
+            }}
+          >
+            {findReferredByUser()?.fullName}
+          </span>{" "}
+          to join Propdial.
+        </p>
       </div>
+
       <div className="left col_left">
         {mobilenoSliderState && (
-          <>
+          <div className="referralLogin-card">
+            <div className="referralLogin-card_header">
+              <div className="header-icon">
+                <User className="lucide-icon" />
+              </div>
+              <div className="header-text">
+                <h5>Create your account</h5>
+                <p>Enter your phone to get started</p>
+              </div>
+            </div>
+
+            <div className="referral-info">
+              <h6>Referral Bonus</h6>
+              <p>
+                You've been referred! Complete signup to receive your welcome
+                bonus.
+              </p>
+            </div>
+
             <div className="left_inner col_left_inner">
               {/* <div className="page_inner_logo">
                 <img src="/assets/img/logo_propdial.png" alt="propdial" />
               </div> */}
               <div className="vg22"></div>
               <form action="">
-                <div className="new_form_field with_icon phoneinput">
-                  <label htmlFor="" className="text-center">
-                    Mobile Number
+                <div className="referralPhone with_icon phoneinput">
+                  <label htmlFor="" className="form-label">
+                    Phone Number
                   </label>
 
                   <div>
-                   <PhoneInput
-  country={"in"}
-  value={phone}
-  onChange={handlePhoneChange}
-  international
-  keyboardType="phone-pad"
-  countryCodeEditable={false}  // make country code non-editable
-  disableDropdown={true}       // optional: disables country selector
-  placeholder="Country code + mobile number"
-  inputProps={{
-    name: "phone",
-    required: true,
-    autoFocus: false,
-    readOnly: true,            // ✅ input field becomes read-only
-  }}
-  inputStyle={{
-    width: "100%",
-    height: "45px",
-    paddingLeft: "45px",
-    fontSize: "16px",
-    borderRadius: "5px",
-    border: "1px solid #00A8A8",
-    backgroundColor: "#f5f5f5", // optional: grey background for read-only feel
-  }}
-  buttonStyle={{
-    borderRadius: "5px",
-    textAlign: "left",
-    border: "1px solid #00A8A8",
-    backgroundColor: "#f5f5f5", // optional: matches read-only style
-  }}
-/>
+                    <PhoneInput
+                      country={"in"}
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      international
+                      keyboardType="phone-pad"
+                      countryCodeEditable={false} // make country code non-editable
+                      disableDropdown={true} // optional: disables country selector
+                      placeholder="Country code + mobile number"
+                      inputProps={{
+                        name: "phone",
+                        required: true,
+                        autoFocus: false,
+                        readOnly: true, // ✅ input field becomes read-only
+                      }}
+                      inputStyle={{
+                        width: "100%",
+                        height: "45px",
+                        paddingLeft: "45px",
+                        fontSize: "16px",
+                        borderRadius: "5px",
+                        border: "1px solid #00A8A8",
+                        cursor: "not-allowed",
+                        backgroundColor: "#d4d4d4", // optional: grey background for read-only feel
+                      }}
+                      buttonStyle={{
+                        borderRadius: "5px",
+                        textAlign: "left",
+                        border: "1px solid #00A8A8",
+                        cursor: "not-allowed",
+                        backgroundColor: "#d4d4d4",
+                        // optional: matches read-only style
+                      }}
+                    />
+                    <p>We'll send a verification code to this number</p>
 
                     {error && <div className="field_error">{error}</div>}
                   </div>
@@ -535,13 +587,17 @@ useEffect(() => {
                   <>
                     <div
                       id="btn_sendotp"
-                      className="theme_btn btn_fill w_full"
+                      className="theme_btn btn_fill w_full continue-btn"
                       onClick={getOTP}
                     >
                       Continue
+                      <ChevronRight style={{ width: "16px", height: "16px" }} />
                     </div>
                     <div className="new_form_field">
-                      <div className="checkbox justify-content-center">
+                      <div
+                        className="checkbox justify-content-center"
+                        style={{ marginTop: "10px" }}
+                      >
                         {/* <input type="checkbox" id="agree_tcp" checked /> */}
                         <label htmlFor="agree_tcp">
                           By proceeding, I agree to Propdial{" "}
@@ -565,13 +621,16 @@ useEffect(() => {
                 )}
               </form>
             </div>
-          </>
+          </div>
         )}
 
         {/* OTP Slider */}
         <div>
           {otpSliderState && (
-            <div className="left_inner col_left_inner">
+            <div
+              className="referralLogin-card left_inner col_left_inner"
+              style={{ backgroundColor: "#fff" }}
+            >
               <div className="vg22"></div>
 
               <div
@@ -680,24 +739,26 @@ useEffect(() => {
                 )}
               </p>
               <div className="vg22"></div>
-              <button
-                className="theme_btn btn_fill w_full no_icon"
-                onClick={verifyOTP}
-                disabled={isConfirmDisabled} // Disable logic apply
-                style={{
-                  cursor: isConfirmDisabled ? "not-allowed" : "pointer",
-                  opacity: isConfirmDisabled ? 0.5 : 1,
-                }}
-              >
-                Confirm
-              </button>
-              <div className="vg10"></div>
-              <button
-                className="theme_btn btn_border w_full no_icon"
-                onClick={handleGoBack}
-              >
-                Change Number
-              </button>
+              <div>
+                <button
+                  className="theme_btn btn_fill w_full no_icon"
+                  onClick={verifyOTP}
+                  disabled={isConfirmDisabled} // Disable logic apply
+                  style={{
+                    cursor: isConfirmDisabled ? "not-allowed" : "pointer",
+                    opacity: isConfirmDisabled ? 0.5 : 1,
+                  }}
+                >
+                  Confirm
+                </button>
+                <div className="vg10"></div>
+                <button
+                  className="theme_btn btn_border w_full no_icon"
+                  onClick={handleGoBack}
+                >
+                  Change Number
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -709,22 +770,22 @@ useEffect(() => {
                 <div className="vg22"></div>
                 <div></div>
 
-                <label htmlFor="" className="text-center">
-                  <h5>Congratulations and welcome aboard! 🎉</h5>
+                {/* <label htmlFor="" className="text-center">
+                <h5>Congratulations and welcome aboard! 🎉</h5>
 
-                  <p
-                    style={{
-                      marginTop: "3px",
-                    }}
-                  >
-                    {" "}
-                    Welcome to join the Propdial community.
-                  </p>
-                </label>
+                <p
+                  style={{
+                    marginTop: "3px",
+                  }}
+                >
+                  {" "}
+                  Welcome to join the Propdial community.
+                </p>
+              </label> */}
                 <div className="vg22"></div>
                 {/* stage one gender  */}
                 {genderSlider && (
-                  <div className="field_box theme_radio_new">
+                  <div className="field_box theme_radio_new referralLogin-card">
                     <div
                       className="theme_radio_container gender"
                       style={{
@@ -799,71 +860,76 @@ useEffect(() => {
 
                 {/* stage two personal info  */}
                 {personalInfoSlider && (
-                  <div className="new_form_field with_icon">
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Full Name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      style={{
-                        background: "none",
-                      }}
-                    />
-                    <div className="vg22"></div>
-                    <input
-                      required
-                      type="email"
-                      placeholder="Your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      style={{
-                        background: "none",
-                      }}
-                    />
-                    <div className="vg22"></div>
-                    <input
-                      required
-                      type="text"
-                      placeholder="Your Current City"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      style={{
-                        background: "none",
-                      }}
-                    />
-                    <div className="vg22"></div>
+                  <div className="new_form_field with_icon referralLogin-card">
                     <div>
-                      <button
-                        className="theme_btn btn_fill w_full"
-                        onClick={(e) => {
-                          if (name === "" || email === "" || city === "") {
-                            setError("Please complete all the details");
-                            allSliderVisible(false);
-                            setPersonalInfoSlider(true);
-                          } else if (!validateEmail(email)) {
-                            setError("Email format is not valid");
-                            allSliderVisible(false);
-                            setPersonalInfoSlider(true);
-                          } else {
-                            setError("");
-                            allSliderVisible(false);
-                            setWhoAmISlider(true);
-                          }
+                      <input
+                        required
+                        type="text"
+                        placeholder="Your Full Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        style={{
+                          background: "none",
                         }}
-                      >
-                        Next
-                      </button>
+                      />
+                      <div className="vg22"></div>
+                      <input
+                        required
+                        type="email"
+                        placeholder="Your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{
+                          background: "none",
+                        }}
+                      />
+                      <div className="vg22"></div>
+                      <input
+                        required
+                        type="text"
+                        placeholder="Your Current City"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        style={{
+                          background: "none",
+                        }}
+                      />
+                      <div className="vg22"></div>
+                      <div>
+                        <button
+                          className="theme_btn btn_fill w_full"
+                          onClick={(e) => {
+                            if (name === "" || email === "" || city === "") {
+                              setError("Please complete all the details");
+                              allSliderVisible(false);
+                              setPersonalInfoSlider(true);
+                            } else if (!validateEmail(email)) {
+                              setError("Email format is not valid");
+                              allSliderVisible(false);
+                              setPersonalInfoSlider(true);
+                            } else {
+                              setError("");
+                              allSliderVisible(false);
+                              setWhoAmISlider(true);
+                            }
+                          }}
+                        >
+                          Next
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {/* stage three who am i   */}
                 {whoAmISlider && (
-                  <div className="field_box theme_radio_new whoami">
+                  <div className="field_box theme_radio_new whoami referralLogin-card">
                     <div className="inner">
                       <label htmlFor="" className="text-center mb-2">
-                        <h6> Who am i?</h6>
+                        <h6 style={{ fontWeight: "bold", fontSize: "1.5rem" }}>
+                          {" "}
+                          Who am i?
+                        </h6>
                         <div className="emoji"></div>
                       </label>
                       <div className="vg12"></div>
@@ -939,7 +1005,7 @@ useEffect(() => {
                       </div>
                     </div>
                     <div className="vg22"></div>
-                    <div className="vg22"></div>
+                    {/* <div className="vg22"></div> */}
                     <div>
                       <button
                         className="theme_btn btn_fill w_full"
