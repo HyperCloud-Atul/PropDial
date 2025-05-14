@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // import component
 import ReferralSingle from "./ReferralSingle";
 import LinearProgressBar from "../../pages/roles/owner/LinearProgressBar";
-
+import "./ViewReferral.scss";
 const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
   // Search input state
   const [searchInput, setSearchInput] = useState("");
@@ -103,21 +103,27 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
               <div className="vg22_1199"></div>
               <div className="property_status">
                 <div
-                  className={`ps_single pending pointer ${filterStatus === "all" && "arrow"}`}
+                  className={`ps_single pending pointer ${
+                    filterStatus === "all" && "arrow"
+                  }`}
                   onClick={() => setFilterStatus("all")}
                 >
                   <h5>{referralDoc ? referralDoc.length : 0}</h5>
                   <h6>Total Referrals</h6>
                 </div>
                 <div
-                  className={`ps_single active pointer ${filterStatus === "success" && "arrow"}`}
+                  className={`ps_single active pointer ${
+                    filterStatus === "success" && "arrow"
+                  }`}
                   onClick={() => setFilterStatus("success")}
                 >
                   <h5>{successfulCount}</h5>
                   <h6>Successful Conversions</h6>
                 </div>
                 <div
-                  className={`ps_single inactive pointer ${filterStatus === "pending" && "arrow"}`}
+                  className={`ps_single inactive pointer ${
+                    filterStatus === "pending" && "arrow"
+                  }`}
                   onClick={() => setFilterStatus("pending")}
                 >
                   <h5>{pendingCount}</h5>
@@ -131,54 +137,59 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
       </div>
 
       {/* Filters */}
-      <div className="filters">
-        <div className="left">
-          <div className="rt_global_search search_field">
-            <input
-              placeholder="Search"
-              value={searchInput}
-              onChange={handleSearchInputChange}
-            />
-            <div className="field_icon">
-              <span className="material-symbols-outlined">search</span>
-            </div>
-          </div>
+      <div className="referral_filters">
+        <div className="referral_title">
+          <h4>Referral History</h4>
         </div>
-        <div className="right">
-          <div className="button_filter diff_views">
-            <div
-              className={`bf_single ${
-                viewMode === "card_view" ? "active" : ""
-              }`}
-              onClick={() => handleModeChange("card_view")}
-            >
-              <span className="material-symbols-outlined">
-                calendar_view_month
-              </span>
-            </div>
-            <div
-              className={`bf_single ${
-                viewMode === "table_view" ? "active" : ""
-              }`}
-              onClick={() => handleModeChange("table_view")}
-            >
-              <span className="material-symbols-outlined">view_list</span>
+        <div className="filters">
+          <div className="left">
+            <div className="rt_global_search search_field">
+              <input
+                placeholder="Search"
+                value={searchInput}
+                onChange={handleSearchInputChange}
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
+              </div>
             </div>
           </div>
-          <div
-            onClick={handleShowAIForm}
-            className="theme_btn no_icon header_btn btn_fill"
-          >
-            Add New
+          <div className="right">
+            <div className="button_filter diff_views">
+              <div
+                className={`bf_single ${
+                  viewMode === "card_view" ? "active" : ""
+                }`}
+                onClick={() => handleModeChange("card_view")}
+              >
+                <span className="material-symbols-outlined">
+                  calendar_view_month
+                </span>
+              </div>
+              <div
+                className={`bf_single ${
+                  viewMode === "table_view" ? "active" : ""
+                }`}
+                onClick={() => handleModeChange("table_view")}
+              >
+                <span className="material-symbols-outlined">view_list</span>
+              </div>
+            </div>
+            <div
+              onClick={handleShowAIForm}
+              className="theme_btn no_icon header_btn btn_fill"
+            >
+              Invite friend
+            </div>
           </div>
         </div>
       </div>
-      <hr />
+      {/* <hr /> */}
 
       {/* Referral Display */}
       {viewMode === "card_view" && (
-        <div className="pg_enquiry">
-          <div className="my_small_card_parent">
+        <div className="referral_display">
+          <div className="referral_display_inner">
             {filteredreferrals && (
               <ReferralSingle referralDoc={filteredreferrals} user={user} />
             )}
