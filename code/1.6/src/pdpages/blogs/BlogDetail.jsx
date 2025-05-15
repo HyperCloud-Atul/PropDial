@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
 import "./blogdetail.scss";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -25,8 +26,8 @@ const BlogDetail = () => {
   const { slug } = useParams();
 
   // Extract id from slug using regex or split
-  const match = slug.match(/-blogid(.+)$/);
-  const id = match ? match[1] : null;
+  const location = useLocation();
+  const id = location.state?.id;
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,18 +88,21 @@ const BlogDetail = () => {
             style={{ position: "relative" }}
           >
             <img src={blog.image.url} alt={blog.title} className="blog-image" />
-            {user && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
-              <div className="author-right">
-                <Link className="edit" to={`/blog-edit/${blog.id}`}>
-                  Edit
-                </Link>
-              </div>
-            )}
-             <div className="published_date">
-                                    {blog.updatedAt?.toDate
-                                      ? format(blog.updatedAt.toDate(), "dd-MMM-yyyy")
-                                      : format(blog.createdAt.toDate(), "dd-MMM-yyyy")}
-                                  </div>
+            {user &&
+              (user.role === "admin" ||
+                user.role === "superAdmin" ||
+                user.role === "executive") && (
+                <div className="author-right">
+                  <Link className="edit" to={`/blog-edit/${blog.id}`}>
+                    Edit
+                  </Link>
+                </div>
+              )}
+            <div className="published_date">
+              {blog.updatedAt?.toDate
+                ? format(blog.updatedAt.toDate(), "dd-MMM-yyyy")
+                : format(blog.createdAt.toDate(), "dd-MMM-yyyy")}
+            </div>
           </div>
 
           <div className="blog-box">
@@ -119,27 +123,33 @@ const BlogDetail = () => {
         <div className="blog-detail-sidebar">
           <h3 className="sidebar-title">Related Blogs</h3>
           <div className="related-cards">
-            {relatedBlogs.map((rblog) => (
-              <Link   to={`/blog/${rblog.title
+            {relatedBlogs.map((rblog) => {
+              const slug = rblog.title
                 .toLowerCase()
                 .replace(/[^a-z0-9\s-]/g, "")
-                .replace(/\s+/g, "-")}-blogid${rblog.id}`}
+                .replace(/\s+/g, "-");
+
+              return (
+                <Link
+                  key={rblog.id}
+                  to={`/blog/${slug}`}
+                  state={{ id: rblog.id }}
                 >
-                  
-                <div
-                  className={`related-card ${
-                    rblog.id === id ? "selected" : ""
-                  }`}
-                >
-                  <div className="related-card-image">
-                    <img src={rblog.image.url} alt={rblog.title} />
+                  <div
+                    className={`related-card ${
+                      rblog.id === id ? "selected" : ""
+                    }`}
+                  >
+                    <div className="related-card-image">
+                      <img src={rblog.image.url} alt={rblog.title} />
+                    </div>
+                    <div className="related-card-info">
+                      <p>{rblog.title.substring(0, 125)}...</p>
+                    </div>
                   </div>
-                  <div className="related-card-info">
-                    <p>{rblog.title.substring(0, 125)}... </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

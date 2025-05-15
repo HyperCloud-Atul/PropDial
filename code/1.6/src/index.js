@@ -28,13 +28,11 @@
 // // Register service worker
 // serviceWorkerRegistration.register();
 
-
-
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import 'core-js/features/global-this';
+import "core-js/features/global-this";
 import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
@@ -43,6 +41,7 @@ import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
 
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { CityContextProvider } from "./context/CityContext";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
@@ -59,20 +58,31 @@ const RootComponent = () => {
   }, []);
 
   if (isLoading) {
-    return  <div className="page_loader" style={{
-      height: "100vh",
-    }}>
-                 <img src="/assets/img/logo_propdial.png" alt="Propdial" style={{
-                  height: "80px",
-                  width: "auto",
-                 }} />
-                </div>; // Show the loader while loading
+    return (
+      <div
+        className="page_loader"
+        style={{
+          height: "100vh",
+        }}
+      >
+        <img
+          src="/assets/img/logo_propdial.png"
+          alt="Propdial"
+          style={{
+            height: "80px",
+            width: "auto",
+          }}
+        />
+      </div>
+    ); // Show the loader while loading
   }
 
   return (
     <AuthContextProvider>
       <BrowserRouter>
-        <App />
+        <CityContextProvider>
+          <App />
+        </CityContextProvider>
       </BrowserRouter>
     </AuthContextProvider>
   );
@@ -86,9 +96,6 @@ root.render(
 
 // Register service worker
 serviceWorkerRegistration.register();
-
-
-
 
 //Register service worker for FCM Messaging
 // if ('serviceWorker' in navigator) {

@@ -10,7 +10,6 @@ import { useLocation } from "react-router-dom";
 import { useCollection } from "./hooks/useCollection";
 import SEOHelmet from "./components/SEOHelmet ";
 
-
 import toast, { Toaster } from "react-hot-toast"; // You can use any toast notification library or create your custom popup
 
 // components
@@ -132,6 +131,7 @@ import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
 import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 import Faq from "./pdpages/faq/Faq";
 import PGBlogs from "./pdpages/blogs/PGBlogs";
+import { ToastContainer } from "react-toastify";
 // New component import end
 
 // import Home from "./pdpages/home/Home";
@@ -499,17 +499,11 @@ function App() {
                 ></Route>
                 <Route path="/alreadylogin" element={<AlreadyLogin />}></Route>
                 <Route
-                  path="/referrallogin/:referralCode/:referredBy"
+                  path="/referrallogin/:referralCode"
                   element={
-                    user ? <Navigate to="/alreadylogin" /> :
-                      <ReferralLogin />
-                  }
-                ></Route>
-                <Route
-                  path="/referrallogin"
-                  element={
-                    user ? <Navigate to="/alreadylogin" /> :
-                      <ReferralLogin />
+                    // user ? <Navigate to="/alreadylogin" /> : 
+                    <ReferralLogin />
+                   
                   }
                 ></Route>
                 <Route
@@ -557,12 +551,14 @@ function App() {
                     )
                   }
                 ></Route>
-                <Route path="/add-blog"
+                <Route
+                  path="/add-blog"
                   element={
                     user &&
-                      (user.role === "executive" ||
-                        user.role === "admin" || user.role === "hr" ||
-                        user.role === "superAdmin") ? (
+                    (user.role === "executive" ||
+                      user.role === "admin" ||
+                      user.role === "hr" ||
+                      user.role === "superAdmin") ? (
                       <BlogAdd />
                     ) : (
                       <Navigate to="/blogs" />
@@ -659,7 +655,6 @@ function App() {
                           <Navigate to="/" />
                         )
                       }
-
                     ></Route>
                     <Route
                       path="/propertydetails/:slug"
@@ -692,9 +687,7 @@ function App() {
                     ></Route>
                     <Route
                       path="/inspection-report/:inspectionid"
-                      element={
-                        <InspectionDetails />
-                      }
+                      element={<InspectionDetails />}
                     ></Route>
                     <Route
                       path="/add-inspection/:inspectionId"
@@ -885,8 +878,9 @@ function App() {
                       path="/updateproperty/:propertyid"
                       element={
                         user &&
-                          (user.role === "admin" ||
-                            user.role === "superAdmin" || user.role === "executive") ? (
+                        (user.role === "admin" ||
+                          user.role === "superAdmin" ||
+                          user.role === "executive") ? (
                           <PGUpdateProperty />
                         ) : (
                           <Navigate to="/login" />
@@ -1197,6 +1191,7 @@ function App() {
             {/* {user && user.role !== "user" && <NavbarBottom></NavbarBottom>} */}
             {/* <Footer></Footer> */}
             <NavbarBottom></NavbarBottom>
+            <ToastContainer />
           </div>
         </div>
       </div>

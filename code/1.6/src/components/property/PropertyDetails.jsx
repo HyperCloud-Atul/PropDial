@@ -2123,6 +2123,12 @@ const PropertyDetails = () => {
                                 </div>
                               )}
                             </Link>
+
+
+
+
+
+
                           </div>
                         ) : (
                           <img

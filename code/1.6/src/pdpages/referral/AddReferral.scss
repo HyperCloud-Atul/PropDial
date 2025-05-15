@@ -1,0 +1,356 @@
+.invite-friends {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 64px;
+  min-height: 80vh;
+  .invite-friends_header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    h1 {
+      font-weight: bold;
+      font-size: 1.875rem; /* 30px */
+      line-height: 2.25rem; /* 36px */
+      color: var(--theme-green);
+    }
+    p {
+      font-weight: 500;
+      font-size: 0.875rem; /* 14px */
+      line-height: 1.25rem; /* 20px */
+      text-align: center;
+      color: #6b7280;
+    }
+  }
+
+  .invite-friends_body {
+    // border: 1px solid;
+    padding: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 64px;
+
+    .invite-friends_method {
+      // width: 50%;
+      // border: 1px solid;
+      max-width: 42rem;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      padding-bottom: 2rem;
+      gap: 36px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
+      .invite-friends_method_header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        // borde-bottom: 1px solid;
+        h2 {
+          font-weight: bold;
+          font-size: 1.5rem; /* 24px */
+          line-height: 2rem; /* 32px */
+        }
+        p {
+          font-weight: 500;
+          font-size: 0.875rem; /* 14px */
+          line-height: 1.25rem; /* 20px */
+          text-align: center;
+          color: #6b7280;
+        }
+      }
+      .invite-friends_method_body {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        position: relative;
+        z-index: 10;
+        .vertical-line {
+          position: absolute;
+          left: 1.4rem;
+          top: 0;
+          height: 90%;
+          width: 1px;
+          // padding: 1rem 0;
+          z-index: -1;
+          background-color: var(--theme-green);
+        }
+        .invite-friends_method_step {
+          display: flex;
+          align-items: flex-start;
+          // justify-content: center;
+          gap: 16px;
+          // border: 1px solid;
+          position: relative;
+          // padding: 1rem 0;
+          .invite-friends_method_step_icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            // border: 1px solid;
+            border-radius: 9999px;
+            padding: 15px;
+            background-color: var(--theme-green);
+          }
+
+          .invite-friends_method_step_detail {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            h4 {
+              font-size: 1.125rem; /* 18px */
+              line-height: 1.75rem; /* 28px */
+              font-weight: 600;
+            }
+            p {
+              font-size: 0.75rem; /* 12px */
+              line-height: 1rem; /* 16px */
+              white-space: wrap;
+            }
+          }
+        }
+      }
+    }
+    .invite-friends_form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      padding: 1.5rem;
+      //   border: 1px solid;
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+        0 4px 6px -4px rgb(0 0 0 / 0.1);
+      background-color: white;
+      min-width: 50%;
+      width: 100%;
+      .invite-friends_form_header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        h2 {
+          font-weight: bold;
+          font-size: 1.5rem; /* 24px */
+          line-height: 2rem; /* 32px */
+        }
+        p {
+          font-weight: 500;
+          font-size: 0.875rem; /* 14px */
+          line-height: 1.25rem; /* 20px */
+          text-align: center;
+          color: #6b7280;
+        }
+      }
+      .invite-friends_form_body {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        width: 100%;
+        // border: 1px solid;
+
+        .form-name-number {
+          display: flex;
+          gap: 16px;
+          justify-content: center;
+          align-items: flex-start;
+        }
+        .form-input {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          width: 100%;
+          label {
+            font-size: 0.875rem; /* 14px */
+            line-height: 1.25rem; /* 20px */
+            font-weight: 500;
+            color: #1f2937;
+            span {
+              margin-left: 0.5px;
+              color: #ef4444;
+            }
+          }
+          input {
+            width: 100%;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem; /* 14px */
+            line-height: 1.25rem; /* 20px */
+          }
+        }
+        .promo-code {
+          // border: 1px solid;
+          // padding: 0.5rem;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+          margin-top: 0.5rem;
+          .promo-code-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            border: 0.5px solid #9ca3af;
+            padding: 1rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            h6 {
+              font-size: 1rem; /* 16px */
+              line-height: 1.5rem; /* 24px */
+              color: #0f172a;
+            }
+            p {
+              font-size: 0.75rem; /* 12px */
+              line-height: 1rem; /* 16px */
+              color: #6b7280;
+              font-weight: 400;
+            }
+          }
+          .active-promo {
+            border: 1px solid var(--theme-green);
+            background-color: #f0fdfa;
+            scale: 1.04;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+              rgba(0, 0, 0, 0.24) 0px 1px 2px;
+          }
+        }
+        .invite-form-button {
+          button {
+            width: 100%;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--theme-green);
+            color: white;
+            font-weight: 500;
+            font-size: 1rem; /* 16px */
+            line-height: 1.5rem; /* 24px */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            &:disabled {
+              background-color: #007777;
+              cursor: not-allowed;
+              opacity: 0.7; // optional for better visual feedback
+            }
+          }
+        }
+      }
+    }
+  }
+  .lucide-icon {
+    width: 1rem;
+    height: 1rem;
+    color: white;
+  }
+}
+
+.custom-phone-input .form-control {
+  padding: 12px 42px !important;
+  &:focus-visible {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+.custom-phone-input .form-control::placeholder {
+  color: #7c7c7c; /* Light grey placeholder */
+  opacity: 1;
+}
+
+.custom-phone-input .flag-dropdown {
+  background: transparent;
+  border: none;
+  &:focus-visible,
+  &:focus {
+    outline: -webkit-focus-ring-color auto 1px;
+    border: none;
+  }
+  &:hover {
+    border: 1px solid #d1d5db;
+    border-right: none;
+  }
+}
+
+@media screen and (max-width: 1050px) {
+  .invite-friends {
+    .invite-friends_body {
+      gap: 32px;
+    }
+  }
+}
+
+@media screen and (max-width: 920px) {
+  .invite-friends {
+    .invite-friends_body {
+      flex-direction: column-reverse;
+      align-items: center !important;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .invite-friends_body {
+    .invite-friends_form {
+      .invite-friends_form_body {
+        .form-name-number {
+          flex-direction: column !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 510px) {
+  .invite-friends {
+    .invite-friends_header {
+      h1 {
+        font-size: 1.5rem; /* 24px */
+        line-height: 2rem; /* 32px */
+        white-space: nowrap;
+      }
+      p {
+        font-size: 0.75rem; /* 12px */
+        line-height: 1rem; /* 16px */
+      }
+    }
+    .invite-friends_body {
+      .invite-friends_method {
+        .invite-friends_method_body {
+          .vertical-line {
+            height: 80%;
+          }
+        }
+      }
+      .invite-friends_form {
+        .invite-friends_form_body {
+          .form-name-number {
+            flex-direction: column !important;
+          }
+          .promo-code {
+            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+          }
+        }
+      }
+    }
+  }
+}

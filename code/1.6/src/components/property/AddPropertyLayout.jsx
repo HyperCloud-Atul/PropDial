@@ -207,7 +207,7 @@ const AddPropertyLayout = () => {
     { value: "Concrete", label: "Concrete" },
     { value: "Marble", label: "Marble" },
     { value: "Vinyl", label: "Vinyl" },
-    { value: "Hardwood", label: "Hardwood" },
+    { value: "Wooden Floor", label: "Wooden Floor" },
     { value: "Granite", label: "Granite" },
     { value: "Bamboo", label: "Bamboo" },
     { value: "Laminate", label: "Laminate" },

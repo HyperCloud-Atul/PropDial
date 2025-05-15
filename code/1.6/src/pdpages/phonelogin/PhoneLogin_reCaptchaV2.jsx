@@ -741,7 +741,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                       <label htmlFor="male">
                         <div className="label_inner">
                           <img
-                            src="assets/img/icons/men-icon-login.png"
+                            src="/assets/img/icons/men-icon-login.png"
                             alt="icon"
                           />
                           <h6>Male</h6>
@@ -760,7 +760,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                       <label htmlFor="female">
                         <div className="label_inner">
                           <img
-                            src="assets/img/icons/women-icon-login.png"
+                            src="/assets/img/icons/women-icon-login.png"
                             alt="icon"
                           />
                           <h6>Female</h6>

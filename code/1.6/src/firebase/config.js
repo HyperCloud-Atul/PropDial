@@ -9,7 +9,7 @@ import "firebase/functions";
 
 // // development keys
 const firebaseConfig = {
-  apiKey: "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw",
+  apiKey: "AIzaSyBQ1dlizv-nwe6vtOH-Z2acQX7paKwHykw", 
   authDomain: "propdial-dev-aa266.firebaseapp.com",
   projectId: "propdial-dev-aa266",
   storageBucket: "propdial-dev-aa266.appspot.com",

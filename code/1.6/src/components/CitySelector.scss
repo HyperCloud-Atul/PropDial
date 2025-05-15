@@ -1,0 +1,430 @@
+.city-modal {
+  display: flex !important;
+  align-items: flex-start !important;
+  .modal-dialog {
+    max-width: 65rem !important;
+    width: 100%;
+    padding: 10px !important;
+    .modal-content {
+      width: 100% !important;
+      padding: 20px !important;
+      .city-modal-header {
+        border: none !important;
+        .city-modal-header-title {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          width: 100% !important;
+
+          h5 {
+            font-size: 1.25rem; /* 20px */
+            line-height: 1.75rem; /* 28px */
+            font-weight: 600 !important;
+            color: #0a0a0a !important;
+          }
+
+          button {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background-color: transparent !important;
+            cursor: pointer !important;
+            border: none !important;
+            padding: 6px 8px !important;
+            .close-icon {
+              width: 1.25rem; /* 20px */
+              height: 1.25rem; /* 20px */
+            }
+            &:hover {
+              background-color: #f5f5f5 !important;
+              border-radius: 4px !important;
+            }
+          }
+        }
+      }
+      .modal-body {
+        overflow: visible !important;
+        .city-modal-body {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          width: 100%;
+          .city-modal-body-search {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            padding: 16px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #d4d4d4;
+            position: relative;
+            .city-modal-body-search-title {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 8px;
+              h5 {
+                font-size: 0.875rem; /* 14px */
+                line-height: 1.25rem; /* 20px */
+                font-weight: bold;
+                color: #0a0a0a;
+              }
+              button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 4px;
+                color: #ef4444;
+                border: none;
+                background-color: transparent;
+                .locate-icon {
+                  width: 0.875rem; /* 14px */
+                  height: 0.875rem; /* 14px */
+                }
+                span {
+                  font-size: 0.875rem; /* 14px */
+                  line-height: 1.25rem; /* 20px */
+                }
+              }
+            }
+            .city-modal-search-wrapper {
+              position: relative;
+              .city-modal-body-search-input {
+                width: 100%;
+                position: relative;
+                // height: 2.5rem;
+                border-radius: 8px;
+                // border: 2px solid #d4d4d4;
+                background-color: #ffffffff;
+                display: flex;
+                align-items: center;
+                // gap: 6px;
+                .city-modal-body-search-input-icon {
+                  padding: 12px 16px;
+                  // border: 1px solid;
+                  .search-icon {
+                    width: 1.25rem; /* 20px */
+                    height: 1.25rem; /* 20px */
+                  }
+                }
+                .search-input {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                  background-color: transparent;
+                  font-size: 1.125rem; /* 18px */
+                  line-height: 1.75rem; /* 28px */
+                  padding: 16px 4px;
+                  // border: 1px solid;
+                  &:focus {
+                    outline: none;
+                  }
+                }
+              }
+              .city-modal-body-list {
+                z-index: 1000;
+                position: absolute;
+                //   margin-top: 0.5rem;
+                top: 100%;
+                left: 0px;
+                right: 0;
+                max-height: 15rem;
+                overflow-y: scroll;
+                background-color: #ffffff;
+                // border: 1px solid #d4d4d4;
+                border-radius: 4px;
+                box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+                  rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+                .city-modal-body-list-title {
+                  font-size: 1.125rem; /* 18px */
+                  line-height: 1.75rem; /* 28px */
+                  font-weight: bold;
+                  padding: 0.5rem 1.5rem !important;
+                }
+                .no-results {
+                  padding: 0.5rem 1.5rem !important;
+                  font-size: 0.85rem;
+                  color: #888;
+                }
+                ul {
+                  //   border: 2px solid;
+                  display: flex;
+                  flex-direction: column;
+                  //   gap: 8px;
+                  cursor: pointer;
+                  li {
+                    padding: 0.5rem 0rem !important;
+                    cursor: pointer;
+                    display: flex;
+                    gap: 8px;
+                    justify-content: flex-start;
+                    align-items: center;
+                    .locate-icon {
+                      width: 1rem; /* 16px */
+                      height: 1rem; /* 16px */
+                      color: #a3a3a3;
+                    }
+                    span {
+                      font-size: 1rem; /* 16px */
+                      line-height: 1.5rem; /* 24px */
+                    }
+                    &:hover {
+                      background-color: #f5f5f5;
+                      border-radius: 4px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .city-modal-body-major-city {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            padding: 16px;
+            position: relative;
+            .city-modal-body-major-city-title {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 8px;
+              h5 {
+                font-size: 1rem; /* 16px */
+                line-height: 1.5rem; /* 24px */
+                font-weight: bold;
+                color: #0a0a0a;
+              }
+            }
+            .city-modal-body-major-city-list {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 12px;
+              button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                color: #52525b;
+                border: none;
+                background-color: #f5f5f5;
+                padding: 8px 12px;
+                border-radius: 4px;
+                &:hover {
+                  background-color: #fee2e2;
+                  color: #b91c1c;
+                }
+                .locate-icon {
+                  width: 0.875rem; /* 14px */
+                  height: 0.875rem; /* 14px */
+                }
+                span {
+                  font-size: 0.875rem; /* 14px */
+                  line-height: 1.25rem; /* 20px */
+                }
+              }
+            }
+
+            .city-modal-body-city-view {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              .city-modal-body-city-view-title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                button {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 6px;
+                  border: none;
+                  background-color: transparent;
+                  padding: 8px 12px;
+                  border-radius: 4px;
+                  transition: all 0.3s ease;
+                  &:hover {
+                    background-color: #f5f5f5;
+                  }
+                  span {
+                    font-size: 1rem; /* 16px */
+                    line-height: 1.5rem; /* 24px */
+                    font-weight: bold;
+                    color: #0a0a0a;
+                  }
+                  .down-icon {
+                    width: 0.875rem; /* 14px */
+                    height: 0.875rem; /* 14px */
+                  }
+                }
+              }
+
+              .city-modal-body-city-view-list {
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 12px;
+                button {
+                  display: flex;
+                  justify-content: flex-start;
+                  align-items: center;
+                  gap: 6px;
+                  color: #52525b;
+                  border: none;
+                  background-color: transparent;
+                  // padding: 8px 12px;
+                  // white-space: nowrap; /* 20px */
+
+                  border-radius: 4px;
+                  &:hover {
+                    text-decoration: underline;
+                  }
+                  .locate-icon {
+                    flex-shrink: 0 !important;
+                    width: 0.875rem; /* 14px */
+                    height: 0.875rem; /* 14px */
+                  }
+                  span {
+                    font-size: 0.875rem; /* 14px */
+                    line-height: 1.25rem;
+                    word-break: break-word !important;
+                    overflow-wrap: break-word !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .city-modal {
+    .modal-dialog {
+      .modal-content {
+        max-width: 640px !important;
+        padding: 16px !important;
+        .city-modal-header {
+          .city-modal-header-title {
+            h5 {
+              font-size: 1rem; /* 16px */
+              line-height: 1.5rem; /* 24px */
+              white-space: nowrap;
+            }
+            button {
+              padding: 2px 4px !important;
+            }
+          }
+        }
+        .modal-body {
+          .city-modal-body {
+            .city-modal-body-search {
+              gap: 4px;
+              padding: 12px;
+              .city-modal-body-search-title {
+                h5 {
+                  width: 1rem; /* 16px */
+                  height: 1rem; /* 16px */
+                  white-space: nowrap;
+                }
+                button {
+                  span {
+                    font-size: 0.75rem; /* 12px */
+                    line-height: 1rem; /* 16px */
+                  }
+                }
+              }
+              .city-modal-search-wrapper {
+                .city-modal-body-search-input {
+                  padding: 6px 8px;
+                  .search-icon {
+                    width: 1.25rem; /* 20px */
+                    height: 1.25rem; /* 20px */
+                  }
+                  .search-input {
+                    font-size: 0.875rem; /* 14px */
+                    line-height: 1.25rem; /* 20px */
+                  }
+                }
+                .city-modal-body-list {
+                  .city-modal-body-list-title {
+                    font-size: 0.875rem; /* 14px */
+                    line-height: 1.25rem; /* 20px */
+                  }
+                  ul {
+                    li {
+                      span {
+                        font-size: 0.75rem; /* 12px */
+                        line-height: 1rem; /* 16px */
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            .city-modal-body-major-city {
+              padding: 8px !important;
+              .city-modal-body-major-city-list {
+                gap: 8px !important;
+                button {
+                  padding: 6px 8px !important;
+                }
+              }
+
+              .city-modal-body-city-view {
+                .city-modal-body-city-view-title {
+                  button {
+                    span {
+                      font-size: 0.875rem !important; /* 14px */
+                      line-height: 1.25rem !important; /* 20px */
+                    }
+                  }
+                }
+                .city-modal-body-city-view-list {
+                  grid-template-columns: repeat(3, minmax(0, 1fr));
+                  gap: 12px;
+                  button {
+                    span {
+                      font-size: 0.75rem !important; /* 12px */
+                      line-height: 1rem !important; /* 16px */
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 510px) {
+  .city-modal {
+    .modal-dialog {
+      padding: 10px !important;
+      .modal-content {
+        max-width: 450px !important;
+        width: 100%;
+        .city-modal-body-city-view-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .city-modal {
+    .modal-dialog {
+      // padding: 50px !important;
+      .modal-content {
+        max-width: 300px !important;
+        width: 100%;
+      }
+    }
+  }
+}
