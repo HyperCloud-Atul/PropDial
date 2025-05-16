@@ -1,7 +1,7 @@
 .referral_card {
-  border-radius: 10px;
+  border-radius: 22px;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  background-color: white;
+    background-color: var(--white-color);
   padding: 1rem;
   transition: all 0.3s ease;
   &:hover {
@@ -19,27 +19,29 @@
       .header-user-status {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         // border: 1px solid;
+        gap: 1rem;
         width: 100%;
         h5 {
-          font-size: 1rem; /* 16px */
-          line-height: 1.5rem; /* 24px */
+          font-size: 1rem; 
+          line-height: 1.5rem;
           font-weight: 500;
+          color: var(--light-black);
+          text-transform: capitalize;
         }
         p {
-          font-size: 0.75rem; /* 12px */
-          line-height: 1rem; /* 16px */
+          font-size: 0.75rem;           
           font-weight: 500;
           border-radius: 99999px;
           padding: 2px 10px;
           &.accepted {
-            color: #16a34a;
-            background-color: #bbf7d0;
+            color: var(--theme-green2);
+            background-color: var(--theme-green2-bg);
           }
           &.pending {
-            color: #ca8a04;
-            background-color: #fef08a;
+            color: var(--theme-pending);
+            background-color: var(--theme-pending-bg);
           }
         }
       }
@@ -58,7 +60,7 @@
           span {
             font-size: 0.875rem; /* 14px */
             line-height: 1.25rem; /* 20px */
-            color: #6b7280;
+           color: var(--theme-grey);
           }
         }
       }
@@ -67,6 +69,7 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       padding: 16px 2px;
+      padding-bottom: 0px;
       // border-bottom: 0.5px solid #d4d4d4;
       .body_item {
         display: flex;
@@ -84,12 +87,13 @@
             font-size: 0.75rem; /* 12px */
             line-height: 1rem; /* 16px */
             font-weight: 500;
-            color: #6b7280;
+            color: var(--theme-grey);
           }
           p {
             font-size: 0.875rem; /* 14px */
             line-height: 1.25rem; /* 20px */
             letter-spacing: 1px;
+            color: var(--light-black);
           }
         }
       }
@@ -99,16 +103,30 @@
   .lucide-icon {
     width: 1rem;
     height: 1rem;
-    color: #9ca3af;
+    color: var(--theme-grey);
   }
 }
 
-// @media screen and (max-width: 975px) {
-//   .referral_card {
-//     .referral_card_inner {
-//     }
-//   }
-// }
+@media screen and (max-width:767px) {  
+    .referral_card {
+    border-radius: 0px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    background-color: var(--white-color);
+    padding: 1rem;
+    transition: all 0.3s ease;
+    margin: 0px -15px;
+    &.accepted{
+border-bottom: 1px solid var(--theme-green2);
+    }
+    &.pending{
+      border-bottom: 1px solid var(--theme-pending);
+    }
+    
+
+    .referral_card_inner {
+    }
+  }
+}
 // @media screen and (max-width: 500px) {
 //   .referral_card {
 //     .referral_card_inner {

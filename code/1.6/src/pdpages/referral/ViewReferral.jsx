@@ -138,9 +138,7 @@ const ViewReferral = ({ referralDoc, handleShowAIForm, user }) => {
 
       {/* Filters */}
       <div className="referral_filters">
-        <div className="referral_title">
-          <h4>Referral History</h4>
-        </div>
+        
         <div className="filters">
           <div className="left">
             <div className="rt_global_search search_field">

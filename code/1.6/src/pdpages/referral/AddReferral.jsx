@@ -458,7 +458,9 @@ const AddReferral = () => {
               </div>
 
               <div className="invite-form-button">
-                <button disabled={isUploading || formDisable}>
+                <button disabled={isUploading || formDisable} style={{
+                  opacity: formDisable ? 0.4 : 1
+                }}>
                   {isUploading ? (
                     <>
                       <LoaderCircle className="lucide-icon" />

@@ -22,10 +22,13 @@
 
   /* background color variables start */
   --theme-green-bg: #e2ffe7;
+  --theme-green2-bg:#bbf7d0;
   --theme-purple-bg: #efe5ff;
   --theme-blue-bg: #dae7ff;
   --theme-blue-light-bg: #eef3ff;
   --theme-inreview: #ffc107;
+  --theme-pending:#ca8a04;
+  --theme-pending-bg:#fef08a;
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;

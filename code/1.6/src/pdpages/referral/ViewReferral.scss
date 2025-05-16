@@ -23,22 +23,30 @@
 
 .referral_display {
   // border: 1px solid #ddd;
-  margin: 40px 0;
+  margin: 30px 0;
   .referral_display_inner {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    gap: 22px;
   }
 }
 
-@media screen and (max-width: 1445px) {
-  .referral_display_inner {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+@media screen and (max-width: 1199px) {
+  .referral_display
+{
+    .referral_display_inner {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+}
 
-@media screen and (max-width: 975px) {
-  .referral_display_inner {
-    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+@media screen and (max-width: 767px) {
+  .referral_display
+{
+    .referral_display_inner {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 15px;
   }
+}
 }
