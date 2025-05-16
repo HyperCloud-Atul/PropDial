@@ -15,17 +15,17 @@ import AddAgent from "./AddAgent";
 const UpdateAgent = () => {
   const { id } = useParams();
   const { user } = useAuthContext();
-  const { camelCase } = useCommon();
-  const {
-    // addDocument: addAgentDoc,
-    updateDocument: updateAgentDoc,
-    // deleteDocument: deleteAgentDoc,
-    error: addingError,
-  } = useFirestore("agent-propdial");
+  // const { camelCase } = useCommon();
+  // const {
+  //   // addDocument: addAgentDoc,
+  //   updateDocument: updateAgentDoc,
+  //   // deleteDocument: deleteAgentDoc,
+  //   error: addingError,
+  // } = useFirestore("agent-propdial");
 
-  const [showAIForm, setShowAIForm] = useState(false);
-  const handleShowAIForm = () => setShowAIForm(!showAIForm);
-  const navigate = useNavigate();
+  // const [showAIForm, setShowAIForm] = useState(false);
+  // const handleShowAIForm = () => setShowAIForm(!showAIForm);
+  // const navigate = useNavigate();
   // const { documents: masterState, error: masterStateError } = useCollection(
   //   "m_states",
   //   "",
@@ -49,15 +49,15 @@ const UpdateAgent = () => {
   // );
   // console.log("agentDoc: ", agentDoc)
 
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
-  const [locality, setLocality] = useState();
-  const [society, setSociety] = useState();
+  // const [state, setState] = useState();
+  // const [city, setCity] = useState();
+  // const [locality, setLocality] = useState();
+  // const [society, setSociety] = useState();
 
-  let stateOptions = useRef([]);
-  let cityOptions = useRef([]);
-  let localityOptions = useRef([]);
-  let societyOptions = useRef([]);
+  // let stateOptions = useRef([]);
+  // let cityOptions = useRef([]);
+  // let localityOptions = useRef([]);
+  // let societyOptions = useRef([]);
 
   // const [searchList, setSearchList] = useState(null);
   // useEffect(() => {
@@ -88,8 +88,6 @@ const UpdateAgent = () => {
   //     );
   //     setSociety(agentDoc.society);
 
-
-
   //     handleStateChange({
   //       label: _state.state || "",
   //       value: _state.id || ""
@@ -100,7 +98,6 @@ const UpdateAgent = () => {
 
   //     )
 
-
   //     handleCityChange({
   //       label: _city.city || "",
   //       value: _city.id || ""
@@ -108,17 +105,12 @@ const UpdateAgent = () => {
   //       agentDoc.society
   //     )
 
-
   //     // handleLocalityChange(agentDoc.locality)
 
   //   }
   // }, [agentDoc]);
 
   //Master Data Loading Initialisation - Start
-
-
-
-
 
   // useEffect(() => {
   //   // console.log('in useeffect')
@@ -248,7 +240,6 @@ const UpdateAgent = () => {
   //     // setError('No such document exists')
   //   }
   // }
-
 
   //Locality select onchange
   // const handleLocalityChange = async (option) => {
@@ -455,47 +446,47 @@ const UpdateAgent = () => {
   //   }
   // };
 
-  const backViewAgents = () => {
-    navigate("/agents");
-  };
+  // const backViewAgents = () => {
+  //   navigate("/agents");
+  // };
   return (
     <div>
       <ScrollToTop />
       {user && user.status === "active" ? (
-        <div className="top_header_pg pg_bg pg_agent">
-          <div className="page_spacing pg_min_height">
-            <div className="pg_header d-flex justify-content-between">
-              <div
-                className="left d-flex align-items-center pointer"
-                style={{
-                  gap: "5px",
-                }}
-              >
-                <span
-                  className="material-symbols-outlined pointer"
-                  onClick={backViewAgents}
-                >
-                  arrow_back
-                </span>
-                <h2 className="m22">Update Agent</h2>
-              </div>
-            </div>
-            <hr />
-            <form>
-              <div className="vg12"></div>
-              <AddAgent
-                showAIForm={showAIForm}
-                setShowAIForm={setShowAIForm}
-                handleShowAIForm={handleShowAIForm}
-                agentID={id}
-              />
-
-              <div className="vg22"></div>
-
-            </form>
-          </div>
-        </div>
+        <AddAgent
+          // showAIForm={showAIForm}
+          // setShowAIForm={setShowAIForm}
+          // handleShowAIForm={handleShowAIForm}
+          agentID={id}
+        />
       ) : (
+        // <div className="top_header_pg pg_bg pg_agent">
+        //   <div className="page_spacing pg_min_height">
+        //     <div className="pg_header d-flex justify-content-between">
+        //       <div
+        //         className="left d-flex align-items-center pointer"
+        //         style={{
+        //           gap: "5px",
+        //         }}
+        //       >
+        //         <span
+        //           className="material-symbols-outlined pointer"
+        //           onClick={backViewAgents}
+        //         >
+        //           arrow_back
+        //         </span>
+        //         <h2 className="m22">Update Agent</h2>
+        //       </div>
+        //     </div>
+        //     <hr />
+        //     <form>
+        //       <div className="vg12"></div>
+
+        //       <div className="vg22"></div>
+
+        //     </form>
+        //   </div>
+        // </div>
         <InactiveUserCard />
       )}
     </div>

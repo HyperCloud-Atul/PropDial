@@ -132,6 +132,7 @@ import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 import Faq from "./pdpages/faq/Faq";
 import PGBlogs from "./pdpages/blogs/PGBlogs";
 import { ToastContainer } from "react-toastify";
+import AddAgent from "./pdpages/roles/superAdmin/agent/AddAgent";
 // New component import end
 
 // import Home from "./pdpages/home/Home";
@@ -501,9 +502,8 @@ function App() {
                 <Route
                   path="/referrallogin/:referralCode"
                   element={
-                    // user ? <Navigate to="/alreadylogin" /> : 
+                    // user ? <Navigate to="/alreadylogin" /> :
                     <ReferralLogin />
-                   
                   }
                 ></Route>
                 <Route
@@ -1129,6 +1129,18 @@ function App() {
                           (user.role === "admin" ||
                             user.role === "superAdmin") ? (
                           <PGAgent />
+                        ) : (
+                          <PhoneLogin />
+                        )
+                      }
+                    ></Route>
+                    <Route
+                      path="/agents/new"
+                      element={
+                        user &&
+                        (user.role === "admin" ||
+                          user.role === "superAdmin") ? (
+                          <AddAgent agentID={"new"} />
                         ) : (
                           <PhoneLogin />
                         )
