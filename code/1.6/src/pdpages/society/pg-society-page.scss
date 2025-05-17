@@ -26,7 +26,7 @@ $transition: all 0.3s ease;
   @media (min-width: 768px) {
     padding-top: 80px;
   }
-
+}
 
 // Utility Classes
 .container {
@@ -80,10 +80,9 @@ $transition: all 0.3s ease;
   }
 }
 
-// Hero Section
+// Hero Section (Fixed height and overlay)
 .hero-section {
-  min-height: 100vh;
-  max-height: 800px;
+  min-height: 32rem;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -91,34 +90,11 @@ $transition: all 0.3s ease;
   align-items: center;
   justify-content: center;
   animation: zoomIn 10s ease-in-out infinite alternate;
-  overflow: hidden;
-  .edit-button {
-      background-color: $primary-color;
-      color: white;
-      border: none;
-      padding: 0.5rem 1.25rem;
-      border-radius: $radius-sm;
-      cursor: pointer;
-      transition: $transition;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      // padding: 10px 20px;
-
-      &:hover {
-        background-color: $secondary-color;
-        transform: translateY(-2px);
-      }
-    }
-  @media (max-width: 768px) {
-    min-height: 80vh;
-  }
 
   .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
+    background-color: rgba(0, 0, 0, 0.6);
   }
 
   .hero-content {
@@ -126,7 +102,7 @@ $transition: all 0.3s ease;
     color: white;
     text-align: center;
     padding: 0 1.5rem;
-    max-width: 800px;
+    max-width: 700px;
     opacity: 0;
     animation: fadeIn 1s forwards;
     animation-delay: 0.5s;
@@ -139,7 +115,7 @@ $transition: all 0.3s ease;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 
       @media (min-width: 768px) {
-        font-size: 3.5rem;
+        font-size: 3rem;
       }
     }
 
@@ -150,7 +126,7 @@ $transition: all 0.3s ease;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
       @media (min-width: 768px) {
-        font-size: 2rem;
+        font-size: 1.75rem;
       }
     }
 
@@ -162,6 +138,50 @@ $transition: all 0.3s ease;
       @media (min-width: 768px) {
         font-size: 1.25rem;
       }
+    }
+  }
+}
+
+// Enhanced Edit Button (Consistent across all sections)
+.edit-button {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: 0.65rem 1.5rem;
+  border-radius: $radius-md;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: $transition;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: $shadow-sm;
+  margin-top: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid transparent;
+
+  &:hover {
+    background-color: $secondary-color;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.editing {
+    background-color: #dc2626;
+    
+    &:hover {
+      background-color: #b91c1c;
     }
   }
 }
@@ -438,24 +458,32 @@ $transition: all 0.3s ease;
         display: none;
       }
     }
-    
-    .edit-button {
-      background-color: $primary-color;
-      color: white;
-      border: none;
-      padding: 0.5rem 1.25rem;
-      border-radius: $radius-sm;
-      cursor: pointer;
-      transition: $transition;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 10px 20px;
+  }
 
-      &:hover {
-        background-color: $secondary-color;
-        transform: translateY(-2px);
+  .society-details {
+    .detail-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $border-color;
+
+      @media (max-width: 640px) {
+        flex-direction: column;
+      }
+
+      .detail-label {
+        font-weight: 600;
+        min-width: 150px;
+        color: $dark-text;
+        margin-bottom: 0.5rem;
+      }
+
+      span:last-child {
+        color: $medium-text;
+        flex: 1;
+        word-break: break-word;
+        white-space: normal;
       }
     }
   }
@@ -565,34 +593,6 @@ $transition: all 0.3s ease;
   }
 }
 
-.society-details {
-    .detail-row {
-      display: flex;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $border-color;
-
-      @media (max-width: 640px) {
-        flex-direction: column;
-      }
-
-      .detail-label {
-        font-weight: 600;
-        min-width: 150px;
-        color: $dark-text;
-        margin-bottom: 0.5rem;
-      }
-
-      span:last-child {
-        color: $medium-text;
-        flex: 1;
-        word-break: break-word; // Fixes underscore issues
-        white-space: normal; // Ensures proper text wrapping
-      }
-    }
-  }
-
 // Edit Forms
 .edit-form {
   background-color: white;
@@ -621,68 +621,6 @@ $transition: all 0.3s ease;
   textarea {
     min-height: 120px;
     resize: vertical;
-  }
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
-
-  button {
-    padding: 0.75rem 1.5rem;
-    border-radius: $radius-sm;
-    cursor: pointer;
-    font-weight: 500;
-    transition: $transition;
-
-    &:first-child {
-      background-color: white;
-      border: 1px solid $border-color;
-      color: $medium-text;
-
-      &:hover {
-        background-color: #f1f5f9;
-      }
-    }
-
-    &:last-child {
-      background-color: $primary-color;
-      color: white;
-      border: none;
-
-      &:hover {
-        background-color: $secondary-color;
-        transform: translateY(-2px);
-      }
-    }
-  }
-}
-
-.testimonial-box, .facility-box {
-  margin-bottom: 1rem;
-  padding: 1.5rem;
-  background-color: white;
-  border-radius: $radius-md;
-  box-shadow: $shadow-sm;
-  border: 1px solid $border-color;
-}
-
-.nearby-box {
-  padding: 1.5rem;
-  background-color: white;
-  border-radius: $radius-md;
-  box-shadow: $shadow-sm;
-  margin-bottom: 1.5rem;
-  border: 1px solid $border-color;
-
-  ul {
-    margin-top: 1rem;
-  }
-
-  li {
-    margin-bottom: 0.75rem;
   }
 }
 
@@ -742,5 +680,3 @@ $transition: all 0.3s ease;
     grid-template-columns: 1fr 1fr;
   }
 }
-
-    }

@@ -7,10 +7,10 @@ export default function PGSocietyPage() {
   const { id } = useParams();
   const [society, setSociety] = useState(null);
   const [error, setError] = useState(null);
-  
+
   // State for all editable sections
   const [editingSection, setEditingSection] = useState(null);
-  
+
   // Property Management Section
   const [propertyForm, setPropertyForm] = useState({
     societyType: "",
@@ -22,23 +22,23 @@ export default function PGSocietyPage() {
     societySlug: "",
     societyDescription: "",
     builderName: "",
-    isActive: true
+    isActive: true,
   });
-  
+
   // Hero Section
   const [heroForm, setHeroForm] = useState({
     title: "",
     subtitle: "",
     description: "",
-    backgroundImage: ""
+    backgroundImage: "",
   });
-  
+
   // About Section
   const [aboutForm, setAboutForm] = useState({
     description: "",
-    stats: []
+    stats: [],
   });
-  
+
   // Other Sections
   const [facilitiesForm, setFacilitiesForm] = useState([]);
   const [nearbyForm, setNearbyForm] = useState([]);
@@ -46,15 +46,15 @@ export default function PGSocietyPage() {
 
   // Animation effects
   useEffect(() => {
-    const counters = document.querySelectorAll('.stat-number');
+    const counters = document.querySelectorAll(".stat-number");
     const observer = new IntersectionObserver(
       (entries, observerInstance) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const counter = entry.target;
             const target = +counter.dataset.target;
             const update = () => {
-              const current = +counter.innerText.replace('+', '');
+              const current = +counter.innerText.replace("+", "");
               const increment = Math.ceil(target / 100);
               if (current < target) {
                 counter.innerText = `${Math.min(current + increment, target)}+`;
@@ -69,21 +69,21 @@ export default function PGSocietyPage() {
       { threshold: 0.5 }
     );
 
-    counters.forEach(counter => observer.observe(counter));
+    counters.forEach((counter) => observer.observe(counter));
 
     // Fade-in animation
-    const fadeElements = document.querySelectorAll('.fade-in');
+    const fadeElements = document.querySelectorAll(".fade-in");
     const fadeObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('show');
+            entry.target.classList.add("show");
           }
         });
       },
       { threshold: 0.1 }
     );
-    fadeElements.forEach(el => fadeObserver.observe(el));
+    fadeElements.forEach((el) => fadeObserver.observe(el));
   }, []);
 
   // Load society data
@@ -96,7 +96,7 @@ export default function PGSocietyPage() {
           if (doc.exists) {
             const data = doc.data();
             setSociety({ id: doc.id, ...data });
-            
+
             // Initialize Property Management form
             setPropertyForm({
               societyType: data.societyType || "",
@@ -108,132 +108,158 @@ export default function PGSocietyPage() {
               societySlug: data.slug || "",
               societyDescription: data.description || "",
               builderName: data.builderName || "",
-              isActive: data.isActive !== false
+              isActive: data.isActive !== false,
             });
-            
+
             // Initialize Hero form
             setHeroForm({
               title: data.society || "",
               subtitle: data.subtitle || "A community built for life",
-              description: data.heroDescription || "Modern living spaces with comfort and luxury.",
-              backgroundImage: data.backgroundImage || 'https://cdn.pixabay.com/photo/2020/03/03/12/03/buildings-4898536_1280.jpg'
+              description:
+                data.heroDescription ||
+                "Modern living spaces with comfort and luxury.",
+              backgroundImage:
+                data.backgroundImage ||
+                "https://cdn.pixabay.com/photo/2020/03/03/12/03/buildings-4898536_1280.jpg",
             });
-            
+
             // Initialize About form
             setAboutForm({
-              description: data.aboutDescription || "Nestled in the heart of the city, Darshan Residency offers a blend of comfort, luxury, and convenience.",
+              description:
+                data.aboutDescription ||
+                "Nestled in the heart of the city, Darshan Residency offers a blend of comfort, luxury, and convenience.",
               stats: data.stats || [
                 { value: "500", label: "Residences" },
                 { value: "24/7", label: "Security" },
                 { value: "100", label: "Amenities" },
-                { value: "", label: "Friendly infrastructure" }
-              ]
+                { value: "", label: "Friendly infrastructure" },
+              ],
             });
-            
+
             // Initialize other forms
-            setFacilitiesForm(data.facilities || [
-              "Swimming Pool", "Gymnasium", "Community Hall", "Jogging Track",
-              "Play Area", "Amphitheatre", "Smart Parking", "Library"
-            ]);
-            
-            setNearbyForm(data.nearbyEssentials || [
-              {
-                title: "Schools",
-                places: ["Sunrise Public School (0.5 km)", "Greenfield Academy (1.2 km)"]
-              },
-              {
-                title: "Clubs",
-                places: ["Elite Sports Club (0.8 km)", "Art & Culture Hub (1.5 km)"]
-              },
-              {
-                title: "Hospitals",
-                places: ["City Care Hospital (1.1 km)", "Wellness Clinic (0.7 km)"]
-              },
-              {
-                title: "Shopping",
-                places: ["Metro Mall (2.0 km)", "The Food Street (1.4 km)"]
-              }
-            ]);
-            
-            setTestimonialsForm(data.testimonials || [
-              "Living here has been a wonderful experience. It's safe, green, and vibrant!",
-              "Facilities are top-notch, and my kids love the play area and library."
-            ]);
-            
+            setFacilitiesForm(
+              data.facilities || [
+                "Swimming Pool",
+                "Gymnasium",
+                "Community Hall",
+                "Jogging Track",
+                "Play Area",
+                "Amphitheatre",
+                "Smart Parking",
+                "Library",
+              ]
+            );
+
+            setNearbyForm(
+              data.nearbyEssentials || [
+                {
+                  title: "Schools",
+                  places: [
+                    "Sunrise Public School (0.5 km)",
+                    "Greenfield Academy (1.2 km)",
+                  ],
+                },
+                {
+                  title: "Clubs",
+                  places: [
+                    "Elite Sports Club (0.8 km)",
+                    "Art & Culture Hub (1.5 km)",
+                  ],
+                },
+                {
+                  title: "Hospitals",
+                  places: [
+                    "City Care Hospital (1.1 km)",
+                    "Wellness Clinic (0.7 km)",
+                  ],
+                },
+                {
+                  title: "Shopping",
+                  places: ["Metro Mall (2.0 km)", "The Food Street (1.4 km)"],
+                },
+              ]
+            );
+
+            setTestimonialsForm(
+              data.testimonials || [
+                "Living here has been a wonderful experience. It's safe, green, and vibrant!",
+                "Facilities are top-notch, and my kids love the play area and library.",
+              ]
+            );
           } else {
             setError("Society not found");
           }
         },
         (err) => setError(err.message)
       );
-      
+
     return () => unsub();
   }, [id]);
 
   // Handle input changes for Property Management
   const handlePropertyInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setPropertyForm(prev => ({
+    setPropertyForm((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   // Handle input changes for other sections
   const handleInputChange = (section, e) => {
     const { name, value } = e.target;
-    switch(section) {
-      case 'hero':
-        setHeroForm(prev => ({ ...prev, [name]: value }));
+    switch (section) {
+      case "hero":
+        setHeroForm((prev) => ({ ...prev, [name]: value }));
         break;
-      case 'about':
-        setAboutForm(prev => ({ ...prev, [name]: value }));
+      case "about":
+        setAboutForm((prev) => ({ ...prev, [name]: value }));
         break;
     }
   };
 
   // Handle array input changes
   const handleArrayInputChange = (section, index, field, value) => {
-    switch(section) {
-      case 'facilities':
+    switch (section) {
+      case "facilities":
         const newFacilities = [...facilitiesForm];
         newFacilities[index] = value;
         setFacilitiesForm(newFacilities);
         break;
-      case 'testimonials':
+      case "testimonials":
         const newTestimonials = [...testimonialsForm];
         newTestimonials[index] = value;
         setTestimonialsForm(newTestimonials);
         break;
-      case 'nearby':
+      case "nearby":
         const newNearby = [...nearbyForm];
         newNearby[index] = { ...newNearby[index], [field]: value };
         setNearbyForm(newNearby);
         break;
-      case 'aboutStats':
+      case "aboutStats":
         const newStats = [...aboutForm.stats];
         newStats[index] = { ...newStats[index], [field]: value };
-        setAboutForm({...aboutForm, stats: newStats});
+        setAboutForm({ ...aboutForm, stats: newStats });
         break;
     }
   };
 
   // Add new items to arrays
   const addArrayItem = (section) => {
-    switch(section) {
-      case 'facilities':
+    switch (section) {
+      case "facilities":
         setFacilitiesForm([...facilitiesForm, ""]);
         break;
-      case 'testimonials':
+      case "testimonials":
         setTestimonialsForm([...testimonialsForm, ""]);
         break;
-      case 'nearby':
+      case "nearby":
         setNearbyForm([...nearbyForm, { title: "", places: [""] }]);
         break;
-      case 'aboutStats':
+      case "aboutStats":
         setAboutForm({
           ...aboutForm,
-          stats: [...aboutForm.stats, { value: "", label: "" }]
+          stats: [...aboutForm.stats, { value: "", label: "" }],
         });
         break;
     }
@@ -241,20 +267,20 @@ export default function PGSocietyPage() {
 
   // Remove items from arrays
   const removeArrayItem = (section, index) => {
-    switch(section) {
-      case 'facilities':
+    switch (section) {
+      case "facilities":
         setFacilitiesForm(facilitiesForm.filter((_, i) => i !== index));
         break;
-      case 'testimonials':
+      case "testimonials":
         setTestimonialsForm(testimonialsForm.filter((_, i) => i !== index));
         break;
-      case 'nearby':
+      case "nearby":
         setNearbyForm(nearbyForm.filter((_, i) => i !== index));
         break;
-      case 'aboutStats':
+      case "aboutStats":
         setAboutForm({
           ...aboutForm,
-          stats: aboutForm.stats.filter((_, i) => i !== index)
+          stats: aboutForm.stats.filter((_, i) => i !== index),
         });
         break;
     }
@@ -264,9 +290,9 @@ export default function PGSocietyPage() {
   const saveSection = async (section) => {
     try {
       const updates = {};
-      
-      switch(section) {
-        case 'property':
+
+      switch (section) {
+        case "property":
           updates.societyType = propertyForm.societyType;
           updates.state = propertyForm.state;
           updates.locality = propertyForm.locality;
@@ -278,28 +304,31 @@ export default function PGSocietyPage() {
           updates.builderName = propertyForm.builderName;
           updates.isActive = propertyForm.isActive;
           break;
-        case 'hero':
+        case "hero":
           updates.society = heroForm.title;
           updates.subtitle = heroForm.subtitle;
           updates.heroDescription = heroForm.description;
           updates.backgroundImage = heroForm.backgroundImage;
           break;
-        case 'about':
+        case "about":
           updates.aboutDescription = aboutForm.description;
           updates.stats = aboutForm.stats;
           break;
-        case 'facilities':
+        case "facilities":
           updates.facilities = facilitiesForm;
           break;
-        case 'nearby':
+        case "nearby":
           updates.nearbyEssentials = nearbyForm;
           break;
-        case 'testimonials':
+        case "testimonials":
           updates.testimonials = testimonialsForm;
           break;
       }
-      
-      await projectFirestore.collection("m_societies").doc(id).set(updates, { merge: true });
+
+      await projectFirestore
+        .collection("m_societies")
+        .doc(id)
+        .set(updates, { merge: true });
       setEditingSection(null);
     } catch (err) {
       setError(err.message);
@@ -308,7 +337,7 @@ export default function PGSocietyPage() {
 
   if (error) return <p className="error">{error}</p>;
   if (!society) return <p>Loading...</p>;
-
+  console.log(society);
   return (
     <>
       <div className="pg-page">
@@ -321,38 +350,40 @@ export default function PGSocietyPage() {
         >
           <div className="overlay"></div>
           <div className="hero-content">
-            {editingSection === 'hero' ? (
+            {editingSection === "hero" ? (
               <div className="edit-form">
                 <input
                   type="text"
                   name="title"
                   value={heroForm.title}
-                  onChange={(e) => handleInputChange('hero', e)}
+                  onChange={(e) => handleInputChange("hero", e)}
                   placeholder="Society Name"
                 />
                 <input
                   type="text"
                   name="subtitle"
                   value={heroForm.subtitle}
-                  onChange={(e) => handleInputChange('hero', e)}
+                  onChange={(e) => handleInputChange("hero", e)}
                   placeholder="Subtitle"
                 />
                 <textarea
                   name="description"
                   value={heroForm.description}
-                  onChange={(e) => handleInputChange('hero', e)}
+                  onChange={(e) => handleInputChange("hero", e)}
                   placeholder="Description"
                 />
                 <input
                   type="text"
                   name="backgroundImage"
                   value={heroForm.backgroundImage}
-                  onChange={(e) => handleInputChange('hero', e)}
+                  onChange={(e) => handleInputChange("hero", e)}
                   placeholder="Background Image URL"
                 />
                 <div className="form-actions">
-                  <button onClick={() => setEditingSection(null)}>Cancel</button>
-                  <button onClick={() => saveSection('hero')}>Save</button>
+                  <button onClick={() => setEditingSection(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={() => saveSection("hero")}>Save</button>
                 </div>
               </div>
             ) : (
@@ -360,9 +391,9 @@ export default function PGSocietyPage() {
                 <h1>{heroForm.title}</h1>
                 <h2>{heroForm.subtitle}</h2>
                 <p>{heroForm.description}</p>
-                <button 
+                <button
                   className="edit-button"
-                  onClick={() => setEditingSection('hero')}
+                  onClick={() => setEditingSection("hero")}
                 >
                   Edit
                 </button>
@@ -374,13 +405,13 @@ export default function PGSocietyPage() {
         {/* About Section */}
         <section className="section about-section fade-in">
           <div className="container text-center">
-            {editingSection === 'about' ? (
+            {editingSection === "about" ? (
               <div className="edit-form">
                 <h2>About The Society</h2>
                 <textarea
                   name="description"
                   value={aboutForm.description}
-                  onChange={(e) => handleInputChange('about', e)}
+                  onChange={(e) => handleInputChange("about", e)}
                   placeholder="Description"
                 />
                 <div className="stats-grid">
@@ -389,50 +420,74 @@ export default function PGSocietyPage() {
                       <input
                         type="text"
                         value={stat.value}
-                        onChange={(e) => handleArrayInputChange('aboutStats', index, 'value', e.target.value)}
+                        onChange={(e) =>
+                          handleArrayInputChange(
+                            "aboutStats",
+                            index,
+                            "value",
+                            e.target.value
+                          )
+                        }
                         placeholder="Value"
                       />
                       <input
                         type="text"
                         value={stat.label}
-                        onChange={(e) => handleArrayInputChange('aboutStats', index, 'label', e.target.value)}
+                        onChange={(e) =>
+                          handleArrayInputChange(
+                            "aboutStats",
+                            index,
+                            "label",
+                            e.target.value
+                          )
+                        }
                         placeholder="Label"
                       />
-                      <button onClick={() => removeArrayItem('aboutStats', index)}>Remove</button>
+                      <button
+                        onClick={() => removeArrayItem("aboutStats", index)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
-                  <button onClick={() => addArrayItem('aboutStats')}>Add Stat</button>
+                  <button onClick={() => addArrayItem("aboutStats")}>
+                    Add Stat
+                  </button>
                 </div>
                 <div className="form-actions">
-                  <button onClick={() => setEditingSection(null)}>Cancel</button>
-                  <button onClick={() => saveSection('about')}>Save</button>
+                  <button onClick={() => setEditingSection(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={() => saveSection("about")}>Save</button>
                 </div>
               </div>
             ) : (
               <>
-                <h2>About The Society</h2>
-                <p className="description">{aboutForm.description}</p>
-                <div className="stats-grid">
-                  {aboutForm.stats.map(({value, label}, idx) => (
-                    <div key={idx} className="stat-box">
-                      {value ? (
-                        <h3 className={value === '24/7' ? '' : 'stat-number'} data-target={value}>
-                          {value === '24/7' ? value : '0+'}
-                        </h3>
-                      ) : (
-                        <h3>Eco-</h3>
-                      )}
-                      {label && <p>{label}</p>}
-                    </div>
-                  ))}
-                </div>
-                <button 
-                  className="edit-button"
-                  onClick={() => setEditingSection('about')}
-                >
-                  Edit
-                </button>
-              </>
+ <h2>About The Society</h2>
+              <p className="description">{aboutForm.description}</p>
+              
+              <div className="stats-grid">
+                {aboutForm.stats.map(({ value, label }, index) => (
+                  <div key={index} className="stat-box">
+                    <h3 
+                      className={value && !isNaN(value) ? "stat-number" : ""}
+                      data-target={value && !isNaN(value) ? value : null}
+                    >
+                      {value || "Eco-"}
+                    </h3>
+                    <p>{label}</p>
+                  </div>
+                ))}
+              </div>
+
+  <button 
+    className="edit-button"
+    onClick={() => setEditingSection('about')}
+  >
+    Edit
+  </button>
+</>
+
             )}
           </div>
         </section>
@@ -440,7 +495,7 @@ export default function PGSocietyPage() {
         {/* Facilities Section */}
         <section className="section facilities-section fade-in">
           <div className="container text-center">
-            {editingSection === 'facilities' ? (
+            {editingSection === "facilities" ? (
               <div className="edit-form">
                 <h2>Facilities</h2>
                 <div className="grid">
@@ -449,16 +504,33 @@ export default function PGSocietyPage() {
                       <input
                         type="text"
                         value={facility}
-                        onChange={(e) => handleArrayInputChange('facilities', index, null, e.target.value)}
+                        onChange={(e) =>
+                          handleArrayInputChange(
+                            "facilities",
+                            index,
+                            null,
+                            e.target.value
+                          )
+                        }
                       />
-                      <button onClick={() => removeArrayItem('facilities', index)}>Remove</button>
+                      <button
+                        onClick={() => removeArrayItem("facilities", index)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
-                  <button onClick={() => addArrayItem('facilities')}>Add Facility</button>
+                  <button onClick={() => addArrayItem("facilities")}>
+                    Add Facility
+                  </button>
                 </div>
                 <div className="form-actions">
-                  <button onClick={() => setEditingSection(null)}>Cancel</button>
-                  <button onClick={() => saveSection('facilities')}>Save</button>
+                  <button onClick={() => setEditingSection(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={() => saveSection("facilities")}>
+                    Save
+                  </button>
                 </div>
               </div>
             ) : (
@@ -471,9 +543,9 @@ export default function PGSocietyPage() {
                     </div>
                   ))}
                 </div>
-                <button 
+                <button
                   className="edit-button"
-                  onClick={() => setEditingSection('facilities')}
+                  onClick={() => setEditingSection("facilities")}
                 >
                   Edit
                 </button>
@@ -482,21 +554,31 @@ export default function PGSocietyPage() {
           </div>
         </section>
 
-         {/* Property Management Section */}
+        {/* Property Management Section */}
         <section className="section management-section fade-in">
           <div className="container">
             <div className="management-header">
               <h2>PROPERTY MANAGEMENT</h2>
-              <button 
-                onClick={() => setEditingSection(editingSection === 'property' ? null : 'property')}
+              <button
+                onClick={() =>
+                  setEditingSection(
+                    editingSection === "property" ? null : "property"
+                  )
+                }
                 className="edit-button"
               >
-                {editingSection === 'property' ? 'Cancel' : 'Edit'}
+                {editingSection === "property" ? "Cancel" : "Edit"}
               </button>
             </div>
 
-            {editingSection === 'property' ? (
-              <form onSubmit={(e) => { e.preventDefault(); saveSection('property'); }} className="society-form">
+            {editingSection === "property" ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  saveSection("property");
+                }}
+                className="society-form"
+              >
                 <div className="form-group">
                   <label>Select Society Type</label>
                   <select
@@ -509,36 +591,6 @@ export default function PGSocietyPage() {
                     <option value="Commercial">Commercial</option>
                     <option value="Mixed">Mixed</option>
                   </select>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Select State</label>
-                    <select
-                      name="state"
-                      value={propertyForm.state}
-                      onChange={handlePropertyInputChange}
-                    >
-                      <option value="">Select State</option>
-                      <option value="Maharashtra">Maharashtra</option>
-                      <option value="Delhi">Delhi</option>
-                      <option value="Karnataka">Karnataka</option>
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label>Select Locality</label>
-                    <select
-                      name="locality"
-                      value={propertyForm.locality}
-                      onChange={handlePropertyInputChange}
-                    >
-                      <option value="">Select Locality</option>
-                      <option value="Mumbai">Mumbai</option>
-                      <option value="Pune">Pune</option>
-                      <option value="Bangalore">Bangalore</option>
-                    </select>
-                  </div>
                 </div>
 
                 <div className="form-group">
@@ -625,47 +677,49 @@ export default function PGSocietyPage() {
                   <span className="detail-label">Society Type:</span>
                   <span>{propertyForm.societyType || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">State:</span>
                   <span>{propertyForm.state || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Locality:</span>
                   <span>{propertyForm.locality || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Society Name:</span>
                   <span>{propertyForm.societyName || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Address:</span>
                   <span>{propertyForm.societyAddress || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Google Map Code:</span>
                   <span>{propertyForm.googleMapCode || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Society Slug:</span>
                   <span>{propertyForm.societySlug || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Builder Name:</span>
                   <span>{propertyForm.builderName || "Not specified"}</span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Description:</span>
-                  <span>{propertyForm.societyDescription || "Not specified"}</span>
+                  <span>
+                    {propertyForm.societyDescription || "Not specified"}
+                  </span>
                 </div>
-                
+
                 <div className="detail-row">
                   <span className="detail-label">Status:</span>
                   <span>{propertyForm.isActive ? "Active" : "Inactive"}</span>
@@ -678,7 +732,7 @@ export default function PGSocietyPage() {
         {/* Nearby Essentials Section */}
         <section className="section nearby-section fade-in">
           <div className="container text-center">
-            {editingSection === 'nearby' ? (
+            {editingSection === "nearby" ? (
               <div className="edit-form">
                 <h2>Nearby Essentials</h2>
                 <div className="nearby-grid">
@@ -687,7 +741,14 @@ export default function PGSocietyPage() {
                       <input
                         type="text"
                         value={item.title}
-                        onChange={(e) => handleArrayInputChange('nearby', index, 'title', e.target.value)}
+                        onChange={(e) =>
+                          handleArrayInputChange(
+                            "nearby",
+                            index,
+                            "title",
+                            e.target.value
+                          )
+                        }
                         placeholder="Category Title"
                       />
                       <ul>
@@ -699,33 +760,60 @@ export default function PGSocietyPage() {
                               onChange={(e) => {
                                 const newPlaces = [...item.places];
                                 newPlaces[placeIndex] = e.target.value;
-                                handleArrayInputChange('nearby', index, 'places', newPlaces);
+                                handleArrayInputChange(
+                                  "nearby",
+                                  index,
+                                  "places",
+                                  newPlaces
+                                );
                               }}
                               placeholder="Place name"
                             />
-                            <button onClick={() => {
-                              const newPlaces = item.places.filter((_, i) => i !== placeIndex);
-                              handleArrayInputChange('nearby', index, 'places', newPlaces);
-                            }}>
+                            <button
+                              onClick={() => {
+                                const newPlaces = item.places.filter(
+                                  (_, i) => i !== placeIndex
+                                );
+                                handleArrayInputChange(
+                                  "nearby",
+                                  index,
+                                  "places",
+                                  newPlaces
+                                );
+                              }}
+                            >
                               Remove
                             </button>
                           </li>
                         ))}
-                        <button onClick={() => {
-                          const newPlaces = [...item.places, ""];
-                          handleArrayInputChange('nearby', index, 'places', newPlaces);
-                        }}>
+                        <button
+                          onClick={() => {
+                            const newPlaces = [...item.places, ""];
+                            handleArrayInputChange(
+                              "nearby",
+                              index,
+                              "places",
+                              newPlaces
+                            );
+                          }}
+                        >
                           Add Place
                         </button>
                       </ul>
-                      <button onClick={() => removeArrayItem('nearby', index)}>Remove Category</button>
+                      <button onClick={() => removeArrayItem("nearby", index)}>
+                        Remove Category
+                      </button>
                     </div>
                   ))}
-                  <button onClick={() => addArrayItem('nearby')}>Add Category</button>
+                  <button onClick={() => addArrayItem("nearby")}>
+                    Add Category
+                  </button>
                 </div>
                 <div className="form-actions">
-                  <button onClick={() => setEditingSection(null)}>Cancel</button>
-                  <button onClick={() => saveSection('nearby')}>Save</button>
+                  <button onClick={() => setEditingSection(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={() => saveSection("nearby")}>Save</button>
                 </div>
               </div>
             ) : (
@@ -743,9 +831,9 @@ export default function PGSocietyPage() {
                     </div>
                   ))}
                 </div>
-                <button 
+                <button
                   className="edit-button"
-                  onClick={() => setEditingSection('nearby')}
+                  onClick={() => setEditingSection("nearby")}
                 >
                   Edit
                 </button>
@@ -755,7 +843,7 @@ export default function PGSocietyPage() {
         </section>
 
         {/* Gallery Section */}
-        <section className="section gallery-section fade-in">
+        {/* <section className="section gallery-section fade-in">
           <div className="container text-center">
             <h2>Gallery</h2>
             <div className="gallery-grid">
@@ -769,12 +857,12 @@ export default function PGSocietyPage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Testimonials Section */}
         <section className="section testimonials-section fade-in">
           <div className="container text-center">
-            {editingSection === 'testimonials' ? (
+            {editingSection === "testimonials" ? (
               <div className="edit-form">
                 <h2>What Residents Say</h2>
                 <div className="testimonials">
@@ -782,17 +870,34 @@ export default function PGSocietyPage() {
                     <div key={index} className="testimonial-box">
                       <textarea
                         value={testimonial}
-                        onChange={(e) => handleArrayInputChange('testimonials', index, null, e.target.value)}
+                        onChange={(e) =>
+                          handleArrayInputChange(
+                            "testimonials",
+                            index,
+                            null,
+                            e.target.value
+                          )
+                        }
                         placeholder="Testimonial"
                       />
-                      <button onClick={() => removeArrayItem('testimonials', index)}>Remove</button>
+                      <button
+                        onClick={() => removeArrayItem("testimonials", index)}
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
-                  <button onClick={() => addArrayItem('testimonials')}>Add Testimonial</button>
+                  <button onClick={() => addArrayItem("testimonials")}>
+                    Add Testimonial
+                  </button>
                 </div>
                 <div className="form-actions">
-                  <button onClick={() => setEditingSection(null)}>Cancel</button>
-                  <button onClick={() => saveSection('testimonials')}>Save</button>
+                  <button onClick={() => setEditingSection(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={() => saveSection("testimonials")}>
+                    Save
+                  </button>
                 </div>
               </div>
             ) : (
@@ -805,9 +910,9 @@ export default function PGSocietyPage() {
                     </blockquote>
                   ))}
                 </div>
-                <button 
+                <button
                   className="edit-button"
-                  onClick={() => setEditingSection('testimonials')}
+                  onClick={() => setEditingSection("testimonials")}
                 >
                   Edit
                 </button>
@@ -826,7 +931,7 @@ export default function PGSocietyPage() {
                 className="map-frame"
                 loading="lazy"
                 allowFullScreen
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0198042387456!2d-122.41941508468153!3d37.774929779758794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064abefb9e7%3A0x8ff7a0c245c9a62e!2sDarshan%20Residency!5e0!3m2!1sen!2sus!4v1634381716490!5m2!1sen!2sus"
+                src={society.googleMapCode}
               ></iframe>
             </div>
           </div>
