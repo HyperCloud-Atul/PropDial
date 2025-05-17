@@ -10,13 +10,11 @@ const ReferralSingle = ({ referralDoc, user }) => {
       {referralDoc &&
         referralDoc.map((doc, index) => (
           <div
-            className={`referral_card `}
-            //   ${
-            //   user && (user.role === "admin" || user.role === "superAdmin")
-            //     ? "right_gap"
-            //     : ""
-            // }
-
+            className={`referral_card ${
+             doc.isAccept ? "accepted" : "pending"
+            }
+  `}
+            
             key={index}
             // onClick={() => handleShowEnquriyModal(doc)}
           >
@@ -142,7 +140,22 @@ const ReferralSingle = ({ referralDoc, user }) => {
                   </p>
                   <p>
                     <Mail className="lucide-icon" />
-                    <span>{doc.email}</span>
+                    <span>
+                       <Link
+                    to={`/referrallogin/${doc.referalCode}`}
+                    style={{
+                      fontSize: "14px",
+                      color: "var(--theme-green)",
+                      wordBreak: "break-all",
+                      display: "-webkit-box",
+                      WebkitLineClamp: "1",
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {doc.email}
+                  </Link>
+                    </span>
                   </p>
                 </div>
               </div>
