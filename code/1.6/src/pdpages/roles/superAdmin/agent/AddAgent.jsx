@@ -9,11 +9,14 @@ import SearchBarAutoComplete from "../../../../pages/search/SearchBarAutoComplet
 import { useDocument } from "../../../../hooks/useDocument";
 import { useNavigate } from "react-router-dom";
 import { useCommon } from "../../../../hooks/useCommon";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { BeatLoader } from "react-spinners";
+import { useAuthContext } from "../../../../hooks/useAuthContext";
+import { format } from "date-fns";
 
 const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   const { camelCase } = useCommon();
+  const { user } = useAuthContext();
   const isReadOnly = agentID !== "new" ? true : false; // Set read-only based on param existence
 
   // add document
@@ -23,6 +26,9 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
     deleteDocument: deleteAgentDoc,
     error: addingError,
   } = useFirestore("agent-propdial");
+  // get user
+  const { documents: dbUsers, error: dbuserserror } =
+    useCollection("users-propdial");
   // console.log('agentID', agentID)
   const navigate = useNavigate();
 
@@ -64,6 +70,12 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
   const [agentEmail, setAgentEmail] = useState("");
   const [agentPancard, setAgentPancard] = useState("");
   const [agentGstNumber, setAgentGstNumber] = useState("");
+  const [status, setStatus] = useState("active");
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [reason, setReason] = useState("");
+  const [remark, setRemark] = useState("");
+  const [errorForNoSelectReasonMessage, setErrorForNoSelectReasonMessage] =
+    useState("");
   const [errors, setErrors] = useState({
     agentPhone: "",
     agentName: "",
@@ -136,6 +148,8 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
       agentDoc.agentGstNumber
         ? setAgentGstNumber(agentDoc.agentGstNumber)
         : setAgentGstNumber("");
+
+      agentDoc.status ? setStatus(agentDoc.status) : setStatus("active");
 
       handleStateChange({
         label: agentDoc.state,
@@ -562,7 +576,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
     try {
       setIsUploading(true);
       //Add new document for agent
-      const dataSet = {
+      let dataSet = {
         agentName: camelCase(agentName),
         agentCompnayName,
         agentPhone,
@@ -575,7 +589,7 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
         locality: locality,
         society: society,
         area: area,
-        status: "active",
+        status,
       };
       if (agentID === "new") {
         // const ref = await projectFirestore.collection("agent-propdial");
@@ -621,25 +635,35 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
         console.log("add dataSet: ", dataSet);
 
         await addAgentDoc(dataSet);
+        setAgentName("");
+        setAgentCompnayName("");
+        setAgentPhone("91");
+        setAgentEmail("");
+        setAgentPancard("");
+        setAgentGstNumber("");
+        setState("");
+        setLocality("");
+        setCity("");
+        setArea("");
       } else {
         //Update Document
-
+        const currentDate = new Date();
+        dataSet = {
+          ...dataSet,
+          activeBy: status === "active" ? user.phoneNumber : null,
+          activeAt: status === "active" ? currentDate : null,
+          inactiveBy: status === "banned" && user.phoneNumber,
+          inactiveAt: status === "banned" && currentDate,
+          inactiveReason: status === "banned" && reason,
+          inactiveRemark: status === "banned" && remark,
+        };
         console.log("update dataSet: ", dataSet);
         await updateAgentDoc(agentID, dataSet);
         // backViewAgents();
       }
 
       // Reset fields and errors after successful submission
-      setAgentName("");
-      setAgentCompnayName("");
-      setAgentPhone("91");
-      setAgentEmail("");
-      setAgentPancard("");
-      setAgentGstNumber("");
-      setState("");
-      setLocality("");
-      setCity("");
-      setArea("");
+
       // setSociety("");
       setErrors({
         agentPhone: "",
@@ -919,6 +943,364 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
                   </div>
                 </div>
 
+                {agentID !== "new" && (
+                  <>
+                    <div className="col-xl-4 col-lg-6">
+                      <div className="form_field st-2 label_top">
+                        <label htmlFor="">Status*</label>
+                        <div className="form_field_inner">
+                          <div className="form_field_container">
+                            <div className="radio_group">
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    status === "active"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="user_status-active"
+                                    onChange={(e) => {
+                                      if (status === "active") {
+                                        return;
+                                      }
+                                      setShowStatusModal(true);
+                                    }}
+                                    checked={status === "active"}
+                                  />
+                                  <label
+                                    htmlFor="user_status-active"
+                                    style={{ paddingTop: "7px" }}
+                                  >
+                                    <div
+                                      style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <div>
+                                        <div className="radio_icon">
+                                          <span className="material-symbols-outlined add">
+                                            add
+                                          </span>
+                                          <span className="material-symbols-outlined check">
+                                            done
+                                          </span>
+                                        </div>
+                                        Active
+                                      </div>
+                                      <div>
+                                        {agentDoc &&
+                                          agentDoc.activeBy &&
+                                          agentDoc.activeAt && (
+                                            <div className="info_icon">
+                                              <span className="material-symbols-outlined">
+                                                info
+                                              </span>
+                                              <div className="info_icon_inner">
+                                                <b className="text_green2">
+                                                  Active
+                                                </b>{" "}
+                                                by{" "}
+                                                <b>
+                                                  {agentDoc &&
+                                                    dbUsers &&
+                                                    dbUsers.find(
+                                                      (user) =>
+                                                        user.id ===
+                                                        agentDoc.activeBy
+                                                    )?.fullName}
+                                                </b>{" "}
+                                                on{" "}
+                                                <b>
+                                                  {agentDoc &&
+                                                    format(
+                                                      agentDoc.activeAt.toDate(),
+                                                      "dd-MMM-yyyy hh:mm a"
+                                                    )}
+                                                </b>
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <div className="radio_group_single">
+                                <div
+                                  className={
+                                    status === "banned"
+                                      ? "custom_radio_button radiochecked"
+                                      : "custom_radio_button"
+                                  }
+                                >
+                                  <input
+                                    type="checkbox"
+                                    id="user_status-banned"
+                                    onChange={(e) => {
+                                      if (status === "banned") {
+                                        return;
+                                      }
+                                      // setStatus("banned");
+                                      setShowStatusModal(true);
+                                    }}
+                                    checked={status === "banned"}
+                                  />
+                                  <label
+                                    htmlFor="user_status-banned"
+                                    style={{ paddingTop: "7px" }}
+                                  >
+                                    <div
+                                      style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <div>
+                                        <div className="radio_icon">
+                                          <span className="material-symbols-outlined add">
+                                            add
+                                          </span>
+                                          <span className="material-symbols-outlined check">
+                                            done
+                                          </span>
+                                        </div>
+                                        Banned
+                                      </div>
+                                      <div>
+                                        {agentDoc &&
+                                          agentDoc.inactiveBy &&
+                                          agentDoc.inactiveAt && (
+                                            <div className="info_icon">
+                                              <span className="material-symbols-outlined">
+                                                info
+                                              </span>
+                                              <div className="info_icon_inner">
+                                                <b className="text_green2">
+                                                  Banned
+                                                </b>{" "}
+                                                by{" "}
+                                                <b>
+                                                  {agentDoc &&
+                                                    dbUsers &&
+                                                    dbUsers.find(
+                                                      (user) =>
+                                                        user.id ===
+                                                        agentDoc.inactiveBy
+                                                    )?.fullName}
+                                                </b>{" "}
+                                                on{" "}
+                                                <b>
+                                                  {agentDoc &&
+                                                    format(
+                                                      agentDoc.inactiveAt.toDate(),
+                                                      "dd-MMM-yyyy hh:mm a"
+                                                    )}
+                                                </b>
+                                                , Reason{" "}
+                                                <b>
+                                                  {agentDoc &&
+                                                    agentDoc.inactiveReason &&
+                                                    agentDoc.inactiveReason}
+                                                </b>
+                                                ,
+                                                {agentDoc &&
+                                                  agentDoc.inactiveRemark && (
+                                                    <>
+                                                      {" "}
+                                                      Remark{" "}
+                                                      <b>
+                                                        {
+                                                          agentDoc.inactiveRemark
+                                                        }
+                                                      </b>
+                                                    </>
+                                                  )}
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+                                    </div>
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Modal
+                      show={showStatusModal}
+                      onHide={() => setShowStatusModal(false)}
+                      centered
+                    >
+                      <Modal.Header
+                        className="justify-content-center"
+                        style={{
+                          paddingBottom: "0px",
+                          border: "none",
+                        }}
+                      >
+                        <h5>
+                          {status === "banned"
+                            ? "Reason For Inactive"
+                            : "Confirmation"}
+                        </h5>
+                      </Modal.Header>
+                      <Modal.Body
+                        className="text-center"
+                        style={{
+                          color: "#FA6262",
+                          fontSize: "20px",
+                          border: "none",
+                        }}
+                      >
+                        {status === "active" && (
+                          <div>
+                            <div className="form_field">
+                              <div className="field_box theme_radio_new">
+                                <div
+                                  className="theme_radio_container"
+                                  style={{
+                                    padding: "0px",
+                                    border: "none",
+                                  }}
+                                >
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="Security Concerns"
+                                      checked={reason === "Security Concerns"}
+                                      onChange={() =>
+                                        setReason("Security Concerns")
+                                      }
+                                      id="SecurityConcerns"
+                                    />
+
+                                    <label htmlFor="SecurityConcerns">
+                                      Security Concerns
+                                    </label>
+                                  </div>
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="PolicyViolations"
+                                      checked={reason === "Policy Violations"}
+                                      onChange={() =>
+                                        setReason("Policy Violations")
+                                      }
+                                      id="PolicyViolations"
+                                    />
+
+                                    <label htmlFor="PolicyViolations">
+                                      Policy Violations
+                                    </label>
+                                  </div>
+
+                                  <div className="radio_single">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="other"
+                                      checked={reason === "other"}
+                                      onChange={() => setReason("other")}
+                                      id="other"
+                                    />
+                                    <label htmlFor="other">Other</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="form_field mt-3 mb-3">
+                              <textarea
+                                value={remark}
+                                onChange={(e) => setRemark(e.target.value)}
+                                onFocus={(e) =>
+                                  (e.target.style.outline = "none")
+                                }
+                                onBlur={(e) => (e.target.style.outline = "")}
+                                placeholder="Enter any remark..."
+                                style={{ outline: "none", paddingLeft: "10px" }}
+                              ></textarea>
+                            </div>
+                          </div>
+                        )}
+                        Are you sure you want to mark this user as{" "}
+                        {status === "active" ? "Banned" : "Active"}?
+                      </Modal.Body>
+                      <Modal.Footer
+                        className="d-flex justify-content-between"
+                        style={{
+                          border: "none",
+                          gap: "15px",
+                        }}
+                      >
+                        {errorForNoSelectReasonMessage && (
+                          <div
+                            style={{
+                              fontSize: "15px",
+                              textAlign: "center",
+                              padding: "4px 15px",
+                              borderRadius: "8px",
+                              background: "#ffe9e9",
+                              color: "red",
+                              width: "100%",
+                              margin: "auto",
+                            }}
+                          >
+                            {errorForNoSelectReasonMessage}
+                          </div>
+                        )}
+                        <div
+                          className="cancel_btn"
+                          onClick={() => {
+                            if (status === "active" && !reason) {
+                              setErrorForNoSelectReasonMessage(
+                                "Please select a reason before updating the status."
+                              );
+                              return;
+                            } else if (
+                              status === "active" &&
+                              reason === "other" &&
+                              !remark
+                            ) {
+                              setErrorForNoSelectReasonMessage(
+                                "Please enter a remark."
+                              );
+                              return;
+                            }
+
+                            setStatus((prev) =>
+                              prev === "active" ? "banned" : "active"
+                            );
+                            setShowStatusModal(false);
+                          }}
+                          // disabled={loading}
+                        >
+                          Yes, Update
+                        </div>
+                        <div
+                          className="done_btn"
+                          onClick={() => setShowStatusModal(false)}
+                        >
+                          No
+                        </div>
+                      </Modal.Footer>
+                    </Modal>
+                  </>
+                )}
+
                 {/* <div className="col-xl-4 col-lg-6">
           <div className="form_field label_top">
             <label htmlFor="">Society*</label>
@@ -1102,6 +1484,9 @@ const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
                 <button
                   className="theme_btn btn_fill no_icon text-center"
                   style={{ width: "100%", marginTop: "15px" }}
+                  onClick={() => {
+                    setShowModal(false);
+                  }}
                 >
                   Cancel
                 </button>
