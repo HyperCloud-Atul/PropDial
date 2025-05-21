@@ -108,6 +108,7 @@ const BlogDetail = () => {
           <div className="blog-box">
             <div className="title-container">
               <h1 className="blog-title">{blog.title}</h1>
+              {blog.slug}
             </div>
             <div className="blog-content">
               <h2 className="blog-subtitle">{blog.subTitle}</h2>
@@ -124,7 +125,7 @@ const BlogDetail = () => {
           <h3 className="sidebar-title">Related Blogs</h3>
           <div className="related-cards">
             {relatedBlogs.map((rblog) => {
-              const slug = rblog.title
+              const slug = rblog.slug
                 .toLowerCase()
                 .replace(/[^a-z0-9\s-]/g, "")
                 .replace(/\s+/g, "-");

@@ -6,6 +6,7 @@ import { useCollection } from "../hooks/useCollection";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
+import { projectFirestore } from "../firebase/config";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
@@ -17,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import ImageModal from "../pdpages/imageModal/ImageModal";
 import PropertySummaryCard from "../pdpages/property/PropertySummaryCard";
+import { generateSlug } from "../utils/generateSlug";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -42,6 +44,33 @@ const TenantDetails = () => {
     tenantId
   );
   console.log("Tenant Info: ", tenantInfo);
+const fetchPropertyById = async (propertyId) => {
+  try {
+    const docRef = projectFirestore.collection("properties-propdial").doc(propertyId);
+    const docSnap = await docRef.get();
+    if (docSnap.exists) {
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      console.warn("No such property document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching property:", error);
+    return null;
+  }
+};
+const [propertydoc, setPropertydoc] = useState(null);
+
+useEffect(() => {
+  const getProperty = async () => {
+    if (tenantInfo?.propertyId) {
+      const fetched = await fetchPropertyById(tenantInfo.propertyId);
+      setPropertydoc(fetched);
+    }
+  };
+  getProperty();
+}, [tenantInfo]);
+  
   // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties-propdial", editedFields.propertyId);
   // console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection(
@@ -67,17 +96,39 @@ const TenantDetails = () => {
     }
   };
 
-  const deleteTenant = async () => {
-    setIsDeleting(true);
-    try {
-      await deleteDocument(tenantId);
-      setIsDeleting(false);
-      navigate(`/propertydetails/${editedFields.propertyId}`);
-    } catch (error) {
-      console.error("Error deleting tenant:", error);
-      setIsDeleting(false);
+  // const deleteTenant = async () => {
+  //   setIsDeleting(true);
+  //   try {
+  //     await deleteDocument(tenantId);
+  //     setIsDeleting(false);
+  //     navigate(`/propertydetails/${editedFields.propertyId}`);
+  //   } catch (error) {
+  //     console.error("Error deleting tenant:", error);
+  //     setIsDeleting(false);
+  //   }
+  // };
+const deleteTenant = async () => {
+  setIsDeleting(true);
+  try {
+    await deleteDocument(tenantId);
+
+    // Fetch the property document using tenantInfo.propertyId
+    const property = await fetchPropertyById(tenantInfo.propertyId);
+    
+    if (property) {
+      const slug = generateSlug(property);
+      navigate(`/propertydetails/${slug}`);
+    } else {
+      navigate("/"); // fallback
     }
-  };
+
+    setIsDeleting(false);
+  } catch (error) {
+    console.error("Error deleting tenant:", error);
+    setIsDeleting(false);
+  }
+};
+
 
   const handleSaveClick = async (fieldName) => {
     try {
@@ -425,10 +476,12 @@ const TenantDetails = () => {
                 )}
               </div>
             </div>
-            {/* <PropertySummaryCard
-            propertydoc={propertydoc}
-            propertyId={propSummaryId}
-          /> */}
+        {propertydoc && (
+  <PropertySummaryCard
+    propertydoc={propertydoc}
+    propertyId={tenantInfo.propertyId}
+  />
+)}
           </div>
           {showAIForm && (
             <>

@@ -48,7 +48,7 @@ const PGBlogs1 = () => {
           <div className="blog_inner relative">
             {blogDoc &&
               blogDoc.map((blog) => {
-                const blogUrl = generateSlug(blog.title, blog.id);
+                const blogUrl = generateSlug(blog.slug, blog.id);
                 return (
                   <div key={blog.id} className="item card-container">
                     <div className="card-image">
