@@ -7,7 +7,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import { generateSlug } from "../../utils/generateSlug";
-
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
   // Convert number to a string if it's not already
@@ -187,7 +187,12 @@ const PropertyCard = ({ propertyid }) => {
     await updateDocument(propertyid, updatedProperty);
   };
 
-
+  const {
+    isPropertyOwner,
+    propertyUserOwnerData,
+    isPropertyManager,
+    propertyUserManagerData,
+  } = usePropertyUserRoles(propertyid, user);
 
 
   return (
@@ -317,7 +322,7 @@ const PropertyCard = ({ propertyid }) => {
               </div>
               <div className="left_side relative">
                 {user &&
-                  (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
+                  (user.role === "admin" || user.role === "superAdmin" || isPropertyManager) && (
                     <Link
                       className="prop_edit"
                       to={`/updateproperty/${propertydoc.id}`}
@@ -767,7 +772,8 @@ const PropertyCard = ({ propertyid }) => {
                   </div>
                 )}
           </div>
-          <div className="card_upcoming">
+          {user && (user.role === "admin" || user.role === "superAdmin") && (
+<div className="card_upcoming">
             <div className="parent">
               <div className="child coming_soon">
                 <div className="left">
@@ -801,6 +807,8 @@ const PropertyCard = ({ propertyid }) => {
               </div>
             </div>
           </div>
+          )}
+          
 
           <div
             className="bottom"

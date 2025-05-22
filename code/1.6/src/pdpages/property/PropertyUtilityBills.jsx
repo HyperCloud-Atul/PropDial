@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useFirestore } from "../../hooks/useFirestore";
+import { projectFirestore } from "../../firebase/config";
 import { useCollection } from "../../hooks/useCollection";
 import { Modal } from "react-bootstrap"; // Ensure you have imported Modal
 import { format } from "date-fns";
@@ -348,6 +349,79 @@ const PropertyUtilityBills = () => {
     },
   ];
 
+
+    const [isPropertyOwner, setIsPropertyOwner] = useState(false);
+    const [propertyUserOwnerData, setPropertyUserOwnerData] = useState(null);
+  
+    const [isPropertyManager, setIsPropertyManager] = useState(false);
+    const [propertyUserManagerData, setPropertyUserManagerData] = useState(null);
+  
+    // Check for Property Owner
+    useEffect(() => {
+      let unsubscribe;
+  
+      if (propertyId && user?.phoneNumber) {
+        const query = projectFirestore
+          .collection("propertyusers")
+          .where("propertyId", "==", propertyId)
+          .where("userId", "==", user.phoneNumber)
+          .where("userType", "==", "propertyowner");
+  
+        unsubscribe = query.onSnapshot(
+          (snapshot) => {
+            if (!snapshot.empty) {
+              const doc = snapshot.docs[0];
+              setIsPropertyOwner(true);
+              setPropertyUserOwnerData({ id: doc.id, ...doc.data() });
+            } else {
+              setIsPropertyOwner(false);
+              setPropertyUserOwnerData(null);
+            }
+          },
+          (error) => {
+            console.error("Error fetching property owner doc:", error);
+          }
+        );
+      }
+  
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
+    }, [propertyId, user]);
+  
+    // Check for Property Manager
+    useEffect(() => {
+      let unsubscribe;
+  
+      if (propertyId && user?.phoneNumber) {
+        const query = projectFirestore
+          .collection("propertyusers")
+          .where("propertyId", "==", propertyId)
+          .where("userId", "==", user.phoneNumber)
+          .where("userType", "==", "propertymanager");
+  
+        unsubscribe = query.onSnapshot(
+          (snapshot) => {
+            if (!snapshot.empty) {
+              const doc = snapshot.docs[0];
+              setIsPropertyManager(true);
+              setPropertyUserManagerData({ id: doc.id, ...doc.data() });
+            } else {
+              setIsPropertyManager(false);
+              setPropertyUserManagerData(null);
+            }
+          },
+          (error) => {
+            console.error("Error fetching property manager doc:", error);
+          }
+        );
+      }
+  
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
+    }, [propertyId, user]);
+
   return (
     <>
       {user && user.status === "active" ? (
@@ -360,14 +434,19 @@ const PropertyUtilityBills = () => {
                     OnePlace for Property Utility Bills
                   </h2>
                   {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-                  {!showAIForm && (
-                    <div
-                      className="theme_btn btn_fill no_icon text-center short_btn"
-                      onClick={handleShowAIForm}
-                    >
-                      Add New Utility Bill
-                    </div>
-                  )}
+               {!showAIForm &&
+  user?.status === "active" &&
+  (user.role === "admin" ||
+    user.role === "superAdmin" ||
+    isPropertyManager) && (
+    <div
+      className="theme_btn btn_fill no_icon text-center short_btn"
+      onClick={handleShowAIForm}
+    >
+      Add New Utility Bill
+    </div>
+)}
+
                 </div>
               </div>
               <PropertySummaryCard

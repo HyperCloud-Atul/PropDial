@@ -6,6 +6,7 @@ import { useCollection } from '../../hooks/useCollection';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useParams } from 'react-router-dom';
 import InactiveUserCard from '../../components/InactiveUserCard';
+import { usePropertyUserRoles } from '../../utils/usePropertyUserRoles';
 
 // import component 
 import ViewEnquiry from './ViewEnquiry';
@@ -25,6 +26,12 @@ const PGEnquiry = () => {
   const enquiryDocsById = id === "all" ? enquiryDocs : (enquiryDocs && enquiryDocs.filter(doc => (doc.propId === id)));
 
   console.log("enquiryDocsById", enquiryDocsById, id);
+   const {
+      isPropertyOwner,
+      propertyUserOwnerData,
+      isPropertyManager,
+      propertyUserManagerData,
+    } = usePropertyUserRoles(id, user);
 
   const { deleteDocument } =
   useFirestore("enquiry-propdial");
@@ -62,6 +69,10 @@ const PGEnquiry = () => {
         <div className="top_header_pg pg_bg pg_enquiry">
           <div className="page_spacing">
             {/* 9 dots html  */}
+            {user?.status === "active" && (
+              user?.role === "admin" ||
+              user?.role === "superAdmin" ||  isPropertyManager) && (
+                 <>
             <div onClick={openMoreAddOptions} className="property-list-add-property">
               <span className="material-symbols-outlined">apps</span>
             </div>
@@ -96,12 +107,16 @@ const PGEnquiry = () => {
                 </Link>
               </div>
             </div>
-            {/* 9 dots html  */}
-            <Link className="property-list-add-property with_9dot">
+                 <Link className="property-list-add-property with_9dot">
               <span className="material-symbols-outlined" onClick={handelShowForm}>
                 {showForm ? "close" : "add"}
               </span>
             </Link>
+        </>
+            )}
+       
+            {/* 9 dots html  */}
+       
             {!showForm && (
               <ViewEnquiry enquiryDocs={enquiryDocsById} enquiryDocsError={enquiryDocsError}
               deleteDocument={deleteDocument} />

@@ -8,6 +8,7 @@ import { generateSlug } from "../../utils/generateSlug";
 import format from "date-fns/format";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
 import jsPDF from "jspdf";
@@ -232,6 +233,13 @@ const InspectionDetails = () => {
     }
   };
 
+      const {
+        isPropertyOwner,
+        propertyUserOwnerData,
+        isPropertyManager,
+        propertyUserManagerData,
+      } = usePropertyUserRoles(propertyDocument?.id, user);
+
   return (
     <div className=" pd_single pg_bg inspection_report">
       <div className="page_spacing relative">
@@ -239,7 +247,7 @@ const InspectionDetails = () => {
         {user &&
           (user.role === "admin" ||
             user.role === "superAdmin" ||
-            user.role === "executive") && (
+            isPropertyManager) && (
             <>
               <div
                 onClick={handleShare}

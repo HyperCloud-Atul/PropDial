@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import PropertySummaryCard from "../../pdpages/property/PropertySummaryCard";
 import { ClipLoader } from "react-spinners";
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 
 import "./PropertyLayout.scss";
 
@@ -224,7 +225,12 @@ const ViewPropertyLayout = () => {
 
   // sexpand more expand less end
 
-
+  const {
+    isPropertyOwner,
+    propertyUserOwnerData,
+    isPropertyManager,
+    propertyUserManagerData,
+  } = usePropertyUserRoles(propertyId, user);
 
   return (
     <div className="top_header_pg pg_bg property_layout_pg">
@@ -246,7 +252,7 @@ const ViewPropertyLayout = () => {
           user.status === "active" &&
           (user.role === "admin" ||
             user.role === "superAdmin" ||
-            user.role === "executive") && (
+            isPropertyManager) && (
             <div
               onClick={() => setIsAttachmentOn(!isAttachmentOn)}
               className="property-list-add-property "
@@ -714,7 +720,7 @@ const ViewPropertyLayout = () => {
                   {user?.status === "active" &&
                     (user.role === "admin" ||
                       user.role === "superAdmin" ||
-                      user.role === "executive") && (
+                      isPropertyManager) && (
                       <button
                         onClick={() => handleDetach(i)}
                         style={{

@@ -25,6 +25,7 @@ const AddPropertyLayout = () => {
   const [fixtureOptions, setFixtureOptions] = useState([]);
   const [imageActionStatus, setImageActionStatus] = useState(null);
 
+
   useEffect(() => {
     const fetchPropertyLayout = async () => {
       try {

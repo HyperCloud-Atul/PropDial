@@ -4,6 +4,7 @@ import { projectStorage } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useDocument } from "../../hooks/useDocument";
 import { FaPlus, FaTrash, FaRetweet } from "react-icons/fa";
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import { BeatLoader, BarLoader, ClipLoader } from "react-spinners";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -164,9 +165,7 @@ const PropertyKeyDetail = () => {
   // Add or edit property keys
   const addOrUpdatePropertyKey = async () => {
     if (keyRows.some((row) => !row.keyFor || !row.numberOfKey)) {
-      alert(
-        "Key name and number of key are required for each row!"
-      );
+      alert("Key name and number of key are required for each row!");
       return;
     }
 
@@ -253,6 +252,13 @@ const PropertyKeyDetail = () => {
     setSelectedKey(null);
     setModalIsOpen(false);
   };
+
+  const {
+    isPropertyOwner,
+    propertyUserOwnerData,
+    isPropertyManager,
+    propertyUserManagerData,
+  } = usePropertyUserRoles(propertyId, user);
   return (
     <>
       {user && user.status === "active" ? (
@@ -264,17 +270,21 @@ const PropertyKeyDetail = () => {
                 <div className="col-lg-6">
                   <div className="title_card mobile_full_575 mobile_gap h-100">
                     <h2 className="text-center mb-4">
-                      OnePlace for Property Keys 2
+                      OnePlace for Property Keys
                     </h2>
                     {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-                    {!showAIForm && (
-                      <div
-                        className="theme_btn btn_fill no_icon text-center short_btn"
-                        onClick={handleShowAIForm}
-                      >
-                        Add Keys
-                      </div>
-                    )}
+                    {!showAIForm &&
+                      user?.status === "active" &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin" ||
+                        isPropertyManager) && (
+                        <div
+                          className="theme_btn btn_fill no_icon text-center short_btn"
+                          onClick={handleShowAIForm}
+                        >
+                          Add Keys
+                        </div>
+                      )}
                   </div>
                 </div>
                 <PropertySummaryCard
@@ -390,7 +400,6 @@ const PropertyKeyDetail = () => {
                                     <div>
                                       <input
                                         type="file"
-                                       
                                         onChange={(e) =>
                                           handleImageUpload(e, index)
                                         }
@@ -405,7 +414,7 @@ const PropertyKeyDetail = () => {
                                 <label className="upload_icon">
                                   <div>
                                     <input
-                                      type="file"                                   
+                                      type="file"
                                       onChange={(e) =>
                                         handleImageUpload(e, index)
                                       }

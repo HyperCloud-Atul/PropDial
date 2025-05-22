@@ -72,7 +72,7 @@ const PGBlogs1 = () => {
       {/* Floating Add Blog Button (visible only if logged in) */}
       {user &&
           user.status === "active" &&
-          (user.role === "admin" || user.role === "superAdmin" || user.role === "executive" ) && (
+          (user.role === "admin" || user.role === "superAdmin") && (
             <Link
               to="/add-blog"
               className="property-list-add-property "

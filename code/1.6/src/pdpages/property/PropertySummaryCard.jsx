@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { generateSlug } from "../../utils/generateSlug";
+import { projectFirestore } from "../../firebase/config";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const PropertySummaryCard = ({ propertydoc, propertyId }) => {
   const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
-
+const { user } = useAuthContext();
   const handleExpand = () => {
     setExpanded(!expanded);
   };
@@ -30,6 +32,78 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
     return decimalPart ? `${formattedNumber}.${decimalPart}` : formattedNumber;
   }
 
+      const [isPropertyOwner, setIsPropertyOwner] = useState(false);
+      const [propertyUserOwnerData, setPropertyUserOwnerData] = useState(null);
+    
+      const [isPropertyManager, setIsPropertyManager] = useState(false);
+      const [propertyUserManagerData, setPropertyUserManagerData] = useState(null);
+    
+      // Check for Property Owner
+      useEffect(() => {
+        let unsubscribe;
+    
+        if (propertyId && user?.phoneNumber) {
+          const query = projectFirestore
+            .collection("propertyusers")
+            .where("propertyId", "==", propertyId)
+            .where("userId", "==", user.phoneNumber)
+            .where("userType", "==", "propertyowner");
+    
+          unsubscribe = query.onSnapshot(
+            (snapshot) => {
+              if (!snapshot.empty) {
+                const doc = snapshot.docs[0];
+                setIsPropertyOwner(true);
+                setPropertyUserOwnerData({ id: doc.id, ...doc.data() });
+              } else {
+                setIsPropertyOwner(false);
+                setPropertyUserOwnerData(null);
+              }
+            },
+            (error) => {
+              console.error("Error fetching property owner doc:", error);
+            }
+          );
+        }
+    
+        return () => {
+          if (unsubscribe) unsubscribe();
+        };
+      }, [propertyId, user]);
+    
+      // Check for Property Manager
+      useEffect(() => {
+        let unsubscribe;
+    
+        if (propertyId && user?.phoneNumber) {
+          const query = projectFirestore
+            .collection("propertyusers")
+            .where("propertyId", "==", propertyId)
+            .where("userId", "==", user.phoneNumber)
+            .where("userType", "==", "propertymanager");
+    
+          unsubscribe = query.onSnapshot(
+            (snapshot) => {
+              if (!snapshot.empty) {
+                const doc = snapshot.docs[0];
+                setIsPropertyManager(true);
+                setPropertyUserManagerData({ id: doc.id, ...doc.data() });
+              } else {
+                setIsPropertyManager(false);
+                setPropertyUserManagerData(null);
+              }
+            },
+            (error) => {
+              console.error("Error fetching property manager doc:", error);
+            }
+          );
+        }
+    
+        return () => {
+          if (unsubscribe) unsubscribe();
+        };
+      }, [propertyId, user]);
+
   return (
     <div className="col-lg-6">
       {propertydoc && (
@@ -51,7 +125,14 @@ const PropertySummaryCard = ({ propertydoc, propertyId }) => {
                     fontWeight: "400",
                   }}
                 >
-                  {propertydoc.unitNumber} | {propertydoc.society}{" "}
+                     {user &&
+                              user.status === "active" &&
+                              (user.role === "superAdmin" ||
+                                user.role === "admin" ||
+                                isPropertyOwner ||
+                                isPropertyManager) && (
+                                <>{propertydoc.unitNumber}{" "}{"|"}{" "}</>
+                              )}{propertydoc.society}
                 </h6>
               </div>
             </div>

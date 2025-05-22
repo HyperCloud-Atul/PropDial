@@ -38,13 +38,9 @@ const PGOwnerDashboard = () => {
     "propertyusers",
     ["userId", "==", user.phoneNumber]
   );
-
-  // const { documents: properties, error: propertieserror } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
+ 
   const { documents: properties, error: propertieserror } = useCollection("properties-propdial");
-  // const { documents: properties, error: propertieserror } = useCollection(
-  //   "properties-propdial",
-  //   ["access", "array-contains", user.uid]
-  // );
+  
 
   // const [filteredproperties, setFilteredproperties] = useState(null);
   const [activeProperties, setActiveProperties] = useState(null);

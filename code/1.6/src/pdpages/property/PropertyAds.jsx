@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom";
 import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { Modal } from "react-bootstrap"; // Ensure you have imported Modal
@@ -187,6 +188,13 @@ const PropertyAds = () => {
       label: "Sale",
     },
   ];
+
+    const {
+      isPropertyOwner,
+      propertyUserOwnerData,
+      isPropertyManager,
+      propertyUserManagerData,
+    } = usePropertyUserRoles(propertyId, user);
   return (
     <>
       {user && user.status === "active" ? (
@@ -199,14 +207,19 @@ const PropertyAds = () => {
                     OnePlace for Property Advertisements
                   </h2>
                   {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-                  {!showAIForm && (
-                    <div
-                      className="theme_btn btn_fill no_icon text-center short_btn"
-                      onClick={handleShowAIForm}
-                    >
-                      Add New Advertisement
-                    </div>
-                  )}
+                
+                     {!showAIForm &&
+                      user?.status === "active" &&
+                      (user.role === "admin" ||
+                        user.role === "superAdmin" ||
+                        isPropertyManager) && (
+                        <div
+                          className="theme_btn btn_fill no_icon text-center short_btn"
+                         onClick={handleShowAIForm}
+                        >
+                           Add New Advertisement
+                        </div>
+                      )}
                 </div>
               </div>
               <PropertySummaryCard

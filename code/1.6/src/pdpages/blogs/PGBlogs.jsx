@@ -63,8 +63,7 @@ const PGBlogs1 = () => {
 
                       {user &&
                         (user.role === "admin" ||
-                          user.role === "superAdmin" ||
-                          user.role === "executive") && (
+                          user.role === "superAdmin") && (
                           <div className="author-right">
                             <Link className="edit" to={`/blog-edit/${blog.id}`}>
                               Edit
@@ -104,8 +103,7 @@ const PGBlogs1 = () => {
       {user &&
         user.status === "active" &&
         (user.role === "admin" ||
-          user.role === "superAdmin" ||
-          user.role === "executive") && (
+          user.role === "superAdmin") && (
           <Link to="/add-blog" className="property-list-add-property ">
             <span className="material-symbols-outlined">add</span>
           </Link>

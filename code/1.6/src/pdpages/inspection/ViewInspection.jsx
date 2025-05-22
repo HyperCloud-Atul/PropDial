@@ -8,6 +8,7 @@ import { Modal } from "react-bootstrap";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { format, subMonths } from "date-fns";
+import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import { ClipLoader, BarLoader } from "react-spinners";
 
 // import component
@@ -36,6 +37,12 @@ const ViewInspections = () => {
     "properties-propdial",
     propertyid
   );
+    const {
+    isPropertyOwner,
+    propertyUserOwnerData,
+    isPropertyManager,
+    propertyUserManagerData,
+  } = usePropertyUserRoles(propertyid, user);
   // card and table view mode functionality start
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
 
@@ -441,7 +448,7 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                     </h2>
 
                    {user && (
-                    user.role === "admin" || user.role === "superAdmin" || user.role === "executive"
+                    user.role === "admin" || user.role === "superAdmin" || isPropertyManager
                    ) && (
                     <div
                     className="theme_btn btn_fill no_icon text-center short_btn"
@@ -696,7 +703,7 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                                     : "final_submit"
                                 }`}
                               >
-                                {user && !iDoc.finalSubmit && (user.role === "admin" || user.role === "superAdmin" || user.role === "executive") && (
+                                {user && !iDoc.finalSubmit && (user.role === "admin" || user.role === "superAdmin" || isPropertyManager) && (
                                   <Link
                                     className="wha_icon wc_single"
                                     to={`/add-inspection/${iDoc.id}`}
