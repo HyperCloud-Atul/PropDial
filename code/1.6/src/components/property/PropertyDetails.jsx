@@ -34,6 +34,7 @@ import InactiveUserCard from "../InactiveUserCard";
 import PropertyImageGallery from "../PropertyImageGallery";
 import ScrollToTop from "../ScrollToTop";
 
+import PhoneInput from "react-phone-input-2";
 const PropertyDetails = () => {
   // install Swiper modules
   SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
@@ -236,6 +237,9 @@ const PropertyDetails = () => {
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
     useFirestore("tenants");
 
+  const { addDocument: userAddDocument, error: userAddDocumentError } =
+    useFirestore("users-propdial");
+
   const {
     addDocument: addProperyUsersDocument,
     updateDocument: updateProperyUsersDocument,
@@ -256,25 +260,33 @@ const PropertyDetails = () => {
   const [tenantName, setTenantName] = useState("");
   const [editingTenantId, setEditingTenantId] = useState(null);
   const [tenantMobile, setTenantMobile] = useState("");
+  const [tenantEmail, setTenantEmail] = useState("");
   const [isTenantEditing, setIsTenantEditing] = useState(false);
   const [selectedTenantImage, setSelectedTenantImage] = useState(null);
   const [previewTenantImage, setPreviewTenantImage] = useState(null);
+  const [showAddTenantModal, setShowAddTenantModal] = useState(false);
+  const [tenantExist, setTenantExist] = useState(false);
+  const [errorTenantForm, setErrorTenantForm] = useState({
+    name: "",
+    mobile: "",
+    email: "",
+  });
   // const handleEditTenantToggle = () => {
   //   setIsTenantEditing(!isTenantEditing);
   // };
 
-  const handleNameChange = (tenantId, newName) => {
-    setTenantName((prev) => ({
-      ...prev,
-      [tenantId]: newName,
-    }));
+  const handleNameChange = (e) => {
+    setTenantName(e.target.value);
+    setErrorTenantForm((prev) => ({ ...prev, name: "" }));
   };
 
-  const handleMobileChange = (tenantId, newMobile) => {
-    setTenantMobile((prev) => ({
-      ...prev,
-      [tenantId]: newMobile,
-    }));
+  const handleMobileChange = (value) => {
+    setTenantMobile(value);
+    setErrorTenantForm((prev) => ({ ...prev, mobile: "" }));
+  };
+  const handleEmailChange = (e) => {
+    setTenantEmail(e.target.value);
+    setErrorTenantForm((prev) => ({ ...prev, email: "" }));
   };
 
   const handleEditTenantToggle = (tenantId) => {
@@ -392,14 +404,79 @@ const PropertyDetails = () => {
     isChecked === true ? addAttachment(name) : removeAttachment(name);
   };
 
+  const fetchExistedUser = async (number) => {
+    const doc = await projectFirestore
+      .collection("users-propdial")
+      .where("phoneNumber", "==", number);
+
+    const data = await doc.get();
+    const userData = data.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log(userData);
+    setTenantName(userData[0].fullName);
+    setTenantMobile(userData[0].phoneNumber);
+    setTenantEmail(userData[0].email);
+  };
+
+  const checkIfPhoneExists = async (value) => {
+    const numericPhone = value.replace(/\D/g, ""); // remove all non-digits
+
+    if (numericPhone.length >= 8 && numericPhone.length <= 15) {
+      try {
+        const doc = await projectFirestore
+          .collection("users-propdial")
+          .where("phoneNumber", "==", numericPhone)
+          .get();
+
+        if (!doc.empty) {
+          await fetchExistedUser(numericPhone);
+          setTenantExist(true);
+        } else {
+          setTenantExist(false);
+        }
+      } catch (error) {
+        console.error("Error checking phone:", error);
+      }
+    } else {
+      setErrorTenantForm((prev) => ({
+        ...prev,
+        agentPhone: "please enter a valid phone number",
+      }));
+    }
+  };
+
+  //validate Form
+  const validateTenantForm = () => {
+    let newErrors = {};
+    if (!tenantName) newErrors.name = "Name is required";
+
+    if (!tenantMobile) newErrors.mobile = "Mobile is required";
+    if (!tenantEmail) newErrors.email = "email is required";
+    else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(tenantEmail) ||
+      tenantEmail.length < 8
+    )
+      newErrors.email = "Invalid email required";
+
+    setErrorTenantForm(newErrors);
+    return !Object.values(newErrors).some((error) => error);
+  };
+
   //Tenant Information
   const handleAddTenant = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
+    if (!validateTenantForm()) {
+      return;
+    }
+
     const tenantData = {
       propertyId: propertyid,
-      name: "",
-      mobile: "",
+      name: tenantName,
+      mobile: tenantMobile,
       whatsappNumber: "",
       status: "active",
       tenantImgUrl: "",
@@ -407,15 +484,35 @@ const PropertyDetails = () => {
       offBoardingDate: "",
       idNumber: "",
       address: "",
-      emailId: "",
+      emailId: tenantEmail,
       rentStartDate: "",
       rentEndDate: "",
     };
 
-    await tenantAddDocument(tenantData);
-    if (tenantAddDocumentError) {
-      console.log("response error");
+    console.log("tenantData: ", tenantData);
+
+    if (tenantExist) {
+      await tenantAddDocument(tenantData);
+      if (tenantAddDocumentError) {
+        console.log("response error");
+      }
+    } else {
+      const userDetails = {
+        fullName: tenantName,
+        phoneNumber: tenantMobile,
+        email: tenantEmail,
+      };
+
+      await Promise.all([
+        await tenantAddDocument(tenantData),
+        await userAddDocument(userDetails),
+      ]);
     }
+
+    setTenantName("");
+    setTenantMobile("");
+    setTenantEmail("");
+    setShowAddTenantModal(false);
     // setIsTenantEditing(!isTenantEditing);
   };
 
@@ -3381,9 +3478,8 @@ const PropertyDetails = () => {
 
                   {propertyDocument &&
                     propertyDocument.category === "Residential" && (
-                      <>                 
-                       
-                             {user?.status === "active" &&
+                      <>
+                        {user?.status === "active" &&
                           ((propertyLayoutsNew?.length === 0 &&
                             (user.role === "superAdmin" ||
                               user.role === "admin" ||
@@ -3467,7 +3563,7 @@ const PropertyDetails = () => {
                                       user &&
                                       user.status === "active" &&
                                       (user.role === "admin" ||
-                                       isPropertyManager ||
+                                        isPropertyManager ||
                                         user.role === "superAdmin")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
@@ -3980,7 +4076,9 @@ const PropertyDetails = () => {
                                         <div className="plus_icon">
                                           <Link
                                             className="plus_icon_inner"
-                                            onClick={handleAddTenant}
+                                            onClick={() =>
+                                              setShowAddTenantModal(true)
+                                            }
                                           >
                                             <span className="material-symbols-outlined">
                                               add
@@ -4101,6 +4199,146 @@ const PropertyDetails = () => {
                                   </div>
                                 </div>
                               </div>
+                              <Modal
+                                show={showAddTenantModal}
+                                onHide={() => {
+                                  setTenantName("");
+                                  setTenantMobile("");
+                                  setTenantEmail("");
+                                  setErrorTenantForm({
+                                    name: "",
+                                    mobile: "",
+                                    email: "",
+                                  });
+                                  setShowAddTenantModal(false);
+                                }}
+                                centered
+                                size="lg"
+                              >
+                                <Modal.Header closeButton>
+                                  <h5>Fill Tenant Details</h5>
+                                </Modal.Header>
+                                <Modal.Body style={{ marginTop: "1rem" }}>
+                                  <div className="form_field">
+                                    <div className="row row_gap">
+                                      <div className="col-xl-6 col-lg-6">
+                                        <div className="form_field label_top">
+                                          <label htmlFor="">
+                                            Phone number*
+                                          </label>
+                                          <div className="form_field_inner">
+                                            <PhoneInput
+                                              country={"in"} // Default country is India
+                                              onlyCountries={["in"]} // Restrict to only India
+                                              // disableCountryCode={true} // Disable editing of the country code
+                                              // disableDropdown={true} // Disable the dropdown menu
+                                              // countryCodeEditable={false}
+                                              value={tenantMobile}
+                                              onBlur={() =>
+                                                checkIfPhoneExists(tenantMobile)
+                                              }
+                                              onChange={handleMobileChange}
+                                              // international
+                                              keyboardType="phone-pad"
+                                              placeholder="mobile number"
+                                              inputProps={{
+                                                name: "phone",
+                                                required: true,
+                                                autoFocus: false,
+                                              }}
+                                              inputStyle={{
+                                                width: "100%",
+                                                paddingLeft: "45px",
+                                                fontSize: "16px",
+                                                height: "45px",
+                                              }}
+                                              buttonStyle={{
+                                                borderRadius: "4px",
+                                                textAlign: "left",
+                                                border: "none",
+                                                backgroundColor: "transparent",
+                                              }}
+                                            />
+                                            {errorTenantForm.mobile && (
+                                              <div className="field_error">
+                                                {errorTenantForm.mobile}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="col-xl-6 col-lg-6">
+                                        <div className="form_field label_top">
+                                          <label htmlFor="">Name*</label>
+                                          <div className="form_field_inner">
+                                            <input
+                                              type="text" // Use type="text" to control length
+                                              placeholder="Enter a Tenant Name here"
+                                              onChange={handleNameChange}
+                                              value={tenantName}
+                                            />
+                                          </div>
+                                          {errorTenantForm.name && (
+                                            <div className="field_error">
+                                              {errorTenantForm.name}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div className="col-xl col-lg-6">
+                                        <div className="form_field label_top">
+                                          <label htmlFor="">Email*</label>
+                                          <div className="form_field_inner">
+                                            <input
+                                              type="text" // Use type="text" to control length
+                                              placeholder="Enter a Tenant Email here"
+                                              onChange={handleEmailChange}
+                                              value={tenantEmail}
+                                            />
+                                          </div>
+                                          {errorTenantForm.email && (
+                                            <div className="field_error">
+                                              {errorTenantForm.email}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="vg22"></div>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "flex-end",
+                                        gap: "16px",
+                                      }}
+                                    >
+                                      <div
+                                        className="theme_btn btn_border no_icon text-center px-4"
+                                        onClick={() => {
+                                          setTenantName("");
+                                          setTenantMobile("");
+                                          setTenantEmail("");
+                                          setErrorTenantForm({
+                                            name: "",
+                                            mobile: "",
+                                            email: "",
+                                          });
+                                          setShowAddTenantModal(false);
+                                        }}
+                                      >
+                                        Cancel
+                                      </div>
+                                      <div
+                                        className="theme_btn btn_fill no_icon text-center px-4"
+                                        onClick={handleAddTenant}
+                                      >
+                                        Confirm
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Modal.Body>
+                              </Modal>
                             </section>
                           )}
                       </>
@@ -5789,8 +6027,7 @@ const PropertyDetails = () => {
                             (user.role === "superAdmin" ||
                               user.role === "admin" ||
                               isPropertyManager ||
-                            isPropertyOwner
-                            ) && (
+                              isPropertyOwner) && (
                               <div className="p_info_single">
                                 <div className="pd_icon">
                                   <img

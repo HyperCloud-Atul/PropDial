@@ -44,33 +44,35 @@ const TenantDetails = () => {
     tenantId
   );
   console.log("Tenant Info: ", tenantInfo);
-const fetchPropertyById = async (propertyId) => {
-  try {
-    const docRef = projectFirestore.collection("properties-propdial").doc(propertyId);
-    const docSnap = await docRef.get();
-    if (docSnap.exists) {
-      return { id: docSnap.id, ...docSnap.data() };
-    } else {
-      console.warn("No such property document!");
+  const fetchPropertyById = async (propertyId) => {
+    try {
+      const docRef = projectFirestore
+        .collection("properties-propdial")
+        .doc(propertyId);
+      const docSnap = await docRef.get();
+      if (docSnap.exists) {
+        return { id: docSnap.id, ...docSnap.data() };
+      } else {
+        console.warn("No such property document!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching property:", error);
       return null;
     }
-  } catch (error) {
-    console.error("Error fetching property:", error);
-    return null;
-  }
-};
-const [propertydoc, setPropertydoc] = useState(null);
-
-useEffect(() => {
-  const getProperty = async () => {
-    if (tenantInfo?.propertyId) {
-      const fetched = await fetchPropertyById(tenantInfo.propertyId);
-      setPropertydoc(fetched);
-    }
   };
-  getProperty();
-}, [tenantInfo]);
-  
+  const [propertydoc, setPropertydoc] = useState(null);
+
+  useEffect(() => {
+    const getProperty = async () => {
+      if (tenantInfo?.propertyId) {
+        const fetched = await fetchPropertyById(tenantInfo.propertyId);
+        setPropertydoc(fetched);
+      }
+    };
+    getProperty();
+  }, [tenantInfo]);
+
   // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties-propdial", editedFields.propertyId);
   // console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection(
@@ -107,28 +109,27 @@ useEffect(() => {
   //     setIsDeleting(false);
   //   }
   // };
-const deleteTenant = async () => {
-  setIsDeleting(true);
-  try {
-    await deleteDocument(tenantId);
+  const deleteTenant = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteDocument(tenantId);
 
-    // Fetch the property document using tenantInfo.propertyId
-    const property = await fetchPropertyById(tenantInfo.propertyId);
-    
-    if (property) {
-      const slug = generateSlug(property);
-      navigate(`/propertydetails/${slug}`);
-    } else {
-      navigate("/"); // fallback
+      // Fetch the property document using tenantInfo.propertyId
+      const property = await fetchPropertyById(tenantInfo.propertyId);
+
+      if (property) {
+        const slug = generateSlug(property);
+        navigate(`/propertydetails/${slug}`);
+      } else {
+        navigate("/"); // fallback
+      }
+
+      setIsDeleting(false);
+    } catch (error) {
+      console.error("Error deleting tenant:", error);
+      setIsDeleting(false);
     }
-
-    setIsDeleting(false);
-  } catch (error) {
-    console.error("Error deleting tenant:", error);
-    setIsDeleting(false);
-  }
-};
-
+  };
 
   const handleSaveClick = async (fieldName) => {
     try {
@@ -165,9 +166,9 @@ const deleteTenant = async () => {
       try {
         await storageRef.delete();
         await updateDocument(tenantId, { tenantImgUrl: "" });
-        setImageURL(null);        
+        setImageURL(null);
       } catch (error) {
-        console.error("Error deleting image:", error);    
+        console.error("Error deleting image:", error);
       }
     }
     handleCloseModal();
@@ -454,7 +455,6 @@ const deleteTenant = async () => {
 
   // );
 
-
   return (
     <div className="tenant_detail_pg">
       <div className="top_header_pg pg_bg">
@@ -476,12 +476,12 @@ const deleteTenant = async () => {
                 )}
               </div>
             </div>
-        {propertydoc && (
-  <PropertySummaryCard
-    propertydoc={propertydoc}
-    propertyId={tenantInfo.propertyId}
-  />
-)}
+            {propertydoc && (
+              <PropertySummaryCard
+                propertydoc={propertydoc}
+                propertyId={tenantInfo.propertyId}
+              />
+            )}
           </div>
           {showAIForm && (
             <>
@@ -567,8 +567,9 @@ const deleteTenant = async () => {
                   </div>
                   <div className="col-md-3 col-6">
                     <div
-                      className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
-                        }`}
+                      className={`theme_btn btn_fill text-center no_icon ${
+                        isUploading ? "disabled" : ""
+                      }`}
                       onClick={isUploading ? null : addTenantDocuments}
                     >
                       {isUploading ? "Uploading..." : "Create"}
@@ -634,10 +635,11 @@ const deleteTenant = async () => {
             >
               <div className="col-lg-4 tenant_mobile_full_card">
                 <div
-                  className={`tc_single${tenantInfo && tenantInfo.status === "inactive"
+                  className={`tc_single${
+                    tenantInfo && tenantInfo.status === "inactive"
                       ? "t_inactive"
                       : ""
-                    }`}
+                  }`}
                 >
                   <div className="tcs_img_container relative">
                     {loading ? (
@@ -727,14 +729,17 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.name
                             ? tenantInfo && tenantInfo.name
                             : "Name"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("name")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() => handleEditClick("name")}
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h5>
@@ -802,14 +807,17 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.mobile
                             ? tenantInfo && tenantInfo.mobile
                             : "Mobile number"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("mobile")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() => handleEditClick("mobile")}
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -828,7 +836,10 @@ const deleteTenant = async () => {
                         to={`https://wa.me/+${tenantInfo && tenantInfo.mobile}`}
                         target="_blank"
                       >
-                        <img src="/assets/img/whatsapp_simple.png" alt="propdial" />
+                        <img
+                          src="/assets/img/whatsapp_simple.png"
+                          alt="propdial"
+                        />
                       </Link>
                     </div>
                   )}
@@ -874,14 +885,19 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.onBoardingDate
                             ? formatDateToDDMMMYYYY(tenantInfo.onBoardingDate)
                             : "Add onborading date"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("onBoardingDate")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditClick("onBoardingDate")
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -905,13 +921,13 @@ const deleteTenant = async () => {
                             min={
                               editedFields.onBoardingDate
                                 ? new Date(
-                                  new Date(
-                                    editedFields.onBoardingDate
-                                  ).getTime() +
-                                  24 * 60 * 60 * 1000
-                                )
-                                  .toISOString()
-                                  .split("T")[0]
+                                    new Date(
+                                      editedFields.onBoardingDate
+                                    ).getTime() +
+                                      24 * 60 * 60 * 1000
+                                  )
+                                    .toISOString()
+                                    .split("T")[0]
                                 : ""
                             }
                           />
@@ -937,14 +953,19 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.offBoardingDate
                             ? formatDateToDDMMMYYYY(tenantInfo.offBoardingDate)
                             : "Add offboarding date"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("offBoardingDate")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() =>
+                                  handleEditClick("offBoardingDate")
+                                }
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -1010,19 +1031,23 @@ const deleteTenant = async () => {
                       ) : (
                         <>
                           <span
-                            className={`text-capitalize ${tenantInfo && tenantInfo.status
-                              }`}
+                            className={`text-capitalize ${
+                              tenantInfo && tenantInfo.status
+                            }`}
                           >
                             {tenantInfo && tenantInfo.status}
                           </span>
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("status")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() => handleEditClick("status")}
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -1062,14 +1087,17 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.emailID
                             ? tenantInfo && tenantInfo.emailID
                             : "Email ID here"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("emailID")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() => handleEditClick("emailID")}
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -1108,14 +1136,17 @@ const deleteTenant = async () => {
                           {tenantInfo && tenantInfo.address
                             ? tenantInfo && tenantInfo.address
                             : "Address here"}
-                          {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
-                            <span
-                              className="material-symbols-outlined click_icon text_near_icon"
-                              onClick={() => handleEditClick("address")}
-                            >
-                              edit
-                            </span>
-                          )}
+                          {!editingField &&
+                            user &&
+                            (user.role === "admin" ||
+                              user.role === "superAdmin") && (
+                              <span
+                                className="material-symbols-outlined click_icon text_near_icon"
+                                onClick={() => handleEditClick("address")}
+                              >
+                                edit
+                              </span>
+                            )}
                         </>
                       )}
                     </h6>
@@ -1394,21 +1425,21 @@ const deleteTenant = async () => {
               </Tabs>
             </div>
 
-            {!editingField && user && user.role === "superAdmin" && (
-              <>
-                <div className="vg22_m15"></div>
-                <div className="divider"></div>
-                <div className="vg10"></div>
-                <div
-                  onClick={() => handleShowModal("deleteTenant")}
-                  className="delete_bottom"
-                >
-                  <span className="material-symbols-outlined">delete</span>
-                  <span>Delete Tenant</span>
-                </div>
-                <div className="vg22_m15"></div>
-              </>
-            )}
+            {/* {!editingField && user && user.role === "superAdmin" && ( */}
+            <>
+              <div className="vg22_m15"></div>
+              <div className="divider"></div>
+              <div className="vg10"></div>
+              <div
+                onClick={() => handleShowModal("deleteTenant")}
+                className="delete_bottom"
+              >
+                <span className="material-symbols-outlined">delete</span>
+                <span>Delete Tenant</span>
+              </div>
+              <div className="vg22_m15"></div>
+            </>
+            {/* )} */}
             <SureDelete
               show={showModal}
               handleClose={handleCloseModal}
