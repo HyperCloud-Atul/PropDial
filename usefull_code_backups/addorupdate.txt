@@ -1,1 +1,0 @@
-Code of Add tenant and edit tenant are available in v10 

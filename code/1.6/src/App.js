@@ -51,6 +51,7 @@ import PGSocietyPage from "./pdpages/society/PGSocietyPage";
 // superadmin
 import PGAgent from "./pdpages/roles/superAdmin/agent/PGAgent";
 import UpdateAgent from "./pdpages/roles/superAdmin/agent/UpdateAgent";
+import AddUser from "./pdpages/roles/superAdmin/agent/addUser/AddUser";
 
 // admin
 import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
@@ -1134,6 +1135,19 @@ function App() {
                         )
                       }
                     ></Route>
+
+ <Route
+                      path="/add-user"
+                      element={
+                        user &&
+                          (user.role === "superAdmin") ? (
+                          <AddUser />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
+                    ></Route>
+                    
                     <Route
                       path="/agents/new"
                       element={

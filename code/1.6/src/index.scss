@@ -911,7 +911,8 @@
         display: grid;
         gap: 8px;
         grid-template-columns: repeat(3, 1fr);
-        margin: 12px 35px 12px 0;
+        // margin: 12px 35px 12px 0;
+          margin: 12px 0px 12px 0;
         padding: 8px;
 
         &.addtional_rooms {
@@ -1692,7 +1693,7 @@
   .parent {
     display: grid;
     gap: 8px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 
     .child {
       border-radius: 8px;
@@ -2324,9 +2325,9 @@
         }
 
         .middle_single {
-          border-radius: 0px 4px 4px 0px;
+          border-radius: 6px;
           gap: 6px;
-          margin: 10px 29px 10px 0;
+          margin: 10px 10px 10px 10px;
           padding: 8px;
 
           .ms_child {

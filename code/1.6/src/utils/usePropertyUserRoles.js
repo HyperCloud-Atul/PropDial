@@ -8,6 +8,9 @@ export const usePropertyUserRoles = (propertyId, user) => {
   const [isPropertyManager, setIsPropertyManager] = useState(false);
   const [propertyUserManagerData, setPropertyUserManagerData] = useState(null);
 
+    const [isPropertyTenant, setIsPropertyTenant] = useState(false);
+  const [propertyUserTenantData, setPropertyUserTenantData] = useState(null);
+
   useEffect(() => {
     let unsubscribe;
 
@@ -72,10 +75,44 @@ export const usePropertyUserRoles = (propertyId, user) => {
     };
   }, [propertyId, user]);
 
+    useEffect(() => {
+    let unsubscribe;
+
+    if (propertyId && user?.phoneNumber) {
+      const query = projectFirestore
+        .collection("propertyusers")
+        .where("propertyId", "==", propertyId)
+        .where("userId", "==", user.phoneNumber)
+        .where("userType", "==", "propertytenant");
+
+      unsubscribe = query.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            setIsPropertyTenant(true);
+            setPropertyUserTenantData({ id: doc.id, ...doc.data() });
+          } else {
+            setIsPropertyTenant(false);
+            setPropertyUserTenantData(null);
+          }
+        },
+        (error) => {
+          console.error("Error fetching property tenant doc:", error);
+        }
+      );
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [propertyId, user]);
+
   return {
     isPropertyOwner,
     propertyUserOwnerData,
     isPropertyManager,
     propertyUserManagerData,
+    isPropertyTenant,
+    propertyUserTenantData,
   };
 };

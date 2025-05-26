@@ -43,7 +43,7 @@ const PropertyCard = ({ propertyid }) => {
     "properties-propdial",
     propertyid
   );
-  // const { document: userDoc, error: userDocError } = useDocument("users-propdial", propertydoc && propertydoc.createdBy)
+
 
   // const { documents: myproperties, error: errMyProperties } = useCollection(
   //   "propertyusers",
@@ -192,7 +192,10 @@ const PropertyCard = ({ propertyid }) => {
     propertyUserOwnerData,
     isPropertyManager,
     propertyUserManagerData,
+      isPropertyTenant,
+    propertyUserTenantData,
   } = usePropertyUserRoles(propertyid, user);
+
 
 
   return (
@@ -290,7 +293,7 @@ const PropertyCard = ({ propertyid }) => {
           </div>
         )}
 
-        <div className="property_single_card relative">
+        <div className={`property_single_card relative ${isPropertyManager || isPropertyOwner || isPropertyTenant ? "property_user" : ""}`}>
           {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
             {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
             {propertydoc.purpose}
@@ -441,11 +444,14 @@ const PropertyCard = ({ propertyid }) => {
             </Link>
           )}
           <div className="middle relative">
-            <div className="show_more_arrow" onClick={handleExpand}>
-              <span className="material-symbols-outlined">
-                {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
-              </span>
-            </div>
+
+  {/* <div className="show_more_arrow" onClick={handleExpand}>
+    <span className="material-symbols-outlined">
+      {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
+    </span>
+  </div> */}
+
+
             {propertydoc && (
               <div className="middle_single">
                 <div className="ms_child">
@@ -772,7 +778,35 @@ const PropertyCard = ({ propertyid }) => {
                   </div>
                 )}
           </div>
-          {user && (user.role === "admin" || user.role === "superAdmin") && (
+          <div className="card_upcoming">
+            <div className="parent">
+              <div className="child">
+                <div className="left">
+                  <h5>0</h5>                 
+                  <h6>Inspection</h6>
+                </div>
+              </div>
+              <div className="child">
+                <div className="left">
+                  <h5>0</h5>               
+                  <h6>Bill</h6>
+                </div>
+              </div>
+               <div className="child">
+                <div className="left">
+                  <h5>0</h5>               
+                  <h6>Ticket</h6>
+                </div>
+              </div>
+               <div className="child">
+                <div className="left">
+                  <h5>0</h5>               
+                  <h6>Enquirys</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
 <div className="card_upcoming">
             <div className="parent">
               <div className="child coming_soon">
@@ -807,7 +841,7 @@ const PropertyCard = ({ propertyid }) => {
               </div>
             </div>
           </div>
-          )}
+          )} */}
           
 
           <div
@@ -821,59 +855,52 @@ const PropertyCard = ({ propertyid }) => {
                 width: "100%",
               }}
             >
-              {/* <div className="property_owner_detail">
+              <div className="property_owner_detail">
                 <div className="img_container">
-                  {userDoc && <img src={userDoc && userDoc.photoURL} alt="propdial" />}
+               
                 </div>
                 <div className="pod_right">
                   <div>
-                    {userDoc && (
+                 
                       <h5
-                        onClick={user && (user.role === "admin" || user.role === "superAdmin") ? openChangeManager : undefined}
-                        className={user && (user.role === "admin" || user.role === "superAdmin") ? "pointer" : ""}
+                       
                       >
-                        {userDoc.fullName}
-                        {user && (user.role === "admin" || user.role === "superAdmin") && (
-                          <span
-                            className="material-symbols-outlined click_icon text_near_icon"
-                          >
-                            edit
-                          </span>
-                        )}
+                       Rahul
+                     
                       </h5>
-                    )}
+                  
 
 
 
                   </div>
 
                   <h6>
-                    {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="phone">
-                      {userDoc && userDoc.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3')}
-                    </a>}
+                     <a href="" className="phone">
+                    36969696969
+                    </a>
 
-                    {userDoc && <a href={"tel:" + userDoc && userDoc.phoneNumber} className="call whatsapp">
+                     <a href="" className="call whatsapp">
                       <img
                         src="/assets/img/phone-call.png"
                         style={{ width: "25px", height: "25px", marginLeft: "6px" }}
                         alt="propdial"
                       />
-                    </a>}
-                    {userDoc && <a href={"https://wa.me/" + userDoc && userDoc.phoneNumber} className="whatsapp">
+                    </a>
+                    <a href='' className="whatsapp">
                       <img
                         src="/assets/img/whatsapp.png"
                         style={{ width: "25px", height: "25px", marginLeft: "6px" }}
                         alt="propdial"
                       />
-                    </a>}
+                    </a>
                   </h6>
 
                 </div>
-              </div> */}
+              </div> 
 
               {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
                 view more
-              </Link>} */}
+              </Link>}  */}
             </div>
 
             {/* {user && (user.role === "admin" || user.role === "superAdmin") && propertydoc && (
