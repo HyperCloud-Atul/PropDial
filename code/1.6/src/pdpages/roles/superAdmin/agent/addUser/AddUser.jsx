@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PhoneInput from "react-phone-input-2";
 import { projectFirestore, timestamp } from "../../../../../firebase/config";
-import { camelCase } from "lodash";
 import "react-phone-input-2/lib/style.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { getNames } from "country-list";
+import Select from "react-select";
 
 const AddUser = () => {
   const [phone, setPhone] = useState("");
@@ -10,15 +12,42 @@ const AddUser = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Mr.");
   const [whoIsUser, setWhoIsUser] = useState("");
   const [country, setCountry] = useState("");
+  const [countryDialCode, setCountryDialCode] = useState("");
+  const [salutation, setSalutation] = useState("");
+  const [address, setAddress] = useState("");
+  const [sameAsPhone, setSameAsPhone] = useState(false);
+
+  const [residentialCountry, setResidentialCountry] = useState("");
+  const [countryList, setCountryList] = useState([]);
+  const [countryOptions, setCountryOptions] = useState([]);
+
+  useEffect(() => {
+    const countries = getNames();
+    const options = countries.map((country) => ({
+      label: country,
+      value: country,
+    }));
+    setCountryOptions(options);
+  }, []);
+  useEffect(() => {
+    const countries = getNames(); // Returns array of country names
+    setCountryList(countries);
+  }, []);
+
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [whatsappNumberCountryCode, setWhatsappNumberCountryCode] =
+    useState("");
+  const [whatsappNumberCountryDialCode, setWhatsappNumberCountryDialCode] =
+    useState("");
+  const [whatsappNumberCountry, setWhatsappNumberCountry] = useState("");
 
   const [error, setError] = useState("");
   const [phoneExists, setPhoneExists] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Check if phone exists in Firestore
   useEffect(() => {
     const checkPhoneExists = async () => {
       if (phone.length >= 10) {
@@ -32,30 +61,77 @@ const AddUser = () => {
     checkPhoneExists();
   }, [phone]);
 
+  // In your state section
+
+  // Update salutation when gender changes
+  useEffect(() => {
+    if (gender === "male") setSalutation("Mr.");
+    else if (gender === "female") setSalutation("Ms.");
+    else setSalutation("Mr.");
+  }, [gender]);
+
   const handlePhoneChange = (value, data) => {
     setPhone(value);
-    setCountryCode(data?.dialCode || "");
-    setCountry(data?.name || "");
+    setCountryCode(data?.countryCode || ""); // like "in"
+    setCountryDialCode(data?.dialCode || ""); // like "91"
+    setCountry(data?.name || ""); // like "India"
+
     setError("");
   };
 
-  const allFieldsFilled = () => {
-    return phone && name && email && city && gender && whoIsUser && !phoneExists;
+  const handleWhatsAppChange = (value, data) => {
+    setWhatsappNumber(value);
+    setWhatsappNumberCountryCode(data?.countryCode || "");
+    setWhatsappNumberCountryDialCode(data?.dialCode || "");
+    setWhatsappNumberCountry(data?.name || "");
   };
 
-const resetForm = () => {
-  setPhone("");
-  setCountry("India");
-  setCountryCode("91");
-  setName("");
-  setEmail("");
-  setCity("");
-  setGender("");
-  setWhoIsUser("");
-  setError("");
-  setPhoneExists(false);
-};
+  useEffect(() => {
+    if (sameAsPhone) {
+      setWhatsappNumber(phone);
+      setWhatsappNumberCountryCode(countryCode);
+      setWhatsappNumberCountryDialCode(countryDialCode);
+      setWhatsappNumberCountry(country);
+    }
+  }, [sameAsPhone, phone, countryCode, countryDialCode, country]);
 
+  const allFieldsFilled = () => {
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return (
+      phone &&
+      name &&
+      email &&
+      whatsappNumber &&
+      validEmail &&
+      gender &&
+      whoIsUser &&
+      salutation &&
+      residentialCountry &&
+      !phoneExists
+    );
+  };
+
+  const resetForm = () => {
+    setPhone("91");
+    setCountry("India");
+    setCountryCode("in");
+    setCountryDialCode("91");
+    setName("");
+    setSalutation("");
+    setResidentialCountry("");
+    setWhatsappNumber("91");
+    setWhatsappNumberCountry("India");
+    setWhatsappNumberCountryCode("in");
+    setWhatsappNumberCountryDialCode("91");
+    setAddress("");
+
+    setEmail("");
+    setCity("");
+    setGender("");
+    setWhoIsUser("");
+    setError("");
+    setPhoneExists(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,22 +142,23 @@ const resetForm = () => {
     }
 
     setIsSubmitting(true);
-
+    let imgUrl = "/assets/img/dummy_user.png";
     const userData = {
       online: true,
       whatsappUpdate: false,
-    displayName: name.trim().split(" ")[0],
+      displayName: name.trim().split(" ")[0],
       fullName: name,
       phoneNumber: phone,
       email: email.toLowerCase().trim(),
-      city: camelCase(city.toLowerCase().trim()),
-      address: "",
+      city,
+      address,
       gender,
+      countryDialCode,
       whoAmI: whoIsUser,
       country,
-      propertyManagerID: phone,
+      propertyManagerID: "",
       countryCode,
-      photoURL: "",
+      photoURL: imgUrl,
       rolePropDial: whoIsUser,
       rolesPropDial: [whoIsUser],
       accessType: "country",
@@ -94,6 +171,13 @@ const resetForm = () => {
       dateofLeaving: "",
       employeeId: "",
       reportingManagerId: "",
+      salutation,
+      residentialCountry,
+      whatsappNumber,
+      whatsappNumberCountry,
+      whatsappNumberCountryCode,
+      whatsappNumberCountryDialCode,
+
       department: "",
       designation: "",
       uan: "",
@@ -102,7 +186,10 @@ const resetForm = () => {
     };
 
     try {
-      await projectFirestore.collection("users-propdial").doc(phone).set(userData);
+      await projectFirestore
+        .collection("users-propdial")
+        .doc(phone)
+        .set(userData);
       alert("✅ User added successfully!");
       resetForm();
     } catch (err) {
@@ -114,171 +201,333 @@ const resetForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-user-form" style={styles.form}>
-      <h2 style={styles.heading}>➕ Add New User</h2>
+    <div className="top_header_pg pg_bg">
+      <div className="page_spacing">
+        <div
+          className="card shadow-lg rounded-4 border-0"
+          style={{
+            padding: "15px",
+          }}
+        >
+          <h3 className="text-center text-primary mb-4">➕ Add New User</h3>
 
-      {/* Phone Number */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Phone Number *</label>
-      <PhoneInput
-  key={countryCode} // triggers re-render
-  country={"in"}
-  value={phone}
-  onChange={handlePhoneChange}
-  international
-  placeholder="Enter phone number"
-  inputStyle={styles.phoneInput}
-  buttonStyle={styles.phoneButton}
-/>
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-lg-6">
+                {/* Phone Number */}
+                <div className="mb-4">
+                  <label className="form-label fw-bold">Phone Number *</label>
+                  <PhoneInput
+                    country={"in"}
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    inputStyle={{
+                      width: "100%",
+                      height: "45px",
+                      fontSize: "16px",
+                      borderRadius: "8px",
+                      border: phoneExists
+                        ? "1px solid red"
+                        : "1px solid #ced4da",
+                    }}
+                    buttonStyle={{
+                      borderRadius: "8px 0 0 8px",
+                      border: phoneExists
+                        ? "1px solid red"
+                        : "1px solid #ced4da",
+                    }}
+                    placeholder="Enter phone number"
+                  />
+                  {phoneExists && (
+                    <div className="text-danger small mt-1">
+                      This phone number is already registered.
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="col-lg-6">
+                {/* WhatsApp Number */}
+                {/* <div className="mb-4">
+                  <label className="form-label fw-bold">WhatsApp Number</label>
+                  <PhoneInput
+                    country={"in"}
+                    value={whatsappNumber}
+                    onChange={handleWhatsAppChange}
+                    inputStyle={{
+                      width: "100%",
+                      height: "45px",
+                      fontSize: "16px",
+                      borderRadius: "8px",
+                      border: "1px solid #ced4da",
+                    }}
+                    buttonStyle={{
+                      borderRadius: "8px 0 0 8px",
+                      border: "1px solid #ced4da",
+                    }}
+                    placeholder="Enter WhatsApp number"
+                  />
+                </div> */}
+                <div className="mb-4">
+                  <label className="form-label fw-bold d-flex align-items-center justify-content-between">
+                    WhatsApp Number *
+                    <div>
+                      <input
+                        type="checkbox"
+                        id="sameAsPhone"
+                        checked={sameAsPhone}
+                        onChange={() => setSameAsPhone(!sameAsPhone)}
+                        className="me-2"
+                      />
+                      <label htmlFor="sameAsPhone" className="form-check-label">
+                        Same as phone
+                      </label>
+                    </div>
+                  </label>
 
-        {phoneExists && <span style={styles.error}>This phone number is already registered.</span>}
-      </div>
+                  <PhoneInput
+                    country={"in"}
+                    value={whatsappNumber}
+                    onChange={handleWhatsAppChange}
+                    inputStyle={{
+                      width: "100%",
+                      height: "45px",
+                      fontSize: "16px",
+                      borderRadius: "6px",
+                    }}
+                    disabled={sameAsPhone}
+                  />
+                </div>
+              </div>
+              <div className="col-lg-12">
+                {/* Gender */}
+                <div className="field_box theme_radio_new mb-4">
+                  <label className="form-label fw-bold mb-2">Gender *</label>
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      border: "none",
+                      padding: "0px",
+                    }}
+                  >
+                    {["male", "female"].map((g) => (
+                      <div className="radio_single" key={g}>
+                        <input
+                          type="radio"
+                          name="gender"
+                          id={g}
+                          value={g}
+                          onChange={(e) => setGender(e.target.value)}
+                          checked={gender === g}
+                        />
+                        <label htmlFor={g}>
+                          {g.charAt(0).toUpperCase() + g.slice(1)}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* user type  */}
+              <div className="col-lg-12">
+                <div className="field_box theme_radio_new mb-4">
+                  <label className="form-label fw-bold mb-2">User Type *</label>
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      border: "none",
+                      padding: "0px",
+                    }}
+                  >
+                    {[
+                      "owner",
+                      "tenant",
+                      "admin",
+                      "hr",
+                      "buyer",
+                      "executive",
+                      "manager",
+                    ].map((role) => (
+                      <div className="radio_single" key={role}>
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="whoIsUser"
+                          id={role}
+                          value={role}
+                          checked={whoIsUser === role}
+                          onChange={(e) => setWhoIsUser(e.target.value)}
+                        />
+                        <label className="form-check-label" htmlFor={role}>
+                          {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* salutation  */}
+              <div className="col-4">
+                <div className="form-floating mb-4">
+                  <select
+                    className="form-select"
+                    id="floatingSalutation"
+                    value={salutation}
+                    onChange={(e) => setSalutation(e.target.value)}
+                  >
+                    <option value="">Select Salutation</option>
+                    {[
+                      "Capt.",
+                      "Col.",
+                      "Dr.",
+                      "Hon.",
+                      "Lt.",
+                      "Madam",
+                      "Major",
+                      "Mr.",
+                      "Ms.",
+                      "Prof.",
+                      "Rev.",
+                      "Sir",
+                    ].map((title) => (
+                      <option key={title} value={title}>
+                        {title}
+                      </option>
+                    ))}
+                  </select>
+                  <label htmlFor="floatingSalutation">Salutation *</label>
+                </div>
+              </div>
+              {/* Name */}
+              <div className="col-8">
+                <div className="form-floating mb-4">
+                  <input
+                    type="text"
+                    className="form-control rounded-3"
+                    id="name"
+                    placeholder="Full Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <label htmlFor="name">Full Name *</label>
+                </div>
+              </div>
+              {/* Email */}
+              <div className="col-lg-12">
+                <div className="form-floating mb-4">
+                  <input
+                    type="email"
+                    className="form-control rounded-3"
+                    id="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <label htmlFor="email">Email *</label>
+                </div>
+              </div>
 
-      {/* Name */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Full Name *</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={styles.input} />
-      </div>
-
-      {/* Email */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Email *</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} style={styles.input} />
-      </div>
-
-      {/* City */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>City *</label>
-        <input type="text" value={city} onChange={(e) => setCity(e.target.value)} style={styles.input} />
-      </div>
-
-      {/* Gender */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Gender *</label>
-        <div style={styles.radioGroup}>
-          {["male", "female", "other"].map((g) => (
-            <label key={g} style={styles.radioLabel}>
-           <input
-  type="radio"
-  name="gender"
-  value={g}
-  checked={gender === g}
-  onChange={(e) => setGender(e.target.value)}
-/>
-
-              {" " + g.charAt(0).toUpperCase() + g.slice(1)}
-            </label>
+              {/* Residential Country */}
+              {/* <div className="col-lg-6">
+              <div className="form-floating mb-4">
+                <select
+                  className="form-select"
+                  id="floatingCountry"
+                  value={residentialCountry}
+                  onChange={(e) => setResidentialCountry(e.target.value)}
+                >
+                  <option value="">Select Country</option>
+                  {countryList.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="floatingCountry">Residential Country *</label>
+              </div>
+            </div> */}
+              <div className="col-lg-6">
+                <div className="custom_floating_label mb-4">
+                  {/* <select
+          className="form-select"
+          id="floatingCountry"
+          value={residentialCountry}
+          onChange={(e) => setResidentialCountry(e.target.value)}
+        >
+          <option value="">Select Country</option>
+          {countryList.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
           ))}
+        </select> */}
+                  <label htmlFor="floatingCountry" className="floating_label">Residential Country *</label>
+                  <Select
+                    options={countryOptions}
+                    value={countryOptions.find(
+                      (c) => c.value === residentialCountry
+                    )}
+                    onChange={(selectedOption) =>
+                      setResidentialCountry(
+                        selectedOption ? selectedOption.value : ""
+                      )
+                    }
+                    placeholder="Select Country"
+                    isClearable
+                    menuPortalTarget={document.body} // 👈 Mounts dropdown to body
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }), // 👈 Brings it on top
+                    }}
+                  />
+                </div>
+              </div>
+              {/* City */}
+              <div className="col-lg-6">
+                <div className="form-floating mb-4">
+                  <input
+                    type="text"
+                    className="form-control rounded-3"
+                    id="city"
+                    placeholder="City"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                  />
+                  <label htmlFor="city">City</label>
+                </div>
+              </div>
+              {/* address  */}
+              <div className="col-lg-12">
+                <div className="form-floating mb-4">
+                  <textarea
+                    className="form-control"
+                    placeholder="Enter address"
+                    id="floatingAddress"
+                    style={{ height: "100px" }}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  ></textarea>
+                  <label htmlFor="floatingAddress">Address</label>
+                </div>
+              </div>
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="alert alert-danger py-2 small">{error}</div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="btn btn-primary w-100 py-2 mt-3 rounded-3"
+              disabled={!allFieldsFilled() || isSubmitting}
+            >
+              {isSubmitting ? "Adding..." : "Add User"}
+            </button>
+          </form>
         </div>
       </div>
-
-      {/* Who Is User */}
-      <div style={styles.inputGroup}>
-        <label style={styles.label}>Who is User? *</label>
-        <div style={styles.radioGroup}>
-          {["owner", "tenant", "admin", "hr", "executive", "manager"].map((role) => (
-            <label key={role} style={styles.radioLabel}>
-            <input
-  type="radio"
-  name="whoIsUser"
-  value={role}
-  checked={whoIsUser === role}
-  onChange={(e) => setWhoIsUser(e.target.value)}
-/>
-
-              {" " + role.charAt(0).toUpperCase() + role.slice(1)}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Error */}
-      {error && <p style={styles.error}>{error}</p>}
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={!allFieldsFilled() || isSubmitting}
-        style={{
-          ...styles.button,
-          opacity: !allFieldsFilled() || isSubmitting ? 0.6 : 1,
-          cursor: !allFieldsFilled() || isSubmitting ? "not-allowed" : "pointer",
-        }}
-      >
-        {isSubmitting ? "Adding..." : "Add User"}
-      </button>
-    </form>
+    </div>
   );
-};
-
-const styles = {
-  form: {
-    maxWidth: 500,
-    margin: "40px auto",
-    padding: 20,
-    borderRadius: "10px",
-    background: "#f9ffff",
-    border: "1px solid #00A8A8",
-    boxShadow: "0 0 12px rgba(0, 168, 168, 0.15)",
-  },
-  heading: {
-    textAlign: "center",
-    color: "#007777",
-    marginBottom: 20,
-  },
-  inputGroup: {
-    marginBottom: 15,
-  },
-  label: {
-    fontWeight: "bold",
-    marginBottom: 5,
-    display: "block",
-    color: "#333",
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    border: "1px solid #ccc",
-    borderRadius: 5,
-    fontSize: 16,
-  },
-  phoneInput: {
-    width: "100%",
-    height: "45px",
-    paddingLeft: "48px",
-    fontSize: "16px",
-    borderRadius: "5px",
-    border: "1px solid #00A8A8",
-  },
-  phoneButton: {
-    borderRadius: "5px 0 0 5px",
-    border: "1px solid #00A8A8",
-  },
-  radioGroup: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-    marginTop: 5,
-  },
-  radioLabel: {
-    fontSize: "14px",
-  },
-  error: {
-    color: "red",
-    fontSize: "13px",
-    marginTop: 5,
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    background: "#00A8A8",
-    color: "#fff",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    transition: "0.3s",
-  },
 };
 
 export default AddUser;

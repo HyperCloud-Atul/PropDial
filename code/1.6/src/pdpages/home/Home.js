@@ -32,6 +32,7 @@ import UpdateCreatedByComponent from "../../hooks/UpdateCreatedByComponent";
 import DuplicateCollection from "../../hooks/DuplicateCollection";
 import UpdateMulitpleFiled from "../../hooks/UpdateMulitpleFiled";
 import UpdateSameDoc from "../../hooks/UpdateSameDoc";
+import AddField from "../../hooks/AddField";
 
 const Home = () => {
   const { authIsReady, user } = useAuthContext();
@@ -89,6 +90,7 @@ const Home = () => {
         <DuplicateCollection/>
         <UpdateMulitpleFiled/>
         <UpdateSameDoc/> */}
+        <AddField/>
         <ProductCarousel/>
         {/* <PunchInOut/> */}
        

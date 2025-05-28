@@ -8,6 +8,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import { generateSlug } from "../../utils/generateSlug";
 import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
+import usePropertyUsersData from "../../utils/usePropertyUsersData";
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
   // Convert number to a string if it's not already
@@ -37,13 +38,35 @@ function removeCommas(stringWithCommas) {
 
 const PropertyCard = ({ propertyid }) => {
   // console.log('property id: ', propertyid)
+  const {
+    ownerUsers,
+    firstOwnerUser,
+    ownerUserData,
+    executiveUsers,
+    firstExecutiveUser,
+    executiveUserData,
+    managerUsers,
+    firstManagerUser,
+    managerUserData,
+    substituteUsers,
+    firstSubstituteUser,
+    substituteUserData,
+    tenantUsers,
+    firstTenantUser,
+    tenantUserData,
+  } = usePropertyUsersData(propertyid);
+
+  const location = useLocation();
 
   const { user } = useAuthContext();
   const { document: propertydoc, error: errPropertyDoc } = useDocument(
     "properties-propdial",
     propertyid
   );
-
+  const { documents: inspections, errors: inspectionsError } = useCollection(
+    "inspections",
+    ["propertyId", "==", propertyid]
+  );
 
   // const { documents: myproperties, error: errMyProperties } = useCollection(
   //   "propertyusers",
@@ -192,11 +215,9 @@ const PropertyCard = ({ propertyid }) => {
     propertyUserOwnerData,
     isPropertyManager,
     propertyUserManagerData,
-      isPropertyTenant,
+    isPropertyTenant,
     propertyUserTenantData,
   } = usePropertyUserRoles(propertyid, user);
-
-
 
   return (
     <>
@@ -292,16 +313,22 @@ const PropertyCard = ({ propertyid }) => {
             {propertydoc.flag}
           </div>
         )}
-
-        <div className={`property_single_card relative ${isPropertyManager || isPropertyOwner || isPropertyTenant ? "property_user" : ""}`}>
+     {propertydoc && (
+        <div
+          className={`property_single_card relative ${
+            isPropertyManager || isPropertyOwner || isPropertyTenant
+              ? "property_user"
+              : ""
+          }`}
+        >
           {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
             {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
             {propertydoc.purpose}
           </div>} */}
-          {propertydoc && (
+       
             <Link
               // to={`/propertydetails/${propertydoc.id}`}
-               to={`/propertydetails/${generateSlug(propertydoc)}`}
+              to={`/propertydetails/${generateSlug(propertydoc)}`}
               key={propertydoc.id}
               className="top relative"
             >
@@ -325,7 +352,9 @@ const PropertyCard = ({ propertyid }) => {
               </div>
               <div className="left_side relative">
                 {user &&
-                  (user.role === "admin" || user.role === "superAdmin" || isPropertyManager) && (
+                  (user.role === "admin" ||
+                    user.role === "superAdmin" ||
+                    isPropertyManager) && (
                     <Link
                       className="prop_edit"
                       to={`/updateproperty/${propertydoc.id}`}
@@ -442,15 +471,13 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
               </div>
             </Link>
-          )}
+       
           <div className="middle relative">
-
-  {/* <div className="show_more_arrow" onClick={handleExpand}>
+            {/* <div className="show_more_arrow" onClick={handleExpand}>
     <span className="material-symbols-outlined">
       {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
     </span>
   </div> */}
-
 
             {propertydoc && (
               <div className="middle_single">
@@ -782,25 +809,25 @@ const PropertyCard = ({ propertyid }) => {
             <div className="parent">
               <div className="child">
                 <div className="left">
-                  <h5>0</h5>                 
+                  <h5>0</h5>
                   <h6>Inspection</h6>
                 </div>
               </div>
               <div className="child">
                 <div className="left">
-                  <h5>0</h5>               
+                  <h5>0</h5>
                   <h6>Bill</h6>
                 </div>
               </div>
-               <div className="child">
+              <div className="child">
                 <div className="left">
-                  <h5>0</h5>               
+                  <h5>0</h5>
                   <h6>Ticket</h6>
                 </div>
               </div>
-               <div className="child">
+              <div className="child">
                 <div className="left">
-                  <h5>0</h5>               
+                  <h5>0</h5>
                   <h6>Enquirys</h6>
                 </div>
               </div>
@@ -842,8 +869,148 @@ const PropertyCard = ({ propertyid }) => {
             </div>
           </div>
           )} */}
-          
+          <div className="property_users">
+            <div className="property_user_single">
+              <div className="user_type">Owner</div>
+              <div className="inner">
+                <div className="img">
+                  <img
+                    src={
+                      firstOwnerUser?.profile?.photoURL ||
+                      "/assets/img/dummy_user.png"
+                    }
+                    alt=""
+                  />
+                </div>
+                <div className="right">
+                  {firstOwnerUser ? (
+                    <>
+                      <h5>{firstOwnerUser?.profile?.fullName} </h5>
+                      <h6>{firstOwnerUser?.profile?.phoneNumber}</h6>
+                    </>
+                  ) : (
+                    <h6
+                      style={{
+                        color: "var(--theme-red)",
+                      }}
+                    >
+                      No Owner Assigned
+                    </h6>
+                  )}
+                </div>
+              </div>
+              {/* Owner Actions */}
+              <div className="actions">
+                <a
+                  href={
+                    firstOwnerUser?.profile?.phoneNumber
+                      ? `tel:+${firstOwnerUser.profile.phoneNumber}`
+                      : undefined
+                  }
+                  className="a_single call"
+                  style={{
+                    opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
+                    pointerEvents: firstOwnerUser?.profile?.phoneNumber
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  <img src="/assets/img/simple_call.png" alt="call" />
+                  <h6>Call</h6>
+                </a>
 
+                <a
+                  href={
+                    firstOwnerUser?.profile?.phoneNumber
+                      ? `https://wa.me/+${firstOwnerUser.profile.phoneNumber}`
+                      : undefined
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="a_single whatsapp"
+                  style={{
+                    opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
+                    pointerEvents: firstOwnerUser?.profile?.phoneNumber
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
+                  <h6>Whatsapp</h6>
+                </a>
+              </div>
+            </div>
+            <div className="property_user_single">
+              <div className="user_type">Executive</div>
+              <div className="inner">
+                <div className="img">
+                  <img
+                    src={
+                      firstExecutiveUser?.profile?.photoURL ||
+                      "/assets/img/dummy_user.png"
+                    }
+                    alt=""
+                  />
+                </div>
+                <div className="right">
+                  {firstExecutiveUser ? (
+                    <>
+                      <h5>{firstExecutiveUser?.profile?.fullName} </h5>
+                      <h6>{firstExecutiveUser?.profile?.phoneNumber}</h6>
+                    </>
+                  ) : (
+                    <h6
+                      style={{
+                        color: "var(--theme-red)",
+                      }}
+                    >
+                      No Executive Assigned
+                    </h6>
+                  )}
+                </div>
+              </div>
+              {/* Executive Actions */}
+              <div className="actions">
+                <a
+                  href={
+                    firstExecutiveUser?.profile?.phoneNumber
+                      ? `tel:+${firstExecutiveUser.profile.phoneNumber}`
+                      : undefined
+                  }
+                  className="a_single call"
+                  style={{
+                    opacity: firstExecutiveUser?.profile?.phoneNumber ? 1 : 0.4,
+                    pointerEvents: firstExecutiveUser?.profile?.phoneNumber
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  <img src="/assets/img/simple_call.png" alt="call" />
+                  <h6>Call</h6>
+                </a>
+
+                <a
+                  href={
+                    firstExecutiveUser?.profile?.phoneNumber
+                      ? `https://wa.me/+${firstExecutiveUser.profile.phoneNumber}`
+                      : undefined
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="a_single whatsapp"
+                  style={{
+                    opacity: firstExecutiveUser?.profile?.phoneNumber ? 1 : 0.4,
+                    pointerEvents: firstExecutiveUser?.profile?.phoneNumber
+                      ? "auto"
+                      : "none",
+                  }}
+                >
+                  <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
+                  <h6>Whatsapp</h6>
+                </a>
+              </div>
+            </div>
+          </div>
           <div
             className="bottom"
             style={{ display: "flex", flexDirection: "column" }}
@@ -855,49 +1022,45 @@ const PropertyCard = ({ propertyid }) => {
                 width: "100%",
               }}
             >
-              <div className="property_owner_detail">
-                <div className="img_container">
-               
-                </div>
-                <div className="pod_right">
-                  <div>
-                 
-                      <h5
-                       
-                      >
-                       Rahul
-                     
-                      </h5>
-                  
-
-
-
+              {/* <div className="property_owner_detail">
+                  <div className="img_container">
+                    <img src="/assets/img/dummy_user.png" alt="" />
                   </div>
+                  <div className="pod_right">
+                    <div>
+                      <h5>Rahul</h5>
+                    </div>
 
-                  <h6>
-                     <a href="" className="phone">
-                    36969696969
-                    </a>
+                    <h6>
+                      <a href="" className="phone">
+                        36969696969
+                      </a>
 
-                     <a href="" className="call whatsapp">
-                      <img
-                        src="/assets/img/phone-call.png"
-                        style={{ width: "25px", height: "25px", marginLeft: "6px" }}
-                        alt="propdial"
-                      />
-                    </a>
-                    <a href='' className="whatsapp">
-                      <img
-                        src="/assets/img/whatsapp.png"
-                        style={{ width: "25px", height: "25px", marginLeft: "6px" }}
-                        alt="propdial"
-                      />
-                    </a>
-                  </h6>
-
-                </div>
-              </div> 
-
+                      <a href="" className="call whatsapp">
+                        <img
+                          src="/assets/img/phone-call.png"
+                          style={{
+                            width: "25px",
+                            height: "25px",
+                            marginLeft: "6px",
+                          }}
+                          alt="propdial"
+                        />
+                      </a>
+                      <a href="" className="whatsapp">
+                        <img
+                          src="/assets/img/whatsapp.png"
+                          style={{
+                            width: "25px",
+                            height: "25px",
+                            marginLeft: "6px",
+                          }}
+                          alt="propdial"
+                        />
+                      </a>
+                    </h6>
+                  </div>
+                </div> */}
               {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
                 view more
               </Link>}  */}
@@ -1004,6 +1167,7 @@ const PropertyCard = ({ propertyid }) => {
             )} */}
           </div>
         </div>
+           )}
       </div>
     </>
   );

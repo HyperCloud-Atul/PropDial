@@ -5,6 +5,7 @@ import { useFirestore } from "../../../hooks/useFirestore";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import UserRoleStatusModal from "./UserRoleStatusModal";
 import ImageModal from "../../imageModal/ImageModal";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const UserSinglecard = ({ users }) => {
   //   modal code start
@@ -13,7 +14,7 @@ const UserSinglecard = ({ users }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = (userObj) => {
-    console.log("userObj: ", userObj)
+    console.log("userObj: ", userObj);
     setSelectedUser(userObj);
     setShow(true);
   };
@@ -87,7 +88,9 @@ const UserSinglecard = ({ users }) => {
       {users &&
         users.map((userObj) => (
           <div
-            className={`pu_single ${userObj.status === "inactive" && "inactive"}`}
+            className={`pu_single ${
+              userObj.status === "inactive" && "inactive"
+            }`}
           >
             <div className="tc_single relative item">
               <div className="left">
@@ -116,24 +119,42 @@ const UserSinglecard = ({ users }) => {
                   />
                 </div>
                 <div className="tenant_detail">
-
-                  <Link to={`/profiledetails/${userObj.id}`}
+                  <Link
+                    to={`/profiledetails/${userObj.id}`}
                     className="t_name pointer"
-                  // onClick={() => handleShow(userObj)} click to open popup don't delete it
+                    // onClick={() => handleShow(userObj)} click to open popup don't delete it
                   >
                     {userObj.fullName}
                     <span className="material-symbols-outlined click_icon text_near_icon">
                       edit
                     </span>
                   </Link>
-                  {userObj.phoneNumber && (
+                  {/* {userObj.phoneNumber && (
                     <h6 className="t_number">
                       {userObj.phoneNumber.replace(
                         /(\d{2})(\d{5})(\d{5})/,
                         "+$1 $2-$3"
                       )}
                     </h6>
+                  )} */}
+                  {userObj.phoneNumber && (
+                    <h6 className="t_number">
+                      {(() => {
+                        try {
+                          const phoneNumber = parsePhoneNumberFromString(
+                            userObj.phoneNumber,
+                            userObj.countryCode?.toUpperCase()
+                          );
+                          return phoneNumber
+                            ? phoneNumber.formatInternational()
+                            : userObj.phoneNumber;
+                        } catch (error) {
+                          return userObj.phoneNumber;
+                        }
+                      })()}
+                    </h6>
                   )}
+
                   {userObj.email && (
                     <h6 className="t_number">{userObj.email}</h6>
                   )}
@@ -159,9 +180,7 @@ const UserSinglecard = ({ users }) => {
                 </Link>
               </div>
               {userObj.status === "inactive" && (
-                <div className="inactive_tag">
-                  Inactive
-                </div>
+                <div className="inactive_tag">Inactive</div>
               )}
             </div>
             <div className="dates">

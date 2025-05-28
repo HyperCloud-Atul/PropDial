@@ -371,12 +371,7 @@ const PhoneLogin_reCaptchaV2 = () => {
 
     let splitName = name.split(" ");
     displayName = splitName.length > 0 ? splitName[0] : name;
-    // console.log("User Display or First Name: ", displayName)
-    // console.log("User Full Name: ", name)
-    // console.log("User Gender: ", gender)
-    // console.log("User Email: ", email)
-    // console.log("User City: ", city)
-    // console.log("User WhoAmI: ", whoAmI)
+   
 
 
     let imgUrl = "/assets/img/dummy_user.png";
@@ -439,17 +434,13 @@ const PhoneLogin_reCaptchaV2 = () => {
     }
   }
 
-  const handlePhoneChange = (value, countryData) => {
-    // setPhone(value);
-    // setCountry(countryData);
-    // console.log("value: ", value + " country code: ", countryData.countryCode + ", country name: ", countryData.name)
+  const handlePhoneChange = (value, countryData) => {   
     setPhone(value);
     setCountryCode(countryData.countryCode);
     setCountryName(countryData.name);
   };
 
   // goback code
-
   const handleGoBack = () => {
     setmobilenoSliderState(true)
     setotpSliderState(false)
@@ -486,8 +477,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                     <PhoneInput
                       country={"in"}
                       // onlyCountries={['in', 'us', 'ae']}
-                      value={phone}
-                      // onChange={setPhone}
+                      value={phone}                     
                       onChange={handlePhoneChange}
                       international
                       keyboardType="phone-pad"
