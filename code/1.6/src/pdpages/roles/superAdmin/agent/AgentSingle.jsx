@@ -224,7 +224,8 @@ const AgentSingle = ({ agentDoc }) => {
                   ) : (
                     <img
                       src={
-                        doc.agentImageUrl || "/assets/img/image_small_placeholder.png"
+                        doc.agentImageUrl ||
+                        "/assets/img/image_small_placeholder.png"
                       }
                       className="pointer"
                       onClick={() =>
@@ -251,16 +252,15 @@ const AgentSingle = ({ agentDoc }) => {
                     <span
                       className="material-symbols-outlined delete_icon"
                       style={{
-                        right: "0"
+                        right: "0",
                       }}
                       onClick={() =>
-                        handleShowDeleteModal(doc.agentImageUrl, doc.id)}
+                        handleShowDeleteModal(doc.agentImageUrl, doc.id)
+                      }
                     >
                       delete_forever
                     </span>
-
                   )}
-
                 </div>
 
                 <div className="tenant_detail">
@@ -323,7 +323,11 @@ const AgentSingle = ({ agentDoc }) => {
             <div className="dates">
               <div className="date_single">
                 <strong>Created At</strong>:{" "}
-                <span>{doc && doc.createdAt && format(doc.createdAt.toDate(), "dd-MMM-yyyy")}</span>
+                <span>
+                  {doc &&
+                    doc.createdAt &&
+                    format(doc.createdAt.toDate(), "dd-MMM-yyyy")}
+                </span>
               </div>
               <div
                 className="date_single click_text pointer"
@@ -353,8 +357,6 @@ const AgentSingle = ({ agentDoc }) => {
         handleDelete={handleDelete}
         isDeleting={isDeleting}
       />
-
-
     </div>
   );
 };

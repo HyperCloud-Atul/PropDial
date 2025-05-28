@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import ImageModal from "../pdpages/imageModal/ImageModal";
 import PropertySummaryCard from "../pdpages/property/PropertySummaryCard";
 import { generateSlug } from "../utils/generateSlug";
+import { firstLetterCapitalize } from "../utils/lib";
 
 const TenantDetails = () => {
   const location = useLocation();
@@ -133,7 +134,17 @@ const TenantDetails = () => {
 
   const handleSaveClick = async (fieldName) => {
     try {
-      await updateDocument(tenantId, { [fieldName]: editedFields[fieldName] });
+      if (fieldName === "status") {
+        await updateDocument(tenantId, {
+          [fieldName]: editedFields[fieldName],
+          isCurrentProperty:
+            editedFields[fieldName] === "active" ? true : false,
+        });
+      } else {
+        await updateDocument(tenantId, {
+          [fieldName]: editedFields[fieldName],
+        });
+      }
       setEditingField(null);
     } catch (error) {
       console.error("Error updating field:", error);
@@ -635,7 +646,7 @@ const TenantDetails = () => {
             >
               <div className="col-lg-4 tenant_mobile_full_card">
                 <div
-                  className={`tc_single${
+                  className={`tc_single ${
                     tenantInfo && tenantInfo.status === "inactive"
                       ? "t_inactive"
                       : ""
@@ -727,9 +738,10 @@ const TenantDetails = () => {
                       ) : (
                         <>
                           {tenantInfo && tenantInfo.name
-                            ? tenantInfo && tenantInfo.name
+                            ? tenantInfo &&
+                              firstLetterCapitalize(tenantInfo.name)
                             : "Name"}
-                          {!editingField &&
+                          {/* {!editingField &&
                             user &&
                             (user.role === "admin" ||
                               user.role === "superAdmin") && (
@@ -739,7 +751,7 @@ const TenantDetails = () => {
                               >
                                 edit
                               </span>
-                            )}
+                            )} */}
                         </>
                       )}
                     </h5>
@@ -805,9 +817,13 @@ const TenantDetails = () => {
                       ) : (
                         <>
                           {tenantInfo && tenantInfo.mobile
-                            ? tenantInfo && tenantInfo.mobile
+                            ? tenantInfo &&
+                              tenantInfo.mobile.replace(
+                                /(\d{2})(\d{5})(\d{5})/,
+                                "+$1 $2-$3"
+                              )
                             : "Mobile number"}
-                          {!editingField &&
+                          {/* {!editingField &&
                             user &&
                             (user.role === "admin" ||
                               user.role === "superAdmin") && (
@@ -817,7 +833,7 @@ const TenantDetails = () => {
                               >
                                 edit
                               </span>
-                            )}
+                            )} */}
                         </>
                       )}
                     </h6>
@@ -1084,10 +1100,10 @@ const TenantDetails = () => {
                         </div>
                       ) : (
                         <>
-                          {tenantInfo && tenantInfo.emailID
-                            ? tenantInfo && tenantInfo.emailID
+                          {tenantInfo && tenantInfo.emailId
+                            ? tenantInfo && tenantInfo.emailId
                             : "Email ID here"}
-                          {!editingField &&
+                          {/* {!editingField &&
                             user &&
                             (user.role === "admin" ||
                               user.role === "superAdmin") && (
@@ -1097,7 +1113,7 @@ const TenantDetails = () => {
                               >
                                 edit
                               </span>
-                            )}
+                            )} */}
                         </>
                       )}
                     </h6>

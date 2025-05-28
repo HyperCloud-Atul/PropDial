@@ -35,6 +35,7 @@ import PropertyImageGallery from "../PropertyImageGallery";
 import ScrollToTop from "../ScrollToTop";
 
 import PhoneInput from "react-phone-input-2";
+import { firstLetterCapitalize } from "../../utils/lib";
 const PropertyDetails = () => {
   // install Swiper modules
   SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
@@ -237,8 +238,11 @@ const PropertyDetails = () => {
   const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
     useFirestore("tenants");
 
-  const { addDocument: userAddDocument, error: userAddDocumentError } =
-    useFirestore("users-propdial");
+  const {
+    addDocument: userAddDocument,
+    addDocumentWithCustomDocId: userAddDocumentWithCustomDocId,
+    error: userAddDocumentError,
+  } = useFirestore("users-propdial");
 
   const {
     addDocument: addProperyUsersDocument,
@@ -260,12 +264,15 @@ const PropertyDetails = () => {
   const [tenantName, setTenantName] = useState("");
   const [editingTenantId, setEditingTenantId] = useState(null);
   const [tenantMobile, setTenantMobile] = useState("");
+  const [tenantCountry, setTenantCountry] = useState("");
+  const [tenantCountryCode, setTenantCountryCode] = useState("");
   const [tenantEmail, setTenantEmail] = useState("");
   const [isTenantEditing, setIsTenantEditing] = useState(false);
   const [selectedTenantImage, setSelectedTenantImage] = useState(null);
   const [previewTenantImage, setPreviewTenantImage] = useState(null);
   const [showAddTenantModal, setShowAddTenantModal] = useState(false);
   const [tenantExist, setTenantExist] = useState(false);
+  const [isTenantDataFetching, setIsTenantDataFetching] = useState(false);
   const [errorTenantForm, setErrorTenantForm] = useState({
     name: "",
     mobile: "",
@@ -280,8 +287,11 @@ const PropertyDetails = () => {
     setErrorTenantForm((prev) => ({ ...prev, name: "" }));
   };
 
-  const handleMobileChange = (value) => {
+  const handleMobileChange = (value, data) => {
+    console.log("value: ", data);
     setTenantMobile(value);
+    setTenantCountryCode(data?.dialCode || "");
+    setTenantCountry(data?.name || "");
     setErrorTenantForm((prev) => ({ ...prev, mobile: "" }));
   };
   const handleEmailChange = (e) => {
@@ -405,6 +415,7 @@ const PropertyDetails = () => {
   };
 
   const fetchExistedUser = async (number) => {
+    setIsTenantDataFetching(true);
     const doc = await projectFirestore
       .collection("users-propdial")
       .where("phoneNumber", "==", number);
@@ -419,6 +430,7 @@ const PropertyDetails = () => {
     setTenantName(userData[0].fullName);
     setTenantMobile(userData[0].phoneNumber);
     setTenantEmail(userData[0].email);
+    setIsTenantDataFetching(false);
   };
 
   const checkIfPhoneExists = async (value) => {
@@ -487,32 +499,74 @@ const PropertyDetails = () => {
       emailId: tenantEmail,
       rentStartDate: "",
       rentEndDate: "",
+      isCurrentProperty: true,
+    };
+
+    const propertyUserData = {
+      propertyId: propertyid,
+      userId: tenantMobile,
+      userTag: "Tenant",
+      userType: "propertytenant",
+      isCurrentProperty: true,
     };
 
     console.log("tenantData: ", tenantData);
 
     if (tenantExist) {
-      await tenantAddDocument(tenantData);
+      await Promise.all([
+        await tenantAddDocument(tenantData),
+        await addProperyUsersDocument(propertyUserData),
+      ]);
       if (tenantAddDocumentError) {
         console.log("response error");
       }
     } else {
       const userDetails = {
+        online: true,
+        whatsappUpdate: false,
+        displayName: tenantName.trim().split(" ")[0],
         fullName: tenantName,
         phoneNumber: tenantMobile,
-        email: tenantEmail,
+        email: tenantName.toLowerCase().trim(),
+        city: "",
+        address: "",
+        gender: "",
+        whoAmI: "tenant",
+        country: tenantCountry,
+        propertyManagerID: tenantMobile,
+        countryCode: tenantCountryCode,
+        photoURL: "",
+        rolePropDial: "tenant",
+        rolesPropDial: ["tenant"],
+        accessType: "country",
+        accessValue: ["India"],
+        status: "active",
+        lastLoginTimestamp: timestamp.fromDate(new Date()),
+        dateofJoinee: "",
+        dateofLeaving: "",
+        employeeId: "",
+        reportingManagerId: "",
+        department: "",
+        designation: "",
+        uan: "",
+        pan: "",
+        aadhaar: "",
       };
 
       await Promise.all([
         await tenantAddDocument(tenantData),
-        await userAddDocument(userDetails),
+        await userAddDocumentWithCustomDocId(userDetails, tenantMobile),
+        await addProperyUsersDocument(propertyUserData),
       ]);
     }
 
     setTenantName("");
     setTenantMobile("");
     setTenantEmail("");
+    setTenantCountryCode("");
+    setTenantCountry("");
     setShowAddTenantModal(false);
+
     // setIsTenantEditing(!isTenantEditing);
   };
 
@@ -4074,7 +4128,7 @@ const PropertyDetails = () => {
                                         }}
                                       >
                                         <div className="plus_icon">
-                                          <Link
+                                          <div
                                             className="plus_icon_inner"
                                             onClick={() =>
                                               setShowAddTenantModal(true)
@@ -4083,7 +4137,7 @@ const PropertyDetails = () => {
                                             <span className="material-symbols-outlined">
                                               add
                                             </span>
-                                          </Link>
+                                          </div>
                                         </div>
                                       </div>
                                     )}
@@ -4158,12 +4212,17 @@ const PropertyDetails = () => {
                                                     >
                                                       <h6 className="t_name">
                                                         {tenant.name
-                                                          ? tenant.name
+                                                          ? firstLetterCapitalize(
+                                                              tenant.name
+                                                            )
                                                           : "Tenant Name"}
                                                       </h6>
                                                       <h6 className="t_number">
                                                         {tenant.mobile
-                                                          ? tenant.mobile
+                                                          ? tenant.mobile.replace(
+                                                              /(\d{2})(\d{5})(\d{5})/,
+                                                              "+$1 $2-$3"
+                                                            )
                                                           : "Tenant Phone"}
                                                       </h6>
                                                     </div>
@@ -4205,6 +4264,8 @@ const PropertyDetails = () => {
                                   setTenantName("");
                                   setTenantMobile("");
                                   setTenantEmail("");
+                                  setTenantCountryCode("");
+                                  setTenantCountry("");
                                   setErrorTenantForm({
                                     name: "",
                                     mobile: "",
@@ -4276,6 +4337,7 @@ const PropertyDetails = () => {
                                               placeholder="Enter a Tenant Name here"
                                               onChange={handleNameChange}
                                               value={tenantName}
+                                              disabled={isTenantDataFetching}
                                             />
                                           </div>
                                           {errorTenantForm.name && (
@@ -4295,6 +4357,7 @@ const PropertyDetails = () => {
                                               placeholder="Enter a Tenant Email here"
                                               onChange={handleEmailChange}
                                               value={tenantEmail}
+                                              disabled={isTenantDataFetching}
                                             />
                                           </div>
                                           {errorTenantForm.email && (
@@ -4319,6 +4382,8 @@ const PropertyDetails = () => {
                                           setTenantName("");
                                           setTenantMobile("");
                                           setTenantEmail("");
+                                          setTenantCountryCode("");
+                                          setTenantCountry("");
                                           setErrorTenantForm({
                                             name: "",
                                             mobile: "",

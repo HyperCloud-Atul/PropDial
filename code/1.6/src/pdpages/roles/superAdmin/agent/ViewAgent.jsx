@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { projectFirestore } from "../../../../firebase/config";
 import { useCollection } from "../../../../hooks/useCollection";
-// import useInView from "../../../../hooks/useInView";
+import useInView from "../../../../hooks/useInView";
 
 // import component
 import AgentSingle from "./AgentSingle";
@@ -25,10 +25,10 @@ const ViewAgent = () => {
   const debouncer = useRef(null);
   const loadingRef = useRef(null);
 
-  // const isIntersecting = useInView(loadingRef, {
-  //   threshold: 0.5,
-  //   rootMargin: "300px",
-  // });
+  const isIntersecting = useInView(loadingRef, {
+    threshold: 0.5,
+    rootMargin: "300px",
+  });
 
   const { documents: masterState, error: masterStateError } = useCollection(
     "m_states",
@@ -46,17 +46,22 @@ const ViewAgent = () => {
   const [allData, setAllData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState("active"); // Default to 'active'
-  
-  // const lastVisibleDocRef = useRef(null);
-  // const [page, setPage] = useState(1); // Current page
-  // const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
-  // const [firstLoad, setFirstLoad] = useState(true);
 
-  const changeStatusFilter = (newStatus) => {
-    setStatus(newStatus);
+  const lastVisibleDocRef = useRef(null);
+  // const [page, setPage] = useState(1); // Current page
+  const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
+  // const [firstLoad, setFirstLoad] = useState(true);
+  const resetPagination = () => {
+    lastVisibleDocRef.current = null;
     setFilteredData([]);
     setAllData([]);
+    setHasMore(true);
   };
+  const changeStatusFilter = useCallback((newStatus) => {
+    setStatus(newStatus);
+    resetPagination();
+  }, []);
+
   const stateOptions = useMemo(() => {
     if (!masterState) return [];
     return masterState.map((data) => ({
@@ -75,17 +80,29 @@ const ViewAgent = () => {
   }
   //update state
 
+  //clear the debouncer
+  useEffect(() => {
+    return () => {
+      if (debouncer.current) {
+        clearTimeout(debouncer.current);
+      }
+    };
+  }, []);
   const fetchAgents = useCallback(async () => {
+    if (!hasMore) return;
     // if (isLoading) return;
     setIsLoading(true);
-    console.log("status: ", status);
-    console.log("state: ", state.label);
     try {
       let ref = await projectFirestore
         .collection("agent-propdial")
         .where("state", "==", state.label)
         .where("status", "==", status.toLowerCase())
-        .orderBy("agentName", "asc");
+        .orderBy("agentName", "asc")
+        .limit(itemsPerPage);
+
+      if (lastVisibleDocRef.current) {
+        ref = ref.startAfter(lastVisibleDocRef.current);
+      }
 
       const snapshot = await ref.get();
 
@@ -94,22 +111,31 @@ const ViewAgent = () => {
           ...doc.data(),
           id: doc.id,
         }));
-        setFilteredData(_filterList);
-        setAllData(_filterList);
+        lastVisibleDocRef.current = snapshot.docs[snapshot.docs.length - 1];
+        setFilteredData((prevData) => [...prevData, ..._filterList]);
+        setAllData((prevData) => [...prevData, ..._filterList]);
+        setHasMore(snapshot.docs.length === itemsPerPage);
       } else {
-        setFilteredData([]);
-        setAllData([]);
+        // setFilteredData([]);
+        // setAllData([]);
+        // lastVisibleDocRef.current = null;
+        setHasMore(false);
       }
     } catch (error) {
       console.error("Error fetching filtered data: ", error);
     } finally {
       setIsLoading(false);
     }
-  }, [state.label, status]);
+  }, [state.label, status, hasMore]);
+
+  const isSearchActive = searchInput.trim() !== "";
 
   useEffect(() => {
-    fetchAgents();
-  }, [fetchAgents]);
+    const fetchData = async () => {
+      if (!isSearchActive) await fetchAgents();
+    };
+    if (isIntersecting) fetchData();
+  }, [fetchAgents, isIntersecting, isSearchActive]);
 
   //fetch more data
 
@@ -122,7 +148,9 @@ const ViewAgent = () => {
       clearTimeout(debouncer.current);
     }
     if (value.trim() === "") {
-      setFilteredData(allData);
+      // Reset pagination and re-fetch
+      resetPagination();
+      await fetchAgents(); // Trigger fresh fetch
       return;
     }
     const _searchkey = toTitleCase(value).trim();
@@ -155,12 +183,14 @@ const ViewAgent = () => {
 
         const allDocs = [...nameSnap.docs, ...citySnap.docs];
         if (allDocs.length !== 0) {
-          const _filterList = allDocs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          console.log(_filterList);
+          const uniqueDocsMap = new Map();
+          allDocs.forEach((doc) =>
+            uniqueDocsMap.set(doc.id, { ...doc.data(), id: doc.id })
+          );
+
+          const _filterList = Array.from(uniqueDocsMap.values());
           setFilteredData(_filterList);
+          setHasMore(false);
         } else {
           setFilteredData([]);
         }
@@ -305,8 +335,7 @@ const ViewAgent = () => {
             className="state_filter"
             onChange={(e) => {
               setState(e);
-              setFilteredData([]);
-              setAllData([]);
+              resetPagination();
               // filteredAgentList(e);
             }}
             options={stateOptions}
@@ -369,7 +398,7 @@ const ViewAgent = () => {
         {viewMode === "card_view" && filteredData && (
           <>
             <AgentSingle agentDoc={filteredData} />
-            {isLoading && (
+            {(isLoading || hasMore) && (
               <div ref={loadingRef} className="filter_loading">
                 <BeatLoader color={"var(--theme-green)"} />
               </div>
