@@ -4,8 +4,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 import PhoneInput, { allCountries } from "react-phone-input-2";
+import Select from "react-select";
 import "react-phone-input-2/lib/style.css";
 // import 'flag-icon-css/css/flag-icon.min.css';
+import { getNames } from "country-list";
 import OtpInput from "react-otp-input";
 
 import { useSignupPhone } from "../../hooks/useSignupPhone";
@@ -66,9 +68,13 @@ const PhoneLogin_reCaptchaV2 = () => {
   const [email, setEmail] = useState("");
   const [city, setCity] = useState("");
   const [countryCode, setCountryCode] = useState("");
+  const [residentialCountry, setResidentialCountry] = useState(null);
+  const [countryOptions, setCountryOptions] = useState([]);
   const [country, setCountryName] = useState("");
   const [address, setAddress] = useState("");
   const [gender, setGender] = useState("");
+  const [countryList, setCountryList] = useState([]);
+  const [salutation, setSalutation] = useState("Mr.");
   const [whoAmI, setWhoAmI] = useState("");
   const [error, setError] = useState("");
   const [otptimer, setOtpTimer] = useState(30);
@@ -99,7 +105,19 @@ const PhoneLogin_reCaptchaV2 = () => {
     // Prevent scrolling changes
     e.preventDefault();
   };
+  useEffect(() => {
+    const countries = getNames(); // Returns array of country names
+    setCountryList(countries);
+  }, []);
 
+  useEffect(() => {
+    const countries = getNames();
+    const options = countries.map((country) => ({
+      label: country,
+      value: country,
+    }));
+    setCountryOptions(options);
+  }, []);
   useEffect(() => {
     let interval;
 
@@ -107,8 +125,7 @@ const PhoneLogin_reCaptchaV2 = () => {
       interval = setInterval(() => {
         setOtpTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    }
-    else if (otptimer === 0) {
+    } else if (otptimer === 0) {
       setIsResendDisabled(false); // Jab timer 0 ho tabhi enable ho
     }
 
@@ -116,10 +133,16 @@ const PhoneLogin_reCaptchaV2 = () => {
   }, [otpSliderState, otptimer]); // Dependency fix
 
   const handleResendOtp = () => {
-    handleGoBack()
+    handleGoBack();
     setOtpTimer(60);
-    setIsResendDisabled(true);  // Timer restart ke sath hi disable bhi ho
+    setIsResendDisabled(true); // Timer restart ke sath hi disable bhi ho
   };
+
+  useEffect(() => {
+    if (gender === "male") setSalutation("Mr.");
+    else if (gender === "female") setSalutation("Ms.");
+    else setSalutation("Mr.");
+  }, [gender]);
 
   // Google authentication
   const signInWithGoogle = () => {
@@ -141,7 +164,8 @@ const PhoneLogin_reCaptchaV2 = () => {
           // Extract the first name
           let firstName = splitName[0];
 
-          let imgUrl = "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2";
+          let imgUrl =
+            "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/userThumbnails%2F1default.png?alt=media&token=38880453-e642-4fb7-950b-36d81d501fe2";
 
           await user.updateProfile({
             phoneNumber: phone,
@@ -180,7 +204,9 @@ const PhoneLogin_reCaptchaV2 = () => {
           console.log("Existing user signed in with Google");
           console.log("existing user:", user);
           let role = "owner";
-          const docRef = projectFirestore.collection("users-propdial").doc(phone);
+          const docRef = projectFirestore
+            .collection("users-propdial")
+            .doc(phone);
           // Get the document snapshot
           const docSnapshot = await docRef.get();
           // Check if the document exists
@@ -232,15 +258,14 @@ const PhoneLogin_reCaptchaV2 = () => {
       });
   };
 
-
-  //New optimized code 
+  //New optimized code
   const allSliderVisible = (state) => {
-    setmobilenoSliderState(state)
-    setotpSliderState(state)
-    setGenderSlider(state)
-    setPersonalInfoSlider(state)
-    setWhoAmISlider(state)
-  }
+    setmobilenoSliderState(state);
+    setotpSliderState(state);
+    setGenderSlider(state);
+    setPersonalInfoSlider(state);
+    setWhoAmISlider(state);
+  };
 
   // send opt
   const getOTP = async (e) => {
@@ -276,15 +301,13 @@ const PhoneLogin_reCaptchaV2 = () => {
       setConfirmObj(respons);
 
       setIsLoading(true); // Start the loader
-      allSliderVisible(false)
-      setotpSliderState(true)
-
-    }
-    catch (err) {
+      allSliderVisible(false);
+      setotpSliderState(true);
+    } catch (err) {
       console.log("Error : ", err.message);
       setIsLoading(false); // loading false
     }
-  }
+  };
 
   // OTP change hote hi Confirm button enable/disable hoga
   useEffect(() => {
@@ -299,25 +322,24 @@ const PhoneLogin_reCaptchaV2 = () => {
   const verifyOTP = async (e) => {
     if (isConfirmDisabled) return;
     try {
-      setIsLoading(true); // Start the loader     
+      setIsLoading(true); // Start the loader
 
       await confirmObj.confirm(otp).then(async (result) => {
         const user = result.user;
-        setUser(user)
+        setUser(user);
 
         // Check if the user is new
         if (isNewUser) {
           console.log("New User Signed-In");
-          allSliderVisible(false)
-          setnewUserSliderState(true)
-          setGenderSlider(true)
-
-        }
-        else {//Existing User
-          console.log("Existing User Signed-In")
-          allSliderVisible(false)
+          allSliderVisible(false);
+          setnewUserSliderState(true);
+          setGenderSlider(true);
+        } else {
+          //Existing User
+          console.log("Existing User Signed-In");
+          allSliderVisible(false);
           console.log("existing user:", user);
-          console.log("phone: ", phone)
+          console.log("phone: ", phone);
           let role = "owner";
           const docRef = projectFirestore
             .collection("users-propdial")
@@ -329,7 +351,11 @@ const PhoneLogin_reCaptchaV2 = () => {
           if (docSnapshot.exists) {
             // Extract the data from the document snapshot
             // const data = docSnapshot.data();
-            if (docSnapshot.data().rolePropDial === "" || docSnapshot.data().rolePropDial === "na") role = "owner";
+            if (
+              docSnapshot.data().rolePropDial === "" ||
+              docSnapshot.data().rolePropDial === "na"
+            )
+              role = "owner";
             else role = docSnapshot.data().rolePropDial;
           }
 
@@ -341,12 +367,11 @@ const PhoneLogin_reCaptchaV2 = () => {
             lastLoginTimestamp: timestamp.fromDate(new Date()),
           });
 
-          navigate("/dashboard"); //Navigae to dashboard 
+          navigate("/dashboard"); //Navigae to dashboard
         }
-      })
+      });
       setIsLoading(false); // stop   the loader
-    }
-    catch (error) {
+    } catch (error) {
       setIsLoading(false); // stop the loader
       console.log("error.message", error.message);
       setError(
@@ -357,27 +382,22 @@ const PhoneLogin_reCaptchaV2 = () => {
         setError("");
         setResendOTPFlag(true);
       }, 10000);
-
     }
-  }
-
+  };
 
   const toggleOtpVisibility = () => {
     setIsOtpHidden(!isOtpHidden); // Toggles the OTP visibility
   };
 
   const handleNewUserData = async () => {
-    console.log("in handleNewUserData")
+    console.log("in handleNewUserData");
 
     let splitName = name.split(" ");
     displayName = splitName.length > 0 ? splitName[0] : name;
-   
-
 
     let imgUrl = "/assets/img/dummy_user.png";
 
     try {
-
       await user.updateProfile({
         phoneNumber: phone,
         displayName: camelCase(displayName.toLowerCase()),
@@ -399,7 +419,9 @@ const PhoneLogin_reCaptchaV2 = () => {
           address: camelCase(address.toLowerCase().trim()),
           gender,
           whoAmI,
+          residentialCountry,
           country,
+          salutation,
           propertyManagerID: phone,
           countryCode,
           photoURL: imgUrl,
@@ -422,19 +444,18 @@ const PhoneLogin_reCaptchaV2 = () => {
           designation: "",
           uan: "",
           pan: "",
-          aadhaar: ""
+          aadhaar: "",
         });
 
-      console.log("User Created Successfully")
+      console.log("User Created Successfully");
 
-      navigate("/dashboard"); //Navigae to dashboard 
-
+      navigate("/dashboard"); //Navigae to dashboard
     } catch ({ error }) {
-      console.log("Error: ", error.message)
+      console.log("Error: ", error.message);
     }
-  }
+  };
 
-  const handlePhoneChange = (value, countryData) => {   
+  const handlePhoneChange = (value, countryData) => {
     setPhone(value);
     setCountryCode(countryData.countryCode);
     setCountryName(countryData.name);
@@ -442,16 +463,14 @@ const PhoneLogin_reCaptchaV2 = () => {
 
   // goback code
   const handleGoBack = () => {
-    setmobilenoSliderState(true)
-    setotpSliderState(false)
-    setIsLoading(false)
+    setmobilenoSliderState(true);
+    setotpSliderState(false);
+    setIsLoading(false);
     setOtp("");
-    setIsOtpHidden(true)
+    setIsOtpHidden(true);
     setOtpTimer(80);
   };
   // goback code
-
-
 
   return (
     <div className="phone_login two_col_page top_header_pg">
@@ -459,7 +478,6 @@ const PhoneLogin_reCaptchaV2 = () => {
         <img src="/assets/img/login_img2.png" alt="propdial" />
       </div>
       <div className="left col_left">
-
         {mobilenoSliderState && (
           <>
             <div className="left_inner col_left_inner">
@@ -477,7 +495,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                     <PhoneInput
                       country={"in"}
                       // onlyCountries={['in', 'us', 'ae']}
-                      value={phone}                     
+                      value={phone}
                       onChange={handlePhoneChange}
                       international
                       keyboardType="phone-pad"
@@ -573,35 +591,64 @@ const PhoneLogin_reCaptchaV2 = () => {
 
               <div className="vg22"></div>
 
-              <div className="otp_input"
+              <div
+                className="otp_input"
                 style={{
                   width: "fit-content",
-                  margin: "auto"
+                  margin: "auto",
                 }}
               >
                 <h5>OTP Verification</h5>
-                <label htmlFor="" className="w-100 relative" style={{
-                  color: "var(--theme-grey)",
-                  maxWidth: "260px",
-                  marginTop: "4px"
-                }}>Enter the code from the sms we sent to <span className="mobile" style={{
-                  color: "var(--light-black)",
-                  fontWeight: "500"
-                }}>{phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}</span>
-                  <span onClick={toggleOtpVisibility} className="hs_otp pointer click_text"
+                <label
+                  htmlFor=""
+                  className="w-100 relative"
+                  style={{
+                    color: "var(--theme-grey)",
+                    maxWidth: "260px",
+                    marginTop: "4px",
+                  }}
+                >
+                  Enter the code from the sms we sent to{" "}
+                  <span
+                    className="mobile"
+                    style={{
+                      color: "var(--light-black)",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {phone.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")}
+                  </span>
+                  <span
+                    onClick={toggleOtpVisibility}
+                    className="hs_otp pointer click_text"
                     style={{
                       marginLeft: "5px",
                       position: "relative",
-                      top: "-2px"
+                      top: "-2px",
                     }}
                   >
                     {!isOtpHidden ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" /></svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#00a8a8"
+                      >
+                        <path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z" />
+                      </svg>
                     ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#00a8a8"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" /></svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#00a8a8"
+                      >
+                        <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z" />
+                      </svg>
                     )}
                   </span>
-
                 </label>
                 <OtpInput
                   value={otp}
@@ -627,10 +674,12 @@ const PhoneLogin_reCaptchaV2 = () => {
                     />
                   )}
                 />
-                {error && <>
-                  <div className="field_error">{error}</div>
-                  <div className="vg10"></div>
-                </>}
+                {error && (
+                  <>
+                    <div className="field_error">{error}</div>
+                    <div className="vg10"></div>
+                  </>
+                )}
               </div>
               <p className="resend_otp_timer">
                 Haven't received the OTP?{" "}
@@ -639,7 +688,9 @@ const PhoneLogin_reCaptchaV2 = () => {
                 ) : (
                   <span
                     onClick={!isResendDisabled ? handleResendOtp : undefined}
-                    style={{ cursor: isResendDisabled ? "not-allowed" : "pointer" }}
+                    style={{
+                      cursor: isResendDisabled ? "not-allowed" : "pointer",
+                    }}
                   >
                     <a style={{ color: "var(--theme-green)" }}> Resend OTP</a>
                   </span>
@@ -680,7 +731,6 @@ const PhoneLogin_reCaptchaV2 = () => {
               >
                 Change Number
               </button>
-
             </div>
           )}
         </div>
@@ -697,7 +747,6 @@ const PhoneLogin_reCaptchaV2 = () => {
                 <div></div>
 
                 <label htmlFor="" className="text-center">
-
                   <h5>Congratulations and welcome aboard! 🎉</h5>
 
                   <p
@@ -711,100 +760,294 @@ const PhoneLogin_reCaptchaV2 = () => {
                 </label>
                 <div className="vg22"></div>
                 {/* stage one gender  */}
-                {genderSlider && <div className="field_box theme_radio_new">
-                  <div
-                    className="theme_radio_container gender"
-                    style={{
-                      padding: "0px",
-                      border: "none",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div className="radio_single male gender_single">
-                      <input
-                        type="radio"
-                        name="gender"
-                        id="male"
-                        value="male"
-                        onClick={(e) => { setGender('male') }}
-                      />
-                      <label htmlFor="male">
-                        <div className="label_inner">
-                          <img
-                            src="/assets/img/icons/men-icon-login.png"
-                            alt="icon"
-                          />
-                          <h6>Male</h6>
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className="radio_single female gender_single">
-                      <input
-                        type="radio"
-                        name="gender"
-                        id="female"
-                        value="female"
-                        onClick={(e) => { setGender('female') }}
-                      />
-                      <label htmlFor="female">
-                        <div className="label_inner">
-                          <img
-                            src="/assets/img/icons/women-icon-login.png"
-                            alt="icon"
-                          />
-                          <h6>Female</h6>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="vg22"></div>
-                  <div>
-                    <button
-                      className="theme_btn btn_fill w_full"
-                      onClick={(e) => {
-                        if (!gender) {
-                          setError("Please select Gender");
-                          allSliderVisible(false)
-                          setGenderSlider(true)
-                        }
-                        else {
-                          setError("");
-                          allSliderVisible(false)
-                          setPersonalInfoSlider(true)
-                        }
+                {genderSlider && (
+                  <div className="field_box theme_radio_new">
+                    <div
+                      className="theme_radio_container gender"
+                      style={{
+                        padding: "0px",
+                        border: "none",
+                        justifyContent: "center",
                       }}
                     >
-                      Next
-                    </button>
+                      <div className="radio_single male gender_single">
+                        <input
+                          type="radio"
+                          name="gender"
+                          id="male"
+                          value="male"
+                          onClick={(e) => {
+                            setGender("male");
+                          }}
+                        />
+                        <label htmlFor="male">
+                          <div className="label_inner">
+                            <img
+                              src="/assets/img/icons/men-icon-login.png"
+                              alt="icon"
+                            />
+                            <h6>Male</h6>
+                          </div>
+                        </label>
+                      </div>
+
+                      <div className="radio_single female gender_single">
+                        <input
+                          type="radio"
+                          name="gender"
+                          id="female"
+                          value="female"
+                          onClick={(e) => {
+                            setGender("female");
+                          }}
+                        />
+                        <label htmlFor="female">
+                          <div className="label_inner">
+                            <img
+                              src="/assets/img/icons/women-icon-login.png"
+                              alt="icon"
+                            />
+                            <h6>Female</h6>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="vg22"></div>
+                    <div>
+                      <button
+                        className="theme_btn btn_fill w_full"
+                        onClick={(e) => {
+                          if (!gender) {
+                            setError("Please select Gender");
+                            allSliderVisible(false);
+                            setGenderSlider(true);
+                          } else {
+                            setError("");
+                            allSliderVisible(false);
+                            setPersonalInfoSlider(true);
+                          }
+                        }}
+                      >
+                        Next
+                      </button>
+                    </div>
                   </div>
-                </div>}
+                )}
 
                 {/* stage two personal info  */}
-                {personalInfoSlider && <div className="new_form_field with_icon">
-                  <input
-                    required
-                    type="text"
-                    placeholder="Your Full Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    style={{
-                      background: "none",
-                    }}
-                  />
-                  <div className="vg22"></div>
-                  <input
-                    required
-                    type="email"
-                    placeholder="Your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{
-                      background: "none",
-                    }}
-                  />
-                  <div className="vg22"></div>
-                  <input
+                {personalInfoSlider && (
+                  <div className="new_form_field with_icon">
+                    {/* <div className="form_field w-100 aai_form_field">
+                      <h6 className="aaiff_title">
+                        Salutation <span className="required">*</span>
+                      </h6>
+                      <div className="field_box w-100">
+                        <select
+                          className="form-select"
+                          id="floatingSalutation"
+                          value={salutation}
+                          onChange={(e) => setSalutation(e.target.value)}
+                        >
+                          <option value="">Select Salutation</option>
+                          {[
+                            "Capt.",
+                            "Col.",
+                            "Dr.",
+                            "Hon.",
+                            "Lt.",
+                            "Madam",
+                            "Major",
+                            "Mr.",
+                            "Mrs.",
+                            "Ms.",
+                            "Prof.",
+                            "Rev.",
+                            "Sir",
+                          ].map((title) => (
+                            <option key={title} value={title}>
+                              {title}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Your Full Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      style={{
+                        background: "none",
+                      }}
+                    />
+                    <div className="vg22"></div>
+                    <input
+                      required
+                      type="email"
+                      placeholder="Your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      style={{
+                        background: "none",
+                      }}
+                    />
+                    <div className="vg22"></div>
+
+                    <div className="form_field w-100 aai_form_field">
+                      <h6 className="aaiff_title d-flex align-items-center justify-content-between">
+                        <p>
+                          Residential Country {residentialCountry}
+                          <span className="required">*</span>
+                        </p>
+                      </h6>
+                      <div className="field_box w-100">
+                        <Select
+                          name="residentialCountry"
+                          options={countryOptions}
+                          value={
+                            countryOptions.find(
+                              (c) => c.value === residentialCountry
+                            ) || null
+                          }
+                          onChange={(selectedOption) =>
+                            setResidentialCountry(
+                              selectedOption ? selectedOption.value : null
+                            )
+                          }
+                          placeholder="Select Country"
+                          isClearable
+                          isSearchable
+                          menuPortalTarget={document.body}
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="vg22"></div> */}
+                    {/* Salutation Dropdown (Bootstrap Floating Label) */}
+                    {/* Country Select (react-select styled as floating label) */}
+                    <div
+                      className="form-floating mb-3 position-relative"
+                      style={{ zIndex: 1 }}
+                    >
+                      <div style={{ height: "58px" }}>
+                        <Select
+                          name="residentialCountry"
+                          options={countryOptions}
+                          value={
+                            countryOptions.find(
+                              (c) => c.value === residentialCountry
+                            ) || null
+                          }
+                          onChange={(selectedOption) =>
+                            setResidentialCountry(
+                              selectedOption ? selectedOption.value : null
+                            )
+                          }
+                          placeholder="Select Country"
+                          isClearable
+                          isSearchable
+                          menuPortalTarget={document.body}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              height: "100%",
+                              paddingTop: "10px",
+                              outline: "none",
+                              boxShadow: "none",
+                            }),
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          }}
+                        />
+                      </div>
+                      <label
+                        htmlFor="residentialCountry"
+                        style={{
+                          top: "4px",
+                          fontSize: "14px",
+                          left: "10px",
+                          position: "absolute",
+                          color: "rgb(33 37 41 / 65%)",
+                          opacity: "0.7",
+                          padding: "0px",
+                        }}
+                      >
+                        Residential Country
+                      </label>
+                    </div>
+                    <div className="form-floating mb-3">
+                      <select
+                        className="form-select"
+                        id="floatingSalutation"
+                        value={salutation}
+                        onChange={(e) => setSalutation(e.target.value)}
+                        style={{ outline: "none", boxShadow: "none" }} // Remove focus outline
+                      >
+                        <option value="">Select Salutation</option>
+                        {[
+                          "Capt.",
+                          "Col.",
+                          "Dr.",
+                          "Hon.",
+                          "Lt.",
+                          "Madam",
+                          "Major",
+                          "Mr.",
+                          "Mrs.",
+                          "Ms.",
+                          "Prof.",
+                          "Rev.",
+                          "Sir",
+                        ].map((title) => (
+                          <option key={title} value={title}>
+                            {title}
+                          </option>
+                        ))}
+                      </select>
+                      <label htmlFor="floatingSalutation">Salutation</label>
+                    </div>
+
+                    {/* Full Name Input (Floating Label) */}
+                    <div className="form-floating mb-3">
+                      <input
+                        required
+                        type="text"
+                        className="form-control"
+                        id="floatingName"
+                        placeholder="Your Full Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        style={{
+                          background: "none",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
+                      />
+                      <label htmlFor="floatingName">Full Name</label>
+                    </div>
+
+                    {/* Email Input (Floating Label) */}
+                    <div className="form-floating mb-3">
+                      <input
+                        required
+                        type="email"
+                        className="form-control"
+                        id="floatingEmail"
+                        placeholder="Your Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        style={{
+                          background: "none",
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
+                      />
+                      <label htmlFor="floatingEmail">Email</label>
+                    </div>
+
+                    {/* <input
                     required
                     type="text"
                     placeholder="Your Current City"
@@ -813,129 +1056,137 @@ const PhoneLogin_reCaptchaV2 = () => {
                     style={{
                       background: "none",
                     }}
-                  />
-                  <div className="vg22"></div>
-                  <div>
-                    <button
-                      className="theme_btn btn_fill w_full"
-                      onClick={(e) => {
-                        if (name === "" || email === "" || city === "") {
-                          setError("Please complete all the details");
-                          allSliderVisible(false)
-                          setPersonalInfoSlider(true)
-                        }
-                        else if (!validateEmail(email)) {
-                          setError("Email format is not valid");
-                          allSliderVisible(false)
-                          setPersonalInfoSlider(true)
-                        }
-                        else {
-                          setError("");
-                          allSliderVisible(false)
-                          setWhoAmISlider(true)
-                        }
-                      }}
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>}
-
-                {/* stage three who am i   */}
-                {whoAmISlider && <div className="field_box theme_radio_new whoami">
-                  <div className="inner">
-                    <label htmlFor="" className="text-center mb-2">
-                      <h6> Who am i?</h6>
-                      <div className="emoji"></div>
-                    </label>
-                    <div className="vg12"></div>
-                    <div
-                      className="theme_radio_container"
-                      style={{
-                        padding: "0px",
-                        border: "none",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <div className="radio_single owner">
-                        <input
-                          type="radio"
-                          name="whoAmI"
-                          id="owner"
-                          value="owner"
-                          onClick={(e) => { setWhoAmI('owner') }}
-                        />
-                        <label htmlFor="owner">I Am owner</label>
-                      </div>
-
-                      <div className="radio_single agent">
-                        <input
-                          type="radio"
-                          name="whoAmI"
-                          id="agent"
-                          value="agent"
-                          onClick={(e) => { setWhoAmI('agent') }}
-                        />
-                        <label htmlFor="agent">I Am agent</label>
-                      </div>
-                      <div className="radio_single tenant">
-                        <input
-                          type="radio"
-                          name="whoAmI"
-                          id="tenant"
-                          value="tenant"
-                          onClick={(e) => { setWhoAmI('tenant') }}
-                        />
-                        <label htmlFor="tenant">I Am tenant</label>
-                      </div>
-                      <div className="radio_single buyer">
-                        <input
-                          type="radio"
-                          name="whoAmI"
-                          id="buyer"
-                          value="buyer"
-                          onClick={(e) => { setWhoAmI('buyer') }}
-                        />
-                        <label htmlFor="buyer">I Am buyer</label>
-                      </div>
-                      <div className="radio_single seller">
-                        <input
-                          type="radio"
-                          name="whoAmI"
-                          id="seller"
-                          value="seller"
-                          onClick={(e) => { setWhoAmI('seller') }}
-                        />
-                        <label htmlFor="seller">I Am seller</label>
-                      </div>
+                  /> */}
+                    <div>
+                      <button
+                        className="theme_btn btn_fill w_full"
+                        onClick={(e) => {
+                          if (name === "" || email === "" || salutation === "" || residentialCountry === "") {
+                            setError("Please complete all the details");
+                            allSliderVisible(false);
+                            setPersonalInfoSlider(true);
+                          } else if (!validateEmail(email)) {
+                            setError("Email format is not valid");
+                            allSliderVisible(false);
+                            setPersonalInfoSlider(true);
+                          } else {
+                            setError("");
+                            allSliderVisible(false);
+                            setWhoAmISlider(true);
+                          }
+                        }}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
-                  <div className="vg22"></div>
-                  <div className="vg22"></div>
-                  <div>
-                    <button
-                      className="theme_btn btn_fill w_full"
-                      onClick={(e) => {
-                        if (whoAmI === "") {
-                          setError("Please select who you are");
-                          allSliderVisible(false)
-                          setWhoAmISlider(true)
-                        }
-                        else {
-                          setError("");
-                          allSliderVisible(false)
-                          handleNewUserData()
-                        }
-                      }}
-                    >
-                      Next
-                    </button>
+                )}
+
+                {/* stage three who am i   */}
+                {whoAmISlider && (
+                  <div className="field_box theme_radio_new whoami">
+                    <div className="inner">
+                      <label htmlFor="" className="text-center mb-2">
+                        <h6> Who am i?</h6>
+                        <div className="emoji"></div>
+                      </label>
+                      <div className="vg12"></div>
+                      <div
+                        className="theme_radio_container"
+                        style={{
+                          padding: "0px",
+                          border: "none",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <div className="radio_single owner">
+                          <input
+                            type="radio"
+                            name="whoAmI"
+                            id="owner"
+                            value="owner"
+                            onClick={(e) => {
+                              setWhoAmI("owner");
+                            }}
+                          />
+                          <label htmlFor="owner">I Am owner</label>
+                        </div>
+
+                        <div className="radio_single agent">
+                          <input
+                            type="radio"
+                            name="whoAmI"
+                            id="agent"
+                            value="agent"
+                            onClick={(e) => {
+                              setWhoAmI("agent");
+                            }}
+                          />
+                          <label htmlFor="agent">I Am agent</label>
+                        </div>
+                        <div className="radio_single tenant">
+                          <input
+                            type="radio"
+                            name="whoAmI"
+                            id="tenant"
+                            value="tenant"
+                            onClick={(e) => {
+                              setWhoAmI("tenant");
+                            }}
+                          />
+                          <label htmlFor="tenant">I Am tenant</label>
+                        </div>
+                        <div className="radio_single buyer">
+                          <input
+                            type="radio"
+                            name="whoAmI"
+                            id="buyer"
+                            value="buyer"
+                            onClick={(e) => {
+                              setWhoAmI("buyer");
+                            }}
+                          />
+                          <label htmlFor="buyer">I Am buyer</label>
+                        </div>
+                        <div className="radio_single seller">
+                          <input
+                            type="radio"
+                            name="whoAmI"
+                            id="seller"
+                            value="seller"
+                            onClick={(e) => {
+                              setWhoAmI("seller");
+                            }}
+                          />
+                          <label htmlFor="seller">I Am seller</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="vg22"></div>
+                    <div className="vg22"></div>
+                    <div>
+                      <button
+                        className="theme_btn btn_fill w_full"
+                        onClick={(e) => {
+                          if (whoAmI === "") {
+                            setError("Please select who you are");
+                            allSliderVisible(false);
+                            setWhoAmISlider(true);
+                          } else {
+                            setError("");
+                            allSliderVisible(false);
+                            handleNewUserData();
+                          }
+                        }}
+                      >
+                        Next
+                      </button>
+                    </div>
                   </div>
-                </div>}
+                )}
 
                 {error && <div className="field_error">{error}</div>}
                 <div className="vg10"></div>
-
               </div>
             </>
           )}

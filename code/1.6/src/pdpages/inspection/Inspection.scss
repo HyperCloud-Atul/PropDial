@@ -61,6 +61,11 @@
       font-weight: 500;
       color: var(--theme-blue);
       margin-bottom: 8px;
+      .required{
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--theme-red);
+      }
       span {
         font-size: 12px;
         font-weight: 400;

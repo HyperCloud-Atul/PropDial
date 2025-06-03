@@ -192,90 +192,73 @@ const AddInspection = () => {
     return () => unsubscribe();
   }, [propertyId]);
 
-const handleImageUpload = async (e, roomId) => {
-  const files = Array.from(e.target.files);
-  if (files.length === 0) return;
+  const handleImageUpload = async (e, roomId) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  // Get current images count to avoid exceeding 10
-  const existingCount = inspectionData[roomId]?.images?.length || 0;
-  const remainingSlots = 10 - existingCount;
-
-  // Only allow up to 10 images total
-  const validFiles = files.slice(0, remainingSlots);
-
-  for (const file of validFiles) {
+    // Allowed image formats
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) {
       alert("Only JPG and PNG files are allowed.");
-      continue;
+      return;
     }
 
     setImageActionStatus("uploading");
 
     try {
+      // Image Compression Settings
       const options = {
-        maxSizeMB: 0.2,
-        maxWidthOrHeight: 1024,
+        maxSizeMB: 0.2, // Maximum size 200KB
+        maxWidthOrHeight: 1024, // Resize if necessary
         useWebWorker: true,
       };
 
+      // Compress Image
       const compressedFile = await imageCompression(file, options);
 
+      // Upload Process
       const storageRef = projectStorage.ref(
         `inspection_images/${inspectionId}/${roomId}/${compressedFile.name}`
       );
       const uploadTask = storageRef.put(compressedFile);
 
-      await new Promise((resolve, reject) => {
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress((prev) => ({
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
+        },
+        (error) => {
+          console.error("Error uploading image:", error);
+          setImageActionStatus(null);
+        },
+        async () => {
+          try {
+            const url = await storageRef.getDownloadURL();
+            setInspectionData((prev) => ({
               ...prev,
-              [file.name]: progress,
+              [roomId]: {
+                ...prev[roomId],
+                images: [
+                  ...(prev[roomId]?.images || []),
+                  { url, name: compressedFile.name },
+                ],
+              },
             }));
-          },
-          (error) => {
-            console.error("Upload error:", error);
+            setUploadProgress((prev) => ({ ...prev, [file.name]: 100 })); // Mark upload as complete
+          } catch (error) {
+            console.error("Error getting download URL:", error);
+          } finally {
             setImageActionStatus(null);
-            reject(error);
-          },
-          async () => {
-            try {
-              const url = await storageRef.getDownloadURL();
-              setInspectionData((prev) => ({
-                ...prev,
-                [roomId]: {
-                  ...prev[roomId],
-                  images: [
-                    ...(prev[roomId]?.images || []),
-                    { url, name: compressedFile.name },
-                  ],
-                },
-              }));
-              setUploadProgress((prev) => ({
-                ...prev,
-                [file.name]: 100,
-              }));
-              resolve();
-            } catch (error) {
-              console.error("Download URL error:", error);
-              reject(error);
-            } finally {
-              setImageActionStatus(null);
-            }
           }
-        );
-      });
+        }
+      );
     } catch (error) {
-      console.error("Compression error:", error);
-      setImageActionStatus(null);
+      console.error("Image compression error:", error);
+      setShow(false); // Stop uploading state if compression fails
     }
-  }
-};
-
+  };
 
   const handleImageDelete = async (roomId, image) => {
     setImageActionStatus("deleting");
@@ -1909,14 +1892,14 @@ const handleImageUpload = async (e, roomId) => {
                                       >
                                         <FaPlus size={24} color="#555" />
                                       </div>
-                                     <input
-  type="file"
-  id={`file-input-${activeRoom}`}
-  style={{ display: "none" }}
-  multiple // 👈 Add this line
-  onChange={(e) => handleImageUpload(e, activeRoom)}
-/>
-
+                                      <input
+                                        type="file"
+                                        id={`file-input-${activeRoom}`}
+                                        style={{ display: "none" }}
+                                        onChange={(e) =>
+                                          handleImageUpload(e, activeRoom)
+                                        }
+                                      />
                                     </div>
                                     )}
                                   </div>

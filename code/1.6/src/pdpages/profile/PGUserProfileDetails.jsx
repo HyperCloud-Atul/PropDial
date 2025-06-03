@@ -14,6 +14,7 @@ import PhoneInput from "react-phone-input-2";
 import { useCollection } from "../../hooks/useCollection";
 import { projectFirestore } from "../../firebase/config";
 import NineDots from "../../components/NineDots";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 // import scss
 import "./PGUserProfileDetails.scss";
@@ -154,8 +155,8 @@ export default function PGUserProfileDetails2() {
   const [isOwnedCityEditing, setIsOwnedCityEditing] = useState(false);
   const [saveOwnedCityMessage, setSaveOwnedCityMessage] = useState("");
   const [ownedCityMessageType, setOwnedCityMessageType] = useState("");
-  const [originalCity, setOriginalCity] = useState([]); 
-  
+  const [originalCity, setOriginalCity] = useState([]);
+
   const handleOwnedCityEditClick = () => {
     if (!isOwnedCityEditing) {
       // Start editing -> Save the original value
@@ -177,9 +178,14 @@ export default function PGUserProfileDetails2() {
       }, 4000);
       return;
     }
-  
-    if (JSON.stringify(city) === JSON.stringify(userProfileDoc?.propertiesOwnedInCities || [])) {
-      setSaveOwnedCityMessage("No changes detected. Please update before saving.");
+
+    if (
+      JSON.stringify(city) ===
+      JSON.stringify(userProfileDoc?.propertiesOwnedInCities || [])
+    ) {
+      setSaveOwnedCityMessage(
+        "No changes detected. Please update before saving."
+      );
       setOwnedCityMessageType("error_msg");
       setTimeout(() => {
         setSaveOwnedCityMessage("");
@@ -187,14 +193,14 @@ export default function PGUserProfileDetails2() {
       }, 4000);
       return;
     }
-  
+
     const updatedData = {
       propertiesOwnedInCities: city,
     };
-  
+
     setIsOwnedCitySaving(true);
     setSaveOwnedCityMessage("");
-  
+
     try {
       await updateDocument(userProfileId, updatedData);
       setOwnedCityMessageType("success_msg");
@@ -215,11 +221,10 @@ export default function PGUserProfileDetails2() {
       }, 4000);
     }
   };
-  
 
   // handleSavePropertyOwnedInCities
-  // old code don,t delete 
-  // const handleSavePropertyOwnedInCities = async () => { 
+  // old code don,t delete
+  // const handleSavePropertyOwnedInCities = async () => {
   //   const updatedData = {
   //     propertiesOwnedInCities: city,
   //   };
@@ -231,10 +236,7 @@ export default function PGUserProfileDetails2() {
   //   }
   // };
 
-
   // Save Access Mgmt details
-
-
 
   // const handleSaveAccessMgmt = async () => {
   //   console.log("selected country", country);
@@ -260,75 +262,80 @@ export default function PGUserProfileDetails2() {
   //   }
   // };
   const [isAccessMgmtSaving, setIsAccessMgmtSaving] = useState(false);
-const [isAccessMgmtEditing, setIsAccessMgmtEditing] = useState(false);
-const [saveAccessMgmtMessage, setSaveAccessMgmtMessage] = useState("");
-const [accessMgmtMessageType, setAccessMgmtMessageType] = useState("");
-const [originalState, setOriginalState] = useState([]); // Store original state
+  const [isAccessMgmtEditing, setIsAccessMgmtEditing] = useState(false);
+  const [saveAccessMgmtMessage, setSaveAccessMgmtMessage] = useState("");
+  const [accessMgmtMessageType, setAccessMgmtMessageType] = useState("");
+  const [originalState, setOriginalState] = useState([]); // Store original state
 
-const handleAccessMgmtEditClick = () => {
-  if (!isAccessMgmtEditing) {
-    setOriginalState(state);
-  } else {
-    setState(originalState);
-  }
-  setIsAccessMgmtEditing(!isAccessMgmtEditing);
-};
-
-const handleSaveAccessMgmt = async () => {
-  if (!state || state.length === 0) {
-    setSaveAccessMgmtMessage("Please select at least one state.");
-    setAccessMgmtMessageType("error_msg");
-    setTimeout(() => {
-      setSaveAccessMgmtMessage("");
-      setAccessMgmtMessageType("");
-    }, 4000);
-    return;
-  }
-
-  if (JSON.stringify(state) === JSON.stringify(userProfileDoc?.accessValue || [])) {
-    setSaveAccessMgmtMessage("No changes detected. Please update before saving.");
-    setAccessMgmtMessageType("error_msg");
-    setTimeout(() => {
-      setSaveAccessMgmtMessage("");
-      setAccessMgmtMessageType("");
-    }, 4000);
-    return;
-  }
-
-  const updatedData = {
-    accessType: "state",
-    accessValue: state,
+  const handleAccessMgmtEditClick = () => {
+    if (!isAccessMgmtEditing) {
+      setOriginalState(state);
+    } else {
+      setState(originalState);
+    }
+    setIsAccessMgmtEditing(!isAccessMgmtEditing);
   };
 
-  setIsAccessMgmtSaving(true);
-  setSaveAccessMgmtMessage("");
+  const handleSaveAccessMgmt = async () => {
+    if (!state || state.length === 0) {
+      setSaveAccessMgmtMessage("Please select at least one state.");
+      setAccessMgmtMessageType("error_msg");
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+      return;
+    }
 
-  try {
-    await updateDocument(userProfileId, updatedData);
-    setAccessMgmtMessageType("success_msg");
-    setSaveAccessMgmtMessage("Access management updated successfully!");
-    setOriginalState(state);
-    setTimeout(() => {
-      setIsAccessMgmtEditing(false);
-    }, 4000);
-  } catch (error) {
-    console.error("Error updating access management details:", error);
-    setAccessMgmtMessageType("error_msg");
-    setSaveAccessMgmtMessage("Failed to update access management. Please try again.");
-  } finally {
-    setIsAccessMgmtSaving(false);
-    setTimeout(() => {
-      setSaveAccessMgmtMessage("");
-      setAccessMgmtMessageType("");
-    }, 4000);
-  }
-};
+    if (
+      JSON.stringify(state) ===
+      JSON.stringify(userProfileDoc?.accessValue || [])
+    ) {
+      setSaveAccessMgmtMessage(
+        "No changes detected. Please update before saving."
+      );
+      setAccessMgmtMessageType("error_msg");
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+      return;
+    }
 
+    const updatedData = {
+      accessType: "state",
+      accessValue: state,
+    };
+
+    setIsAccessMgmtSaving(true);
+    setSaveAccessMgmtMessage("");
+
+    try {
+      await updateDocument(userProfileId, updatedData);
+      setAccessMgmtMessageType("success_msg");
+      setSaveAccessMgmtMessage("Access management updated successfully!");
+      setOriginalState(state);
+      setTimeout(() => {
+        setIsAccessMgmtEditing(false);
+      }, 4000);
+    } catch (error) {
+      console.error("Error updating access management details:", error);
+      setAccessMgmtMessageType("error_msg");
+      setSaveAccessMgmtMessage(
+        "Failed to update access management. Please try again."
+      );
+    } finally {
+      setIsAccessMgmtSaving(false);
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+    }
+  };
 
   useEffect(() => {
     setdbUserState(dbUsers);
   }, [dbUsers]);
-
 
   // code for active inactive start
   // Make sure that userProfileDoc is not null before using it
@@ -1554,13 +1561,16 @@ const handleSaveAccessMgmt = async () => {
     );
   };
 
-   // nine dots menu start
+  // nine dots menu start
 
-   const nineDotsMenu = [
+  const nineDotsMenu = [
     // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "User List", link: "/userlist", icon: "groups" },
-    { title: "Attendance Dashboard", link: "/attendance-dashboard", icon: "alarm" },
-   
+    {
+      title: "Attendance Dashboard",
+      link: "/attendance-dashboard",
+      icon: "alarm",
+    },
   ];
   // nine dots menu end
   return (
@@ -1605,21 +1615,39 @@ const handleSaveAccessMgmt = async () => {
         </div>
         <div className="p_info">
           <h5>{userProfileDoc && userProfileDoc.fullName}</h5>
-          <h6>
+          {userProfileDoc?.phoneNumber && (
+            <h6 className="t_number">
+              {(() => {
+                try {
+                  const phoneNumber = parsePhoneNumberFromString(
+                    userProfileDoc.phoneNumber,
+                    userProfileDoc.countryCode?.toUpperCase()
+                  );
+                  return phoneNumber
+                    ? phoneNumber.formatInternational()
+                    : userProfileDoc.phoneNumber;
+                } catch (error) {
+                  return userProfileDoc.phoneNumber;
+                }
+              })()}
+            </h6>
+          )}
+          {/* <h6>
             {" "}
             {userProfileDoc &&
               userProfileDoc.phoneNumber.replace(
                 /(\d{2})(\d{5})(\d{5})/,
                 "+$1 $2-$3"
               )}
-          </h6>
+          </h6> */}
           <h6 className="break_all">
             {userProfileDoc && userProfileDoc.email}
           </h6>
-          <h6>
-            {userProfileDoc && userProfileDoc.city},{" "}
-            {userProfileDoc && userProfileDoc.country}{" "}
-          </h6>
+                     <h6 >
+  {userProfileDoc?.city}
+  {userProfileDoc?.city && userProfileDoc?.residentialCountry && ", "}
+  {userProfileDoc?.residentialCountry || userProfileDoc?.country}
+</h6>
         </div>
         {/* <hr />
         <div className="roles">
@@ -1650,7 +1678,10 @@ const handleSaveAccessMgmt = async () => {
                   <h6>On-Boarded</h6>
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
-                      ? format(userProfileDoc.createdAt.toDate(), "dd-MMM-yyyy, hh:mm a")
+                      ? format(
+                          userProfileDoc.createdAt.toDate(),
+                          "dd-MMM-yyyy, hh:mm a"
+                        )
                       : ""}
                   </h5>
                 </div>
@@ -1799,7 +1830,6 @@ const handleSaveAccessMgmt = async () => {
                     </div>
                   </div>
                 </div>
-             
               </div>
               <div className="blue_single is_employee currentrole">
                 <h5>Current Role </h5>
@@ -1914,262 +1944,250 @@ const handleSaveAccessMgmt = async () => {
                     </div>
                   </Modal.Footer>
                 </Modal>
-              </div>           
+              </div>
               {userProfileDoc && userProfileDoc.isEmployee && (
-              <div className="blue_single  is_employee is_attendance_required">
-                <h5>Is Attendance Required?</h5>
-                <div className="form_field">
-                  <div className="field_box theme_radio_new">
-                    <div
-                      className="theme_radio_container"
-                      style={{
-                        padding: "0px",
-                        border: "none",
-                        background: "transparent",
-                      }}
-                    >
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isar"
-                          value="yes"
-                          id="isaryes"
-                          checked={
-                            userProfileDoc?.isAttendanceRequired === true
-                          } // Fixed checked condition
-                          onChange={() => handleArRadioChange("yes")}
-                        />
-                        <label htmlFor="isaryes">yes</label>
-                      </div>
-                      <div className="radio_single">
-                        <input
-                          type="radio"
-                          name="isar"
-                          value="no"
-                          id="isarno"
-                          checked={
-                            userProfileDoc?.isAttendanceRequired === false
-                          } // Fixed checked condition
-                          onChange={() => handleArRadioChange("no")}
-                        />
-                        <label htmlFor="isarno">no</label>
+                <div className="blue_single  is_employee is_attendance_required">
+                  <h5>Is Attendance Required?</h5>
+                  <div className="form_field">
+                    <div className="field_box theme_radio_new">
+                      <div
+                        className="theme_radio_container"
+                        style={{
+                          padding: "0px",
+                          border: "none",
+                          background: "transparent",
+                        }}
+                      >
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="isar"
+                            value="yes"
+                            id="isaryes"
+                            checked={
+                              userProfileDoc?.isAttendanceRequired === true
+                            } // Fixed checked condition
+                            onChange={() => handleArRadioChange("yes")}
+                          />
+                          <label htmlFor="isaryes">yes</label>
+                        </div>
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="isar"
+                            value="no"
+                            id="isarno"
+                            checked={
+                              userProfileDoc?.isAttendanceRequired === false
+                            } // Fixed checked condition
+                            onChange={() => handleArRadioChange("no")}
+                          />
+                          <label htmlFor="isarno">no</label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Confirmation Modal */}
-                <Modal
-                  show={showConfirmationPopupAr}
-                  onHide={() => setShowConfirmationPopupAr(false)}
-                  centered
-                >
-                  <Modal.Header
-                    className="justify-content-center"
-                    style={{ paddingBottom: "0px", border: "none" }}
+                  {/* Confirmation Modal */}
+                  <Modal
+                    show={showConfirmationPopupAr}
+                    onHide={() => setShowConfirmationPopupAr(false)}
+                    centered
                   >
-                    <h5>Confirmation</h5>
-                  </Modal.Header>
-                  <Modal.Body
-                    className="text-center"
-                    style={{
-                      color: "#FA6262",
-                      fontSize: "20px",
-                      border: "none",
-                    }}
-                  >
-                    Are you sure you want to mark this user as{" "}
-                    {selectedAttendanceRequiredStatus === "yes"
-                      ? "attendance required"
-                      : "not attendance required"}
-                    ?
-                  </Modal.Body>
-                  <Modal.Footer
-                    className="d-flex justify-content-between"
-                    style={{ border: "none", gap: "15px" }}
-                  >
-                    <div
-                      className="cancel_btn"
-                      onClick={handleUpdateIsAttendanceRequired}
-                      disabled={loading}
+                    <Modal.Header
+                      className="justify-content-center"
+                      style={{ paddingBottom: "0px", border: "none" }}
                     >
-                      {loading ? "Saving..." : "Yes, Update"}
-                    </div>
-                    <div
-                      className="done_btn"
-                      onClick={() => setShowConfirmationPopupAr(false)}
+                      <h5>Confirmation</h5>
+                    </Modal.Header>
+                    <Modal.Body
+                      className="text-center"
+                      style={{
+                        color: "#FA6262",
+                        fontSize: "20px",
+                        border: "none",
+                      }}
                     >
-                      No
-                    </div>
-                  </Modal.Footer>
-                </Modal>
-              </div>
+                      Are you sure you want to mark this user as{" "}
+                      {selectedAttendanceRequiredStatus === "yes"
+                        ? "attendance required"
+                        : "not attendance required"}
+                      ?
+                    </Modal.Body>
+                    <Modal.Footer
+                      className="d-flex justify-content-between"
+                      style={{ border: "none", gap: "15px" }}
+                    >
+                      <div
+                        className="cancel_btn"
+                        onClick={handleUpdateIsAttendanceRequired}
+                        disabled={loading}
+                      >
+                        {loading ? "Saving..." : "Yes, Update"}
+                      </div>
+                      <div
+                        className="done_btn"
+                        onClick={() => setShowConfirmationPopupAr(false)}
+                      >
+                        No
+                      </div>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
               )}
             </div>
-            <Modal
-                  show={showPopup}
-                  onHide={() => setShowPopup(false)}
-                  centered
-                >
-                  <Modal.Header
-                    className="justify-content-center"
-                    style={{
-                      paddingBottom: "0px",
-                      border: "none",
-                    }}
-                  >
-                    <h5>
-                      {popupData.status === "inactive"
-                        ? "Reason For Inactive"
-                        : "Confirmation"}
-                    </h5>
-                  </Modal.Header>
-                  <Modal.Body
-                    className="text-center"
-                    style={{
-                      color: "#FA6262",
-                      fontSize: "20px",
-                      border: "none",
-                    }}
-                  >
-                    {popupData.status === "inactive" && (
-                      <div>
-                        <div className="form_field">
-                          <div className="field_box theme_radio_new">
-                            <div
-                              className="theme_radio_container"
-                              style={{
-                                padding: "0px",
-                                border: "none",
-                              }}
-                            >
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="reason"
-                                  value="Security Concerns"
-                                  checked={reason === "Security Concerns"}
-                                  onChange={() =>
-                                    setReason("Security Concerns")
-                                  }
-                                  id="SecurityConcerns"
-                                />
+            <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
+              <Modal.Header
+                className="justify-content-center"
+                style={{
+                  paddingBottom: "0px",
+                  border: "none",
+                }}
+              >
+                <h5>
+                  {popupData.status === "inactive"
+                    ? "Reason For Inactive"
+                    : "Confirmation"}
+                </h5>
+              </Modal.Header>
+              <Modal.Body
+                className="text-center"
+                style={{
+                  color: "#FA6262",
+                  fontSize: "20px",
+                  border: "none",
+                }}
+              >
+                {popupData.status === "inactive" && (
+                  <div>
+                    <div className="form_field">
+                      <div className="field_box theme_radio_new">
+                        <div
+                          className="theme_radio_container"
+                          style={{
+                            padding: "0px",
+                            border: "none",
+                          }}
+                        >
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="Security Concerns"
+                              checked={reason === "Security Concerns"}
+                              onChange={() => setReason("Security Concerns")}
+                              id="SecurityConcerns"
+                            />
 
-                                <label htmlFor="SecurityConcerns">
-                                  Security Concerns
-                                </label>
-                              </div>
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="reason"
-                                  value="PolicyViolations"
-                                  checked={reason === "Policy Violations"}
-                                  onChange={() =>
-                                    setReason("Policy Violations")
-                                  }
-                                  id="PolicyViolations"
-                                />
+                            <label htmlFor="SecurityConcerns">
+                              Security Concerns
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="PolicyViolations"
+                              checked={reason === "Policy Violations"}
+                              onChange={() => setReason("Policy Violations")}
+                              id="PolicyViolations"
+                            />
 
-                                <label htmlFor="PolicyViolations">
-                                  Policy Violations
-                                </label>
-                              </div>
+                            <label htmlFor="PolicyViolations">
+                              Policy Violations
+                            </label>
+                          </div>
 
-                              {userProfileDoc && userProfileDoc.isEmployee && (
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name="reason"
-                                    value="resigned"
-                                    checked={reason === "resigned"}
-                                    onChange={() => setReason("resigned")}
-                                    id="resigned"
-                                  />
-                                  <label htmlFor="resigned">Resigned</label>
-                                </div>
-                              )}
-                              {userProfileDoc && userProfileDoc.isEmployee && (
-                                <div className="radio_single">
-                                  <input
-                                    type="radio"
-                                    name="reason"
-                                    value="leave"
-                                    checked={reason === "leave"}
-                                    onChange={() => setReason("leave")}
-                                    id="leave"
-                                  />
-
-                                  <label htmlFor="leave">Leave</label>
-                                </div>
-                              )}
-
-                              <div className="radio_single">
-                                <input
-                                  type="radio"
-                                  name="reason"
-                                  value="other"
-                                  checked={reason === "other"}
-                                  onChange={() => setReason("other")}
-                                  id="other"
-                                />
-                                <label htmlFor="other">Other</label>
-                              </div>
+                          {userProfileDoc && userProfileDoc.isEmployee && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="reason"
+                                value="resigned"
+                                checked={reason === "resigned"}
+                                onChange={() => setReason("resigned")}
+                                id="resigned"
+                              />
+                              <label htmlFor="resigned">Resigned</label>
                             </div>
+                          )}
+                          {userProfileDoc && userProfileDoc.isEmployee && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="reason"
+                                value="leave"
+                                checked={reason === "leave"}
+                                onChange={() => setReason("leave")}
+                                id="leave"
+                              />
+
+                              <label htmlFor="leave">Leave</label>
+                            </div>
+                          )}
+
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="other"
+                              checked={reason === "other"}
+                              onChange={() => setReason("other")}
+                              id="other"
+                            />
+                            <label htmlFor="other">Other</label>
                           </div>
                         </div>
-                        <div className="form_field mt-3 mb-3">
-                          <textarea
-                            value={remark}
-                            onChange={(e) => setRemark(e.target.value)}
-                            onFocus={(e) => (e.target.style.outline = "none")}
-                            onBlur={(e) => (e.target.style.outline = "")}
-                            placeholder="Enter any remark..."
-                            style={{ outline: "none", paddingLeft: "10px" }}
-                          ></textarea>
-                        </div>
                       </div>
-                    )}
-                    Are you sure you want to mark this user as{" "}
-                    {popupData.status}?
-                  </Modal.Body>
-                  <Modal.Footer
-                    className="d-flex justify-content-between"
+                    </div>
+                    <div className="form_field mt-3 mb-3">
+                      <textarea
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                        onFocus={(e) => (e.target.style.outline = "none")}
+                        onBlur={(e) => (e.target.style.outline = "")}
+                        placeholder="Enter any remark..."
+                        style={{ outline: "none", paddingLeft: "10px" }}
+                      ></textarea>
+                    </div>
+                  </div>
+                )}
+                Are you sure you want to mark this user as {popupData.status}?
+              </Modal.Body>
+              <Modal.Footer
+                className="d-flex justify-content-between"
+                style={{
+                  border: "none",
+                  gap: "15px",
+                }}
+              >
+                {errorForNoSelectReasonMessage && (
+                  <div
                     style={{
-                      border: "none",
-                      gap: "15px",
+                      fontSize: "15px",
+                      padding: "4px 15px",
+                      borderRadius: "8px",
+                      background: "#ffe9e9",
+                      color: "red",
+                      width: "fit-content",
+                      margin: "auto",
                     }}
                   >
-                    {errorForNoSelectReasonMessage && (
-                      <div
-                        style={{
-                          fontSize: "15px",
-                          padding: "4px 15px",
-                          borderRadius: "8px",
-                          background: "#ffe9e9",
-                          color: "red",
-                          width: "fit-content",
-                          margin: "auto",
-                        }}
-                      >
-                        {errorForNoSelectReasonMessage}
-                      </div>
-                    )}
-                    <div
-                      className="cancel_btn"
-                      onClick={handlePopupSubmit}
-                      disabled={loading}
-                    >
-                      {loading ? "Saving..." : "Yes, Update"}
-                    </div>
-                    <div
-                      className="done_btn"
-                      onClick={() => setShowPopup(false)}
-                    >
-                      No
-                    </div>
-                  </Modal.Footer>
-                </Modal>
+                    {errorForNoSelectReasonMessage}
+                  </div>
+                )}
+                <div
+                  className="cancel_btn"
+                  onClick={handlePopupSubmit}
+                  disabled={loading}
+                >
+                  {loading ? "Saving..." : "Yes, Update"}
+                </div>
+                <div className="done_btn" onClick={() => setShowPopup(false)}>
+                  No
+                </div>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
@@ -2355,15 +2373,16 @@ const handleSaveAccessMgmt = async () => {
               userProfileDoc.rolesPropDial.includes("owner"))) && (
             <div className="property_card_single mobile_full_card overflow_unset">
               <div className="more_detail_card_inner">
-                <h2 className="card_title">Properties owned within the city
-                <span
-                className={`material-symbols-outlined action_icon ${
-                  isOwnedCityEditing ? "text_red" : "text_green"
-                }`}
-                onClick={handleOwnedCityEditClick}
-              >
-                {isOwnedCityEditing ? "close" : "border_color"}
-              </span>
+                <h2 className="card_title">
+                  Properties owned within the city
+                  <span
+                    className={`material-symbols-outlined action_icon ${
+                      isOwnedCityEditing ? "text_red" : "text_green"
+                    }`}
+                    onClick={handleOwnedCityEditClick}
+                  >
+                    {isOwnedCityEditing ? "close" : "border_color"}
+                  </span>
                 </h2>
                 <div className="vg12"></div>
                 <div className="row row_gap">
@@ -2400,33 +2419,34 @@ const handleSaveAccessMgmt = async () => {
                     </div>
                   </div>
                 </div>
-                
-               {isOwnedCityEditing && (
-                 <div className="btn_msg_area">
+
+                {isOwnedCityEditing && (
+                  <div className="btn_msg_area">
                     {saveOwnedCityMessage && (
-                  <p className={`msg_area ${ownedCityMessageType}`}>
-                    {saveOwnedCityMessage}
-                  </p>
+                      <p className={`msg_area ${ownedCityMessageType}`}>
+                        {saveOwnedCityMessage}
+                      </p>
+                    )}
+                    <button
+                      onClick={handleOwnedCityEditClick}
+                      disabled={isOwnedCitySaving}
+                      className={`theme_btn btn_border no_icon min_width ${
+                        isOwnedCitySaving ? "disabled" : ""
+                      }`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSavePropertyOwnedInCities}
+                      disabled={isOwnedCitySaving}
+                      className={`theme_btn btn_fill no_icon min_width ${
+                        isOwnedCitySaving ? "disabled" : ""
+                      }`}
+                    >
+                      {isOwnedCitySaving ? "Saving..." : "Save"}
+                    </button>
+                  </div>
                 )}
-                 <button
-               onClick={handleOwnedCityEditClick}
-               disabled={isOwnedCitySaving}
-               className={`theme_btn btn_border no_icon min_width ${isOwnedCitySaving ? "disabled" : ""
-                 }`}
-             >
-               Cancel
-             </button>
-                 <button
-                   onClick={handleSavePropertyOwnedInCities}
-                   disabled={isOwnedCitySaving}
-                   className={`theme_btn btn_fill no_icon min_width ${
-                     isOwnedCitySaving ? "disabled" : ""
-                   }`}
-                 >
-                   {isOwnedCitySaving ? "Saving..." : "Save"}
-                 </button>
-               </div>
-               )}
               </div>
             </div>
           )}
@@ -2434,16 +2454,16 @@ const handleSaveAccessMgmt = async () => {
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
-              <h2 className="card_title">Access Management
-              <span
-                className={`material-symbols-outlined action_icon ${
-                  isAccessMgmtEditing ? "text_red" : "text_green"
-                }`}
-                onClick={handleAccessMgmtEditClick}
-              >
-                {isAccessMgmtEditing ? "close" : "border_color"}
-              </span>
-
+              <h2 className="card_title">
+                Access Management
+                <span
+                  className={`material-symbols-outlined action_icon ${
+                    isAccessMgmtEditing ? "text_red" : "text_green"
+                  }`}
+                  onClick={handleAccessMgmtEditClick}
+                >
+                  {isAccessMgmtEditing ? "close" : "border_color"}
+                </span>
               </h2>
               <div className="form_field">
                 <div className="field_box theme_radio_new">
@@ -2552,36 +2572,35 @@ const handleSaveAccessMgmt = async () => {
                 )}
               </div>
               <div className="vg12"></div>
-{isAccessMgmtEditing && (
+              {isAccessMgmtEditing && (
                 <div className="btn_msg_area">
-                {saveAccessMgmtMessage && (
-                  <p className={`msg_area ${accessMgmtMessageType}`}>
-                    {saveAccessMgmtMessage}
-                  </p>
-                )}
-                
-                <button
-                  onClick={handleAccessMgmtEditClick}
-                  disabled={isAccessMgmtSaving}
-                  className={`theme_btn btn_border no_icon min_width ${
-                    isAccessMgmtSaving ? "disabled" : ""
-                  }`}
-                >
-                  Cancel
-                </button>
-                
-                <button
-                  onClick={handleSaveAccessMgmt}
-                  disabled={isAccessMgmtSaving}
-                  className={`theme_btn btn_fill no_icon min_width ${
-                    isAccessMgmtSaving ? "disabled" : ""
-                  }`}
-                >
-                  {isAccessMgmtSaving ? "Saving..." : "Save"}
-                </button>
-              </div>
-)}
+                  {saveAccessMgmtMessage && (
+                    <p className={`msg_area ${accessMgmtMessageType}`}>
+                      {saveAccessMgmtMessage}
+                    </p>
+                  )}
 
+                  <button
+                    onClick={handleAccessMgmtEditClick}
+                    disabled={isAccessMgmtSaving}
+                    className={`theme_btn btn_border no_icon min_width ${
+                      isAccessMgmtSaving ? "disabled" : ""
+                    }`}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handleSaveAccessMgmt}
+                    disabled={isAccessMgmtSaving}
+                    className={`theme_btn btn_fill no_icon min_width ${
+                      isAccessMgmtSaving ? "disabled" : ""
+                    }`}
+                  >
+                    {isAccessMgmtSaving ? "Saving..." : "Save"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2658,7 +2677,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/department.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/department.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Department</h6>
@@ -2671,7 +2693,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/designation.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/designation.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Designation</h6>
@@ -2684,7 +2709,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>UAN Number</h6>
@@ -2697,7 +2725,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>PAN Number</h6>
@@ -2710,7 +2741,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Aadhar Number</h6>
@@ -2946,7 +2980,10 @@ const handleSaveAccessMgmt = async () => {
                 <div className="p_info">
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/steering-wheel.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/steering-wheel.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Is Vehicle</h6>
@@ -2989,7 +3026,10 @@ const handleSaveAccessMgmt = async () => {
                   {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
                     <div className="p_info_single">
                       <div className="pd_icon">
-                        <img src="/assets/img/edicon/numberplate.png" alt="propdial" />
+                        <img
+                          src="/assets/img/edicon/numberplate.png"
+                          alt="propdial"
+                        />
                       </div>
                       <div className="pis_content">
                         <h6>Number Plate</h6>
@@ -3006,7 +3046,10 @@ const handleSaveAccessMgmt = async () => {
                   {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
                     <div className="p_info_single">
                       <div className="pd_icon">
-                        <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                        <img
+                          src="/assets/img/edicon/id-card.png"
+                          alt="propdial"
+                        />
                       </div>
                       <div className="pis_content">
                         <h6>Driving Licence</h6>
@@ -3389,7 +3432,10 @@ const handleSaveAccessMgmt = async () => {
                 <div className="p_info for_ref">
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/accountholder.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/accountholder.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>A/C Holder Name</h6>
@@ -3403,7 +3449,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/accountnumber.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/accountnumber.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>A/C Number</h6>
@@ -3445,7 +3494,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/ifsccode.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/ifsccode.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>IFSC Code</h6>
@@ -3609,7 +3661,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/mobile-phone.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/mobile-phone.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Phone</h6>
@@ -3832,7 +3887,10 @@ const handleSaveAccessMgmt = async () => {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/mobile-phone.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/mobile-phone.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Phone</h6>
@@ -4129,5 +4187,3 @@ const handleSaveAccessMgmt = async () => {
     </div>
   );
 }
-
-

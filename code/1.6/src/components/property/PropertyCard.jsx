@@ -7,6 +7,7 @@ import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { timestamp } from "../../firebase/config";
 import { generateSlug } from "../../utils/generateSlug";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import usePropertyUsersData from "../../utils/usePropertyUsersData";
 // Convert digit into comma formate start
@@ -313,19 +314,19 @@ const PropertyCard = ({ propertyid }) => {
             {propertydoc.flag}
           </div>
         )}
-     {propertydoc && (
-        <div
-          className={`property_single_card relative ${
-            isPropertyManager || isPropertyOwner || isPropertyTenant
-              ? "property_user"
-              : ""
-          }`}
-        >
-          {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
+        {propertydoc && (
+          <div
+            className={`property_single_card relative ${
+              isPropertyManager || isPropertyOwner || isPropertyTenant
+                ? "property_user"
+                : ""
+            }`}
+          >
+            {/* {propertydoc && <div className={`purpose ${propertydoc.purpose === "Rent" ? "rent" : "sale"}`}>
             {propertydoc.status === 'Available for Rent' || propertydoc.status === 'Rented Out' ? 'Rent' : 'Sale'}
             {propertydoc.purpose}
           </div>} */}
-       
+
             <Link
               // to={`/propertydetails/${propertydoc.id}`}
               to={`/propertydetails/${generateSlug(propertydoc)}`}
@@ -471,369 +472,371 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
               </div>
             </Link>
-       
-          <div className="middle relative">
-            {/* <div className="show_more_arrow" onClick={handleExpand}>
+
+            <div className="middle relative">
+              {/* <div className="show_more_arrow" onClick={handleExpand}>
     <span className="material-symbols-outlined">
       {expanded ? "keyboard_arrow_down" : "keyboard_arrow_up"}
     </span>
   </div> */}
 
-            {propertydoc && (
-              <div className="middle_single">
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img src="/assets/img/superarea.png" alt="propdial" />
-                  </div>
-                  <div className="left">
-                    <h6>
-                      {propertydoc.category === "Plot"
-                        ? "Area"
-                        : propertydoc.category === "Commercial"
-                        ? "Super Area"
-                        : propertydoc.category === "Residential"
-                        ? propertydoc.superArea
+              {propertydoc && (
+                <div className="middle_single">
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img src="/assets/img/superarea.png" alt="propdial" />
+                    </div>
+                    <div className="left">
+                      <h6>
+                        {propertydoc.category === "Plot"
+                          ? "Area"
+                          : propertydoc.category === "Commercial"
                           ? "Super Area"
-                          : propertydoc.carpetArea
-                          ? "Carpet Area"
-                          : "Area"
-                        : "Area"}
-                    </h6>
-                    <h5>
-                      {propertydoc.category === "Residential"
-                        ? propertydoc.superArea
-                          ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
-                          : propertydoc.carpetArea
-                          ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
-                          : "Yet to be added"
-                        : propertydoc.category === "Commercial" ||
-                          propertydoc.category === "Plot"
-                        ? propertydoc.superArea
-                          ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
-                          : "Yet to be added"
-                        : "Yet to be added"}
-                    </h5>
+                          : propertydoc.category === "Residential"
+                          ? propertydoc.superArea
+                            ? "Super Area"
+                            : propertydoc.carpetArea
+                            ? "Carpet Area"
+                            : "Area"
+                          : "Area"}
+                      </h6>
+                      <h5>
+                        {propertydoc.category === "Residential"
+                          ? propertydoc.superArea
+                            ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
+                            : propertydoc.carpetArea
+                            ? `${propertydoc.carpetArea} ${propertydoc.superAreaUnit}`
+                            : "Yet to be added"
+                          : propertydoc.category === "Commercial" ||
+                            propertydoc.category === "Plot"
+                          ? propertydoc.superArea
+                            ? `${propertydoc.superArea} ${propertydoc.superAreaUnit}`
+                            : "Yet to be added"
+                          : "Yet to be added"}
+                      </h5>
+                    </div>
                   </div>
-                </div>
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img
-                      src={
-                        propertydoc.category === "Residential"
-                          ? "/assets/img/new_bedroom.png"
-                          : propertydoc.category === "Commercial"
-                          ? "/assets/img/new_carpet.png"
-                          : propertydoc.category === "Plot"
-                          ? "/assets/img/park.png"
-                          : "/assets/img/default.png" // Fallback image for other categories
-                      }
-                      alt={propertydoc.category || "Category"}
-                    />
-                  </div>
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img
+                        src={
+                          propertydoc.category === "Residential"
+                            ? "/assets/img/new_bedroom.png"
+                            : propertydoc.category === "Commercial"
+                            ? "/assets/img/new_carpet.png"
+                            : propertydoc.category === "Plot"
+                            ? "/assets/img/park.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }
+                        alt={propertydoc.category || "Category"}
+                      />
+                    </div>
 
-                  <div className="left">
-                    {propertydoc.category === "Plot" ? (
-                      <>
-                        <h6>Park Facing</h6>
-                        <h5>
-                          {propertydoc.isParkFacingPlot || "Yet to be added"}
-                        </h5>
-                      </>
-                    ) : propertydoc.category === "Commercial" ? (
-                      <>
-                        <h6>Carpet Area</h6>
-                        <h5>
-                          {propertydoc.carpetArea
-                            ? `${propertydoc.carpetArea} ${
-                                propertydoc.superAreaUnit || ""
-                              }`
-                            : "Yet to be added"}
-                        </h5>
-                      </>
-                    ) : (
-                      <>
-                        <h6>Bedroom</h6>
-                        <h5>
-                          {propertydoc.numberOfBedrooms === "0" ||
-                          propertydoc.numberOfBedrooms === 0
-                            ? "Yet to be added"
-                            : propertydoc.numberOfBedrooms}
-                        </h5>
-                      </>
-                    )}
+                    <div className="left">
+                      {propertydoc.category === "Plot" ? (
+                        <>
+                          <h6>Park Facing</h6>
+                          <h5>
+                            {propertydoc.isParkFacingPlot || "Yet to be added"}
+                          </h5>
+                        </>
+                      ) : propertydoc.category === "Commercial" ? (
+                        <>
+                          <h6>Carpet Area</h6>
+                          <h5>
+                            {propertydoc.carpetArea
+                              ? `${propertydoc.carpetArea} ${
+                                  propertydoc.superAreaUnit || ""
+                                }`
+                              : "Yet to be added"}
+                          </h5>
+                        </>
+                      ) : (
+                        <>
+                          <h6>Bedroom</h6>
+                          <h5>
+                            {propertydoc.numberOfBedrooms === "0" ||
+                            propertydoc.numberOfBedrooms === 0
+                              ? "Yet to be added"
+                              : propertydoc.numberOfBedrooms}
+                          </h5>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="ms_child">
+                    <div className="icon_container">
+                      <img
+                        src={
+                          propertydoc.category === "Residential"
+                            ? "/assets/img/new_bathroom.png"
+                            : propertydoc.category === "Commercial"
+                            ? "/assets/img/directions.png"
+                            : propertydoc.category === "Plot"
+                            ? "/assets/img/directions.png"
+                            : "/assets/img/default.png" // Fallback image for other categories
+                        }
+                        alt={propertydoc.category || "Category"}
+                      />
+                    </div>
+                    <div className="left">
+                      {propertydoc.category === "Plot" ||
+                      propertydoc.category === "Commercial" ? (
+                        <>
+                          <h6>Direction Facing</h6>
+                          <h5>
+                            {propertydoc.mainDoorFacing || "Yet to be added"}
+                          </h5>
+                        </>
+                      ) : (
+                        <>
+                          <h6>Bathroom</h6>
+                          <h5>
+                            {propertydoc.numberOfBathrooms === "0" ||
+                            propertydoc.numberOfBathrooms === 0
+                              ? "Yet to be added"
+                              : propertydoc.numberOfBathrooms}
+                          </h5>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="ms_child">
-                  <div className="icon_container">
-                    <img
-                      src={
-                        propertydoc.category === "Residential"
-                          ? "/assets/img/new_bathroom.png"
-                          : propertydoc.category === "Commercial"
-                          ? "/assets/img/directions.png"
-                          : propertydoc.category === "Plot"
-                          ? "/assets/img/directions.png"
-                          : "/assets/img/default.png" // Fallback image for other categories
-                      }
-                      alt={propertydoc.category || "Category"}
-                    />
-                  </div>
-                  <div className="left">
-                    {propertydoc.category === "Plot" ||
-                    propertydoc.category === "Commercial" ? (
-                      <>
-                        <h6>Direction Facing</h6>
-                        <h5>
-                          {propertydoc.mainDoorFacing || "Yet to be added"}
-                        </h5>
-                      </>
-                    ) : (
-                      <>
-                        <h6>Bathroom</h6>
-                        <h5>
-                          {propertydoc.numberOfBathrooms === "0" ||
-                          propertydoc.numberOfBathrooms === 0
-                            ? "Yet to be added"
-                            : propertydoc.numberOfBathrooms}
-                        </h5>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-            {expanded
-              ? ""
-              : propertydoc && (
-                  <div className="middle_single">
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img
-                          src={
-                            propertydoc.category === "Residential"
-                              ? "/assets/img/floor.png"
-                              : propertydoc.category === "Commercial"
-                              ? "/assets/img/propertytype.png"
-                              : propertydoc.category === "Plot"
-                              ? "/assets/img/corner.png"
-                              : "/assets/img/default.png" // Fallback image for other categories
-                          }
-                          alt="propdial"
-                        />
+              )}
+              {expanded
+                ? ""
+                : propertydoc && (
+                    <div className="middle_single">
+                      <div className="ms_child">
+                        <div className="icon_container">
+                          <img
+                            src={
+                              propertydoc.category === "Residential"
+                                ? "/assets/img/floor.png"
+                                : propertydoc.category === "Commercial"
+                                ? "/assets/img/propertytype.png"
+                                : propertydoc.category === "Plot"
+                                ? "/assets/img/corner.png"
+                                : "/assets/img/default.png" // Fallback image for other categories
+                            }
+                            alt="propdial"
+                          />
+                        </div>
+                        <div className="left">
+                          {propertydoc.category === "Residential" ? (
+                            <>
+                              <h6>Floor</h6>
+                              <h5>
+                                {propertydoc.floorNo
+                                  ? propertydoc.floorNo === "Ground"
+                                    ? "Ground"
+                                    : propertydoc.floorNo === "Stilt"
+                                    ? "Stilt"
+                                    : propertydoc.floorNo === "Basement"
+                                    ? "Basement"
+                                    : `${propertydoc.floorNo}${
+                                        propertydoc.numberOfFloors
+                                          ? " of " + propertydoc.numberOfFloors
+                                          : ""
+                                      }`
+                                  : "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : propertydoc.category === "Commercial" ? (
+                            <>
+                              <h6>Property Type</h6>
+                              <h5>
+                                {propertydoc.propertyType || "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : propertydoc.category === "Plot" ? (
+                            <>
+                              <h6>Is Corner?</h6>
+                              <h5>
+                                {propertydoc.isCornerSidePlot ||
+                                  "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : (
+                            <>
+                              <h6>Property Details</h6>
+                              <h5>Yet to be added</h5>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <div className="left">
-                        {propertydoc.category === "Residential" ? (
-                          <>
-                            <h6>Floor</h6>
-                            <h5>
-                              {propertydoc.floorNo
-                                ? propertydoc.floorNo === "Ground"
-                                  ? "Ground"
-                                  : propertydoc.floorNo === "Stilt"
-                                  ? "Stilt"
-                                  : propertydoc.floorNo === "Basement"
-                                  ? "Basement"
-                                  : `${propertydoc.floorNo}${
-                                      propertydoc.numberOfFloors
-                                        ? " of " + propertydoc.numberOfFloors
-                                        : ""
-                                    }`
-                                : "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : propertydoc.category === "Commercial" ? (
-                          <>
-                            <h6>Property Type</h6>
-                            <h5>
-                              {propertydoc.propertyType || "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : propertydoc.category === "Plot" ? (
-                          <>
-                            <h6>Is Corner?</h6>
-                            <h5>
-                              {propertydoc.isCornerSidePlot ||
-                                "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : (
-                          <>
-                            <h6>Property Details</h6>
-                            <h5>Yet to be added</h5>
-                          </>
-                        )}
+                      <div className="ms_child">
+                        <div className="icon_container">
+                          <img
+                            src={
+                              propertydoc.category === "Residential"
+                                ? "/assets/img/new_bhk.png"
+                                : propertydoc.category === "Commercial"
+                                ? "/assets/img/propertysubtype.png"
+                                : propertydoc.category === "Plot"
+                                ? "/assets/img/gatedcomunity.png"
+                                : "/assets/img/default.png" // Fallback image for other categories
+                            }
+                            alt="propdial"
+                          />
+                        </div>
+                        <div className="left">
+                          {propertydoc.category === "Residential" ? (
+                            <>
+                              <h6>BHK</h6>
+                              <h5>{propertydoc.bhk || "Yet to be added"}</h5>
+                            </>
+                          ) : propertydoc.category === "Commercial" ? (
+                            <>
+                              <h6>Property Sub-Type</h6>
+                              <h5>
+                                {propertydoc.additionalRooms &&
+                                propertydoc.additionalRooms.length > 0
+                                  ? propertydoc.additionalRooms[0]
+                                  : "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : propertydoc.category === "Plot" ? (
+                            <>
+                              <h6>Gated Community</h6>
+                              <h5>
+                                {propertydoc.gatedArea || "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : (
+                            <>
+                              <h6>Property Details</h6>
+                              <h5>Yet to be added</h5>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="ms_child">
+                        <div className="icon_container">
+                          <img
+                            src={
+                              propertydoc.category === "Residential"
+                                ? "/assets/img/new_furniture.png"
+                                : propertydoc.category === "Commercial"
+                                ? "/assets/img/new_furniture.png"
+                                : propertydoc.category === "Plot"
+                                ? "/assets/img/road.png"
+                                : "/assets/img/default.png" // Fallback image for other categories
+                            }
+                            alt="propdial"
+                          />
+                        </div>
+                        <div className="left">
+                          {propertydoc.category === "Plot" ? (
+                            <>
+                              <h6>Road Width</h6>
+                              <h5>
+                                {propertydoc.roadWidth || "Yet to be added"}{" "}
+                                {propertydoc.roadWidthUnit}
+                              </h5>
+                            </>
+                          ) : propertydoc.category === "Residential" ||
+                            propertydoc.category === "Commercial" ? (
+                            <>
+                              <h6>Furnishing</h6>
+                              <h5>
+                                {propertydoc.furnishing || "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : (
+                            <>
+                              <h6>Details</h6>
+                              <h5>Yet to be added</h5>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img
-                          src={
-                            propertydoc.category === "Residential"
-                              ? "/assets/img/new_bhk.png"
-                              : propertydoc.category === "Commercial"
-                              ? "/assets/img/propertysubtype.png"
-                              : propertydoc.category === "Plot"
-                              ? "/assets/img/gatedcomunity.png"
-                              : "/assets/img/default.png" // Fallback image for other categories
-                          }
-                          alt="propdial"
-                        />
-                      </div>
-                      <div className="left">
-                        {propertydoc.category === "Residential" ? (
-                          <>
-                            <h6>BHK</h6>
-                            <h5>{propertydoc.bhk || "Yet to be added"}</h5>
-                          </>
-                        ) : propertydoc.category === "Commercial" ? (
-                          <>
-                            <h6>Property Sub-Type</h6>
-                            <h5>
-                              {propertydoc.additionalRooms &&
-                              propertydoc.additionalRooms.length > 0
-                                ? propertydoc.additionalRooms[0]
-                                : "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : propertydoc.category === "Plot" ? (
-                          <>
-                            <h6>Gated Community</h6>
-                            <h5>
-                              {propertydoc.gatedArea || "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : (
-                          <>
-                            <h6>Property Details</h6>
-                            <h5>Yet to be added</h5>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img
-                          src={
-                            propertydoc.category === "Residential"
-                              ? "/assets/img/new_furniture.png"
-                              : propertydoc.category === "Commercial"
-                              ? "/assets/img/new_furniture.png"
-                              : propertydoc.category === "Plot"
-                              ? "/assets/img/road.png"
-                              : "/assets/img/default.png" // Fallback image for other categories
-                          }
-                          alt="propdial"
-                        />
-                      </div>
-                      <div className="left">
-                        {propertydoc.category === "Plot" ? (
-                          <>
-                            <h6>Road Width</h6>
-                            <h5>
-                              {propertydoc.roadWidth || "Yet to be added"}{" "}
-                              {propertydoc.roadWidthUnit}
-                            </h5>
-                          </>
-                        ) : propertydoc.category === "Residential" ||
+                  )}
+              {expanded
+                ? ""
+                : propertydoc &&
+                  (propertydoc.category === "Commercial" ||
+                    propertydoc.category === "Residential") && (
+                    <div className="middle_single addtional_rooms">
+                      <div className="ms_child">
+                        <div className="icon_container">
+                          <img
+                            src={
+                              propertydoc.category === "Residential"
+                                ? "/assets/img/new_room.png"
+                                : propertydoc.category === "Commercial"
+                                ? "/assets/img/overlooking.png"
+                                : propertydoc.category === "Plot"
+                                ? "/assets/img/overlooking.png"
+                                : "/assets/img/default.png" // Fallback image for other categories
+                            }
+                            alt="propdial"
+                          />
+                        </div>
+                        <div className="left">
+                          {propertydoc.category === "Plot" ||
                           propertydoc.category === "Commercial" ? (
-                          <>
-                            <h6>Furnishing</h6>
-                            <h5>
-                              {propertydoc.furnishing || "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : (
-                          <>
-                            <h6>Details</h6>
-                            <h5>Yet to be added</h5>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-            {expanded
-              ? ""
-              : propertydoc &&
-                (propertydoc.category === "Commercial" ||
-                  propertydoc.category === "Residential") && (
-                  <div className="middle_single addtional_rooms">
-                    <div className="ms_child">
-                      <div className="icon_container">
-                        <img
-                          src={
-                            propertydoc.category === "Residential"
-                              ? "/assets/img/new_room.png"
-                              : propertydoc.category === "Commercial"
-                              ? "/assets/img/overlooking.png"
-                              : propertydoc.category === "Plot"
-                              ? "/assets/img/overlooking.png"
-                              : "/assets/img/default.png" // Fallback image for other categories
-                          }
-                          alt="propdial"
-                        />
-                      </div>
-                      <div className="left">
-                        {propertydoc.category === "Plot" ||
-                        propertydoc.category === "Commercial" ? (
-                          <>
-                            <h6 className="mb-1">Overlooking</h6>
-                            <h5>
-                              {propertydoc.overLooking.length > 0
-                                ? propertydoc.overLooking.map((overLooking) => (
-                                    <span>{overLooking}</span>
-                                  ))
-                                : "Yet to be added"}
-                            </h5>
-                          </>
-                        ) : (
-                          <>
-                            <h6 className="mb-1">Additional Room</h6>
-                            <h5>
-                              {propertydoc.additionalRooms.length > 0
-                                ? propertydoc.additionalRooms.map(
-                                    (additionalroom) => (
-                                      <span>{additionalroom}</span>
+                            <>
+                              <h6 className="mb-1">Overlooking</h6>
+                              <h5>
+                                {propertydoc.overLooking.length > 0
+                                  ? propertydoc.overLooking.map(
+                                      (overLooking) => (
+                                        <span>{overLooking}</span>
+                                      )
                                     )
-                                  )
-                                : "No Additional Rooms"}
-                            </h5>
-                          </>
-                        )}
+                                  : "Yet to be added"}
+                              </h5>
+                            </>
+                          ) : (
+                            <>
+                              <h6 className="mb-1">Additional Room</h6>
+                              <h5>
+                                {propertydoc.additionalRooms.length > 0
+                                  ? propertydoc.additionalRooms.map(
+                                      (additionalroom) => (
+                                        <span>{additionalroom}</span>
+                                      )
+                                    )
+                                  : "No Additional Rooms"}
+                              </h5>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
+                  )}
+            </div>
+            <div className="card_upcoming">
+              <div className="parent">
+                <div className="child">
+                  <div className="left">
+                    <h5>0</h5>
+                    <h6>Inspection</h6>
                   </div>
-                )}
-          </div>
-          <div className="card_upcoming">
-            <div className="parent">
-              <div className="child">
-                <div className="left">
-                  <h5>0</h5>
-                  <h6>Inspection</h6>
                 </div>
-              </div>
-              <div className="child">
-                <div className="left">
-                  <h5>0</h5>
-                  <h6>Bill</h6>
+                <div className="child">
+                  <div className="left">
+                    <h5>0</h5>
+                    <h6>Bill</h6>
+                  </div>
                 </div>
-              </div>
-              <div className="child">
-                <div className="left">
-                  <h5>0</h5>
-                  <h6>Ticket</h6>
+                <div className="child">
+                  <div className="left">
+                    <h5>0</h5>
+                    <h6>Ticket</h6>
+                  </div>
                 </div>
-              </div>
-              <div className="child">
-                <div className="left">
-                  <h5>0</h5>
-                  <h6>Enquirys</h6>
+                <div className="child">
+                  <div className="left">
+                    <h5>0</h5>
+                    <h6>Enquirys</h6>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
+            {/* {user && (user.role === "admin" || user.role === "superAdmin") && (
 <div className="card_upcoming">
             <div className="parent">
               <div className="child coming_soon">
@@ -869,160 +872,197 @@ const PropertyCard = ({ propertyid }) => {
             </div>
           </div>
           )} */}
-          <div className="property_users">
-            <div className="property_user_single">
-              <div className="user_type">Owner</div>
-              <div className="inner">
-                <div className="img">
-                  <img
-                    src={
-                      firstOwnerUser?.profile?.photoURL ||
-                      "/assets/img/dummy_user.png"
-                    }
-                    alt=""
-                  />
+            <div className="property_users">
+              <div className="property_user_single">
+                <div className="user_type">Owner</div>
+                <div className="inner">
+                  <div className="img">
+                    <img
+                      src={
+                        firstOwnerUser?.profile?.photoURL ||
+                        "/assets/img/dummy_user.png"
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <div className="right">
+                    {firstOwnerUser ? (
+                      <>
+                        <h5>{firstOwnerUser?.profile?.fullName} </h5>
+                        {firstOwnerUser?.profile?.phoneNumber && (
+                          <h6>
+                            {(() => {
+                              try {
+                                const phoneNumber = parsePhoneNumberFromString(
+                                  firstOwnerUser?.profile?.phoneNumber,
+                                  firstOwnerUser?.profile?.countryCode?.toUpperCase()
+                                );
+                                return phoneNumber
+                                  ? phoneNumber.formatInternational()
+                                  : firstOwnerUser?.profile?.phoneNumber;
+                              } catch (error) {
+                                return firstOwnerUser?.profile?.phoneNumber;
+                              }
+                            })()}
+                          </h6>
+                        )}
+                      </>
+                    ) : (
+                      <h6
+                        style={{
+                          color: "var(--theme-red)",
+                        }}
+                      >
+                        No Owner Assigned
+                      </h6>
+                    )}
+                  </div>
                 </div>
-                <div className="right">
-                  {firstOwnerUser ? (
-                    <>
-                      <h5>{firstOwnerUser?.profile?.fullName} </h5>
-                      <h6>{firstOwnerUser?.profile?.phoneNumber}</h6>
-                    </>
-                  ) : (
-                    <h6
-                      style={{
-                        color: "var(--theme-red)",
-                      }}
-                    >
-                      No Owner Assigned
-                    </h6>
-                  )}
+                {/* Owner Actions */}
+                <div className="actions">
+                  <a
+                    href={
+                      firstOwnerUser?.profile?.phoneNumber
+                        ? `tel:+${firstOwnerUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    className="a_single call"
+                    style={{
+                      opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
+                      pointerEvents: firstOwnerUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/simple_call.png" alt="call" />
+                    <h6>Call</h6>
+                  </a>
+
+                  <a
+                    href={
+                      firstOwnerUser?.profile?.phoneNumber
+                        ? `https://wa.me/+${firstOwnerUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="a_single whatsapp"
+                    style={{
+                      opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
+                      pointerEvents: firstOwnerUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
+                    <h6>Whatsapp</h6>
+                  </a>
                 </div>
               </div>
-              {/* Owner Actions */}
-              <div className="actions">
-                <a
-                  href={
-                    firstOwnerUser?.profile?.phoneNumber
-                      ? `tel:+${firstOwnerUser.profile.phoneNumber}`
-                      : undefined
-                  }
-                  className="a_single call"
-                  style={{
-                    opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
-                    pointerEvents: firstOwnerUser?.profile?.phoneNumber
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <img src="/assets/img/simple_call.png" alt="call" />
-                  <h6>Call</h6>
-                </a>
+              <div className="property_user_single">
+                <div className="user_type">Executive</div>
+                <div className="inner">
+                  <div className="img">
+                    <img
+                      src={
+                        firstExecutiveUser?.profile?.photoURL ||
+                        "/assets/img/dummy_user.png"
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <div className="right">
+                    {firstExecutiveUser ? (
+                      <>
+                        <h5>{firstExecutiveUser?.profile?.fullName} </h5>
+                       
+                          {firstExecutiveUser?.profile?.phoneNumber && (
+                          <h6>
+                            {(() => {
+                              try {
+                                const phoneNumber = parsePhoneNumberFromString(
+                                  firstExecutiveUser?.profile?.phoneNumber,
+                                  firstExecutiveUser?.profile?.countryCode?.toUpperCase()
+                                );
+                                return phoneNumber
+                                  ? phoneNumber.formatInternational()
+                                  : firstExecutiveUser?.profile?.phoneNumber;
+                              } catch (error) {
+                                return firstExecutiveUser?.profile?.phoneNumber;
+                              }
+                            })()}
+                          </h6>
+                        )}
+                      </>
+                    ) : (
+                      <h6
+                        style={{
+                          color: "var(--theme-red)",
+                        }}
+                      >
+                        No Executive Assigned
+                      </h6>
+                    )}
+                  </div>
+                </div>
+                {/* Executive Actions */}
+                <div className="actions">
+                  <a
+                    href={
+                      firstExecutiveUser?.profile?.phoneNumber
+                        ? `tel:+${firstExecutiveUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    className="a_single call"
+                    style={{
+                      opacity: firstExecutiveUser?.profile?.phoneNumber
+                        ? 1
+                        : 0.4,
+                      pointerEvents: firstExecutiveUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/simple_call.png" alt="call" />
+                    <h6>Call</h6>
+                  </a>
 
-                <a
-                  href={
-                    firstOwnerUser?.profile?.phoneNumber
-                      ? `https://wa.me/+${firstOwnerUser.profile.phoneNumber}`
-                      : undefined
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="a_single whatsapp"
-                  style={{
-                    opacity: firstOwnerUser?.profile?.phoneNumber ? 1 : 0.4,
-                    pointerEvents: firstOwnerUser?.profile?.phoneNumber
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
-                  <h6>Whatsapp</h6>
-                </a>
+                  <a
+                    href={
+                      firstExecutiveUser?.profile?.phoneNumber
+                        ? `https://wa.me/+${firstExecutiveUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="a_single whatsapp"
+                    style={{
+                      opacity: firstExecutiveUser?.profile?.phoneNumber
+                        ? 1
+                        : 0.4,
+                      pointerEvents: firstExecutiveUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
+                    <h6>Whatsapp</h6>
+                  </a>
+                </div>
               </div>
             </div>
-            <div className="property_user_single">
-              <div className="user_type">Executive</div>
-              <div className="inner">
-                <div className="img">
-                  <img
-                    src={
-                      firstExecutiveUser?.profile?.photoURL ||
-                      "/assets/img/dummy_user.png"
-                    }
-                    alt=""
-                  />
-                </div>
-                <div className="right">
-                  {firstExecutiveUser ? (
-                    <>
-                      <h5>{firstExecutiveUser?.profile?.fullName} </h5>
-                      <h6>{firstExecutiveUser?.profile?.phoneNumber}</h6>
-                    </>
-                  ) : (
-                    <h6
-                      style={{
-                        color: "var(--theme-red)",
-                      }}
-                    >
-                      No Executive Assigned
-                    </h6>
-                  )}
-                </div>
-              </div>
-              {/* Executive Actions */}
-              <div className="actions">
-                <a
-                  href={
-                    firstExecutiveUser?.profile?.phoneNumber
-                      ? `tel:+${firstExecutiveUser.profile.phoneNumber}`
-                      : undefined
-                  }
-                  className="a_single call"
-                  style={{
-                    opacity: firstExecutiveUser?.profile?.phoneNumber ? 1 : 0.4,
-                    pointerEvents: firstExecutiveUser?.profile?.phoneNumber
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <img src="/assets/img/simple_call.png" alt="call" />
-                  <h6>Call</h6>
-                </a>
-
-                <a
-                  href={
-                    firstExecutiveUser?.profile?.phoneNumber
-                      ? `https://wa.me/+${firstExecutiveUser.profile.phoneNumber}`
-                      : undefined
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="a_single whatsapp"
-                  style={{
-                    opacity: firstExecutiveUser?.profile?.phoneNumber ? 1 : 0.4,
-                    pointerEvents: firstExecutiveUser?.profile?.phoneNumber
-                      ? "auto"
-                      : "none",
-                  }}
-                >
-                  <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
-                  <h6>Whatsapp</h6>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div
-            className="bottom"
-            style={{ display: "flex", flexDirection: "column" }}
-          >
             <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
+              className="bottom"
+              style={{ display: "flex", flexDirection: "column" }}
             >
-              {/* <div className="property_owner_detail">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                {/* <div className="property_owner_detail">
                   <div className="img_container">
                     <img src="/assets/img/dummy_user.png" alt="" />
                   </div>
@@ -1061,12 +1101,12 @@ const PropertyCard = ({ propertyid }) => {
                     </h6>
                   </div>
                 </div> */}
-              {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
+                {/* {propertydoc && <Link style={{ height: '25px', position: 'relative', top: '20px' }} to={`/propertydetails/${propertydoc.id}`} key={propertydoc.id} className="view_detail click_text">
                 view more
               </Link>}  */}
-            </div>
+              </div>
 
-            {/* {user && (user.role === "admin" || user.role === "superAdmin") && propertydoc && (
+              {/* {user && (user.role === "admin" || user.role === "superAdmin") && propertydoc && (
               <div className="form_field st-2 outline">
                 <div className="radio_group">
                   <div className="radio_group_single">
@@ -1165,9 +1205,9 @@ const PropertyCard = ({ propertyid }) => {
                 </div>
               </div>
             )} */}
+            </div>
           </div>
-        </div>
-           )}
+        )}
       </div>
     </>
   );

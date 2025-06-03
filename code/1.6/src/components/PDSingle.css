@@ -459,6 +459,9 @@
 .aai_form .form_field .field_icon.icon_left span {
   color: var(--theme-grey);
 }
+.aai_form .aai_form_field.phonenumber  input{
+  padding-left: 50px;
+}
 .aai_form .form_field input,
 .aai_form .form_field textarea {
   border-radius: 8px;

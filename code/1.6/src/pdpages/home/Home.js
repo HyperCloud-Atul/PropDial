@@ -90,7 +90,7 @@ const Home = () => {
         <DuplicateCollection/>
         <UpdateMulitpleFiled/>
         <UpdateSameDoc/> */}
-        <AddField/>
+        {/* <AddField/>  */}
         <ProductCarousel/>
         {/* <PunchInOut/> */}
        

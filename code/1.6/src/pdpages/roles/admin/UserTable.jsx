@@ -5,6 +5,7 @@ import { useFirestore } from '../../../hooks/useFirestore';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import UserRoleStatusModal from './UserRoleStatusModal';
 import ReactTable from '../../../components/ReactTable';
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 const UserTable = ({ users }) => {
   const { user } = useAuthContext();
@@ -83,15 +84,40 @@ const UserTable = ({ users }) => {
           </div>
         ),
       },
+      // {
+      //   Header: 'Phone Number',
+      //   accessor: 'phoneNumber',
+      //   Cell: ({ value }) => (
+      //     <div className="phone-number mobile_min_width">
+      //       <span>{formatPhoneNumber(value)}</span>
+      //     </div>
+      //   ),
+      // },
       {
-        Header: 'Phone Number',
-        accessor: 'phoneNumber',
-        Cell: ({ value }) => (
+    Header: 'Phone Number',
+    accessor: 'phoneNumber',
+    Cell: ({ row }) => {
+      const value = row.original.phoneNumber;
+      const countryCode = row.original.countryCode?.toUpperCase();
+
+      try {
+        const phoneNumber = parsePhoneNumberFromString(value, countryCode);
+        return (
           <div className="phone-number mobile_min_width">
-            <span>{formatPhoneNumber(value)}</span>
+            <span>
+              {phoneNumber ? phoneNumber.formatInternational() : value}
+            </span>
           </div>
-        ),
-      },
+        );
+      } catch (error) {
+        return (
+          <div className="phone-number mobile_min_width">
+            <span>{value}</span>
+          </div>
+        );
+      }
+    },
+  },
       {
         Header: 'Email',
         accessor: 'email',
