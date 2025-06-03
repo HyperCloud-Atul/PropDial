@@ -19,7 +19,8 @@ import {
 import { useLocation, Link } from "react-router-dom";
 import PhoneInput from "react-phone-input-2";
 import { Form, Button, Alert } from "react-bootstrap";
-
+import { getNames } from "country-list";
+import Select from "react-select";
 export default function PGProfile() {
   // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
@@ -30,7 +31,7 @@ export default function PGProfile() {
 
   const { user } = useAuthContext();
 
-  console.log('user:', user)
+  console.log("user:", user);
   const navigate = useNavigate();
 
   if (!user) navigate("/login");
@@ -43,6 +44,9 @@ export default function PGProfile() {
 
   const [userDetails, setUserDetails] = useState({
     FullName: "",
+    Email: "",
+    City: "",
+    Country: "",
   });
 
   const [formError, setFormError] = useState(null);
@@ -67,7 +71,6 @@ export default function PGProfile() {
     var formattedNumber = userPhoneNumber
       ? userPhoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, "+$1 $2-$3")
       : "";
-    // console.log('userPhoneNumber formatted: ', formattedNumber)
     setUserPhoneNumber(formattedNumber);
 
     setUserDetails({
@@ -77,7 +80,7 @@ export default function PGProfile() {
       PhoneNumber: user && user.phoneNumber,
       Email: user && user.email,
       City: user && user.city,
-      Country: user && user.country,
+      Country: user && user.residentialCountry,
       Role: user && user.role ? user.role : "owner",
       Roles: user && user.roles ? user.roles : ["owner"],
     });
@@ -342,6 +345,33 @@ export default function PGProfile() {
     }, 1000);
   };
 
+  const [isEmailEditable, setIsEmailEditable] = useState(false);
+  const handleEmailChange = async () => {
+    setIsEmailEditable(false);
+    await updateDocument(user.phoneNumber, {
+      email: userDetails.Email,
+    });
+  };
+
+  const [isAddressEditable, setIsAddressEditable] = useState(false);
+  const [countryOptions, setCountryOptions] = useState([]);
+  useEffect(() => {
+    const countries = getNames();
+    const options = countries.map((country) => ({
+      label: country,
+      value: country,
+    }));
+    setCountryOptions(options);
+  }, []);
+
+  const handleAddressChange = async () => {
+    setIsAddressEditable(false);
+    await updateDocument(user.phoneNumber, {
+      city: userDetails.City,
+      residentialCountry: userDetails.Country,
+    });
+  };
+
   // --------------------HTML UI Codebase------------------
   return (
     <div className="profile_pg pg_bg ">
@@ -390,8 +420,34 @@ export default function PGProfile() {
                 </div>
               )}
             </div>
+            <div
+              className="position-absolute"
+              style={{ top: "20px", left: "50px" }}
+            >
+              {user.gender === "male" ? (
+                <img
+                  src="/assets/img/icons/men-icon-login.png"
+                  alt=""
+                  srcset=""
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+              ) : (
+                <img
+                  src="/assets/img/icons/women-icon-login.png"
+                  alt=""
+                  srcset=""
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+              )}
+            </div>
             <div className="vg22"></div>
-            <h4 className="user_name field_with_edit_icon">
+            <h4 className="user_name field_with_edit_icon position-relative">
               <input
                 type="text"
                 className="profile-change-name"
@@ -441,24 +497,140 @@ export default function PGProfile() {
                 // onChange={(e) => setUserPhoneNumber(e.target.value)}
                 value={userPhoneNumber}
               ></input>
-              <div className="pp_edit_icon">
+              {/* <div className="pp_edit_icon">
                 <span
                   className="material-symbols-outlined"
                   onClick={openChangeNumber}
                 >
                   edit
                 </span>
-              </div>
+              </div> */}
             </h5>
-            <div>
-              <h5>
-                {" "}
-                {userDetails.City && userDetails.City.trim() + ", "}{" "}
-                {userDetails.Country}
-              </h5>
+            <div className="field_with_edit_icon w-100">
+              {isAddressEditable ? (
+                <div className="d-flex gap-2 justify-content-between align-items-start align-items-sm-center w-100">
+                  <div className="w-100 d-flex flex-column flex-sm-row gap-2 justify-content-center align-items-center">
+                    <input
+                      type="text"
+                      value={userDetails.City}
+                      style={{
+                        fontSize: "18px",
+                        width: "100%",
+                        textAlign: "center",
+                        border: "1px solid var(--theme-green)",
+                      }}
+                      onChange={(e) => {
+                        setUserDetails({
+                          ...userDetails,
+                          City: e.target.value,
+                        });
+                      }}
+                    />
+                    <div className="w-100">
+                      <Select
+                        name="residentialCountry"
+                        options={countryOptions}
+                        value={
+                          countryOptions.find(
+                            (c) => c.value === userDetails.Country
+                          ) || null
+                        }
+                        onChange={(selectedOption) =>
+                          setUserDetails((prev) => ({
+                            ...prev,
+                            Country: selectedOption
+                              ? selectedOption.value
+                              : null,
+                          }))
+                        }
+                        placeholder="Select Country"
+                        isClearable
+                        isSearchable
+                        menuPortalTarget={document.body}
+                        styles={{
+                          menuPortal: (base) => ({
+                            ...base,
+                            zIndex: 9999,
+                          }),
+                          control: (baseStyles) => ({
+                            ...baseStyles,
+                            border: "1px solid var(--theme-green)",
+                            width: "100%",
+                            // height: "100%",
+                          }),
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="pp_edit_icon pointer">
+                    <span
+                      className="material-symbols-outlined done"
+                      onClick={handleAddressChange}
+                    >
+                      done
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h5>
+                    {userDetails.City && userDetails.City.trim() + ", "}{" "}
+                    {userDetails.Country}
+                  </h5>
+                  <div className="pp_edit_icon pointer">
+                    <span
+                      className="material-symbols-outlined"
+                      onClick={() => setIsAddressEditable(true)}
+                    >
+                      edit
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
-            <div>
-              <h5>{userDetails.Email}</h5>
+            <div className="vg12"></div>
+            <div className=" user_name field_with_edit_icon w-100">
+              {isEmailEditable ? (
+                <>
+                  <input
+                    type="text"
+                    value={userDetails.Email}
+                    style={{
+                      fontSize: "18px",
+                      width: "100%",
+                      textAlign: "center",
+                      border: "1px solid var(--theme-green)",
+                    }}
+                    onChange={(e) => {
+                      setUserDetails({
+                        ...userDetails,
+                        Email: e.target.value,
+                      });
+                    }}
+                  />
+
+                  <div className="pp_edit_icon pointer">
+                    <span
+                      className="material-symbols-outlined done"
+                      onClick={handleEmailChange}
+                    >
+                      done
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h5>{userDetails.Email}</h5>
+                  <div className="pp_edit_icon pointer">
+                    <span
+                      className="material-symbols-outlined"
+                      onClick={() => setIsEmailEditable(true)}
+                    >
+                      edit
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
             {/* <h5>
               {user.email} <br />
@@ -606,12 +778,15 @@ export default function PGProfile() {
         ) : (
           <div className="visit_dashboard">
             <span className="text_red">Your account has been deactivated</span>
-            <Link to="/contact-us" className="theme_btn btn_fill text-center no_icon">
-                    Contact Support
-                    </Link>
+            <Link
+              to="/contact-us"
+              className="theme_btn btn_fill text-center no_icon"
+            >
+              Contact Support
+            </Link>
           </div>
         )}
-      </div>  
+      </div>
 
       {user && user.roles && user.roles.length > 1 && (
         <div className="container">
@@ -624,12 +799,16 @@ export default function PGProfile() {
               <div className="form_field_container">
                 <div
                   className="radio_group"
-                  style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}
                 >
                   {user.roles.map((userrole) => (
                     <div
                       className="radio_group_single"
-                      style={{ width: "fit-content", minWidth:"35%" }}
+                      style={{ width: "fit-content", minWidth: "35%" }}
                     >
                       <div
                         className={`custom_radio_button ${
@@ -669,12 +848,14 @@ export default function PGProfile() {
       <div className="vg22"></div>
       <div className="container">
         <div className="row no-gutters">
-        <div className="col-lg-6 col-md-12 col-sm-12">
+          <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="property-status-padding-div">
               <div className="profile-card-div">
                 <div className="address-div">
                   <div className="icon">
-                    <span className="material-symbols-outlined">featured_seasonal_and_gifts</span>
+                    <span className="material-symbols-outlined">
+                      featured_seasonal_and_gifts
+                    </span>
                   </div>
                   <Link to="/referral" className="address-text">
                     <h5>Refer and win</h5>
@@ -684,16 +865,14 @@ export default function PGProfile() {
                       </span>
                     </div>
                   </Link>
-                </div>           
-              
+                </div>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="property-status-padding-div">
-              <div className="profile-card-div">             
-
-              <div className="address-div" style={{ cursor: "pointer" }}>
+              <div className="profile-card-div">
+                <div className="address-div" style={{ cursor: "pointer" }}>
                   <div className="icon">
                     <span className="material-symbols-outlined">sports</span>
                   </div>
@@ -710,7 +889,7 @@ export default function PGProfile() {
               </div>
             </div>
           </div>
-<div className="vg22"></div>
+          <div className="vg22"></div>
 
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="property-status-padding-div">
