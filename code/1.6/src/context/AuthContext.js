@@ -27,8 +27,9 @@ export const AuthContextProvider = ({ children }) => {
       // update online status
 
       if (user) {
-        const phone = user.phoneNumber.slice(1)
-        const documentRef = projectFirestore.collection("users-propdial")
+        const phone = user.phoneNumber.slice(1);
+        const documentRef = projectFirestore
+          .collection("users-propdial")
           .doc(phone);
         const unsubscribe = documentRef.onSnapshot((snapshot) => {
           // need to make sure the doc exists & has data
@@ -47,12 +48,14 @@ export const AuthContextProvider = ({ children }) => {
             let gender = snapshot.data().gender;
             let country = snapshot.data().country;
             let countryCode = snapshot.data().countryCode;
+            let residentialCountry = snapshot.data().residentialCountry;
             let city = snapshot.data().city;
             let address = snapshot.data().address;
             let photoURL = snapshot.data().photoURL;
             let status = snapshot.data().status;
             let createdAt = snapshot.data().createdAt;
             let lastLoginTimestamp = snapshot.data().lastLoginTimestamp;
+
             //Employee Details
             let dateofJoinee = snapshot.data().dateofJoinee;
             let dateofLeaving = snapshot.data().dateofLeaving;
@@ -68,7 +71,6 @@ export const AuthContextProvider = ({ children }) => {
             let isEmployee = snapshot.data().isEmployee;
             let isAttendanceRequired = snapshot.data().isAttendanceRequired;
 
-
             let userData = {
               ...user,
               role,
@@ -83,6 +85,7 @@ export const AuthContextProvider = ({ children }) => {
               email,
               country,
               countryCode,
+              residentialCountry,
               referredBy,
               referralCode,
               city,
@@ -104,7 +107,7 @@ export const AuthContextProvider = ({ children }) => {
               vehicleStatus,
               vehicleDetails,
               isEmployee,
-              isAttendanceRequired
+              isAttendanceRequired,
             };
 
             dispatch({ type: "AUTH_IS_READY", payload: userData });
