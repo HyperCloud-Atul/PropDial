@@ -873,7 +873,9 @@ const PropertyCard = ({ propertyid }) => {
           </div>
           )} */}
             <div className="property_users">
-              <div className="property_user_single">
+              {/* owner  */}
+              {!isPropertyOwner && (
+  <div className="property_user_single">
                 <div className="user_type">Owner</div>
                 <div className="inner">
                   <div className="img">
@@ -959,7 +961,10 @@ const PropertyCard = ({ propertyid }) => {
                   </a>
                 </div>
               </div>
-              <div className="property_user_single">
+              )}
+                {/* Executive  */}
+            {!isPropertyManager && (
+ <div className="property_user_single">
                 <div className="user_type">Executive</div>
                 <div className="inner">
                   <div className="img">
@@ -975,8 +980,8 @@ const PropertyCard = ({ propertyid }) => {
                     {firstExecutiveUser ? (
                       <>
                         <h5>{firstExecutiveUser?.profile?.fullName} </h5>
-                       
-                          {firstExecutiveUser?.profile?.phoneNumber && (
+
+                        {firstExecutiveUser?.profile?.phoneNumber && (
                           <h6>
                             {(() => {
                               try {
@@ -1050,6 +1055,104 @@ const PropertyCard = ({ propertyid }) => {
                   </a>
                 </div>
               </div>
+            )}
+            
+             
+              {/* tenant  */}
+              {!isPropertyTenant && (
+    <div className="property_user_single">
+                <div className="user_type">Tenant</div>
+                <div className="inner">
+                  <div className="img">
+                    <img
+                      src={
+                        firstTenantUser?.profile?.photoURL ||
+                        "/assets/img/dummy_user.png"
+                      }
+                      alt=""
+                    />
+                  </div>
+                  <div className="right">
+                    {firstTenantUser ? (
+                      <>
+                        <h5>{firstTenantUser?.profile?.fullName} </h5>
+
+                        {firstTenantUser?.profile?.phoneNumber && (
+                          <h6>
+                            {(() => {
+                              try {
+                                const phoneNumber = parsePhoneNumberFromString(
+                                  firstTenantUser?.profile?.phoneNumber,
+                                  firstTenantUser?.profile?.countryCode?.toUpperCase()
+                                );
+                                return phoneNumber
+                                  ? phoneNumber.formatInternational()
+                                  : firstTenantUser?.profile?.phoneNumber;
+                              } catch (error) {
+                                return firstTenantUser?.profile?.phoneNumber;
+                              }
+                            })()}
+                          </h6>
+                        )}
+                      </>
+                    ) : (
+                      <h6
+                        style={{
+                          color: "var(--theme-red)",
+                        }}
+                      >
+                        No Tenant Assigned
+                      </h6>
+                    )}
+                  </div>
+                </div>
+                {/* Executive Actions */}
+                <div className="actions">
+                  <a
+                    href={
+                      firstTenantUser?.profile?.phoneNumber
+                        ? `tel:+${firstTenantUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    className="a_single call"
+                    style={{
+                      opacity: firstTenantUser?.profile?.phoneNumber
+                        ? 1
+                        : 0.4,
+                      pointerEvents: firstTenantUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/simple_call.png" alt="call" />
+                    <h6>Call</h6>
+                  </a>
+
+                  <a
+                    href={
+                      firstTenantUser?.profile?.phoneNumber
+                        ? `https://wa.me/+${firstTenantUser.profile.phoneNumber}`
+                        : undefined
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="a_single whatsapp"
+                    style={{
+                      opacity: firstTenantUser?.profile?.phoneNumber
+                        ? 1
+                        : 0.4,
+                      pointerEvents: firstTenantUser?.profile?.phoneNumber
+                        ? "auto"
+                        : "none",
+                    }}
+                  >
+                    <img src="/assets/img/whatsapp_simple.png" alt="whatsapp" />
+                    <h6>Whatsapp</h6>
+                  </a>
+                </div>
+              </div>
+              )}
+           
             </div>
             <div
               className="bottom"

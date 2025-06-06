@@ -363,3 +363,118 @@ const usePropertyUsersData = (propertyId) => {
 export default usePropertyUsersData;
 
 
+
+
+// also check by role 
+
+// import { useEffect, useState } from "react";
+// import { projectFirestore } from "../firebase/config";
+
+// const usePropertyUsersData = (propertyId) => {
+//   const [ownerUsers, setOwnerUsers] = useState([]);
+//   const [executiveUsers, setExecutiveUsers] = useState([]);
+//   const [managerUsers, setManagerUsers] = useState([]);
+//   const [substituteUsers, setSubstituteUsers] = useState([]);
+//   const [tenantUsers, setTenantUsers] = useState([]);
+
+//   const [firstOwnerUser, setFirstOwnerUser] = useState(null);
+//   const [firstExecutiveUser, setFirstExecutiveUser] = useState(null);
+//   const [firstManagerUser, setFirstManagerUser] = useState(null);
+//   const [firstSubstituteUser, setFirstSubstituteUser] = useState(null);
+//   const [firstTenantUser, setFirstTenantUser] = useState(null);
+
+//   const TAG_MAP = {
+//     owner: "Owner",
+//     executive: "Executive",
+//     manager: "Manager",
+//     substitute: "Substitute",
+//     tenant: "Tenant",
+//   };
+
+//   const fetchUserProfile = async (userId) => {
+//     if (!userId) return null;
+//     const snap = await projectFirestore
+//       .collection("users-propdial")
+//       .doc(userId)
+//       .get();
+//     return snap.exists ? snap.data() : null;
+//   };
+
+//   useEffect(() => {
+//     if (!propertyId) return;
+
+//     const unsub = projectFirestore
+//       .collection("propertyusers")
+//       .where("propertyId", "==", propertyId)
+//       .onSnapshot(async (snap) => {
+//         const grouped = {
+//           Owner: [],
+//           Executive: [],
+//           Manager: [],
+//           Substitute: [],
+//           Tenant: [],
+//         };
+
+//         // Bucketize by userTag
+//         snap.docs.forEach((doc) => {
+//           const data = { id: doc.id, ...doc.data() };
+//           const raw = (data.userTag || "").toString().toLowerCase();
+//           const key = TAG_MAP[raw];
+//           if (key) grouped[key].push(data);
+//         });
+
+//         // Helper to enrich and filter by role
+//         const enrichAndFilter = async (arr, expectedRole) => {
+//           const result = [];
+
+//           for (const d of arr) {
+//             const profile = await fetchUserProfile(d.userId);
+//             if (profile && profile.role === expectedRole) {
+//               result.push({ ...d, profile });
+//             }
+//           }
+
+//           return result;
+//         };
+
+//         // Run all in parallel
+//         const [owners, execs, mgrs, subs, tenants] = await Promise.all([
+//           enrichAndFilter(grouped.Owner, "owner"),
+//           enrichAndFilter(grouped.Executive, "executive"),
+//           enrichAndFilter(grouped.Manager, "manager"),
+//           enrichAndFilter(grouped.Substitute, "substitute"),
+//           enrichAndFilter(grouped.Tenant, "tenant"),
+//         ]);
+
+//         // Set all
+//         setOwnerUsers(owners);
+//         setExecutiveUsers(execs);
+//         setManagerUsers(mgrs);
+//         setSubstituteUsers(subs);
+//         setTenantUsers(tenants);
+
+//         setFirstOwnerUser(owners[0] || null);
+//         setFirstExecutiveUser(execs[0] || null);
+//         setFirstManagerUser(mgrs[0] || null);
+//         setFirstSubstituteUser(subs[0] || null);
+//         setFirstTenantUser(tenants[0] || null);
+//       });
+
+//     return () => unsub();
+//   }, [propertyId]);
+
+//   return {
+//     ownerUsers,
+//     firstOwnerUser,
+//     executiveUsers,
+//     firstExecutiveUser,
+//     managerUsers,
+//     firstManagerUser,
+//     substituteUsers,
+//     firstSubstituteUser,
+//     tenantUsers,
+//     firstTenantUser,
+//   };
+// };
+
+// export default usePropertyUsersData;

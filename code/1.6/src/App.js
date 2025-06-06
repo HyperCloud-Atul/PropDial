@@ -867,7 +867,7 @@ function App() {
                       path="/newproperty"
                       element={
                         user &&
-                          (user.role === "admin" ||
+                          (user.role === "admin" || user.role === "executive" ||
                             user.role === "superAdmin") ? (
                           <PGCreateProperty />
                         ) : (

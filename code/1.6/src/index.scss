@@ -1765,6 +1765,9 @@ div#react-select-3-placeholder {
   margin-top: 12px;
    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    @media only screen and (max-width: 575px) {
+       grid-template-columns: repeat(1, 1fr);
+    }
     grid-column-gap: 12px;
     grid-row-gap: 12px;
     .user_type {

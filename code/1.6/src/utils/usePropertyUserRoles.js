@@ -14,7 +14,7 @@ export const usePropertyUserRoles = (propertyId, user) => {
   useEffect(() => {
     let unsubscribe;
 
-    if (propertyId && user?.phoneNumber) {
+    if (propertyId && user?.phoneNumber && user.role === "owner") {
       const query = projectFirestore
         .collection("propertyusers")
         .where("propertyId", "==", propertyId)
@@ -46,7 +46,7 @@ export const usePropertyUserRoles = (propertyId, user) => {
   useEffect(() => {
     let unsubscribe;
 
-    if (propertyId && user?.phoneNumber) {
+    if (propertyId && user?.phoneNumber && (user.role === "manager" || user.role === "executive")) {
       const query = projectFirestore
         .collection("propertyusers")
         .where("propertyId", "==", propertyId)
@@ -78,7 +78,7 @@ export const usePropertyUserRoles = (propertyId, user) => {
     useEffect(() => {
     let unsubscribe;
 
-    if (propertyId && user?.phoneNumber) {
+    if (propertyId && user?.phoneNumber && user.role === "tenant") {
       const query = projectFirestore
         .collection("propertyusers")
         .where("propertyId", "==", propertyId)
