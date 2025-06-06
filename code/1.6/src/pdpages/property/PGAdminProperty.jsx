@@ -7,18 +7,13 @@ import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
 import Switch from "react-switch";
 import { ClipLoader } from "react-spinners";
-import Filters from "../../components/Filters"; // Using your existing Filters component
+import Filters from "../../components/Filters";
 import InactiveUserCard from "../../components/InactiveUserCard";
 const propertyFilter = ["Residential", "Commercial", "Plot"];
-// const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
 const statusFilter = [ "Active","In-Review", "Inactive"];
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { filterOption } = useParams();
-  // console.log("filterOption :", filterOption)
-
-  // const { documents: allproperties, error: propertieserror } =
-  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
   const { documents: allproperties, error: propertieserror } = useCollection(
     "properties-propdial",
     "",
@@ -29,21 +24,16 @@ const PGAdminProperty = () => {
     documents: assignedPopertyUserList,
     error: errassignedPopertyUserList,
   } = useCollection("propertyusers");
-
   const { documents: userList, error: erruserList } =
     useCollection("users-propdial");
-
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
 
-  // Existing property filter state
   const [filter, setFilter] = useState(propertyFilter[0]);
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
-  };
-
-  // // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("active"); // Default to 'active'
+  }; 
+  const [status, setStatus] = useState("active"); 
   const changeStatusFilter = (newStatus) => {
     setStatus(newStatus);
   };
@@ -54,95 +44,9 @@ const PGAdminProperty = () => {
     setSearchInput(e.target.value);
   };
 
-  const ITEMS_PER_PAGE = 10;
-  // const [pdProperties, setAllproperties] = useState([]);
-  // const [allproperties, setAllproperties] = useState([]);
+  const ITEMS_PER_PAGE = 10; 
   const [lastVisiblePDDoc, setLastVisiblePDDoc] = useState(null);
   const [hasMorePDDoc, setHasMorePDDoc] = useState(true);
-  
-// Initial Load
-// useEffect(() => {
-//   async function fetchData() {
-//       // You can await here
-//       await fetchProperties(null, status);      
-//   }
-//   fetchData();
-// }, [status]);
-
-//Call merged function in case of any change of pa or pd properties
-// useEffect(() => {
-//   async function fetchData() {
-//       // You can await here
-//       await mergedPAPDProperties();
-//       // ...
-//   }
-//   fetchData();
-
-// }, [paProperties, pdProperties]);
-
-  // // Loading state
-//   const fetchProperties = async (
-//     _lastVisibleDoc = null,
-//     _status = "Active",
-    
-// ) => {
-
-//     try {
-//         // console.log("Purpose: ", _purpose)
-
-//         // setLoading(true);
-
-//         let query = projectFirestore
-//             .collection("properties-propdial")
-//             // .where("propertyManagerID", " !=", user?.uid)
-//             // .where("purpose", "==", _purpose)
-//             .where("status", "==", _status)
-//             // .where("createdBy", "!=", user?.uid)
-//             // .orderBy("createdBy", "asc")
-//             .orderBy("createdAt", "desc")
-//             .limit(ITEMS_PER_PAGE);
-
-//         if (_lastVisibleDoc) {
-//             query = query.startAfter(_lastVisibleDoc);
-//             // console.log('query start after: ', query)
-//         }
-
-//         const snapshot = await query.get();
-//         const PDProperties = snapshot.docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//         }));
-
-
-//         if (_lastVisibleDoc) {
-//             setAllproperties((prevItems) => [...prevItems, ...PDProperties]);
-//         } else {
-//             setAllproperties(PDProperties);
-//         }
-//         setLastVisiblePDDoc(snapshot.docs[snapshot.docs.length - 1]);
-//         setHasMorePDDoc(snapshot.docs.length === ITEMS_PER_PAGE);
-
-//         // console.log("PAProperties: ", PAProperties);
-
-//     }
-//     catch (error) {
-//         console.log("Error in function fetchPropertiesOfPropDial: ", error)
-//     }
-
-// };
-
-
-// const handleLoadMore = () => {
-//   // if (loading) return;
-
-//   // console.log("hasMorePADoc: ", hasMorePADoc)
-//   // console.log("hasMorePDDoc: ", hasMorePDDoc)
-
-//   // setLoading(true);
-
-//   if (hasMorePDDoc) fetchProperties(lastVisiblePDDoc, status);
-
-// };
 
   useEffect(() => {
     let _properties = null;
@@ -411,32 +315,7 @@ const PGAdminProperty = () => {
                       />
                     )}
                   </div>
-                  {/* <div className="mobile_size residentail_commercial rent_sale">
-      <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
-        <div className="switch">
-          <span
-            className={`rent ${rentSaleFilter === "Sale" ? "off" : "on"
-              }`}
-          >
-            Rent
-          </span>
-          <Switch
-            onChange={handleRentSaleChange}
-            checked={rentSaleFilter === "Sale"}
-            handleDiameter={20} // Set the handle diameter (optional)
-            uncheckedIcon={false} // Hide the wrong/right icon
-            checkedIcon={false} // Hide the wrong/right icon
-            className="pointer"
-          />
-          <span
-            className={`sale ${rentSaleFilter === "Sale" ? "on" : "off"
-              }`}
-          >
-            Sale
-          </span>
-        </div>
-      </label>
-    </div> */}
+             
                   <div className="button_filter diff_views">
                     <div
                       className={`bf_single ${

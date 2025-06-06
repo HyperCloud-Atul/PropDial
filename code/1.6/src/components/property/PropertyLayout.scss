@@ -260,3 +260,13 @@
     }
   }
 }
+.add_new.modal {
+    padding-left: 0px !important;
+    margin-top: 15px;
+    &.new{
+  .modal-content{
+      background: #f0f0f0;
+    }
+    }
+  
+}

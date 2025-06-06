@@ -223,8 +223,8 @@ const AddUser = () => {
       alert("✅ User added successfully!");
 
       resetForm();
-      
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error(err);
       setError("❌ Failed to add user.");
@@ -587,7 +587,7 @@ const AddUser = () => {
                     </div>
                   </div>
                 )}
-  {countrySameAsPhone && (
+                {countrySameAsPhone && (
                   <div className="col-lg-6">
                     <div className="form_field w-100 aai_form_field">
                       <h6 className="aaiff_title d-flex align-items-center justify-content-between">
@@ -614,21 +614,20 @@ const AddUser = () => {
                         </div>
                       </h6>
                       <div className="field_box w-100">
-                    <input
-                      type="text"
-                      className="w-100"
-                      id="residentialCountry"
-                      placeholder="Residential country"
-                      value={residentialCountry}
-                     readOnly
-                    />
+                        <input
+                          type="text"
+                          className="w-100"
+                          id="residentialCountry"
+                          placeholder="Residential country"
+                          value={residentialCountry}
+                          readOnly
+                        />
                         {fieldErrors.residentialCountry && (
                           <div className="field_error">
                             {fieldErrors.residentialCountry}
                           </div>
                         )}
                       </div>
-               
                     </div>
                   </div>
                 )}

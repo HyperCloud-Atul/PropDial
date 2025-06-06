@@ -28,6 +28,7 @@ import "swiper/swiper.min.css";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import MakeInactivePopup from "./MakeInactivePopup";
 import "./UserList.css";
+import AddPropertyUser from "./AddPropertyUser";
 import InactiveUserCard from "../InactiveUserCard";
 
 // component
@@ -1575,6 +1576,137 @@ const PropertyDetails = () => {
       console.error("Error creating new property layout:", error);
     } finally {
       setIsRedirecting(false);
+    }
+  };
+
+  // code for add tenant by search start
+  const [allUsers, setAllUsers] = useState([]);
+  const [tenantFilteredUsers, setTenantFilteredUsers] = useState([]);
+  const [tenantSearchQuery, setTenantSearchQuery] = useState("");
+  const [tenantSelectedUser, setTenantSelectedUser] = useState(null);
+  const [tenantLoading, setTenantLoading] = useState(false);
+  const [tenantMode, setTenantMode] = useState("existing"); // or "new"
+
+  // 🔄 Fetch all tenants from 'users-propdial' where role is tenant
+  useEffect(() => {
+    const fetchTenantUsers = async () => {
+      setTenantLoading(true);
+      try {
+        const snapshot = await projectFirestore
+          .collection("users-propdial")
+          .where("rolePropDial", "==", "tenant")
+          .get();
+
+        const users = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAllUsers(users);
+        setTenantFilteredUsers(users);
+      } catch (err) {
+        console.error("Error fetching tenants:", err);
+      } finally {
+        setTenantLoading(false);
+      }
+    };
+
+    fetchTenantUsers();
+  }, []);
+
+  // 🔎 Search Handler
+  const handleTenantSearchChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    setTenantSearchQuery(value);
+
+    const filtered = allUsers.filter((user) => {
+      const name = user.fullName?.toLowerCase() || "";
+      const emailId = user.email?.toLowerCase() || "";
+      const mobile = user.id?.toLowerCase() || ""; // doc ID == phoneNumber
+      return (
+        name.includes(value) ||
+        emailId.includes(value) ||
+        mobile.includes(value)
+      );
+    });
+
+    setTenantFilteredUsers(filtered);
+  };
+
+  // ✅ Select user from list
+  const handleTenantSelectUser = (user) => {
+    setTenantSelectedUser(user);
+  };
+
+  // ➕ Add to 'tenants' collection
+  // const handleAddTenantToCollection = async () => {
+  //   if (!tenantSelectedUser) return alert("Please select a user");
+
+  //   try {
+  //     await projectFirestore.collection("tenants").add({
+  //       address: "",
+  //       name: tenantSelectedUser.fullName || "",
+  //       emailId: tenantSelectedUser.email || "",
+  //       mobile: tenantSelectedUser.id, // Document ID is phone number
+  //       status: "active",
+  //       propertyId: propertyid, // make sure propertyid is defined in this component
+  //       createdAt: timestamp.now(),
+  //       createdBy: user?.phoneNumber,
+  //       offBoardingDate: "",
+  //       onBoardingDate: "",
+  //       rentEndDate: "",
+  //       rentStartDate: "",
+  //       tenantImgUrl: "",
+  //       whatsappNumber: "",
+  //       idNumber: "",
+  //     });
+
+  //     alert("Tenant added successfully!");
+  //     setTenantSelectedUser(null);
+  //   } catch (error) {
+  //     console.error("Error adding tenant:", error);
+  //     alert("Failed to add tenant");
+  //   }
+  // };
+  const handleAddTenantToCollection = async () => {
+    if (!tenantSelectedUser) return alert("Please select a user");
+
+    try {
+      // Add to 'tenants' collection and get the doc reference
+      const tenantDocRef = await projectFirestore.collection("tenants").add({
+        address: "",
+        name: tenantSelectedUser.fullName || "",
+        emailId: tenantSelectedUser.email || "",
+        mobile: tenantSelectedUser.id, // Document ID is phone number
+        status: "active",
+        propertyId: propertyid,
+        createdAt: timestamp.now(),
+        createdBy: user?.phoneNumber,
+        offBoardingDate: "",
+        onBoardingDate: "",
+        rentEndDate: "",
+        rentStartDate: "",
+        tenantImgUrl: "",
+        whatsappNumber: "",
+        idNumber: "",
+      });
+
+      // Add to 'propertyusers' collection with tenantDocId
+      await projectFirestore.collection("propertyusers").add({
+        propertyId: propertyid,
+        userId: tenantSelectedUser.id,
+        tenantDocId: tenantDocRef.id, // capturing tenant document ID here
+        createdAt: timestamp.now(),
+        createdBy: user?.phoneNumber,
+        userTag: "Tenant",
+        userType: "propertytenant",
+        isCurrentProperty: true,
+      });
+
+      alert("Tenant added successfully!");
+      setTenantSelectedUser(null);
+    } catch (error) {
+      console.error("Error adding tenant or propertyuser:", error);
+      alert("Failed to add tenant");
     }
   };
 
@@ -4122,12 +4254,12 @@ const PropertyDetails = () => {
                                       user.role === "superAdmin" ||
                                       isPropertyManager) && (
                                       <div
-                                        className="col-sm-1 col-2"
+                                        className="col-sm-1 col-2 "
                                         style={{
                                           paddingRight: "0px",
                                         }}
                                       >
-                                        <div className="plus_icon">
+                                        <div className="plus_icon pointer">
                                           <div
                                             className="plus_icon_inner"
                                             onClick={() =>
@@ -4230,7 +4362,7 @@ const PropertyDetails = () => {
                                                   <div className="wha_call_icon">
                                                     <Link
                                                       className="call_icon wc_single"
-                                                      to={`tel:+${tenant.mobile}`}
+                                                      to={`tel:+${tenantSelectedUser?.id}`}
                                                       target="_blank"
                                                     >
                                                       <img
@@ -4258,151 +4390,142 @@ const PropertyDetails = () => {
                                   </div>
                                 </div>
                               </div>
+
                               <Modal
                                 show={showAddTenantModal}
-                                onHide={() => {
-                                  setTenantName("");
-                                  setTenantMobile("");
-                                  setTenantEmail("");
-                                  setTenantCountryCode("");
-                                  setTenantCountry("");
-                                  setErrorTenantForm({
-                                    name: "",
-                                    mobile: "",
-                                    email: "",
-                                  });
-                                  setShowAddTenantModal(false);
-                                }}
                                 centered
                                 size="lg"
-                              >
-                                <Modal.Header closeButton>
-                                  <h5>Fill Tenant Details</h5>
-                                </Modal.Header>
-                                <Modal.Body style={{ marginTop: "1rem" }}>
-                                  <div className="form_field">
-                                    <div className="row row_gap">
-                                      <div className="col-xl-6 col-lg-6">
-                                        <div className="form_field label_top">
-                                          <label htmlFor="">
-                                            Phone number*
-                                          </label>
-                                          <div className="form_field_inner">
-                                            <PhoneInput
-                                              country={"in"} // Default country is India
-                                              onlyCountries={["in"]} // Restrict to only India
-                                              // disableCountryCode={true} // Disable editing of the country code
-                                              // disableDropdown={true} // Disable the dropdown menu
-                                              // countryCodeEditable={false}
-                                              value={tenantMobile}
-                                              onBlur={() =>
-                                                checkIfPhoneExists(tenantMobile)
-                                              }
-                                              onChange={handleMobileChange}
-                                              // international
-                                              keyboardType="phone-pad"
-                                              placeholder="mobile number"
-                                              inputProps={{
-                                                name: "phone",
-                                                required: true,
-                                                autoFocus: false,
-                                              }}
-                                              inputStyle={{
-                                                width: "100%",
-                                                paddingLeft: "45px",
-                                                fontSize: "16px",
-                                                height: "45px",
-                                              }}
-                                              buttonStyle={{
-                                                borderRadius: "4px",
-                                                textAlign: "left",
-                                                border: "none",
-                                                backgroundColor: "transparent",
-                                              }}
-                                            />
-                                            {errorTenantForm.mobile && (
-                                              <div className="field_error">
-                                                {errorTenantForm.mobile}
-                                              </div>
-                                            )}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="col-xl-6 col-lg-6">
-                                        <div className="form_field label_top">
-                                          <label htmlFor="">Name*</label>
-                                          <div className="form_field_inner">
-                                            <input
-                                              type="text" // Use type="text" to control length
-                                              placeholder="Enter a Tenant Name here"
-                                              onChange={handleNameChange}
-                                              value={tenantName}
-                                              disabled={isTenantDataFetching}
-                                            />
-                                          </div>
-                                          {errorTenantForm.name && (
-                                            <div className="field_error">
-                                              {errorTenantForm.name}
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-
-                                      <div className="col-xl col-lg-6">
-                                        <div className="form_field label_top">
-                                          <label htmlFor="">Email*</label>
-                                          <div className="form_field_inner">
-                                            <input
-                                              type="text" // Use type="text" to control length
-                                              placeholder="Enter a Tenant Email here"
-                                              onChange={handleEmailChange}
-                                              value={tenantEmail}
-                                              disabled={isTenantDataFetching}
-                                            />
-                                          </div>
-                                          {errorTenantForm.email && (
-                                            <div className="field_error">
-                                              {errorTenantForm.email}
-                                            </div>
-                                          )}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="vg22"></div>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "flex-end",
-                                        gap: "16px",
-                                      }}
+                              className={`add_new ${tenantMode === "new" && "new"}`}                             >
+                                <h5 className="text_orange text-center">
+                                  Add tenant
+                                </h5>
+                                <div className="project-filter">
+                                  <nav>
+                                    <button
+                                      className={`pointer  ${
+                                        tenantMode === "existing"
+                                          ? "active"
+                                          : ""
+                                      }`}
+                                      onClick={() => setTenantMode("existing")}
+                                      style={{ marginRight: "10px" }}
                                     >
-                                      <div
-                                        className="theme_btn btn_border no_icon text-center px-4"
-                                        onClick={() => {
-                                          setTenantName("");
-                                          setTenantMobile("");
-                                          setTenantEmail("");
-                                          setTenantCountryCode("");
-                                          setTenantCountry("");
-                                          setErrorTenantForm({
-                                            name: "",
-                                            mobile: "",
-                                            email: "",
-                                          });
-                                          setShowAddTenantModal(false);
-                                        }}
-                                      >
-                                        Cancel
-                                      </div>
-                                      <div
-                                        className="theme_btn btn_fill no_icon text-center px-4"
-                                        onClick={handleAddTenant}
-                                      >
-                                        Confirm
+                                      Existing
+                                    </button>
+                                    <button
+                                      className={`pointer ${
+                                        tenantMode === "new" ? "active" : ""
+                                      }`}
+                                      onClick={() => setTenantMode("new")}
+                                    >
+                                      Add New
+                                    </button>
+                                  </nav>
+                                </div>
+
+                                <span
+                                  className="material-symbols-outlined modal_close"
+                                  onClick={() => setShowAddTenantModal(false)}
+                                >
+                                  close
+                                </span>
+                                {tenantMode === "new" && <AddPropertyUser propertyid={propertyid} user={user} whoIsUser={"tenant"}/>}
+                                {tenantMode === "existing" && (
+                                  <>
+                                    <div className="form_field st-2">
+                                      <div className="field_inner">
+                                        <input
+                                          type="text"
+                                          style={{
+                                            border: "1px solid #ddd",
+                                            borderRadius: "4px",
+                                          }}
+                                          value={tenantSearchQuery}
+                                          onChange={handleTenantSearchChange}
+                                          placeholder="Search users by name, email, or mobile..."
+                                        />
+                                        <div className="field_icon">
+                                          <span className="material-symbols-outlined">
+                                            search
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </Modal.Body>
+
+                                    <ul className="search_results">
+                                      {tenantFilteredUsers.map((user) => (
+                                        <li
+                                          className="search_result_single"
+                                          key={user.id}
+                                        >
+                                          <label>
+                                            <input
+                                              type="radio"
+                                              name="selectedTenant"
+                                              checked={
+                                                tenantSelectedUser?.id ===
+                                                user.id
+                                              }
+                                              onChange={() =>
+                                                handleTenantSelectUser(user)
+                                              }
+                                            />
+                                            <div>
+                                              <strong>
+                                                {user.rolePropDial?.toUpperCase()}{" "}
+                                                - {user.fullName}
+                                              </strong>{" "}
+                                              (
+                                              {user.id?.replace(
+                                                /(\d{2})(\d{5})(\d{5})/,
+                                                "+$1 $2-$3"
+                                              )}
+                                              )<br />
+                                              {user.email}, {user.city},{" "}
+                                              {user.country}
+                                            </div>
+                                          </label>
+                                        </li>
+                                      ))}
+                                    </ul>
+
+                                    {tenantSelectedUser && (
+                                      // <div
+                                      //   className="tc_single relative"
+                                      // >
+                                      //   <div
+                                      //     className="left"
+                                      //   >
+                                      //     <div className="tcs_img_container">
+                                      //       <img
+                                      //         src={
+                                      //           tenantSelectedUser.photoURL ||
+                                      //           "/assets/img/dummy_user.png"
+                                      //         }
+                                      //         alt="Preview"
+                                      //       />
+                                      //     </div>
+                                      //     <div
+                                      //       className="tenant_detail"
+                                      //     >
+                                      //       <h6 className="t_name">
+                                      //         {tenantSelectedUser.fullName}
+                                      //       </h6>
+                                      //       <h6 className="t_number">
+                                      //       {tenantSelectedUser.phoneNumber}
+                                      //       </h6>
+                                      //     </div>
+                                      //   </div>
+                                      // </div>
+                                      <button
+                                        onClick={handleAddTenantToCollection}
+                                        className="theme_btn btn_fill no_icon full_width text-center"
+                                      >
+                                        Add
+                                      </button>
+                                    )}
+                                  </>
+                                )}
                               </Modal>
                             </section>
                           )}
@@ -6410,6 +6533,11 @@ const PropertyDetails = () => {
                                                 <img
                                                   src="/assets/img/property-detail-icon/storeRoom.png"
                                                   alt="Store Room"
+                                                />
+                                              ) : item === "Utility Room" ? (
+                                                <img
+                                                  src="/assets/img/property-detail-icon/utility-room.png"
+                                                  alt="Utility Room"
                                                 />
                                               ) : item === "Pooja Room" ? (
                                                 <img

@@ -1,342 +1,510 @@
-import React, { useCallback, useEffect, useState } from "react";
-
+import React from "react";
+import { useState, useEffect } from "react";
+import LinearProgressBar from "../../../pages/roles/owner/LinearProgressBar";
+import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-import InactiveUserCard from "../../../components/InactiveUserCard";
-import PropertyCard from "../../../components/property/PropertyCard";
 import { useCollection } from "../../../hooks/useCollection";
-import { projectFirestore } from "../../../firebase/config";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+// import { useFirestore } from "../../../hooks/useFirestore";
+// import { projectStorage, projectFirestore } from "../../../firebase/config";
 
-const PGTenantDashboard = () => {
+// import Table from 'react-bootstrap/Table';
+// import { Link } from "react-router-dom";
+
+// owl carousel
+import OwlCarousel from "react-owl-carousel";
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
+// owl carousel
+
+// component
+import PropertyCard from "../../../components/property/PropertyCard";
+import InactiveUserCard from "../../../components/InactiveUserCard";
+
+
+// css
+// import "./PGOwnerDashboard.css";
+
+const PGOwnerDashboard = () => {
+  // Scroll to the top of the page whenever the location changes start
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  // Scroll to the top of the page whenever the location changes end
+
   const { user } = useAuthContext();
-  console.log(user);
+  // console.log('user: ', user)
+  const { documents: myproperties, error: errMyProperties } = useCollection(
+    "propertyusers",
+    ["userId", "==", user.phoneNumber]
+  );
+ 
+  const { documents: properties, error: propertieserror } = useCollection("properties-propdial");
+  
 
-  const [propertydetail, setPropertydetail] = useState({});
-
-  const fetchDocument = useCallback(async () => {
-    const docs = await projectFirestore
-      .collection("tenants")
-      .where("mobile", "==", user.phoneNumber)
-      .where("status", "==", "active")
-      .where("isCurrentProperty", "==", true)
-      .get();
-    const property = docs.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    if (property.length > 0) {
-      setPropertydetail(property[0]);
-    }
-  }, [user.phoneNumber]);
+  // const [filteredproperties, setFilteredproperties] = useState(null);
+  const [activeProperties, setActiveProperties] = useState(null);
+  const [pendingProperties, setPendingProperties] = useState(null);
+  const [inactiveProperties, setInactiveProperties] = useState(null);
+  const [residentialProperties, setResidentialProperties] = useState(null);
+  const [commercialProperties, setCommercialProperties] = useState(null);
 
   useEffect(() => {
-    if (user) fetchDocument();
-  }, [user, fetchDocument]);
 
-  console.log(propertydetail);
+    try {
+      // console.log('myproperties: ', myproperties)
+      // console.log('all properties: ', properties)
+
+      if (myproperties && properties) {
+        //Filtered Properties   
+        const _filteredproperties = myproperties && myproperties.map((doc) => (
+          properties.filter(propdoc => propdoc.id === doc.propertyId)
+        ))
+        // console.log("_filteredproperties: ", _filteredproperties)
+
+        // setFilteredproperties(_filteredproperties)
+
+        //Active Properties
+        const _activeProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
+          ))
+        setActiveProperties(_activeProperties)
+
+        //Pending Properties
+        const _pendingProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
+          ))
+        setPendingProperties(_pendingProperties)
+
+        //Inactive Properties
+        const _inactiveProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
+          ))
+        setInactiveProperties(_inactiveProperties)
+
+        //Residential Properties
+        const _residentialProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
+          ))
+        setResidentialProperties(_residentialProperties)
+
+        //Commercial Properties
+        const _commercialProperties =
+          _filteredproperties && _filteredproperties.map((propdoc) => (
+            propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
+          ))
+        setCommercialProperties(_commercialProperties)
+
+      }
+    } catch (ex) {
+      console.error("Error: ", ex);
+    }
+
+  }, [myproperties, properties]);
+
+  // const filteredproperties = myproperties && myproperties.map((doc) => (
+  //   properties && properties.filter(propdoc => propdoc.id === doc.propertyId)
+  // ))
+
+  // console.log('filteredproperties: ', filteredproperties)
+
+  // const activeProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
+  //   ))
+
+  const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
+
+  // const pendingProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
+  //   ))
+
+  const pendingPropertieslengthWithoutNulls = pendingProperties && pendingProperties.filter(element => element !== null).length;
+  // console.log('pendingPropertieslengthWithoutNulls: ', pendingPropertieslengthWithoutNulls)
+
+  // const inactiveProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
+  //   ))
+
+  const inactivePropertieslengthWithoutNulls = inactiveProperties && inactiveProperties.filter(element => element !== null).length;
+
+  // const inactiveProperties =
+  //   filteredproperties && filteredproperties[0].filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
+
+  // const residentialProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
+  //   ))
+
+  const residentialPropertieslengthWithoutNulls = residentialProperties && residentialProperties.filter(element => element !== null).length;
+
+  // commercialProperties
+  // const commercialProperties =
+  //   filteredproperties && filteredproperties.map((propdoc) => (
+  //     propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
+  //   ))
+  const commercialPropertieslengthWithoutNulls = commercialProperties && commercialProperties.filter(element => element !== null).length;
+
+  // const commercialProperties =
+  //   filteredproperties && filteredproperties[0].filter((item) => item.category.toUpperCase() === 'COMMERCIAL');
+
+  // advertisement img option in owl carousel
+  const addImgOptions = {
+    items: 1,
+    dots: false,
+    loop: true,
+    margin: 10,
+    nav: false,
+    smartSpeed: 1500,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 1,
+      },
+      992: {
+        items: 1,
+      },
+    },
+  };
+  const addImgOptions2 = {
+    items: 1,
+    dots: false,
+    loop: true,
+    margin: 10,
+    nav: false,
+    smartSpeed: 1500,
+    autoplay: true,
+    autoplayTimeout: 9000,
+    responsive: {
+      // Define breakpoints and the number of items to show at each breakpoint
+      0: {
+        items: 1,
+      },
+      768: {
+        items: 1,
+      },
+      992: {
+        items: 1,
+      },
+    },
+  };
+  // advertisement img option in owl carousel
 
   return (
     <div>
-      {user && user.status === "active" ? (
+    {user && user.status === "active" ? (
         <div className="top_header_pg pg_bg propagent_dashboard">
-          <div className="page_spacing">
-            <div className="pg_header">
-              <h2 className="m22 mb-1">Tenant Dashboard</h2>
-              <h4 className="r18 light_black">
-                Welcome <b> {user.displayName} </b>to Propdial
-              </h4>
-            </div>
-            <div className="vg22"></div>
-            <div className="pg_body">
-              <div className="propagent_dashboard_inner">
-                <h2 style={{ fontSize: "28px" }}>Your Current Residence</h2>
-              </div>
-              <div className="vg12"></div>
-              <section className="property_cards_parent">
-                {propertydetail?.propertyId && (
-                  <PropertyCard propertyid={propertydetail.propertyId} />
-                )}
+        <div className="page_spacing">
+          <div className="pg_header">
+            <h2 className="m22 mb-1">Owner Dashboard</h2>
+            <h4 className="r18 light_black">
+              Welcome <b> {user.displayName} </b>to Propdial            
+            </h4>
+          </div>
+          <div className="vg22"></div>
+          <div className="pg_body">
+            <div className="propagent_dashboard_inner">
+              <section className="row">
+                <div className="col-xl-5">
+                  <div className="total_prop_card relative">
+                    <div className="bg_icon">
+                      <img src="/assets/img/flats.png" alt="propdial" />
+                    </div>
+                    <div className="inner">
+                      <div className="icon">
+                        <img src="/assets/img/flats.png" alt="propdial" />
+                      </div>
+                      <div className="content">
+                        <h4 className="title">My Properties</h4>
+                        <div className="bar">
+                          <LinearProgressBar total="55" current="20" />
+                        </div>
+
+                        <h6>
+                          360&deg; Property Management Solutions
+                        </h6>
+                      </div>
+                      <div className="number">{myproperties && myproperties.length}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-xl-7 bg_575">
+                  <div className="vg22_1199"></div>
+                  <div className="property_status">
+                    <div className="ps_single pending">
+                      <h5>{pendingProperties && pendingPropertieslengthWithoutNulls}</h5>
+                      <h6>In-Review</h6>
+                    </div>
+                    <div className="ps_single active">
+                      <h5>{activeProperties && activePropertieslengthWithoutNulls}</h5>
+                      <h6>Active</h6>
+                    </div>
+                    <div className="ps_single inactive">
+                      <h5>{inactiveProperties && inactivePropertieslengthWithoutNulls}</h5>
+                      <h6>Inactive</h6>
+                    </div>
+                  </div>
+                </div>
               </section>
 
-              <div className="theme_tab prop_doc_tab">
-                <Tabs>
-                  <TabList className="tabs">
-                    <Tab className="pointer">Past Property</Tab>
-                    <Tab className="pointer">Documents</Tab>
-                    <Tab className="pointer">Payment History</Tab>
-                  </TabList>
-                  <TabPanel>
-                    <div className="blog_sect">
-                      {/* <div className="row">
-                        {filteredTenantDocLength === 0 && (
-                          <h5 className="m20 text_red mt-4">No data found</h5>
-                        )}
-                        {filteredTenantDocuments.map((doc, index) => (
-                          <div className="col-lg-4 col-sm-6 " key={index}>
-                            <div className="item card-container">
-                              <div
-                                className="card-image relative w-100"
-                                style={{
-                                  aspectRatio: "3/2",
-                                }}
-                              >
-                                {uploadingDocId !== doc.id && (
-                                  <label
-                                    htmlFor={`upload_img_${doc.id}`}
-                                    className="upload_img click_text by_text"
-                                  >
-                                    Upload PDF or Img
-                                    <input
-                                      type="file"
-                                      onChange={(e) =>
-                                        handleFileChange(e, doc.id)
-                                      }
-                                      ref={fileInputRef}
-                                      id={`upload_img_${doc.id}`}
-                                    />
-                                  </label>
-                                )}
-                                {uploadingDocId === doc.id ? (
-                                  <div
-                                    className="loader d-flex justify-content-center align-items-center"
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    <BeatLoader
-                                      color={"#FF5733"}
-                                      loading={true}
-                                    />
-                                  </div>
-                                ) : doc.mediaType === "pdf" ? (
-                                  <iframe
-                                    title="PDF Viewer"
-                                    src={doc.documentUrl}
-                                    style={{
-                                      width: "100%",
-                                      aspectRatio: "3/2",
-                                    }}
-                                  ></iframe>
-                                ) : (
-                                  <img
-                                    src={
-                                      doc.documentUrl ||
-                                      "/assets/img/image_small_placeholder.png"
-                                    }
-                                    alt="Document"
-                                  />
-                                )}
-                              </div>
-                              <div className="card-body">
-                                <h3>{doc.idType}</h3>
-                                <p className="card-subtitle">{doc.idNumber}</p>
-                                {user && user.role === "superAdmin" && (
-                                  <div className="card-author">
-                                    <div
-                                      onClick={() =>
-                                        deleteTenantDocument(doc.id)
-                                      }
-                                      className="learn-more pointer"
-                                    >
-                                      Delete
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
+              <div className="vg22"></div>
+              <section className="self_property_detail">
+                <div className="spd_single">
+                  <div className="left residential">
+                    <img src="/assets/img/house.png" alt="propdial" />
+                  </div>
+                  <div className="right">
+                    <h6>Residential</h6>
+                    <h5>{residentialProperties && residentialPropertieslengthWithoutNulls}</h5>
+                  </div>
+                </div>
+                <div className="spd_single">
+                  <div className="left commercial">
+                    <img src="/assets/img/buildings.png" alt="propdial" />
+                  </div>
+                  <div className="right">
+                    <h6>Commercial</h6>
+                    <h5>{commercialProperties && commercialPropertieslengthWithoutNulls}</h5>
+                  </div>
+                </div>
+
+                {/* <div className="spd_single">
+                  <div className="left rent">
+                    <img src="/assets/img/key.png" alt="propdial" />
+                  </div>
+                  <div className="right">
+                    <h6>Available for Rent</h6>
+                    <h5>5</h5>
+                  </div>
+                </div>
+
+                <div className="spd_single">
+                  <div className="left sale">
+                    <img src="/assets/img/growth.png  " alt="propdial" />
+                  </div>
+                  <div className="right ">
+                    <h6>Available for Sale</h6>
+                    <h5>5</h5>
+                  </div>
+                </div>
+                <div className="spd_single">
+                  <div className="left rent">
+                    <img src="/assets/img/rented_out.png" alt="propdial" />
+                  </div>
+                  <div className="right">
+                    <h6>Rented Out</h6>
+                    <h5>55</h5>
+                  </div>
+                </div>
+                <div className="spd_single">
+                  <div className="left sale">
+                    <img src="/assets/img/sold_out.png  " alt="propdial" />
+                  </div>
+                  <div className="right ">
+                    <h6>Sold Out</h6>
+                    <h5>6</h5>
+                  </div>
+                </div> */}
+              </section>
+              <div className="vg12"></div>
+              <div className="vg22"></div>
+              <section className="property_cards_parent">
+                {myproperties && myproperties.map((property) => (
+                  <PropertyCard propertyid={property.propertyId} />))}
+              </section>
+              {/* <>
+         <div className="vg22"></div>
+              <hr />
+
+              <div className="vg22"></div>
+              <section>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="payment_card">                      
+                      <div className="all_payments">
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_orange">
+                            <img src="./assets/img/brokreage_bill_icon.png" alt="propdial" />
                           </div>
-                        ))}
-                      </div> */}
-                      No Data Found
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className="blog_sect">
-                      {/* <div className="row">
-                        {filteredPoliceVerificationDocLength === 0 && (
-                          <h5 className="m20 text_red mt-4">No data found</h5>
-                        )}
-                        {filteredPoliceVerificationDocuments.map(
-                          (doc, index) => (
-                            <div className="col-lg-4 col-sm-6 " key={index}>
-                              <div className="item card-container">
-                                <div
-                                  className="card-image relative w-100"
-                                  style={{
-                                    aspectRatio: "3/2",
-                                  }}
-                                >
-                                  {uploadingDocId !== doc.id && (
-                                    <label
-                                      htmlFor={`upload_img_${doc.id}`}
-                                      className="upload_img click_text by_text"
-                                    >
-                                      Upload PDF or Img
-                                      <input
-                                        type="file"
-                                        onChange={(e) =>
-                                          handleFileChange(e, doc.id)
-                                        }
-                                        ref={fileInputRef}
-                                        id={`upload_img_${doc.id}`}
-                                      />
-                                    </label>
-                                  )}
-                                  {uploadingDocId === doc.id ? (
-                                    <div
-                                      className="loader d-flex justify-content-center align-items-center"
-                                      style={{
-                                        width: "100%",
-                                        height: "100%",
-                                      }}
-                                    >
-                                      <BeatLoader
-                                        color={"#FF5733"}
-                                        loading={true}
-                                      />
-                                    </div>
-                                  ) : doc.mediaType === "pdf" ? (
-                                    <iframe
-                                      title="PDF Viewer"
-                                      src={doc.documentUrl}
-                                      style={{
-                                        width: "100%",
-                                        aspectRatio: "3/2",
-                                      }}
-                                    ></iframe>
-                                  ) : (
-                                    <img
-                                      src={
-                                        doc.documentUrl ||
-                                        "/assets/img/image_small_placeholder.png"
-                                      }
-                                      alt="Document"
-                                    />
-                                  )}
-                                </div>
-                                <div className="card-body">
-                                  <h3>{doc.idType}</h3>
-                                  <p className="card-subtitle">
-                                    {doc.idNumber}
-                                  </p>
-                                  {user && user.role === "superAdmin" && (
-                                    <div className="card-author">
-                                      <div
-                                        onClick={() =>
-                                          deleteTenantDocument(doc.id)
-                                        }
-                                        className="learn-more pointer"
-                                      >
-                                        Delete
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        )}
-                      </div> */}
-                      No Data Found
-                    </div>
-                  </TabPanel>
-                  <TabPanel>
-                    <div className="blog_sect">
-                      {/* <div className="row">
-                        {filteredRentAgreementDocLength === 0 && (
-                          <h5 className="m20 text_red mt-4">No data found</h5>
-                        )}
-                        {filteredRentAgreementDocuments.map((doc, index) => (
-                          <div className="col-lg-4 col-sm-6 " key={index}>
-                            <div className="item card-container">
-                              <div
-                                className="card-image relative w-100"
-                                style={{
-                                  aspectRatio: "3/2",
-                                }}
-                              >
-                                {uploadingDocId !== doc.id && (
-                                  <label
-                                    htmlFor={`upload_img_${doc.id}`}
-                                    className="upload_img click_text by_text"
-                                  >
-                                    Upload PDF or Img
-                                    <input
-                                      type="file"
-                                      onChange={(e) =>
-                                        handleFileChange(e, doc.id)
-                                      }
-                                      ref={fileInputRef}
-                                      id={`upload_img_${doc.id}`}
-                                    />
-                                  </label>
-                                )}
-                                {uploadingDocId === doc.id ? (
-                                  <div
-                                    className="loader d-flex justify-content-center align-items-center"
-                                    style={{
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    <BeatLoader
-                                      color={"#FF5733"}
-                                      loading={true}
-                                    />
-                                  </div>
-                                ) : doc.mediaType === "pdf" ? (
-                                  <iframe
-                                    title="PDF Viewer"
-                                    src={doc.documentUrl}
-                                    style={{
-                                      width: "100%",
-                                      aspectRatio: "3/2",
-                                    }}
-                                  ></iframe>
-                                ) : (
-                                  <img
-                                    src={
-                                      doc.documentUrl ||
-                                      "/assets/img/image_small_placeholder.png"
-                                    }
-                                    alt="Document"
-                                  />
-                                )}
-                              </div>
-                              <div className="card-body">
-                                <h3>{doc.idType}</h3>
-                                <p className="card-subtitle">{doc.idNumber}</p>
-                                {user && user.role === "superAdmin" && (
-                                  <div className="card-author">
-                                    <div
-                                      onClick={() =>
-                                        deleteTenantDocument(doc.id)
-                                      }
-                                      className="learn-more pointer"
-                                    >
-                                      Delete
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Brokerage Payment</h6>
+                            <h5 className="dashboard_number_small">₹ 1,000</h5>
                           </div>
-                        ))}
-                      </div> */}
-                      No Data Found
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_blue">
+                            <img src="./assets/img/financial.png" alt="propdial" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">PMS</h6>
+                            <h5 className="dashboard_number_small">₹ 2,500</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_green">
+                            <img src="./assets/img/electricity-bill.png" alt="propdial" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Electricity Bill</h6>
+                            <h5 className="dashboard_number_small">₹ 875</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_orange">
+                            <img src="./assets/img/brokreage_bill_icon.png" alt="propdial" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Society Maintainance</h6>
+                            <h5 className="dashboard_number_small">₹ 2,000</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_blue">
+                            <img src="./assets/img/financial.png" alt="propdial" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Water Bill</h6>
+                            <h5 className="dashboard_number_small">₹ 75</h5>
+                          </div>
+                        </div>
+                        <div className="payment_single my_big_card">
+                          <div className="icon bg_green">
+                            <img src="./assets/img/electricity-bill.png" alt="propdial" />
+                          </div>
+                          <div className="right">
+                            <h6 className="r14 text_grey">Others</h6>
+                            <h5 className="dashboard_number_small">₹ 875</h5>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </TabPanel>
-                </Tabs>
-              </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="balance_sheet my_big_card">
+                      <Table responsive="sm">
+                        <thead>
+                          <tr>
+                            <th>S.N.</th>
+                            <th>Property Details</th>
+                            <th>Remark</th>
+                            <th>Pay Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>G-25 | mp-nagar | kanipura road | ujjain</td>
+                            <td>On-boarding Charges</td>
+                            <td>2000</td>
+                          </tr>
+
+                        </tbody>
+                      </Table>
+                      <div className="text-end">
+                        <Link className="click_text" to="/payment">
+                          view more
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <div className="vg22"></div>
+              <hr />
+         </> */}
+              {myproperties && myproperties.length === 0 && (
+                <>
+                  <div className="vg22"></div>
+                  <div className="property_soon">
+                    <div className="inner">
+                      <div>
+                        <h2>
+                          Welcome! 🌹😊
+                        </h2>
+                        <h4>🏡 Your property is currently in the discovery phase and will be onboarded shortly. 🚀</h4>
+                      </div>
+                      <img src="./assets/img/wait.png" alt="propdial" />
+                    </div>
+                  </div>
+                </>
+
+              )}
+
+              <div className="vg22"></div>
+              <section className="add_section row">
+                <div className="add_single col-lg-6">
+                  <OwlCarousel className="owl-theme" {...addImgOptions2}>
+                    <div className="item">
+                      <img
+                        src="/assets/img/banner1.png"
+                        alt="propdial"
+                        className="add_img"
+                      />
+                    </div>
+                    <div className="item">
+                      <img
+                        src="/assets/img/banner2.png"
+                        alt="propdial"
+                        className="add_img"
+                      />
+                    </div>
+                  </OwlCarousel>
+                </div>
+                <div className="add_single col-lg-6 add_single_2">
+                  <OwlCarousel className="owl-theme" {...addImgOptions}>
+                    <div className="item">
+                      <img
+                        src="/assets/img/banner4.png"
+                        alt="propdial"
+                        className="add_img"
+                      />
+                    </div>
+                    <div className="item">
+                      <img
+                        src="/assets/img/banner5.png"
+                        alt="propdial"
+                        className="add_img"
+                      />
+                    </div>
+                  </OwlCarousel>
+                </div>
+              </section>
+
             </div>
           </div>
         </div>
-      ) : (
-        <InactiveUserCard />
-      )}
-    </div>
+      </div>
+    ) : (
+    <InactiveUserCard/>
+    )}
+  </div>
+   
+   
   );
 };
 
-export default PGTenantDashboard;
+export default PGOwnerDashboard;

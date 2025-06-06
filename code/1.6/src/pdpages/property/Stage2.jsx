@@ -119,6 +119,7 @@ const Stage2 = (props) => {
     OfficeRoomClick: false,
     StoreRoomClick: false,
     PoojaRoomClick: false,
+    UtilityRoomClick: false,
     StudyRoomClick: false,
     PowderRoomClick: false,
     AdditionalArea: [],
@@ -263,6 +264,12 @@ const Stage2 = (props) => {
             propertyDocument.additionalRooms.find((e) => e === "Pooja Room")
             ? true
             : false,
+UtilityRoomClick:
+          propertyDocument.additionalRooms &&
+            propertyDocument.additionalRooms.find((e) => e === "Utility Room")
+            ? true
+            : false,
+            
         StudyRoomClick:
           propertyDocument.additionalRooms &&
             propertyDocument.additionalRooms.find((e) => e === "Study Room")
@@ -3410,6 +3417,55 @@ const Stage2 = (props) => {
                     </label>
                   </div>
                 </div>
+                 <div className="radio_group_single">
+                  <div
+                    className={
+                      propertyDetails.UtilityRoomClick
+                        ? "custom_radio_button radiochecked"
+                        : "custom_radio_button"
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      id="utility_room"
+                      onClick={(e) => {
+                        if (propertyDetails.UtilityRoomClick) {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms:
+                              propertyDetails.AdditionalRooms &&
+                              propertyDetails.AdditionalRooms.filter(
+                                (elem) => elem !== "Utility Room"
+                              ),
+                            UtilityRoomClick: !propertyDetails.UtilityRoomClick,
+                          });
+                        } else {
+                          setPropertyDetails({
+                            ...propertyDetails,
+                            AdditionalRooms: [
+                              ...propertyDetails.AdditionalRooms,
+                              "Utility Room",
+                            ],
+                            UtilityRoomClick: !propertyDetails.UtilityRoomClick,
+                          });
+                        }
+                      }}
+                    />
+                    <label htmlFor="utility_room">
+                      <div className="radio_icon">
+                        <span className="material-symbols-outlined add">
+                          add
+                        </span>
+                        <span className="material-symbols-outlined check">
+                          done
+                        </span>
+                      </div>
+                      <h6> Utility Room</h6>
+                    </label>
+                  </div>
+                </div>
+
+                
                 <div className="radio_group_single">
                   {/* {console.log(propertyDetails.StudyRoomClick)} */}
                   <div

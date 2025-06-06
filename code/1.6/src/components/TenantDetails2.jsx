@@ -2,20 +2,15 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDocument } from "../hooks/useDocument";
+import { BeatLoader } from "react-spinners";
 import { useCollection } from "../hooks/useCollection";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { projectFirestore } from "../firebase/config";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
-import Back from "../pdpages/back/Back";
-import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
-import PhoneInput from "react-phone-input-2";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
 import ImageModal from "../pdpages/imageModal/ImageModal";
 import PropertySummaryCard from "../pdpages/property/PropertySummaryCard";
 import { generateSlug } from "../utils/generateSlug";
@@ -33,7 +28,6 @@ const TenantDetails = () => {
   const { tenantId } = useParams();
   console.log("Tenant ID: ", tenantId);
   const fileInputRef = useRef(null);
-
   const [editedFields, setEditedFields] = useState({});
   const [editingField, setEditingField] = useState(null);
   const [imageURL, setImageURL] = useState();
@@ -75,8 +69,6 @@ const TenantDetails = () => {
     getProperty();
   }, [tenantInfo]);
 
-  // const { document: propertyInfo, error: propertyInfoError } = useDocument("properties-propdial", editedFields.propertyId);
-  // console.log('Property Details:', propertyInfo)
   const { documents: tenantDocs, errors: tenantDocsError } = useCollection(
     "docs",
     ["masterRefId", "==", tenantId]
@@ -89,9 +81,6 @@ const TenantDetails = () => {
     }
   }, [tenantInfo]);
 
-  // const handleEditClick = (fieldName) => {
-  //   setEditingField(fieldName);
-  // };
   const handleEditClick = (fieldName) => {
     if (fieldName === "offBoardingDate" && !editedFields.onBoardingDate) {
       alert("Please select Rent Start Date first.");
@@ -99,18 +88,6 @@ const TenantDetails = () => {
       setEditingField(fieldName);
     }
   };
-
-  // const deleteTenant = async () => {
-  //   setIsDeleting(true);
-  //   try {
-  //     await deleteDocument(tenantId);
-  //     setIsDeleting(false);
-  //     navigate(`/propertydetails/${editedFields.propertyId}`);
-  //   } catch (error) {
-  //     console.error("Error deleting tenant:", error);
-  //     setIsDeleting(false);
-  //   }
-  // };
   const deleteTenant = async () => {
     setIsDeleting(true);
     try {
@@ -132,26 +109,7 @@ const TenantDetails = () => {
       setIsDeleting(false);
     }
   };
-
-  // const handleSaveClick = async (fieldName) => {
-  //   try {
-  //     if (fieldName === "status") {
-  //       await updateDocument(tenantId, {
-  //         [fieldName]: editedFields[fieldName],
-  //         isCurrentProperty:
-  //           editedFields[fieldName] === "active" ? true : false,
-  //       });
-  //     } else {
-  //       await updateDocument(tenantId, {
-  //         [fieldName]: editedFields[fieldName],
-  //       });
-  //     }
-  //     setEditingField(null);
-  //   } catch (error) {
-  //     console.error("Error updating field:", error);
-  //   }
-  // };
-
+  
   const handleSaveClick = async (fieldName) => {
     try {
       if (fieldName === "status") {
@@ -287,36 +245,88 @@ const TenantDetails = () => {
   const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
   const handleRadioChange = (event) => setSelectedIdType(event.target.value);
   const handleIdNumberChange = (event) => setIdNumber(event.target.value);
+  // const [documentFile, setDocumentFile] = useState(null);
   const [documentFile, setDocumentFile] = useState(null);
+const [filePreview, setFilePreview] = useState(null);
+
   const [newDocId, setNewDocId] = useState("");
 
-  const addTenantDocuments = async () => {
-    if (!selectedDocCat || !selectedIdType) {
-      alert("All fields are required!");
-      return;
-    }
+  // const addTenantDocuments = async () => {
+  //   if (!selectedDocCat || !selectedIdType) {
+  //     alert("All fields are required!");
+  //     return;
+  //   }
 
-    try {
-      setIsUploading(true);
-      const docRef = await tenantDocsAddDocument({
-        status: "active",
-        masterRefId: tenantId,
-        documentUrl: "",
-        docCat: selectedDocCat,
-        idType: selectedIdType,
-        idNumber: idNumber,
-        mediaType: "",
-      });
-      setSelectedDocCat("");
-      setSelectedIdType("");
-      setIdNumber("");
-      setIsUploading(false);
-      // setNewDocId(docRef.id);
-    } catch (error) {
-      console.error("Error adding document:", error);
-      setIsUploading(false);
-    }
-  };
+  //   try {
+  //     setIsUploading(true);
+  //     const docRef = await tenantDocsAddDocument({
+  //       status: "active",
+  //       masterRefId: tenantId,
+  //       documentUrl: "",
+  //       docCat: selectedDocCat,
+  //       idType: selectedIdType,
+  //       idNumber: idNumber,
+  //       mediaType: "",
+  //     });
+  //     setSelectedDocCat("");
+  //     setSelectedIdType("");
+  //     setIdNumber("");
+  //     setIsUploading(false);
+  //     // setNewDocId(docRef.id);
+  //   } catch (error) {
+  //     console.error("Error adding document:", error);
+  //     setIsUploading(false);
+  //   }
+  // };
+  const addTenantDocuments = async () => {
+  if (!selectedDocCat || !selectedIdType || !documentFile) {
+    alert("All fields including document file are required!");
+    return;
+  }
+
+  try {
+    setIsUploading(true);
+
+    const fileType = getFileType(documentFile);
+
+    // Step 1: Create a new Firestore document with placeholder for documentUrl
+    const docRef = await tenantDocsAddDocument({
+      status: "active",
+      masterRefId: tenantId,
+      documentUrl: "",
+      docCat: selectedDocCat,
+      idType: selectedIdType,
+      idNumber: idNumber,
+      mediaType: fileType,
+    });
+
+    // Step 2: Upload file to storage
+    const storageRef = projectStorage.ref(
+      `docs/${docRef.id}/${documentFile.name}`
+    );
+    await storageRef.put(documentFile);
+
+    const fileURL = await storageRef.getDownloadURL();
+
+    // Step 3: Update Firestore document with file URL
+    await tenantDocsUpdateDocument(docRef.id, {
+      documentUrl: fileURL,
+    });
+
+    // Reset fields
+    setSelectedDocCat("");
+    setSelectedIdType("");
+    setIdNumber("");
+    setDocumentFile(null);
+    setFilePreview(null);
+    setIsUploading(false);
+    setShowAIForm(false);
+  } catch (error) {
+    console.error("Error adding document:", error);
+    setIsUploading(false);
+  }
+};
+
   console.log("doccat", selectedDocCat);
   const handleFileChange = (event, docId) => {
     const file = event.target.files[0];
@@ -493,7 +503,7 @@ const TenantDetails = () => {
     }
     setShowImageModal(true);
   };
-
+// image modal code end
 
   return (
     <div className="tenant_detail_pg">
@@ -594,6 +604,42 @@ const TenantDetails = () => {
                         </div>
                       </div>
                     </div>
+
+                    <div className="col-md-11">
+  <div className="form_field mt-3">
+    <input
+      type="file"
+      accept="image/*,application/pdf"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setDocumentFile(file);
+          const type = file.type;
+          if (type.startsWith("image/")) {
+            setFilePreview(URL.createObjectURL(file));
+          } else {
+            setFilePreview("pdf"); // placeholder for PDF
+          }
+        }
+      }}
+    />
+  </div>
+
+  {filePreview && (
+    <div className="preview_box mt-2">
+      {filePreview === "pdf" ? (
+        <p className="text-muted">PDF file selected.</p>
+      ) : (
+        <img
+          src={filePreview}
+          alt="Preview"
+          style={{ width: "100%", maxHeight: "200px", objectFit: "contain" }}
+        />
+      )}
+    </div>
+  )}
+</div>
+
                   </div>
                 </div>
                 <div className="row mt-3">
