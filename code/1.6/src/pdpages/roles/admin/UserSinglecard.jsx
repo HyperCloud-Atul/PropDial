@@ -124,6 +124,7 @@ const UserSinglecard = ({ users }) => {
                     className="t_name pointer"
                     // onClick={() => handleShow(userObj)} click to open popup don't delete it
                   >
+                    {userObj.salutation}{" "}
                     {userObj.fullName}
                     <span className="material-symbols-outlined click_icon text_near_icon">
                       edit
@@ -158,12 +159,11 @@ const UserSinglecard = ({ users }) => {
                   {userObj.email && (
                     <h6 className="t_number">{userObj.email}</h6>
                   )}
-                 <h6 className="t_number">
-  {userObj.city}
-  {userObj.city && userObj.residentialCountry && ", "}
-  {userObj.residentialCountry || userObj.country}
-</h6>
-
+                  <h6 className="t_number">
+                    {userObj.city}
+                    {userObj.city && userObj.residentialCountry && ", "}
+                    {userObj.residentialCountry || userObj.country}
+                  </h6>
                 </div>
               </div>
               <div className="wha_call_icon">

@@ -632,19 +632,26 @@ const AddUser = () => {
                   </div>
                 )}
                 {/* City */}
-                <div className="col-lg-6">
-                  <div className="form_field w-100 aai_form_field">
-                    <h6 className="aaiff_title">City</h6>
-                    <input
-                      type="text"
-                      className="w-100"
-                      id="city"
-                      placeholder="City"
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                    />
-                  </div>
-                </div>
+             <div className="col-lg-6">
+  <div className="form_field w-100 aai_form_field">
+    <h6 className="aaiff_title">City</h6>
+    <input
+      type="text"
+      className="w-100"
+      id="city"
+      placeholder="City"
+      value={city}
+      onChange={(e) => setCity(e.target.value)}
+      onBlur={() => {
+        const formattedCity = city
+          .toLowerCase()
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+        setCity(formattedCity);
+      }}
+    />
+  </div>
+</div>
+
                 {/* address  */}
                 <div className="col-lg-12">
                   <div className="form_field w-100 aai_form_field">

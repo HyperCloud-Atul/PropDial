@@ -583,6 +583,12 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
                   placeholder="City"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                     onBlur={() => {
+        const formattedCity = city
+          .toLowerCase()
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+        setCity(formattedCity);
+      }}
                 />
               </div>
             </div>
