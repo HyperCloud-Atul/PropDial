@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { getNames } from "country-list";
 import Select from "react-select";
 
-const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
+const AddPropertyUser = ({ propertyid, user, whoIsUser }) => {
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [name, setName] = useState("");
@@ -135,7 +135,7 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
     setEmail("");
     setCity("");
     setGender("");
-   
+
     setError("");
     setPhoneExists(false);
   };
@@ -335,8 +335,8 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
                   </div>
                 )}
               </div>
-            </div>       
-          
+            </div>
+
             {/* Gender */}
             <div className="col-12">
               <div className="form_field w-100 aai_form_field">
@@ -459,6 +459,7 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setEmail(email.toLowerCase())}
                   />
                   {fieldErrors.email && (
                     <div className="field_error">{fieldErrors.email}</div>
@@ -583,12 +584,12 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
                   placeholder="City"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                     onBlur={() => {
-        const formattedCity = city
-          .toLowerCase()
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-        setCity(formattedCity);
-      }}
+                  onBlur={() => {
+                    const formattedCity = city
+                      .toLowerCase()
+                      .replace(/\b\w/g, (char) => char.toUpperCase());
+                    setCity(formattedCity);
+                  }}
                 />
               </div>
             </div>
@@ -603,6 +604,17 @@ const AddPropertyUser = ({propertyid, user, whoIsUser}) => {
                   style={{ height: "100px" }}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  onBlur={() => {
+                    // Remove wrapping quotes if present
+                    let cleaned = address.trim();
+                    if (
+                      (cleaned.startsWith('"') && cleaned.endsWith('"')) ||
+                      (cleaned.startsWith("'") && cleaned.endsWith("'"))
+                    ) {
+                      cleaned = cleaned.slice(1, -1).trim();
+                    }
+                    setAddress(cleaned);
+                  }}
                 ></textarea>
               </div>
             </div>

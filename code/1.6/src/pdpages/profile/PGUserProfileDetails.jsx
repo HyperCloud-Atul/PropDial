@@ -15,6 +15,7 @@ import { useCollection } from "../../hooks/useCollection";
 import { projectFirestore } from "../../firebase/config";
 import NineDots from "../../components/NineDots";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import formatCountry from "../../utils/formatCountry";
 
 // import scss
 import "./PGUserProfileDetails.scss";
@@ -1642,12 +1643,28 @@ export default function PGUserProfileDetails2() {
           </h6> */}
           <h6 className="break_all">
             {userProfileDoc && userProfileDoc.email}
+            {userProfileDoc && userProfileDoc.gender}
           </h6>
-                     <h6 >
-  {userProfileDoc?.city}
-  {userProfileDoc?.city && userProfileDoc?.residentialCountry && ", "}
-  {userProfileDoc?.residentialCountry || userProfileDoc?.country}
-</h6>
+          <h6>
+            {userProfileDoc?.city}
+            {userProfileDoc?.city && userProfileDoc?.residentialCountry && ", "}
+            {formatCountry(
+              userProfileDoc?.residentialCountry || userProfileDoc?.country
+            )}
+          </h6>
+          <h6
+            className="address"
+            style={{
+              background: "#ececec",
+              fontSize: "14px",
+              textTransform: "capitalize",
+              padding: "8px",
+              borderRadius: "6px",
+              marginTop: "6px",
+            }}
+          >
+            {userProfileDoc?.address}
+          </h6>
         </div>
         {/* <hr />
         <div className="roles">

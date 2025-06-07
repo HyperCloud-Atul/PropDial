@@ -6,6 +6,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import UserRoleStatusModal from "./UserRoleStatusModal";
 import ImageModal from "../../imageModal/ImageModal";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import formatCountry from "../../../utils/formatCountry";
 
 const UserSinglecard = ({ users }) => {
   //   modal code start
@@ -162,7 +163,7 @@ const UserSinglecard = ({ users }) => {
                   <h6 className="t_number">
                     {userObj.city}
                     {userObj.city && userObj.residentialCountry && ", "}
-                    {userObj.residentialCountry || userObj.country}
+                 {formatCountry(userObj.residentialCountry || userObj.country)}   
                   </h6>
                 </div>
               </div>

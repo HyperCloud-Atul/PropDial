@@ -5,6 +5,7 @@ import "react-phone-input-2/lib/style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { getNames } from "country-list";
 import Select from "react-select";
+import { getCodeList } from "country-list";
 
 const AddUser = () => {
   const [phone, setPhone] = useState("");
@@ -33,10 +34,30 @@ const AddUser = () => {
     }));
     setCountryOptions(options);
   }, []);
+
+
   useEffect(() => {
     const countries = getNames(); // Returns array of country names
     setCountryList(countries);
   }, []);
+
+// useEffect(() => {
+//   const codeList = getCodeList(); // { AF: "Afghanistan", AL: "Albania", ... }
+//   const options = Object.entries(codeList).map(([code, name]) => ({
+//     label: code,   // e.g., "US"
+//     value: code,
+//   }));
+//   setCountryOptions(options);
+// }, []);
+
+// useEffect(() => {
+//   const codeList = getCodeList();
+//   const options = Object.entries(codeList).map(([code, name]) => ({
+//     label: `${code} - ${name}`,   // e.g., "US - United States of America"
+//     value: code,
+//   }));
+//   setCountryOptions(options);
+// }, []);
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [whatsappNumberCountryCode, setWhatsappNumberCountryCode] =
     useState("");
@@ -503,6 +524,7 @@ const AddUser = () => {
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        onBlur={() => setEmail(email.toLowerCase())}
                       />
                       {fieldErrors.email && (
                         <div className="field_error">{fieldErrors.email}</div>
@@ -632,40 +654,53 @@ const AddUser = () => {
                   </div>
                 )}
                 {/* City */}
-             <div className="col-lg-6">
+                <div className="col-lg-6">
+                  <div className="form_field w-100 aai_form_field">
+                    <h6 className="aaiff_title">City</h6>
+                    <input
+                      type="text"
+                      className="w-100"
+                      id="city"
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      onBlur={() => {
+                        const formattedCity = city
+                          .toLowerCase()
+                          .replace(/\b\w/g, (char) => char.toUpperCase());
+                        setCity(formattedCity);
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* address  */}
+<div className="col-lg-12">
   <div className="form_field w-100 aai_form_field">
-    <h6 className="aaiff_title">City</h6>
-    <input
-      type="text"
+    <h6 className="aaiff_title">Address</h6>
+    <textarea
       className="w-100"
-      id="city"
-      placeholder="City"
-      value={city}
-      onChange={(e) => setCity(e.target.value)}
+      placeholder="Enter address"
+      id="floatingAddress"
+      style={{ height: "100px" }}
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
       onBlur={() => {
-        const formattedCity = city
-          .toLowerCase()
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-        setCity(formattedCity);
+        // Remove wrapping quotes if present
+        let cleaned = address.trim();
+        if (
+          (cleaned.startsWith('"') && cleaned.endsWith('"')) ||
+          (cleaned.startsWith("'") && cleaned.endsWith("'"))
+        ) {
+          cleaned = cleaned.slice(1, -1).trim();
+        }
+        setAddress(cleaned);
       }}
-    />
+    ></textarea>
   </div>
 </div>
 
-                {/* address  */}
-                <div className="col-lg-12">
-                  <div className="form_field w-100 aai_form_field">
-                    <h6 className="aaiff_title">Address</h6>
-                    <textarea
-                      className="w-100"
-                      placeholder="Enter address"
-                      id="floatingAddress"
-                      style={{ height: "100px" }}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                    ></textarea>
-                  </div>
-                </div>
+
               </div>
             </div>
             <div className="vg22"></div>
