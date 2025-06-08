@@ -33,6 +33,7 @@ import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
+import UserProperties from "./pdpages/roles/admin/UserProperties";
 
 import ViewInspection from "./pdpages/inspection/ViewInspection";
 import InspectionDetails from "./pdpages/inspection/InspectionDetails";
@@ -875,6 +876,19 @@ function App() {
                         )
                       }
                     ></Route>
+                     <Route
+                      path="/user-properties/:phoneNumber"
+                      element={
+                        user &&
+                          (user.role === "admin" || 
+                            user.role === "superAdmin") ? (
+                          <UserProperties />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
+                    ></Route>
+                    
                     <Route
                       path="/updateproperty/:propertyid"
                       element={

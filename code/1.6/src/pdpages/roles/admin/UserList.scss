@@ -12,6 +12,20 @@
 
     .tc_single {
       border: none;
+      .role_count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--theme-green-bg);
+    min-width: 40px;
+    font-size: 14px;
+    color: var(--theme-green);
+    text-align: center;
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 0px 0px 10px 0px;
+    z-index: 2;
+}
       .inactive_tag {
         position: absolute;
         top: 34px;
