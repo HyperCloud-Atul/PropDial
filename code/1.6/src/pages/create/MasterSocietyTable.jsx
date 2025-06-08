@@ -13,6 +13,7 @@ const MasterSocietyTable = ({ filterData }) => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
       {
         Header: "Society",
@@ -21,6 +22,7 @@ const MasterSocietyTable = ({ filterData }) => {
       {
         Header: "Date",
         accessor: "createdAt",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
             {format(value.toDate(), "dd-MMM-yy hh:mm a")}

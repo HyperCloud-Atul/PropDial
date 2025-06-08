@@ -889,17 +889,20 @@ const PGAttendance = () => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
       {
         Header: "Date",
         accessor: "date",
         disableFilters: true,
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="date mobile_min_width">{value}</div>
         ),
       },
       {
         Header: "Hrs Worked",
+        disableSortBy: true,
         accessor: "workHrs",
         disableFilters: true,
         Cell: ({ value }) => (
@@ -920,6 +923,7 @@ const PGAttendance = () => {
       },
       {
         Header: "Punch In",
+        disableSortBy: true,
         accessor: "punchIn",
         disableFilters: true,
         Cell: ({ value }) => (
@@ -929,6 +933,7 @@ const PGAttendance = () => {
       {
         Header: "Punch In Location",
         accessor: "punchInLocation",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="location mobile_min_width">
@@ -947,6 +952,7 @@ const PGAttendance = () => {
 
       {
         Header: "Punch Out",
+        disableSortBy: true,
         accessor: "punchOut",
         disableFilters: true,
         Cell: ({ value }) => (
@@ -956,6 +962,7 @@ const PGAttendance = () => {
       {
         Header: "Punch Out Location",
         accessor: "punchOutLocation",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="location mobile_min_width">
@@ -974,6 +981,7 @@ const PGAttendance = () => {
       {
         Header: "Dist (Km)",
         accessor: "tripDistance",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="time mobile_min_width">{value ? value : "--:--"}</div>
@@ -982,6 +990,7 @@ const PGAttendance = () => {
       {
         Header: "Trip Start",
         accessor: "tripStart",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="time mobile_min_width">{value ? value : "--:--"}</div>
@@ -989,6 +998,7 @@ const PGAttendance = () => {
       },
       {
         Header: "Trip End",
+        disableSortBy: true,
         accessor: "tripEnd",
         disableFilters: true,
         Cell: ({ value }) => (

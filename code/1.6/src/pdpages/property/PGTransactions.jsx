@@ -14,17 +14,21 @@ const COLUMNS = [
     {
         Header: 'Expense Amount',
         disableFilters: true, //disable column filter for particular column
-        accessor: 'expenseAmount'
+        accessor: 'expenseAmount',
+        disableSortBy: true,
+        
     },
     {
         Header: 'Discount',
         disableFilters: true, //disable column filter for particular column
-        accessor: 'discount'
+        accessor: 'discount',
+        disableSortBy: true,
     },
     {
         Header: 'Payment Amount',
         disableFilters: true, //disable column filter for particular column
-        accessor: 'paymentAmount'
+        accessor: 'paymentAmount',
+        disableSortBy: true,
     },
     {
         Header: 'Status',
@@ -39,7 +43,8 @@ const COLUMNS = [
     {
         Header: 'Due Date',
         disableFilters: true, //disable column filter for particular column
-        accessor: 'dueDate'
+        accessor: 'dueDate',
+        disableSortBy: true,
     },
 
 ]

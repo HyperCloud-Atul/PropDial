@@ -8,9 +8,96 @@ import { projectFirestore } from "../../firebase/config";
 const PropertyTable = ({ properties }) => {
   const [mergedData, setMergedData] = useState([]);
 
+  // old useeffect which render table again and again 
+  // useEffect(() => {
+  //   if (!properties || properties.length === 0) return;
+
+  //   const initialData = properties.map((property) => ({
+  //     ...property,
+  //     owner: "...",
+  //     executive: "...",
+  //     tenant: "...",
+  //   }));
+
+  //   setMergedData(initialData);
+
+  //   const userCache = new Map();
+
+  //   const fetchUserDetails = async (userId) => {
+  //     if (!userId) return ":::";
+
+  //     if (userCache.has(userId)) return userCache.get(userId);
+
+  //     try {
+  //       const userDoc = await projectFirestore
+  //         .collection("users-propdial")
+  //         .doc(userId)
+  //         .get();
+
+  //       let result;
+  //       if (userDoc.exists) {
+  //         const data = userDoc.data();
+  //         result = `${data.fullName || ""}::${data.email || ""}::${data.phoneNumber || userId}::${data.countryCode || "IN"}`;
+  //       } else {
+  //         result = `::${userId}`;
+  //       }
+
+  //       userCache.set(userId, result);
+  //       return result;
+  //     } catch (error) {
+  //       console.error("Error fetching user details:", error);
+  //       const fallback = `::${userId}`;
+  //       userCache.set(userId, fallback);
+  //       return fallback;
+  //     }
+  //   };
+
+  //   const updateRoleField = (propertyId, field, value) => {
+  //     setMergedData((prevData) =>
+  //       prevData.map((item) =>
+  //         item.id === propertyId ? { ...item, [field]: value } : item
+  //       )
+  //     );
+  //   };
+
+  //   const fetchRoles = async () => {
+  //     for (const property of properties) {
+  //       const rolesSnapshot = await projectFirestore
+  //         .collection("propertyusers")
+  //         .where("propertyId", "==", property.id)
+  //         .get();
+
+  //       for (const doc of rolesSnapshot.docs) {
+  //         const data = doc.data();
+  //         const type = (data.userType || "").toLowerCase();
+  //         const tag = (data.userTag || "").toLowerCase();
+  //         const userId = data.userId;
+
+  //         if (!userId) continue;
+
+  //         if (type === "propertyowner" && tag === "owner") {
+  //           const ownerData = await fetchUserDetails(userId);
+  //           updateRoleField(property.id, "owner", ownerData);
+  //         }
+
+  //         if (type === "propertymanager" && tag === "executive") {
+  //           const execData = await fetchUserDetails(userId);
+  //           updateRoleField(property.id, "executive", execData);
+  //         }
+
+  //         if (type === "propertytenant" && tag === "tenant") {
+  //           const tenantData = await fetchUserDetails(userId);
+  //           updateRoleField(property.id, "tenant", tenantData);
+  //         }
+  //       }
+  //     }
+  //   };
+
+  //   fetchRoles();
+  // }, [properties]);
   useEffect(() => {
     if (!properties || properties.length === 0) return;
-
+ let isMounted = true;
     const initialData = properties.map((property) => ({
       ...property,
       owner: "...",
@@ -51,50 +138,48 @@ const PropertyTable = ({ properties }) => {
       }
     };
 
-    const updateRoleField = (propertyId, field, value) => {
-      setMergedData((prevData) =>
-        prevData.map((item) =>
-          item.id === propertyId ? { ...item, [field]: value } : item
-        )
-      );
-    };
+     const fetchRoles = async () => {
+    const updatedData = [...initialData];
 
-    const fetchRoles = async () => {
-      for (const property of properties) {
-        const rolesSnapshot = await projectFirestore
-          .collection("propertyusers")
-          .where("propertyId", "==", property.id)
-          .get();
+    for (const property of updatedData) {
+      const rolesSnapshot = await projectFirestore
+        .collection("propertyusers")
+        .where("propertyId", "==", property.id)
+        .get();
 
-        for (const doc of rolesSnapshot.docs) {
-          const data = doc.data();
-          const type = (data.userType || "").toLowerCase();
-          const tag = (data.userTag || "").toLowerCase();
-          const userId = data.userId;
+      for (const doc of rolesSnapshot.docs) {
+        const data = doc.data();
+        const type = (data.userType || "").toLowerCase();
+        const tag = (data.userTag || "").toLowerCase();
+        const userId = data.userId;
 
-          if (!userId) continue;
+        if (!userId) continue;
 
-          if (type === "propertyowner" && tag === "owner") {
-            const ownerData = await fetchUserDetails(userId);
-            updateRoleField(property.id, "owner", ownerData);
-          }
+        const userData = await fetchUserDetails(userId);
 
-          if (type === "propertymanager" && tag === "executive") {
-            const execData = await fetchUserDetails(userId);
-            updateRoleField(property.id, "executive", execData);
-          }
-
-          if (type === "propertytenant" && tag === "tenant") {
-            const tenantData = await fetchUserDetails(userId);
-            updateRoleField(property.id, "tenant", tenantData);
-          }
+        if (type === "propertyowner" && tag === "owner") {
+          property.owner = userData;
+        }
+        if (type === "propertymanager" && tag === "executive") {
+          property.executive = userData;
+        }
+        if (type === "propertytenant" && tag === "tenant") {
+          property.tenant = userData;
         }
       }
-    };
+    }
 
-    fetchRoles();
-  }, [properties]);
+    if (isMounted) {
+      setMergedData(updatedData); // set only once after full role fetch
+    }
+  };
 
+  fetchRoles();
+
+  return () => {
+    isMounted = false;
+  };
+}, [properties]);
   const renderUserCell = (value) => {
     if (!value || value === "...") {
       return <div className="mobile_min_width">...</div>;
@@ -163,11 +248,13 @@ const PropertyTable = ({ properties }) => {
       {
         Header: "PID",
         accessor: "pid",
+        disableSortBy: true,
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "State",
         accessor: "state",
+        
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
@@ -188,6 +275,7 @@ const PropertyTable = ({ properties }) => {
       {
         Header: "Unit No",
         accessor: "unitNumber",
+        disableSortBy: true,
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
@@ -205,7 +293,7 @@ const PropertyTable = ({ properties }) => {
         accessor: "tenant",
         Cell: ({ value }) => renderUserCell(value),
       },
-      { Header: "Flag", accessor: "purpose" },
+      { Header: "Flag", accessor: "purpose", disableSortBy: true, },
     ],
     []
   );

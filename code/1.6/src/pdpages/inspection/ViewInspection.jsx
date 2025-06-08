@@ -320,6 +320,7 @@ const ViewInspections = () => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
 
       {
@@ -331,6 +332,7 @@ const ViewInspections = () => {
         Header: "Action",
         accessor: "id",
         disableFilters: true,
+        disableSortBy: true,
         Cell: ({ row }) => {
           const { id, finalSubmit } = row.original; // Get finalSubmit field
           return (
@@ -372,6 +374,7 @@ const ViewInspections = () => {
       {
         Header: "Inspection Date",
         accessor: "createdAt",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
@@ -382,6 +385,7 @@ const ViewInspections = () => {
       {
         Header: "Inspections Areas",
         accessor: "rooms",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">

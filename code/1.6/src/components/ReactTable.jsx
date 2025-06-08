@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useTable, useGlobalFilter, useFilters, usePagination } from 'react-table'
+import { useTable, useGlobalFilter, useFilters, usePagination, useSortBy  } from 'react-table'
 import './ReactTable.scss'
 import ReactTableGlobalFilter from './ReactTableGlobalFilter'
 import ReactTableColumnFilter from './ReactTableColumnFilter'
@@ -40,7 +40,7 @@ export default function ReactTable({ tableColumns, tableData }) {
         columns: tableColumns,
         data: tableData,
         defaultColumn
-    }, useFilters, useGlobalFilter, usePagination)
+    }, useFilters, useGlobalFilter, useSortBy, usePagination)
 
     const { globalFilter } = state
     const { pageIndex, pageSize } = state
@@ -91,9 +91,19 @@ export default function ReactTable({ tableColumns, tableData }) {
                             <tr {...headergroup.getFooterGroupProps()}>
                                 {
                                     headergroup.headers.map((column) => (
-                                        <th {...column.getHeaderProps()}>{column.render('Header')}
-                                            <div>{column.canFilter ? column.render('Filter') : null}</div>
-                                        </th>
+                               <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+  {column.render('Header')}
+  {/* Sort indicator */}
+  <span>
+    {column.isSorted
+      ? column.isSortedDesc
+        ? ' 🔽'
+        : ' 🔼'
+      : ''}
+  </span>
+  <div>{column.canFilter ? column.render('Filter') : null}</div>
+</th>
+
                                     ))
                                 }
 

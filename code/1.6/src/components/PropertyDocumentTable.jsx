@@ -79,6 +79,7 @@ const PropertyDocumentTable = ({ filterDoc, dbUserState }) => {
       {
         Header: "Added At",
         accessor: "createdAt",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
             {format(value.toDate(), "dd-MMM-yy hh:mm a")}
@@ -88,6 +89,7 @@ const PropertyDocumentTable = ({ filterDoc, dbUserState }) => {
       {
         Header: "Added By",
         accessor: "createdBy",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
             {dbUserState &&

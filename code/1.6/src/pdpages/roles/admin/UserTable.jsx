@@ -72,6 +72,7 @@ const UserTable = ({ users }) => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
       // {
       //   Header: 'Name',
@@ -88,6 +89,7 @@ const UserTable = ({ users }) => {
       {
         Header: "Name",
         accessor: "fullName",
+         disableSortBy: false,
         Cell: ({ row }) => {
           const phone = row.original.phoneNumber;
           const { ownerCount, executiveCount } = useUserPropertyCounts(phone); // Hook use karo
@@ -121,6 +123,7 @@ const UserTable = ({ users }) => {
       {
         Header: "Phone Number",
         accessor: "phoneNumber",
+         disableSortBy: true,
         Cell: ({ row }) => {
           const value = row.original.phoneNumber;
           const countryCode = row.original.countryCode?.toUpperCase();
@@ -146,12 +149,13 @@ const UserTable = ({ users }) => {
       {
         Header: "Email",
         accessor: "email",
+          disableSortBy: false,
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
       {
         Header: "Contact Options",
         accessor: "actions",
-
+disableSortBy: true,
         Cell: ({ row }) => (
           <div className="contact_btn mobile_min_width">
             <Link
@@ -175,6 +179,7 @@ const UserTable = ({ users }) => {
       {
         Header: "On-Boarded",
         accessor: "createdAt",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
             {format(value.toDate(), "dd-MMM-yy hh:mm a")}
@@ -184,6 +189,7 @@ const UserTable = ({ users }) => {
       {
         Header: "Last Login",
         accessor: "lastLoginTimestamp",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="mobile_min_width">
             {format(value.toDate(), "dd-MMM-yy hh:mm a")}
@@ -193,7 +199,7 @@ const UserTable = ({ users }) => {
       {
         Header: "Status",
         accessor: "status",
-
+disableSortBy: true,
         Cell: ({ value }) => (
           <span
             className={`text-capitalize  ${

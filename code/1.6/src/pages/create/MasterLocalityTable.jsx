@@ -13,6 +13,7 @@ const MasterLocalityTable = ({ filterData }) => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
       {
         Header: "Locality",
@@ -20,6 +21,7 @@ const MasterLocalityTable = ({ filterData }) => {
       },    
       {
         Header: "Date",
+        disableSortBy: true,
         accessor: "createdAt",
         Cell: ({ value }) => (
           <div className="mobile_min_width">

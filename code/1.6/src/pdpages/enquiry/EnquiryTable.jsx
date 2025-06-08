@@ -28,11 +28,13 @@ const EnquiryTable = ({ enquiries }) => {
           id: "serialNumber",
           Cell: ({ row }) => row.index + 1,
           disableFilters: true,
+          disableSortBy: true,
         },
         {
           Header: "Action",
           accessor: "id",
           disableFilters: true,
+          disableSortBy: true,
           Cell: ({ row }) => (
             <div className="d-flex align-items-center">
               <span
@@ -68,11 +70,13 @@ const EnquiryTable = ({ enquiries }) => {
         {
           Header: "Date & Time",
           accessor: "createdAt",
+          disableSortBy: true,
           Cell: ({ value }) => format(value.toDate(), "dd-MMM-yy hh:mm a"),
           disableFilters: true,
         },
         {
           Header: "Phone Number",
+          disableSortBy: true,
           accessor: "phone",
           Cell: ({ value }) => (
             <div className="phone-number">
@@ -132,6 +136,7 @@ const EnquiryTable = ({ enquiries }) => {
         {
           Header: "Description",
           accessor: "description",
+          disableSortBy: true,
           disableFilters: true,
         }
       );

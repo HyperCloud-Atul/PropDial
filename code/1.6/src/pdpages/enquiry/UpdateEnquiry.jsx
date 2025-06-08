@@ -280,6 +280,7 @@ const UpdateEnquiry = () => {
         id: "serialNumber",
         Cell: ({ row }) => row.index + 1,
         disableFilters: true,
+        disableSortBy: true,
       },
       {
         Header: "Remark",
@@ -302,6 +303,7 @@ const UpdateEnquiry = () => {
         Header: "Visit Date",
         accessor: "visitDate",
         disableFilters: true,
+        disableSortBy: true,
         Cell: ({ value }) => {
           if (value && value.seconds) {
             const date = new Date(value.seconds * 1000);
@@ -313,6 +315,7 @@ const UpdateEnquiry = () => {
       {
         Header: "Updated At",
         accessor: "updatedAt",
+        disableSortBy: true,
         Cell: ({ value }) =>
           format(new Date(value.seconds * 1000), "dd-MMM-yy hh:mm a"),
         disableFilters: true,
@@ -320,6 +323,7 @@ const UpdateEnquiry = () => {
       {
         Header: "Updated By",
         accessor: "updatedBy",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <span className="text-capitalize">
             {dbUserState.find((user) => user.id === value)?.fullName ||

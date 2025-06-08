@@ -53,6 +53,7 @@ const AgentTable = ({ agentDoc }) => {
         Header: "S.No",
         accessor: (row, i) => i + 1,
         id: "serialNumber",
+        disableSortBy: true,
         Cell: ({ row }) =>
            (
             <span className="min_width_inherit">{ row.index + 1}</span>
@@ -62,6 +63,7 @@ const AgentTable = ({ agentDoc }) => {
       {
         Header: "Action",
         accessor: "id",
+        disableSortBy: true,
         disableFilters: true,
         Cell: ({ row }) => (
           <div className="d-flex align-items-center min_width_inherit">
@@ -95,6 +97,7 @@ const AgentTable = ({ agentDoc }) => {
       {
         Header: "Phone Number",
         className: "phone_header",
+        disableSortBy: true,
         accessor: "agentPhone",
         Cell: ({ value, row }) => {
           const uniqueId = `phone-${row.index}`;
@@ -128,6 +131,7 @@ const AgentTable = ({ agentDoc }) => {
       },
       {
         Header: "Contact Options",
+        disableSortBy: true,
         accessor: "actions",
 
         Cell: ({ row }) => (
@@ -188,6 +192,7 @@ const AgentTable = ({ agentDoc }) => {
       {
         Header: "Added At",
         accessor: "createdAt",
+        disableSortBy: true,
         Cell: ({ value }) => (
           <div className="createdat">{format(value.toDate(), "dd-MMM-yy hh:mm a")}</div>
         ),

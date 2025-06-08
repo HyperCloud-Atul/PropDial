@@ -22,7 +22,8 @@ const COLUMNS = [
     },
     {
         Header: 'Property Size',
-        accessor: 'size'
+        accessor: 'size',
+        disableSortBy: true,
     },
     {
         Header: 'Frequency',
@@ -31,7 +32,8 @@ const COLUMNS = [
     {
         Header: 'Amount',
         disableFilters: true, //disable column filter for particular column
-        accessor: 'amount'
+        accessor: 'amount',
+        disableSortBy: true,
     },
 ]
 
