@@ -78,8 +78,7 @@ const PropertyDetails = () => {
     useState();
 
   const { documents: dbUsers, error: dbuserserror } = useCollection(
-    "users-propdial",
-    ["status", "==", "active"]
+    "users-propdial",    
   );
 
   const { documents: onlyOwners, error: onlyOwnersError } = useCollection(
@@ -1519,7 +1518,7 @@ const PropertyDetails = () => {
 
   const handleInspectionClick = (e) => {
     const isAuthorized =
-      user?.status === "active" &&
+      user &&
       (user?.role === "admin" ||
         user?.role === "superAdmin" ||
         isPropertyManager);
@@ -1833,8 +1832,8 @@ const PropertyDetails = () => {
             </div>
             {/* Change User Popup - End */}
             {/* 9 dots html start  */}
-            {user &&
-              user.status === "active" &&
+            {/* {user &&
+             
               (user.role === "admin" || user.role === "superAdmin") && (
                 <div
                   onClick={openMoreAddOptions}
@@ -1881,10 +1880,10 @@ const PropertyDetails = () => {
                   <span className="material-symbols-outlined">home</span>
                 </Link>
               </div>
-            </div>
+            </div> */}
             {/* 9 dots html end*/}
             {user &&
-              user.status === "active" &&
+            
               (user.role === "admin" ||
                 user.role === "superAdmin" ||
                 isPropertyManager) && (
@@ -1893,6 +1892,14 @@ const PropertyDetails = () => {
                   className="property-list-add-property with_9dot"
                 >
                   <span className="material-symbols-outlined">edit_square</span>
+                </Link>
+              )}
+               {(user.role === "admin" || user.role === "superAdmin") && (
+                <Link
+                to="/newproperty"
+                  className="property-list-add-property"
+                >
+                  <span className="material-symbols-outlined">add</span>
                 </Link>
               )}
             {/* top search bar */}
@@ -1917,7 +1924,7 @@ const PropertyDetails = () => {
               {propertyDocument && (
                 <div className="">
                   {user &&
-                    user.status === "active" &&
+                   
                     (user.role === "admin" || user.role === "superAdmin") && (
                       // <div className="property_card_single quick_detail_show mobile_full_card">
                       //   <div className="more_detail_card_inner">
@@ -2084,7 +2091,7 @@ const PropertyDetails = () => {
                               </div>
                             </div>
                             {user &&
-                              user.status === "active" &&
+                          
                               (user.role === "admin" ||
                                 user.role === "superAdmin") &&
                               propertyDocument && (
@@ -2577,7 +2584,7 @@ const PropertyDetails = () => {
                             </div>
                           )} */}
                         {user &&
-                          user.status === "active" &&
+                       
                           (user.role === "admin" ||
                             user.role === "superAdmin") && (
                             <div
@@ -2638,7 +2645,7 @@ const PropertyDetails = () => {
                         <div className="pmd_top">
                           <h4 className="padd_right">
                             {user &&
-                              user.status === "active" &&
+                            
                               (user.role === "superAdmin" ||
                                 user.role === "admin" ||
                                 isPropertyOwner ||
@@ -3251,7 +3258,7 @@ const PropertyDetails = () => {
                     )}
 
                   {user &&
-                    user.status === "active" &&
+                
                     (user.role === "superAdmin" ||
                       user.role === "admin" ||
                       isPropertyOwner ||
@@ -3660,7 +3667,7 @@ const PropertyDetails = () => {
                   {propertyDocument &&
                     propertyDocument.category === "Residential" && (
                       <>
-                        {user?.status === "active" &&
+                        {user &&
                           ((propertyLayoutsNew?.length === 0 &&
                             (user.role === "superAdmin" ||
                               user.role === "admin" ||
@@ -3682,7 +3689,7 @@ const PropertyDetails = () => {
                               <div className="more_detail_card_inner">
                                 <div className="row">
                                   {user &&
-                                    user.status === "active" &&
+                                 
                                     (user.role === "admin" ||
                                       user.role === "superAdmin" ||
                                       isPropertyManager) && (
@@ -3742,7 +3749,7 @@ const PropertyDetails = () => {
                                   <div
                                     className={`${
                                       user &&
-                                      user.status === "active" &&
+                               
                                       (user.role === "admin" ||
                                         isPropertyManager ||
                                         user.role === "superAdmin")
@@ -4226,7 +4233,7 @@ const PropertyDetails = () => {
                     (propertyDocument.category === "Residential" ||
                       propertyDocument.category === "Commercial") && (
                       <>
-                        {user?.status === "active" &&
+                        {user &&
                           ((tenantDocument?.length === 0 &&
                             (user.role === "superAdmin" ||
                               user.role === "admin" ||
@@ -4244,7 +4251,7 @@ const PropertyDetails = () => {
                               <div className="more_detail_card_inner">
                                 <div className="row">
                                   {user &&
-                                    user.status === "active" &&
+                                   
                                     (user.role === "admin" ||
                                       user.role === "superAdmin" ||
                                       isPropertyManager) && (
@@ -4271,7 +4278,7 @@ const PropertyDetails = () => {
                                   <div
                                     className={`${
                                       user &&
-                                      user.status === "active" &&
+                                   
                                       (user.role === "admin" ||
                                         user.role === "superAdmin" ||
                                         isPropertyManager)
@@ -4542,7 +4549,7 @@ const PropertyDetails = () => {
                   {/* tenant card end  */}
 
                   {/* property user card  start */}
-                  {user?.status === "active" &&
+                  {user &&
                     ((filteredPropertyOwners?.length === 0 &&
                       (user.role === "superAdmin" ||
                         user.role === "admin" ||
@@ -4561,7 +4568,7 @@ const PropertyDetails = () => {
                           <div className="more_detail_card_inner">
                             <div className="row">
                               {user &&
-                                user.status === "active" &&
+                              
                                 (user.role === "admin" ||
                                   user.role === "superAdmin") && (
                                   <div
@@ -4590,7 +4597,7 @@ const PropertyDetails = () => {
                               <div
                                 className={`${
                                   user &&
-                                  user.status === "active" &&
+                                
                                   (user.role === "admin" ||
                                     user.role === "superAdmin")
                                     ? "col-sm-11 col-10"
@@ -4632,7 +4639,7 @@ const PropertyDetails = () => {
                                                 className="property_people_designation d-flex align-items-end justify-content-center pointer"
                                                 onClick={
                                                   user &&
-                                                  user.status === "active" &&
+                                                  
                                                   (user.role === "admin" ||
                                                     user.role === "superAdmin")
                                                     ? (e) =>
@@ -4646,7 +4653,7 @@ const PropertyDetails = () => {
                                               >
                                                 {propUser.userTag}
                                                 {user &&
-                                                  user.status === "active" &&
+                                                 
                                                   (user.role === "admin" ||
                                                     user.role ===
                                                       "superAdmin") && (
@@ -4674,8 +4681,7 @@ const PropertyDetails = () => {
                                                   <h5
                                                     onClick={
                                                       user &&
-                                                      user.status ===
-                                                        "active" &&
+                                                   
                                                       (user.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
@@ -4697,8 +4703,7 @@ const PropertyDetails = () => {
                                                   >
                                                     {propUser.fullName}
                                                     {user &&
-                                                      user.status ===
-                                                        "active" &&
+                                                   
                                                       (user.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin") && (
@@ -4717,7 +4722,7 @@ const PropertyDetails = () => {
                                                     {propUser.email}
                                                   </h6>
                                                   {user &&
-                                                    user.status === "active" &&
+                                                    
                                                     user.role ===
                                                       "superAdmin" && (
                                                       <h6
@@ -4962,7 +4967,7 @@ const PropertyDetails = () => {
                   {/* property user card end  */}
 
                   {/* propdial managers / users card  start */}
-                  {user?.status === "active" &&
+                  {user &&
                     ((filteredPropertyManagers?.length === 0 &&
                       (user.role === "superAdmin" ||
                         user.role === "admin" ||
@@ -4981,7 +4986,7 @@ const PropertyDetails = () => {
                           <div className="more_detail_card_inner">
                             <div className="row">
                               {user &&
-                                user.status === "active" &&
+                        
                                 (user.role === "admin" ||
                                   user.role === "superAdmin") && (
                                   <div
@@ -5052,7 +5057,7 @@ const PropertyDetails = () => {
                                                 onClick={(e) => {
                                                   if (
                                                     user &&
-                                                    user.status === "active" &&
+                                                   
                                                     (user.role === "admin" ||
                                                       user.role ===
                                                         "superAdmin")
@@ -5067,7 +5072,7 @@ const PropertyDetails = () => {
                                               >
                                                 {propUser.userTag}
                                                 {user &&
-                                                  user.status === "active" &&
+                                                  
                                                   (user.role === "admin" ||
                                                     user.role ===
                                                       "superAdmin") && (
@@ -5095,8 +5100,7 @@ const PropertyDetails = () => {
                                                   <h5
                                                     onClick={
                                                       user &&
-                                                      user.status ===
-                                                        "active" &&
+                                                      
                                                       (user.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
@@ -5118,8 +5122,7 @@ const PropertyDetails = () => {
                                                   >
                                                     {propUser.fullName}
                                                     {user &&
-                                                      user.status ===
-                                                        "active" &&
+                                                    
                                                       (user.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin") && (
@@ -5138,7 +5141,7 @@ const PropertyDetails = () => {
                                                     {propUser.email}
                                                   </h6>
                                                   {user &&
-                                                    user.status === "active" &&
+                                                    
                                                     user.role ===
                                                       "superAdmin" && (
                                                       <h6
@@ -6224,7 +6227,7 @@ const PropertyDetails = () => {
                         <h2 className="card_title">Property Address</h2>
                         <div className="p_info">
                           {user &&
-                            user.status === "active" &&
+                           
                             (user.role === "superAdmin" ||
                               user.role === "admin" ||
                               isPropertyManager ||
@@ -7359,7 +7362,7 @@ const PropertyDetails = () => {
                                 ></p>
                                 {!isPropDescEdit &&
                                   user &&
-                                  user.status === "active" &&
+                                  
                                   (user.role === "owner" ||
                                     user.role === "admin" ||
                                     user.role === "superAdmin") && (
@@ -7382,7 +7385,7 @@ const PropertyDetails = () => {
                     </div>
                     {/* Owner Instruction  */}
                     {user &&
-                      user.status === "active" &&
+                      
                       user.role !== "guest" && (
                         <div className="col-lg-6">
                           <div className="property_card_single mobile_full_card">
@@ -7433,7 +7436,7 @@ const PropertyDetails = () => {
                                     ></p>
                                     {!isEditingOwnerInstruction &&
                                       user &&
-                                      user.status === "active" &&
+                                   
                                       (user.role === "admin" ||
                                         user.role === "superAdmin") && (
                                         <span

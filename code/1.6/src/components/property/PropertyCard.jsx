@@ -1067,7 +1067,7 @@ const PropertyCard = ({ propertyid }) => {
               )}
 
               {/* tenant  */}
-              {!isPropertyTenant && (
+             {!isPropertyTenant && propertydoc.flag.toLowerCase() === "rented out" && (
                 <div className="property_user_single">
                   <div className="user_type">Tenant</div>
                   <div className="inner">

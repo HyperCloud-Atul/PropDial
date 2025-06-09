@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
 // import { useCommon } from "../../hooks/useCommon";
 import { useDocument } from "../../hooks/useDocument";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { generateSlug } from "../../utils/generateSlug";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { projectFirestore, timestamp } from "../../firebase/config";
@@ -487,6 +488,7 @@ const CreateProperty = () => {
     if (btnProperties === "Properties") {
       // console.log("btnName: ", btnProperties)
       navigate("/allproperties/all");
+      
     } else {
       let errorFlag = false;
       let errorMsg = "Please resolve ERRORs before proceeding...";
@@ -938,7 +940,9 @@ const CreateProperty = () => {
           // var x = document.getElementById("btn_create").name;
           document.getElementById("btn_create").display = "none";
           // navigate("/dashboard");
-          navigate("/allproperties/all");
+          // navigate("/allproperties/all");
+        navigate(`/propertydetails/${generateSlug(docRef)}`);
+
           // setNewProperty(newProperty);
         }
       }

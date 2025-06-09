@@ -424,7 +424,7 @@ export default function PGProfile() {
               className="position-absolute"
               style={{ top: "20px", left: "50px" }}
             >
-              {user.gender === "male" ? (
+              {user?.gender === "male" ? (
                 <img
                   src="/assets/img/icons/men-icon-login.png"
                   alt=""

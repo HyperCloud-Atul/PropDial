@@ -2008,7 +2008,20 @@ div#react-select-3-placeholder {
   gap: 22px;
   flex-direction: wrap;
 }
-
+.pg_adminproperty{
+  .filters{
+    .left{
+   display: flex
+;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    .css-b62m3t-container {
+    min-width: 170px;
+}
+    }
+  }
+}
 .msg_area {
   font-size: 15px;
   padding: 4px 15px;

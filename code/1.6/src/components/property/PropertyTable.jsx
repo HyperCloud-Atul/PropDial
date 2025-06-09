@@ -254,17 +254,17 @@ const PropertyTable = ({ properties }) => {
         disableSortBy: true,
         Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
       },
-      {
-        Header: "State",
-        accessor: "state",
+      // {
+      //   Header: "State",
+      //   accessor: "state",
         
-        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
-      },
-      {
-        Header: "City",
-        accessor: "city",
-        Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
-      },
+      //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
+      // },
+      // {
+      //   Header: "City",
+      //   accessor: "city",
+      //   Cell: ({ value }) => <div className="mobile_min_width">{value}</div>,
+      // },
       {
         Header: "Locality",
         accessor: "locality",

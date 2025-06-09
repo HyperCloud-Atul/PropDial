@@ -3,47 +3,101 @@ import { Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useCollection } from "../../hooks/useCollection";
 import { projectFirestore } from "../../firebase/config";
+import { useMemo } from "react";
 import PropertyCard from "../../components/property/PropertyCard";
 import PropertyTable from "../../components/property/PropertyTable";
-import Switch from "react-switch";
+import Select from "react-select";
 import { ClipLoader } from "react-spinners";
-import Filters from "../../components/Filters"; // Using your existing Filters component
+import Filters from "../../components/Filters";
 import InactiveUserCard from "../../components/InactiveUserCard";
 const propertyFilter = ["Residential", "Commercial", "Plot"];
-// const statusFilter = ["In-Review", "Active", "Inactive"]; // Define the isActiveInactiveReview options
-const statusFilter = [ "Active","In-Review", "Inactive"];
+const statusFilter = ["Active", "In-Review", "Inactive"];
+
+
+
 const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { filterOption } = useParams();
-  // console.log("filterOption :", filterOption)
 
-  // const { documents: allproperties, error: propertieserror } =
-  //   useCollection("properties-propdial", ["postedBy", "==", "Propdial"], ["createdAt", "desc"]);
-  const { documents: allproperties, error: propertieserror } = useCollection(
-    "properties-propdial",
-    "",
-    ["createdAt", "desc"]
-  );
+  // populate state and city based on state start
+  const { documents: mState, error: mStateError } = useCollection("m_states");
+  const [selectedStateId, setSelectedStateId] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [cityOptions, setCityOptions] = useState([]);
+  const [allproperties, setAllproperties] = useState([]);
+
+  const stateOptions =
+    mState?.map((doc) => ({
+      value: doc.docId,
+      label: doc.state,
+    })) || [];
+
+  const handleStateChange = (selectedOption) => {
+    setSelectedStateId(selectedOption?.value || null);
+    setSelectedCity(null);
+    setCityOptions([]);
+    setAllproperties([]);
+  };
+
+  const handleCityChange = (selectedOption) => {
+    setSelectedCity(selectedOption?.value || null);
+  };
+
+  // Fetch cities on state select
+  useEffect(() => {
+    if (!selectedStateId) return;
+
+    const unsubscribe = projectFirestore
+      .collection("m_cities")
+      .where("state", "==", selectedStateId)
+      .where("status", "==", "active")
+      .onSnapshot((snapshot) => {
+        const options = snapshot.docs.map((doc) => ({
+          value: doc.data().city,
+          label: doc.data().city,
+        }));
+        setCityOptions(options);
+      });
+
+    return () => unsubscribe();
+  }, [selectedStateId]);
+
+  // Fetch properties on city select
+  useEffect(() => {
+    if (!selectedCity) return;
+
+    const unsubscribe = projectFirestore
+      .collection("properties-propdial")
+      .where("city", "==", selectedCity)
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        const props = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAllproperties(props);
+      });
+
+    return () => unsubscribe();
+  }, [selectedCity]);
+  // populate state and city based on state end
+
+ 
 
   const {
     documents: assignedPopertyUserList,
     error: errassignedPopertyUserList,
   } = useCollection("propertyusers");
-
   const { documents: userList, error: erruserList } =
     useCollection("users-propdial");
-
   const [propertyListWithUsers, setPropertyListWithUsers] = useState();
   const [properties, setProperties] = useState();
 
-  // Existing property filter state
   const [filter, setFilter] = useState(propertyFilter[0]);
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
   };
-
-  // // New isActiveInactiveReview filter state
-  const [status, setStatus] = useState("active"); // Default to 'active'
+  const [status, setStatus] = useState("active");
   const changeStatusFilter = (newStatus) => {
     setStatus(newStatus);
   };
@@ -54,95 +108,7 @@ const PGAdminProperty = () => {
     setSearchInput(e.target.value);
   };
 
-  const ITEMS_PER_PAGE = 10;
-  // const [pdProperties, setAllproperties] = useState([]);
-  // const [allproperties, setAllproperties] = useState([]);
-  const [lastVisiblePDDoc, setLastVisiblePDDoc] = useState(null);
-  const [hasMorePDDoc, setHasMorePDDoc] = useState(true);
-  
-// Initial Load
-// useEffect(() => {
-//   async function fetchData() {
-//       // You can await here
-//       await fetchProperties(null, status);      
-//   }
-//   fetchData();
-// }, [status]);
 
-//Call merged function in case of any change of pa or pd properties
-// useEffect(() => {
-//   async function fetchData() {
-//       // You can await here
-//       await mergedPAPDProperties();
-//       // ...
-//   }
-//   fetchData();
-
-// }, [paProperties, pdProperties]);
-
-  // // Loading state
-//   const fetchProperties = async (
-//     _lastVisibleDoc = null,
-//     _status = "Active",
-    
-// ) => {
-
-//     try {
-//         // console.log("Purpose: ", _purpose)
-
-//         // setLoading(true);
-
-//         let query = projectFirestore
-//             .collection("properties-propdial")
-//             // .where("propertyManagerID", " !=", user?.uid)
-//             // .where("purpose", "==", _purpose)
-//             .where("status", "==", _status)
-//             // .where("createdBy", "!=", user?.uid)
-//             // .orderBy("createdBy", "asc")
-//             .orderBy("createdAt", "desc")
-//             .limit(ITEMS_PER_PAGE);
-
-//         if (_lastVisibleDoc) {
-//             query = query.startAfter(_lastVisibleDoc);
-//             // console.log('query start after: ', query)
-//         }
-
-//         const snapshot = await query.get();
-//         const PDProperties = snapshot.docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//         }));
-
-
-//         if (_lastVisibleDoc) {
-//             setAllproperties((prevItems) => [...prevItems, ...PDProperties]);
-//         } else {
-//             setAllproperties(PDProperties);
-//         }
-//         setLastVisiblePDDoc(snapshot.docs[snapshot.docs.length - 1]);
-//         setHasMorePDDoc(snapshot.docs.length === ITEMS_PER_PAGE);
-
-//         // console.log("PAProperties: ", PAProperties);
-
-//     }
-//     catch (error) {
-//         console.log("Error in function fetchPropertiesOfPropDial: ", error)
-//     }
-
-// };
-
-
-// const handleLoadMore = () => {
-//   // if (loading) return;
-
-//   // console.log("hasMorePADoc: ", hasMorePADoc)
-//   // console.log("hasMorePDDoc: ", hasMorePDDoc)
-
-//   // setLoading(true);
-
-//   if (hasMorePDDoc) fetchProperties(lastVisiblePDDoc, status);
-
-// };
 
   useEffect(() => {
     let _properties = null;
@@ -214,6 +180,7 @@ const PGAdminProperty = () => {
 
   const accessedPropertyList = propertyListWithUsers
     ? propertyListWithUsers.filter((document) => {
+      
         switch (caseFilter) {
           case "country":
             const lowerCaseCountryArray = user.accessValue.map((element) =>
@@ -232,8 +199,7 @@ const PGAdminProperty = () => {
               lowerCaseRegionArray.includes(document.region.toLowerCase())
             );
           case "state":
-            // const lowerCaseStateArray = user.accessValue?.map(
-               const lowerCaseStateArray = user.accessValue?.map(
+            const lowerCaseStateArray = user.accessValue?.map(
               (element) =>
                 //  element.toLowerCase()
                 element
@@ -255,6 +221,71 @@ const PGAdminProperty = () => {
         }
       })
     : null;
+
+
+    const propertyCounts = useMemo(() => {
+  const count = {
+    active: 0,
+    inactive: 0,
+    inreview: 0,
+    residential: 0,
+    commercial: 0,
+    plot: 0,
+  };
+
+  accessedPropertyList?.forEach((doc) => {
+    const status = doc.isActiveInactiveReview?.toLowerCase();
+    const category = doc.category?.toLowerCase();
+
+    if (status === "active") count.active++;
+    else if (status === "inactive") count.inactive++;
+    else if (status === "in-review") count.inreview++;
+
+    if (category === "residential") count.residential++;
+    else if (category === "commercial") count.commercial++;
+    else if (category === "plot") count.plot++;
+  });
+
+  return count;
+}, [accessedPropertyList]);
+
+
+const categoryStatusCounts = useMemo(() => {
+  const counts = {
+    Residential: { active: 0, inreview: 0, inactive: 0 },
+    Commercial: { active: 0, inreview: 0, inactive: 0 },
+    Plot: { active: 0, inreview: 0, inactive: 0 },
+  };
+
+  accessedPropertyList?.forEach((doc) => {
+    const category = doc.category?.trim().toLowerCase();
+    const status = doc.isActiveInactiveReview?.trim().toLowerCase();
+
+    const catKey =
+      category === "residential"
+        ? "Residential"
+        : category === "commercial"
+        ? "Commercial"
+        : category === "plot"
+        ? "Plot"
+        : null;
+
+    const statusKey =
+      status === "active"
+        ? "active"
+        : status === "in-review"
+        ? "inreview"
+        : status === "inactive"
+        ? "inactive"
+        : null;
+
+    if (catKey && statusKey) {
+      counts[catKey][statusKey]++;
+    }
+  });
+
+  return counts;
+}, [accessedPropertyList]);
 
   // Filter properties based on search input, isActiveInactiveReview, and other filters
   const filteredProperties = accessedPropertyList
@@ -359,14 +390,6 @@ const PGAdminProperty = () => {
                 </div>
               </div>
               {/* 9 dots html */}
-               {user?.status === "active" && (user?.role === "admin" || user?.role === "superAdmin") && (
-                 <Link
-                            to="/newproperty"
-                            className="property-list-add-property with_9dot"
-                          >
-                            <span className="material-symbols-outlined">add</span>
-                          </Link>
-               )}
               <div className="pg_header d-flex justify-content-between">
                 <div className="left">
                   <h2 className="m22">
@@ -399,6 +422,25 @@ const PGAdminProperty = () => {
                       <span className="material-symbols-outlined">search</span>
                     </div>
                   </div>
+                  <label>Select State</label>
+                  <Select
+                    options={stateOptions}
+                    onChange={handleStateChange}
+                    placeholder="Select a state..."
+                    isClearable
+                  />
+
+                  {selectedStateId && (
+                    <>
+                      <label className="mt-3">Select City</label>
+                      <Select
+                        options={cityOptions}
+                        onChange={handleCityChange}
+                        placeholder="Select a city..."
+                        isClearable
+                      />
+                    </>
+                  )}
                 </div>
 
                 <div className="right">
@@ -420,32 +462,7 @@ const PGAdminProperty = () => {
                       />
                     )}
                   </div>
-                  {/* <div className="mobile_size residentail_commercial rent_sale">
-      <label className={rentSaleFilter === "Sale" ? "on" : "off"}>
-        <div className="switch">
-          <span
-            className={`rent ${rentSaleFilter === "Sale" ? "off" : "on"
-              }`}
-          >
-            Rent
-          </span>
-          <Switch
-            onChange={handleRentSaleChange}
-            checked={rentSaleFilter === "Sale"}
-            handleDiameter={20} // Set the handle diameter (optional)
-            uncheckedIcon={false} // Hide the wrong/right icon
-            checkedIcon={false} // Hide the wrong/right icon
-            className="pointer"
-          />
-          <span
-            className={`sale ${rentSaleFilter === "Sale" ? "on" : "off"
-              }`}
-          >
-            Sale
-          </span>
-        </div>
-      </label>
-    </div> */}
+
                   <div className="button_filter diff_views">
                     <div
                       className={`bf_single ${
@@ -468,17 +485,110 @@ const PGAdminProperty = () => {
                       </span>
                     </div>
                   </div>
-                  {/* {user?.status === "active" && (user?.role === "admin" || user?.role === "superAdmin") && (
-                     <Link
-                     to="/newproperty"
-                     className="theme_btn btn_fill no_icon header_btn"
-                   >
-                     Create Property
-                   </Link>
-                  )} */}
-                 
+                  {user?.status === "active" &&
+                    (user?.role === "admin" || user?.role === "superAdmin") && (
+                      <Link
+                        to="/newproperty"
+                        className="theme_btn btn_fill no_icon header_btn"
+                      >
+                        Create Property
+                      </Link>
+                    )}
                 </div>
+
               </div>
+              <div className="btn-group my-2">
+  <button onClick={() => setStatus("Active")}>
+    Active ({propertyCounts.active})
+  </button>
+  <button onClick={() => setStatus("In-Review")}>
+    In-Review ({propertyCounts.inreview})
+  </button>
+  <button onClick={() => setStatus("Inactive")}>
+    Inactive ({propertyCounts.inactive})
+  </button>
+</div>
+
+<div className="btn-group my-2">
+  <button onClick={() => setFilter("Residential")}>
+    Residential ({propertyCounts.residential})
+  </button>
+  <button onClick={() => setFilter("Commercial")}>
+    Commercial ({propertyCounts.commercial})
+  </button>
+  <button onClick={() => setFilter("Plot")}>
+    Plot ({propertyCounts.plot})
+  </button>
+  <button onClick={() => setFilter("All")}>All</button>
+</div>
+
+<div className="flex flex-wrap gap-4 mb-4">
+  {propertyFilter.map((cat) => (
+    <button
+      key={cat}
+      onClick={() => changeFilter(cat)}
+      className={`px-4 py-2 rounded shadow ${
+        filter === cat ? "bg-blue-600 text-white" : "bg-gray-100"
+      }`}
+    >
+      <div className="font-semibold">{cat}</div>
+      <div className="text-sm text-gray-700">
+        Active: {categoryStatusCounts[cat]?.active || 0} |
+        In-Review: {categoryStatusCounts[cat]?.inreview || 0} |
+        Inactive: {categoryStatusCounts[cat]?.inactive || 0} <br />
+        Total:{" "}
+        {(
+          (categoryStatusCounts[cat]?.active || 0) +
+          (categoryStatusCounts[cat]?.inreview || 0) +
+          (categoryStatusCounts[cat]?.inactive || 0)
+        ).toString()}
+      </div>
+    </button>
+  ))}
+</div>
+
+<div className="flex flex-col gap-4 mb-4">
+  {propertyFilter.map((cat) => (
+    <div key={cat} className="border p-3 rounded bg-white shadow">
+        <div className="px-3 py-1 rounded border text-sm bg-green-100 font-semibold">
+    Total:{" "}
+    {["active", "inreview", "inactive"].reduce(
+      (acc, stat) => acc + (categoryStatusCounts[cat]?.[stat] || 0),
+      0
+    )}
+  </div>
+      <button
+        onClick={() => setFilter(cat)}
+        className={`text-lg font-semibold mb-2 ${
+          filter === cat ? "text-blue-600" : "text-gray-800"
+        }`}
+      >
+        {cat}
+      </button>
+
+      {/* {filter === cat && ( */}
+        <div className="flex gap-2 mt-2">
+          {["active", "inreview", "inactive"].map((stat) => (
+            <button
+              key={stat}
+              onClick={() => setStatus(stat)}
+              className={`px-3 py-1 rounded border text-sm ${
+                status === stat ? "bg-blue-600 text-white" : "bg-gray-100"
+              }`}
+            >
+              {stat.charAt(0).toUpperCase() + stat.slice(1)} (
+              {categoryStatusCounts[cat]?.[stat] || 0})
+            </button>
+          ))}
+        </div>
+      {/* )} */}
+
+   
+    </div>
+  ))}
+</div>
+
+
               <hr></hr>
               <div className="vg12"></div>
               <div className="property_cards_parent">
@@ -497,7 +607,10 @@ const PGAdminProperty = () => {
               {viewMode === "table_view" && (
                 <>
                   {filteredProperties && (
-                    <PropertyTable properties={filteredProperties} />
+                    <PropertyTable
+                      properties={filteredProperties}
+                      user={user}
+                    />
                   )}
                 </>
               )}
