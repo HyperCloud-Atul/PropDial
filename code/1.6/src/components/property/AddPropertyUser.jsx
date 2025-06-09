@@ -204,10 +204,9 @@ const AddPropertyUser = ({ propertyid, user, whoIsUser }) => {
         .set(userData);
 
       const tenantDocRef = await projectFirestore.collection("tenants").add({
-        address: "",
-        name: name,
-        emailId: email,
+      
         mobile: phone, // Document ID is phone number
+        userId: phone,
         status: "active",
         propertyId: propertyid,
         createdAt: timestamp.now(),
@@ -215,10 +214,7 @@ const AddPropertyUser = ({ propertyid, user, whoIsUser }) => {
         offBoardingDate: "",
         onBoardingDate: "",
         rentEndDate: "",
-        rentStartDate: "",
-        tenantImgUrl: "",
-        whatsappNumber: "",
-        idNumber: "",
+        rentStartDate: "",      
       });
 
       // Add to 'propertyusers' collection with tenantDocId

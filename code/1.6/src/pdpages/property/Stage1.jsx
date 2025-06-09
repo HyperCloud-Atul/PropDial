@@ -2124,9 +2124,9 @@ const Stage1 = (props) => {
                   required
                   type="text"
                   placeholder="Demand for Sale"
-                  maxLength={9}
+                  maxLength={12}
                   onInput={(e) => {
-                    restrictInput(e, 9);
+                    restrictInput(e, 12);
                   }}
                   onChange={(e) => {
                     // const rawValue = e.target.value.replace(/,/g, ""); // Remove existing commas

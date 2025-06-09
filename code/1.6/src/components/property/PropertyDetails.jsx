@@ -219,7 +219,7 @@ const PropertyDetails = () => {
     allPropertyUsers.filter((doc) => doc.userType === "propertymanager");
 
   const { documents: propertyDocList, errors: propertyDocListError } =
-    useCollection("docs-propdial", ["masterRefId", "==", propertyid]);
+    useCollection("property-document-propdial", ["masterRefId", "==", propertyid]);
 
   // console.log("propertyDocList: ", propertyDocList && propertyDocList.length);
 
@@ -1672,11 +1672,9 @@ const PropertyDetails = () => {
 
     try {
       // Add to 'tenants' collection and get the doc reference
-      const tenantDocRef = await projectFirestore.collection("tenants").add({
-        address: "",
-        name: tenantSelectedUser.fullName || "",
-        emailId: tenantSelectedUser.email || "",
-        mobile: tenantSelectedUser.id, // Document ID is phone number
+      const tenantDocRef = await projectFirestore.collection("tenants").add({      
+        mobile: tenantSelectedUser.id, 
+        userId: tenantSelectedUser.id, // Document ID is phone number
         status: "active",
         propertyId: propertyid,
         createdAt: timestamp.now(),
@@ -1684,10 +1682,7 @@ const PropertyDetails = () => {
         offBoardingDate: "",
         onBoardingDate: "",
         rentEndDate: "",
-        rentStartDate: "",
-        tenantImgUrl: "",
-        whatsappNumber: "",
-        idNumber: "",
+        rentStartDate: "",     
       });
 
       // Add to 'propertyusers' collection with tenantDocId
@@ -1697,7 +1692,7 @@ const PropertyDetails = () => {
         tenantDocId: tenantDocRef.id, // capturing tenant document ID here
         createdAt: timestamp.now(),
         createdBy: user?.phoneNumber,
-        userTag: "Tenant",
+        userTag: "tenant",
         userType: "propertytenant",
         isCurrentProperty: true,
       });
@@ -4357,6 +4352,9 @@ const PropertyDetails = () => {
                                                             )
                                                           : "Tenant Phone"}
                                                       </h6>
+                                                    <h6 className="t_number">
+                                                        {tenant?.emailId}
+                                                      </h6>
                                                     </div>
                                                   </Link>
                                                   <div className="wha_call_icon">
@@ -4395,7 +4393,10 @@ const PropertyDetails = () => {
                                 show={showAddTenantModal}
                                 centered
                                 size="lg"
-                              className={`add_new ${tenantMode === "new" && "new"}`}                             >
+                                className={`add_new ${
+                                  tenantMode === "new" && "new"
+                                }`}
+                              >
                                 <h5 className="text_orange text-center">
                                   Add tenant
                                 </h5>
@@ -4429,7 +4430,13 @@ const PropertyDetails = () => {
                                 >
                                   close
                                 </span>
-                                {tenantMode === "new" && <AddPropertyUser propertyid={propertyid} user={user} whoIsUser={"tenant"}/>}
+                                {tenantMode === "new" && (
+                                  <AddPropertyUser
+                                    propertyid={propertyid}
+                                    user={user}
+                                    whoIsUser={"tenant"}
+                                  />
+                                )}
                                 {tenantMode === "existing" && (
                                   <>
                                     <div className="form_field st-2">
@@ -4705,6 +4712,9 @@ const PropertyDetails = () => {
                                                       /(\d{2})(\d{5})(\d{5})/,
                                                       "+$1 $2-$3"
                                                     )}
+                                                  </h6>
+                                                   <h6 className="t_number">
+                                                    {propUser.email}
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&
@@ -5123,6 +5133,9 @@ const PropertyDetails = () => {
                                                       /(\d{2})(\d{5})(\d{5})/,
                                                       "+$1 $2-$3"
                                                     )}
+                                                  </h6>
+                                                  <h6 className="t_number">
+                                                    {propUser.email}
                                                   </h6>
                                                   {user &&
                                                     user.status === "active" &&

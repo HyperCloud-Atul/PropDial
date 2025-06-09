@@ -7,8 +7,13 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useFirestore } from "../hooks/useFirestore";
 import { projectStorage } from "../firebase/config";
 import { projectFirestore } from "../firebase/config";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BarLoader, BeatLoader, ClimbingBoxLoader } from "react-spinners";
 import SureDelete from "../pdpages/sureDelete/SureDelete";
+import Back from "../pdpages/back/Back";
+import QuickAccessMenu from "../pdpages/quickAccessMenu/QuickAccessMenu";
+import PhoneInput from "react-phone-input-2";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import ImageModal from "../pdpages/imageModal/ImageModal";
@@ -256,14 +261,186 @@ const TenantDetails = () => {
     }
     return "";
   };
+  // 9 dots controls
+  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
+  const openMoreAddOptions = () => {
+    setHandleMoreOptionsClick(true);
+  };
+  const closeMoreAddOptions = () => {
+    setHandleMoreOptionsClick(false);
+  };
+  // 9 dots controls
 
-
-
+  const {
+    addDocument: tenantDocsAddDocument,
+    updateDocument: tenantDocsUpdateDocument,
+    deleteDocument: tenantDocsDeleteDocument,
+    docerror,
+  } = useFirestore("docs");
+  const [uploadingDocId, setUploadingDocId] = useState(null); // Track uploading document ID
   const [showAIForm, setShowAIForm] = useState(false);
   const handleShowAIForm = () => setShowAIForm(!showAIForm);
- 
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedDocCat, setSelectedDocCat] = useState("KYC");
+  const [selectedIdType, setSelectedIdType] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const handleDocCatChange = (event) => setSelectedDocCat(event.target.value);
+  const handleRadioChange = (event) => setSelectedIdType(event.target.value);
+  const handleIdNumberChange = (event) => setIdNumber(event.target.value);
+  const [documentFile, setDocumentFile] = useState(null);
+  const [newDocId, setNewDocId] = useState("");
 
+  const addTenantDocuments = async () => {
+    if (!selectedDocCat || !selectedIdType) {
+      alert("All fields are required!");
+      return;
+    }
 
+    try {
+      setIsUploading(true);
+      const docRef = await tenantDocsAddDocument({
+        status: "active",
+        masterRefId: tenantId,
+        documentUrl: "",
+        docCat: selectedDocCat,
+        idType: selectedIdType,
+        idNumber: idNumber,
+        mediaType: "",
+      });
+      setSelectedDocCat("");
+      setSelectedIdType("");
+      setIdNumber("");
+      setIsUploading(false);
+      // setNewDocId(docRef.id);
+    } catch (error) {
+      console.error("Error adding document:", error);
+      setIsUploading(false);
+    }
+  };
+  console.log("doccat", selectedDocCat);
+  const handleFileChange = (event, docId) => {
+    const file = event.target.files[0];
+    if (file) {
+      setDocumentFile(file);
+      setNewDocId(docId);
+    }
+  };
+
+  const getFileType = (file) => {
+    const fileExtension = file.name.split(".").pop().toLowerCase();
+    return fileExtension === "pdf" ? "pdf" : "image";
+  };
+
+  useEffect(() => {
+    if (newDocId && documentFile) {
+      uploadDocumentImage();
+    }
+  }, [newDocId, documentFile]);
+
+  const uploadDocumentImage = async () => {
+    try {
+      setIsUploading(true);
+      setUploadingDocId(newDocId); // Set the uploading document ID
+      const fileType = getFileType(documentFile);
+      const storageRef = projectStorage.ref(
+        `docs/${newDocId}/${documentFile.name}`
+      );
+      await storageRef.put(documentFile);
+
+      const fileURL = await storageRef.getDownloadURL();
+
+      await tenantDocsUpdateDocument(newDocId, {
+        documentUrl: fileURL,
+        mediaType: fileType,
+      });
+
+      setDocumentFile(null);
+      setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID
+      fileInputRef.current.value = "";
+    } catch (error) {
+      console.error("Error uploading document image:", error);
+      setIsUploading(false);
+      setUploadingDocId(null); // Reset the uploading document ID in case of error
+    }
+  };
+
+  const deleteTenantDocument = async (docId) => {
+    try {
+      await tenantDocsDeleteDocument(docId);
+      // navigate("/properties");
+    } catch (error) {
+      console.error("Error deleting document:", error);
+    }
+  };
+
+  // render jsx code in short form start
+  const docCategories = [
+    { id: "kyc", value: "KYC", label: "KYC" },
+    {
+      id: "police_verification",
+      value: "Police Verification",
+      label: "Police Verification",
+    },
+    { id: "agreement", value: "Rent Agreement", label: "Rent Agreement" },
+  ];
+
+  const docTypes = {
+    KYC: [
+      { id: "aadhar", value: "Aadhar Card", label: "Aadhar Card" },
+      { id: "pan_card", value: "Pan Card", label: "Pan Card" },
+      { id: "voter_id", value: "Voter ID", label: "Voter ID" },
+      { id: "passport", value: "Passport", label: "Passport" },
+      {
+        id: "driving_licence",
+        value: "Driving Licence",
+        label: "Driving Licence",
+      },
+    ],
+    "Police Verification": [
+      {
+        id: "police_verification_doc",
+        value: "Police Verification Document",
+        label: "Police Verification Document",
+      },
+    ],
+    "Rent Agreement": [
+      {
+        id: "rent_agree_doc",
+        value: "Rent Agreement (Word Doc)",
+        label: "Rent Agreement (Word Doc)",
+      },
+      {
+        id: "rent_agree_pdf",
+        value: "Rent Agreement (PDF)",
+        label: "Rent Agreement (PDF)",
+      },
+    ],
+  };
+  // render jsx code in short form end
+
+  // filters start
+  // filter for KYC start
+  const filteredTenantDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "KYC")
+    : [];
+  const filteredTenantDocLength = filteredTenantDocuments.length;
+  // filter for KYC end
+
+  // filter for Police Verification document start
+  const filteredPoliceVerificationDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "Police Verification")
+    : [];
+  const filteredPoliceVerificationDocLength =
+    filteredPoliceVerificationDocuments.length;
+  // filter for propertymaintainance document end
+  // filter for property utility document start
+  const filteredRentAgreementDocuments = tenantDocs
+    ? tenantDocs.filter((doc) => doc.docCat === "Rent Agreement")
+    : [];
+  const filteredRentAgreementDocLength = filteredRentAgreementDocuments.length;
+  // filter for property utility document end
+  // filters end
 
   // modal controls
   // modal controls start
@@ -316,15 +493,7 @@ const TenantDetails = () => {
     }
     setShowImageModal(true);
   };
-  // 9 dots controls
-  const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
-  const openMoreAddOptions = () => {
-    setHandleMoreOptionsClick(true);
-  };
-  const closeMoreAddOptions = () => {
-    setHandleMoreOptionsClick(false);
-  };
-  // 9 dots controls
+
 
   return (
     <div className="tenant_detail_pg">
@@ -353,10 +522,106 @@ const TenantDetails = () => {
                 propertyId={tenantInfo.propertyId}
               />
             )}
-          </div>      
+          </div>
+          {showAIForm && (
+            <>
+              <div className="vg22_m15"></div>
+              <section className="my_big_card">
+                <h2 className="card_title">Select document type</h2>
+                <div className="aai_form">
+                  <div className="row" style={{ rowGap: "18px" }}>
+                    <div className="col-12">
+                      <div className="form_field">
+                        <div className="field_box theme_radio_new tab_type_radio">
+                          <div className="theme_radio_container">
+                            {docCategories.map((category) => (
+                              <div className="radio_single" key={category.id}>
+                                <input
+                                  type="radio"
+                                  name="doc_cat"
+                                  id={category.id}
+                                  value={category.value}
+                                  onChange={handleDocCatChange}
+                                  checked={selectedDocCat === category.value}
+                                />
+                                <label htmlFor={category.id}>
+                                  {category.label}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {docTypes[selectedDocCat] && (
+                      <div className="col-12">
+                        <div className="form_field">
+                          <div className="field_box theme_radio_new">
+                            <div className="theme_radio_container">
+                              {docTypes[selectedDocCat].map((radio) => (
+                                <div className="radio_single" key={radio.id}>
+                                  <input
+                                    type="radio"
+                                    name="aai_type"
+                                    id={radio.id}
+                                    value={radio.value}
+                                    onChange={handleRadioChange}
+                                    checked={selectedIdType === radio.value}
+                                  />
+                                  <label htmlFor={radio.id}>
+                                    {radio.label}
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="col-md-11">
+                      <div className="add_info_text">
+                        <div className="form_field">
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={idNumber}
+                              onChange={handleIdNumberChange}
+                              placeholder="Document ID (optional)"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row mt-3">
+                  <div className="col-md-2 col-6">
+                    <div
+                      className="theme_btn btn_border text-center no_icon"
+                      onClick={isUploading ? null : handleShowAIForm}
+                    >
+                      Cancel
+                    </div>
+                  </div>
+                  <div className="col-md-3 col-6">
+                    <div
+                      className={`theme_btn btn_fill text-center no_icon ${
+                        isUploading ? "disabled" : ""
+                      }`}
+                      onClick={isUploading ? null : addTenantDocuments}
+                    >
+                      {isUploading ? "Uploading..." : "Create"}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
 
           {/* 9 dots html  */}
-          {/* <div
+          <div
             onClick={openMoreAddOptions}
             className="property-list-add-property"
           >
@@ -398,7 +663,7 @@ const TenantDetails = () => {
                 <span className="material-symbols-outlined">home</span>
               </Link>
             </div>
-          </div> */}
+          </div>
 
           <div className="vg22_m15"></div>
           <div className="">
@@ -940,9 +1205,272 @@ const TenantDetails = () => {
               imageUrl={selectedImageUrl}
               imageModalTitle={imageModalTitle} // Pass the dynamic title as a prop
             />
-         
+            <div className="theme_tab prop_doc_tab">
+              <Tabs>
+                <TabList className="tabs">
+                  <Tab className="pointer">
+                    Tenant KYC Document ({filteredTenantDocLength})
+                  </Tab>
+                  <Tab className="pointer">
+                    Police Verification ({filteredPoliceVerificationDocLength})
+                  </Tab>
+                  <Tab className="pointer">
+                    Rent Agreements ({filteredRentAgreementDocLength})
+                  </Tab>
+                </TabList>
+                <TabPanel>
+                  <div className="blog_sect">
+                    <div className="row">
+                      {filteredTenantDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredTenantDocuments.map((doc, index) => (
+                        <div className="col-lg-4 col-sm-6 " key={index}>
+                          <div className="item card-container">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
+                              {uploadingDocId !== doc.id && (
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={
+                                    doc.documentUrl ||
+                                    "/assets/img/image_small_placeholder.png"
+                                  }
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="blog_sect">
+                    <div className="row">
+                      {filteredPoliceVerificationDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredPoliceVerificationDocuments.map((doc, index) => (
+                        <div className="col-lg-4 col-sm-6 " key={index}>
+                          <div className="item card-container">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
+                              {uploadingDocId !== doc.id && (
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={
+                                    doc.documentUrl ||
+                                    "/assets/img/image_small_placeholder.png"
+                                  }
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div className="blog_sect">
+                    <div className="row">
+                      {filteredRentAgreementDocLength === 0 && (
+                        <h5 className="m20 text_red mt-4">No data found</h5>
+                      )}
+                      {filteredRentAgreementDocuments.map((doc, index) => (
+                        <div className="col-lg-4 col-sm-6 " key={index}>
+                          <div className="item card-container">
+                            <div
+                              className="card-image relative w-100"
+                              style={{
+                                aspectRatio: "3/2",
+                              }}
+                            >
+                              {uploadingDocId !== doc.id && (
+                                <label
+                                  htmlFor={`upload_img_${doc.id}`}
+                                  className="upload_img click_text by_text"
+                                >
+                                  Upload PDF or Img
+                                  <input
+                                    type="file"
+                                    onChange={(e) =>
+                                      handleFileChange(e, doc.id)
+                                    }
+                                    ref={fileInputRef}
+                                    id={`upload_img_${doc.id}`}
+                                  />
+                                </label>
+                              )}
+                              {uploadingDocId === doc.id ? (
+                                <div
+                                  className="loader d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "100%",
+                                    height: "100%",
+                                  }}
+                                >
+                                  <BeatLoader
+                                    color={"#FF5733"}
+                                    loading={true}
+                                  />
+                                </div>
+                              ) : doc.mediaType === "pdf" ? (
+                                <iframe
+                                  title="PDF Viewer"
+                                  src={doc.documentUrl}
+                                  style={{
+                                    width: "100%",
+                                    aspectRatio: "3/2",
+                                  }}
+                                ></iframe>
+                              ) : (
+                                <img
+                                  src={
+                                    doc.documentUrl ||
+                                    "/assets/img/image_small_placeholder.png"
+                                  }
+                                  alt="Document"
+                                />
+                              )}
+                            </div>
+                            <div className="card-body">
+                              <h3>{doc.idType}</h3>
+                              <p className="card-subtitle">{doc.idNumber}</p>
+                              {user && user.role === "superAdmin" && (
+                                <div className="card-author">
+                                  <div
+                                    onClick={() => deleteTenantDocument(doc.id)}
+                                    className="learn-more pointer"
+                                  >
+                                    Delete
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </TabPanel>
+              </Tabs>
+            </div>
 
-            {user?.role === "superAdmin" && (
+            {/* {!editingField && user && user.role === "superAdmin" && ( */}
             <>
               <div className="vg22_m15"></div>
               <div className="divider"></div>
@@ -956,7 +1484,7 @@ const TenantDetails = () => {
               </div>
               <div className="vg22_m15"></div>
             </>
-             )}
+            {/* )} */}
             <SureDelete
               show={showModal}
               handleClose={handleCloseModal}
@@ -964,7 +1492,126 @@ const TenantDetails = () => {
               isDeleting={isDeleting}
             />
 
-        
+            {/* <div>
+            ID Number:
+            {editingField === "idNumber" ? (
+              <div>
+                <input
+                  type="text"
+                  value={editedFields.idNumber || ""}
+                  onChange={(e) => handleInputChange("idNumber", e.target.value)}
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
+                    onClick={() => handleSaveClick("idNumber")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
+                    onClick={() => handleCancelClick("idNumber")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {tenantInfo && tenantInfo.idNumber}
+                {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("idNumber")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div>       */}
+
+            {/* <div>
+            Rent Start Date:
+            {editingField === "rentStartDate" ? (
+              <div>
+                <input
+                  type="date"
+                  value={editedFields.rentStartDate || ""}
+                  onChange={(e) =>
+                    handleInputChange("rentStartDate", e.target.value)
+                  }
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
+                    onClick={() => handleSaveClick("rentStartDate")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
+                    onClick={() => handleCancelClick("rentStartDate")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {tenantInfo && tenantInfo.rentStartDate}
+                {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("rentStartDate")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div> */}
+            {/* <div>
+            Rent End Date:
+            {editingField === "rentEndDate" ? (
+              <div>
+                <input
+                  type="date"
+                  value={editedFields.rentEndDate || ""}
+                  onChange={(e) => handleInputChange("rentEndDate", e.target.value)}
+                />
+                <div className="d-flex">
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon"
+                    onClick={() => handleSaveClick("rentEndDate")}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="product_edit_theme_btn btn_fill text-center no_icon cancel-btn"
+                    onClick={() => handleCancelClick("rentEndDate")}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {tenantInfo && tenantInfo.rentEndDate}
+                {!editingField && user && (user.role === "admin" || user.role === "superAdmin") && (
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditClick("rentEndDate")}
+                  >
+                    edit
+                  </span>
+                )}
+              </>
+            )}
+          </div> */}
           </div>
         </div>
       </div>

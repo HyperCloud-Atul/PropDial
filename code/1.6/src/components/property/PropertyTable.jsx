@@ -160,6 +160,9 @@ const PropertyTable = ({ properties }) => {
         if (type === "propertyowner" && tag === "owner") {
           property.owner = userData;
         }
+           if (type === "propertyowner" && tag === "co-owner") {
+          property.owner = userData;
+        }
         if (type === "propertymanager" && tag === "executive") {
           property.executive = userData;
         }

@@ -22,11 +22,11 @@ const PropertyDocuments = () => {
   const fileInputRef = useRef(null);
 
   const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("docs-propdial");
+    useFirestore("property-document-propdial");
 
   const { documents: propertyDocument, errors: propertyDocError } =
     useCollection(
-      "docs-propdial",
+      "property-document-propdial",
       ["masterRefId", "==", propertyId],
       ["createdAt", "desc"]
     );
@@ -145,7 +145,7 @@ const PropertyDocuments = () => {
 
       // Reference for the new file
       const storageRef = projectStorage.ref(
-        `docs-propdial/${newDocId}/${documentFile.name}`
+        `property-document-propdial/${newDocId}/${documentFile.name}`
       );
 
       // Upload the new file
@@ -195,7 +195,7 @@ const PropertyDocuments = () => {
     try {
       // Fetch the document details to get the `documentUrl`
       const docRef = projectFirestore
-        .collection("docs-propdial")
+        .collection("property-document-propdial")
         .doc(selectedDocId);
       const docSnapshot = await docRef.get();
 
