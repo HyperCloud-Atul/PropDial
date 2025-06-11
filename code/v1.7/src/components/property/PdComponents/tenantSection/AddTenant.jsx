@@ -4,7 +4,7 @@ import { projectFirestore, timestamp } from "../../../../firebase/config";
 import parsePhoneNumberFromString from "libphonenumber-js";
 import formatCountry from "../../../../utils/formatCountry";
 import { Modal } from "react-bootstrap";
-import { useAuthContext } from "../../../../hooks/useAuthContext";
+
 // component
 import AddPropertyUser from "../../AddPropertyUser";
 
@@ -13,9 +13,8 @@ const AddTenant = ({
   propertyid,
   setShowAddTenantModal,
   showAddTenantModal,
+  user
 }) => {
-  const { user } = useAuthContext();
-
   const [allUsers, setAllUsers] = useState([]);
   const [tenantFilteredUsers, setTenantFilteredUsers] = useState([]);
   const [tenantSearchQuery, setTenantSearchQuery] = useState("");
