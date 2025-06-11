@@ -1,0 +1,58 @@
+.userlist .single_user {
+    background: white;
+    padding: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;    
+}
+.single_user .left {
+    border-right: 1px solid #e7e7e7;
+    padding-right: 8px;
+}
+.single_user .user_img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.single_user .right h5 {
+    color: #3f3f3f;
+    font-size: 16px;
+    margin-bottom: 6px!important;
+    padding-right: 30px !important;
+}
+.single_user .right .wc img {
+    width: 28px;
+    margin-right: 6px;
+    margin-top: 6px;
+}
+.userlist{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+.single_user .right .wc img:last-child{
+    margin-right: 0px;
+}
+.single_user .right h6 {
+    font-size: 14px;
+    font-weight: 400;  
+    color: #7d7d7d;
+    line-height: 18px;
+}
+.single_user .user_img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.single_user .right {
+    width: 100%;
+    position: relative;
+}
+.single_user .right .wc {
+    display: grid;
+    position: absolute;
+    top: -10px;
+    right: -8px;
+}
+

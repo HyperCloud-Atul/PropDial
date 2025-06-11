@@ -1,0 +1,415 @@
+.user_detail_pg {
+  display: flex;
+  align-items: center;
+
+  .msg_area {
+    font-size: 15px;
+    padding: 4px 15px;
+    border-radius: 8px;
+    &.error_msg {
+      background: #ffe9e9;
+      color: red;
+    }
+    &.success_msg {
+      background: var(--theme-green-bg);
+      color: var(--theme-green2);
+    }
+  }
+  .basic_info {
+    box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgba(82, 63, 105, 0.05);
+    background: var(--white-color);
+    width: 20%;
+    position: fixed;
+    height: calc(100vh - 68px);
+    overflow-y: auto;
+    top: 68px;
+    left: 0;
+    .pic_are {
+      width: 100%;
+      aspect-ratio: 3/1.5;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-bottom: 65px;
+      &::after {
+        content: "";
+        background: black;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.4;
+      }
+      .pic {
+        width: 55%;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: -60px;
+        z-index: 1;
+        img {
+          width: 100%;
+          border-radius: 50%;
+          height: 100%;
+          object-fit: cover;
+          border: 4px solid;
+        }
+      }
+      .icon {
+        position: absolute;
+        bottom: -50px;
+        img {
+          width: 28px;
+        }
+        &.left {
+          left: 10px;
+        }
+        &.right {
+          right: 10px;
+        }
+      }
+    }
+    .p_info {
+      padding: 8px;
+      text-align: center;
+      display: grid;
+      gap: 5px;
+      justify-content: inherit;
+      h5 {
+        color: var(--light-black);
+        font-size: 18px;
+        font-weight: 500;
+      }
+      h6 {
+        color: var(--theme-grey);
+        font-size: 16px;
+        font-weight: 400;
+      }
+    }
+    .save_btn {
+      position: absolute;
+      width: 100%;
+      border-radius: 0px;
+      bottom: 0;
+      left: 0;
+    }
+    .roles {
+      padding: 10px;
+      padding-top: 0px;
+      h5 {
+        font-size: 17px;
+        margin-bottom: 10px;
+        color: var(--light-black);
+        margin-top: -8px;
+        text-align: center;
+      }
+      .theme_checkbox {
+        .theme_checkbox_container {
+          input[type="checkbox"] + label {
+            font-size: 14px;
+            min-width: fit-content;
+          }
+        }
+      }
+    }
+  }
+  .detail_info {
+    min-height: calc(100vh - 68px);
+    padding: 22px;
+    width: 80%;
+    margin-left: auto;
+    .card_blue_divider {
+      display: flex;
+      margin-top: 22px;
+      gap: 22px;
+      flex-wrap: wrap;
+      .active_inactive {
+        width: 290px;
+        .blue_single {
+          width: 100%;
+          .theme_radio_container {
+            gap: 0px;
+          }
+          .radio_single {
+            width: 50%;
+            &:last-child {
+              padding-left: 6px;
+            }
+            &:first-child {
+              padding-right: 6px;
+            }
+            label {
+              width: 100%;
+              display: flex;
+              .label_inner{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+                width: 100%;
+              }
+             
+            }
+          }
+        }
+      }
+      .blue_single {
+        background: #f0f5ff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        width: fit-content;
+        h5 {
+          color: var(--light-black);
+          font-size: 15px;
+          font-weight: 500;
+        }
+        h6 {
+          font-size: 15px;
+          font-weight: 500;
+        }
+        &.is_employee {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+        }
+      }
+    }
+    .property_card_single {
+      .card_title {
+        display: flex;
+        gap: 15px;
+        justify-content: space-between;
+        .action_icon {
+          font-size: 24px;
+          cursor: pointer;
+        }
+      }
+      .btn_msg_area {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 15px;
+        margin-top: 12px;
+      }
+
+      .p_info_single {
+        width: 18%;
+        h5 {
+          text-transform: capitalize;
+        }
+      }
+      &.onboarded_card{
+        .p_info_single {
+          width: 25%;         
+        }
+      }
+      .for_ref {
+        .p_info_single {
+          width: 30%;
+          &.address {
+            width: 65%;
+          }
+          &.actions{
+            width: 32%;
+            gap: 22px;
+            .icon{
+              img{
+                opacity: 1;
+                height: 32px !important;
+              }
+            }
+          }
+        }
+      }
+    }
+    .employee_docs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      .ed_single {
+        border: 3px solid var(--theme-green);
+        border-radius: 12px;
+        overflow: hidden;
+        .image_container {
+          width: 100%;
+          aspect-ratio: 3/2;
+          .image_container_inner{
+            width: 100%;
+            height: 100%;
+            .delete_icon_top {            
+              top: 5px;
+              right: 5px;
+              font-size: 20px;             
+          }
+          }
+          .loader {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .uploader.relative {
+          padding: 15px;
+          text-align: center;
+          font-size: 18px;
+          font-weight: 500;
+          background: var(--theme-green-bg);
+          color: var(--light-black);
+          span {
+            position: relative;
+            z-index: 2;
+          }
+          .u_bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--theme-green);
+            transition: 0.3s;
+            z-index: 1;
+          }
+        }
+        .doc_name_upload {
+          display: flex;
+          justify-content: space-between;
+          gap: 15px;
+          background: var(--theme-blue-light-bg);
+          align-items: center;
+          .upload_label {
+            padding: 15px;
+            background: var(--theme-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            span {
+              font-size: 28px;
+              color: var(--white-color);
+            }
+          }
+          h6 {
+            padding: 15px;
+            color: var(--light-black);
+            font-size: 18px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1199px) {
+  .user_detail_pg{
+    flex-direction: column;
+    gap: 22px;
+    .basic_info {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      background: var(--white-color);
+      width: 100%;
+      position: unset;
+      height: auto;   
+      .pic_are {      
+        aspect-ratio: inherit;     
+        height: 140px;
+        .pic{
+          width: 150px;
+        }
+        .icon.right {
+          right: 26px;
+      }
+      .icon.left {
+        left: 26px;
+    }
+    }
+  }
+  .detail_info {
+    min-height: auto;
+    padding: 0px;
+    width: 100%;
+    .property_card_single {
+      .p_info_single {
+        width: 30%;         
+      }
+     
+      
+    }
+   
+}
+  }
+}
+@media only screen and (max-width: 767px) {
+  .user_detail_pg { 
+    .detail_info {  
+     .card_blue_divider {   
+        margin-top: 15px;
+        gap: 15px;  
+        .blue_single {
+          h5 {
+            font-size: 14px;
+          }
+          h6{
+            font-size: 14px;
+          }
+        }  
+        .active_inactive {
+          width: 272px;
+        }    
+    }
+      .property_card_single {
+        .p_info_single {
+          width: 47%;         
+        }
+        &.onboarded_card{
+          .p_info_single {
+            width: 47%;         
+          }
+        }
+        .for_ref {
+          .p_info_single {
+            width: 47%;
+            &.address {
+              width: 100%;
+            }
+          
+          }
+        }
+      }
+      .employee_docs {  
+        grid-template-columns: repeat(1, 1fr);
+        gap: 15px;
+    }
+    
+    }
+  }
+}
+/* For Webkit-based browsers (Chrome, Edge, Safari) */
+.basic_info::-webkit-scrollbar {
+  width: 2px; /* Scrollbar width */
+}
+
+.basic_info::-webkit-scrollbar-thumb {
+  background: var(--theme-blue); /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded corners for thumb */
+}
+
+.basic_info::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-blue); /* Thumb color on hover */
+}
+
+.basic_info::-webkit-scrollbar-track {
+  background: var(--theme-grey); /* Scrollbar track color */
+}
