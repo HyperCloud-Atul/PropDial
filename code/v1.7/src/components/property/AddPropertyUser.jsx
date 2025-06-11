@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { getNames } from "country-list";
 import Select from "react-select";
 
-const AddPropertyUser = ({ propertyid, user, whoIsUser }) => {
+const AddPropertyUser = ({ propertyid, user, whoIsUser, setShowSavedModal, setShowAddTenantModal }) => {
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [name, setName] = useState("");
@@ -224,18 +224,17 @@ const AddPropertyUser = ({ propertyid, user, whoIsUser }) => {
         tenantDocId: tenantDocRef.id, // capturing tenant document ID here
         createdAt: timestamp.now(),
         createdBy: user?.phoneNumber,
-        userTag: "Tenant",
+        userTag: "tenant",
         userType: "propertytenant",
         isCurrentProperty: true,
       });
-      alert("✅ User added successfully!");
-
-      resetForm();
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setShowSavedModal(true);
+      setShowAddTenantModal(false);
+      resetForm();      
     } catch (err) {
       console.error(err);
       setError("❌ Failed to add user.");
+       setShowAddTenantModal(false);
     } finally {
       setIsSubmitting(false);
     }

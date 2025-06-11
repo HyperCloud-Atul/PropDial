@@ -6,13 +6,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { getNames } from "country-list";
 import Select from "react-select";
 import { getCodeList } from "country-list";
-
+import SavedSuccessfully from "../../../../../components/SavedSuccessfully";
 const AddUser = () => {
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+    const [showSavedModal, setShowSavedModal] = useState(false);
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
   const [whoIsUser, setWhoIsUser] = useState("");
@@ -241,7 +242,7 @@ const AddUser = () => {
         .collection("users-propdial")
         .doc(phone)
         .set(userData);
-      alert("✅ User added successfully!");
+     setShowSavedModal(true);
 
       resetForm();
 
@@ -249,6 +250,7 @@ const AddUser = () => {
     } catch (err) {
       console.error(err);
       setError("❌ Failed to add user.");
+      setShowSavedModal(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -726,6 +728,11 @@ const AddUser = () => {
             </button>
           </form>
         </div>
+            <SavedSuccessfully
+                show={showSavedModal}
+                onClose={() => setShowSavedModal(false)}
+                message="Tenant Added Successfully"
+              />
       </div>
     </div>
   );

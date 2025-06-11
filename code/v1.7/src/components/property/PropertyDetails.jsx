@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Gallery from "react-image-gallery";
-import { projectStorage } from "../../firebase/config";
+import { projectStorage, timestamp } from "../../firebase/config";
 import Switch from "react-switch";
+import formatCountry from "../../utils/formatCountry";
 import imageCompression from "browser-image-compression";
 import { ClipLoader, BarLoader } from "react-spinners";
 import { Navigate, Link } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
+import parsePhoneNumberFromString from "libphonenumber-js";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -15,7 +17,7 @@ import { useDocument } from "../../hooks/useDocument";
 import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
-import { timestamp } from "../../firebase/config";
+
 import { format } from "date-fns";
 import RichTextEditor from "react-rte";
 import EnquiryAddModal from "../EnquiryAddModal";
@@ -28,14 +30,13 @@ import "swiper/swiper.min.css";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 import MakeInactivePopup from "./MakeInactivePopup";
 import "./UserList.css";
-import AddPropertyUser from "./AddPropertyUser";
 import InactiveUserCard from "../InactiveUserCard";
 
 // component
 import PropertyImageGallery from "../PropertyImageGallery";
 import ScrollToTop from "../ScrollToTop";
-
-import PhoneInput from "react-phone-input-2";
+import SavedSuccessfully from "../SavedSuccessfully";
+import TenantSection from "./PdComponents/tenantSection/TenantSection";
 import { firstLetterCapitalize } from "../../utils/lib";
 const PropertyDetails = () => {
   // install Swiper modules
@@ -43,7 +44,7 @@ const PropertyDetails = () => {
 
   // get user from useauthcontext
   const { slug } = useParams();
-
+  const [showSavedModal, setShowSavedModal] = useState(false);
   // Get the last part after the final dash
   const parts = slug?.split("-");
   const propertyid = parts[parts.length - 1]; // 'abc123'
@@ -190,11 +191,7 @@ const PropertyDetails = () => {
   const { documents: onlyExecutives, error: onlyExecutivesError } =
     useCollection("users-propdial", ["rolePropDial", "==", "executive"]);
 
-  const { documents: tenantDocument, errors: tenantDocError } = useCollection(
-    "tenants",
-    ["propertyId", "==", propertyid],
-    ["createdAt", "desc"]
-  );
+
 
   const { documents: propertyLayouts, errors: propertyLayoutsError } =
     useCollection(
@@ -235,371 +232,15 @@ const PropertyDetails = () => {
   const { documents: propertyKeysList, errors: propertyKeysListError } =
     useCollection("propertyKeys", ["propertyId", "==", propertyid]);
 
-  const { addDocument: tenantAddDocument, error: tenantAddDocumentError } =
-    useFirestore("tenants");
-
-  const {
-    addDocument: userAddDocument,
-    addDocumentWithCustomDocId: userAddDocumentWithCustomDocId,
-    error: userAddDocumentError,
-  } = useFirestore("users-propdial");
-
   const {
     addDocument: addProperyUsersDocument,
     updateDocument: updateProperyUsersDocument,
     deleteDocument: deleteProperyUsersDocument,
     error: errProperyUsersDocument,
   } = useFirestore("propertyusers");
-  const {
-    addDocument: propertyLayoutAddDocument,
-    error: propertyLayoutAddDocumentError,
-  } = useFirestore("propertylayouts");
-  const {
-    updateDocument: updatePropertyLayoutDocument,
-    deleteDocument: deletePropertyLayoutDocument,
-    error: propertyLayoutDocumentError,
-  } = useFirestore("propertylayouts");
 
-  // upload tenant code start
-  const [tenantName, setTenantName] = useState("");
-  const [editingTenantId, setEditingTenantId] = useState(null);
-  const [tenantMobile, setTenantMobile] = useState("");
-  const [tenantCountry, setTenantCountry] = useState("");
-  const [tenantCountryCode, setTenantCountryCode] = useState("");
-  const [tenantEmail, setTenantEmail] = useState("");
-  const [isTenantEditing, setIsTenantEditing] = useState(false);
-  const [selectedTenantImage, setSelectedTenantImage] = useState(null);
-  const [previewTenantImage, setPreviewTenantImage] = useState(null);
-  const [showAddTenantModal, setShowAddTenantModal] = useState(false);
-  const [tenantExist, setTenantExist] = useState(false);
-  const [isTenantDataFetching, setIsTenantDataFetching] = useState(false);
-  const [errorTenantForm, setErrorTenantForm] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-  });
-  // const handleEditTenantToggle = () => {
-  //   setIsTenantEditing(!isTenantEditing);
-  // };
 
-  const handleNameChange = (e) => {
-    setTenantName(e.target.value);
-    setErrorTenantForm((prev) => ({ ...prev, name: "" }));
-  };
-
-  const handleMobileChange = (value, data) => {
-    console.log("value: ", data);
-    setTenantMobile(value);
-    setTenantCountryCode(data?.dialCode || "");
-    setTenantCountry(data?.name || "");
-    setErrorTenantForm((prev) => ({ ...prev, mobile: "" }));
-  };
-  const handleEmailChange = (e) => {
-    setTenantEmail(e.target.value);
-    setErrorTenantForm((prev) => ({ ...prev, email: "" }));
-  };
-
-  const handleEditTenantToggle = (tenantId) => {
-    const tenant = tenantDocument?.find((tenant) => tenant.id === tenantId);
-    if (tenant) {
-      setEditingTenantId(tenantId);
-      setTenantName((prev) => ({
-        ...prev,
-        [tenantId]: tenant.name,
-      }));
-      setTenantMobile((prev) => ({
-        ...prev,
-        [tenantId]: tenant.mobile,
-      }));
-    } else {
-      console.error("Tenant not found or tenantDocument is undefined");
-    }
-  };
-
-  const updateTenantDetails = async (tenantId, name, mobile) => {
-    try {
-      await projectFirestore
-        .collection("tenants")
-        .doc(tenantId)
-        .update({ name, mobile });
-      console.log("Document updated successfully");
-    } catch (error) {
-      console.log("Error updating document:", error);
-    }
-  };
-
-  const handleSaveTenant = async (tenantId) => {
-    if (
-      tenantName[tenantId] !== undefined &&
-      tenantMobile[tenantId] !== undefined
-    ) {
-      await updateTenantDetails(
-        tenantId,
-        tenantName[tenantId],
-        tenantMobile[tenantId]
-      );
-    }
-    setEditingTenantId(null);
-  };
-
-  //Property Layout
-  const [layoutid, setLayoutId] = useState(null);
-  const [showPropertyLayoutComponent, setShowPropertyLayoutComponent] =
-    useState(false);
-  const handleShowPropertyLayoutComponent = () => {
-    setLayoutId(null);
-    setShowPropertyLayoutComponent(true);
-  };
-
-  const editPropertyLayout = async (layoutid) => {
-    // console.log('layout id: ', layoutid)
-    setShowPropertyLayoutComponent(true);
-    setLayoutId(layoutid);
-  };
-
-  const deletePropertyLayout = async (layoutid) => {
-    // console.log('layout id: ', layoutid)
-    try {
-      await deletePropertyLayoutDocument(layoutid);
-      console.log("property layout document deleted successfully");
-    } catch (error) {
-      console.error("Error deleting property layout document:", error);
-    }
-    setShowConfirmModal(false);
-  };
-
-  // add from field of additonal info code start
-  const [additionalInfos, setAdditionalInfos] = useState([""]); // Initialize with one field
-
-  const handleAddMore = () => {
-    setAdditionalInfos([...additionalInfos, ""]);
-  };
-
-  const handleRemove = (index) => {
-    if (additionalInfos.length > 1) {
-      // Prevent removal if only one field remains
-      const newInfos = additionalInfos.filter((_, i) => i !== index);
-      setAdditionalInfos(newInfos);
-    }
-  };
-
-  const handleInputChange = (index, value) => {
-    const newInfos = [...additionalInfos];
-    newInfos[index] = value;
-    setAdditionalInfos(newInfos);
-  };
-  // add from field of additonal info code end
-
-  // attachments in property layout
-  const [attachments, setAttachments] = useState([]); //initialize array
-
-  // Function to add an item
-  var addAttachment = (item) => {
-    console.log("item for addAttachment;", item);
-    setAttachments([...attachments, item]);
-    // setPropertyLayout([...propertyLayout.RoomAttachments, item]);
-  };
-
-  // Function to remove an item by value
-  var removeAttachment = (item) => {
-    console.log("item for removeAttachment;", item);
-    setAttachments(attachments.filter((i) => i !== item));
-    // setPropertyLayout(propertyLayout.RoomAttachments && propertyLayout.RoomAttachments.filter(i => i !== item));
-  };
-
-  const handleAttachmentInputChange = (index, name, value, isChecked) => {
-    console.log("isChecked:", isChecked);
-    // console.log('index:', index)
-    // console.log('value:', value)
-    isChecked === true ? addAttachment(name) : removeAttachment(name);
-  };
-
-  const fetchExistedUser = async (number) => {
-    setIsTenantDataFetching(true);
-    const doc = await projectFirestore
-      .collection("users-propdial")
-      .where("phoneNumber", "==", number);
-
-    const data = await doc.get();
-    const userData = data.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    console.log(userData);
-    setTenantName(userData[0].fullName);
-    setTenantMobile(userData[0].phoneNumber);
-    setTenantEmail(userData[0].email);
-    setIsTenantDataFetching(false);
-  };
-
-  const checkIfPhoneExists = async (value) => {
-    const numericPhone = value.replace(/\D/g, ""); // remove all non-digits
-
-    if (numericPhone.length >= 8 && numericPhone.length <= 15) {
-      try {
-        const doc = await projectFirestore
-          .collection("users-propdial")
-          .where("phoneNumber", "==", numericPhone)
-          .get();
-
-        if (!doc.empty) {
-          await fetchExistedUser(numericPhone);
-          setTenantExist(true);
-        } else {
-          setTenantExist(false);
-        }
-      } catch (error) {
-        console.error("Error checking phone:", error);
-      }
-    } else {
-      setErrorTenantForm((prev) => ({
-        ...prev,
-        agentPhone: "please enter a valid phone number",
-      }));
-    }
-  };
-
-  //validate Form
-  const validateTenantForm = () => {
-    let newErrors = {};
-    if (!tenantName) newErrors.name = "Name is required";
-
-    if (!tenantMobile) newErrors.mobile = "Mobile is required";
-    if (!tenantEmail) newErrors.email = "email is required";
-    else if (
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(tenantEmail) ||
-      tenantEmail.length < 8
-    )
-      newErrors.email = "Invalid email required";
-
-    setErrorTenantForm(newErrors);
-    return !Object.values(newErrors).some((error) => error);
-  };
-
-  //Tenant Information
-  const handleAddTenant = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
-    if (!validateTenantForm()) {
-      return;
-    }
-
-    const tenantData = {
-      propertyId: propertyid,
-      name: tenantName,
-      mobile: tenantMobile,
-      whatsappNumber: "",
-      status: "active",
-      tenantImgUrl: "",
-      onBoardingDate: "",
-      offBoardingDate: "",
-      idNumber: "",
-      address: "",
-      emailId: tenantEmail,
-      rentStartDate: "",
-      rentEndDate: "",
-      isCurrentProperty: true,
-    };
-
-    const propertyUserData = {
-      propertyId: propertyid,
-      userId: tenantMobile,
-      userTag: "Tenant",
-      userType: "propertytenant",
-      isCurrentProperty: true,
-    };
-
-    console.log("tenantData: ", tenantData);
-
-    if (tenantExist) {
-      await Promise.all([
-        await tenantAddDocument(tenantData),
-        await addProperyUsersDocument(propertyUserData),
-      ]);
-      if (tenantAddDocumentError) {
-        console.log("response error");
-      }
-    } else {
-      const userDetails = {
-        online: true,
-        whatsappUpdate: false,
-        displayName: tenantName.trim().split(" ")[0],
-        fullName: tenantName,
-        phoneNumber: tenantMobile,
-        email: tenantName.toLowerCase().trim(),
-        city: "",
-        address: "",
-        gender: "",
-        whoAmI: "tenant",
-        country: tenantCountry,
-        propertyManagerID: tenantMobile,
-        countryCode: tenantCountryCode,
-        photoURL: "",
-        rolePropDial: "tenant",
-        rolesPropDial: ["tenant"],
-        accessType: "country",
-        accessValue: ["India"],
-        status: "active",
-        lastLoginTimestamp: timestamp.fromDate(new Date()),
-        dateofJoinee: "",
-        dateofLeaving: "",
-        employeeId: "",
-        reportingManagerId: "",
-        department: "",
-        designation: "",
-        uan: "",
-        pan: "",
-        aadhaar: "",
-      };
-
-      await Promise.all([
-        await tenantAddDocument(tenantData),
-        await userAddDocumentWithCustomDocId(userDetails, tenantMobile),
-        await addProperyUsersDocument(propertyUserData),
-      ]);
-    }
-
-    setTenantName("");
-    setTenantMobile("");
-    setTenantEmail("");
-    setTenantCountryCode("");
-    setTenantCountry("");
-    setShowAddTenantModal(false);
-
-    // setIsTenantEditing(!isTenantEditing);
-  };
-
-  const handleTenantImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedTenantImage(file);
-
-      // Create a preview URL for the selected image
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewTenantImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveTenantImage = () => {
-    setSelectedTenantImage(null);
-    setPreviewTenantImage(null);
-  };
-
-  const getImageSrc = () => {
-    if (isTenantEditing && !previewTenantImage) {
-      return "/assets/img/upload_img_small.png";
-    } else if (previewTenantImage) {
-      return previewTenantImage;
-    } else {
-      return "/assets/img/dummy_user.png";
-    }
-  };
-
-  // upload tenant code end
+ 
 
   // let propertyOnboardingDateFormatted = "date";
   useEffect(() => {
@@ -1576,148 +1217,12 @@ const PropertyDetails = () => {
     } finally {
       setIsRedirecting(false);
     }
-  };
+  }; 
 
-  // code for add tenant by search start
-  const [allUsers, setAllUsers] = useState([]);
-  const [tenantFilteredUsers, setTenantFilteredUsers] = useState([]);
-  const [tenantSearchQuery, setTenantSearchQuery] = useState("");
-  const [tenantSelectedUser, setTenantSelectedUser] = useState(null);
-  const [tenantLoading, setTenantLoading] = useState(false);
-  const [tenantMode, setTenantMode] = useState("existing"); // or "new"
-
-  // 🔄 Fetch all tenants from 'users-propdial' where role is tenant
-  useEffect(() => {
-    const fetchTenantUsers = async () => {
-      setTenantLoading(true);
-      try {
-        const snapshot = await projectFirestore
-          .collection("users-propdial")
-          .where("rolePropDial", "==", "tenant")
-          .get();
-
-        const users = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAllUsers(users);
-        setTenantFilteredUsers(users);
-      } catch (err) {
-        console.error("Error fetching tenants:", err);
-      } finally {
-        setTenantLoading(false);
-      }
-    };
-
-    fetchTenantUsers();
-  }, []);
-
-  // 🔎 Search Handler
-  const handleTenantSearchChange = (e) => {
-    const value = e.target.value.toLowerCase();
-    setTenantSearchQuery(value);
-
-    const filtered = allUsers.filter((user) => {
-      const name = user.fullName?.toLowerCase() || "";
-      const emailId = user.email?.toLowerCase() || "";
-      const mobile = user.id?.toLowerCase() || ""; // doc ID == phoneNumber
-      return (
-        name.includes(value) ||
-        emailId.includes(value) ||
-        mobile.includes(value)
-      );
-    });
-
-    setTenantFilteredUsers(filtered);
-  };
-
-  // ✅ Select user from list
-  const handleTenantSelectUser = (user) => {
-    setTenantSelectedUser(user);
-  };
-
-  // ➕ Add to 'tenants' collection
-  // const handleAddTenantToCollection = async () => {
-  //   if (!tenantSelectedUser) return alert("Please select a user");
-
-  //   try {
-  //     await projectFirestore.collection("tenants").add({
-  //       address: "",
-  //       name: tenantSelectedUser.fullName || "",
-  //       emailId: tenantSelectedUser.email || "",
-  //       mobile: tenantSelectedUser.id, // Document ID is phone number
-  //       status: "active",
-  //       propertyId: propertyid, // make sure propertyid is defined in this component
-  //       createdAt: timestamp.now(),
-  //       createdBy: user?.phoneNumber,
-  //       offBoardingDate: "",
-  //       onBoardingDate: "",
-  //       rentEndDate: "",
-  //       rentStartDate: "",
-  //       tenantImgUrl: "",
-  //       whatsappNumber: "",
-  //       idNumber: "",
-  //     });
-
-  //     alert("Tenant added successfully!");
-  //     setTenantSelectedUser(null);
-  //   } catch (error) {
-  //     console.error("Error adding tenant:", error);
-  //     alert("Failed to add tenant");
-  //   }
-  // };
-  const handleAddTenantToCollection = async () => {
-    if (!tenantSelectedUser) return alert("Please select a user");
-
-    try {
-      // Add to 'tenants' collection and get the doc reference
-      const tenantDocRef = await projectFirestore.collection("tenants").add({      
-        mobile: tenantSelectedUser.id, 
-        userId: tenantSelectedUser.id, // Document ID is phone number
-        status: "active",
-        propertyId: propertyid,
-        createdAt: timestamp.now(),
-        createdBy: user?.phoneNumber,
-        offBoardingDate: "",
-        onBoardingDate: "",
-        rentEndDate: "",
-        rentStartDate: "",     
-      });
-
-      // Add to 'propertyusers' collection with tenantDocId
-      await projectFirestore.collection("propertyusers").add({
-        propertyId: propertyid,
-        userId: tenantSelectedUser.id,
-        tenantDocId: tenantDocRef.id, // capturing tenant document ID here
-        createdAt: timestamp.now(),
-        createdBy: user?.phoneNumber,
-        userTag: "tenant",
-        userType: "propertytenant",
-        isCurrentProperty: true,
-      });
-
-      alert("Tenant added successfully!");
-      setTenantSelectedUser(null);
-    } catch (error) {
-      console.error("Error adding tenant or propertyuser:", error);
-      alert("Failed to add tenant");
-    }
-  };
 
   return (
-    <>
-      <ScrollToTop />
-      <Modal show={isRedirecting} centered className="uploading_modal">
-        <h6
-          style={{
-            color: "var(--theme-green2)",
-          }}
-        >
-          Redirecting...
-        </h6>
-        <BarLoader color="var(--theme-green2)" loading={true} height={10} />
-      </Modal>
-      {/* Change User Popup - Start */}
+    <>  
+ 
 
       {propertyDocument ? (
         <div div className="pg_property pd_single pg_bg">
@@ -1834,7 +1339,7 @@ const PropertyDetails = () => {
             {/* 9 dots html start  */}
             {/* {user &&
              
-              (user.role === "admin" || user.role === "superAdmin") && (
+              (user?.role === "admin" || user?.role === "superAdmin") && (
                 <div
                   onClick={openMoreAddOptions}
                   className="property-list-add-property"
@@ -1884,8 +1389,8 @@ const PropertyDetails = () => {
             {/* 9 dots html end*/}
             {user &&
             
-              (user.role === "admin" ||
-                user.role === "superAdmin" ||
+              (user?.role === "admin" ||
+                user?.role === "superAdmin" ||
                 isPropertyManager) && (
                 <Link
                   to={`/updateproperty/${propertyid}`}
@@ -1894,7 +1399,7 @@ const PropertyDetails = () => {
                   <span className="material-symbols-outlined">edit_square</span>
                 </Link>
               )}
-               {(user.role === "admin" || user.role === "superAdmin") && (
+               {(user?.role === "admin" || user?.role === "superAdmin") && (
                 <Link
                 to="/newproperty"
                   className="property-list-add-property"
@@ -1925,7 +1430,7 @@ const PropertyDetails = () => {
                 <div className="">
                   {user &&
                    
-                    (user.role === "admin" || user.role === "superAdmin") && (
+                    (user?.role === "admin" || user?.role === "superAdmin") && (
                       // <div className="property_card_single quick_detail_show mobile_full_card">
                       //   <div className="more_detail_card_inner">
                       //     <div className="row align-items-center">
@@ -2092,8 +1597,8 @@ const PropertyDetails = () => {
                             </div>
                             {user &&
                           
-                              (user.role === "admin" ||
-                                user.role === "superAdmin") &&
+                              (user?.role === "admin" ||
+                                user?.role === "superAdmin") &&
                               propertyDocument && (
                                 <div className="form_field st-2 outline">
                                   <div className="radio_group air">
@@ -2536,8 +2041,8 @@ const PropertyDetails = () => {
 
                         {/* {user &&
                           user.status === "active" &&
-                          (user.role === "admin" ||
-                            user.role === "superAdmin") && (
+                          (user?.role === "admin" ||
+                            user?.role === "superAdmin") && (
                             <div
                               className="d-flex align-items-center justify-content-center gap-2"
                               style={{ margin: "15px 0px" }}
@@ -2585,8 +2090,8 @@ const PropertyDetails = () => {
                           )} */}
                         {user &&
                        
-                          (user.role === "admin" ||
-                            user.role === "superAdmin") && (
+                          (user?.role === "admin" ||
+                            user?.role === "superAdmin") && (
                             <div
                               className="d-flex align-items-center justify-content-center gap-2"
                               style={{ margin: "15px 0px" }}
@@ -2646,8 +2151,8 @@ const PropertyDetails = () => {
                           <h4 className="padd_right">
                             {user &&
                             
-                              (user.role === "superAdmin" ||
-                                user.role === "admin" ||
+                              (user?.role === "superAdmin" ||
+                                user?.role === "admin" ||
                                 isPropertyOwner ||
                                 isPropertyManager) && (
                                 <>{propertyDocument.unitNumber}, </>
@@ -3218,7 +2723,7 @@ const PropertyDetails = () => {
                     </div>
                   </div>
                   {user &&
-                    (user.role === "admin" || user.role === "superAdmin") && (
+                    (user?.role === "admin" || user?.role === "superAdmin") && (
                       <div className="extra_info_card_property mobile_full_card">
                         <div className="card_upcoming">
                           <div className="parent">
@@ -3259,8 +2764,8 @@ const PropertyDetails = () => {
 
                   {user &&
                 
-                    (user.role === "superAdmin" ||
-                      user.role === "admin" ||
+                    (user?.role === "superAdmin" ||
+                      user?.role === "admin" ||
                       isPropertyOwner ||
                       isPropertyManager) && (
                       <div className="extra_info_card_property">
@@ -3652,29 +3157,19 @@ const PropertyDetails = () => {
              </div>
            </section>
          )} */}
-                  {/* Show Property Layout Component */}
-                  {showPropertyLayoutComponent && (
-                    <PropertyLayoutComponent
-                      propertylayouts={propertyLayouts}
-                      propertyid={propertyid}
-                      layoutid={layoutid}
-                      setShowPropertyLayoutComponent={
-                        setShowPropertyLayoutComponent
-                      }
-                    ></PropertyLayoutComponent>
-                  )}
+                 
 
                   {propertyDocument &&
                     propertyDocument.category === "Residential" && (
                       <>
                         {user &&
                           ((propertyLayoutsNew?.length === 0 &&
-                            (user.role === "superAdmin" ||
-                              user.role === "admin" ||
+                            (user?.role === "superAdmin" ||
+                              user?.role === "admin" ||
                               isPropertyManager)) ||
                             (propertyLayoutsNew?.length > 0 &&
-                              (user.role === "superAdmin" ||
-                                user.role === "admin" ||
+                              (user?.role === "superAdmin" ||
+                                user?.role === "admin" ||
                                 isPropertyManager ||
                                 isPropertyOwner))) && (
                             <section className="property_card_single full_width_sec with_blue">
@@ -3690,8 +3185,8 @@ const PropertyDetails = () => {
                                 <div className="row">
                                   {user &&
                                  
-                                    (user.role === "admin" ||
-                                      user.role === "superAdmin" ||
+                                    (user?.role === "admin" ||
+                                      user?.role === "superAdmin" ||
                                       isPropertyManager) && (
                                       // <div
                                       //   className="col-sm-1 col-2 pointer"
@@ -3750,9 +3245,9 @@ const PropertyDetails = () => {
                                     className={`${
                                       user &&
                                
-                                      (user.role === "admin" ||
+                                      (user?.role === "admin" ||
                                         isPropertyManager ||
-                                        user.role === "superAdmin")
+                                        user?.role === "superAdmin")
                                         ? "col-sm-11 col-10"
                                         : "col-12"
                                     }`}
@@ -3922,7 +3417,7 @@ const PropertyDetails = () => {
                                                     {user &&
                                                       user.status ===
                                                         "active" &&
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin") && (
                                                         <span
@@ -4151,7 +3646,7 @@ const PropertyDetails = () => {
 
                                             {/* {user &&
                                               user.status === "active" &&
-                                              user.role === "superAdmin" && (
+                                              user?.role === "superAdmin" && (
                                                 <div className="modal_footer">
                                                   <div
                                                     onClick={handleConfirmShow}
@@ -4228,333 +3723,26 @@ const PropertyDetails = () => {
 
                   {/* property layout section end  */}
 
-                  {/* tenant card start */}
-                  {propertyDocument &&
-                    (propertyDocument.category === "Residential" ||
-                      propertyDocument.category === "Commercial") && (
-                      <>
-                        {user &&
-                          ((tenantDocument?.length === 0 &&
-                            (user.role === "superAdmin" ||
-                              user.role === "admin" ||
-                              isPropertyManager)) ||
-                            (tenantDocument?.length > 0 &&
-                              (user.role === "superAdmin" ||
-                                user.role === "admin" ||
-                                isPropertyManager ||
-                                isPropertyOwner))) && (
-                            <section className="property_card_single full_width_sec with_orange">
-                              <span className="verticall_title">
-                                Tenants                                
-                              </span>
-                              <div className="more_detail_card_inner">
-                                <div className="row">
-                                  {user &&                                   
-                                    (user.role === "admin" ||
-                                      user.role === "superAdmin" ||
-                                      isPropertyManager) && (
-                                      <div
-                                        className="col-sm-1 col-2 "
-                                        style={{
-                                          paddingRight: "0px",
-                                        }}
-                                      >
-                                        <div className="plus_icon pointer">
-                                          <div
-                                            className="plus_icon_inner"
-                                            onClick={() =>
-                                              setShowAddTenantModal(true)
-                                            }
-                                          >
-                                            <span className="material-symbols-outlined">
-                                              add
-                                            </span>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
-                                  <div
-                                    className={`${
-                                      user &&
-                                   
-                                      (user.role === "admin" ||
-                                        user.role === "superAdmin" ||
-                                        isPropertyManager)
-                                        ? "col-sm-11 col-10"
-                                        : "col-12"
-                                    }`}
-                                  >
-                                    <div className="tenant_card">
-                                      <Swiper
-                                        spaceBetween={15}
-                                        slidesPerView={3.5}
-                                        pagination={false}
-                                        freeMode={true}
-                                        className="all_tenants"
-                                        breakpoints={{
-                                          320: {
-                                            slidesPerView: 1.1,
-                                            spaceBetween: 10,
-                                          },
-                                          767: {
-                                            slidesPerView: 1.5,
-                                            spaceBetween: 15,
-                                          },
-                                          991: {
-                                            slidesPerView: 2.5,
-                                            spaceBetween: 15,
-                                          },
-                                          1199: {
-                                            slidesPerView: 3.5,
-                                            spaceBetween: 15,
-                                          },
-                                        }}
-                                      >
-                                        {tenantDocument &&
-                                          tenantDocument.map(
-                                            (tenant, index) => (
-                                              <SwiperSlide key={index}>
-                                                <div
-                                                  className={`tc_single relative item ${
-                                                    tenant.status === "inactive"
-                                                      ? "t_inactive"
-                                                      : ""
-                                                  }`}
-                                                >
-                                                  <Link
-                                                    className="left"
-                                                    to={`/tenantdetails/${tenant.id}`}
-                                                  >
-                                                    <div className="tcs_img_container">
-                                                      <img
-                                                        src={
-                                                          tenant.tenantImgUrl ||
-                                                          "/assets/img/dummy_user.png"
-                                                        }
-                                                        alt="Preview"
-                                                      />
-                                                    </div>
-                                                    <div
-                                                      className={`tenant_detail ${
-                                                        editingTenantId ===
-                                                        tenant.id
-                                                          ? "td_edit"
-                                                          : ""
-                                                      }`}
-                                                    >
-                                                      <h6 className="t_name">
-                                                        {tenant.name
-                                                          ? firstLetterCapitalize(
-                                                              tenant.name
-                                                            )
-                                                          : "Tenant Name"}
-                                                      </h6>
-                                                      <h6 className="t_number">
-                                                        {tenant.mobile
-                                                          ? tenant.mobile.replace(
-                                                              /(\d{2})(\d{5})(\d{5})/,
-                                                              "+$1 $2-$3"
-                                                            )
-                                                          : "Tenant Phone"}
-                                                      </h6>
-                                                    <h6 className="t_number">
-                                                        {tenant?.emailId}
-                                                      </h6>
-                                                    </div>
-                                                  </Link>
-                                                  <div className="wha_call_icon">
-                                                    <Link
-                                                      className="call_icon wc_single"
-                                                      to={`tel:+${tenantSelectedUser?.id}`}
-                                                      target="_blank"
-                                                    >
-                                                      <img
-                                                        src="/assets/img/simple_call.png"
-                                                        alt="propdial"
-                                                      />
-                                                    </Link>
-                                                    <Link
-                                                      className="wha_icon wc_single"
-                                                      to={`https://wa.me/+${tenant.mobile}`}
-                                                      target="_blank"
-                                                    >
-                                                      <img
-                                                        src="/assets/img/whatsapp_simple.png"
-                                                        alt="propdial"
-                                                      />
-                                                    </Link>
-                                                  </div>
-                                                </div>
-                                              </SwiperSlide>
-                                            )
-                                          )}
-                                      </Swiper>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                  {/* tenant section start */}
+               <TenantSection
+               propertyid={propertyid}
+               isPropertyManager={isPropertyManager}
+               propertyDocument={propertyDocument}
+               setShowSavedModal={setShowSavedModal}
+               isPropertyOwner={isPropertyOwner}
+               />
 
-                              <Modal
-                                show={showAddTenantModal}
-                                centered
-                                size="lg"
-                                className={`add_new ${
-                                  tenantMode === "new" && "new"
-                                }`}
-                              >
-                                <h5 className="text_orange text-center">
-                                  Add tenant
-                                </h5>
-                                <div className="project-filter">
-                                  <nav>
-                                    <button
-                                      className={`pointer  ${
-                                        tenantMode === "existing"
-                                          ? "active"
-                                          : ""
-                                      }`}
-                                      onClick={() => setTenantMode("existing")}
-                                      style={{ marginRight: "10px" }}
-                                    >
-                                      Existing
-                                    </button>
-                                    <button
-                                      className={`pointer ${
-                                        tenantMode === "new" ? "active" : ""
-                                      }`}
-                                      onClick={() => setTenantMode("new")}
-                                    >
-                                      Add New
-                                    </button>
-                                  </nav>
-                                </div>
-
-                                <span
-                                  className="material-symbols-outlined modal_close"
-                                  onClick={() => setShowAddTenantModal(false)}
-                                >
-                                  close
-                                </span>
-                                {tenantMode === "new" && (
-                                  <AddPropertyUser
-                                    propertyid={propertyid}
-                                    user={user}
-                                    whoIsUser={"tenant"}
-                                  />
-                                )}
-                                {tenantMode === "existing" && (
-                                  <>
-                                    <div className="form_field st-2">
-                                      <div className="field_inner">
-                                        <input
-                                          type="text"
-                                          style={{
-                                            border: "1px solid #ddd",
-                                            borderRadius: "4px",
-                                          }}
-                                          value={tenantSearchQuery}
-                                          onChange={handleTenantSearchChange}
-                                          placeholder="Search users by name, email, or mobile..."
-                                        />
-                                        <div className="field_icon">
-                                          <span className="material-symbols-outlined">
-                                            search
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <ul className="search_results">
-                                      {tenantFilteredUsers.map((user) => (
-                                        <li
-                                          className="search_result_single"
-                                          key={user.id}
-                                        >
-                                          <label>
-                                            <input
-                                              type="radio"
-                                              name="selectedTenant"
-                                              checked={
-                                                tenantSelectedUser?.id ===
-                                                user.id
-                                              }
-                                              onChange={() =>
-                                                handleTenantSelectUser(user)
-                                              }
-                                            />
-                                            <div>
-                                              <strong>
-                                                {user.rolePropDial?.toUpperCase()}{" "}
-                                                - {user.fullName}
-                                              </strong>{" "}
-                                              (
-                                              {user.id?.replace(
-                                                /(\d{2})(\d{5})(\d{5})/,
-                                                "+$1 $2-$3"
-                                              )}
-                                              )<br />
-                                              {user.email}, {user.city},{" "}
-                                              {user.country}
-                                            </div>
-                                          </label>
-                                        </li>
-                                      ))}
-                                    </ul>
-
-                                    {tenantSelectedUser && (
-                                      // <div
-                                      //   className="tc_single relative"
-                                      // >
-                                      //   <div
-                                      //     className="left"
-                                      //   >
-                                      //     <div className="tcs_img_container">
-                                      //       <img
-                                      //         src={
-                                      //           tenantSelectedUser.photoURL ||
-                                      //           "/assets/img/dummy_user.png"
-                                      //         }
-                                      //         alt="Preview"
-                                      //       />
-                                      //     </div>
-                                      //     <div
-                                      //       className="tenant_detail"
-                                      //     >
-                                      //       <h6 className="t_name">
-                                      //         {tenantSelectedUser.fullName}
-                                      //       </h6>
-                                      //       <h6 className="t_number">
-                                      //       {tenantSelectedUser.phoneNumber}
-                                      //       </h6>
-                                      //     </div>
-                                      //   </div>
-                                      // </div>
-                                      <button
-                                        onClick={handleAddTenantToCollection}
-                                        className="theme_btn btn_fill no_icon full_width text-center"
-                                      >
-                                        Add
-                                      </button>
-                                    )}
-                                  </>
-                                )}
-                              </Modal>
-                            </section>
-                          )}
-                      </>
-                    )}
-
-                  {/* tenant card end  */}
+                  {/* tenant section end  */}
 
                   {/* property user card  start */}
                   {user &&
                     ((filteredPropertyOwners?.length === 0 &&
-                      (user.role === "superAdmin" ||
-                        user.role === "admin" ||
+                      (user?.role === "superAdmin" ||
+                        user?.role === "admin" ||
                         isPropertyManager)) ||
                       (filteredPropertyOwners?.length > 0 &&
-                        (user.role === "superAdmin" ||
-                          user.role === "admin" ||
+                        (user?.role === "superAdmin" ||
+                          user?.role === "admin" ||
                           isPropertyManager ||
                           isPropertyOwner))) && (
                       <>
@@ -4567,8 +3755,8 @@ const PropertyDetails = () => {
                             <div className="row">
                               {user &&
                               
-                                (user.role === "admin" ||
-                                  user.role === "superAdmin") && (
+                                (user?.role === "admin" ||
+                                  user?.role === "superAdmin") && (
                                   <div
                                     className="col-sm-1 col-2"
                                     style={{
@@ -4596,8 +3784,8 @@ const PropertyDetails = () => {
                                 className={`${
                                   user &&
                                 
-                                  (user.role === "admin" ||
-                                    user.role === "superAdmin")
+                                  (user?.role === "admin" ||
+                                    user?.role === "superAdmin")
                                     ? "col-sm-11 col-10"
                                     : "col-12"
                                 }`}
@@ -4638,8 +3826,8 @@ const PropertyDetails = () => {
                                                 onClick={
                                                   user &&
                                                   
-                                                  (user.role === "admin" ||
-                                                    user.role === "superAdmin")
+                                                  (user?.role === "admin" ||
+                                                    user?.role === "superAdmin")
                                                     ? (e) =>
                                                         handleShowOwnerTags(
                                                           e,
@@ -4652,7 +3840,7 @@ const PropertyDetails = () => {
                                                 {propUser.userTag}
                                                 {user &&
                                                  
-                                                  (user.role === "admin" ||
+                                                  (user?.role === "admin" ||
                                                     user.role ===
                                                       "superAdmin") && (
                                                     <span
@@ -4680,7 +3868,7 @@ const PropertyDetails = () => {
                                                     onClick={
                                                       user &&
                                                    
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
                                                         ? () =>
@@ -4692,7 +3880,7 @@ const PropertyDetails = () => {
                                                     }
                                                     className={`t_name ${
                                                       user &&
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
                                                         ? "pointer"
@@ -4702,7 +3890,7 @@ const PropertyDetails = () => {
                                                     {propUser.fullName}
                                                     {user &&
                                                    
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin") && (
                                                         <span className="material-symbols-outlined click_icon text_near_icon">
@@ -4967,12 +4155,12 @@ const PropertyDetails = () => {
                   {/* propdial managers / users card  start */}
                   {user &&
                     ((filteredPropertyManagers?.length === 0 &&
-                      (user.role === "superAdmin" ||
-                        user.role === "admin" ||
+                      (user?.role === "superAdmin" ||
+                        user?.role === "admin" ||
                         isPropertyManager)) ||
                       (filteredPropertyManagers?.length > 0 &&
-                        (user.role === "superAdmin" ||
-                          user.role === "admin" ||
+                        (user?.role === "superAdmin" ||
+                          user?.role === "admin" ||
                           isPropertyManager ||
                           isPropertyOwner))) && (
                       <>
@@ -4985,8 +4173,8 @@ const PropertyDetails = () => {
                             <div className="row">
                               {user &&
                         
-                                (user.role === "admin" ||
-                                  user.role === "superAdmin") && (
+                                (user?.role === "admin" ||
+                                  user?.role === "superAdmin") && (
                                   <div
                                     className="col-sm-1 col-2"
                                     style={{
@@ -5013,8 +4201,8 @@ const PropertyDetails = () => {
                               <div
                                 className={`${
                                   user &&
-                                  (user.role === "admin" ||
-                                    user.role === "superAdmin")
+                                  (user?.role === "admin" ||
+                                    user?.role === "superAdmin")
                                     ? "col-sm-11 col-10"
                                     : "col-12"
                                 }`}
@@ -5056,7 +4244,7 @@ const PropertyDetails = () => {
                                                   if (
                                                     user &&
                                                    
-                                                    (user.role === "admin" ||
+                                                    (user?.role === "admin" ||
                                                       user.role ===
                                                         "superAdmin")
                                                   ) {
@@ -5071,7 +4259,7 @@ const PropertyDetails = () => {
                                                 {propUser.userTag}
                                                 {user &&
                                                   
-                                                  (user.role === "admin" ||
+                                                  (user?.role === "admin" ||
                                                     user.role ===
                                                       "superAdmin") && (
                                                     <span
@@ -5099,7 +4287,7 @@ const PropertyDetails = () => {
                                                     onClick={
                                                       user &&
                                                       
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
                                                         ? () =>
@@ -5111,7 +4299,7 @@ const PropertyDetails = () => {
                                                     }
                                                     className={`t_name ${
                                                       user &&
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin")
                                                         ? "pointer"
@@ -5121,7 +4309,7 @@ const PropertyDetails = () => {
                                                     {propUser.fullName}
                                                     {user &&
                                                     
-                                                      (user.role === "admin" ||
+                                                      (user?.role === "admin" ||
                                                         user.role ===
                                                           "superAdmin") && (
                                                         <span className="material-symbols-outlined click_icon text_near_icon">
@@ -6226,8 +5414,8 @@ const PropertyDetails = () => {
                         <div className="p_info">
                           {user &&
                            
-                            (user.role === "superAdmin" ||
-                              user.role === "admin" ||
+                            (user?.role === "superAdmin" ||
+                              user?.role === "admin" ||
                               isPropertyManager ||
                               isPropertyOwner) && (
                               <div className="p_info_single">
@@ -7362,8 +6550,8 @@ const PropertyDetails = () => {
                                   user &&
                                   
                                   (user.role === "owner" ||
-                                    user.role === "admin" ||
-                                    user.role === "superAdmin") && (
+                                    user?.role === "admin" ||
+                                    user?.role === "superAdmin") && (
                                     <span
                                       className="material-symbols-outlined click_icon text_near_icon"
                                       onClick={() =>
@@ -7435,8 +6623,8 @@ const PropertyDetails = () => {
                                     {!isEditingOwnerInstruction &&
                                       user &&
                                    
-                                      (user.role === "admin" ||
-                                        user.role === "superAdmin") && (
+                                      (user?.role === "admin" ||
+                                        user?.role === "superAdmin") && (
                                         <span
                                           className="material-symbols-outlined click_icon text_near_icon"
                                           onClick={() =>
@@ -7460,7 +6648,7 @@ const PropertyDetails = () => {
               )}
 
               {/* {(user && user.status === "active" && user.role === "owner") ||
-       (user && user.status === "active" && (user.role === "admin" || user.role === "superAdmin") && (
+       (user && user.status === "active" && (user?.role === "admin" || user?.role === "superAdmin") && (
          <div className="property_card_single">
            <div className="more_detail_card_inner">
              <div className="row no-gutters">
@@ -7596,6 +6784,22 @@ const PropertyDetails = () => {
           <ClipLoader color="var(--theme-green2)" loading={true} />
         </div>
       )}
+       <ScrollToTop />
+        <SavedSuccessfully
+        show={showSavedModal}
+        onClose={() => setShowSavedModal(false)}
+        message="Tenant Added Successfully"
+      />
+      <Modal show={isRedirecting} centered className="uploading_modal">
+        <h6
+          style={{
+            color: "var(--theme-green2)",
+          }}
+        >
+          Redirecting...
+        </h6>
+        <BarLoader color="var(--theme-green2)" loading={true} height={10} />
+      </Modal>
     </>
   );
 };

@@ -1,12 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
 import { useFirestore } from "../../../hooks/useFirestore";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import UserRoleStatusModal from "./UserRoleStatusModal";
 import ImageModal from "../../imageModal/ImageModal";
-import { parsePhoneNumberFromString } from "libphonenumber-js";
-import formatCountry from "../../../utils/formatCountry";
 import UserCardItem from "./UserCardItem";
 const UserSinglecard = ({ users }) => {
   //   modal code start
