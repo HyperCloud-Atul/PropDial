@@ -8,6 +8,7 @@ import Select from "react-select";
 import { getCodeList } from "country-list";
 import SavedSuccessfully from "../../../../../components/SavedSuccessfully";
 const AddUser = () => {
+   const [whoAdd, setWhoAdd] = useState("");
   const [phone, setPhone] = useState("");
   const [countryCode, setCountryCode] = useState("");
   const [name, setName] = useState("");
@@ -243,7 +244,7 @@ const AddUser = () => {
         .doc(phone)
         .set(userData);
      setShowSavedModal(true);
-
+setWhoAdd(whoIsUser);
       resetForm();
 
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -731,7 +732,8 @@ const AddUser = () => {
             <SavedSuccessfully
                 show={showSavedModal}
                 onClose={() => setShowSavedModal(false)}
-                message="Tenant Added Successfully"
+                message={`${whoAdd.charAt(0).toUpperCase() + whoAdd.slice(1).toLowerCase()} Added Successfully`}
+
               />
       </div>
     </div>

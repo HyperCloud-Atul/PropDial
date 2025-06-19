@@ -59,6 +59,7 @@ const TenantSection = ({
               <TenantSwiper
                 user={user}
                 tenantDocument={tenantDocument}
+                isPropertyManager={isPropertyManager}
                 confirmDeleteTenant={confirmDeleteTenant}
               />
             </div>

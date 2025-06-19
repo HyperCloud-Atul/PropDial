@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
 // import { useFirestore } from "../../../hooks/useFirestore";
-// import { projectStorage, projectFirestore } from "../../../firebase/config";
+import { projectStorage, projectFirestore } from "../../../firebase/config";
 
 // import Table from 'react-bootstrap/Table';
 // import { Link } from "react-router-dom";
@@ -20,7 +20,6 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 import PropertyCard from "../../../components/property/PropertyCard";
 import InactiveUserCard from "../../../components/InactiveUserCard";
 
-
 // css
 import "./PGOwnerDashboard.css";
 
@@ -34,13 +33,37 @@ const PGOwnerDashboard = () => {
 
   const { user } = useAuthContext();
   // console.log('user: ', user)
-  const { documents: myproperties, error: errMyProperties } = useCollection(
-    "propertyusers",
-    ["userId", "==", user.phoneNumber]
+  const [myproperties, setMyProperties] = useState([]);
+  const [errMyProperties, setErrMyProperties] = useState(null);
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const snapshot = await projectFirestore
+          .collection("propertyusers")
+          .where("userId", "==", user?.phoneNumber)
+          .where("userType", "==", "propertyowner")
+          .get();
+
+        const results = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setMyProperties(results);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        setErrMyProperties(error.message);
+      }
+    };
+
+    if (user?.phoneNumber) {
+      fetchProperties();
+    }
+  }, [user?.phoneNumber]);
+
+  const { documents: properties, error: propertieserror } = useCollection(
+    "properties-propdial"
   );
- 
-  const { documents: properties, error: propertieserror } = useCollection("properties-propdial");
-  
 
   // const [filteredproperties, setFilteredproperties] = useState(null);
   const [activeProperties, setActiveProperties] = useState(null);
@@ -50,60 +73,74 @@ const PGOwnerDashboard = () => {
   const [commercialProperties, setCommercialProperties] = useState(null);
 
   useEffect(() => {
-
     try {
       // console.log('myproperties: ', myproperties)
       // console.log('all properties: ', properties)
 
       if (myproperties && properties) {
-        //Filtered Properties   
-        const _filteredproperties = myproperties && myproperties.map((doc) => (
-          properties.filter(propdoc => propdoc.id === doc.propertyId)
-        ))
+        //Filtered Properties
+        const _filteredproperties =
+          myproperties &&
+          myproperties.map((doc) =>
+            properties.filter((propdoc) => propdoc.id === doc.propertyId)
+          );
         // console.log("_filteredproperties: ", _filteredproperties)
 
         // setFilteredproperties(_filteredproperties)
 
         //Active Properties
         const _activeProperties =
-          _filteredproperties && _filteredproperties.map((propdoc) => (
-            propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
-          ))
-        setActiveProperties(_activeProperties)
+          _filteredproperties &&
+          _filteredproperties.map((propdoc) =>
+            propdoc[0].isActiveInactiveReview.toUpperCase() === "ACTIVE"
+              ? propdoc[0]
+              : null
+          );
+        setActiveProperties(_activeProperties);
 
         //Pending Properties
         const _pendingProperties =
-          _filteredproperties && _filteredproperties.map((propdoc) => (
-            propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
-          ))
-        setPendingProperties(_pendingProperties)
+          _filteredproperties &&
+          _filteredproperties.map((propdoc) =>
+            propdoc[0].isActiveInactiveReview.toUpperCase() === "IN-REVIEW"
+              ? propdoc[0]
+              : null
+          );
+        setPendingProperties(_pendingProperties);
 
         //Inactive Properties
         const _inactiveProperties =
-          _filteredproperties && _filteredproperties.map((propdoc) => (
-            propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
-          ))
-        setInactiveProperties(_inactiveProperties)
+          _filteredproperties &&
+          _filteredproperties.map((propdoc) =>
+            propdoc[0].isActiveInactiveReview.toUpperCase() === "INACTIVE"
+              ? propdoc[0]
+              : null
+          );
+        setInactiveProperties(_inactiveProperties);
 
         //Residential Properties
         const _residentialProperties =
-          _filteredproperties && _filteredproperties.map((propdoc) => (
-            propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
-          ))
-        setResidentialProperties(_residentialProperties)
+          _filteredproperties &&
+          _filteredproperties.map((propdoc) =>
+            propdoc[0].category.toUpperCase() === "RESIDENTIAL"
+              ? propdoc[0]
+              : null
+          );
+        setResidentialProperties(_residentialProperties);
 
         //Commercial Properties
         const _commercialProperties =
-          _filteredproperties && _filteredproperties.map((propdoc) => (
-            propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
-          ))
-        setCommercialProperties(_commercialProperties)
-
+          _filteredproperties &&
+          _filteredproperties.map((propdoc) =>
+            propdoc[0].category.toUpperCase() === "COMMERCIAL"
+              ? propdoc[0]
+              : null
+          );
+        setCommercialProperties(_commercialProperties);
       }
     } catch (ex) {
       console.error("Error: ", ex);
     }
-
   }, [myproperties, properties]);
 
   // const filteredproperties = myproperties && myproperties.map((doc) => (
@@ -117,14 +154,18 @@ const PGOwnerDashboard = () => {
   //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'ACTIVE' ? propdoc[0] : null
   //   ))
 
-  const activePropertieslengthWithoutNulls = activeProperties && activeProperties.filter(element => element !== null).length;
+  const activePropertieslengthWithoutNulls =
+    activeProperties &&
+    activeProperties.filter((element) => element !== null).length;
 
   // const pendingProperties =
   //   filteredproperties && filteredproperties.map((propdoc) => (
   //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'IN-REVIEW' ? propdoc[0] : null
   //   ))
 
-  const pendingPropertieslengthWithoutNulls = pendingProperties && pendingProperties.filter(element => element !== null).length;
+  const pendingPropertieslengthWithoutNulls =
+    pendingProperties &&
+    pendingProperties.filter((element) => element !== null).length;
   // console.log('pendingPropertieslengthWithoutNulls: ', pendingPropertieslengthWithoutNulls)
 
   // const inactiveProperties =
@@ -132,7 +173,9 @@ const PGOwnerDashboard = () => {
   //     propdoc[0].isActiveInactiveReview.toUpperCase() === 'INACTIVE' ? propdoc[0] : null
   //   ))
 
-  const inactivePropertieslengthWithoutNulls = inactiveProperties && inactiveProperties.filter(element => element !== null).length;
+  const inactivePropertieslengthWithoutNulls =
+    inactiveProperties &&
+    inactiveProperties.filter((element) => element !== null).length;
 
   // const inactiveProperties =
   //   filteredproperties && filteredproperties[0].filter((item) => item.isActiveInactiveReview.toUpperCase() === 'INACTIVE');
@@ -142,14 +185,18 @@ const PGOwnerDashboard = () => {
   //     propdoc[0].category.toUpperCase() === 'RESIDENTIAL' ? propdoc[0] : null
   //   ))
 
-  const residentialPropertieslengthWithoutNulls = residentialProperties && residentialProperties.filter(element => element !== null).length;
+  const residentialPropertieslengthWithoutNulls =
+    residentialProperties &&
+    residentialProperties.filter((element) => element !== null).length;
 
   // commercialProperties
   // const commercialProperties =
   //   filteredproperties && filteredproperties.map((propdoc) => (
   //     propdoc[0].category.toUpperCase() === 'COMMERCIAL' ? propdoc[0] : null
   //   ))
-  const commercialPropertieslengthWithoutNulls = commercialProperties && commercialProperties.filter(element => element !== null).length;
+  const commercialPropertieslengthWithoutNulls =
+    commercialProperties &&
+    commercialProperties.filter((element) => element !== null).length;
 
   // const commercialProperties =
   //   filteredproperties && filteredproperties[0].filter((item) => item.category.toUpperCase() === 'COMMERCIAL');
@@ -203,84 +250,99 @@ const PGOwnerDashboard = () => {
 
   return (
     <div>
-    {user && user.status === "active" ? (
+      {user && user.status === "active" ? (
         <div className="top_header_pg pg_bg propagent_dashboard">
-        <div className="page_spacing">
-          <div className="pg_header">
-            <h2 className="m22 mb-1">Owner Dashboard</h2>
-            <h4 className="r18 light_black">
-              Welcome <b> {user.displayName} </b>to Propdial            
-            </h4>
-          </div>
-          <div className="vg22"></div>
-          <div className="pg_body">
-            <div className="propagent_dashboard_inner">
-              <section className="row">
-                <div className="col-xl-5">
-                  <div className="total_prop_card relative">
-                    <div className="bg_icon">
-                      <img src="/assets/img/flats.png" alt="propdial" />
-                    </div>
-                    <div className="inner">
-                      <div className="icon">
+          <div className="page_spacing">
+            <div className="pg_header">
+              <h2 className="m22 mb-1">Owner Dashboard</h2>
+              <h4 className="r18 light_black">
+                Welcome <b> {user.displayName} </b>to Propdial
+              </h4>
+            </div>
+            <div className="vg22"></div>
+            <div className="pg_body">
+              <div className="propagent_dashboard_inner">
+                <section className="row">
+                  <div className="col-xl-5">
+                    <div className="total_prop_card relative">
+                      <div className="bg_icon">
                         <img src="/assets/img/flats.png" alt="propdial" />
                       </div>
-                      <div className="content">
-                        <h4 className="title">My Properties</h4>
-                        <div className="bar">
-                          <LinearProgressBar total="55" current="20" />
+                      <div className="inner">
+                        <div className="icon">
+                          <img src="/assets/img/flats.png" alt="propdial" />
                         </div>
+                        <div className="content">
+                          <h4 className="title">My Properties</h4>
+                          <div className="bar">
+                            <LinearProgressBar total="55" current="20" />
+                          </div>
 
-                        <h6>
-                          360&deg; Property Management Solutions
-                        </h6>
+                          <h6>360&deg; Property Management Solutions</h6>
+                        </div>
+                        <div className="number">
+                          {myproperties && myproperties.length}
+                        </div>
                       </div>
-                      <div className="number">{myproperties && myproperties.length}</div>
                     </div>
                   </div>
-                </div>
 
-                <div className="col-xl-7 bg_575">
-                  <div className="vg22_1199"></div>
-                  <div className="property_status">
-                    <div className="ps_single pending">
-                      <h5>{pendingProperties && pendingPropertieslengthWithoutNulls}</h5>
-                      <h6>In-Review</h6>
-                    </div>
-                    <div className="ps_single active">
-                      <h5>{activeProperties && activePropertieslengthWithoutNulls}</h5>
-                      <h6>Active</h6>
-                    </div>
-                    <div className="ps_single inactive">
-                      <h5>{inactiveProperties && inactivePropertieslengthWithoutNulls}</h5>
-                      <h6>Inactive</h6>
+                  <div className="col-xl-7 bg_575">
+                    <div className="vg22_1199"></div>
+                    <div className="property_status">
+                      <div className="ps_single pending">
+                        <h5>
+                          {pendingProperties &&
+                            pendingPropertieslengthWithoutNulls}
+                        </h5>
+                        <h6>In-Review</h6>
+                      </div>
+                      <div className="ps_single active">
+                        <h5>
+                          {activeProperties &&
+                            activePropertieslengthWithoutNulls}
+                        </h5>
+                        <h6>Active</h6>
+                      </div>
+                      <div className="ps_single inactive">
+                        <h5>
+                          {inactiveProperties &&
+                            inactivePropertieslengthWithoutNulls}
+                        </h5>
+                        <h6>Inactive</h6>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </section>
+                </section>
 
-              <div className="vg22"></div>
-              <section className="self_property_detail">
-                <div className="spd_single">
-                  <div className="left residential">
-                    <img src="/assets/img/house.png" alt="propdial" />
+                <div className="vg22"></div>
+                <section className="self_property_detail">
+                  <div className="spd_single">
+                    <div className="left residential">
+                      <img src="/assets/img/house.png" alt="propdial" />
+                    </div>
+                    <div className="right">
+                      <h6>Residential</h6>
+                      <h5>
+                        {residentialProperties &&
+                          residentialPropertieslengthWithoutNulls}
+                      </h5>
+                    </div>
                   </div>
-                  <div className="right">
-                    <h6>Residential</h6>
-                    <h5>{residentialProperties && residentialPropertieslengthWithoutNulls}</h5>
+                  <div className="spd_single">
+                    <div className="left commercial">
+                      <img src="/assets/img/buildings.png" alt="propdial" />
+                    </div>
+                    <div className="right">
+                      <h6>Commercial</h6>
+                      <h5>
+                        {commercialProperties &&
+                          commercialPropertieslengthWithoutNulls}
+                      </h5>
+                    </div>
                   </div>
-                </div>
-                <div className="spd_single">
-                  <div className="left commercial">
-                    <img src="/assets/img/buildings.png" alt="propdial" />
-                  </div>
-                  <div className="right">
-                    <h6>Commercial</h6>
-                    <h5>{commercialProperties && commercialPropertieslengthWithoutNulls}</h5>
-                  </div>
-                </div>
 
-                {/* <div className="spd_single">
+                  {/* <div className="spd_single">
                   <div className="left rent">
                     <img src="/assets/img/key.png" alt="propdial" />
                   </div>
@@ -317,14 +379,16 @@ const PGOwnerDashboard = () => {
                     <h5>6</h5>
                   </div>
                 </div> */}
-              </section>
-              <div className="vg12"></div>
-              <div className="vg22"></div>
-              <section className="property_cards_parent">
-                {myproperties && myproperties.map((property) => (
-                  <PropertyCard propertyid={property.propertyId} />))}
-              </section>
-              {/* <>
+                </section>
+                {/* <div className="vg12"></div>
+                <div className="vg22"></div>
+                <section className="property_cards_parent">
+                  {myproperties &&
+                    myproperties.map((property) => (
+                      <PropertyCard propertyid={property.propertyId} />
+                    ))}
+                </section> */}
+                {/* <>
          <div className="vg22"></div>
               <hr />
 
@@ -436,74 +500,71 @@ const PGOwnerDashboard = () => {
               <div className="vg22"></div>
               <hr />
          </> */}
-              {myproperties && myproperties.length === 0 && (
-                <>
-                  <div className="vg22"></div>
-                  <div className="property_soon">
-                    <div className="inner">
-                      <div>
-                        <h2>
-                          Welcome! 🌹😊
-                        </h2>
-                        <h4>🏡 Your property is currently in the discovery phase and will be onboarded shortly. 🚀</h4>
+                {myproperties && myproperties.length === 0 && (
+                  <>
+                    <div className="vg22"></div>
+                    <div className="property_soon">
+                      <div className="inner">
+                        <div>
+                          <h2>Welcome! 🌹😊</h2>
+                          <h4>
+                            🏡 Your property is currently in the discovery phase
+                            and will be onboarded shortly. 🚀
+                          </h4>
+                        </div>
+                        <img src="./assets/img/wait.png" alt="propdial" />
                       </div>
-                      <img src="./assets/img/wait.png" alt="propdial" />
                     </div>
+                  </>
+                )}
+
+                <div className="vg22"></div>
+                <section className="add_section row">
+                  <div className="add_single col-lg-6">
+                    <OwlCarousel className="owl-theme" {...addImgOptions2}>
+                      <div className="item">
+                        <img
+                          src="/assets/img/banner1.png"
+                          alt="propdial"
+                          className="add_img"
+                        />
+                      </div>
+                      <div className="item">
+                        <img
+                          src="/assets/img/banner2.png"
+                          alt="propdial"
+                          className="add_img"
+                        />
+                      </div>
+                    </OwlCarousel>
                   </div>
-                </>
-
-              )}
-
-              <div className="vg22"></div>
-              <section className="add_section row">
-                <div className="add_single col-lg-6">
-                  <OwlCarousel className="owl-theme" {...addImgOptions2}>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner1.png"
-                        alt="propdial"
-                        className="add_img"
-                      />
-                    </div>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner2.png"
-                        alt="propdial"
-                        className="add_img"
-                      />
-                    </div>
-                  </OwlCarousel>
-                </div>
-                <div className="add_single col-lg-6 add_single_2">
-                  <OwlCarousel className="owl-theme" {...addImgOptions}>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner4.png"
-                        alt="propdial"
-                        className="add_img"
-                      />
-                    </div>
-                    <div className="item">
-                      <img
-                        src="/assets/img/banner5.png"
-                        alt="propdial"
-                        className="add_img"
-                      />
-                    </div>
-                  </OwlCarousel>
-                </div>
-              </section>
-
+                  <div className="add_single col-lg-6 add_single_2">
+                    <OwlCarousel className="owl-theme" {...addImgOptions}>
+                      <div className="item">
+                        <img
+                          src="/assets/img/banner4.png"
+                          alt="propdial"
+                          className="add_img"
+                        />
+                      </div>
+                      <div className="item">
+                        <img
+                          src="/assets/img/banner5.png"
+                          alt="propdial"
+                          className="add_img"
+                        />
+                      </div>
+                    </OwlCarousel>
+                  </div>
+                </section>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    ) : (
-    <InactiveUserCard/>
-    )}
-  </div>
-   
-   
+      ) : (
+        <InactiveUserCard />
+      )}
+    </div>
   );
 };
 

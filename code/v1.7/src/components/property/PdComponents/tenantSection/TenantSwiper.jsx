@@ -1,15 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import TenantCard from "./TenantCard";
 
-const TenantSwiper = ({ user, tenantDocument, confirmDeleteTenant }) => {
+const TenantSwiper = ({ user, tenantDocument, confirmDeleteTenant, isPropertyManager }) => {
+      const showNarrowLayout =
+    user && (["admin", "superAdmin"].includes(user?.role) || isPropertyManager);
   return (
-    <div
-      className={`${
-        user && ["admin", "superAdmin"].includes(user?.role)
-          ? "col-sm-11 col-10"
-          : "col-12"
-      }`}
-    >
+       <div className={showNarrowLayout ? "col-sm-11 col-10" : "col-12"}>
       <div className="tenant_card">
         <Swiper
           spaceBetween={15}
@@ -28,6 +24,7 @@ const TenantSwiper = ({ user, tenantDocument, confirmDeleteTenant }) => {
               <TenantCard
                 tenant={tenant}
                 confirmDeleteTenant={confirmDeleteTenant}
+                user={user}
               />
             </SwiperSlide>
           ))}

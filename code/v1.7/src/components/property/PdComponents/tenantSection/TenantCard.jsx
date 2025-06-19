@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { firstLetterCapitalize } from "../../../../utils/lib";
 
-const TenantCard = ({ tenant, confirmDeleteTenant }) => (
+const TenantCard = ({ tenant, confirmDeleteTenant, user }) => (
   <div
     className={`tc_single relative item ${
       tenant.status === "inactive" ? "t_inactive" : ""
     }`}
   >
-    <Link className="left">
+    <Link className="left" 
+    // to={`/tenantdetails/${tenant.id}`} 
+    >
       <div className="tcs_img_container">
         <img
           src={tenant.tenantImgUrl || "/assets/img/dummy_user.png"}
@@ -24,7 +26,8 @@ const TenantCard = ({ tenant, confirmDeleteTenant }) => (
             : "Tenant Phone"}
         </h6>
         <h6 className="t_number">{tenant?.emailId}</h6>
-        <h6
+        {user?.role === "superAdmin" && (
+   <h6
           className="text_red"
           onClick={(e) => {
             e.preventDefault();
@@ -35,6 +38,8 @@ const TenantCard = ({ tenant, confirmDeleteTenant }) => (
         >
           Delete
         </h6>
+        )}
+     
       </div>
     </Link>
     <div className="wha_call_icon">

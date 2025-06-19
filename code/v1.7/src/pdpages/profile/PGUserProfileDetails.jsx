@@ -1643,7 +1643,7 @@ export default function PGUserProfileDetails2() {
           </h6> */}
           <h6 className="break_all">
             {userProfileDoc && userProfileDoc.email}
-            {userProfileDoc && userProfileDoc.gender}
+            {/* {userProfileDoc && userProfileDoc.gender} */}
           </h6>
           <h6>
             {userProfileDoc?.city}
@@ -1985,7 +1985,7 @@ export default function PGUserProfileDetails2() {
                             id="isaryes"
                             checked={
                               userProfileDoc?.isAttendanceRequired === true
-                            } // Fixed checked condition
+                            } 
                             onChange={() => handleArRadioChange("yes")}
                           />
                           <label htmlFor="isaryes">yes</label>

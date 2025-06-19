@@ -13,19 +13,19 @@ import UserTable from "./UserTable";
 import "./UserList.scss";
 
 // import filter
-import Filters from "../../../components/Filters";
+import UserFilters from "./UserFilters";
 const userFilter = [
-  "All",
-  "Owner",
-  "Frontdesk",
-  "Executive",
   "Admin",
+  "Executive",
+  "Owner",
+  "Tenant",
   "Agent",
+  "All",
   "Super Admin",
   "HR",
-  "Tenant",
   "Prospective Tenant",
   "Buyer",
+  "Frontdesk",
   "Prospective Buyer",
   "Inactive",
 ];
@@ -33,18 +33,18 @@ const userFilter = [
 const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
-  const { documents, error } = useCollection("users-propdial", "", ["createdAt", "desc"]);
-  // const { documents: inspections, errors: inspectionsError } = useCollection("propertyinspections",
-  //   ["propertyId", "==", propertyId],
-  //   ["createdAt", "desc"]);
-  const [filter, setFilter] = useState(userFilter[0]);
+  const { documents, error } = useCollection("users-propdial", "", [
+    "createdAt",
+    "desc",
+  ]);
+  const [filter, setFilter] = useState("Admin");
 
   useEffect(() => {
     let flag = user && user.role === "superAdmin";
     if (!flag) {
       logout();
     }
-  }, [user]);
+  }, [user, logout]);
 
   const changeFilter = (newFilter) => {
     setFilter(newFilter);
@@ -58,71 +58,182 @@ const UserList = () => {
 
   const users = documents
     ? documents.filter((document) => {
-      let roleMatch = true;
-      let searchMatch = true;
+        let roleMatch = true;
+        let searchMatch = true;
+        const rolesArray = document.rolesPropDial || [];
+        const primaryRole = document.rolePropDial;
 
-      // Filter by role
-      switch (filter) {
-        case "All":
-          roleMatch =
-            document.status === "active";
-          break;
-        case "Owner":
-          roleMatch =
-            document.status === "active" &&
-            document.rolePropDial === "owner" ||
-            document.rolePropDial === "coowner";
-          break;
-        case "Frontdesk":
-          roleMatch = document.status === "active" && document.rolePropDial === "frontdesk";
-          break;
-        case "Executive":
-          roleMatch = document.status === "active" && document.rolePropDial === "executive";
-          break;
-        case "Admin":
-          roleMatch = document.status === "active" && document.rolePropDial === "admin";
-          break;
-        case "Super Admin":
-          roleMatch = document.status === "active" && document.rolePropDial === "superAdmin";
-          break;
-        case "Agent":
-          roleMatch = document.status === "active" && document.rolePropDial === "agent";
-          break;
-        case "Inactive":
-          roleMatch = document.status === "inactive";
-          break;
-        case "Tenant":
-          roleMatch = document.status === "active" && document.rolePropDial === "tenant";
-          break;
-        case "Prospective Tenant":
-          roleMatch = document.status === "active" && document.rolePropDial === "prospectiveTenant";
-          break;
-        case "Buyer":
-          roleMatch = document.status === "active" && document.rolePropDial === "buyer";
-          break;
-        case "Prospective Buyer":
-          roleMatch = document.status === "active" && document.rolePropDial === "prospectiveBuyer";
-          break;
-        case "HR":
-          roleMatch = document.status === "active" && document.rolePropDial === "hr";
-          break;
-        default:
-          roleMatch = true;
+        // Filter by role
+        switch (filter) {
+          case "All":
+            roleMatch = document.status === "active";
+            break;
+          case "Owner":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "owner" ||
+                primaryRole === "coowner" ||
+                rolesArray.includes("owner") ||
+                rolesArray.includes("coowner"));
+            break;
+          case "Frontdesk":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "frontdesk" || rolesArray.includes("frontdesk"));
+            break;
+          case "Executive":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "executive" || rolesArray.includes("executive"));
+            break;
+          case "Admin":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "admin" || rolesArray.includes("admin"));
+            break;
+          case "Super Admin":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "superAdmin" ||
+                rolesArray.includes("superAdmin"));
+            break;
+          case "Agent":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "agent" || rolesArray.includes("agent"));
+            break;
+          case "Tenant":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "tenant" || rolesArray.includes("tenant"));
+            break;
+          case "Prospective Tenant":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "prospectiveTenant" ||
+                rolesArray.includes("prospectiveTenant"));
+            break;
+          case "Buyer":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "buyer" || rolesArray.includes("buyer"));
+            break;
+          case "Prospective Buyer":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "prospectiveBuyer" ||
+                rolesArray.includes("prospectiveBuyer"));
+            break;
+          case "HR":
+            roleMatch =
+              document.status === "active" &&
+              (primaryRole === "hr" || rolesArray.includes("hr"));
+            break;
+          case "Inactive":
+            roleMatch = document.status === "inactive";
+            break;
+          default:
+            roleMatch = true;
+        }
+
+        // Filter by search input
+        // console.log("Object: ", Object)
+        searchMatch = searchInput
+          ? Object.values(document).some(
+              (field) =>
+                typeof field === "string" &&
+                field.toUpperCase().includes(searchInput.toUpperCase())
+            )
+          : true;
+
+        return roleMatch && searchMatch;
+      })
+    : null;
+
+  // role wise count start
+  const formatCount = (num) => {
+    if (num >= 1000) {
+      return `${(num / 1000).toFixed(1).replace(".0", "")}K+`;
+    }
+    return num;
+  };
+  const userCounts = {
+    All: 0,
+    Owner: 0,
+    Frontdesk: 0,
+    Executive: 0,
+    Admin: 0,
+    Agent: 0,
+    "Super Admin": 0,
+    HR: 0,
+    Tenant: 0,
+    "Prospective Tenant": 0,
+    Buyer: 0,
+    "Prospective Buyer": 0,
+    Inactive: 0,
+  };
+
+  if (documents) {
+    documents.forEach((doc) => {
+      const status = doc.status;
+      const role = doc.rolePropDial;
+      const roles = doc.rolesPropDial || [];
+
+      // Inactive
+      if (status === "inactive") {
+        userCounts.Inactive++;
       }
 
-      // Filter by search input
-      // console.log("Object: ", Object)
-      searchMatch = searchInput
-        ? Object.values(document).some(
-          (field) =>
-            typeof field === "string" &&
-            field.toUpperCase().includes(searchInput.toUpperCase())
-        )
-        : true;
+      if (status === "active") {
+        userCounts.All++;
 
-      return roleMatch && searchMatch;
-    })
-    : null;
+        const allRoles = new Set([role, ...roles]);
+
+        allRoles.forEach((r) => {
+          switch (r) {
+            case "owner":
+            case "coowner":
+              userCounts.Owner++;
+              break;
+            case "frontdesk":
+              userCounts.Frontdesk++;
+              break;
+            case "executive":
+              userCounts.Executive++;
+              break;
+            case "admin":
+              userCounts.Admin++;
+              break;
+            case "superAdmin":
+              userCounts["Super Admin"]++;
+              break;
+            case "agent":
+              userCounts.Agent++;
+              break;
+            case "hr":
+              userCounts.HR++;
+              break;
+            case "tenant":
+              userCounts.Tenant++;
+              break;
+            case "prospectiveTenant":
+              userCounts["Prospective Tenant"]++;
+              break;
+            case "buyer":
+              userCounts.Buyer++;
+              break;
+            case "prospectiveBuyer":
+              userCounts["Prospective Buyer"]++;
+              break;
+            default:
+              break;
+          }
+        });
+      }
+    });
+  }
+
+  // role wise count end
 
   // card and table view mode functionality start
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
@@ -141,8 +252,13 @@ const UserList = () => {
       Mobile: item.phoneNumber,
       Role: item.rolePropDial,
       Status: item.status,
-      LastLogin: format(item.lastLoginTimestamp.toDate(), "dd-MMM-yy hh:mm a"),
-      OnboardedTimestamp: format(item.createdAt.toDate(), "dd-MMM-yy"),
+      LastLogin: item.lastLoginTimestamp
+        ? format(item.lastLoginTimestamp.toDate(), "dd-MMM-yy hh:mm a")
+        : "N/A",
+      OnboardedTimestamp: item.createdAt
+        ? format(item.createdAt.toDate(), "dd-MMM-yy")
+        : "N/A",
+
       // Add other fields as needed
 
       // Add other fields as needed
@@ -156,15 +272,14 @@ const UserList = () => {
 
   return (
     <div className="top_header_pg pg_bg user_pg">
-      <div className="page_spacing pg_min_height
-      ">
+      <div
+        className="page_spacing pg_min_height
+      "
+      >
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">
-              User List{" "}
-              <span className="r14 light_black">
-                ( Application's filtered users : {users && users.length} )
-              </span>
+              Total: <span className="text_orange">{documents?.length}</span>, Filtered: <span className="text_orange">{users?.length}</span>           
             </h2>
           </div>
           <div className="right">
@@ -198,17 +313,20 @@ const UserList = () => {
           <div className="right">
             <div className="user_filters new_inline">
               {documents && (
-                <Filters
+                <UserFilters
                   changeFilter={changeFilter}
                   filterList={userFilter}
                   filterLength={users.length}
+                  roleCounts={userCounts}
+                  formatCount={formatCount}
                 />
               )}
             </div>
             <div className="button_filter diff_views">
               <div
-                className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                  }`}
+                className={`bf_single ${
+                  viewMode === "card_view" ? "active" : ""
+                }`}
                 onClick={() => handleModeChange("card_view")}
               >
                 <span className="material-symbols-outlined">
@@ -216,8 +334,9 @@ const UserList = () => {
                 </span>
               </div>
               <div
-                className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                  }`}
+                className={`bf_single ${
+                  viewMode === "table_view" ? "active" : ""
+                }`}
                 onClick={() => handleModeChange("table_view")}
               >
                 <span className="material-symbols-outlined">view_list</span>
@@ -236,17 +355,14 @@ const UserList = () => {
           >
             No Users Yet!
           </p>
-        )
-        }
+        )}
 
         {viewMode === "card_view" && (
           <div className="propdial_users all_tenants">
             {users && <UserSinglecard users={users} />}
           </div>
         )}
-        {viewMode === "table_view" && (
-          <>{users && <UserTable users={users} />}</>
-        )}
+        {viewMode === "table_view" && users && <UserTable users={users} />}
       </div>
     </div>
   );

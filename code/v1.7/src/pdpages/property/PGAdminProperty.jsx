@@ -16,18 +16,19 @@ const PGAdminProperty = () => {
   const { user } = useAuthContext();
   const { filterOption } = useParams();
 
-  // const { documents: allproperties, error: propertieserror } = useCollection(
-  //   "properties-propdial",
-  //   "",
-  //   ["createdAt", "desc"]
-  // );
-
   // populate state and city based on state start
-  const { documents: mState, error: mStateError } = useCollection("m_states");
+    const { documents: mState, errors: mStateError } =
+      useCollection(
+        "m_states",
+        ["status", "==", "active"],
+        // ["createdAt", "desc"]
+      );
   const [selectedStateId, setSelectedStateId] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [cityOptions, setCityOptions] = useState([]);
   const [allproperties, setAllproperties] = useState([]);
+  const [loading, setLoading] = useState(false);
+
 
   const stateOptions =
     mState?.map((doc) => ({
@@ -35,21 +36,52 @@ const PGAdminProperty = () => {
       label: doc.state,
     })) || [];
 
-  const handleStateChange = (selectedOption) => {
-    setSelectedStateId(selectedOption?.value || null);
-    setSelectedCity(null);
-    setCityOptions([]);
-    setAllproperties([]);
-  };
+  // const handleStateChange = (selectedOption) => {
+  //   setSelectedStateId(selectedOption?.value || null);
+  //   setSelectedCity(null);
+  //   setCityOptions([]);
+  //   setAllproperties([]);
+  // };
 
-  const handleCityChange = (selectedOption) => {
-    setSelectedCity(selectedOption?.value || null);
-  };
+  // const handleCityChange = (selectedOption) => {
+  //   setSelectedCity(selectedOption?.value || null);
+  // };
+
+  const handleStateChange = (selectedOption) => {
+  const stateValue = selectedOption?.value || null;
+  setSelectedStateId(stateValue);
+  localStorage.setItem("selectedStateId", stateValue); // Save
+
+  setSelectedCity(null);
+  setCityOptions([]);
+  setAllproperties([]);
+  localStorage.removeItem("selectedCity"); // Reset city
+};
+
+const handleCityChange = (selectedOption) => {
+  const cityValue = selectedOption?.value || null;
+  setSelectedCity(cityValue);
+  localStorage.setItem("selectedCity", cityValue); // Save
+};
+
+useEffect(() => {
+  const savedStateId = localStorage.getItem("selectedStateId");
+  const savedCity = localStorage.getItem("selectedCity");
+
+  if (savedStateId) {
+    setSelectedStateId(savedStateId);
+  }
+
+  if (savedCity) {
+    setSelectedCity(savedCity);
+  }
+}, []);
+
 
   // Fetch cities on state select
   useEffect(() => {
     if (!selectedStateId) return;
-
+  
     const unsubscribe = projectFirestore
       .collection("m_cities")
       .where("state", "==", selectedStateId)
@@ -68,7 +100,7 @@ const PGAdminProperty = () => {
   // Fetch properties on city select
   useEffect(() => {
     if (!selectedCity) return;
-
+setLoading(true);
     const unsubscribe = projectFirestore
       .collection("properties-propdial")
       .where("city", "==", selectedCity)
@@ -79,6 +111,7 @@ const PGAdminProperty = () => {
           ...doc.data(),
         }));
         setAllproperties(props);
+         setLoading(false);
       });
 
     return () => unsubscribe();
@@ -291,8 +324,7 @@ const PGAdminProperty = () => {
   return (
     <>
       {user && user.status === "active" ? (
-        <div className="top_header_pg pg_bg pg_adminproperty">
-          {filteredProperties ? (
+        <div className="top_header_pg pg_bg pg_adminproperty">        
             <div className="page_spacing pg_min_height">
               {/* 9 dots html */}
               <div
@@ -362,6 +394,8 @@ const PGAdminProperty = () => {
                   <Select
                     options={stateOptions}
                     onChange={handleStateChange}
+                    
+                    value={stateOptions.find((opt) => opt.value === selectedStateId) || null} 
                     placeholder="Select a state..."
                     menuPortalTarget={document.body}
                     styles={{
@@ -375,6 +409,7 @@ const PGAdminProperty = () => {
                       <Select
                         options={cityOptions}
                         onChange={handleCityChange}
+                        value={cityOptions.find((opt) => opt.value === selectedCity) || null} 
                         placeholder="Select a city..."
                         menuPortalTarget={document.body}
                         styles={{
@@ -451,6 +486,13 @@ const PGAdminProperty = () => {
                 </div>
               </div>
               <hr></hr>
+              {loading ? (
+  <div className="page_loader">
+              <ClipLoader color="var(--theme-green2)" loading={true} />
+            </div>
+              )
+            : (
+   <>
               <div className="vg12"></div>
               <div className="property_cards_parent">
                 {viewMode === "card_view" && (
@@ -475,12 +517,12 @@ const PGAdminProperty = () => {
                   )}
                 </>
               )}
-            </div>
-          ) : (
-            <div className="page_loader">
-              <ClipLoader color="var(--theme-green2)" loading={true} />
-            </div>
-          )}
+             </>
+            )
+            }
+             
+          
+            </div>         
         </div>
       ) : (
         <InactiveUserCard />

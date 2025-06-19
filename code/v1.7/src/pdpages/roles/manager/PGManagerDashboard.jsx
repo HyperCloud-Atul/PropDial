@@ -34,11 +34,37 @@ const PGManagerDashboard = () => {
 
   const { user } = useAuthContext();
   // console.log('user: ', user)
-  const { documents: myproperties, error: errMyProperties } = useCollection(
-    "propertyusers",
-    ["userId", "==", user.phoneNumber]
-  );
+  // const { documents: myproperties, error: errMyProperties } = useCollection(
+  //   "propertyusers",
+  //   ["userId", "==", user.phoneNumber]
+  // );
+  const [myproperties, setMyProperties] = useState([]);
+const [errMyProperties, setErrMyProperties] = useState(null);
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      const snapshot = await projectFirestore
+        .collection("propertyusers")
+        .where("userId", "==", user?.phoneNumber)
+        .where("userType", "==", "propertymanager")
+        .get();
 
+      const results = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setMyProperties(results);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+      setErrMyProperties(error.message);
+    }
+  };
+
+  if (user?.phoneNumber) {
+    fetchProperties();
+  }
+}, [user?.phoneNumber]);
   console.log('myproperties: ', myproperties)
 
   // const { documents: properties, error: propertieserror } = useCollection("properties-propdial", ["postedBy", "==", "Propdial"]);
@@ -297,13 +323,13 @@ const PGManagerDashboard = () => {
                   </div>
                 </div> */}
               </section>
-              <div className="vg22"></div>
+              {/* <div className="vg22"></div>
               <hr />
               <div className="vg22"></div>
               <section className="property_cards_parent">
                 {myproperties && myproperties.map((property) => (
                   <PropertyCard propertyid={property.propertyId} />))}
-              </section>
+              </section> */}
 
               {/* <>
          <div className="vg22"></div>

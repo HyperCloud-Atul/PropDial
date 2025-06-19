@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import { projectStorage, projectFirestore, timestamp } from "../firebase/config";
 
 const AddTenantDocument = () => {
+  
   const { tenantId } = useParams();
   const [docType, setDocType] = useState("");
   const [file, setFile] = useState(null);

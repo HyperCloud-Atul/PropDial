@@ -969,7 +969,9 @@ const PropertyCard = ({ propertyid }) => {
               {/* Executive  */}
               {!isPropertyManager && (
                 <div className="property_user_single">
-                  <div className="user_type">Executive</div>
+                  <div className="user_type">
+                    {user?.role === "owner" ? "Property Manager" : "Executive"}
+                  </div>
                   <div className="inner">
                     <div className="img">
                       <img

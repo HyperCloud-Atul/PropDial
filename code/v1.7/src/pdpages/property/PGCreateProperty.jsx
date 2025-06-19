@@ -3273,7 +3273,7 @@ const CreateProperty = () => {
                             </div>
                           </div>
                         </div>
-                        <div
+                          <div
                           style={{
                             fontSize: "smaller",
                             borderTop: "1px solid #ddd",
@@ -3283,6 +3283,16 @@ const CreateProperty = () => {
                         >
                           {convertToWords(propertyDetails.MaintenanceCharges)}
                         </div>
+                     {(propertyDetails?.MaintenanceCharges === "" || propertyDetails?.MaintenanceChargesFrequency === "") && (
+  <div className="field_error">
+    Please 
+    {propertyDetails?.MaintenanceCharges === "" && " enter fees"}
+    {propertyDetails?.MaintenanceCharges === "" && propertyDetails?.MaintenanceChargesFrequency === "" && " and "}
+    {propertyDetails?.MaintenanceChargesFrequency === "" && " select maintenance frequency"}
+  </div>
+)}
+
+                      
                       </div>
                     </div>
                   )}

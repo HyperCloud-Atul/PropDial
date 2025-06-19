@@ -4434,21 +4434,19 @@ const PropertyDetails = () => {
                                       border: "none",
                                     }}
                                   >
-                                    <div className="radio_single">
+                                    {/* <div className="radio_single">
                                       <input
                                         type="radio"
                                         name="prop_user_manager"
                                         value="Manager"
                                         id="Manager"
-                                        // checked={
-                                        //   selectedPropUser.userTag === "Manager"
-                                        // }
+                                      
                                         onChange={() =>
                                           handleUserTagChange("Manager")
                                         }
                                       />
                                       <label htmlFor="Manager">Manager</label>
-                                    </div>
+                                    </div> */}
                                     <div className="radio_single">
                                       <input
                                         type="radio"

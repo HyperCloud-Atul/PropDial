@@ -33,7 +33,7 @@ import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
 import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
-import UserProperties from "./pdpages/roles/admin/UserProperties";
+import MyProperties from "./pdpages/property/MyProperties";
 
 import ViewInspection from "./pdpages/inspection/ViewInspection";
 import InspectionDetails from "./pdpages/inspection/InspectionDetails";
@@ -122,6 +122,7 @@ import PropertyUtilityBills from "./pdpages/property/PropertyUtilityBills";
 import PropertyKeyDetail from "./pdpages/property/PropertyKeyDetail";
 import PropertyInspectionDocuments from "./components/PropertyInspectionDocuments";
 import PGAdminProperty from "./pdpages/property/PGAdminProperty";
+import UserProperties from "./pdpages/roles/admin/UserProperties";
 import PGEnquiry from "./pdpages/enquiry/PGEnquiry";
 import UpdateEnquiry from "./pdpages/enquiry/UpdateEnquiry";
 import ScrollToTop from "./components/ScrollToTop";
@@ -642,6 +643,17 @@ function App() {
                           <PGAdminProperty />
                         ) : (
                           <Navigate to="/login" />
+                        )
+                      }
+                    ></Route>
+                     <Route
+                      path="/my-property"
+                      element={
+                        user ?
+                         (
+                          <MyProperties />
+                        ) : (
+                          <Navigate to="/" />
                         )
                       }
                     ></Route>

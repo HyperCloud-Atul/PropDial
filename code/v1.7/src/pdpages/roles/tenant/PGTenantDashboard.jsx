@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { useCollection } from "../../../hooks/useCollection";
 // import { useFirestore } from "../../../hooks/useFirestore";
-// import { projectStorage, projectFirestore } from "../../../firebase/config";
+import { projectStorage, projectFirestore } from "../../../firebase/config";
 
 // import Table from 'react-bootstrap/Table';
 // import { Link } from "react-router-dom";
@@ -34,11 +34,38 @@ const PGOwnerDashboard = () => {
 
   const { user } = useAuthContext();
   // console.log('user: ', user)
-  const { documents: myproperties, error: errMyProperties } = useCollection(
-    "propertyusers",
-    ["userId", "==", user.phoneNumber]
-  );
- 
+  // const { documents: myproperties, error: errMyProperties } = useCollection(
+  //   "propertyusers",
+  //   ["userId", "==", user.phoneNumber]
+  // );
+   const [myproperties, setMyProperties] = useState([]);
+const [errMyProperties, setErrMyProperties] = useState(null);
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      const snapshot = await projectFirestore
+        .collection("propertyusers")
+        .where("userId", "==", user?.phoneNumber)
+        .where("userType", "==", "propertytenant")
+        .get();
+
+      const results = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setMyProperties(results);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+      setErrMyProperties(error.message);
+    }
+  };
+
+  if (user?.phoneNumber) {
+    fetchProperties();
+  }
+}, [user?.phoneNumber]);
+  console.log('myproperties: ', myproperties)
   const { documents: properties, error: propertieserror } = useCollection("properties-propdial");
   
 

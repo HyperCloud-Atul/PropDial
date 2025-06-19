@@ -24,30 +24,86 @@ const AddTenant = ({
   const [tenantMode, setTenantMode] = useState("existing"); // or "new"
 
   // 🔄 Fetch all tenants from 'users-propdial' where role is tenant
-  useEffect(() => {
-    const fetchTenantUsers = async () => {
-      setTenantLoading(true);
-      try {
-        const snapshot = await projectFirestore
-          .collection("users-propdial")
-          .where("rolePropDial", "==", "tenant")
-          .get();
+  // useEffect(() => {
+  //   const fetchTenantUsers = async () => {
+  //     setTenantLoading(true);
+  //     try {
+  //       const snapshot = await projectFirestore
+  //         .collection("users-propdial")
+  //         .where("rolePropDial", "==", "tenant")
+  //         .get();
 
-        const users = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setAllUsers(users);
-        setTenantFilteredUsers(users);
-      } catch (err) {
-        console.error("Error fetching tenants:", err);
-      } finally {
-        setTenantLoading(false);
-      }
-    };
+  //       const users = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setAllUsers(users);
+  //       setTenantFilteredUsers(users);
+  //     } catch (err) {
+  //       console.error("Error fetching tenants:", err);
+  //     } finally {
+  //       setTenantLoading(false);
+  //     }
+  //   };
 
-    fetchTenantUsers();
-  }, []);
+  //   fetchTenantUsers();
+  // }, []);
+ useEffect(() => {
+  setTenantLoading(true);
+
+  // Caches
+  let users1Cache = [];
+  let users2Cache = [];
+
+  // Combine logic with deduplication
+  const combineUsers = (u1, u2) => {
+    if (u1 !== null) users1Cache = u1;
+    if (u2 !== null) users2Cache = u2;
+
+    const combinedMap = new Map();
+    [...users1Cache, ...users2Cache].forEach((user) => {
+      combinedMap.set(user.id, user); // remove duplicates by ID
+    });
+
+    const allCombined = Array.from(combinedMap.values());
+
+    setAllUsers(allCombined);
+    setTenantFilteredUsers(allCombined);
+    setTenantLoading(false);
+  };
+
+  // listener 1: rolePropDial == "tenant"
+  const q1 = projectFirestore
+    .collection("users-propdial")
+    .where("rolePropDial", "==", "tenant");
+
+  const unsub1 = q1.onSnapshot((snapshot1) => {
+    const users1 = snapshot1.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    combineUsers(users1, null);
+  });
+
+  // listener 2: rolesPropDial contains "tenant"
+  const q2 = projectFirestore
+    .collection("users-propdial")
+    .where("rolesPropDial", "array-contains", "tenant");
+
+  const unsub2 = q2.onSnapshot((snapshot2) => {
+    const users2 = snapshot2.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    combineUsers(null, users2);
+  });
+
+  return () => {
+    unsub1();
+    unsub2();
+  };
+}, []);
+
 
   // 🔎 Search Handler
   const handleTenantSearchChange = (e) => {
@@ -188,7 +244,8 @@ const AddTenant = ({
                     />
                     <div>
                       <strong>
-                        {user.rolePropDial?.toUpperCase()} - {user.fullName}
+                        {/* {user.rolePropDial?.toUpperCase()} - */}
+                         {user.fullName}
                       </strong>{" "}
                       (
                       {(() => {
