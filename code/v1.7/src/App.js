@@ -58,6 +58,7 @@ import AddUser from "./pdpages/roles/superAdmin/agent/addUser/AddUser";
 import PGAdminDashboard from "./pages/roles/admin/PGAdminDashboard";
 import PGAdminProperties from "./pages/roles/admin/PGAdminProperties";
 import PGPropertyEdit from "./pages/roles/admin/PGPropertyEdit";
+import FilteredProperties from "./pdpages/property/FilteredProperties";
 // owner
 
 import PGBills from "./pages/roles/owner/PGBills";
@@ -642,10 +643,25 @@ function App() {
                             user.role === "executive") ? (
                           <PGAdminProperty />
                         ) : (
-                          <Navigate to="/login" />
+                          <Navigate to="/" />
                         )
                       }
                     ></Route>
+                     <Route path="/filtered-property" 
+                        element={
+                        user &&
+                          (user.role === "admin" ||
+                            user.role === "superAdmin"
+                            //  || user.role === "executive"
+                            )
+                             ? (
+                          <FilteredProperties />
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
+                     />
+
                      <Route
                       path="/my-property"
                       element={

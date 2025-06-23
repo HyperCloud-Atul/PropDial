@@ -8,7 +8,7 @@ const TenantCard = ({ tenant, confirmDeleteTenant, user }) => (
     }`}
   >
     <Link className="left" 
-    to={`/tenantdetails/${tenant.id}`} 
+    // to={`/tenantdetails/${tenant.id}`} 
     >
       <div className="tcs_img_container">
         <img

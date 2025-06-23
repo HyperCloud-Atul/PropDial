@@ -364,7 +364,8 @@ const PGAdminDashboard = () => {
                       <div className="vg22_1199"></div>
                       <div className="property_status">
                         <Link
-                          to="/allproperties/in-review"
+                          // to="/allproperties/in-review"
+                           to="/filtered-property?filter=inreview"
                           className="ps_single pending"
                         >
                           <h5>
@@ -373,14 +374,15 @@ const PGAdminDashboard = () => {
                           <h6>In-Review</h6>
                         </Link>
                         <Link
-                          to="/allproperties/active"
+                          // to="/allproperties/active"
                           className="ps_single active"
                         >
                           <h5>{activeProperties && activeProperties.length}</h5>
                           <h6>Active</h6>
                         </Link>
                         <Link
-                          to="/allproperties/inactive"
+                          // to="/allproperties/inactive"
+                          to="/filtered-property?filter=inactive"
                           className="ps_single inactive"
                         >
                           <h5>

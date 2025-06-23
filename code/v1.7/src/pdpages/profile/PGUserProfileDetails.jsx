@@ -1747,7 +1747,7 @@ export default function PGUserProfileDetails2() {
                         />
                         <label htmlFor="active">
                           <div className="label_inner">
-                            {userProfileDoc && userProfileDoc.activeAt
+                            {userProfileDoc?.status === "active"
                               ? "Active"
                               : "Make Active"}
 
@@ -1788,15 +1788,14 @@ export default function PGUserProfileDetails2() {
                           name="user_status"
                           value="inactive"
                           id="inactive"
-                          checked={
-                            userProfileDoc &&
-                            userProfileDoc.status === "inactive"
+                          checked={                          
+                            userProfileDoc?.status === "inactive"
                           }
                           onChange={() => handleStatusChange("inactive")}
                         />
                         <label htmlFor="inactive">
                           <div className="label_inner">
-                            {userProfileDoc && userProfileDoc.inactiveAt
+                            {userProfileDoc?.status === "inactive"
                               ? "Inactive"
                               : "Make Inactive"}
                             {userProfileDoc &&
@@ -1903,7 +1902,7 @@ export default function PGUserProfileDetails2() {
                           id="no"
                           checked={
                             userProfileDoc &&
-                            userProfileDoc.isEmployee === false
+                            (userProfileDoc.isEmployee === false || isEmployee === false)
                           }
                           onChange={() => handleRadioChange("no")}
                         />
@@ -2433,6 +2432,10 @@ export default function PGUserProfileDetails2() {
                           //     textTransform: "capitalize",
                           //   }),
                           // }}
+                             menuPortalTarget={document.body}
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          }}
                         />
                       </div>
                     </div>

@@ -369,7 +369,9 @@ setLoading(true);
                     <span className="material-symbols-outlined">add</span>
                   </Link>
                 )}
-              <div className="pg_header d-flex justify-content-between">
+              <div className="pg_header d-flex justify-content-between flex-wrap" style={{
+                gap:"22px"
+              }}>
                 <div className="left">
                   <h2 className="m22">
                     Filtered properties:{" "}
@@ -381,6 +383,35 @@ setLoading(true);
                   </h2>
                 </div>
                 <div className="right">
+                 <div className="new_inline">
+                        <div className="project-filter">
+                          <nav>
+                            <button
+                              className="pointer active"                             
+                            >
+                             All
+                            </button>
+                            <Link  to="/filtered-property?filter=inreview"
+                            >
+                                <button
+                              className="pointer"
+                             
+                            >
+                              Only In-Review
+                            </button>
+                            </Link>
+                               <Link  to="/filtered-property?filter=inactive"
+                            >
+                                <button
+                              className="pointer"
+                             
+                            >
+                              Only Inactive
+                            </button>
+                            </Link>
+                          </nav>
+                        </div>
+                      </div>
                   <img
                     src="/assets/img/icons/excel_logo.png"
                     alt="propdial"
@@ -388,7 +419,7 @@ setLoading(true);
                   />
                 </div>
               </div>
-              <div className="vg12"></div>
+             <hr />
               <div className="filters">
                 <div className="left">
                   <Select
@@ -485,6 +516,7 @@ setLoading(true);
                     )} */}
                 </div>
               </div>
+              
               <hr></hr>
               {loading ? (
   <div className="page_loader">

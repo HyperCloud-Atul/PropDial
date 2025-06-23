@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Modal, Button } from "react-bootstrap";
 import Select from "react-select";
 import AddTenantDocument from "./AddTenantDocument";
+import { citizenshipOptions } from "../utils/citizenshipOptions";
 
 // import scss
 
@@ -744,8 +745,8 @@ export default function TenantDetails() {
                     />
                     <label htmlFor="active">
                       <div className="label_inner">
-                        {tenantData?.activeAt ? "Active" : "Make Active"}
-
+                      
+ {tenantData?.status === "active" ? "Active" : "Make Active"}
                         {tenantData?.activeBy && tenantData?.activeAt && (
                           <div className="info_icon">
                             <span className="material-symbols-outlined">
@@ -784,7 +785,7 @@ export default function TenantDetails() {
                     />
                     <label htmlFor="inactive">
                       <div className="label_inner">
-                        {tenantData?.inactiveAt ? "Inactive" : "Make Inactive"}
+                        {tenantData?.status === "inactive" ? "Inactive" : "Make Inactive"}
 
                         {tenantData?.inactiveBy && tenantData?.inactiveAt && (
                           <div className="info_icon">
@@ -932,6 +933,17 @@ export default function TenantDetails() {
               <div>{formData.citizenship || "-"}</div>
             )}
           </div>
+          <Select
+  options={citizenshipOptions}
+  value={
+    formData.citizenship
+      ? { label: formData.citizenship, value: formData.citizenship }
+      : null
+  }
+  onChange={(selected) =>
+    setFormData({ ...formData, citizenship: selected.value })
+  }
+/>
 
           {/* Country */}
           <div className="mb-2">
