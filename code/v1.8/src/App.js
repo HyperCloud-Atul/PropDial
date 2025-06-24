@@ -792,11 +792,11 @@ function App() {
                     ></Route>
                     <Route
                       path="/userlist"
-                      element={
-                        user && user.role === "superAdmin" ? (
+                      element={user &&
+                     (user.role === "hr" || user.role === "superAdmin") ? (
                           <UserList />
                         ) : (
-                          <Navigate to="/login" />
+                          <Navigate to="/" />
                         )
                       }
                     ></Route>
@@ -1222,7 +1222,7 @@ function App() {
                     <Route
                       path="/profiledetails/:userProfileId"
                       element={
-                        user && user.role === "superAdmin" ? (
+                        user && (user.role === "superAdmin" || user.role === "hr") ? (
                           <PGUserProfileDetails />
                         ) : (
                           <Navigate to="/login" />

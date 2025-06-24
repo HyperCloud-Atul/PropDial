@@ -40,7 +40,7 @@ const UserList = () => {
   const [filter, setFilter] = useState("Admin");
 
   useEffect(() => {
-    let flag = user && user.role === "superAdmin";
+    let flag = user && (user.role === "superAdmin" || user.role === "hr");
     if (!flag) {
       logout();
     }
