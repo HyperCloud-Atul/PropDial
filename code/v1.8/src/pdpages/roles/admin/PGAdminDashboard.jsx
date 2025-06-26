@@ -20,7 +20,7 @@ import "./PGAdminDashboard.scss";
 const PGAdminDashboard = () => {
   const { user } = useAuthContext();
   const { stateCounts } = useStateWisePropertyCounts();
-const { counts, countLoading, countError } = usePropertyCounts();
+  const { counts, countLoading, countError } = usePropertyCounts();
 
   // advertisement img option in owl carousel
   const addImgOptions = {
@@ -284,7 +284,7 @@ const { counts, countLoading, countError } = usePropertyCounts();
                   </section>
                   <div className="vg22"></div>
 
-{/* properties map start */}
+                  {/* properties map start */}
                   <div className="properties_map">
                     <h2
                       className="p_title"
@@ -298,22 +298,26 @@ const { counts, countLoading, countError } = usePropertyCounts();
                     </h2>
 
                     <div className="pi_cities row">
-                      {Object.entries(stateCounts).map(([state, count]) => (
-                        <div className="col-lg-3 col-md-4 col-6" key={state}>
-                          <div className="pi_cities_single mt-4">
-                            <h6>{state}</h6>
-                            <h5>{count}</h5>
-                            <div className="bar">
-                              <div
-                                className="bar_fill"
-                                style={{
-                                  width: `${(count / counts.totalCount) * 100}%`,
-                                }}
-                              ></div>
+                      {Object.entries(stateCounts)
+                        .filter(([_, count]) => count > 0)
+                        .map(([state, count]) => (
+                          <div className="col-lg-3 col-md-4 col-6" key={state}>
+                            <div className="pi_cities_single mt-4">
+                              <h6>{state}</h6>
+                              <h5>{count}</h5>
+                              <div className="bar">
+                                <div
+                                  className="bar_fill"
+                                  style={{
+                                    width: `${
+                                      (count / counts.totalCount) * 100
+                                    }%`,
+                                  }}
+                                ></div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
                   </div>
                   {/* properties map end */}
