@@ -5,10 +5,12 @@ import { useDocument } from "../../hooks/useDocument";
 import { projectFirestore } from "../../firebase/config";
 import { FaTrashAlt } from "react-icons/fa";
 import { projectStorage } from "../../firebase/config";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 const PropertyImages = () => {
   const { propertyId } = useParams();
   const { document: propertyDocument } = useDocument("properties-propdial", propertyId);
+  const { user } = useAuthContext();
 
   const images = propertyDocument?.images || [];
   const layoutImages = propertyDocument?.layoutImages || {};
@@ -186,11 +188,12 @@ const PropertyImages = () => {
                         objectFit: "cover",
                       }}
                     />
+                  {user?.role === "admin" || user?.role === "superAdmin" ? (
                     <FaTrashAlt
-                     onClick={() => {
-    setImageToDelete({ type: "images", index });
-    setShowConfirm(true); 
-  }}
+                      onClick={() => {
+                        setImageToDelete({ type: "images", index });
+                        setShowConfirm(true);
+                      }}
                       style={{
                         position: "absolute",
                         top: 8,
@@ -202,6 +205,7 @@ const PropertyImages = () => {
                         cursor: "pointer",
                       }}
                     />
+                  ) : null}
                   </div>
                 ))
               ) : (
@@ -250,25 +254,28 @@ const PropertyImages = () => {
                           objectFit: "cover",
                         }}
                       />
-                      <FaTrashAlt
+                   { user?.role === "admin" || user?.role === "superAdmin" ? (
+                     <FaTrashAlt
                        onClick={() => {
-    setImageToDelete({
-      type: "layoutImages",
-      layoutName,
-      index,
-    });
-    setShowConfirm(true); 
-  }} style={{
-                          position: "absolute",
-                          top: 8,
-                          right: 8,
-                          color: "red",
-                          background: "#fff",
-                          borderRadius: "50%",
-                          padding: "5px",
-                          cursor: "pointer",
-                        }}
-                      />
+                         setImageToDelete({
+                           type: "layoutImages",
+                           layoutName,
+                           index,
+                         });
+                         setShowConfirm(true);
+                       }}
+                       style={{
+                         position: "absolute",
+                         top: 8,
+                         right: 8,
+                         color: "red",
+                         background: "#fff",
+                         borderRadius: "50%",
+                         padding: "5px",
+                         cursor: "pointer",
+                       }}
+                     />
+                   ) : null}
                     </div>
                   ))
                 ) : (
