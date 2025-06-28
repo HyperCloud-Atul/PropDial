@@ -35,6 +35,8 @@ export default function NavbarBottom() {
     }
 
     if (user.role === "hr") navigate("/attendance-dashboard");
+    else if (user && user.role === "frontdesk") {
+      navigate("/properties");}
     else navigate("/dashboard");
   };
 
@@ -46,6 +48,8 @@ export default function NavbarBottom() {
       navigate("/allproperties/all");
     } else if (user.role === "hr") {
       navigate("/userlist");
+    } else if (user.role === "frontdesk") {
+      navigate("/blogs");
     } else {
       navigate("/my-property");
     }
@@ -95,12 +99,39 @@ export default function NavbarBottom() {
     );
     thirdMenu = "About Us";
   }
+  
+  if (user && user.role === "frontdesk") {
+    secondMenuIcon = (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#FA6304"
+      >
+        <path d="M760-400v-260L560-800 360-660v60h-80v-100l280-200 280 200v300h-80ZM560-800Zm20 160h40v-40h-40v40Zm-80 0h40v-40h-40v40Zm80 80h40v-40h-40v40Zm-80 0h40v-40h-40v40ZM280-220l278 76 238-74q-5-9-14.5-15.5T760-240H558q-27 0-43-2t-33-8l-93-31 22-78 81 27q17 5 40 8t68 4q0-11-6.5-21T578-354l-234-86h-64v220ZM40-80v-440h304q7 0 14 1.5t13 3.5l235 87q33 12 53.5 42t20.5 66h80q50 0 85 33t35 87v40L560-60l-280-78v58H40Zm80-80h80v-280h-80v280Z" />
+      </svg>
+    );
+    secondMenu = "Property";
+    thirdMenuIcon = (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="#FA6304"
+      >
+        <path d="M260-320q47 0 91.5 10.5T440-278v-394q-41-24-87-36t-93-12q-36 0-71.5 7T120-692v396q35-12 69.5-18t70.5-6Zm260 42q44-21 88.5-31.5T700-320q36 0 70.5 6t69.5 18v-396q-33-14-68.5-21t-71.5-7q-47 0-93 12t-87 36v394Zm-40 118q-48-38-104-59t-116-21q-42 0-82.5 11T100-198q-21 11-40.5-1T40-234v-482q0-11 5.5-21T62-752q46-24 96-36t102-12q58 0 113.5 15T480-740q51-30 106.5-45T700-800q52 0 102 12t96 36q11 5 16.5 15t5.5 21v482q0 23-19.5 35t-40.5 1q-37-20-77.5-31T700-240q-60 0-116 21t-104 59ZM280-494Z" />
+      </svg>
+    );
+    thirdMenu = "Blogs";
+  }
 
   if (
     user &&
     (user.role === "admin" ||
       user.role === "superAdmin" ||
-      user.role === "executive")
+      user.role === "executive" )
   ) {
     secondMenuIcon = (
       <svg
@@ -374,6 +405,7 @@ export default function NavbarBottom() {
             className={`b_menu_single ${
               location.pathname === "/about-us" ||
               location.pathname === "/contact-us" ||
+              location.pathname === "/blogs" ||
               location.pathname === "/allproperties/all"
                 ? "b_menu_active"
                 : ""

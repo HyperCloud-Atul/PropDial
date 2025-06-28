@@ -546,7 +546,7 @@ function App() {
                 <Route path="/blog-edit/:id"
                   element={
                     user &&
-                      (user.role === "executive" ||
+                      (user.role === "frontdesk" || user.role === "executive" ||
                         user.role === "admin" || user.role === "hr" ||
                         user.role === "superAdmin") ? (
                       <BlogEdit />
@@ -559,7 +559,8 @@ function App() {
                   path="/add-blog"
                   element={
                     user &&
-                    (user.role === "executive" ||
+                    (user.role === "frontdesk" || 
+                      user.role === "executive" ||
                       user.role === "admin" ||
                       user.role === "hr" ||
                       user.role === "superAdmin") ? (

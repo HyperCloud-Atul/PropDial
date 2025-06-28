@@ -89,7 +89,7 @@ const BlogDetail = () => {
           >
             <img src={blog.image.url} alt={blog.title} className="blog-image" />
             {user &&
-              (user.role === "admin" ||
+              (user.role === "frontdesk" || user.role === "admin" ||
                 user.role === "superAdmin") && (
                 <div className="author-right">
                   <Link className="edit" to={`/blog-edit/${blog.id}`}>
@@ -157,7 +157,7 @@ const BlogDetail = () => {
       {/* Floating Add Blog Button, visible only when logged in */}
       {user &&
         user.status === "active" &&
-        (user.role === "admin" ||
+        (user.role === "frontdesk" || user.role === "admin" ||
           user.role === "superAdmin") && (
           <Link to="/add-blog" className="property-list-add-property ">
             <span className="material-symbols-outlined">add</span>
