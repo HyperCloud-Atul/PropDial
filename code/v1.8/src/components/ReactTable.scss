@@ -79,6 +79,9 @@
   tr {
     background-color: var(--white-color);
   }
+  tr.inactive-row {
+    background: #ffdcdc !important;
+}
   tr:nth-child(even) {
     background-color: #eff5ff;
   }

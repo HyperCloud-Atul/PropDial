@@ -111,7 +111,7 @@ export default function ReactTable({ tableColumns, tableData }) {
                         ))}
 
                     </thead>
-                    <tbody {...getTableBodyProps()}>
+                    {/* <tbody {...getTableBodyProps()}>
                         {
                             page.map((row) => {
                                 prepareRow(row)
@@ -126,7 +126,29 @@ export default function ReactTable({ tableColumns, tableData }) {
                                 )
                             })
                         }
-                    </tbody>
+                    </tbody> */}
+                    <tbody {...getTableBodyProps()}>
+  {page.map((row) => {
+    prepareRow(row);
+
+    const status = row.original?.status?.toLowerCase?.(); // safe check
+    const rowClass =
+      status === "inactive"
+        ? "inactive-row"
+        : status === "active"
+        ? "active-row"
+        : ""; // default: no class if no status
+
+    return (
+      <tr {...row.getRowProps({ className: rowClass })}>
+        {row.cells.map((cell) => (
+          <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+        ))}
+      </tr>
+    );
+  })}
+</tbody>
+
                 </table>
             </div>
             {tableData.length > 10 && (

@@ -86,7 +86,7 @@ const UserCardItem = ({ userObj, handleImageClick }) => {
             {userObj.email && <h6 className="t_number">{userObj.email}</h6>}
             <h6 className="t_number">
               {userObj.city}
-              {userObj.city && userObj.residentialCountry && ", "}
+              {userObj.city && (userObj.residentialCountry || userObj.country) && ", "}
               {formatCountry(userObj.residentialCountry || userObj.country)}
             </h6>
           </div>

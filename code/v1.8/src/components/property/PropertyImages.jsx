@@ -4,6 +4,7 @@ import ScrollToTop from "../ScrollToTop";
 import { useDocument } from "../../hooks/useDocument";
 import { projectFirestore } from "../../firebase/config";
 import { FaTrashAlt } from "react-icons/fa";
+import { projectStorage } from "../../firebase/config";
 
 const PropertyImages = () => {
   const { propertyId } = useParams();
@@ -61,8 +62,14 @@ const PropertyImages = () => {
 
       if (imageToDelete.type === "images") {
         const updatedImages = [...images];
-        updatedImages.splice(imageToDelete.index, 1);
-        await docRef.update({ images: updatedImages });
+        const deletedImageUrl = updatedImages[imageToDelete.index];
+          // 🔥 Delete from Firebase Storage
+      const imageRef = projectStorage.refFromURL(deletedImageUrl);
+      await imageRef.delete();
+
+      // 🗑️ Remove from Firestore array
+      updatedImages.splice(imageToDelete.index, 1);
+      await docRef.update({ images: updatedImages });
       } else if (imageToDelete.type === "layoutImages") {
         const layoutArray = [...layoutImages[imageToDelete.layoutName]];
         layoutArray.splice(imageToDelete.index, 1);
@@ -179,10 +186,11 @@ const PropertyImages = () => {
                         objectFit: "cover",
                       }}
                     />
-                    {/* <FaTrashAlt
-                      onClick={() =>
-                        setImageToDelete({ type: "images", index })
-                      }
+                    <FaTrashAlt
+                     onClick={() => {
+    setImageToDelete({ type: "images", index });
+    setShowConfirm(true); 
+  }}
                       style={{
                         position: "absolute",
                         top: 8,
@@ -193,7 +201,7 @@ const PropertyImages = () => {
                         padding: "5px",
                         cursor: "pointer",
                       }}
-                    /> */}
+                    />
                   </div>
                 ))
               ) : (
@@ -242,15 +250,15 @@ const PropertyImages = () => {
                           objectFit: "cover",
                         }}
                       />
-                      {/* <FaTrashAlt
-                        onClick={() =>
-                          setImageToDelete({
-                            type: "layoutImages",
-                            layoutName,
-                            index,
-                          })
-                        }
-                        style={{
+                      <FaTrashAlt
+                       onClick={() => {
+    setImageToDelete({
+      type: "layoutImages",
+      layoutName,
+      index,
+    });
+    setShowConfirm(true); 
+  }} style={{
                           position: "absolute",
                           top: 8,
                           right: 8,
@@ -260,7 +268,7 @@ const PropertyImages = () => {
                           padding: "5px",
                           cursor: "pointer",
                         }}
-                      /> */}
+                      />
                     </div>
                   ))
                 ) : (
@@ -273,20 +281,9 @@ const PropertyImages = () => {
       </div>
 
       {/* ✅ Confirmation Modal */}
-      {showConfirm && (
+      {/* {showConfirm && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            width: "100vw",
-            background: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 2000,
-          }}
+ 
         >
           <div
             style={{
@@ -309,7 +306,45 @@ const PropertyImages = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
+      {showConfirm && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 2000,
+    }}
+  >
+    <div
+      style={{
+        background: "#fff",
+        padding: "30px",
+        borderRadius: "10px",
+        textAlign: "center",
+        maxWidth: "400px",
+        boxShadow: "0 0 10px rgba(0,0,0,0.2)",
+      }}
+    >
+      <p>Are you sure you want to delete this image?</p>
+      <div style={{ marginTop: "20px", display: "flex", gap: "10px", justifyContent: "center" }}>
+        <button onClick={handleDelete} style={{ padding: "8px 16px", background: "red", color: "#fff", border: "none", borderRadius: "4px" }}>
+          Yes, Delete
+        </button>
+        <button onClick={() => setShowConfirm(false)} style={{ padding: "8px 16px", background: "#ccc", border: "none", borderRadius: "4px" }}>
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
