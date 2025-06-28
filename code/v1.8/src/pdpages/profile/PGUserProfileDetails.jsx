@@ -1647,7 +1647,7 @@ export default function PGUserProfileDetails2() {
           </h6>
           <h6>
             {userProfileDoc?.city}
-            {userProfileDoc?.city && userProfileDoc?.residentialCountry && ", "}
+            {userProfileDoc?.city && (userProfileDoc?.residentialCountry || userProfileDoc?.country) && ", "}
             {formatCountry(
               userProfileDoc?.residentialCountry || userProfileDoc?.country
             )}

@@ -66,68 +66,52 @@ const UserList = () => {
         // Filter by role
         switch (filter) {
           case "All":
-            roleMatch = document.status === "active";
+            roleMatch = document.status === "inactive";
             break;
           case "Owner":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "owner" ||
-                primaryRole === "coowner" ||
-                rolesArray.includes("owner") ||
-                rolesArray.includes("coowner"));
+              primaryRole === "owner" ||
+              primaryRole === "coowner" ||
+              rolesArray.includes("owner") ||
+              rolesArray.includes("coowner");
             break;
           case "Frontdesk":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "frontdesk" || rolesArray.includes("frontdesk"));
+              primaryRole === "frontdesk" || rolesArray.includes("frontdesk");
             break;
           case "Executive":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "executive" || rolesArray.includes("executive"));
+              primaryRole === "executive" || rolesArray.includes("executive");
             break;
           case "Admin":
-            roleMatch =
-              document.status === "active" &&
-              (primaryRole === "admin" || rolesArray.includes("admin"));
+            roleMatch = primaryRole === "admin" || rolesArray.includes("admin");
             break;
           case "Super Admin":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "superAdmin" ||
-                rolesArray.includes("superAdmin"));
+              primaryRole === "superAdmin" || rolesArray.includes("superAdmin");
             break;
           case "Agent":
-            roleMatch =
-              document.status === "active" &&
-              (primaryRole === "agent" || rolesArray.includes("agent"));
+            roleMatch = primaryRole === "agent" || rolesArray.includes("agent");
             break;
           case "Tenant":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "tenant" || rolesArray.includes("tenant"));
+              primaryRole === "tenant" || rolesArray.includes("tenant");
             break;
           case "Prospective Tenant":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "prospectiveTenant" ||
-                rolesArray.includes("prospectiveTenant"));
+              primaryRole === "prospectiveTenant" ||
+              rolesArray.includes("prospectiveTenant");
             break;
           case "Buyer":
-            roleMatch =
-              document.status === "active" &&
-              (primaryRole === "buyer" || rolesArray.includes("buyer"));
+            roleMatch = primaryRole === "buyer" || rolesArray.includes("buyer");
             break;
           case "Prospective Buyer":
             roleMatch =
-              document.status === "active" &&
-              (primaryRole === "prospectiveBuyer" ||
-                rolesArray.includes("prospectiveBuyer"));
+              primaryRole === "prospectiveBuyer" ||
+              rolesArray.includes("prospectiveBuyer");
             break;
           case "HR":
-            roleMatch =
-              document.status === "active" &&
-              (primaryRole === "hr" || rolesArray.includes("hr"));
+            roleMatch = primaryRole === "hr" || rolesArray.includes("hr");
             break;
           case "Inactive":
             roleMatch = document.status === "inactive";
@@ -157,6 +141,7 @@ const UserList = () => {
     }
     return num;
   };
+
   const userCounts = {
     All: 0,
     Owner: 0,
@@ -279,7 +264,8 @@ const UserList = () => {
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">
-              Total: <span className="text_orange">{documents?.length}</span>, Filtered: <span className="text_orange">{users?.length}</span>           
+              Total: <span className="text_orange">{documents?.length}</span>,
+              Filtered: <span className="text_orange">{users?.length}</span>
             </h2>
           </div>
           <div className="right">
@@ -362,7 +348,9 @@ const UserList = () => {
             {users && <UserSinglecard users={users} />}
           </div>
         )}
-        {viewMode === "table_view" && users && <UserTable users={users} />}
+        {viewMode === "table_view" && users && (
+          <UserTable users={users} filter={filter} />
+        )}
       </div>
     </div>
   );
