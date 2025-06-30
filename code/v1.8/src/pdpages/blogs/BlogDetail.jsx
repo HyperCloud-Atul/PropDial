@@ -1,78 +1,88 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
 import "./blogdetail.scss";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { format } from "date-fns";
 
-const loaderStyle = {
-  border: "8px solid #f3f3f3",
-  borderTop: "8px solid #3498db",
-  borderRadius: "50%",
-  width: "80px",
-  height: "80px",
-  animation: "spin 1s linear infinite",
+// Utility: Generate slug from title
+const generateSlug = (title) => {
+  if (!title || title.trim() === "") return "untitled";
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
 };
-
-const spinnerKeyframes = `
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-`;
 
 const BlogDetail = () => {
   const { slug } = useParams();
-
-  // Extract id from slug using regex or split
-  const location = useLocation();
-  const id = location.state?.id;
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuthContext();
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchData = async () => {
       try {
-        const doc = await projectFirestore.collection("blogs").doc(id).get();
-        if (doc.exists) {
-          setBlog({ id: doc.id, ...doc.data() });
-        }
-
+        // Fetch all blogs
         const snapshot = await projectFirestore.collection("blogs").get();
         const blogs = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Find the blog matching the slug
+        const matchedBlog = blogs.find((b) => generateSlug(b.slug || b.title) === slug);
+        setBlog(matchedBlog);
         setRelatedBlogs(blogs);
       } catch (error) {
         console.error("Error fetching blog:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
-    fetchBlog();
-  }, [id]);
 
-  // If still loading, return null
+    fetchData();
+  }, [slug]);
+
   if (loading) {
-    return null;
+    return (
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        color: "#fff",
+      }}>
+        <div style={{
+          border: "8px solid #f3f3f3",
+          borderTop: "8px solid #3498db",
+          borderRadius: "50%",
+          width: "80px",
+          height: "80px",
+          animation: "spin 1s linear infinite"
+        }} />
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
   }
 
-  // If loading is complete but no blog is found, display fallback message.
   if (!blog) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #667eea, #764ba2)",
-          color: "#fff",
-        }}
-      >
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #667eea, #764ba2)",
+        color: "#fff",
+      }}>
         <p style={{ fontSize: "18px" }}>Blog not found.</p>
       </div>
     );
@@ -82,21 +92,18 @@ const BlogDetail = () => {
     <div className="top_header_pg pg_bg pgblogdetail">
       <div className="blog-detail-wrapper page_spacing pg_min_height">
         <div className="blog-detail-main">
-          {/* Blog Image Container with Edit button rendered only when logged in */}
-          <div
-            className="blog-image-container"
-            style={{ position: "relative" }}
-          >
+          {/* Blog Image */}
+          <div className="blog-image-container" style={{ position: "relative" }}>
             <img src={blog.image.url} alt={blog.title} className="blog-image" />
-            {user &&
-              (user.role === "frontdesk" || user.role === "admin" ||
-                user.role === "superAdmin") && (
-                <div className="author-right">
-                  <Link className="edit" to={`/blog-edit/${blog.id}`}>
-                    Edit
-                  </Link>
-                </div>
-              )}
+
+            {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
+              <div className="author-right">
+                <Link className="edit" to={`/blog-edit/${blog.id}`}>
+                  Edit
+                </Link>
+              </div>
+            )}
+
             <div className="published_date">
               {blog.updatedAt?.toDate
                 ? format(blog.updatedAt.toDate(), "dd-MMM-yyyy")
@@ -104,42 +111,31 @@ const BlogDetail = () => {
             </div>
           </div>
 
+          {/* Blog Content */}
           <div className="blog-box">
             <div className="title-container">
               <h1 className="blog-title">{blog.title}</h1>
-            
             </div>
             <div className="blog-content">
               <h2 className="blog-subtitle">{blog.subTitle}</h2>
               <div
                 className="blog-text"
-                style={{ lineHeight: "1", fontSize: "1.4rem" }}
+                style={{ lineHeight: "1.6", fontSize: "1.4rem" }}
                 dangerouslySetInnerHTML={{ __html: blog.content }}
               />
             </div>
           </div>
         </div>
 
+        {/* Related Blogs */}
         <div className="blog-detail-sidebar">
           <h3 className="sidebar-title">Related Blogs</h3>
           <div className="related-cards">
             {relatedBlogs.map((rblog) => {
-              const slug = rblog.slug
-                .toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, "")
-                .replace(/\s+/g, "-");
-
+              const blogSlug = generateSlug(rblog.slug || rblog.title);
               return (
-                <Link
-                  key={rblog.id}
-                  to={`/blog/${slug}`}
-                  state={{ id: rblog.id }}
-                >
-                  <div
-                    className={`related-card ${
-                      rblog.id === id ? "selected" : ""
-                    }`}
-                  >
+                <Link key={rblog.id} to={`/blog/${blogSlug}`}>
+                  <div className={`related-card ${rblog.id === blog.id ? "selected" : ""}`}>
                     <div className="related-card-image">
                       <img src={rblog.image.url} alt={rblog.title} />
                     </div>
@@ -154,19 +150,16 @@ const BlogDetail = () => {
         </div>
       </div>
 
-      {/* Floating Add Blog Button, visible only when logged in */}
+      {/* Add Blog Floating Button */}
       {user &&
         user.status === "active" &&
-        (user.role === "frontdesk" || user.role === "admin" ||
-          user.role === "superAdmin") && (
-          <Link to="/add-blog" className="property-list-add-property ">
+        ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
+          <Link to="/add-blog" className="property-list-add-property">
             <span className="material-symbols-outlined">add</span>
           </Link>
         )}
 
       <style>{`
-        ${spinnerKeyframes}
-        /* Edit button styles positioned at the top right of the image container */
         .author-right {
           position: absolute;
           top: 10px;

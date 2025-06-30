@@ -3,7 +3,6 @@ import { useLocation, Link } from "react-router-dom";
 import Hero from "../../components/Hero";
 import { useCollection } from "../../hooks/useCollection";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import "../../components/Blog.css";
 import { format } from "date-fns";
 import "./Blog.scss";
 
@@ -12,22 +11,17 @@ const PGBlogs1 = () => {
   const { documents: blogDoc } = useCollection("blogs");
   const { user } = useAuthContext();
 
-  // Scroll to top and log the user for debugging
   useEffect(() => {
     window.scrollTo(0, 0);
     console.log("User object:", user);
   }, [location, user]);
 
-  // ✅ Slug Generator (Handles empty title case)
   const generateSlug = (title) => {
-    if (!title || title.trim() === "") return `/blog/untitled`;
-    return (
-      `/blog/` +
-      title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-    );
+    if (!title || title.trim() === "") return `untitled`;
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-");
   };
 
   return (
@@ -48,11 +42,11 @@ const PGBlogs1 = () => {
           <div className="blog_inner relative">
             {blogDoc &&
               blogDoc.map((blog) => {
-                const blogUrl = generateSlug(blog.slug, blog.id);
+                const slug = generateSlug(blog.slug || blog.title);
                 return (
                   <div key={blog.id} className="item card-container">
                     <div className="card-image">
-                      <Link to={blogUrl} state={{ id: blog.id }}>
+                      <Link to={`/blog/${slug}`}>
                         <img src={blog.image.url} alt={blog.title} />
                         <div className="published_date">
                           {blog.updatedAt?.toDate
@@ -62,7 +56,8 @@ const PGBlogs1 = () => {
                       </Link>
 
                       {user &&
-                        (user.role === "frontdesk" || user.role === "admin" ||
+                        (user.role === "frontdesk" ||
+                          user.role === "admin" ||
                           user.role === "superAdmin") && (
                           <div className="author-right">
                             <Link className="edit" to={`/blog-edit/${blog.id}`}>
@@ -72,22 +67,14 @@ const PGBlogs1 = () => {
                         )}
                     </div>
 
-                    <Link
-                      className="card-body"
-                      to={blogUrl}
-                      state={{ id: blog.id }}
-                    >
+                    <Link className="card-body" to={`/blog/${slug}`}>
                       <h3>{blog.title}</h3>
                       <p className="card-subtitle">{blog.subTitle}</p>
                     </Link>
 
                     <div className="card-author">
                       <div className="author-left">
-                        <Link
-                          className="read-more"
-                          to={blogUrl}
-                          state={{ id: blog.id }}
-                        >
+                        <Link className="read-more" to={`/blog/${slug}`}>
                           Read More <span className="arrow">&rarr;</span>
                         </Link>
                       </div>
@@ -102,9 +89,10 @@ const PGBlogs1 = () => {
       {/* Floating Add Blog Button */}
       {user &&
         user.status === "active" &&
-        (user.role === "frontdesk" || user.role === "admin" ||
+        (user.role === "frontdesk" ||
+          user.role === "admin" ||
           user.role === "superAdmin") && (
-          <Link to="/add-blog" className="property-list-add-property ">
+          <Link to="/add-blog" className="property-list-add-property">
             <span className="material-symbols-outlined">add</span>
           </Link>
         )}

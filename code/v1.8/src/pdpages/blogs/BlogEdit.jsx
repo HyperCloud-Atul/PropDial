@@ -147,6 +147,12 @@ const BlogEdit = () => {
       alert("Error updating blog. Please try again.");
     }
   };
+  const generateSlug = (text) => {
+  if (!text) return "untitled";
+  return text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+};
+
+console.log("Slug:", slug);
 
   return (
     <div className="top_header_pg pg_bg" style={{ padding: "20px", background: "#f7f9fc" }}>
@@ -431,7 +437,8 @@ const BlogEdit = () => {
                   <button
                     type="button"
                     className="theme_btn btn_border w-100 text-center no_icon"
-                    onClick={() => navigate(`/blog/${id}`)}               
+                    onClick={() => navigate(`/blog/${generateSlug(slug || title)}`)}
+          
                   >
                   View 
                   </button>
