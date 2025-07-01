@@ -359,7 +359,7 @@ const Home = () => {
                     <span className="icon">
                       <span className="material-symbols-outlined">cottage</span>
                     </span>
-                    <h3 className="title">Property On Boarding</h3>
+                    <h3 className="title">Property On-Boarding</h3>
                     <p className="description">
                       Once the PMS agreement is signed by the property owner,
                       propdial assigns a dedicated property manager, who
@@ -467,7 +467,7 @@ const Home = () => {
                         description
                       </span>
                     </span>
-                    <h3 className="title">Personalised Dashboard</h3>
+                    <h3 className="title">Personalized Dashboard</h3>
                     <p className="description">
                       Our dashboard includes an online document vault,
                       transaction history of the tenant, personal expense
