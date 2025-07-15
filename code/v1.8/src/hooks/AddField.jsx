@@ -7,7 +7,7 @@ const AddField = () => {
   const handleAddStatus = async () => {
     setLoading(true);
 
-    const collectionRef = projectFirestore.collection("agent-propdial");
+    const collectionRef = projectFirestore.collection("m_cities");
 
     try {
       const snapshot = await collectionRef.get();
@@ -17,9 +17,11 @@ const AddField = () => {
         const data = doc.data();
 
         // Only update if status doesn't exist
-        if (!data.status) {
+        if (!data.inPropdial) {
           await collectionRef.doc(doc.id).update({
-            status: "active",
+            // status: "active",
+            inPropdial:"show",
+            inPropagent:"show"
           });
           updatedCount++;
           console.log(`✅ Added status to doc ${doc.id}`);

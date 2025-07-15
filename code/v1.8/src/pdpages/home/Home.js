@@ -93,7 +93,7 @@ const Home = () => {
         {/* <AddField/>  */}
         <ProductCarousel/>
         {/* <PunchInOut/> */}
-       
+       {/* <AddField/> */}
         <section className="work_flow sect_padding">
           <div className="container">
             <div className="section_title">

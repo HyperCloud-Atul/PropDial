@@ -53,6 +53,9 @@ export default function MasterCityList() {
   const [country, setCountry] = useState();
   const [state, setState] = useState();
   const [city, setCity] = useState();
+  const [propdialVisibility, setPropdialVisibility] = useState("show");
+  const [propagentVisibility, setPropagentVisibility] = useState("show");
+
   const [locality, setLocality] = useState();
   const [society, setSociety] = useState();
 
@@ -92,8 +95,7 @@ export default function MasterCityList() {
   useEffect(() => {
     // console.log('in useeffect')
     if (masterCity) {
-
-      filteredDataNew(state)
+      filteredDataNew(state);
     }
   }, [masterCity]);
 
@@ -361,12 +363,11 @@ export default function MasterCityList() {
     setFormErrorType(null);
 
     if (city) {
-
       const cityname = camelCase(city.trim());
       const isDuplicateCity =
         state.value + "_" + cityname.split(" ").join("_").toLowerCase();
 
-      console.log("isDuplicateCity: ", isDuplicateCity)
+      console.log("isDuplicateCity: ", isDuplicateCity);
 
       if (currentDocid) {
         // Check for duplicate city
@@ -374,39 +375,70 @@ export default function MasterCityList() {
           .collection("m_cities")
           .where("docId", "==", isDuplicateCity);
         const snapshot = await ref.get();
+//  old code for update 
+        // if (snapshot.empty) {
+        //   // Update existing document
+        //   await updateDocument(currentDocid, {
+        //     docId: isDuplicateCity,
+        //     country: country.value,
+        //     state: state.value,
+        //     city: cityname,
+        //     inPropdial: propdialVisibility,
+        //     inPropagent: propagentVisibility,
+        //   });
 
-        if (snapshot.empty) {
+        //   setFormErrorType("success_msg");
+        //   setFormError("Updated Successfully");
+        //   setIsAdding(false);
 
-          // Update existing document
-          await updateDocument(currentDocid, {
-            docId: isDuplicateCity,
-            country: country.value,
-            state: state.value,
-            city: cityname,
-          });
+        //   // Reset messages after 5 seconds
+        //   setTimeout(() => {
+        //     setFormError(null);
+        //     setFormErrorType(null);
+        //   }, 5000);
+        // } else {
+        //   // Handle duplicate case
+        //   setFormErrorType("error_msg");
+        //   setFormError("Already added");
+        //   setIsAdding(false);
 
-          setFormErrorType("success_msg");
-          setFormError("Updated Successfully");
-          setIsAdding(false);
+        //   // Reset error message after 5 seconds
+        //   setTimeout(() => {
+        //     setFormError(null);
+        //     setFormErrorType(null);
+        //   }, 5000);
+        // }
+        // change code for update 
+        if (snapshot.empty || snapshot.docs[0].id === currentDocid) {
+  // Safe to update
+  await updateDocument(currentDocid, {
+    docId: isDuplicateCity,
+    country: country.value,
+    state: state.value,
+    city: cityname,
+    inPropdial: propdialVisibility,
+    inPropagent: propagentVisibility,
+  });
 
-          // Reset messages after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
-        }
-        else {
-          // Handle duplicate case
-          setFormErrorType("error_msg");
-          setFormError("Already added");
-          setIsAdding(false);
+  setFormErrorType("success_msg");
+  setFormError("Updated Successfully");
+  setIsAdding(false);
 
-          // Reset error message after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
-        }
+  setTimeout(() => {
+    setFormError(null);
+    setFormErrorType(null);
+  }, 5000);
+} else {
+  setFormErrorType("error_msg");
+  setFormError("Already added");
+  setIsAdding(false);
+
+  setTimeout(() => {
+    setFormError(null);
+    setFormErrorType(null);
+  }, 5000);
+}
+
       } else {
         try {
           // Check for duplicate city
@@ -423,6 +455,8 @@ export default function MasterCityList() {
               state: state.value,
               city: cityname,
               status: "active",
+              inPropdial: propdialVisibility,
+              inPropagent: propagentVisibility,
             };
 
             await addDocumentWithCustomDocId(dataSet, dataSet.docId);
@@ -436,6 +470,8 @@ export default function MasterCityList() {
               setFormError(null);
               setFormErrorType(null);
               setCity("");
+              setPropagentVisibility("show");
+              setPropdialVisibility("show");
             }, 5000);
           } else {
             // Duplicate city found
@@ -462,8 +498,7 @@ export default function MasterCityList() {
           }, 5000);
         }
       }
-    }
-    else {
+    } else {
       // Handle blank case
       setFormErrorType("error_msg");
       setFormError("City should not be blank ");
@@ -501,7 +536,9 @@ export default function MasterCityList() {
     setFormBtnText("Add");
     setCountry({ label: "INDIA", value: "_india" });
     // setState(null);
-    setCity("");
+    setCity("");    
+     setPropagentVisibility("show");
+              setPropdialVisibility("show");
   };
 
   // const [cityStatus, setCityStatus] = useState();
@@ -514,7 +551,7 @@ export default function MasterCityList() {
     });
   };
 
-  const handleEditCard = (docid, doccountry, docstate, doccity) => {
+  const handleEditCard = (docid, doccountry, docstate, doccity, docinpropdial, docinpropagent) => {
     // console.log('data:', data)
     setCurrentDocid(docid);
     window.scrollTo(0, 0);
@@ -532,9 +569,12 @@ export default function MasterCityList() {
     setCountry({ label: countryname, value: doccountry });
     setState({ label: statename, value: docstate });
     setCity(doccity);
+    setPropagentVisibility(docinpropagent === undefined ? "show" : docinpropagent);
+    setPropdialVisibility(docinpropdial === undefined ? "show" : docinpropdial);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update City");
   };
+console.log("propagentVisibility", propagentVisibility);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -673,8 +713,9 @@ export default function MasterCityList() {
               No City Yet!
               <div
                 onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
+                className={`theme_btn no_icon header_btn mt-3 ${
+                  handleAddSectionFlag ? "btn_border" : "btn_fill"
+                }`}
               >
                 {handleAddSectionFlag ? "Cancel" : "Add New"}
               </div>
@@ -704,9 +745,13 @@ export default function MasterCityList() {
             <div className="filters">
               <div
                 className="left"
-                style={{ display: "flex", alignItems: "center", flexWrap:"wrap", gap:"15px" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "15px",
+                }}
               >
-              
                 <div>
                   <Select
                     className=""
@@ -754,8 +799,9 @@ export default function MasterCityList() {
                 </div>
                 <div className="button_filter diff_views">
                   <div
-                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "card_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("card_view")}
                   >
                     <span className="material-symbols-outlined">
@@ -763,8 +809,9 @@ export default function MasterCityList() {
                     </span>
                   </div>
                   <div
-                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                      }`}
+                    className={`bf_single ${
+                      viewMode === "table_view" ? "active" : ""
+                    }`}
                     onClick={() => handleModeChange("table_view")}
                   >
                     <span className="material-symbols-outlined">view_list</span>
@@ -773,8 +820,9 @@ export default function MasterCityList() {
                 {!handleAddSectionFlag && (
                   <div
                     onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                      }`}
+                    className={`theme_btn no_icon header_btn ${
+                      handleAddSectionFlag ? "btn_border" : "btn_fill"
+                    }`}
                   >
                     Add New
                   </div>
@@ -854,6 +902,91 @@ export default function MasterCityList() {
                 </div>
               </div>
             </div>
+
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field st-2 label_top">
+                <label>Propdial Visibility</label>
+                <div className="field_box theme_radio_new">
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      padding: "0px",
+                      border: "none",
+                      margin: "10px 0px",
+                    }}
+                  >
+                    <div className="radio_single">
+                      <input
+                        type="radio"
+                        name="propdialVisibility"
+                        value="hide"
+                        id="propdial_show"
+                        checked={propdialVisibility === "show"}
+                        onChange={() => setPropdialVisibility("show")}
+                      />
+                      <label className="label" htmlFor="propdial_show">
+                        Show
+                      </label>
+                    </div>
+                    <div className="radio_single">
+                      <input
+                        type="radio"
+                        name="propdialVisibility"
+                        value="hide"
+                        id="propdial_hide"
+                        checked={propdialVisibility === "hide"}
+                        onChange={() => setPropdialVisibility("hide")}
+                      />
+                      <label className="label" htmlFor="propdial_hide">
+                        Hide
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-6">
+              <div className="form_field st-2 label_top">
+                <label>PropAgent Visibility</label>
+                <div className="field_box theme_radio_new">
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      padding: "0px",
+                      border: "none",
+                      margin: "10px 0px",
+                    }}
+                  >
+                    <div className="radio_single">
+                      <input
+                        type="radio"
+                        name="propagentVisibility"
+                        value="hide"
+                        id="propagent_show"
+                        checked={propagentVisibility === "show"}
+                        onChange={() => setPropagentVisibility("show")}
+                      />
+                      <label className="label" htmlFor="propagent_show">
+                        Show
+                      </label>
+                    </div>
+                    <div className="radio_single">
+                      <input
+                        type="radio"
+                        name="propagentVisibility"
+                        value="hide"
+                        id="propagent_hide"
+                        checked={propagentVisibility === "hide"}
+                        onChange={() => setPropagentVisibility("hide")}
+                      />
+                      <label className="label" htmlFor="propagent_hide">
+                        Hide
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="vg22"></div>
 
@@ -890,15 +1023,14 @@ export default function MasterCityList() {
               </div>
             </div>
           </div>
-
-
         </div>
         {masterCity && masterCity.length !== 0 && (
           <>
             <div className="vg22"></div>
             {filteredData && filteredData.length > 0 ? (
               <div className="m18">
-                Filtered City: <span className="text_orange">{filteredData.length}</span>
+                Filtered City:{" "}
+                <span className="text_orange">{filteredData.length}</span>
               </div>
             ) : (
               ""
@@ -935,7 +1067,9 @@ export default function MasterCityList() {
                                     data.id,
                                     data.country,
                                     data.state,
-                                    data.city
+                                    data.city,
+                                    data.inPropdial,
+                                    data.inPropagent
                                   )
                                 }
                                 style={{
@@ -955,30 +1089,44 @@ export default function MasterCityList() {
                                     transform: "translateY(5px)",
                                   }}
                                 >
-                                  {camelCase(data.city)}{" "}<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+                                  {camelCase(data.city)}{" "}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    height="16px"
+                                    viewBox="0 -960 960 960"
+                                    width="16px"
+                                    fill="#00a8a8"
+                                  >
+                                    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                  </svg>
                                 </h5>
-                                {masterCountry && masterState && <small
-                                  style={{
-                                    margin: "0",
-                                    transform: "translateY(5px)",
-                                  }}
-                                >
-                                  {/* {camelCase(data.state)}, */}
-                                  {(
-                                    masterState.length > 0 && masterState.find(
-                                      (e) => e.id === data.state
-                                    )
-                                  ).state
-                                  }{" "}
-                                  {
-                                    (
-                                      masterCountry.length > 0 && masterCountry.find(
-                                        (e) => e.id === data.country
-                                      )
-                                    ).country
-                                  }
-                                  {/* {data.country} */}
-                                </small>}
+                                {masterCountry && masterState && (
+                                  <small
+                                    style={{
+                                      margin: "0",
+                                      transform: "translateY(5px)",
+                                    }}
+                                  >
+                                    {/* {camelCase(data.state)}, */}
+                                    {
+                                      (
+                                        masterState.length > 0 &&
+                                        masterState.find(
+                                          (e) => e.id === data.state
+                                        )
+                                      ).state
+                                    }{" "}
+                                    {
+                                      (
+                                        masterCountry.length > 0 &&
+                                        masterCountry.find(
+                                          (e) => e.id === data.country
+                                        )
+                                      ).country
+                                    }
+                                    {/* {data.country} */}
+                                  </small>
+                                )}
                               </div>
                               <div
                                 className=""
@@ -1000,9 +1148,9 @@ export default function MasterCityList() {
                                   style={{
                                     margin: "0",
                                     background:
-                                     data.status === "active"
-                                          ? "var(--theme-green2)"
-                                          : "var(--theme-red)",
+                                      data.status === "active"
+                                        ? "var(--theme-green2)"
+                                        : "var(--theme-red)",
                                     color: "#fff",
                                     padding: "3px 10px 3px 10px",
                                     borderRadius: "4px",
@@ -1024,7 +1172,12 @@ export default function MasterCityList() {
             </div>
             {viewMode === "table_view" && (
               <>
-                {filteredData && <MasterCityTable filterData={filteredData} handleEditCard={handleEditCard} />}
+                {filteredData && (
+                  <MasterCityTable
+                    filterData={filteredData}
+                    handleEditCard={handleEditCard}
+                  />
+                )}
               </>
             )}
           </>
