@@ -19,6 +19,8 @@ export default function MasterCityList() {
     window.scrollTo(0, 0);
   }, [location]);
   const { camelCase } = useCommon();
+  // Scroll to the top of the page whenever the location changes end
+  // const { addDocument, response: responseAddDocument } = useFirestore("m_cities");
   const { addDocumentWithCustomDocId, response: responseAddDocument } =
     useFirestore("m_cities");
 
@@ -42,15 +44,26 @@ export default function MasterCityList() {
     "",
     ["city", "asc"]
   );
+  // const { documents: masterLocality, error: masterLocalityerror } =
+  //   useCollection("m_localities", "", ["locality", "asc"]);
+
+  // const { documents: masterSociety, error: masterSocietyError } =
+  //   useCollection("m_societies", "", ["society", "asc"]);
+
   const [country, setCountry] = useState();
   const [state, setState] = useState();
   const [city, setCity] = useState();
-  const [isShowInPropdial, setIsShowInPropdial] = useState(true);
-  const [isShowInPropagent, setIsShowInPropagent] = useState(true);
+  const [propdialVisibility, setPropdialVisibility] = useState("show");
+  const [propagentVisibility, setPropagentVisibility] = useState("show");
+
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
 
   let countryOptions = useRef([]);
   let stateOptions = useRef([]);
   let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
 
   //Master Data Loading Initialisation - End
 
@@ -63,8 +76,6 @@ export default function MasterCityList() {
   const [stateFilter, setStateFilter] = useState("INDIA");
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
-  const [aliasList, setAliasList] = useState([]);
-
   useEffect(() => {
     // console.log('in useeffect')
     if (masterCountry) {
@@ -75,6 +86,10 @@ export default function MasterCityList() {
     }
 
     handleCountryChange({ label: "INDIA", value: "_india" });
+    // filteredDataNew({
+    //   label: "Andaman & Nicobar Islands",
+    //   value: "_andaman_&_nicobar_islands",
+    // });
   }, [masterCountry]);
 
   useEffect(() => {
@@ -88,6 +103,10 @@ export default function MasterCityList() {
   //Country select onchange
   const handleCountryChange = async (option) => {
     setCountry(option);
+    // let countryname = option.label;
+    // console.log('handleCountryChange option:', option)
+    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // console.log('countryid:', countryid)
     const ref = await projectFirestore
       .collection("m_states")
       .where("country", "==", option.value)
@@ -110,10 +129,12 @@ export default function MasterCityList() {
             });
           }
         } else {
+          // setError('No such document exists')
         }
       },
       (err) => {
         console.log(err.message);
+        // setError('failed to get document')
       }
     );
   };
@@ -133,32 +154,208 @@ export default function MasterCityList() {
             label: cityData.data().city,
             value: cityData.id,
           }));
+
+          // console.log("cityOptions.current: ", cityOptions.current)
+
+          // setFilteredData(cityOptions.current)
+
+          // if (cityOptions.current.length === 0) {
+          //   // console.log("No City")
+          //   handleCityChange(null)
+          // }
+          // else {
+          //   handleCityChange({
+          //     label: cityOptions.current[0].label,
+          //     value: cityOptions.current[0].value,
+          //   });
+          // }
         } else {
+          // handleCityChange(null)
+          // setError('No such document exists')
         }
       },
       (err) => {
         console.log(err.message);
+        // setError('failed to get document')
       }
     );
   };
+
+  //Filter State select onchange
+  // const handleFilterStateChange = async (option) => {
+  //   setState(option);
+  //   console.log('handleFilterStateChange state.id:', option.value)
+  //   const ref = await projectFirestore
+  //     .collection("m_cities")
+  //     .where("state", "==", option.value)
+  //     .orderBy("city", "asc");
+  //   ref.onSnapshot(
+  //     async (snapshot) => {
+  //       if (snapshot.docs) {
+  //         cityOptions.current = snapshot.docs.map((cityData) => ({
+  //           label: cityData.data().city,
+  //           value: cityData.id,
+  //         }));
+
+  //         console.log("cityOptions: ", cityOptions.current)
+
+  //         // if (cityOptions.current.length === 0) {
+  //         //   // console.log("No City")
+  //         //   handleCityChange(null)
+  //         // }
+  //         // else {
+  //         //   handleCityChange({
+  //         //     label: cityOptions.current[0].label,
+  //         //     value: cityOptions.current[0].value,
+  //         //   });
+  //         // }
+
+  //       } else {
+  //         // handleCityChange(null)
+  //         // setError('No such document exists')
+  //       }
+  //     },
+  //     (err) => {
+  //       console.log(err.message);
+  //       // setError('failed to get document')
+  //     }
+  //   );
+  // };
+
+  //City select onchange
+  // const handleCityChange = async (option) => {
+  //   setCity(option);
+  //   // console.log('city.id:', option)
+
+  //   if (option) {
+  //     const ref = await projectFirestore
+  //       .collection("m_localities")
+  //       .where("city", "==", option.value)
+  //       .orderBy("locality", "asc");
+  //     ref.onSnapshot(
+  //       async (snapshot) => {
+  //         if (snapshot.docs) {
+  //           localityOptions.current = snapshot.docs.map((localityData) => ({
+  //             label: localityData.data().locality,
+  //             value: localityData.id,
+  //           }));
+
+  //           // console.log("localityOptions: ", localityOptions)
+
+  //         } else {
+  //           // setError('No such document exists')
+  //         }
+  //       },
+  //       (err) => {
+  //         console.log(err.message);
+  //         // setError('failed to get document')
+  //       }
+  //     );
+  //   }
+  // };
+
+  //Locality select onchange
+  // const handleLocalityChange = async (option) => {
+  //   setLocality(option);
+  //   // console.log('locality.id:', option.value)
+
+  //   if (option) {
+  //     const ref = await projectFirestore
+  //       .collection("m_societies")
+  //       .where("locality", "==", option.value)
+  //       .orderBy("society", "asc");
+  //     ref.onSnapshot(
+  //       async (snapshot) => {
+  //         if (snapshot.docs) {
+  //           societyOptions.current = snapshot.docs.map((societyData) => ({
+  //             label: societyData.data().society,
+  //             value: societyData.id,
+  //           }));
+
+  //         } else {
+  //           // handleSocietyChange(null)
+  //         }
+  //       },
+  //       (err) => {
+  //         console.log(err.message);
+  //         // setError('failed to get document')
+  //       }
+  //     );
+  //   }
+  // };
+
+  //Society select onchange
+  // const handleSocietyChange = async (option) => {
+  //   setSociety(option);
+  //   // console.log('society.id:', option.value)
+  // };
+
   // Populate Master Data - End
 
-// useEffect(() => {
-//   if (city && aliasList.length === 0) {
-//     setAliasList([city]); // ✅ Only set if aliasList is empty (initial add)
-//   }
-// }, [city]);
-useEffect(() => {
-  if (city) {
-    setAliasList((prev) => {
-      const updated = [...prev];
-      updated[0] = city;
-      return updated;
-    });
-  }
-}, [city]);
+  let results = [];
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setFormError("");
 
+  //   let _addCityFlag = false;
+
+  //   let cityname = camelCase(city.trim());
+  //   // console.log('cityname:', cityname)
+
+  //   let isDuplicateCity = state.value + "_" + cityname.split(" ").join("_").toLowerCase()
+  //   // console.log("value: ", isDuplicateLocality)
+
+  //   // console.log("Updated currentDocid: ", currentDocid)
+  //   if (currentDocid != null) {
+  //     // console.log("Updated currentDocid: ", currentDocid)
+  //     setFormError("Updated Successfully");
+  //     // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //     await updateDocument(currentDocid, {
+  //       country: country.value,
+  //       state: state.value,
+  //       city: cityname,
+  //     });
+
+  //   } else if (currentDocid == null) {
+  //     let ref = projectFirestore
+  //       .collection("m_cities")
+  //       .where("docId", "==", isDuplicateCity);
+  //     const unsubscribe = ref.onSnapshot(async (snapshot) => {
+  //       snapshot.docs.forEach((doc) => {
+  //         results.push({ ...doc.data(), id: doc.id });
+  //       });
+  //       // console.log("_addCityFlag: ", _addCityFlag)
+  //       // console.log("results.length: ", results.length)
+  //       if (results.length === 0) {
+  //         const dataSet = {
+  //           docId: state.value + "_" + cityname.split(" ").join("_").toLowerCase(),
+  //           country: country.value,
+  //           state: state.value,
+  //           city: cityname,
+  //           status: "active",
+  //         };
+
+  //         _addCityFlag = true
+  //         // console.log("_addCityFlag: ", _addCityFlag)
+  //         setFormError("Successfully added");
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //         // console.log("Successfully added")
+  //         // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+  //         // await addDocument(dataSet);
+  //         const _customDocId = dataSet.docId
+  //         await addDocumentWithCustomDocId(dataSet, _customDocId);
+  //       } else if (results.length > 0 && _addCityFlag === false) {
+  //         // console.log("Duplicate City")
+  //         setFormError("Duplicate City");
+  //         // console.log("handleAddSectionFlag: ", handleAddSectionFlag)
+  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
+  //       }
+
+  //     });
+
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsAdding(true);
@@ -178,7 +375,40 @@ useEffect(() => {
           .collection("m_cities")
           .where("docId", "==", isDuplicateCity);
         const snapshot = await ref.get();
+        //  old code for update
+        // if (snapshot.empty) {
+        //   // Update existing document
+        //   await updateDocument(currentDocid, {
+        //     docId: isDuplicateCity,
+        //     country: country.value,
+        //     state: state.value,
+        //     city: cityname,
+        //     inPropdial: propdialVisibility,
+        //     inPropagent: propagentVisibility,
+        //   });
 
+        //   setFormErrorType("success_msg");
+        //   setFormError("Updated Successfully");
+        //   setIsAdding(false);
+
+        //   // Reset messages after 5 seconds
+        //   setTimeout(() => {
+        //     setFormError(null);
+        //     setFormErrorType(null);
+        //   }, 5000);
+        // } else {
+        //   // Handle duplicate case
+        //   setFormErrorType("error_msg");
+        //   setFormError("Already added");
+        //   setIsAdding(false);
+
+        //   // Reset error message after 5 seconds
+        //   setTimeout(() => {
+        //     setFormError(null);
+        //     setFormErrorType(null);
+        //   }, 5000);
+        // }
+        // change code for update
         if (snapshot.empty || snapshot.docs[0].id === currentDocid) {
           // Safe to update
           await updateDocument(currentDocid, {
@@ -186,11 +416,8 @@ useEffect(() => {
             country: country.value,
             state: state.value,
             city: cityname,
-            isShowInPropdial,
-            isShowInPropagent,
-            // alias: aliasList,
-            alias: aliasList.map((a) => a.trim().toLowerCase()),
-
+            inPropdial: propdialVisibility,
+            inPropagent: propagentVisibility,
           });
 
           setFormErrorType("success_msg");
@@ -227,11 +454,8 @@ useEffect(() => {
               state: state.value,
               city: cityname,
               status: "active",
-              isShowInPropdial,
-          isShowInPropagent,
-              // alias: aliasList,
-              alias: aliasList.map((a) => a.trim().toLowerCase()),
-
+              inPropdial: propdialVisibility,
+              inPropagent: propagentVisibility,
             };
 
             await addDocumentWithCustomDocId(dataSet, dataSet.docId);
@@ -245,9 +469,8 @@ useEffect(() => {
               setFormError(null);
               setFormErrorType(null);
               setCity("");
-              setAliasList([]);
-              setIsShowInPropagent(true);
-              setIsShowInPropdial(true);
+              setPropagentVisibility("show");
+              setPropdialVisibility("show");
             }, 5000);
           } else {
             // Duplicate city found
@@ -313,9 +536,8 @@ useEffect(() => {
     setCountry({ label: "INDIA", value: "_india" });
     // setState(null);
     setCity("");
-    setAliasList([]);
-    setIsShowInPropagent(true);
-    setIsShowInPropdial(true);
+    setPropagentVisibility("show");
+    setPropdialVisibility("show");
   };
 
   // const [cityStatus, setCityStatus] = useState();
@@ -334,8 +556,7 @@ useEffect(() => {
     docstate,
     doccity,
     docinpropdial,
-    docinpropagent,
-    docalias
+    docinpropagent
   ) => {
     // console.log('data:', data)
     setCurrentDocid(docid);
@@ -354,24 +575,14 @@ useEffect(() => {
     setCountry({ label: countryname, value: doccountry });
     setState({ label: statename, value: docstate });
     setCity(doccity);
-    setIsShowInPropagent(
-      docinpropagent === undefined ? true : docinpropagent
+    setPropagentVisibility(
+      docinpropagent === undefined ? "show" : docinpropagent
     );
-    setIsShowInPropdial(docinpropdial === undefined ? true : docinpropdial);
-    // setAliasList(docalias && docalias.length > 0 ? docalias : [doccity]); 
-    setAliasList(
-  docalias && docalias.length > 0
-    ? docalias
-    : city
-    ? [doccity]
-    : []
-);
-
-    console.log("Setting aliasList to:", docalias);
-
+    setPropdialVisibility(docinpropdial === undefined ? "show" : docinpropdial);
     sethandleAddSectionFlag(!handleAddSectionFlag);
     setFormBtnText("Update City");
   };
+  console.log("propagentVisibility", propagentVisibility);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -399,6 +610,84 @@ useEffect(() => {
     // filterData
     // console.log('filteredData', filteredData)
   };
+
+  // const searchCountry = (data) => {
+  //   // console.log(data)
+  //   let _filterList = [];
+
+  //   setFilteredData(_filterList)
+  //   // filterData
+  //   console.log('filteredData', filteredData)
+
+  // }
+
+  // let filteredData = masterCity
+  //   ? masterCity.filter((document) => {
+  //     let isFiltered = false;
+
+  //     console.log("document: ", document)
+  //     // console.log("filter value: ", filter)
+  //     console.log("State Filter: ", stateFilter)
+
+  //     if (stateFilter.value === document.state) {
+  //       isFiltered = true;
+  //     }
+
+  //     // Role and country-based filtering
+  //     switch (filter) {
+  //       case "INDIA":
+  //         const indiaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+  //         if (document.country === indiaid) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "USA":
+  //         const usaid = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+  //         if (document.country === usaid) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "OTHERS":
+  //         const indiaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "INDIA").id
+  //         const usaid1 = masterCountry && masterCountry.find((e) => e.country.toUpperCase() === "USA").id
+  //         if (document.country !== indiaid1 && document.country !== usaid1) {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       case "INACTIVE":
+  //         if (document.status.toLowerCase() === "inactive") {
+  //           isFiltered = true;
+  //         }
+  //         break;
+  //       default:
+  //         isFiltered = true;
+  //     }
+
+  //     // console.log("searchInput: ", searchInput)
+
+  //     let searchMatch = "";
+  //     // if (searchInput) {
+  //     let _searchkey;
+  //     let _state = masterState.find(e => e.id === document.state).state;
+  //     _searchkey = {
+  //       city: document.city,
+  //       state: _state
+  //     }
+  //     // console.log("_searchkey: ", _searchkey)
+
+  //     // Search input filtering
+  //     searchMatch = searchInput
+  //       ? Object.values(_searchkey).some(
+  //         (field) =>
+  //           typeof field === "string" &&
+  //           field.toUpperCase().includes(searchInput.toUpperCase())
+  //       )
+  //       : true;
+  //     // }
+
+  //     return isFiltered && searchMatch;
+  //   })
+  //   : null;
 
   // nine dots menu start
 
@@ -640,8 +929,8 @@ useEffect(() => {
                         name="propdialVisibility"
                         value="hide"
                         id="propdial_show"
-                        checked={isShowInPropdial}
-                        onChange={() => setIsShowInPropdial(true)}
+                        checked={propdialVisibility === "show"}
+                        onChange={() => setPropdialVisibility("show")}
                       />
                       <label className="label" htmlFor="propdial_show">
                         Show
@@ -653,8 +942,8 @@ useEffect(() => {
                         name="propdialVisibility"
                         value="hide"
                         id="propdial_hide"
-                        checked={!isShowInPropdial}
-                        onChange={() => setIsShowInPropdial(false)}
+                        checked={propdialVisibility === "hide"}
+                        onChange={() => setPropdialVisibility("hide")}
                       />
                       <label className="label" htmlFor="propdial_hide">
                         Hide
@@ -682,8 +971,8 @@ useEffect(() => {
                         name="propagentVisibility"
                         value="hide"
                         id="propagent_show"
-                        checked={isShowInPropagent}
-                        onChange={() => setIsShowInPropagent(true)}
+                        checked={propagentVisibility === "show"}
+                        onChange={() => setPropagentVisibility("show")}
                       />
                       <label className="label" htmlFor="propagent_show">
                         Show
@@ -695,8 +984,8 @@ useEffect(() => {
                         name="propagentVisibility"
                         value="hide"
                         id="propagent_hide"
-                        checked={!isShowInPropagent}
-                        onChange={() => setIsShowInPropagent(false)}
+                        checked={propagentVisibility === "hide"}
+                        onChange={() => setPropagentVisibility("hide")}
                       />
                       <label className="label" htmlFor="propagent_hide">
                         Hide
@@ -706,80 +995,6 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-          {city && (
-              <div className="col-xl-12">
-              <div className="form_field label_top">
-                <label>Alias Name(s)</label>
-                {aliasList.map((alias, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={alias}
-                      onChange={(e) => {
-                        const updatedList = [...aliasList];
-                        updatedList[index] = e.target.value;
-                        setAliasList(updatedList);
-                      }}
-                      disabled={index === 0}
-                      placeholder={
-                        index === 0 ? "City name (default)" : `Alias ${index}`
-                      }
-                      style={{
-                        flex: 1,
-                        padding: "8px",
-                        border: "1px solid #ccc",
-                        borderRadius: "5px",
-                        background: index === 0 ? "#f5f5f5" : "#fff",
-                        textTransform:"capitalize"
-                      }}
-                    />
-                    {index !== 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...aliasList];
-                          updated.splice(index, 1);
-                          setAliasList(updated);
-                        }}
-                        style={{
-                          padding: "8px 10px",
-                          background: "#ff4d4d",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "5px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setAliasList([...aliasList, ""])}
-                  style={{
-                    marginTop: "5px",
-                    padding: "8px 15px",
-                    background: "#5a10d5",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  + Add More Alias
-                </button>
-              </div>
-            </div>
-          )}
           </div>
           <div className="vg22"></div>
 
@@ -861,9 +1076,8 @@ useEffect(() => {
                                     data.country,
                                     data.state,
                                     data.city,
-                                    data.isShowInPropdial,
-                                    data.isShowInPropagent,
-                                    data.alias
+                                    data.inPropdial,
+                                    data.inPropagent
                                   )
                                 }
                                 style={{
@@ -958,15 +1172,6 @@ useEffect(() => {
                               </div>
                             </div>
                           </div>
-                      <div className="visibility">
-  <div className={`vs ${data?.isShowInPropdial ? "show" : "hide"}`}>
-    <span>{data?.isShowInPropdial ? "Show" : "Hide"}</span> in PD
-  </div>
-  <div className={`vs ${data?.isShowInPropagent ? "show" : "hide"}`}>
-    <span>{data?.isShowInPropagent ? "Show" : "Hide"}</span> in PA
-  </div>
-</div>
-
                         </div>
                       </div>
                     ))}

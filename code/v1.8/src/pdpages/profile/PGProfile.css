@@ -219,7 +219,7 @@
   display: grid;
   grid-template-columns: 10% 90%;
   padding: 15px;
-  border-bottom: 1px solid var(--theme-grey);
+  border-bottom: 1px solid #b5b5b5;
 }
 
 .profile-card-div .address-div:last-child {

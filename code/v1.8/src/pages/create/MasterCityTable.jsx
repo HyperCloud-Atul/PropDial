@@ -44,6 +44,26 @@ const MasterCityTable = ({ filterData, handleEditCard }) => {
         Header: "Status",
         accessor: "status",
       }, 
+     {
+  Header: "Propdial Visibility",
+  accessor: "isShowInPropdial",
+  Cell: ({ value }) => (
+    <span className={value ? "text-success" : "text-danger"}>
+      {value ? "Show" : "Hide"}
+    </span>
+  ),
+  
+},
+     {
+  Header: "PropAgent Visibility",
+  accessor: "isShowInPropagent",
+  Cell: ({ value }) => (
+    <span className={value ? "text-success" : "text-danger"}>
+      {value ? "Show" : "Hide"}
+    </span>
+  ),
+},
+
         //   {
     //     Header: "Added By",
     //     accessor: "createdBy",
