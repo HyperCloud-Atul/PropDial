@@ -21,6 +21,7 @@ import Banner from "../../components/Banner";
 import TopCitiesInIndia from "../../components/TopCitiesInIndia";
 import ProductCarousel from "../../components/ProductCarousel";
 import CounterSection from "../../components/CounterSection";
+import ChatApp from "../../TicketSystem/ChatApp";
 import Testimonial from "../../components/Testimonial";
 import Blog from "../../components/Blog";
 import PunchInOut from "../../components/attendance/PunchInOut";
@@ -258,7 +259,7 @@ const Home = () => {
           <img src="./assets/gif/house-animation.gif"></img>
         </div> */}
         </section>
-
+<ChatApp/>
         <TopCitiesInIndia />
         <AirBnb />
         <section className="why_us sect_padding">
