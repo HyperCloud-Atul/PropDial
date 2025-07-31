@@ -259,7 +259,7 @@ const Home = () => {
           <img src="./assets/gif/house-animation.gif"></img>
         </div> */}
         </section>
-<ChatApp/>
+{/* <ChatApp/> */}
         <TopCitiesInIndia />
         <AirBnb />
         <section className="why_us sect_padding">
