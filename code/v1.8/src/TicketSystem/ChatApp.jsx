@@ -2,12 +2,14 @@ import { useState } from 'react';
 import TicketSidebar from './TicketSidebar';
 import ChatWindow from './ChatWindow';
 import CreateTicket from './CreateTicket';
+import './ChatApp.scss';
 
 const ChatApp = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
 
   return (
     <div className="flex h-screen relative">
+      <br /><br /><br /><br /><br />
       <TicketSidebar selectedTicket={selectedTicket} setSelectedTicket={setSelectedTicket} />
       {selectedTicket ? (
         <ChatWindow ticketId={selectedTicket} />

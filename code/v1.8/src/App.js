@@ -28,6 +28,7 @@ import PGAboutUs from "./pdpages/about_us/PGAboutUs";
 import PGPriacyPolicy from "./pdpages/privacypolicy/PGPrivacyPolicy";
 import PGTerms from "./pdpages/terms/PGTerms";
 import PGContactUs from "./pdpages/contact_us/PGContactUs";
+import ChatApp from "./TicketSystem/ChatApp";
 import PGMoreMenu from "./pdpages/more-menu/PGMoreMenu";
 import PGSearchProperty from "./pdpages/property/PGSearchProperty";
 import PGProperties from "./pdpages/property/PGProperties";
@@ -720,6 +721,11 @@ function App() {
                       path="/inspection-report/:inspectionid"
                       element={<InspectionDetails />}
                     ></Route>
+                      <Route
+                      path="/chatapp"
+                      element={<ChatApp />}
+                    ></Route>
+                    
                     <Route
                       path="/add-inspection/:inspectionId"
                       element={

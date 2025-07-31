@@ -7,6 +7,7 @@ const TicketSidebar = ({ selectedTicket, setSelectedTicket }) => {
   const { user } = useAuthContext();
   const isAdmin = user?.role === "admin";
   const [unreadCounts, setUnreadCounts] = useState({});
+
   useEffect(() => {
     if (!user || tickets.length === 0) return;
 
@@ -49,42 +50,38 @@ const TicketSidebar = ({ selectedTicket, setSelectedTicket }) => {
     });
   }, [tickets]);
 
-useEffect(() => {
-  const fetchTickets = async () => {
-    try {
-      if (!user) return; // ⛔ Exit early if user is null
 
-      let ref = projectFirestore
-        .collection("tickets")
-        .orderBy("createdAt", "desc");
 
-      if (user?.role !== "admin") {
-        ref = ref.where("createdBy", "==", user.phoneNumber);
-      }
+  useEffect(() => {
+    if (!user) return;
 
-      const snapshot = await ref.get();
-      const data = snapshot.docs.map((doc) => ({
+    let ref = projectFirestore.collection("tickets").orderBy("createdAt", "desc");
+
+    if (user?.role !== "admin") {
+      ref = ref.where("createdBy", "==", user.phoneNumber);
+    }
+
+    const unsubscribe = ref.onSnapshot(snapshot => {
+      const data = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
       setTickets(data);
-    } catch (error) {
-      console.error("Error fetching tickets:", error);
-    }
-  };
+    });
 
-  fetchTickets();
-}, [user]);
+    return () => unsubscribe(); // Cleanup on unmount
+  }, [user]);
+
 
 
   useEffect(() => {
-  if (selectedTicket) {
-    setUnreadCounts(prev => ({
-      ...prev,
-      [selectedTicket]: 0
-    }));
-  }
-}, [selectedTicket]);
+    if (selectedTicket) {
+      setUnreadCounts(prev => ({
+        ...prev,
+        [selectedTicket]: 0
+      }));
+    }
+  }, [selectedTicket]);
 
 
   return (
@@ -98,7 +95,7 @@ useEffect(() => {
         >
           <h4 className="font-bold">{ticket.issueType}</h4>
           <p className="text-sm text-gray-600 truncate">{ticket.description}</p>
-  {unreadCounts[ticket.id]}
+          {unreadCounts[ticket.id]}
           {/* 🔴 Unread badge */}
           {(unreadCounts?.[ticket.id] ?? 0) > 0 && (
             <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full">
