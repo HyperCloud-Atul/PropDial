@@ -1,0 +1,252 @@
+/* property image page - start */
+
+.property-image-div {
+    position: relative;
+    background: #fff;
+    width: 100%;
+    height: 200px;
+    border: 1px solid #333C5D;
+    border-radius: 10px 10px 0 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.property-image-div img.property-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+}
+
+.object-more-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ddd;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.object-more-icon span {
+    font-size: 1.3rem;
+}
+
+.object-more-details {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    padding: 0 5px;
+    background: #ddd;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0);
+    transform-origin: right top;
+    transition: 0.7s;
+}
+
+.object-more-details.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+}
+
+.object-more-details::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ddd;
+}
+
+.object-more-details div {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+}
+
+.object-more-details div:nth-last-child(1) {
+    border: none;
+}
+
+.object-more-details div span {
+    font-size: 1.3rem;
+}
+
+.object-more-details div h1 {
+    position: relative;
+    top: 5px;
+    font-size: 0.9rem;
+    padding-left: 5px;
+}
+
+.propety-description {
+    position: relative;
+    padding: 10px 0;
+}
+
+.propety-description h1 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.propety-description .indicating-letter {
+    position: absolute;
+    left: 0;
+    bottom: 6px;
+    height: 1px;
+    background: #333C5D;
+    width: 30px;
+}
+
+.propety-description .indicating-letter::before,
+.propety-description .indicating-letter::after {
+    position: absolute;
+    top: -2px;
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: #aaa;
+    border-radius: 50%;
+}
+
+.propety-description .indicating-letter::before {
+    left: 35px;
+}
+
+.propety-description .indicating-letter::after {
+    left: 42px;
+}
+
+.trash-heading-div {
+    display: flex;
+    cursor: pointer;
+    background: #F8EA8C;
+    padding: 10px 10px 0 10px;
+}
+
+.trash-heading-div span {
+    position: relative;
+    top: -2px;
+    font-size: 2.4rem;
+    color: #EB542E;
+    font-weight: bolder;
+    transition: 0.8s;
+}
+
+.trash-heading-div span.open {
+    transform: rotate(180deg);
+    top: -8px;
+}
+
+.trash-cards {
+    max-height: 0;
+    overflow: hidden;
+    transition: 1s;
+}
+
+.trash-cards.open {
+    max-height: 6000px;
+}
+
+.trash-pop-up {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 1s;
+    padding: 10px;
+    z-index: 9999;
+}
+
+.trash-pop-up.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.trash-pop-up .trash-pop-up-card {
+    position: relative;
+    padding-top: 20px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.trash-pop-up .trash-pop-up-card .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #000;
+}
+
+.trash-pop-up .trash-pop-up-card hr {
+    margin-bottom: 0;
+}
+
+.trash-pop-up .trash-pop-up-card h1 {
+    padding: 0 20px 0 10px;
+    font-size: 1.3rem;
+    color: #000;
+}
+
+.trash-pop-up .trash-pop-up-card h2 {
+    padding: 17px 60px 10px 10px;
+    font-size: 0.8rem;
+    text-align: left;
+    color: #666;
+    font-weight: normal;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div {
+    border-top: 1px solid #ddd;
+    display: flex;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    cursor: pointer;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div div:nth-child(1) {
+    border-right: 1px solid #ddd;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div div span {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #bbb;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div div.delete span {
+    color: #EB542E;
+}
+
+.trash-pop-up .trash-pop-up-card .trash-pop-up-btn-div div.recover span {
+    color: #28e041;
+}
+
+/* property image page - end */

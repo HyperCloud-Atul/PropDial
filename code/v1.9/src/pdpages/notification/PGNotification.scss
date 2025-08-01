@@ -1,0 +1,56 @@
+.pg_notification {
+  .my_small_card_parent { 
+    .my_small_card {
+      .title {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .left{
+        gap: 8px;
+        .img_div{
+      padding: 6px;
+        }
+      }
+      .sub_title{
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .pg_notification {
+    .my_small_card_parent {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+@media only screen and (max-width: 767px) {
+  .pg_notification {
+    .my_small_card_parent {
+      grid-template-columns: repeat(1, 1fr);
+      grid-column-gap: 15px;
+      grid-row-gap: 15px;
+      .my_small_card {
+        border-radius: 0px;
+        box-shadow: none;
+        margin: 0px -15px;
+        border-bottom: 2px solid var(--theme-blue);
+        .left {
+          gap: 8px;
+        }
+        .title {
+          font-size: 15px;
+        }
+        .sub_title {
+          margin-top: 2px !important;
+        }
+      }
+    }
+  }
+}
