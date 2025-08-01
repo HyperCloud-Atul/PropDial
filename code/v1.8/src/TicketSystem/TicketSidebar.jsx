@@ -2,56 +2,14 @@ import { useEffect, useState } from "react";
 import { projectFirestore } from "../firebase/config";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const TicketSidebar = ({ selectedTicket, setSelectedTicket }) => {
+const TicketSidebar = ({ selectedTicket, setSelectedTicket, searchQuery, onSelectTicket }) => {
   const [tickets, setTickets] = useState([]);
-  const { user } = useAuthContext();
-  const isAdmin = user?.role === "admin";
   const [unreadCounts, setUnreadCounts] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuthContext();
+  const [filteredTickets, setFilteredTickets] = useState([]);
 
-  useEffect(() => {
-    if (!user || tickets.length === 0) return;
-
-    const unsubscribers = [];
-
-    const setupListeners = async () => {
-      for (const ticket of tickets) {
-        const unsubscribe = projectFirestore
-          .collection('tickets')
-          .doc(ticket.id)
-          .collection('messages')
-          .where('read', '==', false)
-          .where('senderId', '!=', user.phoneNumber)
-          .onSnapshot((snapshot) => {
-            setUnreadCounts(prev => ({
-              ...prev,
-              [ticket.id]: snapshot.size
-            }));
-          });
-
-        unsubscribers.push(unsubscribe);
-      }
-    };
-
-    setupListeners();
-
-    return () => {
-      unsubscribers.forEach(unsub => unsub());
-    };
-  }, [tickets, user]);
-
-  useEffect(() => {
-    const currentTicketIds = tickets.map(t => t.id);
-    setUnreadCounts(prev => {
-      const newCounts = {};
-      currentTicketIds.forEach(id => {
-        if (prev[id] !== undefined) newCounts[id] = prev[id];
-      });
-      return newCounts;
-    });
-  }, [tickets]);
-
-
-
+  // Fetch tickets from Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -65,15 +23,60 @@ const TicketSidebar = ({ selectedTicket, setSelectedTicket }) => {
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date()
       }));
       setTickets(data);
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching tickets:", error);
+      setLoading(false);
     });
 
-    return () => unsubscribe(); // Cleanup on unmount
+    return () => unsubscribe();
   }, [user]);
 
+  // Filter tickets based on search query
+  useEffect(() => {
+    const filtered = tickets.filter(ticket => 
+      ticket.issueType?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ticket.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ticket.status?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredTickets(filtered);
+  }, [tickets, searchQuery]);
 
+  // Fetch unread message counts
+  useEffect(() => {
+    if (!user || tickets.length === 0) return;
 
+    const unsubscribers = [];
+    const counts = {};
+
+    const setupListeners = async () => {
+      for (const ticket of tickets) {
+        const unsubscribe = projectFirestore
+          .collection('tickets')
+          .doc(ticket.id)
+          .collection('messages')
+          .where('read', '==', false)
+          .where('senderId', '!=', user.phoneNumber)
+          .onSnapshot((snapshot) => {
+            counts[ticket.id] = snapshot.size;
+            setUnreadCounts({...counts});
+          });
+
+        unsubscribers.push(unsubscribe);
+      }
+    };
+
+    setupListeners();
+
+    return () => {
+      unsubscribers.forEach(unsub => unsub());
+    };
+  }, [tickets, user]);
+
+  // Reset unread count when ticket is selected
   useEffect(() => {
     if (selectedTicket) {
       setUnreadCounts(prev => ({
@@ -83,26 +86,79 @@ const TicketSidebar = ({ selectedTicket, setSelectedTicket }) => {
     }
   }, [selectedTicket]);
 
+  // Format date for display
+  const formatDate = (date) => {
+    if (!date) return '';
+    
+    const now = new Date();
+    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) {
+      return 'Today';
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="ticket-list loading">
+        <div className="loading-spinner"></div>
+        <p>Loading tickets...</p>
+      </div>
+    );
+  }
+
+  if (filteredTickets.length === 0) {
+    return (
+      <div className="ticket-list empty">
+        <p>No tickets found</p>
+        {searchQuery && (
+          <button 
+            className="clear-search"
+            onClick={() => onSelectTicket(null)}
+          >
+            Clear search
+          </button>
+        )}
+      </div>
+    );
+  }
 
   return (
-    <div className="w-1/3 h-screen border-r overflow-y-auto bg-white">
-      {tickets.map((ticket) => (
+    <div className="ticket-list">
+      {filteredTickets.map((ticket) => (
         <div
           key={ticket.id}
-          className={`p-4 cursor-pointer hover:bg-gray-100 relative ${selectedTicket === ticket.id ? "bg-gray-200" : ""
-            }`}
-          onClick={() => setSelectedTicket(ticket.id)}
+          className={`ticket ${selectedTicket === ticket.id ? "active" : ""}`}
+          onClick={() => {
+            setSelectedTicket(ticket.id);
+            onSelectTicket(ticket.id);
+          }}
         >
-          <h4 className="font-bold">{ticket.issueType}</h4>
-          <p className="text-sm text-gray-600 truncate">{ticket.description}</p>
-          {unreadCounts[ticket.id]}
-          {/* 🔴 Unread badge */}
+          <div className="ticket-header">
+            <div className="issue-type">{ticket.issueType || "No title"}</div>
+            <div className="timestamp">{formatDate(ticket.createdAt)}</div>
+          </div>
+          
+          <div className="ticket-footer">
+            <div className="description">
+              {ticket.description || "No description"}
+            </div>
+            <div className={`status-badge status-${ticket.status || 'open'}`}>
+              {ticket.status || 'open'}
+            </div>
+          </div>
+          
           {(unreadCounts?.[ticket.id] ?? 0) > 0 && (
-            <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+            <span className="unread-badge">
               {unreadCounts[ticket.id]}
             </span>
           )}
-
         </div>
       ))}
     </div>

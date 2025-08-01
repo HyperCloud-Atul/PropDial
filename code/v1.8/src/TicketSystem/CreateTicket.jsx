@@ -2,92 +2,101 @@ import { useState } from 'react';
 import { projectFirestore } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { timestamp } from '../firebase/config';
-const CreateTicket = ({ onTicketCreated }) => {
-  const [open, setOpen] = useState(false);
+
+const CreateTicket = ({ onTicketCreated, onClose }) => {
   const [issueType, setIssueType] = useState('');
   const [description, setDescription] = useState('');
-
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const { user } = useAuthContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
+    setError('');
 
-    if (!issueType || !description) return alert("Please fill all fields");
+    if (!issueType || !description) {
+      setError('Please fill in all fields');
+      setSubmitting(false);
+      return;
+    }
 
-    const docRef = await projectFirestore.collection('tickets').add({
-      issueType,
-      description,
-      createdBy: user.phoneNumber,
-      createdAt: timestamp.now(),
-      status: 'open'
-    });
+    try {
+      const docRef = await projectFirestore.collection('tickets').add({
+        issueType,
+        description,
+        createdBy: user.phoneNumber,
+        createdAt: timestamp.now(),
+        status: 'open',
+        lastUpdated: timestamp.now()
+      });
 
-    setOpen(false);
-    setIssueType('');
-    setDescription('');
-
-    if (onTicketCreated) {
-      onTicketCreated(docRef.id); // Optional: Select ticket after creation
+      onTicketCreated(docRef.id);
+    } catch (err) {
+      console.error("Error creating ticket:", err);
+      setError('Failed to create ticket. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <>
-      {/* Floating Create Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-6 left-6 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg"
-      >
-        + Create Ticket
-      </button>
-
-      {/* Modal */}
-      {open && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-          <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Create New Ticket</h2>
-            <form onSubmit={handleSubmit}>
-              <label className="block mb-2 font-medium">Issue Type</label>
-              <select
-                className="w-full border px-3 py-2 rounded mb-4"
-                value={issueType}
-                onChange={(e) => setIssueType(e.target.value)}
-                required
-              >
-                <option value="">-- Select --</option>
-                <option value="Bug">Bug</option>
-                <option value="Feature Request">Feature Request</option>
-                <option value="Login Issue">Login Issue</option>
-                <option value="Other">Other</option>
-              </select>
-
-              <label className="block mb-2 font-medium">Description</label>
-              <textarea
-                className="w-full border px-3 py-2 rounded mb-4"
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe your issue"
-                required
-              />
-
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="mr-2 px-4 py-2 bg-gray-300 rounded"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
+    <div className="create-ticket__modal-overlay">
+      <div className="create-ticket__modal">
+        <div className="create-ticket__modal-header">
+          <h2>Create New Ticket</h2>
         </div>
-      )}
-    </>
+        
+        <div className="create-ticket__modal-body">
+          {error && <div className="error-message">{error}</div>}
+          
+          <form className="create-ticket__form" onSubmit={handleSubmit}>
+            <label>Issue Type</label>
+            <select
+              value={issueType}
+              onChange={(e) => setIssueType(e.target.value)}
+              required
+              disabled={submitting}
+            >
+              <option value="">Select an issue type</option>
+              <option value="Bug">Bug Report</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Login Issue">Login Issue</option>
+              <option value="Payment Problem">Payment Problem</option>
+              <option value="Account Issue">Account Issue</option>
+              <option value="Other">Other</option>
+            </select>
+            
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe your issue in detail..."
+              required
+              disabled={submitting}
+            />
+            
+            <div className="create-ticket__button-group">
+              <button
+                type="button"
+                className="create-ticket__button-group-cancel"
+                onClick={onClose}
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="create-ticket__button-group-submit"
+                disabled={submitting}
+              >
+                {submitting ? 'Creating...' : 'Create Ticket'}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
