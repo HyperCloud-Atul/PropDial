@@ -23,6 +23,7 @@ const PGBlogs1 = () => {
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "-");
   };
+  const maxLength = 150;
   return (
     <div className="blog_page blog_page_css">
       {/* Hero Section */}
@@ -53,6 +54,10 @@ const PGBlogs1 = () => {
                 })
                 .map((blog) => {
                   const slug = generateSlug(blog.slug || blog.title);
+                  const truncatedSubTitle =
+                    blog.subTitle.length > maxLength
+                      ? `${blog.subTitle.slice(0, maxLength)}...` // Slice the individual blog's subtitle
+                      : blog.subTitle;
 
                   return (
                     <div key={blog.id} className="item card-container">
@@ -80,10 +85,14 @@ const PGBlogs1 = () => {
                             </div>
                           )}
                       </div>
-
-                      <Link className="card-body" to={`/blog/${slug}`}>
-                        <h3>{blog.title}</h3>
-                        <p className="card-subtitle">{blog.subTitle}</p>
+                      
+                      <Link to={`/blog/${slug}`}>
+                        <div className="card-body">
+                          <h3>{blog.title}</h3>
+                          <p className="card-subtitle" title={blog.subTitle}>
+                            {truncatedSubTitle}
+                          </p>
+                        </div>
                       </Link>
 
                       <div className="card-author">

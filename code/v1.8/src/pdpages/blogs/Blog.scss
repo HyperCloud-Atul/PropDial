@@ -1,18 +1,5 @@
 .blog_page_css {
-  .blog_head {
-    position: relative;
-  }
-.published_date{
-  position: absolute;
-bottom: 0;
-left: 0;
-padding: 8px 16px;
-background: rgba(0, 0, 0, 0.4); 
-backdrop-filter: blur(6px);    
--webkit-backdrop-filter: blur(6px); 
-color: white; 
-border-radius: 4px; 
-}
+  
   .blog_sect {
     .blog_inner {
       display: grid !important;
@@ -30,7 +17,7 @@ border-radius: 4px;
         display: flex;
         flex-direction: column;
         position: relative;
-        min-height: 409px;
+        // min-height: 390px;
         margin-top: 0;
 
         &:hover {
@@ -66,10 +53,20 @@ border-radius: 4px;
               }
             }
           }
-
+          .published_date{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);    
+            -webkit-backdrop-filter: blur(6px); 
+            color: white; 
+            border-radius: 4px; 
+          }
           img {
             width: 100%;
-            height: 100%;
+            height: 200px;
             object-fit: cover;
             transition: transform 0.3s ease;
           }
@@ -81,10 +78,13 @@ border-radius: 4px;
 
         .card-body {
           padding: 15px;
+          padding-top: 25px;
           padding-bottom: 0;
           display: flex;
+          justify-content: baseline;
           flex-direction: column;
-          min-height: 167px;
+          min-height: 130px;
+          text-align: left;
 
           h3 {
             font-size: 18px;
@@ -99,6 +99,7 @@ border-radius: 4px;
             margin: 8px 0 0;
           }
         }
+        
         .add-blog-btn-circle {
           display: flex;
           align-items: center;
@@ -156,22 +157,25 @@ border-radius: 4px;
           }
         }
       }
+      
     }
     @media (max-width: 992px) {
       .blog_inner {
         grid-template-columns: repeat(2, 1fr) !important;
       }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 565px) {
       .blog_inner {
         grid-template-columns: 1fr !important;
       }
+      
       .add-blog-btn-circle {
         right: 20px;
         bottom: 15px;
       }
     }
   }
+  
     a {
       display: flex;
       justify-content: center;
@@ -196,9 +200,11 @@ border-radius: 4px;
   
 
   @media (max-width: 768px) {
-    .blog_sect .blog_inner {
+    
+    .blog_sect .blog_inner  {
       grid-template-columns: repeat(2, 1fr);
     }
+    
     .action-buttons {
       text-align: center;
       padding: 0;
@@ -214,17 +220,7 @@ border-radius: 4px;
 
   //Blog Detail Page CSS
   .pgblogdetail{
-    .published_date{
-      position: absolute;
-    bottom: 0;
-    left: 0;
-    padding: 8px 16px;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(6px);    
-    -webkit-backdrop-filter: blur(6px); 
-    color: white; 
-    border-radius: 4px; 
-    }
+    
   .blog-detail-sidebar {
     .sidebar-title {
       margin-bottom: 10px;
