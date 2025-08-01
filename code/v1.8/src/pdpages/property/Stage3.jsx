@@ -3177,8 +3177,9 @@ export default function Stage3(props) {
 
               {/* Bachelor Boys Allowed */}
               {
-                (propertyDocument && propertyDocument.category === 'Residential')
-                && (
+  propertyDocument &&
+  propertyDocument.category === 'Residential' &&
+  propertyDocument.purpose !== 'Sale' && (
                   <div className="col-md-6">
                     <div className="form_field st-2 label_top">
                       <label htmlFor="">Bachelor Boys Allowed</label>
@@ -3259,7 +3260,11 @@ export default function Stage3(props) {
                     </div>
                   </div>)}
               {/* Bachelor Girls Allowed */}
-              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
+                  {
+  propertyDocument &&
+  propertyDocument.category === 'Residential' &&
+  propertyDocument.purpose !== 'Sale' && (
+               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Bachelor Girls Allowed</label>
                   <div className="form_field_inner">
@@ -3337,9 +3342,14 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>}
+              </div>
+              )}
               {/* Pets Allowed */}
-              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
+                    {
+  propertyDocument &&
+  propertyDocument.category === 'Residential' &&
+  propertyDocument.purpose !== 'Sale' && (
+               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Pets Allowed</label>
                   <div className="form_field_inner">
@@ -3417,9 +3427,14 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>}
+              </div>
+              )}
               {/* Vegetarian / Non-Vegetarian */}
-              {propertyDocument && propertyDocument.category === 'Residential' && <div className="col-md-6">
+                    {
+  propertyDocument &&
+  propertyDocument.category === 'Residential' &&
+  propertyDocument.purpose !== 'Sale' && (
+               <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Food Habit</label>
                   <div className="form_field_inner">
@@ -3497,7 +3512,8 @@ export default function Stage3(props) {
                     </div>
                   </div>
                 </div>
-              </div>}
+              </div>
+              )}
 
               {/* New Property Description */}
               <div className="col-md-6">

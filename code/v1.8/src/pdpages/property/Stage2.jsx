@@ -6235,9 +6235,10 @@ const Stage2 = (props) => {
           }
 
           {/* Lock-in Period */}
-          {propertyDetails &&
-            (propertyDetails.Category === "Residential" ||
-              propertyDetails.Category === "Commercial") && (
+         {propertyDetails &&
+  (propertyDetails.Category === "Residential" ||
+    propertyDetails.Category === "Commercial") &&
+  propertyDetails.Purpose !== "Sale" && (
               <div className="col-md-4">
                 <div className="form_field label_top">
                   <label htmlFor="">Lock-in Period</label>
