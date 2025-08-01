@@ -113,18 +113,42 @@ const TicketSidebar = ({ selectedTicket, setSelectedTicket, searchQuery, onSelec
     );
   }
 
+  if (tickets.length === 0 && !searchQuery) {
+    return (
+      <div className="ticket-list empty no-tickets">
+        <div className="empty-content">
+          <div className="illustration">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h3>No tickets yet</h3>
+          <p>Please Create New Ticket</p>
+        </div>
+      </div>
+    );
+  }
+
   if (filteredTickets.length === 0) {
     return (
-      <div className="ticket-list empty">
-        <p>No tickets found</p>
-        {searchQuery && (
-          <button 
-            className="clear-search"
-            onClick={() => onSelectTicket(null)}
-          >
-            Clear search
-          </button>
-        )}
+      <div className="ticket-list empty no-results">
+        <div className="empty-content">
+          <div className="illustration">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9.172 16.242a4 4 0 1 1-5.656-5.657 4 4 0 0 1 5.656 5.657zM21 21l-6-6"></path>
+            </svg>
+          </div>
+          <h3>No tickets found</h3>
+          <p>No tickets match your search criteria</p>
+          {searchQuery && (
+            <button 
+              className="clear-search"
+              onClick={() => onSelectTicket(null)}
+            >
+              Clear search
+            </button>
+          )}
+        </div>
       </div>
     );
   }

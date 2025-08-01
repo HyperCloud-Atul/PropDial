@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaEllipsisV, FaPaperclip, FaTimes } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
 import { projectFirestore, timestamp } from '../firebase/config';
@@ -12,6 +12,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const [input, setInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [ticketInfo, setTicketInfo] = useState(null);
+  const [adminName, setAdminName] = useState('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState([]);
@@ -22,20 +23,38 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const typingTimeoutRef = useRef(null);
   const recognitionRef = useRef(null);
 
-  // Fetch ticket info
+  // Fetch ticket info and admin name
   useEffect(() => {
     if (!ticketId) return;
 
     const unsubscribeTicket = projectFirestore
       .collection('tickets')
       .doc(ticketId)
-      .onSnapshot((doc) => {
+      .onSnapshot(async (doc) => {
         if (doc.exists) {
+          const ticketData = doc.data();
           setTicketInfo({
             id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate() || new Date()
+            ...ticketData,
+            createdAt: ticketData.createdAt?.toDate() || new Date()
           });
+
+          // Fetch admin name if adminId exists
+          if (ticketData.adminId) {
+            try {
+              const adminDoc = await projectFirestore
+                .collection('users')
+                .doc(ticketData.adminId)
+                .get();
+              
+              if (adminDoc.exists) {
+                const adminData = adminDoc.data();
+                setAdminName(adminData.displayName || adminData.name || 'Admin');
+              }
+            } catch (error) {
+              console.error("Error fetching admin details:", error);
+            }
+          }
         }
       });
 
@@ -103,7 +122,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     
     if (!isTyping) {
       setIsTyping(true);
-      // Simulate admin typing indicator
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
       typingTimeoutRef.current = setTimeout(() => {
         setIsTyping(false);
@@ -179,8 +197,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     recognitionRef.current.onresult = (event) => {
       const transcript = event.results[event.results.length - 1][0].transcript;
       setInput(prev => prev + transcript + ' ');
-      
-      // Reset silence timer
       clearTimeout(silenceTimeout);
       silenceTimeout = setTimeout(() => recognitionRef.current.stop(), 4000);
     };
@@ -407,13 +423,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               >
                 {msg.senderId !== user.phoneNumber && (
                   <div className="sender-avatar">
-                    {msg.senderName?.charAt(0) || 'A'}
+                    {adminName.charAt(0) || 'A'}
                   </div>
                 )}
                 <div className="message-content-wrapper">
                   {msg.senderId !== user.phoneNumber && (
                     <div className="sender-name">
-                      {msg.senderName || "Support Agent"}
+                      {msg.senderType === 'admin' ? adminName : msg.senderName || "User"}
                     </div>
                   )}
                   {renderMessageContent(msg)}
