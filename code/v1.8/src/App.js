@@ -537,7 +537,7 @@ function App() {
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
                 <Route path="/societies" element={<Societies />}></Route>
-                <Route path="/pg-society/:id" element={<PGSocietyPage />} />
+                <Route path="/pg-society/:id" element={<PGSocietyPage />} /> 
 
 
 
