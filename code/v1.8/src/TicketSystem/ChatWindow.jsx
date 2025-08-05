@@ -1,13 +1,145 @@
 import { useEffect, useState, useRef } from 'react';
-import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaEllipsisV, FaPaperclip, FaTimes } from 'react-icons/fa';
+import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, FaStop, FaPlay, FaPause } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
-import { projectFirestore, timestamp } from '../firebase/config';
+import { projectFirestore, timestamp, projectAuth } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { projectStorage } from "../firebase/config";
+import { signOut } from "firebase/auth";
+
+// Updated VoicePlayer component with enhanced error handling
+const VoicePlayer = ({ url, isSent }) => {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      if (audio.duration > 0) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+
+    const loadedData = () => {
+      setDuration(audio.duration || 0);
+    };
+
+    const handleError = () => {
+      if (audio.error) {
+        setError(`Audio error: ${audio.error.message}`);
+        console.error('Audio playback error:', audio.error);
+      }
+    };
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      setCurrentTime(0);
+      setProgress(0);
+    };
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', loadedData);
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateProgress);
+      audio.removeEventListener('loadedmetadata', loadedData);
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+  
+  const togglePlay = async () => {
+    if (error) return;
+  
+    const audio = audioRef.current;
+    if (!audio) return;
+  
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        await audio.play(); // Wait until it starts playing
+        setIsPlaying(true);
+      }
+    } catch (playError) {
+      console.error("Playback failed:", playError);
+      setError("Playback failed. Try downloading the audio.");
+    }
+  };
+  
+  
+  const formatTime = (time) => {
+    if (isNaN(time)) return '0:00';
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+  
+  return (
+    <div className={`voice-player ${isSent ? 'sent' : 'received'} ${isPlaying ? 'playing' : ''}`}>
+      <audio ref={audioRef} preload="metadata">
+        <source src={url} type="audio/webm" />
+        <source src={url} type="audio/mp3" />
+        <source src={url} type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+      
+      {error ? (
+        <div className="audio-error">
+          <span>Audio playback error</span>
+          <a href={url} download="recording.webm" className="download-audio">
+            Download
+          </a>
+        </div>
+      ) : (
+        <>
+          <button className="play-btn" onClick={togglePlay}>
+            {isPlaying ? <FaPause /> : <FaPlay />}
+          </button>
+          
+          <div className="progress-container">
+            <div 
+              className="progress-bar"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          
+          <span className="duration">
+            {formatTime(isPlaying ? currentTime : duration)}
+          </span>
+          
+          <div className="waveform">
+            {[...Array(20)].map((_, i) => (
+              <div 
+                key={i} 
+                className="bar" 
+                style={{ 
+                  height: `${5 + Math.random() * 15}px`,
+                  animationDelay: `${i * 0.05}s`
+                }} 
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 const ChatWindow = ({ ticketId, onBack, isMobile }) => {
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -16,12 +148,40 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState([]);
-  const [showMenu, setShowMenu] = useState(false);
   const [showAttachmentPreview, setShowAttachmentPreview] = useState(null);
+  const [showTicketDetails, setShowTicketDetails] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [audioChunks, setAudioChunks] = useState([]);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
-  const recognitionRef = useRef(null);
+  const recordingTimerRef = useRef(null);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [error, setError] = useState(null);
+
+  // Helper function to truncate text
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength 
+      ? text.substring(0, maxLength) + '...' 
+      : text;
+  };
+
+  // Generate avatar text from issue type
+  const getAvatarText = (issueType) => {
+    if (!issueType) return 'T';
+    
+    const words = issueType.trim().split(/\s+/);
+    
+    if (words.length === 1) {
+      const word = words[0];
+      if (word.length <= 2) return word;
+      return word.charAt(0) + word.charAt(word.length - 1);
+    }
+    
+    return words.map(word => word.charAt(0)).join('').substring(0, 2);
+  };
 
   // Fetch ticket info and admin name
   useEffect(() => {
@@ -39,7 +199,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             createdAt: ticketData.createdAt?.toDate() || new Date()
           });
 
-          // Fetch admin name if adminId exists
           if (ticketData.adminId) {
             try {
               const adminDoc = await projectFirestore
@@ -79,7 +238,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         setMessages(msgs);
         setLoading(false);
 
-        // Mark messages as read
         setTimeout(() => {
           const batch = projectFirestore.batch();
           snapshot.docs.forEach((doc) => {
@@ -87,11 +245,14 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               batch.update(doc.ref, { read: true });
             }
           });
-          batch.commit();
+          batch.commit().catch(error => {
+            console.error("Error marking messages as read:", error);
+          });
         }, 300);
       }, (error) => {
         console.error("Error fetching messages:", error);
         setLoading(false);
+        setError("Failed to load messages. Please try again.");
       });
 
     return () => unsubscribe();
@@ -129,10 +290,23 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   };
 
+  // Handle authentication errors
+  const handleAuthError = (error) => {
+    console.error("Authentication error:", error);
+    setError("Session expired. Please log in again.");
+    
+    // Sign out user and redirect to login
+    signOut(projectAuth).then(() => {
+      dispatch({ type: 'LOGOUT' });
+    }).catch((signOutError) => {
+      console.error("Sign out error:", signOutError);
+    });
+  };
+
   // Send message
   const sendMessage = async () => {
     if (input.trim() === '' && attachments.length === 0) return;
-
+  
     try {
       const messageData = {
         senderId: user.phoneNumber,
@@ -140,38 +314,67 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         createdAt: timestamp.now(),
         read: false,
       };
-
+  
       if (input.trim() !== '') {
         messageData.text = input;
       }
-
+  
       if (attachments.length > 0) {
-        messageData.attachments = attachments;
+        const uploadedAttachments = [];
+  
+        for (const att of attachments) {
+          let fileToUpload;
+  
+          if (att.type === 'audio') {
+            fileToUpload = new File([att.blob], att.name, { type: 'audio/webm' });
+          } else {
+            fileToUpload = att.file;
+          }
+  
+          const storageRef = ref(projectStorage, `attachments/${ticketId}/${att.name}`);
+          await uploadBytes(storageRef, fileToUpload);
+          const downloadURL = await getDownloadURL(storageRef);
+  
+          uploadedAttachments.push({
+            id: att.id,
+            name: att.name,
+            type: att.type,
+            url: downloadURL,
+          });
+        }
+  
+        messageData.attachments = uploadedAttachments;
       }
-
+  
       await projectFirestore
         .collection('tickets')
         .doc(ticketId)
         .collection('messages')
         .add(messageData);
-
+  
       setInput('');
       setAttachments([]);
       setShowEmojiPicker(false);
-      
-      // Update ticket status
+  
       await projectFirestore
         .collection('tickets')
         .doc(ticketId)
         .update({
           lastUpdated: timestamp.now(),
-          status: 'open'
+          status: 'open',
         });
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("Failed to send message. Please try again.");
+      
+      // Handle token refresh errors
+      if (error.code && error.code.includes('auth')) {
+        handleAuthError(error);
+      } else {
+        setError("Failed to send message. Please try again.");
+      }
     }
   };
+  
 
   // Add emoji
   const addEmoji = (emoji) => {
@@ -179,33 +382,62 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     inputRef.current.focus();
   };
 
-  // Start voice recognition
-  const startListening = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('Voice typing is not supported in your browser');
-      return;
+  // Start voice recording
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          setAudioChunks(prev => [...prev, e.data]);
+        }
+      };
+      
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        
+        const audioAttachment = {
+          id: Math.random().toString(36).substr(2, 9),
+          name: `recording-${new Date().getTime()}.webm`,
+          type: 'audio',
+          blob: audioBlob
+        };
+        
+        setAttachments(prev => [...prev, audioAttachment]);
+        setAudioChunks([]);
+        stream.getTracks().forEach(track => track.stop());
+        clearInterval(recordingTimerRef.current);
+        setRecordingTime(0);
+      };
+      
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+      
+      // Start recording timer
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      setError("Failed to access microphone. Please check permissions.");
     }
+  };
 
-    const SpeechRecognition = window.webkitSpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.continuous = true;
-    recognitionRef.current.interimResults = false;
-    recognitionRef.current.lang = 'en-US';
+  // Stop voice recording
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
 
-    let silenceTimeout;
-
-    recognitionRef.current.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      setInput(prev => prev + transcript + ' ');
-      clearTimeout(silenceTimeout);
-      silenceTimeout = setTimeout(() => recognitionRef.current.stop(), 4000);
-    };
-
-    recognitionRef.current.onend = () => {
-      clearTimeout(silenceTimeout);
-    };
-
-    recognitionRef.current.start();
+  // Format recording time
+  const formatRecordingTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   // Format message time
@@ -247,26 +479,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     setAttachments(prev => prev.filter(att => att.id !== id));
   };
 
-  // Close ticket
-  const closeTicket = async () => {
-    if (!window.confirm('Are you sure you want to close this ticket?')) return;
-    
-    try {
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .update({
-          status: 'closed',
-          closedAt: timestamp.now()
-        });
-        
-      setShowMenu(false);
-    } catch (error) {
-      console.error("Error closing ticket:", error);
-      alert("Failed to close ticket. Please try again.");
-    }
-  };
-
   // Render attachment preview
   const renderAttachmentPreview = () => {
     if (!showAttachmentPreview) return null;
@@ -283,6 +495,8 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           
           {showAttachmentPreview.type === 'image' ? (
             <img src={showAttachmentPreview.url} alt="Attachment preview" />
+          ) : showAttachmentPreview.type === 'audio' ? (
+            <audio controls src={showAttachmentPreview.url} />
           ) : (
             <div className="file-preview">
               <div className="file-icon">📄</div>
@@ -307,22 +521,33 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       <div className="message-content">
         {msg.text && <p>{msg.text}</p>}
         
-        {msg.attachments && msg.attachments.map(att => (
+        {/* {msg.attachments && msg.attachments.map(att => (
           <div 
             key={att.id} 
             className={`attachment ${att.type}`}
-            onClick={() => setShowAttachmentPreview(att)}
           >
             {att.type === 'image' ? (
-              <img src={att.url} alt="Attachment" />
+              <img 
+                src={att.url} 
+                alt="Attachment" 
+                onClick={() => setShowAttachmentPreview(att)}
+              />
+            ) : att.type === 'audio' ? (
+              <VoicePlayer 
+                url={att.url} 
+                isSent={msg.senderId === user.phoneNumber} 
+              />
             ) : (
-              <div className="file-attachment">
+              <div 
+                className="file-attachment"
+                onClick={() => setShowAttachmentPreview(att)}
+              >
                 <div className="file-icon">📄</div>
                 <div className="file-name">{att.name}</div>
               </div>
             )}
           </div>
-        ))}
+        ))} */}
         
         <div className="message-footer">
           <span className="timestamp">{formatTime(msg.createdAt)}</span>
@@ -334,6 +559,18 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       </div>
     );
+  };
+
+  // Generate consistent color based on string
+  const getAvatarColor = (str) => {
+    if (!str) return '#128c7e';
+    
+    const hash = str.split('').reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 60%)`;
   };
 
   // Group messages by date
@@ -371,14 +608,17 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               <FaArrowLeft />
             </button>
           )}
-          <div className="user-avatar">
-            {ticketInfo?.issueType?.charAt(0) || 'T'}
+          <div 
+            className="user-avatar"
+            style={{ backgroundColor: getAvatarColor(ticketInfo?.issueType) }}
+          >
+            {ticketInfo?.issueType ? getAvatarText(ticketInfo.issueType) : 'T'}
           </div>
           <div className="ticket-info">
             <h3>{ticketInfo?.issueType || "Support Ticket"}</h3>
             <div className="status-container">
-              <span className={`status-badge status-${ticketInfo?.status || 'open'}`}>
-                {ticketInfo?.status || 'open'}
+              <span className="subject-text">
+                {truncateText(ticketInfo?.subject, 40)}
               </span>
               {isTyping && (
                 <div className="typing-indicator">
@@ -391,27 +631,88 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             </div>
           </div>
         </div>
-        
-        <div className="header-actions">
-          <div className="menu-container">
-            <button 
-              className="menu-btn"
-              onClick={() => setShowMenu(!showMenu)}
-            >
-              <FaEllipsisV />
-            </button>
-            
-            {showMenu && (
-              <div className="dropdown-menu">
-                <button onClick={closeTicket}>Close Ticket</button>
-                <button>View Ticket Details</button>
-                <button>Export Conversation</button>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
       
+      {error && (
+        <div className="error-banner">
+          {error}
+          <button onClick={() => setError(null)}>
+            <FaTimes />
+          </button>
+        </div>
+      )}
+      
+      {/* Ticket Details Panel */}
+      {ticketInfo && (
+        <div className="ticket-details-panel">
+          <div 
+            className="panel-header"
+            onClick={() => setShowTicketDetails(!showTicketDetails)}
+          >
+            <h4>Ticket Details</h4>
+            <span className="toggle-icon">
+              {showTicketDetails ? <FaChevronUp /> : <FaChevronDown />}
+            </span>
+          </div>
+          
+          {showTicketDetails && (
+            <div className="panel-content">
+              <div className="detail-row">
+                <span className="detail-label">
+                  <FaIdCard className="detail-icon" /> Ticket ID:
+                </span>
+                <span className="detail-value">
+                  {ticketInfo.id}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">
+                  <FaPhone className="detail-icon" /> Mobile:
+                </span>
+                <span className="detail-value">
+                  {ticketInfo.createdBy}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Subject:</span>
+                <span className="detail-value">{ticketInfo.subject || "No subject"}</span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Issue Type:</span>
+                <span 
+                  className="issue-type-badge"
+                  style={{ backgroundColor: getAvatarColor(ticketInfo.issueType) }}
+                >
+                  {ticketInfo.issueType}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Description:</span>
+                <span className="detail-value">{ticketInfo.description || "No description provided"}</span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Created:</span>
+                <span className="detail-value">
+                  {ticketInfo.createdAt.toLocaleDateString()} at {ticketInfo.createdAt.toLocaleTimeString()}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Status:</span>
+                <span className={`status-badge status-${ticketInfo.status}`}>
+                  {ticketInfo.status}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="messages-container">
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date} className="message-date-group">
@@ -421,11 +722,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 key={msg.id}
                 className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'}`}
               >
-                {msg.senderId !== user.phoneNumber && (
-                  <div className="sender-avatar">
-                    {adminName.charAt(0) || 'A'}
-                  </div>
-                )}
                 <div className="message-content-wrapper">
                   {msg.senderId !== user.phoneNumber && (
                     <div className="sender-name">
@@ -464,14 +760,19 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               >
                 <FaTimes />
               </button>
-              {att.type === 'image' ? (
+              {/* {att.type === 'image' ? (
                 <img src={att.url} alt="Preview" />
+              ) : att.type === 'audio' ? (
+                <div className="audio-preview">
+                  <div className="audio-icon">🎤</div>
+                  <span>Voice Recording</span>
+                </div>
               ) : (
                 <div className="file-preview">
                   <div className="file-icon">📄</div>
                   <div className="file-name">{att.name}</div>
                 </div>
-              )}
+              )} */}
             </div>
           ))}
         </div>
@@ -489,6 +790,16 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       )}
 
       <div className="message-input-area">
+        {isRecording && (
+          <div className="recording-indicator">
+            <div className="pulse"></div>
+            <span>Recording: {formatRecordingTime(recordingTime)}</span>
+            <button className="stop-recording" onClick={stopRecording}>
+              <FaTimes />
+            </button>
+          </div>
+        )}
+        
         <div className="input-actions">
           <button
             className="emoji-btn"
@@ -498,7 +809,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             <FaSmile />
           </button>
           
-          <div className="file-upload-btn">
+          {/* <div className="file-upload-btn">
             <input
               type="file"
               id="file-upload"
@@ -509,7 +820,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             <label htmlFor="file-upload">
               <FaPaperclip />
             </label>
-          </div>
+          </div> */}
         </div>
         
         <div className="input-container">
@@ -537,14 +848,14 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             >
               <FaPaperPlane />
             </button>
-          ) : (
-            <button 
-              className="voice-button" 
-              onClick={startListening} 
-              title="Voice Input"
-            >
-              <FaMicrophone />
-            </button>
+          ) : (null
+            // <button 
+            //   className={`voice-button ${isRecording ? 'recording' : ''}`}
+            //   onClick={isRecording ? stopRecording : startRecording}
+            //   title={isRecording ? "Stop Recording" : "Start Recording"}
+            // >
+            //   {isRecording ? <FaStop /> : <FaMicrophone />}
+            // </button>
           )}
         </div>
       </div>

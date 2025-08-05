@@ -2,189 +2,330 @@ import { useEffect, useState } from "react";
 import { projectFirestore } from "../firebase/config";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const TicketSidebar = ({ selectedTicket, setSelectedTicket, searchQuery, onSelectTicket }) => {
-  const [tickets, setTickets] = useState([]);
-  const [unreadCounts, setUnreadCounts] = useState({});
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuthContext();
-  const [filteredTickets, setFilteredTickets] = useState([]);
+const TicketSidebar = ({ 
+  selectedTicket, 
+  setSelectedTicket, 
+  searchQuery, 
+  setSearchQuery,
+  onSelectTicket,
+  onNewTicket,
+  isMobile,
+  onClose
+}) => {
+    const [tickets, setTickets] = useState([]);
+    const [unreadCounts, setUnreadCounts] = useState({});
+    const [loading, setLoading] = useState(true);
+    const { user } = useAuthContext();
+    const [filteredTickets, setFilteredTickets] = useState([]);
+  
+    // Generate consistent color based on issue type
+    const getAvatarColor = (issueType) => {
+      if (!issueType) return '#128c7e'; // WhatsApp green
+      
+      // Create a simple hash from the issue type
+      const hash = issueType.split('').reduce((acc, char) => {
+        return char.charCodeAt(0) + ((acc << 5) - acc);
+      }, 0);
+      
+      // Generate a color from the hash
+      const hue = Math.abs(hash) % 360;
+      return `hsl(${hue}, 70%, 60%)`;
+    };
 
-  // Fetch tickets from Firestore
-  useEffect(() => {
-    if (!user) return;
-
-    let ref = projectFirestore.collection("tickets").orderBy("createdAt", "desc");
-
-    if (user?.role !== "admin") {
-      ref = ref.where("createdBy", "==", user.phoneNumber);
-    }
-
-    const unsubscribe = ref.onSnapshot(snapshot => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
-      }));
-      setTickets(data);
-      setLoading(false);
-    }, (error) => {
-      console.error("Error fetching tickets:", error);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
-
-  // Filter tickets based on search query
-  useEffect(() => {
-    const filtered = tickets.filter(ticket => 
-      ticket.issueType?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ticket.status?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredTickets(filtered);
-  }, [tickets, searchQuery]);
-
-  // Fetch unread message counts
-  useEffect(() => {
-    if (!user || tickets.length === 0) return;
-
-    const unsubscribers = [];
-    const counts = {};
-
-    const setupListeners = async () => {
-      for (const ticket of tickets) {
-        const unsubscribe = projectFirestore
-          .collection('tickets')
-          .doc(ticket.id)
-          .collection('messages')
-          .where('read', '==', false)
-          .where('senderId', '!=', user.phoneNumber)
-          .onSnapshot((snapshot) => {
-            counts[ticket.id] = snapshot.size;
-            setUnreadCounts({...counts});
-          });
-
-        unsubscribers.push(unsubscribe);
+    // Generate two-letter avatar text
+    const getTwoLetters = (str) => {
+      if (!str) return 'TK';
+      
+      const words = str.trim().split(/\s+/);
+      
+      // For multi-word strings
+      if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+      }
+      // For single words with multiple characters
+      if (words[0].length > 1) {
+        return (words[0][0] + words[0][words[0].length - 1]).toUpperCase();
+      }
+      // For single-character strings
+      return (words[0] + words[0]).toUpperCase();
+    };
+  
+    // Fetch tickets from Firestore
+    useEffect(() => {
+      if (!user) return;
+  
+      let ref = projectFirestore.collection("tickets").orderBy("createdAt", "desc");
+  
+      if (user?.role !== "admin") {
+        ref = ref.where("createdBy", "==", user.phoneNumber);
+      }
+  
+      const unsubscribe = ref.onSnapshot(snapshot => {
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date()
+        }));
+        setTickets(data);
+        setLoading(false);
+      }, (error) => {
+        console.error("Error fetching tickets:", error);
+        setLoading(false);
+      });
+  
+      return () => unsubscribe();
+    }, [user]);
+  
+    // Filter tickets based on search query
+    useEffect(() => {
+      const filtered = tickets.filter(ticket => 
+        ticket.issueType?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        ticket.status?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredTickets(filtered);
+    }, [tickets, searchQuery]);
+  
+    // Fetch unread message counts
+    useEffect(() => {
+      if (!user || tickets.length === 0) return;
+  
+      const unsubscribers = [];
+      const counts = {};
+  
+      const setupListeners = async () => {
+        for (const ticket of tickets) {
+          const unsubscribe = projectFirestore
+            .collection('tickets')
+            .doc(ticket.id)
+            .collection('messages')
+            .where('read', '==', false)
+            .where('senderId', '!=', user.phoneNumber)
+            .onSnapshot((snapshot) => {
+              counts[ticket.id] = snapshot.size;
+              setUnreadCounts({...counts});
+            });
+  
+          unsubscribers.push(unsubscribe);
+        }
+      };
+  
+      setupListeners();
+  
+      return () => {
+        unsubscribers.forEach(unsub => unsub());
+      };
+    }, [tickets, user]);
+  
+    // Reset unread count when ticket is selected
+    useEffect(() => {
+      if (selectedTicket) {
+        setUnreadCounts(prev => ({
+          ...prev,
+          [selectedTicket]: 0
+        }));
+      }
+    }, [selectedTicket]);
+  
+    // Format date for display - returns actual time for today
+    const formatDate = (date) => {
+      if (!date) return '';
+      
+      const now = new Date();
+      const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === 0) {
+        // Return actual time for today
+        return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      } else if (diffDays === 1) {
+        return 'Yesterday';
+      } else if (diffDays < 7) {
+        return new Date(date).toLocaleDateString([], { weekday: 'short' });
+      } else {
+        return new Date(date).toLocaleDateString();
       }
     };
 
-    setupListeners();
-
-    return () => {
-      unsubscribers.forEach(unsub => unsub());
-    };
-  }, [tickets, user]);
-
-  // Reset unread count when ticket is selected
-  useEffect(() => {
-    if (selectedTicket) {
-      setUnreadCounts(prev => ({
-        ...prev,
-        [selectedTicket]: 0
-      }));
-    }
-  }, [selectedTicket]);
-
-  // Format date for display
-  const formatDate = (date) => {
-    if (!date) return '';
-    
-    const now = new Date();
-    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) {
-      return 'Today';
-    } else if (diffDays === 1) {
-      return 'Yesterday';
-    } else if (diffDays < 7) {
-      return `${diffDays} days ago`;
-    } else {
-      return date.toLocaleDateString();
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="ticket-list loading">
-        <div className="loading-spinner"></div>
-        <p>Loading tickets...</p>
-      </div>
-    );
-  }
-
-  if (tickets.length === 0 && !searchQuery) {
-    return (
-      <div className="ticket-list empty no-tickets">
-        <div className="empty-content">
-          <div className="illustration">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </div>
-          <h3>No tickets yet</h3>
-          <p>Please Create New Ticket</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (filteredTickets.length === 0) {
-    return (
-      <div className="ticket-list empty no-results">
-        <div className="empty-content">
-          <div className="illustration">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9.172 16.242a4 4 0 1 1-5.656-5.657 4 4 0 0 1 5.656 5.657zM21 21l-6-6"></path>
-            </svg>
-          </div>
-          <h3>No tickets found</h3>
-          <p>No tickets match your search criteria</p>
-          {searchQuery && (
-            <button 
-              className="clear-search"
-              onClick={() => onSelectTicket(null)}
-            >
-              Clear search
+  return (
+    <div className={`sidebar ${isMobile ? 'mobile' : ''}`}>
+      <div className="sidebar-header">
+        <div className="header-left">
+          {isMobile && (
+            <button className="close-sidebar" onClick={onClose}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
             </button>
           )}
+          <h2>Help & Support</h2>
+        </div>
+        <div className="header-right">
+          <button className="new-ticket-btn" onClick={onNewTicket}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="ticket-list">
-      {filteredTickets.map((ticket) => (
-        <div
-          key={ticket.id}
-          className={`ticket ${selectedTicket === ticket.id ? "active" : ""}`}
-          onClick={() => {
-            setSelectedTicket(ticket.id);
-            onSelectTicket(ticket.id);
-          }}
-        >
-          <div className="ticket-header">
-            <div className="issue-type">{ticket.issueType || "No title"}</div>
-            <div className="timestamp">{formatDate(ticket.createdAt)}</div>
+      
+      <div className="search-container">
+        <input 
+          type="text" 
+          placeholder="Search tickets..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+      
+      <div className="sidebar-content">
+        {/* Loading state */}
+        {loading && (
+          <div className="ticket-list loading">
+            <div className="loading-spinner"></div>
+            <p>Loading tickets...</p>
           </div>
-          
-          <div className="ticket-footer">
-            <div className="description">
-              {ticket.description || "No description"}
-            </div>
-            <div className={`status-badge status-${ticket.status || 'open'}`}>
-              {ticket.status || 'open'}
+        )}
+        
+        {/* Empty state - no tickets (hidden on mobile) */}
+        {!isMobile && !loading && tickets.length === 0 && !searchQuery && (
+          <div className="empty-container">
+            <div className="empty-content">
+              <div className="illustration">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <h3>No Tickets Yet</h3>
+              <p>You haven't created any support tickets yet</p>
+              <button 
+                className="new-ticket-btn"
+                onClick={onNewTicket}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create Your First Ticket
+              </button>
             </div>
           </div>
-          
-          {(unreadCounts?.[ticket.id] ?? 0) > 0 && (
-            <span className="unread-badge">
-              {unreadCounts[ticket.id]}
-            </span>
-          )}
-        </div>
-      ))}
+        )}
+        
+        {/* No search results (hidden on mobile) */}
+        {!isMobile && !loading && tickets.length > 0 && filteredTickets.length === 0 && (
+          <div className="empty-container">
+            <div className="empty-content">
+              <div className="illustration">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  <line x1="11" y1="8" x2="11" y2="14"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </div>
+              <h3>No Tickets Found</h3>
+              <p>We couldn't find any tickets matching "{searchQuery}"</p>
+              <div className="search-tips">
+                <p>Try searching with different keywords:</p>
+                <ul>
+                  <li>Use more general terms</li>
+                  <li>Check your spelling</li>
+                  <li>Try status names like "open" or "resolved"</li>
+                </ul>
+              </div>
+              <button 
+                className="new-ticket-btn"
+                onClick={onNewTicket}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Create New Ticket
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {/* Mobile empty state */}
+        {isMobile && !loading && filteredTickets.length === 0 && tickets.length === 0 && (
+          <div className="mobile-empty-state">
+            <p>No tickets found. Create your first ticket.</p>
+            <button 
+              className="mobile-new-ticket-btn"
+              onClick={onNewTicket}
+            >
+              + New Ticket
+            </button>
+          </div>
+        )}
+        
+        {/* Ticket list */}
+        {!loading && filteredTickets.length > 0 && (
+          <div className="ticket-list scrollable">
+            {filteredTickets.map((ticket) => {
+              const avatarText = getTwoLetters(ticket.issueType);
+              const avatarColor = getAvatarColor(ticket.issueType);
+              
+              return (
+                <div
+                  key={ticket.id}
+                  className={`ticket ${selectedTicket === ticket.id ? "active" : ""}`}
+                  tabIndex={0}
+                  onClick={() => {
+                    setSelectedTicket(ticket.id);
+                    onSelectTicket(ticket.id);
+                    if (isMobile) onClose();
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      setSelectedTicket(ticket.id);
+                      onSelectTicket(ticket.id);
+                      if (isMobile) onClose();
+                    }
+                  }}
+                >
+                  <div className="ticket-whole-container">
+                    <div className="ticket-avatar" style={{ backgroundColor: avatarColor }}>
+                      {avatarText}
+                    </div>
+                    
+                    <div className="ticket-content">
+                      <div className="ticket-header">
+                        <div>
+                          <div className="issue-type">{ticket.issueType || "No title"}</div>
+                          <div className="subject">
+                            {ticket.subject || "No subject"}
+                          </div>
+                        </div>
+                        
+                        <div className="ticket-meta">
+                          <div className="timestamp">{formatDate(ticket.createdAt)}</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="ticket-footer">
+                      {(unreadCounts?.[ticket.id] ?? 0) > 0 && (
+                        <span className="unread-badge">
+                          {unreadCounts[ticket.id]}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
