@@ -521,7 +521,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       <div className="message-content">
         {msg.text && <p>{msg.text}</p>}
         
-        {/* {msg.attachments && msg.attachments.map(att => (
+        {msg.attachments && msg.attachments.map(att => (
           <div 
             key={att.id} 
             className={`attachment ${att.type}`}
@@ -547,7 +547,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               </div>
             )}
           </div>
-        ))} */}
+        ))}
         
         <div className="message-footer">
           <span className="timestamp">{formatTime(msg.createdAt)}</span>
@@ -760,7 +760,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               >
                 <FaTimes />
               </button>
-              {/* {att.type === 'image' ? (
+              {att.type === 'image' ? (
                 <img src={att.url} alt="Preview" />
               ) : att.type === 'audio' ? (
                 <div className="audio-preview">
@@ -772,7 +772,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                   <div className="file-icon">📄</div>
                   <div className="file-name">{att.name}</div>
                 </div>
-              )} */}
+              )}
             </div>
           ))}
         </div>
@@ -809,7 +809,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             <FaSmile />
           </button>
           
-          {/* <div className="file-upload-btn">
+          <div className="file-upload-btn">
             <input
               type="file"
               id="file-upload"
@@ -820,7 +820,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             <label htmlFor="file-upload">
               <FaPaperclip />
             </label>
-          </div> */}
+          </div>
         </div>
         
         <div className="input-container">
@@ -840,23 +840,27 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
         
         <div className="send-actions">
-          {input.trim() || attachments.length > 0 ? (
+          {/* Fixed: Always show send button but disable when nothing to send */}
+          <button 
+            className="send-button" 
+            onClick={sendMessage}
+            disabled={!input.trim() && attachments.length === 0}
+          >
+            <FaPaperPlane />
+          </button>
+          
+          {/* Voice button remains commented */}
+          {/*
+          {!input.trim() && attachments.length === 0 && (
             <button 
-              className="send-button" 
-              onClick={sendMessage}
-              disabled={!input.trim() && attachments.length === 0}
+              className={`voice-button ${isRecording ? 'recording' : ''}`}
+              onClick={isRecording ? stopRecording : startRecording}
+              title={isRecording ? "Stop Recording" : "Start Recording"}
             >
-              <FaPaperPlane />
+              {isRecording ? <FaStop /> : <FaMicrophone />}
             </button>
-          ) : (null
-            // <button 
-            //   className={`voice-button ${isRecording ? 'recording' : ''}`}
-            //   onClick={isRecording ? stopRecording : startRecording}
-            //   title={isRecording ? "Stop Recording" : "Start Recording"}
-            // >
-            //   {isRecording ? <FaStop /> : <FaMicrophone />}
-            // </button>
           )}
+          */}
         </div>
       </div>
       
