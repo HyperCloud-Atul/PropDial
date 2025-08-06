@@ -44,7 +44,6 @@ import HowUse from "./pdpages/howUse/HowUse";
 import BlogDetail from "./pdpages/blogs/BlogDetail";
 import BlogEdit from "./pdpages/blogs/BlogEdit";
 import BlogAdd from "./pdpages/blogs/BlogAdd";
-import Societies from "./pdpages/society/Societies";
 import PGSocietyPage from "./pdpages/society/PGSocietyPage";
 
 // ------------------------------------------------------------------------------------
@@ -536,8 +535,8 @@ function App() {
                   path="/more-menu"
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
-                <Route path="/societies" element={<Societies />}></Route>
-                <Route path="/pg-society/:id" element={<PGSocietyPage />} /> 
+                <Route path="/:country/:state/:city/:locality/:societyName/:id" element={<PGSocietyPage />} />
+
 
 
 

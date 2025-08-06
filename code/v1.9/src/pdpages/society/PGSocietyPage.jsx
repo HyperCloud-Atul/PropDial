@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from "react";
-import styles from "./PropertyListingPage.module.css";
+import styles from "./PropertyListingPage.module.scss";
 import { Link, useParams } from "react-router-dom";
 import { projectFirestore } from "../../firebase/config";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import "./PGSociety.scss";
-import { 
+import ComponentBuilder from "./ComponentBuilder";
+import {
+  MdAdd,
+  MdClose,
   MdElevator,
   MdCheckCircle,
   MdMeetingRoom,
-  MdOutlinePhotoLibrary
+  MdOutlinePhotoLibrary,
 } from "react-icons/md"; // Add this
 import {
   FaRegBuilding,
@@ -23,16 +33,16 @@ import {
   FaPrayingHands,
   FaBed,
   FaSearch,
-  FaStar, 
+  FaStar,
   FaStarHalfAlt,
   FaRegStar,
   FaEdit,
-  FaRegHeart, 
+  FaRegHeart,
   FaShareAlt,
   FaRegCalendarAlt,
   FaPlus,
   FaCheck,
-  FaRupeeSign
+  FaRupeeSign,
 } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
@@ -186,23 +196,193 @@ const GalleryPreview = () => {
   );
 };
 
-const LocationAdvantages = () => {
+const LocationAdvantages = ({ societyId }) => {
+  const [locations, setLocations] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [newLocation, setNewLocation] = useState({
+    place: "",
+    distance: "",
+    time: "",
+  });
+  const [tempLocations, setTempLocations] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      if (!societyId) return;
+
+      try {
+        const docRef = doc(projectFirestore, "m_societies", societyId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists() && docSnap.data().locations) {
+          setLocations(docSnap.data().locations);
+          setTempLocations(docSnap.data().locations);
+        }
+      } catch (error) {
+        console.error("Error fetching locations: ", error);
+      }
+    };
+
+    fetchLocations();
+  }, [societyId]);
+
+  const handleAddClick = () => {
+    setIsAdding(true);
+    setTempLocations([...locations]);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewLocation({
+      ...newLocation,
+      [name]: value,
+    });
+  };
+
+  const handleAddLocation = () => {
+    if (newLocation.place && newLocation.distance && newLocation.time) {
+      setTempLocations([...tempLocations, newLocation]);
+      setNewLocation({
+        place: "",
+        distance: "",
+        time: "",
+      });
+    }
+  };
+
+  const handleRemoveLocation = (index) => {
+    const updatedLocations = [...tempLocations];
+    updatedLocations.splice(index, 1);
+    setTempLocations(updatedLocations);
+  };
+
+  const handleSave = async () => {
+    if (!societyId) {
+      alert("No society ID provided");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const docRef = doc(projectFirestore, "m_societies", societyId);
+
+      await updateDoc(docRef, {
+        locations: tempLocations,
+      });
+
+      setLocations(tempLocations);
+      setIsAdding(false);
+    } catch (error) {
+      console.error("Error saving locations: ", error);
+      alert("Failed to save locations. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsAdding(false);
+    setTempLocations([...locations]);
+  };
+
   return (
     <div className="location-container">
       <h2 className="section-title">Nearby Locations</h2>
-      <div className="location-grid">
-        {locations.map((item, index) => (
-          <div key={index} className="location-card">
-            <div className="location-icon">
-              <MdCheckCircle />
+
+      {!isAdding ? (
+        <div className="location-grid">
+          {locations.map((item, index) => (
+            <div key={index} className="location-card">
+              <div className="location-icon">
+                <MdCheckCircle />
+              </div>
+              <div className="location-text">
+                <span className="place">{item.place}</span>
+                <span className="meta">{`${item.distance} - ${item.time}`}</span>
+              </div>
             </div>
-            <div className="location-text">
-              <span className="place">{item.place}</span>
-              <span className="meta">{`${item.distance} - ${item.time}`}</span>
-            </div>
+          ))}
+
+          <div className="add-location-card" onClick={handleAddClick}>
+            <MdAdd size={24} color="#555" />
           </div>
-        ))}
-      </div>
+        </div>
+      ) : (
+        <div>
+          <div className="location-grid">
+            {tempLocations.map((item, index) => (
+              <div key={index} className="location-card">
+                <div className="location-icon">
+                  <MdCheckCircle />
+                </div>
+                <div className="location-text">
+                  <span className="place">{item.place}</span>
+                  <span className="meta">{`${item.distance} - ${item.time}`}</span>
+                </div>
+                <button
+                  onClick={() => handleRemoveLocation(index)}
+                  className="remove-button"
+                >
+                  <MdClose size={20} />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="add-location-form">
+            <h3>Add New Location</h3>
+            <div className="form-grid">
+              <div>
+                <label>Place Name</label>
+                <input
+                  type="text"
+                  name="place"
+                  value={newLocation.place}
+                  onChange={handleInputChange}
+                  placeholder="e.g. Shopping Mall"
+                />
+              </div>
+              <div>
+                <label>Distance</label>
+                <input
+                  type="text"
+                  name="distance"
+                  value={newLocation.distance}
+                  onChange={handleInputChange}
+                  placeholder="e.g. 1.5 km"
+                />
+              </div>
+              <div>
+                <label>Time</label>
+                <input
+                  type="text"
+                  name="time"
+                  value={newLocation.time}
+                  onChange={handleInputChange}
+                  placeholder="e.g. 10 mins"
+                />
+              </div>
+            </div>
+            <button onClick={handleAddLocation} className="add-button">
+              Add Location
+            </button>
+          </div>
+
+          <div className="action-buttons">
+            <button onClick={handleCancel} className="cancel-button">
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="save-button"
+              disabled={isSaving}
+            >
+              {isSaving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -253,30 +433,93 @@ const FloorPlans = () => {
   );
 };
 
-const ProjectInfo = () => {
+const UnitTypeAnimator = ({ unitTypes = [] }) => {
+  const [currentText, setCurrentText] = useState("");
+  const [unitIndex, setUnitIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPausing, setIsPausing] = useState(false);
+
+  useEffect(() => {
+    if (unitTypes.length === 0) return;
+
+    const typingSpeed = isDeleting ? 50 : 150;
+    const pauseDuration = 1000; // pause at full word
+
+    const handleTyping = () => {
+      const currentUnit = unitTypes[unitIndex];
+
+      if (!isDeleting && !isPausing) {
+        // Typing forward
+        if (charIndex < currentUnit.length) {
+          setCurrentText(currentUnit.substring(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+        } else {
+          // Finished typing - pause before deleting
+          setIsPausing(true);
+          setTimeout(() => {
+            setIsPausing(false);
+            setIsDeleting(true);
+          }, pauseDuration);
+        }
+      } else if (isDeleting) {
+        // Deleting
+        if (charIndex > 0) {
+          setCurrentText(currentUnit.substring(0, charIndex - 1));
+          setCharIndex(charIndex - 1);
+        } else {
+          // Finished deleting - move to next word
+          setIsDeleting(false);
+          setUnitIndex((prev) => (prev + 1) % unitTypes.length);
+        }
+      }
+    };
+
+    const timeout = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timeout);
+  }, [unitTypes, unitIndex, charIndex, isDeleting, isPausing]);
+
+  return (
+    <div className="info-card">
+      <span className="label">Unit Types</span>
+      <div className="value-icon">
+        <span className="value">{currentText}</span>
+        {/* <span className="cursor">|</span> */}
+        <FaBed className="icon" />
+      </div>
+    </div>
+  );
+};
+
+const ProjectInfo = ({ societyData }) => {
   return (
     <div className="project-info-container">
-      <h1 className="title">About Assetz Trees and Tandem</h1>
+      <h1 className="title">About {societyData.society}</h1>
+
       <p className="subtitle">
-        You can take your pick from our thoughtfully curated{" "}
-        <strong>3 BHK</strong> apartments with high carpet area efficiency Lorem
-        ipsum dolor sit amet consectetur adipisicing elit. Porro rerum ea
-        cupiditate. Deleniti modi placeat fugit iste neque impedit cumque est
-        dolorum! Dicta, sed facere. Quas praesentium eligendi doloremque
-        adipisci. of near 72 percent Each a canvas of…
+        {societyData.description}
         <span className="read-more"> Read More</span>
       </p>
 
       <div className="rera-info">
-        <span className="badge">As Updated on RERA</span>
-        <span className="rera-date">: 29 Apr’25</span>
+        <span className="badge">
+          {societyData.readyToMove ? "Ready To Move" : "Possession By"}{" "}
+        </span>
+        <span className="rera-date">
+          {societyData.readyToMove
+            ? null
+            : `${new Date(societyData.launchDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+              })}`}
+        </span>
       </div>
 
       <div className="info-grid">
         <div className="info-card">
           <span className="label">Project Size</span>
           <div className="value-icon">
-            <span className="value">7 Acre</span>
+            <span className="value">{societyData.projectSize} Acre</span>
             <BsFileEarmarkText className="icon" />
           </div>
         </div>
@@ -284,34 +527,39 @@ const ProjectInfo = () => {
         <div className="info-card">
           <span className="label">Launch Date</span>
           <div className="value-icon">
-            <span className="value">Mar 2025</span>
+            <span className="value">
+              {" "}
+              {new Date(societyData.launchDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+              })}
+            </span>
             <FaRegCalendarAlt className="icon" />
           </div>
         </div>
-
-        <div className="info-card">
-          <span className="label">Total Units</span>
-          <div className="value-icon">
-            <span className="value">364</span>
-            <MdMeetingRoom className="icon" />
+        {societyData.totalUnits && (
+          <div className="info-card">
+            <span className="label">Total Units</span>
+            <div className="value-icon">
+              <span className="value">{societyData.totalUnits}</span>
+              <MdMeetingRoom className="icon" />
+            </div>
           </div>
-        </div>
-
-        <div className="info-card">
-          <span className="label">Total Towers</span>
-          <div className="value-icon">
-            <span className="value">2</span>
-            <PiBuildingsDuotone className="icon" />
+        )}
+        {societyData.totalTowers && (
+          <div className="info-card">
+            <span className="label">Total Towers</span>
+            <div className="value-icon">
+              <span className="value">{societyData.totalTowers}</span>
+              <PiBuildingsDuotone className="icon" />
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="info-card">
-          <span className="label">BHK</span>
-          <div className="value-icon">
-            <span className="value">3 BHK</span>
-            <FaBed className="icon" />
-          </div>
-        </div>
+        {Array.isArray(societyData.unitTypes) &&
+          societyData.unitTypes.length > 0 && (
+            <UnitTypeAnimator unitTypes={societyData.unitTypes} />
+          )}
       </div>
     </div>
   );
@@ -357,7 +605,7 @@ const allAmenities = [
   { name: "CCTV Surveillance", icon: "FaUserShield" },
   { name: "Intercom Facility", icon: "FaUserShield" },
   { name: "Maintenance Staff", icon: "FaUserShield" },
-  { name: "Housekeeping", icon: "FaUserShield" }
+  { name: "Housekeeping", icon: "FaUserShield" },
 ];
 
 const iconComponents = {
@@ -424,45 +672,45 @@ const AmenitiesSection = ({ societyId }) => {
 
   // Save amenities to Firebase
   const saveAmenitiesToFirebase = async (amenities) => {
-  try {
-    if (!societyId) throw new Error("Society ID is missing");
-    if (!Array.isArray(amenities))
-      throw new Error("Amenities must be an array");
+    try {
+      if (!societyId) throw new Error("Society ID is missing");
+      if (!Array.isArray(amenities))
+        throw new Error("Amenities must be an array");
 
-    const amenitiesData = amenities.map((amenity) => ({
-      name: amenity.name,
-      icon: amenity.icon,
-      highlight: amenity.highlight || false,
-    }));
+      const amenitiesData = amenities.map((amenity) => ({
+        name: amenity.name,
+        icon: amenity.icon,
+        highlight: amenity.highlight || false,
+      }));
 
-    // Use the correct collection name
-    const docRef = projectFirestore.collection("m_societies").doc(societyId);
-    const doc = await docRef.get();
+      // Use the correct collection name
+      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+      const doc = await docRef.get();
 
-    if (!doc.exists) {
-      await docRef.set({ amenities: amenitiesData });
-    } else {
-      await docRef.update({ amenities: amenitiesData });
+      if (!doc.exists) {
+        await docRef.set({ amenities: amenitiesData });
+      } else {
+        await docRef.update({ amenities: amenitiesData });
+      }
+
+      console.log("Amenities saved successfully");
+      return true;
+    } catch (err) {
+      console.error("Firebase save error:", {
+        error: err,
+        message: err.message,
+        stack: err.stack,
+      });
+
+      let errorMessage = "Failed to save amenities. Please try again.";
+      if (err.message.includes("permission-denied")) {
+        errorMessage = "You don't have permission to update amenities.";
+      }
+
+      alert(errorMessage);
+      return false;
     }
-
-    console.log("Amenities saved successfully");
-    return true;
-  } catch (err) {
-    console.error("Firebase save error:", {
-      error: err,
-      message: err.message,
-      stack: err.stack,
-    });
-
-    let errorMessage = "Failed to save amenities. Please try again.";
-    if (err.message.includes("permission-denied")) {
-      errorMessage = "You don't have permission to update amenities.";
-    }
-
-    alert(errorMessage);
-    return false;
-  }
-};
+  };
 
   const handleAddAmenities = () => {
     setTempSelected(selectedAmenities.map((a) => a.name));
@@ -678,13 +926,13 @@ const normalize = (str = "") =>
     .trim();
 
 const capitalizeWords = (str = "") =>
-  str.replace(/\b\w/g, c => c.toUpperCase());
+  str.replace(/\b\w/g, (c) => c.toUpperCase());
 
 const getCleanName = (raw = "", ...removeParts) => {
   let result = normalize(raw);
 
   // Remove all prefixes (state, city, country) from raw
-  removeParts.forEach(part => {
+  removeParts.forEach((part) => {
     const normalizedPart = normalize(part);
     if (result.startsWith(normalizedPart)) {
       result = result.slice(normalizedPart.length).trim();
@@ -703,9 +951,7 @@ const formatAddress = ({ title, country, state, city, locality }) => {
     !normalize(rawLocality).includes(normalize(cityName)) &&
     cityName.length > 0;
 
-  const locationText = showCity
-    ? `${rawLocality}, ${cityName}`
-    : rawLocality;
+  const locationText = showCity ? `${rawLocality}, ${cityName}` : rawLocality;
 
   return `By ${capitalizeWords(title)} | ${locationText}`;
 };
@@ -716,7 +962,7 @@ const data = {
   country: "_india",
   state: "_andaman_&_nicobar_islands",
   city: "_andaman_&_nicobar_islands_sri_vijaya_puram",
-  locality: "_andaman_&_nicobar_islands_sri_vijaya_puram_cellular_jail_road"
+  locality: "_andaman_&_nicobar_islands_sri_vijaya_puram_cellular_jail_road",
 };
 
 console.log(formatAddress(data));
@@ -735,7 +981,12 @@ const SocietyOverview = ({ societyId }) => {
     priceTo: "",
     possessionDate: "",
     readyToMove: false,
-    description: ""
+    description: "",
+    launchDate: "",
+    totalUnits: "",
+    totalTowers: "",
+    projectSize: "",
+    unitTypes: [], // Array of unit types like ["2BHK", "3BHK"]
   });
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -750,12 +1001,14 @@ const SocietyOverview = ({ societyId }) => {
         return;
       }
       try {
-        const docRef = projectFirestore.collection("m_societies").doc(societyId);
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId);
         const doc = await docRef.get();
 
         if (doc.exists) {
           const data = doc.data();
-          setSocietyData(prev => ({ ...prev, ...data }));
+          setSocietyData((prev) => ({ ...prev, ...data }));
         }
       } catch (err) {
         setError("Failed to load data");
@@ -776,13 +1029,13 @@ const SocietyOverview = ({ societyId }) => {
       // The `updatedData` object already has the correct structure.
       const updateObject = {
         ...updatedData, // Spread the form data
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
 
       await docRef.set(updateObject, { merge: true });
 
       // FIX 1.2: Update state correctly with the data from the form
-      setSocietyData(prev => ({ ...prev, ...updatedData }));
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
       setShowEditModal(false);
     } catch (err) {
       console.error("Save error:", err);
@@ -792,14 +1045,14 @@ const SocietyOverview = ({ societyId }) => {
 
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
-  
+
   // FIX 2: Use the formatAddress function for a clean and consistent location display
   const displayAddress = formatAddress({
     title: societyData.builder,
     country: societyData.country,
     state: societyData.state,
     city: societyData.city,
-    locality: societyData.locality
+    locality: societyData.locality,
   });
 
   return (
@@ -814,62 +1067,56 @@ const SocietyOverview = ({ societyId }) => {
           {/* Use the formatted address here */}
           {displayAddress}
         </div>
-        <p className="description">{societyData.description}</p>
       </div>
-      
+
       {/* The rest of the component remains the same */}
 
       <div className="possession-status">
         <div className={`checkbox ${societyData.readyToMove ? "checked" : ""}`}>
           {societyData.readyToMove && <FaCheck size={12} />}
         </div>
-         <span className={styles.circleIcon}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="11"
-                    stroke="#00aa6c"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  <path
-                    d="M8 12l2.5 2.5L16 9"
-                    stroke="#00aa6c"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
-              </span>
-             
+        <span className={styles.circleIcon}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="11"
+              stroke="#00aa6c"
+              strokeWidth="2"
+              fill="none"
+            />
+            <path
+              d="M8 12l2.5 2.5L16 9"
+              stroke="#00aa6c"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+        </span>
 
         <span>
           {societyData.readyToMove
             ? "Ready To Move"
-            : `Possession By ${societyData.possessionDate}`}
+            : `Possession By ${new Date(
+                societyData.launchDate
+              ).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+              })}`}
         </span>
         <span className={styles.reraIcon}>R</span>
-
       </div>
 
       <div className="price-section">
         <div className="price-range">
-          <span className="from">
-            ₹ {societyData.priceFrom} Cr
-          </span>
+          <span className="from">₹ {societyData.priceFrom} Cr</span>
           {" - "}
-          <span className="to">
-            ₹ {societyData.priceTo} Cr
-          </span>
+          <span className="to">₹ {societyData.priceTo} Cr</span>
         </div>
         <div className="bhk">3 BHK Flats</div>
       </div>
 
       <button className={styles.contactBtn}>Contact Now</button>
-
-      
-
-      
 
       {showEditModal && (
         <EditModal
@@ -883,15 +1130,31 @@ const SocietyOverview = ({ societyId }) => {
 };
 
 const EditModal = ({ data, onClose, onSave }) => {
-  // FIX: Clean the incoming data before setting it as the initial state
-
   const [formData, setFormData] = useState(data);
+  const [currentUnitType, setCurrentUnitType] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleUnitTypeAdd = () => {
+    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
+      setFormData((prev) => ({
+        ...prev,
+        unitTypes: [...prev.unitTypes, currentUnitType],
+      }));
+      setCurrentUnitType("");
+    }
+  };
+
+  const handleUnitTypeRemove = (typeToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
     }));
   };
 
@@ -905,74 +1168,196 @@ const EditModal = ({ data, onClose, onSave }) => {
       <div className="modal-content">
         <h2>Edit Society Details</h2>
         <form onSubmit={handleSubmit}>
-          {/* Form fields will now show cleaned data */}
           <div className="form-grid">
             <div className="form-group">
               <label>Society Type</label>
-              <select name="category" value={formData.category} onChange={handleChange}>
+              <select
+                name="societyType"
+                value={formData.societyType}
+                onChange={handleChange}
+              >
                 <option value="">Select Type</option>
-                <option value="Villa">Residential</option>
-                <option value="Plot">Commercial </option>
+                <option value="Villa">Villa</option>
+                <option value="Plot">Plot</option>
                 <option value="Apartment">Apartment</option>
                 <option value="Gated Community">Gated Community</option>
               </select>
             </div>
+
             <div className="form-group">
               <label>Society Name</label>
-              <input type="text" name="society" value={formData.society} onChange={handleChange} placeholder="Enter society name" required />
+              <input
+                type="text"
+                name="society"
+                value={formData.society}
+                onChange={handleChange}
+                placeholder="Enter society name"
+                required
+              />
             </div>
+
             <div className="form-group">
               <label>Builder Name</label>
-              <input type="text" name="builder" value={formData.builder} onChange={handleChange} placeholder="Enter builder name" />
+              <input
+                type="text"
+                name="builder"
+                value={formData.builder}
+                onChange={handleChange}
+                placeholder="Enter builder name"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Project Size in Acre</label>
+              <input
+                type="number"
+                name="projectSize"
+                value={formData.projectSize}
+                onChange={handleChange}
+                placeholder="Enter project size in Acres"
+                min="0"
+              />
             </div>
             <div className="form-group">
-              <label>Description</label>
-              <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Enter society description" rows="3" />
+              <label>Total Units</label>
+              <input
+                type="number"
+                name="totalUnits"
+                value={formData.totalUnits}
+                onChange={handleChange}
+                placeholder="Enter total units"
+                min="0"
+              />
             </div>
-            {/* <div className="form-group">
-              <label>Country</label>
-              <input type="text" name="country" value={formData.country} onChange={handleChange} placeholder="Enter country" />
-            </div>
-             <div className="form-group">
-              <label>State</label>
-              <input type="text" name="state" value={formData.state} onChange={handleChange} placeholder="Enter state" />
-            </div>
+
             <div className="form-group">
-              <label>City</label>
-              <input type="text" name="city" value={formData.city} onChange={handleChange} placeholder="Enter city" />
+              <label>Total Towers</label>
+              <input
+                type="number"
+                name="totalTowers"
+                value={formData.totalTowers}
+                onChange={handleChange}
+                placeholder="Enter number of towers"
+                min="0"
+              />
             </div>
+
             <div className="form-group">
-              <label>Locality</label>
-              <input type="text" name="locality" value={formData.locality} onChange={handleChange} placeholder="Enter locality" />
-            </div> */}
+              <label>Unit Types</label>
+              <div className="unit-types-input">
+                <input
+                  type="text"
+                  value={currentUnitType}
+                  onChange={(e) => setCurrentUnitType(e.target.value)}
+                  placeholder="e.g. 2BHK"
+                />
+                <button
+                  type="button"
+                  className="add-unit-btn"
+                  onClick={handleUnitTypeAdd}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="unit-tags">
+                {formData.unitTypes.map((type) => (
+                  <span key={type} className="unit-tag">
+                    {type}
+                    <button
+                      type="button"
+                      onClick={() => handleUnitTypeRemove(type)}
+                      className="remove-tag"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
             <div className="form-group">
               <label>Address</label>
-              <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter full address" />
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter full address"
+              />
             </div>
+
             <div className="form-group">
               <label>Price From (₹ Cr)</label>
-              <input type="text" name="priceFrom" value={formData.priceFrom} onChange={handleChange} placeholder="e.g., 2.02" required />
+              <input
+                type="number"
+                name="priceFrom"
+                value={formData.priceFrom}
+                onChange={handleChange}
+                placeholder="e.g., 2.02"
+                step="0.01"
+                min="0"
+                required
+              />
             </div>
+
             <div className="form-group">
               <label>Price To (₹ Cr)</label>
-              <input type="text" name="priceTo" value={formData.priceTo} onChange={handleChange} placeholder="e.g., 2.52" required />
+              <input
+                type="number"
+                name="priceTo"
+                value={formData.priceTo}
+                onChange={handleChange}
+                placeholder="e.g., 2.52"
+                step="0.01"
+                min="0"
+                required
+              />
             </div>
+
             <div className="form-group">
               <label>
-                <input type="checkbox" name="readyToMove" checked={formData.readyToMove} onChange={handleChange} />
+                <input
+                  type="checkbox"
+                  name="readyToMove"
+                  checked={formData.readyToMove}
+                  onChange={handleChange}
+                />
                 Ready to Move
               </label>
             </div>
+
             {!formData.readyToMove && (
               <div className="form-group">
                 <label>Possession Date</label>
-                <input type="text" name="possessionDate" value={formData.possessionDate} onChange={handleChange} placeholder="e.g., Aug 2029" />
+                <input
+                  type="date"
+                  name="possessionDate"
+                  value={formData.possessionDate}
+                  onChange={handleChange}
+                />
               </div>
             )}
+
+            {/* Description field moved to full width at the end */}
+            <div className="form-group full-width">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter society description"
+                rows="5"
+              />
+            </div>
           </div>
+
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>Cancel</button>
-            <button type="submit" className="save-btn">Save Changes</button>
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
           </div>
         </form>
       </div>
@@ -981,7 +1366,15 @@ const EditModal = ({ data, onClose, onSave }) => {
 };
 
 const PGSocietyPage = () => {
-  const { id } = useParams();
+  // The 'society' param from the URL is the slug, e.g., "best-12345"
+  const { country, state, city, locality, societyName, id } = useParams();
+  console.log("Country:", country);
+  console.log("State:", state);
+  console.log("City:", city);
+  console.log("Locality:", locality);
+  console.log("Society:", societyName);
+  console.log("Society ID:", id);
+
   const [society, setSociety] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1064,7 +1457,9 @@ const PGSocietyPage = () => {
       {/* Overview Section */}
       <div id="Overview" className={styles.contentWrapper}>
         <div className={styles.contact}>
-           <SocietyOverview societyId={id} />
+          <div>
+            <SocietyOverview societyId={id} />
+          </div>
           <div>
             <ContactForm />
           </div>
@@ -1107,12 +1502,12 @@ const PGSocietyPage = () => {
 
         {/* About Project */}
         <div id="About-Project">
-          <ProjectInfo />
+          <ProjectInfo societyData={society} />
         </div>
 
         {/* Location Advantages */}
         <div id="Nearby-Locations">
-          <LocationAdvantages />
+          <LocationAdvantages societyId={id} />
         </div>
 
         {/* Floor Plans */}
@@ -1123,6 +1518,11 @@ const PGSocietyPage = () => {
         {/* Photo Gallery */}
         <div id="Photo-Gallery">
           <GalleryPreview />
+        </div>
+
+        {/* ComponentBuilder */}
+        <div id="ComponentBuilder">
+          <ComponentBuilder />
         </div>
 
         {/* Reviews and Locality */}

@@ -7,6 +7,7 @@ import { useCommon } from "../../hooks/useCommon";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
 // component
 import NineDots from "../../components/NineDots";
 import MasterSocietyTable from "./MasterSocietyTable";
@@ -178,7 +179,7 @@ export default function MasterSocietyList() {
   //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    console.log('city option:', option)
+    console.log("city option:", option);
 
     if (option) {
       const ref = await projectFirestore
@@ -220,40 +221,39 @@ export default function MasterSocietyList() {
   //Locality select onchange
   const handleLocalityChange = async (option) => {
     setLocality(option);
-    console.log('locality:', option)
+    console.log("locality:", option);
 
     if (option) {
       try {
-
         const querySnapshot = await projectFirestore
           .collection("m_societies")
           .where("locality", "==", option.value)
           .orderBy("society", "asc");
 
-        const unsubscribe = querySnapshot.onSnapshot(snapshot => {
-          let results = []
-          snapshot.docs.forEach(doc => {
-            results.push({ ...doc.data(), id: doc.id })
-          });
+        const unsubscribe = querySnapshot.onSnapshot(
+          (snapshot) => {
+            let results = [];
+            snapshot.docs.forEach((doc) => {
+              results.push({ ...doc.data(), id: doc.id });
+            });
 
-          console.log("list of Societies: ", results)
+            console.log("list of Societies: ", results);
 
-          // // update state
-          setfilteredSocietyData(results)
-          // setError(null)
-        }, error => {
-          console.log(error)
-          // setError('could not fetch the data')
-        })
+            // // update state
+            setfilteredSocietyData(results);
+            // setError(null)
+          },
+          (error) => {
+            console.log(error);
+            // setError('could not fetch the data')
+          }
+        );
 
         return () => unsubscribe(); // Cleanup listener when component unmounts
-
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-
 
     // if (option) {
     //   const ref = await projectFirestore
@@ -280,7 +280,6 @@ export default function MasterSocietyList() {
     //   );
     // }
   };
-
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -390,7 +389,6 @@ export default function MasterSocietyList() {
     setFormErrorType(null);
 
     if (society) {
-
       let societyname = camelCase(society.trim());
 
       let locality_docid = locality.value;
@@ -413,7 +411,7 @@ export default function MasterSocietyList() {
             city: city.value,
             locality: locality.value,
             society: societyname,
-            category: selectedCategory
+            category: selectedCategory,
           };
           // Update existing document
           await updateDocument(currentDocid, dataSet);
@@ -427,8 +425,7 @@ export default function MasterSocietyList() {
             setFormError(null);
             setFormErrorType(null);
           }, 5000);
-        }
-        else {
+        } else {
           // Handle duplicate case
           setFormErrorType("error_msg");
           setFormError("Already added");
@@ -441,13 +438,13 @@ export default function MasterSocietyList() {
           }, 5000);
         }
       } else {
-        console.log("New Society to be added")
+        console.log("New Society to be added");
         // Check for duplicates before adding
         // const ref = projectFirestore
         //   .collection("m_societies")
         //   .where("society", "==", societyname);
-        console.log("locality_docid: ", locality_docid)
-        console.log("societyname: ", societyname)
+        console.log("locality_docid: ", locality_docid);
+        console.log("societyname: ", societyname);
 
         const ref = projectFirestore
           .collection("m_societies")
@@ -460,8 +457,8 @@ export default function MasterSocietyList() {
           id: doc.id,
         }));
 
-        console.log("results: ", results)
-        console.log("selectedCategory: ", selectedCategory)
+        console.log("results: ", results);
+        console.log("selectedCategory: ", selectedCategory);
 
         if (results.length === 0) {
           // Add new document
@@ -475,7 +472,7 @@ export default function MasterSocietyList() {
             category: selectedCategory,
           };
 
-          console.log("society dataSet: ", dataSet)
+          console.log("society dataSet: ", dataSet);
           await addDocument(dataSet);
 
           setFormErrorType("success_msg");
@@ -501,8 +498,7 @@ export default function MasterSocietyList() {
           }, 5000);
         }
       }
-    }
-    else {
+    } else {
       // Handle blank case
       setFormErrorType("error_msg");
       setFormError("Society should not be blank ");
@@ -513,7 +509,6 @@ export default function MasterSocietyList() {
         setFormError(null);
         setFormErrorType(null);
       }, 5000);
-
     }
   };
 
@@ -557,7 +552,15 @@ export default function MasterSocietyList() {
     docsociety,
     doccategory
   ) => {
-    console.log('In handleEditCard: ', docid, doccountry, docstate, doclocality, docsociety, doccategory)
+    console.log(
+      "In handleEditCard: ",
+      docid,
+      doccountry,
+      docstate,
+      doclocality,
+      docsociety,
+      doccategory
+    );
     // console.log("country id: ", doccountry)
     // const countryname = (
     //   masterCountry && masterCountry.find((e) => e.id === doccountry)
@@ -578,7 +581,7 @@ export default function MasterSocietyList() {
     // setState({ label: statename, value: docstate });
     // setCity({ label: cityname, value: doccity });
     // setLocality({ label: localityname, value: doclocality });
-    console.log("doccategory: ", doccategory)
+    console.log("doccategory: ", doccategory);
     setSociety(docsociety);
     setSelectedCategory(doccategory);
     sethandleAddSectionFlag(!handleAddSectionFlag);
@@ -654,15 +657,26 @@ export default function MasterSocietyList() {
     setviewMode(newViewMode);
   };
   // View mode end
-
-
+  const slugify = (text) => {
+    if (!text) return "";
+    return text
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w\-]+/g, "")
+      .replace(/\-\-+/g, "-");
+  };
 
   return (
     <>
       <div className="top_header_pg pg_bg pg_adminproperty">
         <div
-          className={`page_spacing ${filteredSocietyData && filteredSocietyData.length === 0 && "pg_min_height"
-            }`}
+          className={`page_spacing ${
+            filteredSocietyData &&
+            filteredSocietyData.length === 0 &&
+            "pg_min_height"
+          }`}
         >
           <NineDots
             nineDotsMenu={
@@ -686,13 +700,11 @@ export default function MasterSocietyList() {
               </div>
             </div>
           )} */}
-          {(
+          {
             <>
               <div className="pg_header d-flex justify-content-between">
                 <div className="left">
-                  <h2 className="m22">
-                    Search for Societies
-                  </h2>
+                  <h2 className="m22">Search for Societies</h2>
                 </div>
                 <div className="right">
                   <img
@@ -706,9 +718,13 @@ export default function MasterSocietyList() {
               <div className="filters">
                 <div
                   className="left"
-                  style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "15px",
+                  }}
                 >
-                  
                   <div>
                     <Select
                       className=""
@@ -755,30 +771,32 @@ export default function MasterSocietyList() {
                       }}
                     />
                   </div>
-                  {<div>
-                    <Select
-                      className=""
-                      // onChange={(option) => handleFilterStateChange(option)}
-                      // onChange={(option) => setState(option)}
-                      onChange={(e) => {
-                        setLocality(e);
-                        // filteredDataNew(e);
-                        handleLocalityChange(e)
-                      }}
-                      // changeFilter={changeFilter}
-                      options={localityOptions.current}
-                      value={locality}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                          width: "300px",
-                        }),
-                      }}
-                    />
-                  </div>}
+                  {
+                    <div>
+                      <Select
+                        className=""
+                        // onChange={(option) => handleFilterStateChange(option)}
+                        // onChange={(option) => setState(option)}
+                        onChange={(e) => {
+                          setLocality(e);
+                          // filteredDataNew(e);
+                          handleLocalityChange(e);
+                        }}
+                        // changeFilter={changeFilter}
+                        options={localityOptions.current}
+                        value={locality}
+                        styles={{
+                          control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            outline: "none",
+                            background: "#eee",
+                            borderBottom: " 1px solid var(--theme-blue)",
+                            width: "300px",
+                          }),
+                        }}
+                      />
+                    </div>
+                  }
                   <div className="rt_global_search search_field">
                     <input
                       placeholder="Search"
@@ -793,8 +811,9 @@ export default function MasterSocietyList() {
                 <div className="right">
                   <div className="button_filter diff_views">
                     <div
-                      className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                        }`}
+                      className={`bf_single ${
+                        viewMode === "card_view" ? "active" : ""
+                      }`}
                       onClick={() => handleModeChange("card_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -802,8 +821,9 @@ export default function MasterSocietyList() {
                       </span>
                     </div>
                     <div
-                      className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                        }`}
+                      className={`bf_single ${
+                        viewMode === "table_view" ? "active" : ""
+                      }`}
                       onClick={() => handleModeChange("table_view")}
                     >
                       <span className="material-symbols-outlined">
@@ -814,8 +834,9 @@ export default function MasterSocietyList() {
                   {!handleAddSectionFlag && (
                     <div
                       onClick={handleAddSection}
-                      className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                        }`}
+                      className={`theme_btn no_icon header_btn ${
+                        handleAddSectionFlag ? "btn_border" : "btn_fill"
+                      }`}
                     >
                       Add New
                     </div>
@@ -823,7 +844,7 @@ export default function MasterSocietyList() {
                 </div>
               </div>
             </>
-          )}
+          }
           <div
             style={{
               overflow: handleAddSectionFlag ? "visible" : "hidden",
@@ -949,11 +970,14 @@ export default function MasterSocietyList() {
                   <div className="form_field st-2 label_top">
                     <label htmlFor="">Category</label>
                     <div className="field_box theme_radio_new">
-                      <div className="theme_radio_container" style={{
-                        padding: "0px",
-                        border: "none",
-                        margin: "10px 0px"
-                      }}>
+                      <div
+                        className="theme_radio_container"
+                        style={{
+                          padding: "0px",
+                          border: "none",
+                          margin: "10px 0px",
+                        }}
+                      >
                         {category.map((c) => (
                           <div className="radio_single" key={c.id}>
                             <input
@@ -964,15 +988,15 @@ export default function MasterSocietyList() {
                               onChange={handleCategoryChange}
                               checked={selectedCategory === c.value}
                             />
-                            <label className="label" htmlFor={c.id}>{c.label}</label>
+                            <label className="label" htmlFor={c.id}>
+                              {c.label}
+                            </label>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
                 </div>
-
-
               </div>
               <div className="vg22"></div>
 
@@ -1014,7 +1038,8 @@ export default function MasterSocietyList() {
           <div className="vg22"></div>
           {filteredSocietyData && filteredSocietyData.length > 0 ? (
             <div className="m18">
-              Filtered Society: <span className="text_orange">{filteredSocietyData.length}</span>
+              Filtered Society:{" "}
+              <span className="text_orange">{filteredSocietyData.length}</span>
             </div>
           ) : (
             "No data"
@@ -1024,16 +1049,36 @@ export default function MasterSocietyList() {
               <div className="master_data_card">
                 {viewMode === "card_view" && (
                   <>
-                    {filteredSocietyData &&
-                      filteredSocietyData.map((data) => (
-                        <div className="property-status-padding-div">
+                    {filteredSocietyData.map((data) => {
+                      const localityName = slugify(locality?.label);
+                      const cityName = masterCity?.find(
+                        (e) => e.id === data.city
+                      )?.city;
+                      const stateName = masterState?.find(
+                        (e) => e.id === data.state
+                      )?.state;
+                      const countryName = masterCountry?.find(
+                        (e) => e.id === data.country
+                      )?.country;
+
+                      const url = `/${slugify(countryName || "")}/${slugify(
+                        stateName || ""
+                      )}/${slugify(cityName || "")}/${slugify(
+                        localityName || ""
+                      )}/${slugify(data.society || "")}/${data.id}`;
+                      console.log(data);
+                      return (
+                        <div
+                          className="property-status-padding-div"
+                          key={data.id}
+                        >
                           <div
                             className="profile-card-div"
                             style={{ position: "relative" }}
                           >
                             <div
                               className="address-div"
-                              style={{ paddingBottom: "5px" }}
+                              style={{ paddingBottom: "0px", border: "none" }}
                             >
                               <div
                                 className="icon"
@@ -1056,7 +1101,9 @@ export default function MasterSocietyList() {
                                       data.city,
                                       data.locality,
                                       data.society,
-                                      data.category ? data.category : "Residential"
+                                      data.category
+                                        ? data.category
+                                        : "Residential"
                                     )
                                   }
                                   style={{
@@ -1076,7 +1123,16 @@ export default function MasterSocietyList() {
                                       transform: "translateY(5px)",
                                     }}
                                   >
-                                    {data.society}{" "}<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+                                    {data.society}{" "}
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      height="16px"
+                                      viewBox="0 -960 960 960"
+                                      width="16px"
+                                      fill="#00a8a8"
+                                    >
+                                      <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+                                    </svg>
                                   </h5>
                                   <small
                                     style={{
@@ -1084,46 +1140,11 @@ export default function MasterSocietyList() {
                                       transform: "translateY(5px)",
                                     }}
                                   >
-                                    {/* {dblocalitiesdocuments[2].id} */}
-                                    {
-                                      (
-                                        filteredLocalityData &&
-                                        filteredLocalityData.find(
-                                          (e) => e.id === data.locality
-                                        )
-                                      )?.locality
-                                    }
-                                    , {/* {data.city}, */}
-                                    {
-                                      (
-                                        masterCity &&
-                                        masterCity.find(
-                                          (e) => e.id === data.city
-                                        )
-                                      )?.city
-                                    }
-                                    ,{" "}
-                                    {
-                                      (
-                                        masterState &&
-                                        masterState.find(
-                                          (e) => e.id === data.state
-                                        )
-                                      )?.state
-                                    }
-                                    ,{" "}
-                                    {
-                                      (
-                                        masterCountry &&
-                                        masterCountry.find(
-                                          (e) => e.id === data.country
-                                        )
-                                      ).country
-                                    }
+                                    {localityName}, {cityName}, {stateName},{" "}
+                                    {countryName}
                                   </small>
                                 </div>
                                 <div
-                                  className=""
                                   onClick={() =>
                                     handleChangeStatus(data.id, data.status)
                                   }
@@ -1152,22 +1173,48 @@ export default function MasterSocietyList() {
                                   >
                                     {data.status}
                                   </small>
-                                  {/* <span className="material-symbols-outlined">
-                                          chevron_right
-                                      </span> */}
                                 </div>
                               </div>
                             </div>
+                            {/* ✅ View Detail Link */}
+                            <Link to={url} state={{ societyId: data.id }}>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  borderTop: "1px solid #d4d0d0ff",
+                                  padding: " 5px 0px",
+                                }}
+                              >
+                                <small
+                                  style={{
+                                    margin: "0",
+                                    cursor: "pointer",
+                                    color: "var(--theme-green)",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  View Detail <span style={
+                                    { fontSize: "14px", fontWeight: "800" }
+                                  }>→</span>  
+                                </small>
+                              </div>
+                            </Link>
                           </div>
                         </div>
-                      ))}
+                      );
+                    })}
                   </>
                 )}
               </div>
               {viewMode === "table_view" && (
                 <>
                   {filteredSocietyData && (
-                    <MasterSocietyTable filterData={filteredSocietyData} handleEditCard={handleEditCard} />
+                    <MasterSocietyTable
+                      filterData={filteredSocietyData}
+                      handleEditCard={handleEditCard}
+                    />
                   )}
                 </>
               )}
