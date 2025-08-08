@@ -15,7 +15,7 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
-
+    
     // Updated validation to include subject
     if (!issueType || !subject || !description) {
       setError('Please fill in all fields');
