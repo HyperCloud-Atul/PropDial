@@ -43,6 +43,14 @@ import {
   FaPlus,
   FaCheck,
   FaRupeeSign,
+  FaMapMarkerAlt,
+  FaUsers,
+  FaWheelchair,
+  FaCalendarAlt,
+  FaBatteryFull,
+  FaTint,
+  FaTools,
+  FaBuilding,
 } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
@@ -491,15 +499,90 @@ const UnitTypeAnimator = ({ unitTypes = [] }) => {
   );
 };
 
-const ProjectInfo = ({ societyData }) => {
+const ProjectInfo = ({ societyId }) => {
+  const [societyData, setSocietyData] = useState({
+    possessionDate: "",
+    readyToMove: false,
+    description: "",
+    launchDate: "",
+    totalUnits: "",
+    totalTowers: "",
+    projectSize: "",
+    unitTypes: [], // Array of unit types like ["2BHK", "3BHK"]
+  });
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch society data from Firestore (No changes needed here)
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          setSocietyData((prev) => ({ ...prev, ...data }));
+        }
+      } catch (err) {
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  // FIX 1: Correctly handle the save action
+  const handleSave = async (updatedData) => {
+    try {
+      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+
+      // FIX 1.1: Use the correct keys from formData ('name', 'type')
+      // The `updatedData` object already has the correct structure.
+      const updateObject = {
+        ...updatedData, // Spread the form data
+        lastUpdated: new Date(),
+      };
+
+      await docRef.set(updateObject, { merge: true });
+
+      // FIX 1.2: Update state correctly with the data from the form
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
+      setShowEditModal(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save changes.");
+    }
+  };
+
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+
+  // FIX 2: Use the formatAddress function for a clean and consistent location display
   return (
     <div className="project-info-container">
+      {/* // */}
+
       <h1 className="title">About {societyData.society}</h1>
 
       <p className="subtitle">
         {societyData.description}
         <span className="read-more"> Read More</span>
       </p>
+
+      <button className="edit-btn" onClick={() => setShowEditModal(true)}>
+        <FaEdit />
+      </button>
 
       <div className="rera-info">
         <span className="badge">
@@ -528,11 +611,15 @@ const ProjectInfo = ({ societyData }) => {
           <span className="label">Launch Date</span>
           <div className="value-icon">
             <span className="value">
-              {" "}
-              {new Date(societyData.launchDate).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-              })}
+              {societyData.readyToMove
+                ? "Ready To Move"
+                : `${new Date(societyData.launchDate).toLocaleDateString(
+                    "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                    }
+                  )}`}
             </span>
             <FaRegCalendarAlt className="icon" />
           </div>
@@ -561,6 +648,13 @@ const ProjectInfo = ({ societyData }) => {
             <UnitTypeAnimator unitTypes={societyData.unitTypes} />
           )}
       </div>
+      {showEditModal && (
+        <EditAbout
+          data={societyData}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };
@@ -917,63 +1011,17 @@ const ContactForm = () => {
   );
 };
 
-const normalize = (str = "") =>
-  str
-    .replace(/^_+/, "")
-    .replace(/_/g, " ")
-    .replace(/\s*&\s*/g, " & ")
-    .toLowerCase()
-    .trim();
+function formatStateName(slug) {
+  return slug
+    .replace(/-/g, " ") // Replace dashes with spaces
+    .split(" ") // Split into words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+    .join(" ");
+}
 
-const capitalizeWords = (str = "") =>
-  str.replace(/\b\w/g, (c) => c.toUpperCase());
-
-const getCleanName = (raw = "", ...removeParts) => {
-  let result = normalize(raw);
-
-  // Remove all prefixes (state, city, country) from raw
-  removeParts.forEach((part) => {
-    const normalizedPart = normalize(part);
-    if (result.startsWith(normalizedPart)) {
-      result = result.slice(normalizedPart.length).trim();
-    }
-  });
-
-  return capitalizeWords(result);
-};
-
-const formatAddress = ({ title, country, state, city, locality }) => {
-  const cityName = getCleanName(city, state, country);
-  const rawLocality = getCleanName(locality, city, state, country);
-
-  // Don't repeat city if already in the locality
-  const showCity =
-    !normalize(rawLocality).includes(normalize(cityName)) &&
-    cityName.length > 0;
-
-  const locationText = showCity ? `${rawLocality}, ${cityName}` : rawLocality;
-
-  return `By ${capitalizeWords(title)} | ${locationText}`;
-};
-
-// ✅ Example usage
-const data = {
-  title: "Green Valley",
-  country: "_india",
-  state: "_andaman_&_nicobar_islands",
-  city: "_andaman_&_nicobar_islands_sri_vijaya_puram",
-  locality: "_andaman_&_nicobar_islands_sri_vijaya_puram_cellular_jail_road",
-};
-
-console.log(formatAddress(data));
-
-const SocietyOverview = ({ societyId }) => {
+const SocietyOverview = ({ country, state, city, locality, societyId }) => {
   const [societyData, setSocietyData] = useState({
-    societyType: "",
-    country: "India",
-    state: "",
-    city: "",
-    locality: "",
+    societyType: "Residential",
     society: "New Society",
     builder: "",
     address: "",
@@ -981,14 +1029,9 @@ const SocietyOverview = ({ societyId }) => {
     priceTo: "",
     possessionDate: "",
     readyToMove: false,
-    description: "",
-    launchDate: "",
-    totalUnits: "",
-    totalTowers: "",
-    projectSize: "",
-    unitTypes: [], // Array of unit types like ["2BHK", "3BHK"]
+    launchDate: "", // Array of unit types like ["2BHK", "3BHK"]
   });
-
+  console.log(country, state, city, locality, societyId);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1047,13 +1090,9 @@ const SocietyOverview = ({ societyId }) => {
   if (error) return <div className="error-message">{error}</div>;
 
   // FIX 2: Use the formatAddress function for a clean and consistent location display
-  const displayAddress = formatAddress({
-    title: societyData.builder,
-    country: societyData.country,
-    state: societyData.state,
-    city: societyData.city,
-    locality: societyData.locality,
-  });
+  const formattedState = formatStateName(state);
+  const formattedCity = formatStateName(city);
+  const formattedLocality = formatStateName(locality);
 
   return (
     <div className="overview-section" id="Overview">
@@ -1064,8 +1103,11 @@ const SocietyOverview = ({ societyId }) => {
       <div className="society-header">
         <h1>{societyData.society}</h1>
         <div className="location">
-          {/* Use the formatted address here */}
-          {displayAddress}
+          By <span className="builder-name">{societyData.builder}</span>
+        </div>
+        <div className="location">
+          <FaMapMarkerAlt className="location-icon" /> {formattedLocality},{" "}
+          {formattedCity}, {formattedState}
         </div>
       </div>
 
@@ -1177,10 +1219,9 @@ const EditModal = ({ data, onClose, onSave }) => {
                 onChange={handleChange}
               >
                 <option value="">Select Type</option>
-                <option value="Villa">Villa</option>
-                <option value="Plot">Plot</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Gated Community">Gated Community</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Both">Both</option>
               </select>
             </div>
 
@@ -1205,74 +1246,6 @@ const EditModal = ({ data, onClose, onSave }) => {
                 onChange={handleChange}
                 placeholder="Enter builder name"
               />
-            </div>
-
-            <div className="form-group">
-              <label>Project Size in Acre</label>
-              <input
-                type="number"
-                name="projectSize"
-                value={formData.projectSize}
-                onChange={handleChange}
-                placeholder="Enter project size in Acres"
-                min="0"
-              />
-            </div>
-            <div className="form-group">
-              <label>Total Units</label>
-              <input
-                type="number"
-                name="totalUnits"
-                value={formData.totalUnits}
-                onChange={handleChange}
-                placeholder="Enter total units"
-                min="0"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Total Towers</label>
-              <input
-                type="number"
-                name="totalTowers"
-                value={formData.totalTowers}
-                onChange={handleChange}
-                placeholder="Enter number of towers"
-                min="0"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Unit Types</label>
-              <div className="unit-types-input">
-                <input
-                  type="text"
-                  value={currentUnitType}
-                  onChange={(e) => setCurrentUnitType(e.target.value)}
-                  placeholder="e.g. 2BHK"
-                />
-                <button
-                  type="button"
-                  className="add-unit-btn"
-                  onClick={handleUnitTypeAdd}
-                >
-                  Add
-                </button>
-              </div>
-              <div className="unit-tags">
-                {formData.unitTypes.map((type) => (
-                  <span key={type} className="unit-tag">
-                    {type}
-                    <button
-                      type="button"
-                      onClick={() => handleUnitTypeRemove(type)}
-                      className="remove-tag"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
             </div>
 
             <div className="form-group">
@@ -1337,6 +1310,153 @@ const EditModal = ({ data, onClose, onSave }) => {
                 />
               </div>
             )}
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const EditAbout = ({ data, onClose, onSave }) => {
+  const [formData, setFormData] = useState(data);
+  const [currentUnitType, setCurrentUnitType] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleUnitTypeAdd = () => {
+    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
+      setFormData((prev) => ({
+        ...prev,
+        unitTypes: [...prev.unitTypes, currentUnitType],
+      }));
+      setCurrentUnitType("");
+    }
+  };
+
+  const handleUnitTypeRemove = (typeToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Edit Society Details</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Project Size in Acre</label>
+              <input
+                type="number"
+                name="projectSize"
+                value={formData.projectSize}
+                onChange={handleChange}
+                placeholder="Enter project size in Acres"
+                min="0"
+              />
+            </div>
+            <div className="form-group">
+              <label>Total Units</label>
+              <input
+                type="number"
+                name="totalUnits"
+                value={formData.totalUnits}
+                onChange={handleChange}
+                placeholder="Enter total units"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Towers</label>
+              <input
+                type="number"
+                name="totalTowers"
+                value={formData.totalTowers}
+                onChange={handleChange}
+                placeholder="Enter number of towers"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Unit Types</label>
+              <div className="unit-types-input">
+                <input
+                  type="text"
+                  value={currentUnitType}
+                  onChange={(e) => setCurrentUnitType(e.target.value)}
+                  placeholder="e.g. 2 BHK, 3BHK, etc."
+                />
+                <button
+                  type="button"
+                  className="add-unit-btn"
+                  onClick={handleUnitTypeAdd}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="unit-tags">
+                {formData.unitTypes.map((type) => (
+                  <span key={type} className="unit-tag">
+                    {type}
+                    <button
+                      type="button"
+                      onClick={() => handleUnitTypeRemove(type)}
+                      className="remove-tag"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>
+                <input
+                  type="checkbox"
+                  name="readyToMove"
+                  checked={formData.readyToMove}
+                  onChange={handleChange}
+                />
+                Ready to Move
+              </label>
+            </div>
+
+            {!formData.readyToMove && (
+              <div className="form-group">
+                <label>Possession Date</label>
+                <input
+                  type="date"
+                  name="possessionDate"
+                  value={formData.possessionDate}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
 
             {/* Description field moved to full width at the end */}
             <div className="form-group full-width">
@@ -1360,6 +1480,276 @@ const EditModal = ({ data, onClose, onSave }) => {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+};
+
+const EditRates = ({ data, onClose, onSave }) => {
+  const [formData, setFormData] = useState(data);
+  const [currentUnitType, setCurrentUnitType] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleUnitTypeAdd = () => {
+    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
+      setFormData((prev) => ({
+        ...prev,
+        unitTypes: [...prev.unitTypes, currentUnitType],
+      }));
+      setCurrentUnitType("");
+    }
+  };
+
+  const handleUnitTypeRemove = (typeToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Edit Society Details</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Electricity Rate (Authority)</label>
+              <input
+                type="number"
+                name="electricityRateAuthority"
+                value={formData.electricityRateAuthority}
+                onChange={handleChange}
+                placeholder="Enter electricity rate (Authority)"
+                min="0"
+              />
+            </div>
+            <div className="form-group">
+              <label>Electricity Rate (Power Backup)</label>
+              <input
+                type="number"
+                name="electricityRatePowerBackup"
+                value={formData.electricityRatePowerBackup}
+                onChange={handleChange}
+                placeholder="Enter electricity rate (Power Backup)"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Water Charges</label>
+              <input
+                type="number"
+                name="waterCharges"
+                value={formData.waterCharges}
+                onChange={handleChange}
+                placeholder="Enter Water Charges"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Common Area Maintenance</label>
+              <input
+                type="number"
+                name="commonAreaMaintenance"
+                value={formData.commonAreaMaintenance}
+                onChange={handleChange}
+                placeholder="Enter Common Area Maintenance Charges"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Common Area Electricity</label>
+              <input
+                type="number"
+                name="commonAreaElectricity"
+                value={formData.commonAreaElectricity}
+                onChange={handleChange}
+                placeholder="Enter Common Area Electricity Charges"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Club Charges</label>
+              <input
+                type="number"
+                name="clubCharges"
+                value={formData.clubCharges}
+                onChange={handleChange}
+                placeholder="Enter Club Charges"
+                min="0"
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+const ThingsToKnow = ({ societyId }) => {
+  const [societyData, setSocietyData] = useState({
+    electricityRateAuthority: "",
+    electricityRatePowerBackup: "",
+    waterCharges: "",
+    commonAreaMaintenance: "",
+    commonAreaElectricity: "",
+    clubCharges: "",
+  });
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch society data from Firestore (No changes needed here)
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          setSocietyData((prev) => ({ ...prev, ...data }));
+        }
+      } catch (err) {
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  // FIX 1: Correctly handle the save action
+  const handleSave = async (updatedData) => {
+    try {
+      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+
+      // FIX 1.1: Use the correct keys from formData ('name', 'type')
+      // The `updatedData` object already has the correct structure.
+      const updateObject = {
+        ...updatedData, // Spread the form data
+        lastUpdated: new Date(),
+      };
+
+      await docRef.set(updateObject, { merge: true });
+
+      // FIX 1.2: Update state correctly with the data from the form
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
+      setShowEditModal(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save changes.");
+    }
+  };
+  const formatRupees = (value) => {
+  return new Intl.NumberFormat("en-IN", {
+    maximumFractionDigits: 2,
+  }).format(value);
+};
+
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+
+  return (
+    <div className="things-to-know">
+      <button className="edit-btn" onClick={() => setShowEditModal(true)}>
+        <FaEdit />
+      </button>
+      <h2>Society Rates</h2>
+      <div className="info-grid">
+        <div className="info-item">
+          <FaBolt className="info-icon" />
+          <h4>Electricity Rate (Authority)</h4>
+          <p>₹{formatRupees(societyData.electricityRateAuthority)}</p>
+        </div>
+        <div className="info-item">
+          <FaBatteryFull className="info-icon" />
+          <h4>Electricity Rate (Power Backup)</h4>
+          <p>₹{formatRupees(societyData.electricityRatePowerBackup)}</p>
+        </div>
+        <div className="info-item">
+          <FaTint className="info-icon" />
+          <h4>Water Charges</h4>
+          <p>₹{formatRupees(societyData.waterCharges)}</p>
+        </div>
+        <div className="info-item">
+          <FaTools className="info-icon" />
+          <h4>Common Area Maintenance</h4>
+          <p>₹{formatRupees(societyData.commonAreaMaintenance)}</p>
+        </div>
+        <div className="info-item">
+          <FaBuilding className="info-icon" />
+          <h4>Common Area Electricity</h4>
+          <p>₹{formatRupees(societyData.commonAreaElectricity)}</p>
+        </div>
+        <div className="info-item">
+          <FaRegBuilding className="info-icon" />
+          <h4>Club Charges</h4>
+          <p>₹{formatRupees(societyData.clubCharges)}</p>
+        </div>
+      </div>
+      {showEditModal && (
+        <EditRates
+          data={societyData}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleSave}
+        />
+      )}
+    </div>
+  );
+};
+
+const MeetingPoint = ({ state, city, locality }) => {
+  const formattedState = formatStateName(state);
+  const formattedCity = formatStateName(city);
+  const formattedLocality = formatStateName(locality);
+  return (
+    <div className="meeting-point-section">
+      <h2>Where we’ll meet</h2>
+      <div className="location">
+        <FaMapMarkerAlt className="location-icon" /> {formattedLocality},{" "}
+        {formattedCity}, {formattedState}
+      </div>
+      <div className="map-container">
+        <iframe
+          title="Meeting Point"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61291.449298734176!2d73.8777386!3d15.5026635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb4fd095d6bff%3A0x427e9f60f589e059!2sViceroy's%20Arch!5e0!3m2!1sen!2sin!4v1694150123456!5m2!1sen!2sin"
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   );
@@ -1455,45 +1845,58 @@ const PGSocietyPage = () => {
       <StickyTabBar />
 
       {/* Overview Section */}
+
       <div id="Overview" className={styles.contentWrapper}>
-        <div className={styles.contact}>
-          <div>
-            <SocietyOverview societyId={id} />
-          </div>
-          <div>
-            <ContactForm />
+        <div className={styles.overviewSection}>
+          <div className={styles.contact}>
+            <div>
+              <SocietyOverview
+                country={country}
+                state={state}
+                city={city}
+                locality={locality}
+                societyId={id}
+              />
+            </div>
+            <div>
+              <ContactForm />
+            </div>
           </div>
         </div>
 
         {/* Buy Rent Tabs */}
-        <div id="Available-Properties" className="propertyTabs">
-          <div className={styles.tabs}>
-            <h1 className={styles.tabH1}>
-              Properties in Assetz Trees and Tandem
-            </h1>
-            <div>
-              <button className={styles.activeTab}>Buy</button>
-              <button>Rent</button>
+        <di id="Available-Properties" className="propertyTabsWrapper">
+          <div className="propertyTabs">
+            <div className={styles.tabs}>
+              <h1 className={styles.tabH1}>
+                Properties in Assetz Trees and Tandem
+              </h1>
+              <div>
+                <button className={styles.activeTab}>Buy</button>
+                <button>Rent</button>
+              </div>
+            </div>
+            {/* Properties Grid */}
+            <div className={styles.propertyGrid}>
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className={styles.propertyCard}>
+                  <img
+                    src={`/assets/img/society/${images[i]}`}
+                    alt="Flat"
+                    className={styles.propertyImg}
+                  />
+                  <div className={styles.cardContent}>
+                    <h3>₹ 2.20 Cr</h3>
+                    <p>3 BHK Flat for Sale in Assetz Trees and Tandem</p>
+                    <button className={styles.outlineBtn}>
+                      Contact Builder
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          {/* Properties Grid */}
-          <div className={styles.propertyGrid}>
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className={styles.propertyCard}>
-                <img
-                  src={`/assets/img/society/${images[i]}`}
-                  alt="Flat"
-                  className={styles.propertyImg}
-                />
-                <div className={styles.cardContent}>
-                  <h3>₹ 2.20 Cr</h3>
-                  <p>3 BHK Flat for Sale in Assetz Trees and Tandem</p>
-                  <button className={styles.outlineBtn}>Contact Builder</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        </di>
 
         {/* Amenities */}
         <div id="Amenities">
@@ -1501,32 +1904,42 @@ const PGSocietyPage = () => {
         </div>
 
         {/* About Project */}
-        <div id="About-Project">
-          <ProjectInfo societyData={society} />
+        <div id="About-Project" className="projectInfoSection">
+          <ProjectInfo societyId={id} />
         </div>
 
         {/* Location Advantages */}
-        <div id="Nearby-Locations">
+        <div id="Nearby-Locations" className="locationAdvantages">
           <LocationAdvantages societyId={id} />
         </div>
 
         {/* Floor Plans */}
-        <div id="Units-Floor-Plans">
+        <div id="Units-Floor-Plans" className="floorPlansSection">
           <FloorPlans />
         </div>
 
         {/* Photo Gallery */}
-        <div id="Photo-Gallery">
+        <div id="Photo-Gallery" className="gallerySection">
           <GalleryPreview />
         </div>
 
+        {/* Meeting Point */}
+        <div id="Meeting-Point" className="meetingPointSection">
+          <MeetingPoint state={state} city={city} locality={locality} />
+        </div>
+
         {/* ComponentBuilder */}
-        <div id="ComponentBuilder">
+        {/* <div id="ComponentBuilder">
           <ComponentBuilder />
+        </div> */}
+
+        {/* Things to Know */}
+        <div id="Things-to-Know" className="thingsToKnowSection">
+          <ThingsToKnow societyId={id} />
         </div>
 
         {/* Reviews and Locality */}
-        <div id="Ratings-Reviews">
+        <div id="Ratings-Reviews" className="reviewsSection">
           <ReviewSummary />
         </div>
 
