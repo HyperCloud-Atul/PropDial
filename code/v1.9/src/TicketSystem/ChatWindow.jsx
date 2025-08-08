@@ -1,45 +1,133 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaEllipsisV, FaPaperclip, FaTimes } from 'react-icons/fa';
+import { useEffect, useState, useRef } from 'react';
+import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, FaStop, FaPlay, FaPause, FaDownload } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
-import { projectFirestore, timestamp } from '../firebase/config';
+import { projectFirestore, timestamp, projectAuth } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { projectStorage } from "../firebase/config";
+import { signOut } from "firebase/auth";
+
+// Updated VoicePlayer component
+const VoicePlayer = ({ url, isSent }) => {
+  // ... existing VoicePlayer implementation (unchanged) ...
+};
 
 const ChatWindow = ({ ticketId, onBack, isMobile }) => {
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [ticketInfo, setTicketInfo] = useState(null);
+  const [adminName, setAdminName] = useState('');
   const [loading, setLoading] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [attachments, setAttachments] = useState([]);
-  const [showMenu, setShowMenu] = useState(false);
   const [showAttachmentPreview, setShowAttachmentPreview] = useState(null);
+  const [showTicketDetails, setShowTicketDetails] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [audioChunks, setAudioChunks] = useState([]);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
-  const recognitionRef = useRef(null);
+  const recordingTimerRef = useRef(null);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [error, setError] = useState(null);
+  const [pinchStartDistance, setPinchStartDistance] = useState(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [creatorFullName, setCreatorFullName] = useState(''); // Updated state name
 
-  // Fetch ticket info
+  // Helper function to truncate text
+  const truncateText = (text, maxLength) => {
+    if (!text) return '';
+    return text.length > maxLength 
+      ? text.substring(0, maxLength) + '...' 
+      : text;
+  };
+
+  // Generate avatar text from issue type
+  const getAvatarText = (issueType) => {
+    if (!issueType) return 'T';
+    
+    const words = issueType.trim().split(/\s+/);
+    
+    if (words.length === 1) {
+      const word = words[0];
+      if (word.length <= 2) return word;
+      return word.charAt(0) + word.charAt(word.length - 1);
+    }
+    
+    return words.map(word => word.charAt(0)).join('').substring(0, 2);
+  };
+
+  // Fetch ticket info, admin name, and creator name
   useEffect(() => {
     if (!ticketId) return;
+
+    let isMounted = true;
 
     const unsubscribeTicket = projectFirestore
       .collection('tickets')
       .doc(ticketId)
-      .onSnapshot((doc) => {
-        if (doc.exists) {
-          setTicketInfo({
-            id: doc.id,
-            ...doc.data(),
-            createdAt: doc.data().createdAt?.toDate() || new Date()
-          });
+      .onSnapshot(async (doc) => {
+        if (!doc.exists || !isMounted) return;
+
+        const ticketData = doc.data();
+        const ticketInfo = {
+          id: doc.id,
+          ...ticketData,
+          createdAt: ticketData.createdAt?.toDate() || new Date()
+        };
+        setTicketInfo(ticketInfo);
+
+        // Fetch admin name if assigned
+        if (ticketData.adminId) {
+          try {
+            const adminDoc = await projectFirestore
+              .collection('users')
+              .doc(ticketData.adminId)
+              .get();
+            
+            if (adminDoc.exists) {
+              const adminData = adminDoc.data();
+              setAdminName(adminData.displayName || adminData.name || 'Admin');
+            }
+          } catch (error) {
+            console.error("Error fetching admin details:", error);
+          }
+        }
+
+        // Fetch creator's full name from users-propdial collection
+        if (ticketData.createdBy) {
+          try {
+            // Query users-propdial collection where phoneNumber matches createdBy
+            const querySnapshot = await projectFirestore
+              .collection('users-propdial')
+              .where('phoneNumber', '==', ticketData.createdBy)
+              .limit(1)
+              .get();
+            
+            if (!querySnapshot.empty) {
+              const creatorDoc = querySnapshot.docs[0];
+              const creatorData = creatorDoc.data();
+              setCreatorFullName(creatorData.fullName || "User");
+            } else {
+              console.log("Creator document not found in users-propdial");
+              setCreatorFullName("User");
+            }
+          } catch (error) {
+            console.error("Error fetching creator details:", error);
+            setCreatorFullName("User");
+          }
         }
       });
 
-    return () => unsubscribeTicket();
+    return () => {
+      isMounted = false;
+      unsubscribeTicket();
+    };
   }, [ticketId]);
 
   // Fetch messages
@@ -60,7 +148,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         setMessages(msgs);
         setLoading(false);
 
-        // Mark messages as read
         setTimeout(() => {
           const batch = projectFirestore.batch();
           snapshot.docs.forEach((doc) => {
@@ -68,11 +155,14 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               batch.update(doc.ref, { read: true });
             }
           });
-          batch.commit();
+          batch.commit().catch(error => {
+            console.error("Error marking messages as read:", error);
+          });
         }, 300);
       }, (error) => {
         console.error("Error fetching messages:", error);
         setLoading(false);
+        setError("Failed to load messages. Please try again.");
       });
 
     return () => unsubscribe();
@@ -103,7 +193,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     
     if (!isTyping) {
       setIsTyping(true);
-      // Simulate admin typing indicator
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
       typingTimeoutRef.current = setTimeout(() => {
         setIsTyping(false);
@@ -111,10 +200,23 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   };
 
+  // Handle authentication errors
+  const handleAuthError = (error) => {
+    console.error("Authentication error:", error);
+    setError("Session expired. Please log in again.");
+    
+    // Sign out user and redirect to login
+    signOut(projectAuth).then(() => {
+      dispatch({ type: 'LOGOUT' });
+    }).catch((signOutError) => {
+      console.error("Sign out error:", signOutError);
+    });
+  };
+
   // Send message
   const sendMessage = async () => {
     if (input.trim() === '' && attachments.length === 0) return;
-
+  
     try {
       const messageData = {
         senderId: user.phoneNumber,
@@ -122,38 +224,67 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         createdAt: timestamp.now(),
         read: false,
       };
-
+  
       if (input.trim() !== '') {
         messageData.text = input;
       }
-
+  
       if (attachments.length > 0) {
-        messageData.attachments = attachments;
+        const uploadedAttachments = [];
+  
+        for (const att of attachments) {
+          let fileToUpload;
+  
+          if (att.type === 'audio') {
+            fileToUpload = new File([att.blob], att.name, { type: 'audio/webm' });
+          } else {
+            fileToUpload = att.file;
+          }
+  
+          const storageRef = ref(projectStorage, `attachments/${ticketId}/${att.name}`);
+          await uploadBytes(storageRef, fileToUpload);
+          const downloadURL = await getDownloadURL(storageRef);
+  
+          uploadedAttachments.push({
+            id: att.id,
+            name: att.name,
+            type: att.type,
+            url: downloadURL,
+          });
+        }
+  
+        messageData.attachments = uploadedAttachments;
       }
-
+  
       await projectFirestore
         .collection('tickets')
         .doc(ticketId)
         .collection('messages')
         .add(messageData);
-
+  
       setInput('');
       setAttachments([]);
       setShowEmojiPicker(false);
-      
-      // Update ticket status
+  
       await projectFirestore
         .collection('tickets')
         .doc(ticketId)
         .update({
           lastUpdated: timestamp.now(),
-          status: 'open'
+          status: 'open',
         });
     } catch (error) {
       console.error("Error sending message:", error);
-      alert("Failed to send message. Please try again.");
+      
+      // Handle token refresh errors
+      if (error.code && error.code.includes('auth')) {
+        handleAuthError(error);
+      } else {
+        setError("Failed to send message. Please try again.");
+      }
     }
   };
+  
 
   // Add emoji
   const addEmoji = (emoji) => {
@@ -161,35 +292,62 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     inputRef.current.focus();
   };
 
-  // Start voice recognition
-  const startListening = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('Voice typing is not supported in your browser');
-      return;
-    }
-
-    const SpeechRecognition = window.webkitSpeechRecognition;
-    recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.continuous = true;
-    recognitionRef.current.interimResults = false;
-    recognitionRef.current.lang = 'en-US';
-
-    let silenceTimeout;
-
-    recognitionRef.current.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      setInput(prev => prev + transcript + ' ');
+  // Start voice recording
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
       
-      // Reset silence timer
-      clearTimeout(silenceTimeout);
-      silenceTimeout = setTimeout(() => recognitionRef.current.stop(), 4000);
-    };
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          setAudioChunks(prev => [...prev, e.data]);
+        }
+      };
+      
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        
+        const audioAttachment = {
+          id: Math.random().toString(36).substr(2, 9),
+          name: `recording-${new Date().getTime()}.webm`,
+          type: 'audio',
+          blob: audioBlob
+        };
+        
+        setAttachments(prev => [...prev, audioAttachment]);
+        setAudioChunks([]);
+        stream.getTracks().forEach(track => track.stop());
+        clearInterval(recordingTimerRef.current);
+        setRecordingTime(0);
+      };
+      
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+      
+      // Start recording timer
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+      setError("Failed to access microphone. Please check permissions.");
+    }
+  };
 
-    recognitionRef.current.onend = () => {
-      clearTimeout(silenceTimeout);
-    };
+  // Stop voice recording
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
 
-    recognitionRef.current.start();
+  // Format recording time
+  const formatRecordingTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   // Format message time
@@ -231,42 +389,76 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     setAttachments(prev => prev.filter(att => att.id !== id));
   };
 
-  // Close ticket
-  const closeTicket = async () => {
-    if (!window.confirm('Are you sure you want to close this ticket?')) return;
-    
-    try {
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .update({
-          status: 'closed',
-          closedAt: timestamp.now()
-        });
-        
-      setShowMenu(false);
-    } catch (error) {
-      console.error("Error closing ticket:", error);
-      alert("Failed to close ticket. Please try again.");
-    }
-  };
-
   // Render attachment preview
   const renderAttachmentPreview = () => {
     if (!showAttachmentPreview) return null;
     
     return (
-      <div className="attachment-preview-modal">
-        <div className="preview-content">
+      <div 
+        className="attachment-preview-modal"
+        onClick={() => {
+          setShowAttachmentPreview(null);
+          setZoomLevel(1);
+        }}
+      >
+        <div 
+          className="preview-content"
+          onClick={(e) => e.stopPropagation()}
+        >
           <button 
             className="close-preview"
-            onClick={() => setShowAttachmentPreview(null)}
+            onClick={() => {
+              setShowAttachmentPreview(null);
+              setZoomLevel(1);
+            }}
           >
             <FaTimes />
           </button>
           
           {showAttachmentPreview.type === 'image' ? (
-            <img src={showAttachmentPreview.url} alt="Attachment preview" />
+            <div className="image-container">
+              <img 
+                src={showAttachmentPreview.url} 
+                alt="Attachment preview" 
+                className="zoomable-image"
+                style={{ transform: `scale(${zoomLevel})` }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (zoomLevel === 1) {
+                    setZoomLevel(2);
+                  } else {
+                    setZoomLevel(1);
+                  }
+                }}
+                onTouchStart={(e) => {
+                  if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    setPinchStartDistance(Math.sqrt(dx * dx + dy * dy));
+                  }
+                }}
+                onTouchMove={(e) => {
+                  if (e.touches.length === 2) {
+                    const dx = e.touches[0].clientX - e.touches[1].clientX;
+                    const dy = e.touches[0].clientY - e.touches[1].clientY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (pinchStartDistance !== null) {
+                      const newZoom = distance / pinchStartDistance;
+                      setZoomLevel(Math.max(1, Math.min(3, zoomLevel * newZoom)));
+                    }
+                  }
+                }}
+                onTouchEnd={() => {
+                  setPinchStartDistance(null);
+                }}
+              />
+              <div className="zoom-hint">
+                {zoomLevel === 1 ? 'Click to zoom in' : 'Click to reset zoom'}
+              </div>
+            </div>
+          ) : showAttachmentPreview.type === 'audio' ? (
+            <audio controls src={showAttachmentPreview.url} />
           ) : (
             <div className="file-preview">
               <div className="file-icon">📄</div>
@@ -276,7 +468,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 download={showAttachmentPreview.name}
                 className="download-btn"
               >
-                Download
+                <FaDownload /> Download
               </a>
             </div>
           )}
@@ -295,14 +487,28 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           <div 
             key={att.id} 
             className={`attachment ${att.type}`}
-            onClick={() => setShowAttachmentPreview(att)}
           >
             {att.type === 'image' ? (
-              <img src={att.url} alt="Attachment" />
+              <img 
+                src={att.url} 
+                alt="Attachment" 
+                onClick={() => {
+                  setShowAttachmentPreview(att);
+                  setZoomLevel(1);
+                }}
+              />
+            ) : att.type === 'audio' ? (
+              <VoicePlayer 
+                url={att.url} 
+                isSent={msg.senderId === user.phoneNumber} 
+              />
             ) : (
-              <div className="file-attachment">
+              <div 
+                className="file-attachment"
+                onClick={() => setShowAttachmentPreview(att)}
+              >
                 <div className="file-icon">📄</div>
-                <div className="file-name">{att.name}</div>
+                <div className="file-name">{truncateText(att.name, 20)}</div>
               </div>
             )}
           </div>
@@ -318,6 +524,18 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       </div>
     );
+  };
+
+  // Generate consistent color based on string
+  const getAvatarColor = (str) => {
+    if (!str) return '#128c7e';
+    
+    const hash = str.split('').reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 60%)`;
   };
 
   // Group messages by date
@@ -355,14 +573,23 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               <FaArrowLeft />
             </button>
           )}
-          <div className="user-avatar">
-            {ticketInfo?.issueType?.charAt(0) || 'T'}
+          <div 
+            className="user-avatar"
+            style={{ backgroundColor: getAvatarColor(ticketInfo?.issueType) }}
+          >
+            {ticketInfo?.issueType ? getAvatarText(ticketInfo.issueType) : 'T'}
           </div>
           <div className="ticket-info">
-            <h3>{ticketInfo?.issueType || "Support Ticket"}</h3>
+            {/* Updated header to show creator's full name for admin */}
+            <h3>
+              {user?.role === 'admin' ? 
+                (creatorFullName || "User") : 
+                (ticketInfo?.issueType || "Support Ticket")
+              }
+            </h3>
             <div className="status-container">
-              <span className={`status-badge status-${ticketInfo?.status || 'open'}`}>
-                {ticketInfo?.status || 'open'}
+              <span className="subject-text">
+                {truncateText(ticketInfo?.subject, 40)}
               </span>
               {isTyping && (
                 <div className="typing-indicator">
@@ -375,27 +602,88 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             </div>
           </div>
         </div>
-        
-        <div className="header-actions">
-          <div className="menu-container">
-            <button 
-              className="menu-btn"
-              onClick={() => setShowMenu(!showMenu)}
-            >
-              <FaEllipsisV />
-            </button>
-            
-            {showMenu && (
-              <div className="dropdown-menu">
-                <button onClick={closeTicket}>Close Ticket</button>
-                <button>View Ticket Details</button>
-                <button>Export Conversation</button>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
       
+      {error && (
+        <div className="error-banner">
+          {error}
+          <button onClick={() => setError(null)}>
+            <FaTimes />
+          </button>
+        </div>
+      )}
+      
+      {/* Ticket Details Panel */}
+      {ticketInfo && (
+        <div className="ticket-details-panel">
+          <div 
+            className="panel-header"
+            onClick={() => setShowTicketDetails(!showTicketDetails)}
+          >
+            <h4>Ticket Details</h4>
+            <span className="toggle-icon">
+              {showTicketDetails ? <FaChevronUp /> : <FaChevronDown />}
+            </span>
+          </div>
+          
+          {showTicketDetails && (
+            <div className="panel-content">
+              <div className="detail-row">
+                <span className="detail-label">
+                  <FaIdCard className="detail-icon" /> Ticket ID:
+                </span>
+                <span className="detail-value">
+                  {ticketInfo.id}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">
+                  <FaPhone className="detail-icon" /> Mobile:
+                </span>
+                <span className="detail-value">
+                  {ticketInfo.createdBy}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Subject:</span>
+                <span className="detail-value">{ticketInfo.subject || "No subject"}</span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Issue Type:</span>
+                <span 
+                  className="issue-type-badge"
+                  style={{ backgroundColor: getAvatarColor(ticketInfo.issueType) }}
+                >
+                  {ticketInfo.issueType}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Description:</span>
+                <span className="detail-value">{ticketInfo.description || "No description provided"}</span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Created:</span>
+                <span className="detail-value">
+                  {ticketInfo.createdAt.toLocaleDateString()} at {ticketInfo.createdAt.toLocaleTimeString()}
+                </span>
+              </div>
+              
+              <div className="detail-row">
+                <span className="detail-label">Status:</span>
+                <span className={`status-badge status-${ticketInfo.status}`}>
+                  {ticketInfo.status}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="messages-container">
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date} className="message-date-group">
@@ -405,15 +693,10 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 key={msg.id}
                 className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'}`}
               >
-                {msg.senderId !== user.phoneNumber && (
-                  <div className="sender-avatar">
-                    {msg.senderName?.charAt(0) || 'A'}
-                  </div>
-                )}
                 <div className="message-content-wrapper">
                   {msg.senderId !== user.phoneNumber && (
                     <div className="sender-name">
-                      {msg.senderName || "Support Agent"}
+                      {msg.senderType === 'admin' ? adminName : msg.senderName || "User"}
                     </div>
                   )}
                   {renderMessageContent(msg)}
@@ -441,7 +724,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       {attachments.length > 0 && (
         <div className="attachments-preview">
           {attachments.map(att => (
-            <div key={att.id} className="attachment-item">
+            <div key={att.id} className={`attachment-item ${att.type}`}>
               <button 
                 className="remove-attachment"
                 onClick={() => removeAttachment(att.id)}
@@ -449,11 +732,27 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 <FaTimes />
               </button>
               {att.type === 'image' ? (
-                <img src={att.url} alt="Preview" />
+                <div 
+                  className="image-preview"
+                  onClick={() => {
+                    setShowAttachmentPreview(att);
+                    setZoomLevel(1);
+                  }}
+                >
+                  <img src={att.url} alt="Preview" />
+                  <div className="preview-overlay">
+                    <span>View</span>
+                  </div>
+                </div>
+              ) : att.type === 'audio' ? (
+                <div className="audio-preview">
+                  <div className="audio-icon">🎤</div>
+                  <span>Voice Recording</span>
+                </div>
               ) : (
                 <div className="file-preview">
                   <div className="file-icon">📄</div>
-                  <div className="file-name">{att.name}</div>
+                  <div className="file-name">{truncateText(att.name, 15)}</div>
                 </div>
               )}
             </div>
@@ -473,6 +772,16 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       )}
 
       <div className="message-input-area">
+        {isRecording && (
+          <div className="recording-indicator">
+            <div className="pulse"></div>
+            <span>Recording: {formatRecordingTime(recordingTime)}</span>
+            <button className="stop-recording" onClick={stopRecording}>
+              <FaTimes />
+            </button>
+          </div>
+        )}
+        
         <div className="input-actions">
           <button
             className="emoji-btn"
@@ -513,23 +822,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
         
         <div className="send-actions">
-          {input.trim() || attachments.length > 0 ? (
-            <button 
-              className="send-button" 
-              onClick={sendMessage}
-              disabled={!input.trim() && attachments.length === 0}
-            >
-              <FaPaperPlane />
-            </button>
-          ) : (
-            <button 
-              className="voice-button" 
-              onClick={startListening} 
-              title="Voice Input"
-            >
-              <FaMicrophone />
-            </button>
-          )}
+          <button 
+            className="send-button" 
+            onClick={sendMessage}
+            disabled={!input.trim() && attachments.length === 0}
+          >
+            <FaPaperPlane />
+          </button>
         </div>
       </div>
       

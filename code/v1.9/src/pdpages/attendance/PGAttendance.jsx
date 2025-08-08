@@ -7,6 +7,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
+import DailyTrackerModal from "./DailyTrackerModal";
+import WeeklyTrackerModal from "./WeeklyTrackerModal";
+import MonthlyTrackerModal from "./MonthlyTrackerModal";
 import { timestamp } from "../../firebase/config";
 import { useExportToExcel } from "../../hooks/useExportToExcel";
 import { format } from "date-fns";
@@ -1065,6 +1068,8 @@ const PGAttendance = () => {
     }));
   };
 
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       {user && user.status === "active" ? (
@@ -1250,6 +1255,14 @@ const PGAttendance = () => {
           <div className="top_header_pg pg_bg attendance_pg relative">
             {/* Left section */}
             <div className="attendance_dashboard">
+                <div className="trackers">
+
+                <DailyTrackerModal />
+                <WeeklyTrackerModal />
+                <MonthlyTrackerModal />
+              </div>
+
+              <hr />
               <div className="pg_header">
                 <h2>
                   Your progress of this week {startWeekDate?.getDate()} -{" "}
@@ -1258,6 +1271,7 @@ const PGAttendance = () => {
                   {endWeekDate?.getFullYear()}{" "}
                 </h2>
               </div>
+           
               <div className="attendance_cards">
                 <div className="ac_single day">
                   <h6>Total number of</h6>
@@ -1894,23 +1908,7 @@ const PGAttendance = () => {
                       <h6>Trip Start</h6>
                     </div>
                   )}
-                  {user && user.vehicleStatus && (
-                    <div className="pd_single">
-                      <img src="/assets/img/edicon/tripend.png" alt="propdial" />
-                      {topRecord && !topRecord.date === formattedTodaysDate ? (
-                        <div className="data">--:--</div>
-                      ) : (
-                        <div className="data">
-                          {topRecord &&
-                            topRecord.date === formattedTodaysDate &&
-                            topRecord.tripEnd
-                            ? topRecord.tripEnd
-                            : "--:--"}
-                        </div>
-                      )}
-                      <h6>Trip End</h6>
-                    </div>
-                  )}
+
                   {user && user.vehicleStatus && (
                     <div className="pd_single">
                       <img src="/assets/img/edicon/travel.png" alt="propdial" />
@@ -1926,6 +1924,23 @@ const PGAttendance = () => {
                         </div>
                       )}
                       <h6>Distance</h6>
+                    </div>
+                  )}
+                  {user && user.vehicleStatus && (
+                    <div className="pd_single">
+                      <img src="/assets/img/edicon/tripend.png" alt="propdial" />
+                      {topRecord && !topRecord.date === formattedTodaysDate ? (
+                        <div className="data">--:--</div>
+                      ) : (
+                        <div className="data">
+                          {topRecord &&
+                            topRecord.date === formattedTodaysDate &&
+                            topRecord.tripEnd
+                            ? topRecord.tripEnd
+                            : "--:--"}
+                        </div>
+                      )}
+                      <h6>Trip End</h6>
                     </div>
                   )}
                 </div>

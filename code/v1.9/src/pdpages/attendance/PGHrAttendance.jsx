@@ -6,6 +6,9 @@ import { Modal } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { useState, useEffect, useMemo } from "react";
+import DailyTrackerExport from "./DailyTrackerExport";
+import WeeklyTrackerExport from "./WeeklyTrackerExport";
+import MonthlyTrackerExport from "./MonthlyTrackerExport";
 import { useFirestore } from "../../hooks/useFirestore";
 import { projectFirestore } from "../../firebase/config";
 import { timestamp } from "../../firebase/config";
@@ -1685,6 +1688,13 @@ const PGHrAttendance = () => {
           <div className="top_header_pg pg_bg attendance_pg hr_attendance_pg relative">
             {/* Left section */}
             <div className="attendance_dashboard">
+                <div className="trackers">
+              
+                             <DailyTrackerExport/>
+                              <WeeklyTrackerExport />
+                              <MonthlyTrackerExport />
+                            </div>
+                                      <hr /> 
               <div className="pg_header">
                 <h2>Attendance Dashboard</h2>
               </div>

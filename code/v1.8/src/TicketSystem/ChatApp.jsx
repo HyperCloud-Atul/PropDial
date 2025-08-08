@@ -36,6 +36,7 @@ const ChatApp = () => {
   };
 
   return (
+    <div className='chat-app-main'>
     <div className="chat-app">
       {/* Always show sidebar on desktop, conditionally on mobile */}
       {showSidebar && (
@@ -99,6 +100,7 @@ const ChatApp = () => {
           onClose={() => setShowCreateModal(false)}
         />
       )}
+    </div>
     </div>
   );
 };

@@ -58,6 +58,15 @@
 .attendance_pg {
   display: flex;
   align-items: center;
+  .trackers {
+    display: flex
+;
+    align-items: center;
+    gap: 15px;
+    .theme_btn{
+      flex: 1 1;
+    }
+}
   .no_data {
     text-align: center;
     margin-top: 50px;
@@ -990,3 +999,5 @@
   
   }
 }
+
+
