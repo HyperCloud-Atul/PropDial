@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import TicketSidebar from './TicketSidebar';
 import ChatWindow from './ChatWindow';
 import CreateTicket from './CreateTicket';
-// import './ChatApp.scss';
+import './ChatApp.scss';
 
 const ChatApp = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -36,6 +36,7 @@ const ChatApp = () => {
   };
 
   return (
+    <div className='chat-app-main'>
     <div className="chat-app">
       {/* Always show sidebar on desktop, conditionally on mobile */}
       {showSidebar && (
@@ -99,6 +100,7 @@ const ChatApp = () => {
           onClose={() => setShowCreateModal(false)}
         />
       )}
+    </div>
     </div>
   );
 };

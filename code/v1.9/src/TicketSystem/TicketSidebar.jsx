@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../firebase/config";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { doc, getDoc } from "firebase/firestore"; // Corrected import
 
 const TicketSidebar = ({ 
   selectedTicket, 
@@ -17,6 +18,7 @@ const TicketSidebar = ({
     const [loading, setLoading] = useState(true);
     const { user } = useAuthContext();
     const [filteredTickets, setFilteredTickets] = useState([]);
+    const [userDisplayNames, setUserDisplayNames] = useState({});
   
     // Generate consistent color based on issue type
     const getAvatarColor = (issueType) => {
@@ -76,16 +78,50 @@ const TicketSidebar = ({
       return () => unsubscribe();
     }, [user]);
   
+    // Fetch display names for admin users
+    useEffect(() => {
+      if (user?.role !== "admin" || tickets.length === 0) return;
+      
+      const fetchDisplayNames = async () => {
+        const names = {};
+        
+        for (const ticket of tickets) {
+          if (!ticket.createdBy) continue;
+          
+          try {
+            const userRef = doc(projectFirestore, "users-propdial", ticket.createdBy);
+            const userSnap = await getDoc(userRef);
+            
+            if (userSnap.exists()) {
+              const userData = userSnap.data();
+              names[ticket.createdBy] = userData.displayName || userData.fullName || "Unknown User";
+            } else {
+              names[ticket.createdBy] = "User Not Found";
+            }
+          } catch (error) {
+            console.error("Error fetching display name:", error);
+            names[ticket.createdBy] = "Error Loading";
+          }
+        }
+        
+        setUserDisplayNames(names);
+      };
+      
+      fetchDisplayNames();
+    }, [tickets, user?.role]);
+  
     // Filter tickets based on search query
     useEffect(() => {
       const filtered = tickets.filter(ticket => 
         ticket.issueType?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ticket.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.status?.toLowerCase().includes(searchQuery.toLowerCase())
+        ticket.status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (user?.role === "admin" && 
+         userDisplayNames[ticket.createdBy]?.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setFilteredTickets(filtered);
-    }, [tickets, searchQuery]);
+    }, [tickets, searchQuery, user?.role, userDisplayNames]);
   
     // Fetch unread message counts
     useEffect(() => {
@@ -151,14 +187,6 @@ const TicketSidebar = ({
     <div className={`sidebar ${isMobile ? 'mobile' : ''}`}>
       <div className="sidebar-header">
         <div className="header-left">
-          {isMobile && (
-            <button className="close-sidebar" onClick={onClose}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          )}
           <h2>Help & Support</h2>
         </div>
         <div className="header-right">
@@ -271,8 +299,14 @@ const TicketSidebar = ({
         {!loading && filteredTickets.length > 0 && (
           <div className="ticket-list scrollable">
             {filteredTickets.map((ticket) => {
+              // Avatar always uses issue type regardless of user role
               const avatarText = getTwoLetters(ticket.issueType);
               const avatarColor = getAvatarColor(ticket.issueType);
+              
+              // For admin, use displayName from users-propdial
+              const mainText = user?.role === "admin" 
+                ? (userDisplayNames[ticket.createdBy] || ticket.issueType || "No title")
+                : (ticket.issueType || "No title");
               
               return (
                 <div
@@ -300,7 +334,7 @@ const TicketSidebar = ({
                     <div className="ticket-content">
                       <div className="ticket-header">
                         <div>
-                          <div className="issue-type">{ticket.issueType || "No title"}</div>
+                          <div className="issue-type">{mainText}</div>
                           <div className="subject">
                             {ticket.subject || "No subject"}
                           </div>
