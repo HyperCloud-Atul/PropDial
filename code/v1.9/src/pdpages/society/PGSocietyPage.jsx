@@ -51,6 +51,7 @@ import {
   FaTint,
   FaTools,
   FaBuilding,
+  FaVideo,
 } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
@@ -659,51 +660,147 @@ const ProjectInfo = ({ societyId }) => {
   );
 };
 
-const allAmenities = [
-  { name: "Club House", icon: "FaRegBuilding" },
-  { name: "Jogging Track", icon: "FaWalking" },
-  { name: "Power Back Up", icon: "FaBolt" },
-  { name: "Swimming Pool", icon: "FaSwimmingPool" },
-  { name: "Lift", icon: "MdElevator" },
-  { name: "Security", icon: "FaUserShield" },
-  { name: "Park", icon: "FaTree" },
-  { name: "Reserved Parking", icon: "FaParking" },
-  { name: "Gymnasium", icon: "FaDumbbell" },
-  { name: "Indoor Games", icon: "FaGamepad" },
-  { name: "Rain Water Harvesting", icon: "FaShower" },
-  { name: "Meditation Area", icon: "FaPrayingHands" },
-  { name: "Children's Play Area", icon: "FaGamepad" },
-  { name: "Multipurpose Hall", icon: "MdMeetingRoom" },
-  { name: "Badminton Court", icon: "FaRegBuilding" },
-  { name: "Tennis Court", icon: "FaRegBuilding" },
-  { name: "Basketball Court", icon: "FaRegBuilding" },
-  { name: "Squash Court", icon: "FaRegBuilding" },
-  { name: "Yoga Deck", icon: "FaPrayingHands" },
-  { name: "Aerobics Room", icon: "FaDumbbell" },
-  { name: "Sauna", icon: "FaShower" },
-  { name: "Steam Room", icon: "FaShower" },
-  { name: "Jacuzzi", icon: "FaSwimmingPool" },
-  { name: "Banquet Hall", icon: "MdMeetingRoom" },
-  { name: "Guest Rooms", icon: "FaBed" },
-  { name: "Library", icon: "BsFileEarmarkText" },
-  { name: "Cafeteria", icon: "FaRegBuilding" },
-  { name: "Convenience Store", icon: "FaRegBuilding" },
-  { name: "Amphitheater", icon: "FaRegBuilding" },
-  { name: "Pet Park", icon: "FaTree" },
-  { name: "Barbecue Area", icon: "FaRegBuilding" },
-  { name: "Car Wash Area", icon: "FaParking" },
-  { name: "Electric Vehicle Charging", icon: "FaBolt" },
-  { name: "24x7 Water Supply", icon: "FaShower" },
-  { name: "Waste Management", icon: "FaTree" },
-  { name: "Fire Safety", icon: "FaUserShield" },
-  { name: "CCTV Surveillance", icon: "FaUserShield" },
-  { name: "Intercom Facility", icon: "FaUserShield" },
-  { name: "Maintenance Staff", icon: "FaUserShield" },
-  { name: "Housekeeping", icon: "FaUserShield" },
-];
+// Define all amenities categorized as per the images
+const allAmenitiesByCategory = {
+  Club: [
+    { name: "Club House", icon: "FaRegBuilding" },
+    { name: "Steam Bath Room", icon: "FaShower" },
+    { name: "Saltwater Pool (Indoor)", icon: "FaSwimmingPool" },
+    { name: "Sauna Room", icon: "FaShower" },
+    { name: "Swimming Pool (Indoor)", icon: "FaSwimmingPool" },
+    { name: "Swimming Pool (Outdoor)", icon: "FaSwimmingPool" },
+    { name: "Card Room", icon: "FaGamepad" },
+    { name: "Party Room Small", icon: "MdMeetingRoom" },
+    { name: "Party Room Big", icon: "MdMeetingRoom" },
+    { name: "Sun Deck", icon: "FaTree" },
+    { name: "Library", icon: "BsFileEarmarkText" },
+    { name: "Roof Deck Lounge", icon: "FaRegBuilding" },
+    { name: "Pool Deck Area", icon: "FaSwimmingPool" },
+    { name: "Spa Massage Room", icon: "FaShower" },
+    { name: "BBQ Area", icon: "FaRegBuilding" },
+    { name: "Multi Utility Store", icon: "FaRegBuilding" },
+    { name: "Bar", icon: "FaRegBuilding" },
+    { name: "Jacuzzi Spa", icon: "FaSwimmingPool" },
+    { name: "Valet service", icon: "FaRegBuilding" },
+  ],
+  "Sports & Fitness": [
+    { name: "Cycle Track", icon: "FaWalking" },
+    { name: "Meditation Area", icon: "FaPrayingHands" },
+    { name: "Billiard Room", icon: "FaGamepad" },
+    { name: "Gymnastic Room", icon: "FaDumbbell" },
+    { name: "Squash Court", icon: "FaRegBuilding" },
+    { name: "Gymnasium", icon: "FaDumbbell" },
+    { name: "Badminton (Indoor)", icon: "FaRegBuilding" },
+    { name: "Cricket Pitch", icon: "FaRegBuilding" },
+    { name: "Rock Climbing Walls", icon: "FaRegBuilding" },
+    { name: "Volleyball Court", icon: "FaRegBuilding" },
+    { name: "Health Club", icon: "FaDumbbell" },
+    { name: "Badminton (Outdoor)", icon: "FaRegBuilding" },
+    { name: "Football Ground", icon: "FaRegBuilding" },
+    { name: "Skating Ring", icon: "FaGamepad" },
+    { name: "Basket Ball", icon: "FaRegBuilding" },
+    { name: "Golf Course", icon: "FaRegBuilding" },
+    { name: "Skating Track", icon: "FaGamepad" },
+    { name: "Tennis Court", icon: "FaRegBuilding" },
+    { name: "Table Tennis", icon: "FaGamepad" },
+    { name: "Bowling Alley", icon: "FaGamepad" },
+    {
+      name: "Dance Room",
+      icon: "FaRegBuilding",
+    },
+    {
+      name: "Yoga Deck",
+      icon: "FaPrayingHands",
+    },
+    {
+      name: "Horsebacking Ride",
+      icon: "FaRegBuilding",
+    },
+    {
+      name: "Garden Gym",
+      icon: "FaDumbbell",
+    },
+    {
+      name: "Yoga Room",
+      icon: "FaPrayingHands",
+    },
+    {
+      name: "Cricket Ground",
+      icon: "FaRegBuilding",
+    },
+    {
+      name: "Pool Table",
+      icon: "FaGamepad",
+    },
+    {
+      name: "Jogging Track",
+      icon: "FaWalking",
+    },
+  ],
+  "For Children": [
+    { name: "Kids Pool", icon: "FaSwimmingPool" },
+    { name: "Toddler Pool", icon: "FaSwimmingPool" },
+    { name: "Heated Lap Pool", icon: "FaSwimmingPool" },
+    { name: "Children Play Area (Indoor)", icon: "FaGamepad" },
+    { name: "Children Play Area (Outdoor)", icon: "FaGamepad" },
+    { name: "Creche and daycare", icon: "FaRegBuilding" },
+    { name: "Miniature Golf", icon: "FaRegBuilding" },
+    { name: "Dance Room", icon: "FaRegBuilding" },
+    { name: "Yoga Deck", icon: "FaPrayingHands" },
+    { name: "Horseback Riding", icon: "FaRegBuilding" },
+    { name: "Play School", icon: "FaRegBuilding" },
+    { name: "Pre-Primary School", icon: "FaRegBuilding" },
+    { name: "Primary School", icon: "FaRegBuilding" },
+  ],
+  "Safety & Security": [
+    { name: "cctv-in Common Area", icon: "FaVideo" },
+    { name: "Fire Fighting", icon: "FaUserShield" },
+    { name: "Intercom", icon: "FaUserShield" },
+    { name: "PNG (Pipeline gas)", icon: "FaUserShield" },
+    { name: "Security (3 tier)", icon: "FaUserShield" },
+    { name: "Security (Roaming)", icon: "FaUserShield" },
+    { name: "Security (Single Guard)", icon: "FaUserShield" },
+  ],
+  "General Amenities": [
+    { name: "Central Garden Atrium", icon: "FaTree" },
+    { name: "Outdoor Party Area", icon: "FaRegBuilding" },
+    { name: "Cafeteria", icon: "FaRegBuilding" },
+    { name: "Laundry Service", icon: "FaRegBuilding" },
+    { name: "Convenience Store", icon: "FaRegBuilding" },
+    { name: "Saloon", icon: "FaRegBuilding" },
+    { name: "Concierge", icon: "FaRegBuilding" },
+    { name: "Lounge Area", icon: "FaRegBuilding" },
+    { name: "Fountain", icon: "FaRegBuilding" },
+    { name: "Sky Garden", icon: "FaTree" },
+    { name: "Conference Room", icon: "MdMeetingRoom" },
+    { name: "Meeting Room", icon: "MdMeetingRoom" },
+    { name: "Medical Store", icon: "FaRegBuilding" },
+    { name: "Sky Lounge", icon: "FaRegBuilding" },
+    { name: "Extended Sky Patios", icon: "FaRegBuilding" },
+    { name: "Mini Theater", icon: "FaRegBuilding" },
+    { name: "Vegetable Shop", icon: "FaRegBuilding" },
+    { name: "Gazebos", icon: "FaRegBuilding" },
+    { name: "Restaurant", icon: "FaRegBuilding" },
+    { name: "24 Hour Water Supply", icon: "FaShower" },
+    { name: "Car Parking (Basement)", icon: "FaParking" },
+    { name: "Car Parking (Under Shade)", icon: "FaParking" },
+    { name: "Car Parking (For Visitors)", icon: "FaParking" },
+    { name: "Car Parking (Open)", icon: "FaParking" },
+    { name: "Designated Pet Area", icon: "FaTree" },
+    { name: "Gardens", icon: "FaTree" },
+    { name: "Lifts", icon: "MdElevator" },
+    { name: "High Speed Lifts", icon: "MdElevator" },
+    { name: "Landscaped Gardens", icon: "FaTree" },
+    { name: "Rainwater Harvesting", icon: "FaShower" },
+    { name: "Power Back (Full)", icon: "FaBolt" },
+    { name: "Power Backup (Partial)", icon: "FaBolt" },
+    { name: "Power Back (Lift Only)", icon: "FaBolt" },
+  ],
+};
 
 const iconComponents = {
   FaRegBuilding: <FaRegBuilding />,
+  FaVideo: <FaVideo />,
   FaWalking: <FaWalking />,
   FaBolt: <FaBolt />,
   FaSwimmingPool: <FaSwimmingPool />,
@@ -721,13 +818,16 @@ const iconComponents = {
   FaPlus: <FaPlus />,
   FaSearch: <FaSearch />,
 };
+
 const AmenitiesSection = ({ societyId }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [selectedAmenities, setSelectedAmenities] = useState({});
   const [tempSelected, setTempSelected] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  console.log(societyId);
+  const [activeCategory, setActiveCategory] = useState("Club");
+  const [isEditing, setIsEditing] = useState(false);
+
   // Fetch amenities from Firebase
   useEffect(() => {
     const fetchAmenities = async () => {
@@ -735,23 +835,22 @@ const AmenitiesSection = ({ societyId }) => {
         const doc = await projectFirestore
           .collection("m_societies")
           .doc(societyId)
+          .collection("society_information")
+          .doc("Amenities")
           .get();
 
         if (doc.exists) {
-          // Use existing amenities or initialize empty array
-          const data = doc.data();
-          setSelectedAmenities(data.amenities || []);
-          setTempSelected(
-            data.amenities ? data.amenities.map((a) => a.name) : []
-          );
+          setSelectedAmenities(doc.data() || {});
+          // Initialize tempSelected with all selected amenities from all categories
+          const allSelected = Object.values(doc.data() || {}).flat();
+          setTempSelected(allSelected.map((a) => a.name));
         } else {
-          // Initialize new document with empty amenities
-          await projectFirestore
-            .collection("m_societies")
-            .doc(societyId)
-            .set({ amenities: [] });
-
-          setSelectedAmenities([]);
+          // Initialize with empty categories
+          const initialAmenities = {};
+          Object.keys(allAmenitiesByCategory).forEach((category) => {
+            initialAmenities[category] = [];
+          });
+          setSelectedAmenities(initialAmenities);
           setTempSelected([]);
         }
       } catch (err) {
@@ -768,51 +867,45 @@ const AmenitiesSection = ({ societyId }) => {
   const saveAmenitiesToFirebase = async (amenities) => {
     try {
       if (!societyId) throw new Error("Society ID is missing");
-      if (!Array.isArray(amenities))
-        throw new Error("Amenities must be an array");
 
-      const amenitiesData = amenities.map((amenity) => ({
-        name: amenity.name,
-        icon: amenity.icon,
-        highlight: amenity.highlight || false,
-      }));
+      // Structure the data by category
+      const amenitiesByCategory = {};
+      Object.keys(allAmenitiesByCategory).forEach((category) => {
+        amenitiesByCategory[category] = allAmenitiesByCategory[category]
+          .filter((amenity) => amenities.includes(amenity.name))
+          .map((amenity) => ({
+            ...amenity,
+            highlight:
+              selectedAmenities[category]?.some(
+                (a) => a.name === amenity.name && a.highlight
+              ) || false,
+          }));
+      });
 
-      // Use the correct collection name
-      const docRef = projectFirestore.collection("m_societies").doc(societyId);
-      const doc = await docRef.get();
-
-      if (!doc.exists) {
-        await docRef.set({ amenities: amenitiesData });
-      } else {
-        await docRef.update({ amenities: amenitiesData });
-      }
+      await projectFirestore
+        .collection("m_societies")
+        .doc(societyId)
+        .collection("society_information")
+        .doc("Amenities")
+        .set(amenitiesByCategory, { merge: true });
 
       console.log("Amenities saved successfully");
       return true;
     } catch (err) {
-      console.error("Firebase save error:", {
-        error: err,
-        message: err.message,
-        stack: err.stack,
-      });
-
-      let errorMessage = "Failed to save amenities. Please try again.";
-      if (err.message.includes("permission-denied")) {
-        errorMessage = "You don't have permission to update amenities.";
-      }
-
-      alert(errorMessage);
+      console.error("Firebase save error:", err);
+      alert("Failed to save amenities. Please try again.");
       return false;
     }
   };
 
   const handleAddAmenities = () => {
-    setTempSelected(selectedAmenities.map((a) => a.name));
+    setIsEditing(true);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setIsEditing(false);
   };
 
   const handleCheckboxChange = (amenityName) => {
@@ -824,33 +917,48 @@ const AmenitiesSection = ({ societyId }) => {
   };
 
   const handleSaveAmenities = async () => {
-    const newAmenities = allAmenities
-      .filter((amenity) => tempSelected.includes(amenity.name))
-      .map((amenity) => ({
-        ...amenity,
-        highlight: selectedAmenities.some(
-          (a) => a.name === amenity.name && a.highlight
-        ),
-      }));
+    await saveAmenitiesToFirebase(tempSelected);
 
-    setSelectedAmenities(newAmenities);
-    await saveAmenitiesToFirebase(newAmenities);
+    // Update local state with the new selections
+    const updatedAmenities = {};
+    Object.keys(allAmenitiesByCategory).forEach((category) => {
+      updatedAmenities[category] = allAmenitiesByCategory[category]
+        .filter((amenity) => tempSelected.includes(amenity.name))
+        .map((amenity) => ({
+          ...amenity,
+          highlight:
+            selectedAmenities[category]?.some(
+              (a) => a.name === amenity.name && a.highlight
+            ) || false,
+        }));
+    });
+
+    setSelectedAmenities(updatedAmenities);
     setShowModal(false);
+    setIsEditing(false);
   };
 
-  const toggleHighlight = async (amenityName) => {
-    const updatedAmenities = selectedAmenities.map((amenity) =>
+  const toggleHighlight = async (amenityName, category) => {
+    const updatedAmenities = { ...selectedAmenities };
+    updatedAmenities[category] = updatedAmenities[category].map((amenity) =>
       amenity.name === amenityName
         ? { ...amenity, highlight: !amenity.highlight }
         : amenity
     );
 
     setSelectedAmenities(updatedAmenities);
-    await saveAmenitiesToFirebase(updatedAmenities);
+
+    // Save to Firebase
+    await projectFirestore
+      .collection("m_societies")
+      .doc(societyId)
+      .collection("society_information")
+      .doc("Amenities")
+      .set(updatedAmenities, { merge: true });
   };
 
-  const filteredAmenities = allAmenities.filter((amenity) =>
-    amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredAmenities = allAmenitiesByCategory[activeCategory].filter(
+    (amenity) => amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading)
@@ -859,12 +967,28 @@ const AmenitiesSection = ({ societyId }) => {
   return (
     <div className="amenities-section">
       <h2 className="amenities-heading">Amenities</h2>
+
+      {/* Navigation Bar for Categories */}
+      <div className="amenities-categories">
+        {Object.keys(allAmenitiesByCategory).map((category) => (
+          <button
+            key={category}
+            className={`category-btn ${
+              activeCategory === category ? "active" : ""
+            }`}
+            onClick={() => setActiveCategory(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
       <div className="amenities-grid">
-        {selectedAmenities.map((item, index) => (
+        {selectedAmenities[activeCategory]?.map((item, index) => (
           <div
-            className="amenity-card"
+            className={`amenity-card ${item.highlight ? "highlighted" : ""}`}
             key={index}
-            onClick={() => toggleHighlight(item.name)}
+            onClick={() => toggleHighlight(item.name, activeCategory)}
           >
             {item.highlight && <div className="flag"></div>}
             <div className="icon">
@@ -880,9 +1004,12 @@ const AmenitiesSection = ({ societyId }) => {
           <div className="label">Add Amenities</div>
         </div>
       </div>
+
       <div className="amenities-footer">
         <p className="show-more">
-          Showing {selectedAmenities.length} of {allAmenities.length} amenities
+          Showing {selectedAmenities[activeCategory]?.length || 0} of{" "}
+          {allAmenitiesByCategory[activeCategory].length} amenities in{" "}
+          {activeCategory}
         </p>
         <button className="contact-btn">Contact Builder</button>
       </div>
@@ -891,11 +1018,31 @@ const AmenitiesSection = ({ societyId }) => {
         <div className="amenities-modal">
           <div className="modal-content">
             <div className="modal-header">
-              <h2>Select Amenities ({tempSelected.length} selected)</h2>
+              <h2>
+                Select Amenities ({tempSelected.length} selected)
+                {isEditing && <span> - Editing: {activeCategory}</span>}
+              </h2>
               <button className="close-btn" onClick={handleCloseModal}>
                 &times;
               </button>
             </div>
+
+            {!isEditing && (
+              <div className="amenities-categories">
+                {Object.keys(allAmenitiesByCategory).map((category) => (
+                  <button
+                    key={category}
+                    className={`category-btn ${
+                      activeCategory === category ? "active" : ""
+                    }`}
+                    onClick={() => setActiveCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="search-box">
               <FaSearch className="search-icon" />
               <input
@@ -905,6 +1052,7 @@ const AmenitiesSection = ({ societyId }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+
             <div className="amenities-list">
               {filteredAmenities.map((amenity) => (
                 <div className="amenity-item" key={amenity.name}>
@@ -926,6 +1074,7 @@ const AmenitiesSection = ({ societyId }) => {
                 <div className="no-results">No amenities found</div>
               )}
             </div>
+
             <div className="modal-actions">
               <button className="cancel-btn" onClick={handleCloseModal}>
                 Cancel
@@ -1487,7 +1636,6 @@ const EditAbout = ({ data, onClose, onSave }) => {
 
 const EditRates = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
-  const [currentUnitType, setCurrentUnitType] = useState("");
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -1497,26 +1645,9 @@ const EditRates = ({ data, onClose, onSave }) => {
     }));
   };
 
-  const handleUnitTypeAdd = () => {
-    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
-      setFormData((prev) => ({
-        ...prev,
-        unitTypes: [...prev.unitTypes, currentUnitType],
-      }));
-      setCurrentUnitType("");
-    }
-  };
-
-  const handleUnitTypeRemove = (typeToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    onSave(formData); // Send all updated data back to parent
   };
 
   return (
@@ -1624,7 +1755,7 @@ const ThingsToKnow = ({ societyId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch society data from Firestore (No changes needed here)
+  // Fetch data from society_information collection
   useEffect(() => {
     const fetchData = async () => {
       if (!societyId) {
@@ -1634,14 +1765,18 @@ const ThingsToKnow = ({ societyId }) => {
       try {
         const docRef = projectFirestore
           .collection("m_societies")
-          .doc(societyId);
-        const doc = await docRef.get();
+          .doc(societyId)
+          .collection("society_information") // lowercase as per your screenshot
+          .doc("Rates");
 
-        if (doc.exists) {
-          const data = doc.data();
-          setSocietyData((prev) => ({ ...prev, ...data }));
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          setSocietyData(docSnap.data());
+        } else {
+          console.log("No rates found in society_information.");
         }
       } catch (err) {
+        console.error(err);
         setError("Failed to load data");
       } finally {
         setLoading(false);
@@ -1651,21 +1786,23 @@ const ThingsToKnow = ({ societyId }) => {
     fetchData();
   }, [societyId]);
 
-  // FIX 1: Correctly handle the save action
+  // Save only in society_information collection
   const handleSave = async (updatedData) => {
     try {
-      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+      const infoDocRef = projectFirestore
+        .collection("m_societies")
+        .doc(societyId)
+        .collection("society_information")
+        .doc("Rates");
 
-      // FIX 1.1: Use the correct keys from formData ('name', 'type')
-      // The `updatedData` object already has the correct structure.
-      const updateObject = {
-        ...updatedData, // Spread the form data
-        lastUpdated: new Date(),
-      };
+      await infoDocRef.set(
+        {
+          ...updatedData,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
 
-      await docRef.set(updateObject, { merge: true });
-
-      // FIX 1.2: Update state correctly with the data from the form
       setSocietyData((prev) => ({ ...prev, ...updatedData }));
       setShowEditModal(false);
     } catch (err) {
@@ -1673,11 +1810,13 @@ const ThingsToKnow = ({ societyId }) => {
       setError("Failed to save changes.");
     }
   };
+
+  // Format currency in Indian numbering system
   const formatRupees = (value) => {
-  return new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 2,
-  }).format(value);
-};
+    return new Intl.NumberFormat("en-IN", {
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
 
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
