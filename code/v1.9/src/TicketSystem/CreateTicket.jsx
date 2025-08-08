@@ -5,6 +5,7 @@ import { timestamp } from '../firebase/config';
 
 const CreateTicket = ({ onTicketCreated, onClose }) => {
   const [issueType, setIssueType] = useState('');
+  const [subject, setSubject] = useState(''); // New state for subject
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -15,7 +16,8 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     setSubmitting(true);
     setError('');
 
-    if (!issueType || !description) {
+    // Updated validation to include subject
+    if (!issueType || !subject || !description) {
       setError('Please fill in all fields');
       setSubmitting(false);
       return;
@@ -24,6 +26,7 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     try {
       const docRef = await projectFirestore.collection('tickets').add({
         issueType,
+        subject, // Include subject in the ticket data
         description,
         createdBy: user.phoneNumber,
         createdAt: timestamp.now(),
@@ -66,6 +69,18 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
               <option value="Account Issue">Account Issue</option>
               <option value="Other">Other</option>
             </select>
+            
+            {/* New Subject Field */}
+            <label>Subject</label>
+            <input
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              // placeholder="Brief summary of your issue"
+              required
+              disabled={submitting}
+              maxLength={100}
+            />
             
             <label>Description</label>
             <textarea
