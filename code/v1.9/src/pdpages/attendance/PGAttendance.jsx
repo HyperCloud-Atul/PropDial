@@ -1261,6 +1261,7 @@ const PGAttendance = () => {
                 <WeeklyTrackerModal />
                 <MonthlyTrackerModal />
               </div>
+
               <hr />
               <div className="pg_header">
                 <h2>
