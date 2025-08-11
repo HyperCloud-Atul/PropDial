@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styles from "./PropertyListingPage.module.scss";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import {
+  ref,
+  listAll,
+  getDownloadURL,
+  deleteObject,
+  uploadBytesResumable, // Use uploadBytesResumable for progress tracking
+} from "firebase/storage";
 import { Link, useParams } from "react-router-dom";
-import { projectFirestore } from "../../firebase/config";
+import { projectStorage, projectFirestore } from "../../firebase/config";
+import imageCompression from "browser-image-compression";
 import {
   doc,
   getDoc,
   updateDoc,
-  arrayUnion,
-  arrayRemove,
 } from "firebase/firestore";
 import "./PGSociety.scss";
 import ComponentBuilder from "./ComponentBuilder";
@@ -42,35 +49,19 @@ import {
   FaRegCalendarAlt,
   FaPlus,
   FaCheck,
-  FaRupeeSign,
   FaMapMarkerAlt,
-  FaUsers,
-  FaWheelchair,
-  FaCalendarAlt,
   FaBatteryFull,
   FaTint,
   FaTools,
   FaBuilding,
   FaVideo,
+  FaUpload,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
-const locations = [
-  { place: "Koramangala", distance: "8 Km", time: "22 min" },
-  { place: "Sarjapur Road", distance: "2 Km", time: "4 Min" },
-  { place: "Byg Brewski", distance: "3.2 Km", time: "7 Min" },
-  { place: "Manipal Hospital", distance: "1.2 Km", time: "2 Min" },
-  { place: "HSR Layout", distance: "6.5 Km", time: "15 mins" },
-  { place: "Singasandra Metro Station", distance: "5 Km", time: "15 mins" },
-  {
-    place: "Electronic City Metro Station",
-    distance: "6.8 Km",
-    time: "14 mins",
-  },
-  { place: "Wipro Limited", distance: "3.2 Km", time: "7 Min" },
-  { place: "Infosys Limited", distance: "2 Km", time: "4Min" },
-  { place: "National Public School", distance: "3.5 Km", time: "6 Min" },
-];
 
 const ratingData = {
   average: 4.0,
@@ -152,55 +143,388 @@ const ReviewSummary = () => {
   );
 };
 
-const images = [
-  "/assets/img/society/hero1.jpg",
-  "/assets/img/society//assets/img/society/hero2.jpg",
-  "/assets/img/society//assets/img/society/hero3.jpg",
-  "/assets/img/society//assets/img/society/hero4.jpg",
-  "/assets/img/society//assets/img/society/hero5.jpg",
-  "/assets/img/society//assets/img/society/layout1.jpg",
-  "/assets/img/society//assets/img/society/layout2.jpg",
-  "/assets/img/society//assets/img/society/layout3.jpg",
-  "/assets/img/society//assets/img/society/layout4.jpg",
-  "/assets/img/society//assets/img/society/layout5.jpg",
-];
 
-const GalleryPreview = () => {
+const GalleryPreview = ({ societyId, societyName, societyType }) => {
+  const [images, setImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Reference to the society's image folder in storage
+  const societyFolderRef = ref(projectStorage, `society_images/${societyId}`);
+
+  // Fetch existing images for this society
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await listAll(societyFolderRef);
+        const urls = await Promise.all(
+          res.items.map((itemRef) => getDownloadURL(itemRef))
+        );
+        setImages(urls);
+      } catch (error) {
+        console.error("Error fetching images:", error);
+      }
+    };
+
+    fetchImages();
+  }, [societyId]);
+
+  const handleUploadClick = () => {
+    setEditMode(true);
+    setSelectedImages([]);
+  };
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+      fileType: "image/jpeg",
+    };
+
+    try {
+      return await imageCompression(file, options);
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      return file; // Return original if compression fails
+    }
+  };
+
+  const handleFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+
+    // Check if total images would exceed 10
+    if (images.length + selectedImages.length + files.length > 10) {
+      alert(
+        `Maximum 10 images allowed. You can add ${
+          10 - (images.length + selectedImages.length)
+        } more.`
+      );
+      return;
+    }
+
+    // Compress images before adding to selection
+    const compressedFiles = await Promise.all(
+      files.map((file) => compressImage(file))
+    );
+
+    setSelectedImages((prev) => [...prev, ...compressedFiles]);
+  };
+
+  // const handleDeleteAll = () => {
+  //   setSelectedImages([]);
+  // };
+
+  const handleSaveAll = async () => {
+  if (uploading) return; // Prevent multiple clicks
+  
+  setUploading(true);
+  setUploadProgress(0);
+
+  try {
+    const newUrls = [];
+    
+    // Upload selected images sequentially
+    for (const file of selectedImages) {
+      const fileName = `${Date.now()}-${file.name}`;
+      const imageRef = ref(projectStorage, `society_images/${societyId}/${fileName}`);
+      const uploadTask = uploadBytesResumable(imageRef, file);
+
+      const downloadURL = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(Math.round(progress));
+          },
+          (error) => reject(error),
+          async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
+        );
+      });
+      
+      newUrls.push(downloadURL);
+    }
+
+    // Update state with new images
+    setImages(prev => [...prev, ...newUrls]);
+    setSelectedImages([]);
+    setUploadProgress(100);
+    
+    setTimeout(() => {
+      setUploading(false);
+      setEditMode(false);
+    }, 1000);
+  } catch (error) {
+    console.error("Upload failed:", error);
+    alert("Failed to upload images. Please try again.");
+    setUploading(false);
+  }
+};
+
+  const openImageViewer = (index) => {
+    setCurrentImageIndex(index);
+    setViewerOpen(true);
+  };
+
+  const closeImageViewer = () => {
+    setViewerOpen(false);
+  };
+
+  const goToPrevious = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleDeleteExisting = async (index) => {
+    try {
+      // Get the reference to the image in storage
+      const imageUrl = images[index];
+      const imageRef = ref(projectStorage, imageUrl);
+
+      // Delete from Firebase storage
+      await deleteObject(imageRef);
+
+      // Update local state
+      setImages((prev) => prev.filter((_, i) => i !== index));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+  };
+
+  const handleDeleteNew = (index) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteAll = () => {
+    if (window.confirm("Are you sure you want to delete all images?")) {
+      // Delete all new selected images
+      setSelectedImages([]);
+
+      // If no existing images, we're done
+      if (images.length === 0) return;
+
+      // Delete all existing images from Firebase
+      Promise.all(
+        images.map((url) => {
+          const imageRef = ref(projectStorage, url);
+          return deleteObject(imageRef).catch((error) => {
+            console.error("Error deleting image:", error);
+          });
+        })
+      ).then(() => {
+        setImages([]);
+      });
+    }
+  };
+  const renderGallery = () => {
+    if (editMode) {
+      return (
+        <div className="edit-mode-gallery">
+          <div className="edit-mode-controls">
+            <label className="add-images-btn">
+              <FaUpload /> Add Images
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileSelect}
+                style={{ display: 'none' }}
+              />
+            </label>
+            <button 
+              className="delete-all-btn" 
+              onClick={handleDeleteAll}
+              disabled={selectedImages.length === 0 && images.length === 0}
+            >
+              Delete All
+            </button>
+            <button 
+              className="save-all-btn" 
+              onClick={handleSaveAll}
+              disabled={uploading}
+            >
+              {uploading ? 'Uploading...' : 'Save All'}
+            </button>
+            <button 
+              className="cancel-btn" 
+              onClick={() => setEditMode(false)}
+              disabled={uploading}
+            >
+              Cancel
+            </button>
+          </div>
+          
+          <div className="selected-images-preview">
+            {/* Show existing images with delete option */}
+            {images.length > 0 && (
+              <div className="existing-images-section">
+                <h4>Existing Images</h4>
+                <div className="selected-images-grid">
+                  {images.map((url, index) => (
+                    <div key={`existing-${index}`} className="selected-image-item">
+                      <img src={url} alt={`Existing ${index}`} />
+                      <button 
+                        className="delete-image-btn"
+                        onClick={() => handleDeleteExisting(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Show newly selected images */}
+            {selectedImages.length > 0 && (
+              <div className="new-images-section">
+                <h4>New Images to Upload</h4>
+                <div className="selected-images-grid">
+                  {selectedImages.map((file, index) => (
+                    <div key={`new-${index}`} className="selected-image-item">
+                      <img src={URL.createObjectURL(file)} alt={`Selected ${index}`} />
+                      <button 
+                        className="delete-image-btn"
+                        onClick={() => handleDeleteNew(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {images.length === 0 && selectedImages.length === 0 && (
+              <p className="no-images-text">No images selected</p>
+            )}
+          </div>
+          
+          {uploading && (
+            <div className="upload-progress">
+              <progress value={uploadProgress} max="100" />
+              <span>Uploading... {Math.round(uploadProgress)}%</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Rest of your existing renderGallery implementation...
+    // ... (keep the non-edit mode parts the same)
+    if (images.length === 0) {
+      return (
+        <div className="empty-gallery">
+          <p>No images uploaded yet</p>
+          <button className="upload-btn" onClick={handleUploadClick}>
+            <FaUpload /> Upload Images
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="gallery-grid">
+        {images.length >= 1 && (
+          <div className="main-photo" onClick={() => openImageViewer(0)}>
+            <img src={images[0]} alt="Main View" />
+          </div>
+        )}
+
+        {images.length >= 2 && (
+          <div className="sub-photo" onClick={() => openImageViewer(1)}>
+            <img src={images[1]} alt="View 2" />
+          </div>
+        )}
+
+        {images.length >= 3 && (
+          <div
+            className={`sub-photo photo ${images.length === 3 ? "end" : ""}`}
+            onClick={() => openImageViewer(2)}
+          >
+            <img src={images[2]} alt="View 3" />
+          </div>
+        )}
+
+        {images.length >= 4 && (
+          <div className="sub-photo " onClick={() => openImageViewer(3)}>
+            <img src={images[3]} alt="View 4" />
+          </div>
+        )}
+
+        {images.length >= 5 && (
+          <div
+            className={`sub-photo endphoto ${
+              images.length === 5 ? "end2" : ""
+            }`}
+            onClick={() => openImageViewer(4)}
+          >
+            <img src={images[4]} alt="View 5" />
+          </div>
+        )}
+
+        {images.length > 5 && (
+          <div className="show-more" onClick={() => openImageViewer(5)}>
+            <button className="show-all-btn">
+              <MdOutlinePhotoLibrary size={20} />
+              Show all {images.length} photos
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="gallery-preview">
       <div className="gallery-header">
-        <h2 className="gallery-title">
-          Assetz Trees and Tandem - Sample Apartment
-        </h2>
+        <h2 className="gallery-title">{societyName} - {societyType} Apartment</h2>
         <div className="gallery-icons">
+          {images.length > 0 && !editMode && (
+            <button
+              className="upload-btn icon"
+              title="Upload Images"
+              onClick={handleUploadClick}
+            >
+              <FaUpload />
+            </button>
+          )}
           <FaShareAlt className="icon" title="Share" />
           <FaRegHeart className="icon" title="Save" />
         </div>
       </div>
 
-      <div className="gallery-grid">
-        <div className="main-photo">
-          <img src="/assets/img/society//hero1.jpg" alt="Main View" />
+      {renderGallery()}
+
+      {viewerOpen && (
+        <div className="image-viewer-overlay">
+          <div className="image-viewer-content">
+            <button className="close-viewer" onClick={closeImageViewer}>
+              <FaTimes />
+            </button>
+            <button className="nav-button prev" onClick={goToPrevious}>
+             <FaChevronLeft />
+            </button>
+            <img
+              src={images[currentImageIndex]}
+              alt={`Gallery ${currentImageIndex}`}
+            />
+            <button className="nav-button next" onClick={goToNext}>
+              <FaChevronRight />
+            </button>
+            <div className="image-counter">
+              {currentImageIndex + 1} / {images.length}
+            </div>
+          </div>
         </div>
-        <div className="sub-photo">
-          <img src="/assets/img/society//hero2.jpg" alt="View 2" />
-        </div>
-        <div className="sub-photo end">
-          <img src="/assets/img/society//hero3.jpg" alt="View 3" />
-        </div>
-        <div className="sub-photo">
-          <img src="/assets/img/society//hero4.jpg" alt="View 4" />
-        </div>
-        <div className="sub-photo end2">
-          <img src="/assets/img/society//hero5.jpg" alt="View 5" />
-        </div>
-        <div className="show-more">
-          <button className="show-all-btn">
-            <MdOutlinePhotoLibrary size={20} />
-            Show all photos
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
@@ -1894,6 +2218,257 @@ const MeetingPoint = ({ state, city, locality }) => {
   );
 };
 
+const AvailableProperties = ({ societyName }) => {
+  const [properties, setProperties] = useState([]);
+  const [totalCount, setTotalCount] = useState(0); // track total in DB
+  const [filterPurpose, setFilterPurpose] = useState("Sale");
+
+  const fetchProperties = async () => {
+    try {
+      // 1️⃣ Get total count
+      const totalQuery = query(
+        collection(projectFirestore, "properties-propdial"),
+        where("society", "==", societyName),
+        where("purpose", "==", filterPurpose)
+      );
+      const totalSnap = await getDocs(totalQuery);
+      setTotalCount(totalSnap.size);
+
+      // 2️⃣ Get first 10 properties
+      const limitedQuery = query(
+        collection(projectFirestore, "properties-propdial"),
+        where("society", "==", societyName),
+        where("purpose", "==", filterPurpose),
+        limit(10)
+      );
+      const limitedSnap = await getDocs(limitedQuery);
+      const data = limitedSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProperties(data);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (societyName) {
+      fetchProperties();
+    }
+  }, [societyName, filterPurpose]);
+
+  return (
+    <div id="Available-Properties" className="propertyTabsWrapper">
+      <div className="propertyTabs">
+        <div className="tabs">
+          <div className="tabsHeader">
+            <h1 className="tabH1">Properties in {societyName}</h1>
+            <div className="tabButtons">
+              <button
+                className={filterPurpose === "Sale" ? "activeTab" : ""}
+                onClick={() => setFilterPurpose("Sale")}
+              >
+                Buy
+              </button>
+              <button
+                className={filterPurpose === "Rent" ? "activeTab" : ""}
+                onClick={() => setFilterPurpose("Rent")}
+              >
+                Rent
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Properties Grid */}
+        <div className="propertyGridContainer">
+          <div className="propertyGrid">
+            {properties.length > 0 ? (
+              <>
+                {properties.map((property) => (
+                  <Link
+                    to={`/propertydetails/${property.id}`}
+                    key={property.id}
+                    className="propertyLink"
+                  >
+                    <div className="propertyCard">
+                      <img
+                        src={
+                          property.images?.[0] ||
+                          "/assets/img/default-property.jpg"
+                        }
+                        alt={property.propertyName || "Property"}
+                        className="propertyImg"
+                      />
+                      <div className="cardContent">
+                        <h3>
+                          ₹{" "}
+                          {filterPurpose === "Sale"
+                            ? property.demandPriceSale || "N/A"
+                            : property.demandPriceRent || "N/A"}
+                        </h3>
+                        <p>
+                          {property.bhk} {property.propertyType} for{" "}
+                          {filterPurpose} in {property.society}
+                        </p>
+                        <button className="outlineBtn">Contact Builder</button>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+
+                {/* See More button if totalCount > 10 */}
+                {totalCount > 10 && (
+                  <Link to="/all-properties" className="outlineBtn seeMoreBtn">
+                    See More
+                  </Link>
+                )}
+              </>
+            ) : (
+              <p>No properties found.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const HeroSection = ({ societyId }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [images, setImages] = useState(['/hero1.jpg']); // Default image
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [allImages, setAllImages] = useState([]); // All images from storage for viewer
+
+  // Fetch images from Firebase Storage
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const societyFolderRef = ref(projectStorage, `society_images/${societyId}`);
+        const res = await listAll(societyFolderRef);
+        const urls = await Promise.all(
+          res.items.map((itemRef) => getDownloadURL(itemRef))
+        );
+        
+        if (urls.length > 0) {
+          setImages(urls.slice(0, 6)); // Slider images
+          setAllImages(urls); // All images for viewer
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchImages();
+  }, [societyId]);
+
+  // Auto-slide images with right-to-left movement
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const openImageViewer = (index) => {
+    setViewerOpen(true);
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const viewerGoToPrevious = () => {
+    setCurrentIndex(prev => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const viewerGoToNext = () => {
+    setCurrentIndex(prev => (prev === allImages.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="video-section">
+      <div className="slider-container">
+        <div 
+          className="slider-wrapper"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {images.map((img, idx) => (
+            <div key={idx} className="slide">
+              <img
+                src={img}
+                alt={`Slide ${idx + 1}`}
+                className="video-image"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button 
+        className="view-all-btn"
+        onClick={() => openImageViewer(currentIndex)}
+      >
+        View All Photos
+      </button>
+
+      <div className="dots-wrapper">
+        {images.map((_, idx) => (
+          <span
+            key={idx}
+            className={`dot ${currentIndex === idx ? 'active' : ''}`}
+            onClick={() => setCurrentIndex(idx)}
+          ></span>
+        ))}
+      </div>
+
+      {images.length > 1 && (
+        <>
+          <button className="nav-btn prev" onClick={goToPrevious}>
+            <FaChevronLeft />
+          </button>
+          <button className="nav-btn next" onClick={goToNext}>
+            <FaChevronRight />
+          </button>
+        </>
+      )}
+
+      {viewerOpen && (
+        <div className="image-viewer-overlay">
+          <div className="image-viewer-content">
+            <button className="close-viewer" onClick={() => setViewerOpen(false)}>
+              <FaTimes />
+            </button>
+            <button className="nav-button prev" onClick={viewerGoToPrevious}>
+              <FaChevronLeft />
+            </button>
+            <img
+              src={allImages[currentIndex]}
+              alt={`Gallery ${currentIndex}`}
+              className="viewer-image"
+            />
+            <button className="nav-button next" onClick={viewerGoToNext}>
+              <FaChevronRight />
+            </button>
+            <div className="image-counter">
+              {currentIndex + 1} / {allImages.length}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 const PGSocietyPage = () => {
   // The 'society' param from the URL is the slug, e.g., "best-12345"
   const { country, state, city, locality, societyName, id } = useParams();
@@ -1953,7 +2528,7 @@ const PGSocietyPage = () => {
   return (
     <div className={styles.container}>
       {/* Header Image Slider */}
-      <div className={styles.heroSection}>
+      {/* <div className={styles.heroSection}>
         <div
           className={styles.sliderWrapper}
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -1978,7 +2553,8 @@ const PGSocietyPage = () => {
             ></span>
           ))}
         </div>
-      </div>
+      </div> */}
+      <HeroSection societyId={id} />
 
       {/* Sticky Tab Bar */}
       <StickyTabBar />
@@ -2004,38 +2580,10 @@ const PGSocietyPage = () => {
         </div>
 
         {/* Buy Rent Tabs */}
-        <di id="Available-Properties" className="propertyTabsWrapper">
-          <div className="propertyTabs">
-            <div className={styles.tabs}>
-              <h1 className={styles.tabH1}>
-                Properties in Assetz Trees and Tandem
-              </h1>
-              <div>
-                <button className={styles.activeTab}>Buy</button>
-                <button>Rent</button>
-              </div>
-            </div>
-            {/* Properties Grid */}
-            <div className={styles.propertyGrid}>
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className={styles.propertyCard}>
-                  <img
-                    src={`/assets/img/society/${images[i]}`}
-                    alt="Flat"
-                    className={styles.propertyImg}
-                  />
-                  <div className={styles.cardContent}>
-                    <h3>₹ 2.20 Cr</h3>
-                    <p>3 BHK Flat for Sale in Assetz Trees and Tandem</p>
-                    <button className={styles.outlineBtn}>
-                      Contact Builder
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </di>
+        <div>
+          {/* Available Properties Section */}
+          <AvailableProperties societyName={society.society} />
+        </div>
 
         {/* Amenities */}
         <div id="Amenities">
@@ -2059,7 +2607,7 @@ const PGSocietyPage = () => {
 
         {/* Photo Gallery */}
         <div id="Photo-Gallery" className="gallerySection">
-          <GalleryPreview />
+          <GalleryPreview societyId={id} societyName={society.society} societyType={society.societyType} />
         </div>
 
         {/* Meeting Point */}
