@@ -1,18 +1,226 @@
-import { useEffect, useState, useRef } from 'react';
-import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, FaStop, FaPlay, FaPause, FaDownload, FaLock } from 'react-icons/fa';
+import { useEffect, useState, useRef, useMemo, useCallback, memo } from 'react';
+import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, 
+         FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, 
+         FaStop, FaPlay, FaPause, FaDownload, FaLock, FaClock } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
 import { projectFirestore, timestamp, projectAuth } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { projectStorage } from "../firebase/config";
 import { signOut } from "firebase/auth";
 
-// Updated VoicePlayer component
-const VoicePlayer = ({ url, isSent }) => {
-  // ... existing VoicePlayer implementation (unchanged) ...
-};
+// Memoized Circular Progress Component
+const CircularProgress = memo(({ progress }) => (
+  <div className="circular-progress">
+    <svg viewBox="0 0 36 36">
+      <path
+        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+        fill="none"
+        stroke="#eee"
+        strokeWidth="3"
+      />
+      <path
+        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+        fill="none"
+        stroke="#4CAF50"
+        strokeWidth="3"
+        strokeDasharray={`${progress}, 100`}
+      />
+    </svg>
+    <div className="progress-text">{progress}%</div>
+  </div>
+));
+
+// Memoized VoicePlayer component
+const VoicePlayer = memo(({ url, isSent }) => {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    
+    const updateProgress = () => {
+      if (audio.duration) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+    
+    const setAudioData = () => {
+      setDuration(audio.duration);
+    };
+    
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', setAudioData);
+    audio.addEventListener('ended', () => setIsPlaying(false));
+    
+    return () => {
+      audio.removeEventListener('timeupdate', updateProgress);
+      audio.removeEventListener('loadedmetadata', setAudioData);
+      audio.removeEventListener('ended', () => setIsPlaying(false));
+    };
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying]);
+
+  return (
+    <div className={`voice-player ${isSent ? 'sent' : 'received'}`}>
+      <audio ref={audioRef} src={url} preload="metadata" />
+      <button className="play-btn" onClick={togglePlay}>
+        {isPlaying ? <FaPause /> : <FaPlay />}
+      </button>
+      <div className="progress-container">
+        <div className="progress-bar" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="duration">{duration ? `${Math.floor(duration)}s` : '...'}</div>
+    </div>
+  );
+});
+
+// Memoized MessageContent component
+const MessageContent = memo(({ 
+  msg, 
+  isSent, 
+  onShowAttachment,
+  formatTime,
+  userPhone
+}) => {
+  const isOptimistic = msg.tempId;
+  const isPending = msg.pending;
+  const hasError = msg.error;
+
+  if (msg.isSystemMessage) {
+    return (
+      <div className="system-message">
+        <p>{msg.text}</p>
+        <span className="timestamp">{formatTime(msg.createdAt)}</span>
+      </div>
+    );
+  }
+  
+  return (
+    <div className={`message-content ${isPending ? 'pending' : ''} ${hasError ? 'error' : ''}`}>
+      {msg.text && <p>{msg.text}</p>}
+      
+      {msg.attachments && msg.attachments.map((att) => (
+        <div key={att.id} className={`attachment ${att.type} ${att.error ? 'error' : ''}`}>
+          {att.type === 'image' ? (
+            <div className="attachment-preview">
+              <img 
+                src={att.url} 
+                alt="Attachment" 
+                onClick={() => onShowAttachment(att)}
+                loading="lazy"
+              />
+              {isPending && !att.error && (
+                <div className="upload-status">
+                  <CircularProgress progress={att.progress || 0} />
+                </div>
+              )}
+              {att.error && (
+                <div className="upload-error">
+                  <FaTimes className="error-icon" />
+                </div>
+              )}
+            </div>
+          ) : att.type === 'audio' ? (
+            <div className="audio-attachment">
+              <VoicePlayer url={att.url} isSent={isSent} />
+              {isPending && !att.error && (
+                <div className="upload-status">
+                  <FaClock className="pending-icon" />
+                </div>
+              )}
+              {att.error && (
+                <div className="upload-error">
+                  <FaTimes className="error-icon" />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="file-attachment" onClick={() => onShowAttachment(att)}>
+              <div className="file-icon">📄</div>
+              <div className="file-name">{att.name.substring(0, 20)}</div>
+              {isPending && !att.error && (
+                <div className="upload-status">
+                  <CircularProgress progress={att.progress || 0} />
+                </div>
+              )}
+              {att.error && (
+                <div className="upload-error">
+                  <FaTimes className="error-icon" />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+      
+      <div className="message-footer">
+        <span className="timestamp">{formatTime(msg.createdAt)}</span>
+        {msg.senderId === userPhone && !isOptimistic && (
+          <span className="read-status">
+            {msg.read ? <MdDoneAll className="read" /> : <MdDone className="sent" />}
+          </span>
+        )}
+        {isOptimistic && isPending && !hasError && (
+          <span className="pending-status">
+            <FaClock className="pending-icon" />
+          </span>
+        )}
+        {isOptimistic && hasError && (
+          <span className="error-status">
+            <FaTimes className="error-icon" />
+          </span>
+        )}
+      </div>
+    </div>
+  );
+});
+
+// Memoized AttachmentItem component
+const AttachmentItem = memo(({ 
+  attachment, 
+  onRemove, 
+  onPreview 
+}) => {
+  return (
+    <div className={`attachment-item ${attachment.type}`}>
+      <button className="remove-attachment" onClick={() => onRemove(attachment.id)}>
+        <FaTimes />
+      </button>
+      {attachment.type === 'image' ? (
+        <div className="image-preview" onClick={() => onPreview(attachment)}>
+          <img src={attachment.url} alt="Preview" loading="lazy" />
+          <div className="preview-overlay">
+            <span>View</span>
+          </div>
+        </div>
+      ) : attachment.type === 'audio' ? (
+        <div className="audio-preview">
+          <div className="audio-icon">🎤</div>
+          <span>Voice Recording</span>
+        </div>
+      ) : (
+        <div className="file-preview">
+          <div className="file-icon">📄</div>
+          <div className="file-name">{attachment.name.substring(0, 15)}</div>
+        </div>
+      )}
+    </div>
+  );
+});
 
 const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const { user, dispatch } = useAuthContext();
@@ -39,6 +247,8 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [creatorFullName, setCreatorFullName] = useState('');
   const [canCloseTicket, setCanCloseTicket] = useState(false);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [optimisticMessages, setOptimisticMessages] = useState([]);
 
   // Check if admin can close ticket
   useEffect(() => {
@@ -50,18 +260,15 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   }, [user, ticketInfo]);
 
   // Close ticket function
-  const closeTicket = async () => {
+  const closeTicket = useCallback(async () => {
     if (!canCloseTicket) return;
     
     try {
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .update({
-          status: 'closed',
-          closedAt: timestamp.now(),
-          closedBy: user.phoneNumber
-        });
+      await projectFirestore.collection('tickets').doc(ticketId).update({
+        status: 'closed',
+        closedAt: timestamp.now(),
+        closedBy: user.phoneNumber
+      });
       
       setTicketInfo(prev => ({
         ...prev,
@@ -79,42 +286,56 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         isSystemMessage: true
       };
       
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .collection('messages')
-        .add(messageData);
+      await projectFirestore.collection('tickets').doc(ticketId)
+        .collection('messages').add(messageData);
         
       setCanCloseTicket(false);
+      setShowCloseConfirm(false);
       
     } catch (error) {
       console.error("Error closing ticket:", error);
       setError("Failed to close ticket. Please try again.");
     }
-  };
+  }, [canCloseTicket, ticketId, user]);
 
-  // Helper function to truncate text
-  const truncateText = (text, maxLength) => {
-    if (!text) return '';
-    return text.length > maxLength 
+  // Memoized helper functions
+  const truncateText = useCallback((text, maxLength) => {
+    return text && text.length > maxLength 
       ? text.substring(0, maxLength) + '...' 
-      : text;
-  };
+      : text || '';
+  }, []);
 
-  // Generate avatar text from issue type
-  const getAvatarText = (issueType) => {
+  const getAvatarText = useCallback((issueType) => {
     if (!issueType) return 'T';
-    
     const words = issueType.trim().split(/\s+/);
-    
     if (words.length === 1) {
-      const word = words[0];
-      if (word.length <= 2) return word;
-      return word.charAt(0) + word.charAt(word.length - 1);
+      return words[0].length <= 2 
+        ? words[0] 
+        : words[0][0] + words[0][words[0].length - 1];
     }
+    return words.map(word => word[0]).join('').substring(0, 2);
+  }, []);
+
+  const getAvatarColor = useCallback((str) => {
+    if (!str) return '#128c7e';
+    const hash = Array.from(str).reduce((acc, char) => 
+      char.charCodeAt(0) + ((acc << 5) - acc), 0);
+    return `hsl(${Math.abs(hash) % 360}, 70%, 60%)`;
+  }, []);
+
+  const formatTime = useCallback((date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }, []);
+
+  const formatDate = useCallback((date) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
     
-    return words.map(word => word.charAt(0)).join('').substring(0, 2);
-  };
+    if (date.toDateString() === today.toDateString()) return 'Today';
+    if (date.toDateString() === yesterday.toDateString()) return 'Yesterday';
+    return date.toLocaleDateString();
+  }, []);
 
   // Fetch ticket info, admin name, and creator name
   useEffect(() => {
@@ -154,7 +375,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           }
         }
 
-        // Fetch creator's full name from users-propdial collection
+        // Fetch creator's full name
         if (ticketData.createdBy) {
           try {
             const querySnapshot = await projectFirestore
@@ -164,11 +385,9 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
               .get();
             
             if (!querySnapshot.empty) {
-              const creatorDoc = querySnapshot.docs[0];
-              const creatorData = creatorDoc.data();
+              const creatorData = querySnapshot.docs[0].data();
               setCreatorFullName(creatorData.fullName || "User");
             } else {
-              console.log("Creator document not found in users-propdial");
               setCreatorFullName("User");
             }
           } catch (error) {
@@ -184,7 +403,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     };
   }, [ticketId]);
 
-  // Fetch messages
+  // Fetch messages with duplicate prevention
   useEffect(() => {
     if (!ticketId) return;
 
@@ -199,20 +418,30 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           ...doc.data(),
           createdAt: doc.data().createdAt?.toDate() || new Date()
         }));
+        
+        // Optimized optimistic message removal
+        setOptimisticMessages(prev => {
+          const confirmedIds = new Set(
+            msgs.filter(m => m.optimisticId).map(m => m.optimisticId)
+          );
+          return prev.filter(optMsg => !confirmedIds.has(optMsg.tempId));
+        });
+
         setMessages(msgs);
         setLoading(false);
 
-        setTimeout(() => {
+        // Batch update read status
+        const unreadMessages = snapshot.docs.filter(
+          doc => !doc.data().read && doc.data().senderId !== user.phoneNumber
+        );
+        
+        if (unreadMessages.length > 0) {
           const batch = projectFirestore.batch();
-          snapshot.docs.forEach((doc) => {
-            if (!doc.data().read && doc.data().senderId !== user.phoneNumber) {
-              batch.update(doc.ref, { read: true });
-            }
+          unreadMessages.forEach(doc => {
+            batch.update(doc.ref, { read: true });
           });
-          batch.commit().catch(error => {
-            console.error("Error marking messages as read:", error);
-          });
-        }, 300);
+          batch.commit().catch(console.error);
+        }
       }, (error) => {
         console.error("Error fetching messages:", error);
         setLoading(false);
@@ -222,10 +451,17 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return () => unsubscribe();
   }, [ticketId, user.phoneNumber]);
 
-  // Auto-scroll to bottom
+  // Auto-scroll to bottom with throttling
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+    const scrollToBottom = () => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    
+    const timer = setTimeout(scrollToBottom, 100);
+    return () => clearTimeout(timer);
+  }, [messages, optimisticMessages]);
 
   // Close emoji picker when clicking outside
   useEffect(() => {
@@ -241,34 +477,35 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showEmojiPicker]);
 
-  // Handle typing indicator
-  const handleInputChange = (e) => {
+  // Handle typing indicator with debouncing
+  const handleInputChange = useCallback((e) => {
     setInput(e.target.value);
     
     if (!isTyping) {
       setIsTyping(true);
-      if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = setTimeout(() => {
-        setIsTyping(false);
-      }, 2000);
     }
-  };
+    
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+    
+    typingTimeoutRef.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 2000);
+  }, [isTyping]);
 
   // Handle authentication errors
-  const handleAuthError = (error) => {
+  const handleAuthError = useCallback((error) => {
     console.error("Authentication error:", error);
     setError("Session expired. Please log in again.");
     
-    // Sign out user and redirect to login
     signOut(projectAuth).then(() => {
       dispatch({ type: 'LOGOUT' });
-    }).catch((signOutError) => {
-      console.error("Sign out error:", signOutError);
-    });
-  };
+    }).catch(console.error);
+  }, [dispatch]);
 
-  // Send message - disabled when ticket is closed
-  const sendMessage = async () => {
+  // Optimized sendMessage function
+  const sendMessage = useCallback(async () => {
     if (ticketInfo?.status === 'closed') {
       setError("This ticket is closed. No further messages can be sent.");
       return;
@@ -276,83 +513,120 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     
     if (input.trim() === '' && attachments.length === 0) return;
   
+    const tempId = `temp-${Date.now()}`;
+    const optimisticMsg = {
+      id: tempId,
+      senderId: user.phoneNumber,
+      senderType: user?.role === 'admin' ? 'admin' : 'user',
+      createdAt: new Date(),
+      read: false,
+      pending: true,
+      tempId: tempId,
+      text: input,
+      attachments: attachments.map(att => ({
+        ...att,
+        pending: true,
+        progress: 0
+      })),
+    };
+    
+    setOptimisticMessages(prev => [...prev, optimisticMsg]);
+    setAttachments([]);
+    setInput('');
+    setShowEmojiPicker(false);
+  
     try {
       const messageData = {
         senderId: user.phoneNumber,
         senderType: user?.role === 'admin' ? 'admin' : 'user',
         createdAt: timestamp.now(),
         read: false,
+        optimisticId: tempId,
       };
   
       if (input.trim() !== '') {
         messageData.text = input;
       }
   
-      if (attachments.length > 0) {
-        const uploadedAttachments = [];
-  
-        for (const att of attachments) {
-          let fileToUpload;
-  
-          if (att.type === 'audio') {
-            fileToUpload = new File([att.blob], att.name, { type: 'audio/webm' });
-          } else {
-            fileToUpload = att.file;
-          }
-  
+      // Process attachments concurrently
+      if (optimisticMsg.attachments.length > 0) {
+        const uploadPromises = optimisticMsg.attachments.map((att, index) => {
+          const fileToUpload = att.type === 'audio' 
+            ? new File([att.blob], att.name, { type: 'audio/webm' }) 
+            : att.file;
+            
           const storageRef = ref(projectStorage, `attachments/${ticketId}/${att.name}`);
-          await uploadBytes(storageRef, fileToUpload);
-          const downloadURL = await getDownloadURL(storageRef);
-  
-          uploadedAttachments.push({
-            id: att.id,
-            name: att.name,
-            type: att.type,
-            url: downloadURL,
+          const uploadTask = uploadBytesResumable(storageRef, fileToUpload);
+          
+          return new Promise((resolve, reject) => {
+            uploadTask.on('state_changed', 
+              (snapshot) => {
+                const progress = Math.round(
+                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                
+                // Batch progress updates
+                setOptimisticMessages(prev => prev.map(msg => {
+                  if (msg.tempId === tempId) {
+                    const newAttachments = [...msg.attachments];
+                    newAttachments[index] = { ...newAttachments[index], progress };
+                    return { ...msg, attachments: newAttachments };
+                  }
+                  return msg;
+                }));
+              },
+              reject,
+              async () => {
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                resolve({
+                  id: att.id,
+                  name: att.name,
+                  type: att.type,
+                  url: downloadURL,
+                });
+              }
+            );
           });
-        }
-  
-        messageData.attachments = uploadedAttachments;
+        });
+        
+        messageData.attachments = await Promise.all(uploadPromises);
       }
   
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .collection('messages')
-        .add(messageData);
+      // Add to Firestore
+      await projectFirestore.collection('tickets').doc(ticketId)
+        .collection('messages').add(messageData);
   
-      setInput('');
-      setAttachments([]);
-      setShowEmojiPicker(false);
-  
-      await projectFirestore
-        .collection('tickets')
-        .doc(ticketId)
-        .update({
-          lastUpdated: timestamp.now(),
-          status: 'open',
-        });
+      // Update ticket status
+      await projectFirestore.collection('tickets').doc(ticketId).update({
+        lastUpdated: timestamp.now(),
+        status: 'open',
+      });
     } catch (error) {
       console.error("Error sending message:", error);
       
-      // Handle token refresh errors
-      if (error.code && error.code.includes('auth')) {
+      // Mark message as failed
+      setOptimisticMessages(prev => prev.map(msg => 
+        msg.tempId === tempId 
+          ? { ...msg, error: true, pending: false } 
+          : msg
+      ));
+      
+      if (error.code?.includes('auth')) {
         handleAuthError(error);
       } else {
         setError("Failed to send message. Please try again.");
       }
     }
-  };
-  
+  }, [input, attachments, ticketInfo, user, ticketId, handleAuthError]);
 
   // Add emoji
-  const addEmoji = (emoji) => {
+  const addEmoji = useCallback((emoji) => {
     setInput(prev => prev + emoji.native);
     inputRef.current.focus();
-  };
+  }, []);
 
-  // Start voice recording - disabled when ticket is closed
-  const startRecording = async () => {
+  // Start voice recording
+  const startRecording = useCallback(async () => {
     if (ticketInfo?.status === 'closed') {
       setError("This ticket is closed. No further messages can be sent.");
       return;
@@ -371,14 +645,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       recorder.onstop = () => {
         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
         
-        const audioAttachment = {
+        setAttachments(prev => [...prev, {
           id: Math.random().toString(36).substr(2, 9),
-          name: `recording-${new Date().getTime()}.webm`,
+          name: `recording-${Date.now()}.webm`,
           type: 'audio',
           blob: audioBlob
-        };
+        }]);
         
-        setAttachments(prev => [...prev, audioAttachment]);
         setAudioChunks([]);
         stream.getTracks().forEach(track => track.stop());
         clearInterval(recordingTimerRef.current);
@@ -397,45 +670,25 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       console.error("Error starting recording:", error);
       setError("Failed to access microphone. Please check permissions.");
     }
-  };
+  }, [ticketInfo]);
 
   // Stop voice recording
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
     if (mediaRecorder && isRecording) {
       mediaRecorder.stop();
       setIsRecording(false);
     }
-  };
+  }, [mediaRecorder, isRecording]);
 
   // Format recording time
-  const formatRecordingTime = (seconds) => {
+  const formatRecordingTime = useCallback((seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  };
+  }, []);
 
-  // Format message time
-  const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  // Format message date
-  const formatDate = (date) => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    
-    if (date.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return 'Yesterday';
-    } else {
-      return date.toLocaleDateString();
-    }
-  };
-
-  // Handle file attachment - disabled when ticket is closed
-  const handleAttachment = (e) => {
+  // Handle file attachment
+  const handleAttachment = useCallback((e) => {
     if (ticketInfo?.status === 'closed') {
       setError("This ticket is closed. No further messages can be sent.");
       return;
@@ -451,17 +704,30 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }));
     
     setAttachments(prev => [...prev, ...newAttachments]);
-  };
+  }, [ticketInfo]);
 
   // Remove attachment
-  const removeAttachment = (id) => {
+  const removeAttachment = useCallback((id) => {
     setAttachments(prev => prev.filter(att => att.id !== id));
-  };
+  }, []);
 
   // Render attachment preview
-  const renderAttachmentPreview = () => {
+  const renderAttachmentPreview = useCallback(() => {
     if (!showAttachmentPreview) return null;
     
+    const handlePinch = (e) => {
+      if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (pinchStartDistance !== null) {
+          const newZoom = distance / pinchStartDistance;
+          setZoomLevel(Math.max(1, Math.min(3, zoomLevel * newZoom)));
+        }
+      }
+    };
+
     return (
       <div 
         className="attachment-preview-modal"
@@ -470,10 +736,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           setZoomLevel(1);
         }}
       >
-        <div 
-          className="preview-content"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="preview-content" onClick={e => e.stopPropagation()}>
           <button 
             className="close-preview"
             onClick={() => {
@@ -493,11 +756,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 style={{ transform: `scale(${zoomLevel})` }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (zoomLevel === 1) {
-                    setZoomLevel(2);
-                  } else {
-                    setZoomLevel(1);
-                  }
+                  setZoomLevel(zoomLevel === 1 ? 2 : 1);
                 }}
                 onTouchStart={(e) => {
                   if (e.touches.length === 2) {
@@ -506,21 +765,8 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                     setPinchStartDistance(Math.sqrt(dx * dx + dy * dy));
                   }
                 }}
-                onTouchMove={(e) => {
-                  if (e.touches.length === 2) {
-                    const dx = e.touches[0].clientX - e.touches[1].clientX;
-                    const dy = e.touches[0].clientY - e.touches[1].clientY;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (pinchStartDistance !== null) {
-                      const newZoom = distance / pinchStartDistance;
-                      setZoomLevel(Math.max(1, Math.min(3, zoomLevel * newZoom)));
-                    }
-                  }
-                }}
-                onTouchEnd={() => {
-                  setPinchStartDistance(null);
-                }}
+                onTouchMove={handlePinch}
+                onTouchEnd={() => setPinchStartDistance(null)}
               />
               <div className="zoom-hint">
                 {zoomLevel === 1 ? 'Click to zoom in' : 'Click to reset zoom'}
@@ -544,95 +790,96 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       </div>
     );
-  };
+  }, [showAttachmentPreview, zoomLevel, pinchStartDistance]);
 
-  // Render message content with system message support
-  const renderMessageContent = (msg) => {
-    if (msg.isSystemMessage) {
-      return (
-        <div className="system-message">
-          <p>{msg.text}</p>
-          <span className="timestamp">{formatTime(msg.createdAt)}</span>
-        </div>
-      );
-    }
-    
-    return (
-      <div className="message-content">
-        {msg.text && <p>{msg.text}</p>}
-        
-        {msg.attachments && msg.attachments.map(att => (
-          <div 
-            key={att.id} 
-            className={`attachment ${att.type}`}
-          >
-            {att.type === 'image' ? (
-              <img 
-                src={att.url} 
-                alt="Attachment" 
-                onClick={() => {
-                  setShowAttachmentPreview(att);
-                  setZoomLevel(1);
-                }}
-              />
-            ) : att.type === 'audio' ? (
-              <VoicePlayer 
-                url={att.url} 
-                isSent={msg.senderId === user.phoneNumber} 
-              />
-            ) : (
-              <div 
-                className="file-attachment"
-                onClick={() => setShowAttachmentPreview(att)}
-              >
-                <div className="file-icon">📄</div>
-                <div className="file-name">{truncateText(att.name, 20)}</div>
-              </div>
-            )}
-          </div>
-        ))}
-        
-        <div className="message-footer">
-          <span className="timestamp">{formatTime(msg.createdAt)}</span>
-          {msg.senderId === user.phoneNumber && (
-            <span className="read-status">
-              {msg.read ? <MdDoneAll className="read" /> : <MdDone className="sent" />}
-            </span>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  // Generate consistent color based on string
-  const getAvatarColor = (str) => {
-    if (!str) return '#128c7e';
-    
-    const hash = str.split('').reduce((acc, char) => {
-      return char.charCodeAt(0) + ((acc << 5) - acc);
-    }, 0);
-    
-    const hue = Math.abs(hash) % 360;
-    return `hsl(${hue}, 70%, 60%)`;
-  };
-
-  // Group messages by date
-  const groupMessagesByDate = () => {
+  // Memoized grouped messages
+  const groupedMessages = useMemo(() => {
     const grouped = {};
+    const allMessages = [...messages, ...optimisticMessages];
     
-    messages.forEach(msg => {
+    allMessages.forEach(msg => {
       const dateKey = formatDate(msg.createdAt);
-      if (!grouped[dateKey]) {
-        grouped[dateKey] = [];
-      }
+      grouped[dateKey] = grouped[dateKey] || [];
       grouped[dateKey].push(msg);
     });
     
     return grouped;
-  };
+  }, [messages, optimisticMessages, formatDate]);
 
-  const groupedMessages = groupMessagesByDate();
+  // Memoized ticket details panel
+  const ticketDetailsPanel = useMemo(() => {
+    if (!ticketInfo) return null;
+    
+    return (
+      <div className="ticket-details-panel">
+        <div 
+          className="panel-header"
+          onClick={() => setShowTicketDetails(!showTicketDetails)}
+        >
+          <h4>Ticket Details</h4>
+          <span className="toggle-icon">
+            {showTicketDetails ? <FaChevronUp /> : <FaChevronDown />}
+          </span>
+        </div>
+        
+        {showTicketDetails && (
+          <div className="panel-content">
+            <div className="detail-row">
+              <span className="detail-label">
+                <FaIdCard className="detail-icon" /> Ticket ID:
+              </span>
+              <span className="detail-value">{ticketInfo.id}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">
+                <FaPhone className="detail-icon" /> Mobile:
+              </span>
+              <span className="detail-value">{ticketInfo.createdBy}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Subject:</span>
+              <span className="detail-value">{ticketInfo.subject || "No subject"}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Issue Type:</span>
+              <span 
+                className="issue-type-badge"
+                style={{ backgroundColor: getAvatarColor(ticketInfo.issueType) }}
+              >
+                {ticketInfo.issueType}
+              </span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Description:</span>
+              <span className="detail-value">{ticketInfo.description || "No description"}</span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Created:</span>
+              <span className="detail-value">
+                {ticketInfo.createdAt.toLocaleDateString()} at {ticketInfo.createdAt.toLocaleTimeString()}
+              </span>
+            </div>
+            <div className="detail-row">
+              <span className="detail-label">Status:</span>
+              <span className={`status-badge status-${ticketInfo.status}`}>
+                {ticketInfo.status}
+              </span>
+            </div>
+            {ticketInfo.status === 'closed' && ticketInfo.closedAt && (
+              <div className="detail-row">
+                <span className="detail-label">Closed:</span>
+                <span className="detail-value">
+                  {ticketInfo.closedAt.toLocaleDateString()} at {ticketInfo.closedAt.toLocaleTimeString()}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }, [ticketInfo, showTicketDetails, getAvatarColor]);
 
+  // Loading state
   if (loading) {
     return (
       <div className="chat-window loading">
@@ -644,6 +891,40 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
 
   return (
     <div className="chat-window">
+      {/* Close Ticket Confirmation Popup */}
+      {showCloseConfirm && (
+        <div className="confirmation-popup">
+          <div className="confirmation-content">
+            <div className="confirmation-header">
+              <FaLock className="warning-icon" />
+              <h3>Close Ticket Confirmation</h3>
+            </div>
+            <div className="confirmation-body">
+              <p>Are you sure you want to close this ticket?</p>
+              <ul>
+                <li>Users won't be able to send new messages</li>
+                <li>The ticket will be marked as resolved</li>
+                <li>This action cannot be undone</li>
+              </ul>
+            </div>
+            <div className="confirmation-actions">
+              <button 
+                className="cancel-btn"
+                onClick={() => setShowCloseConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="confirm-btn"
+                onClick={closeTicket}
+              >
+                <FaLock /> Confirm Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="chat-header">
         <div className="header-left">
           {isMobile && (
@@ -659,10 +940,9 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           </div>
           <div className="ticket-info">
             <h3>
-              {user?.role === 'admin' ? 
-                (creatorFullName || "User") : 
-                (ticketInfo?.issueType || "Support Ticket")
-              }
+              {user?.role === 'admin' 
+                ? (creatorFullName || "User") 
+                : (ticketInfo?.issueType || "Support Ticket")}
             </h3>
             <div className="status-container">
               <span className="subject-text">
@@ -680,13 +960,12 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           </div>
         </div>
         
-        {/* Close Ticket Button (Admin Only) */}
         {canCloseTicket && (
           <button 
             className="close-ticket-btn"
-            onClick={closeTicket}
+            onClick={() => setShowCloseConfirm(true)}
           >
-            <FaLock /> Close Ticket
+            <FaLock /> Close
           </button>
         )}
       </div>
@@ -716,103 +995,35 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       )}
       
       {/* Ticket Details Panel */}
-      {ticketInfo && (
-        <div className="ticket-details-panel">
-          <div 
-            className="panel-header"
-            onClick={() => setShowTicketDetails(!showTicketDetails)}
-          >
-            <h4>Ticket Details</h4>
-            <span className="toggle-icon">
-              {showTicketDetails ? <FaChevronUp /> : <FaChevronDown />}
-            </span>
-          </div>
-          
-          {showTicketDetails && (
-            <div className="panel-content">
-              <div className="detail-row">
-                <span className="detail-label">
-                  <FaIdCard className="detail-icon" /> Ticket ID:
-                </span>
-                <span className="detail-value">
-                  {ticketInfo.id}
-                </span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">
-                  <FaPhone className="detail-icon" /> Mobile:
-                </span>
-                <span className="detail-value">
-                  {ticketInfo.createdBy}
-                </span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">Subject:</span>
-                <span className="detail-value">{ticketInfo.subject || "No subject"}</span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">Issue Type:</span>
-                <span 
-                  className="issue-type-badge"
-                  style={{ backgroundColor: getAvatarColor(ticketInfo.issueType) }}
-                >
-                  {ticketInfo.issueType}
-                </span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">Description:</span>
-                <span className="detail-value">{ticketInfo.description || "No description provided"}</span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">Created:</span>
-                <span className="detail-value">
-                  {ticketInfo.createdAt.toLocaleDateString()} at {ticketInfo.createdAt.toLocaleTimeString()}
-                </span>
-              </div>
-              
-              <div className="detail-row">
-                <span className="detail-label">Status:</span>
-                <span className={`status-badge status-${ticketInfo.status}`}>
-                  {ticketInfo.status}
-                </span>
-              </div>
-              
-              {ticketInfo.status === 'closed' && ticketInfo.closedAt && (
-                <div className="detail-row">
-                  <span className="detail-label">Closed:</span>
-                  <span className="detail-value">
-                    {ticketInfo.closedAt.toLocaleDateString()} at {ticketInfo.closedAt.toLocaleTimeString()}
-                  </span>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+      {ticketDetailsPanel}
 
       <div className="messages-container">
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date} className="message-date-group">
             <div className="date-divider">{date}</div>
-            {dateMessages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'} ${msg.isSystemMessage ? 'system' : ''}`}
-              >
-                <div className="message-content-wrapper">
-                  {renderMessageContent(msg)}
+            {dateMessages.map((msg) => {
+              const isSent = msg.senderId === user.phoneNumber;
+              return (
+                <div
+                  key={msg.id}
+                  className={`message ${isSent ? 'sent' : 'received'} ${msg.isSystemMessage ? 'system' : ''}`}
+                >
+                  <div className="message-content-wrapper">
+                    <MessageContent 
+                      msg={msg} 
+                      isSent={isSent}
+                      onShowAttachment={setShowAttachmentPreview}
+                      formatTime={formatTime}
+                      userPhone={user.phoneNumber}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))}
         
-        {messages.length === 0 && (
+        {messages.length === 0 && optimisticMessages.length === 0 && (
           <div className="empty-messages">
             <div className="empty-illustration">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
@@ -829,39 +1040,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
 
       {attachments.length > 0 && (
         <div className="attachments-preview">
-          {attachments.map(att => (
-            <div key={att.id} className={`attachment-item ${att.type}`}>
-              <button 
-                className="remove-attachment"
-                onClick={() => removeAttachment(att.id)}
-              >
-                <FaTimes />
-              </button>
-              {att.type === 'image' ? (
-                <div 
-                  className="image-preview"
-                  onClick={() => {
-                    setShowAttachmentPreview(att);
-                    setZoomLevel(1);
-                  }}
-                >
-                  <img src={att.url} alt="Preview" />
-                  <div className="preview-overlay">
-                    <span>View</span>
-                  </div>
-                </div>
-              ) : att.type === 'audio' ? (
-                <div className="audio-preview">
-                  <div className="audio-icon">🎤</div>
-                  <span>Voice Recording</span>
-                </div>
-              ) : (
-                <div className="file-preview">
-                  <div className="file-icon">📄</div>
-                  <div className="file-name">{truncateText(att.name, 15)}</div>
-                </div>
-              )}
-            </div>
+          {attachments.map(attachment => (
+            <AttachmentItem
+              key={attachment.id}
+              attachment={attachment}
+              onRemove={removeAttachment}
+              onPreview={setShowAttachmentPreview}
+            />
           ))}
         </div>
       )}
@@ -877,7 +1062,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       )}
 
-      {/* Input Area - Disabled when ticket is closed */}
+      {/* Input Area */}
       {ticketInfo?.status !== 'closed' ? (
         <div className="message-input-area">
           {isRecording && (
@@ -951,4 +1136,4 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   );
 };
 
-export default ChatWindow;
+export default memo(ChatWindow);
