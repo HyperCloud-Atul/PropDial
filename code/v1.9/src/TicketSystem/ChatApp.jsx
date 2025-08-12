@@ -35,72 +35,85 @@ const ChatApp = () => {
     if (isMobile) setShowSidebar(false);
   };
 
+  // Handle closing the ticket creation form
+  const handleCloseCreate = () => {
+    setShowCreateModal(false);
+    
+    // In mobile view, show sidebar and reset selection/search
+    if (isMobile) {
+      setShowSidebar(true);
+      setSelectedTicket(null);
+      setSearchQuery('');
+    }
+  };
+
   return (
     <div className='chat-app-main'>
-    <div className="chat-app">
-      {/* Always show sidebar on desktop, conditionally on mobile */}
-      {showSidebar && (
-        <TicketSidebar 
-          selectedTicket={selectedTicket} 
-          setSelectedTicket={setSelectedTicket}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          onSelectTicket={(ticketId) => {
-            setSelectedTicket(ticketId);
-            if (isMobile) setShowSidebar(false);
-          }}
-          onNewTicket={handleNewTicket}
-          isMobile={isMobile}
-          onClose={() => setShowSidebar(false)}
-        />
-      )}
-
-      {/* Conditionally render chat window or empty state */}
-      <div className="chat-window">
-        {selectedTicket ? (
-          <ChatWindow 
-            ticketId={selectedTicket} 
-            onBack={() => {
-              setSelectedTicket(null);
-              if (isMobile) setShowSidebar(true);
+      <div className="chat-app">
+        {/* Always show sidebar on desktop, conditionally on mobile */}
+        {showSidebar && (
+          <TicketSidebar 
+            selectedTicket={selectedTicket} 
+            setSelectedTicket={setSelectedTicket}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            onSelectTicket={(ticketId) => {
+              setSelectedTicket(ticketId);
+              if (isMobile) setShowSidebar(false);
             }}
+            onNewTicket={handleNewTicket}
             isMobile={isMobile}
+            onClose={() => setShowSidebar(false)}
           />
-        ) : (
-          // Only show empty state on desktop
-          !isMobile && (
-            <div className="empty-state">
-              <div className="empty-content">
-                <div className="illustration">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  </svg>
+        )}
+
+        {/* Conditionally render chat window or empty state */}
+        <div className="chat-window">
+          {selectedTicket ? (
+            <ChatWindow 
+              ticketId={selectedTicket} 
+              onBack={() => {
+                setSelectedTicket(null);
+                if (isMobile) setShowSidebar(true);
+              }}
+              isMobile={isMobile}
+            />
+          ) : (
+            // Only show empty state on desktop
+            !isMobile && (
+              <div className="empty-state">
+                <div className="empty-content">
+                  <div className="illustration">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <h3>No Ticket Selected</h3>
+                  <p>Select a ticket from the list or create a new one</p>
+                  <button 
+                    className="new-ticket-btn"
+                    onClick={handleNewTicket}
+                  >
+                    + Create New Ticket
+                  </button>
                 </div>
-                <h3>No Ticket Selected</h3>
-                <p>Select a ticket from the list or create a new one</p>
-                <button 
-                  className="new-ticket-btn"
-                  onClick={handleNewTicket}
-                >
-                  + Create New Ticket
-                </button>
               </div>
-            </div>
-          )
+            )
+          )}
+        </div>
+
+        {showCreateModal && (
+          <CreateTicket 
+            onTicketCreated={(ticketId) => {
+              setSelectedTicket(ticketId);
+              setShowCreateModal(false);
+              if (isMobile) setShowSidebar(false);
+            }}
+            onClose={handleCloseCreate}  // Updated handler
+            isMobile={isMobile}  // Pass isMobile to CreateTicket
+          />
         )}
       </div>
-
-      {showCreateModal && (
-        <CreateTicket 
-          onTicketCreated={(ticketId) => {
-            setSelectedTicket(ticketId);
-            setShowCreateModal(false);
-            if (isMobile) setShowSidebar(false);
-          }}
-          onClose={() => setShowCreateModal(false)}
-        />
-      )}
-    </div>
     </div>
   );
 };

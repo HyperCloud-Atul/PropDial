@@ -805,11 +805,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'} ${msg.isSystemMessage ? 'system' : ''}`}
               >
                 <div className="message-content-wrapper">
-                  {msg.senderId !== user.phoneNumber && !msg.isSystemMessage && (
-                    <div className="sender-name">
-                      {msg.senderType === 'admin' ? adminName : msg.senderName || "User"}
-                    </div>
-                  )}
                   {renderMessageContent(msg)}
                 </div>
               </div>
