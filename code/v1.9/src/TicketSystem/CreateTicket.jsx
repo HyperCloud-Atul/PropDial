@@ -3,9 +3,9 @@ import { projectFirestore } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { timestamp } from '../firebase/config';
 
-const CreateTicket = ({ onTicketCreated, onClose }) => {
+const CreateTicket = ({ onTicketCreated, onClose, isMobile }) => {
   const [issueType, setIssueType] = useState('');
-  const [subject, setSubject] = useState(''); // New state for subject
+  const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -16,7 +16,6 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     setSubmitting(true);
     setError('');
     
-    // Updated validation to include subject
     if (!issueType || !subject || !description) {
       setError('Please fill in all fields');
       setSubmitting(false);
@@ -26,7 +25,7 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     try {
       const docRef = await projectFirestore.collection('tickets').add({
         issueType,
-        subject, // Include subject in the ticket data
+        subject,
         description,
         createdBy: user.phoneNumber,
         createdAt: timestamp.now(),
@@ -41,6 +40,21 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // New function to handle cancel/close actions
+  const handleCancel = () => {
+    // Reset form state
+    setIssueType('');
+    setSubject('');
+    setDescription('');
+    setError('');
+    
+    // Execute close callback with mobile-specific flags
+    if (onClose) onClose({
+      resetSelection: isMobile,
+      resetSearch: isMobile
+    });
   };
 
   return (
@@ -70,13 +84,11 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
               <option value="Other">Other</option>
             </select>
             
-            {/* New Subject Field */}
             <label>Subject</label>
             <input
               type="text"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              // placeholder="Brief summary of your issue"
               required
               disabled={submitting}
               maxLength={100}
@@ -95,7 +107,7 @@ const CreateTicket = ({ onTicketCreated, onClose }) => {
               <button
                 type="button"
                 className="create-ticket__button-group-cancel"
-                onClick={onClose}
+                onClick={handleCancel}  
                 disabled={submitting}
               >
                 Cancel

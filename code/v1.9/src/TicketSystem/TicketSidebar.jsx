@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { projectFirestore } from "../firebase/config";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { doc, getDoc } from "firebase/firestore"; // Corrected import
+import { doc, getDoc } from "firebase/firestore";
 
 const TicketSidebar = ({ 
   selectedTicket, 
@@ -22,37 +22,30 @@ const TicketSidebar = ({
   
     // Generate consistent color based on issue type
     const getAvatarColor = (issueType) => {
-      if (!issueType) return '#128c7e'; // WhatsApp green
+      if (!issueType) return '#128c7e';
       
-      // Create a simple hash from the issue type
       const hash = issueType.split('').reduce((acc, char) => {
         return char.charCodeAt(0) + ((acc << 5) - acc);
       }, 0);
       
-      // Generate a color from the hash
       const hue = Math.abs(hash) % 360;
       return `hsl(${hue}, 70%, 60%)`;
     };
 
-    // Generate two-letter avatar text
     const getTwoLetters = (str) => {
       if (!str) return 'TK';
       
       const words = str.trim().split(/\s+/);
       
-      // For multi-word strings
       if (words.length >= 2) {
         return (words[0][0] + words[1][0]).toUpperCase();
       }
-      // For single words with multiple characters
       if (words[0].length > 1) {
         return (words[0][0] + words[0][words[0].length - 1]).toUpperCase();
       }
-      // For single-character strings
       return (words[0] + words[0]).toUpperCase();
     };
   
-    // Fetch tickets from Firestore
     useEffect(() => {
       if (!user) return;
   
@@ -78,7 +71,6 @@ const TicketSidebar = ({
       return () => unsubscribe();
     }, [user]);
   
-    // Fetch display names for admin users
     useEffect(() => {
       if (user?.role !== "admin" || tickets.length === 0) return;
       
@@ -110,7 +102,6 @@ const TicketSidebar = ({
       fetchDisplayNames();
     }, [tickets, user?.role]);
   
-    // Filter tickets based on search query
     useEffect(() => {
       const filtered = tickets.filter(ticket => 
         ticket.issueType?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -123,7 +114,6 @@ const TicketSidebar = ({
       setFilteredTickets(filtered);
     }, [tickets, searchQuery, user?.role, userDisplayNames]);
   
-    // Fetch unread message counts
     useEffect(() => {
       if (!user || tickets.length === 0) return;
   
@@ -154,7 +144,6 @@ const TicketSidebar = ({
       };
     }, [tickets, user]);
   
-    // Reset unread count when ticket is selected
     useEffect(() => {
       if (selectedTicket) {
         setUnreadCounts(prev => ({
@@ -164,7 +153,6 @@ const TicketSidebar = ({
       }
     }, [selectedTicket]);
   
-    // Format date for display - returns actual time for today
     const formatDate = (date) => {
       if (!date) return '';
       
@@ -172,7 +160,6 @@ const TicketSidebar = ({
       const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
       
       if (diffDays === 0) {
-        // Return actual time for today
         return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       } else if (diffDays === 1) {
         return 'Yesterday';
@@ -185,12 +172,16 @@ const TicketSidebar = ({
 
   return (
     <div className={`sidebar ${isMobile ? 'mobile' : ''}`}>
-      <div className="sidebar-header">
-        <div className="header-left">
-          <h2>Help & Support</h2>
-        </div>
-        <div className="header-right">
-          <button className="new-ticket-btn" onClick={onNewTicket}>
+      {/* Updated header with integrated search and new ticket button */}
+      <div className="search-container">
+        <div className="search-input-container">
+          <input 
+            type="text" 
+            placeholder="Search tickets..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="new-ticket-btn" onClick={onNewTicket} aria-label="Create new ticket">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -199,17 +190,7 @@ const TicketSidebar = ({
         </div>
       </div>
       
-      <div className="search-container">
-        <input 
-          type="text" 
-          placeholder="Search tickets..." 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
-      
       <div className="sidebar-content">
-        {/* Loading state */}
         {loading && (
           <div className="ticket-list loading">
             <div className="loading-spinner"></div>
@@ -217,7 +198,6 @@ const TicketSidebar = ({
           </div>
         )}
         
-        {/* Empty state - no tickets (hidden on mobile) */}
         {!isMobile && !loading && tickets.length === 0 && !searchQuery && (
           <div className="empty-container">
             <div className="empty-content">
@@ -246,7 +226,6 @@ const TicketSidebar = ({
           </div>
         )}
         
-        {/* No search results (hidden on mobile) */}
         {!isMobile && !loading && tickets.length > 0 && filteredTickets.length === 0 && (
           <div className="empty-container">
             <div className="empty-content">
@@ -282,7 +261,6 @@ const TicketSidebar = ({
           </div>
         )}
         
-        {/* Mobile empty state */}
         {isMobile && !loading && filteredTickets.length === 0 && tickets.length === 0 && (
           <div className="mobile-empty-state">
             <p>No tickets found. Create your first ticket.</p>
@@ -295,23 +273,23 @@ const TicketSidebar = ({
           </div>
         )}
         
-        {/* Ticket list */}
         {!loading && filteredTickets.length > 0 && (
           <div className="ticket-list scrollable">
             {filteredTickets.map((ticket) => {
-              // Avatar always uses issue type regardless of user role
               const avatarText = getTwoLetters(ticket.issueType);
               const avatarColor = getAvatarColor(ticket.issueType);
               
-              // For admin, use displayName from users-propdial
               const mainText = user?.role === "admin" 
                 ? (userDisplayNames[ticket.createdBy] || ticket.issueType || "No title")
                 : (ticket.issueType || "No title");
               
+              // Determine if ticket is closed
+              const isClosed = ticket.status === 'closed';
+              
               return (
                 <div
                   key={ticket.id}
-                  className={`ticket ${selectedTicket === ticket.id ? "active" : ""}`}
+                  className={`ticket ${selectedTicket === ticket.id ? "active" : ""} ${isClosed ? "closed" : ""}`}
                   tabIndex={0}
                   onClick={() => {
                     setSelectedTicket(ticket.id);
@@ -327,7 +305,7 @@ const TicketSidebar = ({
                   }}
                 >
                   <div className="ticket-whole-container">
-                    <div className="ticket-avatar" style={{ backgroundColor: avatarColor }}>
+                    <div className="ticket-avatar" style={{ backgroundColor: isClosed ? '#bdbdbd' : avatarColor }}>
                       {avatarText}
                     </div>
                     
@@ -337,6 +315,9 @@ const TicketSidebar = ({
                           <div className="issue-type">{mainText}</div>
                           <div className="subject">
                             {ticket.subject || "No subject"}
+                            {isClosed && (
+                              <span className="closed-badge">Closed</span>
+                            )}
                           </div>
                         </div>
                         
@@ -347,9 +328,16 @@ const TicketSidebar = ({
                     </div>
                     
                     <div className="ticket-footer">
-                      {(unreadCounts?.[ticket.id] ?? 0) > 0 && (
+                      {(unreadCounts?.[ticket.id] ?? 0) > 0 && !isClosed && (
                         <span className="unread-badge">
                           {unreadCounts[ticket.id]}
+                        </span>
+                      )}
+                      {isClosed && (
+                        <span className="closed-icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7" />
+                          </svg>
                         </span>
                       )}
                     </div>
