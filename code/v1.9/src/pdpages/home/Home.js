@@ -576,18 +576,23 @@ const Home = () => {
 
         <Blog></Blog>
       </div>
-      {/* Login Modal */}
+      {/* Enhanced Login Modal */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
         centered
         className="reminder_modal"
+        style={{
+          borderRadius: "24px",
+          overflow: "hidden",
+          border: "none",
+        }}
       >
         <Modal.Header
-          className="justify-content-center"
           style={{
             paddingBottom: "0px",
             border: "none",
+            justifyContent: "flex-end",
           }}
           closeButton
         ></Modal.Header>
@@ -597,36 +602,94 @@ const Home = () => {
             color: "#FA6262",
             fontSize: "20px",
             border: "none",
-            position: "unset",
+            position: "relative",
+            padding: "60px 20px 30px",
           }}
         >
-          <img
-            src="/assets/img/login_reminder.png"
-            alt=""
+          <div
             style={{
               position: "absolute",
-              top: "-28px",
+              top: "-40px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "100px",
               height: "100px",
-              width: "auto",
-              left: "0",
-              right: "0",
-              margin: "auto",
+              backgroundColor: "#4361ee",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 10px 20px rgba(67, 97, 238, 0.3)",
             }}
-          />
+          >
+            <span 
+              className="material-symbols-outlined" 
+              style={{ 
+                color: "white", 
+                fontSize: "40px",
+                fontWeight: "bold"
+              }}
+            >
+              lock
+            </span>
+          </div>
+          <h3 style={{ 
+            color: "#2d3748", 
+            fontWeight: "700", 
+            fontSize: "24px",
+            marginTop: "20px",
+            marginBottom: "10px"
+          }}>
+            Secure Login Required
+          </h3>
+          <p style={{ 
+            color: "#718096", 
+            fontSize: "16px", 
+            marginBottom: "20px",
+            lineHeight: "1.5"
+          }}>
+            Sign in to access premium features and personalized content
+          </p>
+          
         </Modal.Body>
         <Modal.Footer
-          className=""
           style={{
             border: "none",
             gap: "15px",
+            padding: "0 30px 30px",
+            flexDirection: "column",
           }}
         >
           <Link
             className="theme_btn btn_fill no_icon text-center w-100 text-decoration-none"
             to="/login"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "16px",
+              borderRadius: "14px",
+              fontWeight: "600",
+              background: "linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%)",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(67, 97, 238, 0.4)",
+              transition: "all 0.3s ease",
+              textDecoration: "none",
+            }}
           >
+            <i className="fas fa-mobile-alt" style={{ marginRight: "10px" }}></i>
             Continue with mobile number
           </Link>
+          
+          <p style={{ 
+            color: "#a0aec0", 
+            fontSize: "13px", 
+            textAlign: "center",
+            marginTop: "10px",
+            lineHeight: "1.5"
+          }}>
+            By continuing, you agree to our <a href="#" style={{ color: "#4361ee", textDecoration: "none" }}>Terms of Service</a> and <a href="#" style={{ color: "#4361ee", textDecoration: "none" }}>Privacy Policy</a>
+          </p>
         </Modal.Footer>
       </Modal>
 

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, FaStop, FaPlay, FaPause, FaDownload } from 'react-icons/fa';
+import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, FaStop, FaPlay, FaPause, FaDownload, FaLock } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
 import { projectFirestore, timestamp, projectAuth } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -37,7 +37,61 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const [error, setError] = useState(null);
   const [pinchStartDistance, setPinchStartDistance] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [creatorFullName, setCreatorFullName] = useState(''); // Updated state name
+  const [creatorFullName, setCreatorFullName] = useState('');
+  const [canCloseTicket, setCanCloseTicket] = useState(false);
+
+  // Check if admin can close ticket
+  useEffect(() => {
+    if (user?.role === 'admin' && ticketInfo?.status === 'open') {
+      setCanCloseTicket(true);
+    } else {
+      setCanCloseTicket(false);
+    }
+  }, [user, ticketInfo]);
+
+  // Close ticket function
+  const closeTicket = async () => {
+    if (!canCloseTicket) return;
+    
+    try {
+      await projectFirestore
+        .collection('tickets')
+        .doc(ticketId)
+        .update({
+          status: 'closed',
+          closedAt: timestamp.now(),
+          closedBy: user.phoneNumber
+        });
+      
+      setTicketInfo(prev => ({
+        ...prev,
+        status: 'closed',
+        closedAt: new Date(),
+        closedBy: user.phoneNumber
+      }));
+      
+      // Add system message about closure
+      const messageData = {
+        senderId: 'system',
+        text: `Ticket closed by admin ${user.displayName || user.phoneNumber}`,
+        createdAt: timestamp.now(),
+        read: true,
+        isSystemMessage: true
+      };
+      
+      await projectFirestore
+        .collection('tickets')
+        .doc(ticketId)
+        .collection('messages')
+        .add(messageData);
+        
+      setCanCloseTicket(false);
+      
+    } catch (error) {
+      console.error("Error closing ticket:", error);
+      setError("Failed to close ticket. Please try again.");
+    }
+  };
 
   // Helper function to truncate text
   const truncateText = (text, maxLength) => {
@@ -78,7 +132,8 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         const ticketInfo = {
           id: doc.id,
           ...ticketData,
-          createdAt: ticketData.createdAt?.toDate() || new Date()
+          createdAt: ticketData.createdAt?.toDate() || new Date(),
+          closedAt: ticketData.closedAt?.toDate() || null
         };
         setTicketInfo(ticketInfo);
 
@@ -102,7 +157,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         // Fetch creator's full name from users-propdial collection
         if (ticketData.createdBy) {
           try {
-            // Query users-propdial collection where phoneNumber matches createdBy
             const querySnapshot = await projectFirestore
               .collection('users-propdial')
               .where('phoneNumber', '==', ticketData.createdBy)
@@ -213,8 +267,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     });
   };
 
-  // Send message
+  // Send message - disabled when ticket is closed
   const sendMessage = async () => {
+    if (ticketInfo?.status === 'closed') {
+      setError("This ticket is closed. No further messages can be sent.");
+      return;
+    }
+    
     if (input.trim() === '' && attachments.length === 0) return;
   
     try {
@@ -292,8 +351,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     inputRef.current.focus();
   };
 
-  // Start voice recording
+  // Start voice recording - disabled when ticket is closed
   const startRecording = async () => {
+    if (ticketInfo?.status === 'closed') {
+      setError("This ticket is closed. No further messages can be sent.");
+      return;
+    }
+    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
@@ -370,8 +434,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   };
 
-  // Handle file attachment
+  // Handle file attachment - disabled when ticket is closed
   const handleAttachment = (e) => {
+    if (ticketInfo?.status === 'closed') {
+      setError("This ticket is closed. No further messages can be sent.");
+      return;
+    }
+    
     const files = Array.from(e.target.files);
     const newAttachments = files.map(file => ({
       id: Math.random().toString(36).substr(2, 9),
@@ -477,8 +546,17 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     );
   };
 
-  // Render message content
+  // Render message content with system message support
   const renderMessageContent = (msg) => {
+    if (msg.isSystemMessage) {
+      return (
+        <div className="system-message">
+          <p>{msg.text}</p>
+          <span className="timestamp">{formatTime(msg.createdAt)}</span>
+        </div>
+      );
+    }
+    
     return (
       <div className="message-content">
         {msg.text && <p>{msg.text}</p>}
@@ -580,7 +658,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             {ticketInfo?.issueType ? getAvatarText(ticketInfo.issueType) : 'T'}
           </div>
           <div className="ticket-info">
-            {/* Updated header to show creator's full name for admin */}
             <h3>
               {user?.role === 'admin' ? 
                 (creatorFullName || "User") : 
@@ -602,7 +679,32 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             </div>
           </div>
         </div>
+        
+        {/* Close Ticket Button (Admin Only) */}
+        {canCloseTicket && (
+          <button 
+            className="close-ticket-btn"
+            onClick={closeTicket}
+          >
+            <FaLock /> Close Ticket
+          </button>
+        )}
       </div>
+      
+      {/* Closed Ticket Banner */}
+      {ticketInfo?.status === 'closed' && (
+        <div className="closed-banner">
+          <div className="closed-content">
+            <FaLock className="closed-icon" />
+            <span>This ticket is closed. No further messages can be sent.</span>
+            {ticketInfo.closedBy && (
+              <span className="closed-by">
+                Closed by: {ticketInfo.closedBy === user.phoneNumber ? 'You' : ticketInfo.closedBy}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
       
       {error && (
         <div className="error-banner">
@@ -679,6 +781,15 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                   {ticketInfo.status}
                 </span>
               </div>
+              
+              {ticketInfo.status === 'closed' && ticketInfo.closedAt && (
+                <div className="detail-row">
+                  <span className="detail-label">Closed:</span>
+                  <span className="detail-value">
+                    {ticketInfo.closedAt.toLocaleDateString()} at {ticketInfo.closedAt.toLocaleTimeString()}
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -691,10 +802,10 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             {dateMessages.map((msg) => (
               <div
                 key={msg.id}
-                className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'}`}
+                className={`message ${msg.senderId === user.phoneNumber ? 'sent' : 'received'} ${msg.isSystemMessage ? 'system' : ''}`}
               >
                 <div className="message-content-wrapper">
-                  {msg.senderId !== user.phoneNumber && (
+                  {msg.senderId !== user.phoneNumber && !msg.isSystemMessage && (
                     <div className="sender-name">
                       {msg.senderType === 'admin' ? adminName : msg.senderName || "User"}
                     </div>
@@ -771,66 +882,74 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       )}
 
-      <div className="message-input-area">
-        {isRecording && (
-          <div className="recording-indicator">
-            <div className="pulse"></div>
-            <span>Recording: {formatRecordingTime(recordingTime)}</span>
-            <button className="stop-recording" onClick={stopRecording}>
-              <FaTimes />
+      {/* Input Area - Disabled when ticket is closed */}
+      {ticketInfo?.status !== 'closed' ? (
+        <div className="message-input-area">
+          {isRecording && (
+            <div className="recording-indicator">
+              <div className="pulse"></div>
+              <span>Recording: {formatRecordingTime(recordingTime)}</span>
+              <button className="stop-recording" onClick={stopRecording}>
+                <FaTimes />
+              </button>
+            </div>
+          )}
+          
+          <div className="input-actions">
+            <button
+              className="emoji-btn"
+              onClick={() => setShowEmojiPicker(prev => !prev)}
+              title="Emoji"
+            >
+              <FaSmile />
+            </button>
+            
+            <div className="file-upload-btn">
+              <input
+                type="file"
+                id="file-upload"
+                multiple
+                onChange={handleAttachment}
+                accept="image/*, .pdf, .doc, .docx, .xls, .xlsx"
+              />
+              <label htmlFor="file-upload">
+                <FaPaperclip />
+              </label>
+            </div>
+          </div>
+          
+          <div className="input-container">
+            <textarea
+              ref={inputRef}
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Type your message..."
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+            />
+          </div>
+          
+          <div className="send-actions">
+            <button 
+              className="send-button" 
+              onClick={sendMessage}
+              disabled={!input.trim() && attachments.length === 0}
+            >
+              <FaPaperPlane />
             </button>
           </div>
-        )}
-        
-        <div className="input-actions">
-          <button
-            className="emoji-btn"
-            onClick={() => setShowEmojiPicker(prev => !prev)}
-            title="Emoji"
-          >
-            <FaSmile />
-          </button>
-          
-          <div className="file-upload-btn">
-            <input
-              type="file"
-              id="file-upload"
-              multiple
-              onChange={handleAttachment}
-              accept="image/*, .pdf, .doc, .docx, .xls, .xlsx"
-            />
-            <label htmlFor="file-upload">
-              <FaPaperclip />
-            </label>
-          </div>
         </div>
-        
-        <div className="input-container">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Type your message..."
-            rows={1}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-          />
+      ) : (
+        <div className="chat-disabled">
+          <FaLock className="disabled-icon" />
+          <p>This conversation is closed. No further messages can be sent.</p>
         </div>
-        
-        <div className="send-actions">
-          <button 
-            className="send-button" 
-            onClick={sendMessage}
-            disabled={!input.trim() && attachments.length === 0}
-          >
-            <FaPaperPlane />
-          </button>
-        </div>
-      </div>
+      )}
       
       {renderAttachmentPreview()}
     </div>
