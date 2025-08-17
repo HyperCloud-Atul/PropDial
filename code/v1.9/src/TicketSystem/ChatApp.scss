@@ -46,8 +46,7 @@ $error-color: #e74c3c;
 /* ========== CHAT APP CONTAINER ========== */
 .chat-app {
   display: flex;
-  height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+height: calc(100vh - 70px);
   position: relative;
   overflow: hidden;
   background: $background-dark;
@@ -908,7 +907,7 @@ $error-color: #e74c3c;
 }
 
 .pending-status .pending-icon {
-  color: #ff9800;
+  color: #808080;
   font-size: 14px;
 }
 

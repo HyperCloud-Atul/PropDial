@@ -1,81 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import firebase from "firebase/compat/app";
 import { projectFirestore } from "../../firebase/config";
-import { FaSignInAlt, FaSignOutAlt, FaTasks, FaEnvelope, FaWhatsapp } from "react-icons/fa";
+import { FaUserCheck, FaUserTie, FaCalendarCheck } from "react-icons/fa";
 import "./Tracker.scss";
 
-const DailyTrackerModal = () => {
+const WeeklyTrackerModal = () => {
   const { user } = useAuthContext();
   const [show, setShow] = useState(false);
-    const [trackerStarted, setTrackerStarted] = useState(false);
   const [questions, setQuestions] = useState([
-    { id: "punchIn", label: "Punch-In done?", icon: <FaSignInAlt />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    { id: "punchOut", label: "Punch-Out done?", icon: <FaSignOutAlt />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    { id: "taskUpdate", label: "Task updated?", icon: <FaTasks />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    { id: "emailReplied", label: "All emails replied?", icon: <FaEnvelope />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    { id: "whatsappReplied", label: "All WhatsApp messages replied?", icon: <FaWhatsapp />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    { id: "agentConnected", label: "How many agents connected today?", icon: null, type: "text", answer: "", updatedAt: null },
+    { id: "selfReview", label: "Self review meeting done?", icon: <FaUserCheck />, type: "radio", allowNA: true, answer: "", updatedAt: null },
+    { id: "managerReview", label: "Manager review meeting done?", icon: <FaUserTie />, type: "radio", allowNA: true, answer: "", updatedAt: null },
+    // { id: "meetingsCount", label: "How many meetings you done?", icon: <FaCalendarCheck />, type: "text", answer: "", updatedAt: null },
   ]);
   const [docId, setDocId] = useState(null);
 
-  const todayDate = new Date().toLocaleDateString("en-CA");
-useEffect(() => {
-  const fetchTracker = async () => {
-    if (!user?.phoneNumber) return;
+  // We track by week instead of date
+  const getCurrentWeek = () => {
+    const now = new Date();
+    const firstJan = new Date(now.getFullYear(), 0, 1);
+    const days = Math.floor((now - firstJan) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil((now.getDay() + 1 + days) / 7);
+    return `${now.getFullYear()}-W${weekNumber}`;
+  };
 
+  const currentWeek = getCurrentWeek();
+
+  const handleShow = async () => {
     const snapshot = await projectFirestore
-      .collection("dailyTracker")
+      .collection("weeklyTracker")
       .where("createdBy", "==", user.phoneNumber)
       .get();
 
-    let todayDoc = null;
+    let thisWeekDoc = null;
     snapshot.forEach((doc) => {
       const data = doc.data();
-      const createdDate = data.createdAt?.toDate
-        ? data.createdAt.toDate().toLocaleDateString("en-CA")
-        : "";
-      if (createdDate === todayDate) {
-        todayDoc = { id: doc.id, ...data };
+      if (data.week === currentWeek) {
+        thisWeekDoc = { id: doc.id, ...data };
       }
     });
 
-    if (todayDoc) {
-      setTrackerStarted(true);
-      setDocId(todayDoc.id);
+    if (thisWeekDoc) {
+      setDocId(thisWeekDoc.id);
       setQuestions((prev) =>
         prev.map((q) => ({
           ...q,
-          answer: todayDoc[q.id]?.answer || "",
-          updatedAt: todayDoc[q.id]?.updatedAt || null
+          answer: thisWeekDoc[q.id]?.answer || "",
+          updatedAt: thisWeekDoc[q.id]?.updatedAt || null
         }))
       );
+    } else {
+      const newDoc = {
+        createdBy: user.phoneNumber,
+        week: currentWeek,
+        createdAt: firebase.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
+      };
+      questions.forEach((q) => {
+        newDoc[q.id] = { answer: "", updatedAt: null };
+      });
+      const docRef = await projectFirestore.collection("weeklyTracker").add(newDoc);
+      setDocId(docRef.id);
+      setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
     }
+    setShow(true);
   };
-
-  fetchTracker();
-}, [user?.phoneNumber]);
-
-const handleShow = async () => {
-  if (!docId) {
-    // Create new tracker if not started yet
-    const newDoc = {
-      createdBy: user.phoneNumber,
-      createdAt: firebase.firestore.Timestamp.now(),
-      updatedAt: firebase.firestore.Timestamp.now(),
-    };
-    questions.forEach((q) => {
-      newDoc[q.id] = { answer: "", updatedAt: null };
-    });
-    const docRef = await projectFirestore.collection("dailyTracker").add(newDoc);
-    setDocId(docRef.id);
-    setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
-    setTrackerStarted(true);
-  }
-  setShow(true);
-};
-
 
   const handleClose = () => setShow(false);
 
@@ -89,7 +79,7 @@ const handleShow = async () => {
       return acc;
     }, {});
     updates.updatedAt = now;
-    await projectFirestore.collection("dailyTracker").doc(docId).update(updates);
+    await projectFirestore.collection("weeklyTracker").doc(docId).update(updates);
     setShow(false);
   };
 
@@ -106,19 +96,13 @@ const handleShow = async () => {
 
   return (
     <>
-     <button
-  onClick={handleShow}
-  className={`theme_btn text-center mt-2 ${
-    trackerStarted ? "btn_border" : "btn_fill"
-  }`}
->
-  {trackerStarted ? "Daily Tracking Started" : "Start Daily Tracker"}
-</button>
+      <button onClick={handleShow} className="theme_btn btn_fill no_icon text-center mt-2">
+        Weekly Tracker
+      </button>
 
-
-      <Modal show={show} onHide={handleClose} centered className="tracker-modal" size="lg">
+      <Modal show={show} onHide={handleClose} centered className="tracker-modal">
         <Modal.Header closeButton>
-          <Modal.Title className="fw-bold fs-4">📅 Daily Tracker</Modal.Title>
+          <Modal.Title className="fw-bold fs-4">📆 Weekly Tracker</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -161,7 +145,7 @@ const handleShow = async () => {
                   </div>
                 ) : (
                   <Form.Control
-                    type="number"
+                    type="text"
                     value={q.answer}
                     onChange={(e) => handleChange(q.id, e.target.value)}
                     placeholder="Enter here"
@@ -185,4 +169,4 @@ const handleShow = async () => {
   );
 };
 
-export default DailyTrackerModal;
+export default WeeklyTrackerModal;

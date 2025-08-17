@@ -577,7 +577,7 @@ const Home = () => {
         <Blog></Blog>
       </div>
       {/* Enhanced Login Modal */}
-      <Modal
+      {/* <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
         centered
@@ -690,6 +690,58 @@ const Home = () => {
           }}>
             By continuing, you agree to our <a href="#" style={{ color: "#4361ee", textDecoration: "none" }}>Terms of Service</a> and <a href="#" style={{ color: "#4361ee", textDecoration: "none" }}>Privacy Policy</a>
           </p>
+        </Modal.Footer>
+      </Modal> */}
+        <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        className="reminder_modal"
+      >
+        <Modal.Header
+          className="justify-content-center"
+          style={{
+            paddingBottom: "0px",
+            border: "none",
+          }}
+          closeButton
+        ></Modal.Header>
+        <Modal.Body
+          className="text-center"
+          style={{
+            color: "#FA6262",
+            fontSize: "20px",
+            border: "none",
+            position: "unset",
+          }}
+        >
+          <img
+            src="/assets/img/login_reminder.png"
+            alt=""
+            style={{
+              position: "absolute",
+              top: "-28px",
+              height: "100px",
+              width: "auto",
+              left: "0",
+              right: "0",
+              margin: "auto",
+            }}
+          />
+        </Modal.Body>
+        <Modal.Footer
+          className=""
+          style={{
+            border: "none",
+            gap: "15px",
+          }}
+        >
+          <Link
+            className="theme_btn btn_fill no_icon text-center w-100 text-decoration-none"
+            to="/login"
+          >
+            Continue with mobile number
+          </Link>
         </Modal.Footer>
       </Modal>
 
