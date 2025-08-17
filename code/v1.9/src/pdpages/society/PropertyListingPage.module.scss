@@ -89,14 +89,20 @@
     }
 
     .contactBtn {
-      background-color: #e50914;
-      color: white;
-      padding: 10px 15px;
-      border: none;
+      background-color: #f4f4f4;
+      border: 2px solid var(--theme-green);
+      color: var(--theme-green);
+      padding: 6px 15px;
+      // border: none;
       border-radius: 4px;
       cursor: pointer;
       margin-top: 10px;
       margin-bottom: 20px;
+    }
+    .contactBtn:hover {
+      color: white;
+      border: 1px solid var(--theme-blue);
+      background-color: var(--theme-blue); /* Darker green on hover */
     }
 
     .priceSummary {
@@ -202,13 +208,20 @@
     }
 
     .viewPhoneBtn {
-      background-color: #e50914;
-      color: white;
+      border: 2px solid var(--theme-green);
+      background-color: #f4f4f4;
+      color: var(--theme-green);
       padding: 12px;
-      border: none;
+      // border: none;
       font-weight: bold;
       border-radius: 4px;
       cursor: pointer;
+      transition: ease 0.3s;
+    }
+    .viewPhoneBtn:hover {
+      border: 1px solid var(--theme-blue);
+      color: white;
+      background-color: var(--theme-blue); /* Darker green on hover */
     }
   }
 
@@ -296,7 +309,7 @@
   }
 
   .tabLink:hover {
-    color: #d8232a; /* red hover */
+    color: var(--theme-green); /* red hover */
   }
 
   .sticky {
