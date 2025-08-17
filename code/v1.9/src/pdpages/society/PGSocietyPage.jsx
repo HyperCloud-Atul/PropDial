@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./PropertyListingPage.module.scss";
-import { collection, query, where, getDocs, limit, onSnapshot,setDoc  } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  limit,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
 import {
   ref,
   listAll,
@@ -13,6 +21,7 @@ import { projectStorage, projectFirestore } from "../../firebase/config";
 import imageCompression from "browser-image-compression";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import "./PGSociety.scss";
+import "./new-society.scss";
 import ComponentBuilder from "./ComponentBuilder";
 import {
   MdAdd,
@@ -56,11 +65,26 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaSave,
+  FaHome,
+  FaUsers,
+  FaCalendarAlt,
 } from "react-icons/fa";
-import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
-import Modal from 'react-modal';
+import Modal from "react-modal";
+import {
+  IndianRupee,
+  MapPin,
+  Clock,
+  Phone,
+  Mail,
+  User,
+  Calendar,
+  Building,
+  Star,
+  Quote,
+} from "lucide-react";
 
 const ratingData = {
   average: 4.0,
@@ -522,7 +546,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
             </button>
           )}
           <FaShareAlt className="icon" title="Share" />
-          <FaRegHeart className="icon" title="Save" />
+          {/* <FaRegHeart className="icon" title="Save" /> */}
         </div>
       </div>
 
@@ -745,26 +769,16 @@ const LocationAdvantages = ({ societyId }) => {
   );
 };
 
-const floorPlanOptions = [
-  { size: "1885 Sq-ft", image: "/assets/img/society/layout3.jpg" },
-  { size: "2346 Sq-ft", image: "/assets/img/society/layout1.jpg" },
-  { size: "2014 Sq-ft", image: "/assets/img/society/layout2.jpg" },
-  { size: "2179 Sq-ft", image: "/assets/img/society/layout4.jpg" },
-  { size: "2142 Sq-ft", image: "/assets/img/society/layout5.jpg" },
-  { size: "2319 Sq-ft", image: "/assets/img/society/layout6.jpg" },
-  { size: "1900 Sq-ft", image: "/assets/img/society/layout7.jpg" },
-];
-
 const FloorPlans = ({ societyId }) => {
   // State for floor plans
   const [floorPlans, setFloorPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [newUnitType, setNewUnitType] = useState('BHK');
-  const [newUnitValue, setNewUnitValue] = useState('1');
-  const [minSize, setMinSize] = useState('');
-  const [maxSize, setMaxSize] = useState('');
-  const [sizeUnit, setSizeUnit] = useState('Sq-ft');
+  const [newUnitType, setNewUnitType] = useState("BHK");
+  const [newUnitValue, setNewUnitValue] = useState("1");
+  const [minSize, setMinSize] = useState("");
+  const [maxSize, setMaxSize] = useState("");
+  const [sizeUnit, setSizeUnit] = useState("Sq-ft");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
@@ -811,24 +825,29 @@ const FloorPlans = ({ societyId }) => {
       minSize,
       maxSize,
       sizeUnit,
-      images: []
+      images: [],
     };
 
     const updatedPlans = [...floorPlans, newPlan];
     setFloorPlans(updatedPlans);
     setSelectedPlan(newPlan);
-    setNewUnitType('BHK');
-    setNewUnitValue('1');
-    setMinSize('');
-    setMaxSize('');
+    setNewUnitType("BHK");
+    setNewUnitValue("1");
+    setMinSize("");
+    setMaxSize("");
   };
 
   // Delete an entire unit type with all its images
   const deleteUnitType = async (index) => {
-    if (!window.confirm(`Are you sure you want to delete this unit type and all its images?`)) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to delete this unit type and all its images?`
+      )
+    )
+      return;
 
     const unitToDelete = floorPlans[index];
-    
+
     try {
       // First delete all images from Firebase Storage
       await Promise.all(
@@ -845,7 +864,7 @@ const FloorPlans = ({ societyId }) => {
       // Then remove the unit from Firestore
       const updatedPlans = [...floorPlans];
       updatedPlans.splice(index, 1);
-      
+
       const docRef = doc(
         projectFirestore,
         "m_societies",
@@ -853,14 +872,15 @@ const FloorPlans = ({ societyId }) => {
         "society_information",
         "floor_plans"
       );
-      
+
       await setDoc(docRef, { plans: updatedPlans });
-      
+
       // Update local state
       setFloorPlans(updatedPlans);
-      setSelectedPlan(updatedPlans.length > 0 ? 
-        (updatedPlans[index] || updatedPlans[updatedPlans.length - 1]) : 
-        null
+      setSelectedPlan(
+        updatedPlans.length > 0
+          ? updatedPlans[index] || updatedPlans[updatedPlans.length - 1]
+          : null
       );
     } catch (error) {
       console.error("Error deleting unit type:", error);
@@ -870,88 +890,92 @@ const FloorPlans = ({ societyId }) => {
   // Handle image selection
   const handleImageSelect = (e) => {
     const files = Array.from(e.target.files);
-    setSelectedImages(prev => [...prev, ...files]);
+    setSelectedImages((prev) => [...prev, ...files]);
   };
 
   // Upload images to Firebase Storage
- const uploadImages = async () => {
-  if (!selectedPlan || selectedImages.length === 0) return;
+  const uploadImages = async () => {
+    if (!selectedPlan || selectedImages.length === 0) return;
 
-  setUploading(true);
-  setUploadProgress(0);
+    setUploading(true);
+    setUploadProgress(0);
 
-  try {
-    const uploadedUrls = [];
-    
-    // Upload files sequentially to better track progress
-    for (const file of selectedImages) {
-      try {
-        const timestamp = Date.now();
-        const fileName = `${timestamp}-${file.name.replace(/\s+/g, '_')}`; // Replace spaces with underscores
-        const imageRef = ref(
-          projectStorage,
-          `society_images/${societyId}/${fileName}`
-        );
-        
-        const uploadTask = uploadBytesResumable(imageRef, file);
-        
-        const downloadURL = await new Promise((resolve, reject) => {
-          uploadTask.on(
-            'state_changed',
-            (snapshot) => {
-              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              setUploadProgress(progress);
-            },
-            (error) => {
-              console.error("Upload error:", error);
-              reject(error);
-            },
-            async () => {
-              try {
-                const url = await getDownloadURL(uploadTask.snapshot.ref);
-                resolve(url);
-              } catch (error) {
-                console.error("Error getting download URL:", error);
-                reject(error);
-              }
-            }
+    try {
+      const uploadedUrls = [];
+
+      // Upload files sequentially to better track progress
+      for (const file of selectedImages) {
+        try {
+          const timestamp = Date.now();
+          const fileName = `${timestamp}-${file.name.replace(/\s+/g, "_")}`; // Replace spaces with underscores
+          const imageRef = ref(
+            projectStorage,
+            `society_images/${societyId}/${fileName}`
           );
-        });
-        
-        uploadedUrls.push(downloadURL);
-      } catch (error) {
-        console.error("Error uploading file:", file.name, error);
-        // Continue with next file even if one fails
-        continue;
-      }
-    }
 
-    if (uploadedUrls.length > 0) {
-      // Update the selected plan with new images
-      const updatedPlans = floorPlans.map(plan => {
-        if (plan.type === selectedPlan.type && plan.value === selectedPlan.value) {
-          return {
-            ...plan,
-            images: [...plan.images, ...uploadedUrls]
-          };
+          const uploadTask = uploadBytesResumable(imageRef, file);
+
+          const downloadURL = await new Promise((resolve, reject) => {
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {
+                const progress =
+                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setUploadProgress(progress);
+              },
+              (error) => {
+                console.error("Upload error:", error);
+                reject(error);
+              },
+              async () => {
+                try {
+                  const url = await getDownloadURL(uploadTask.snapshot.ref);
+                  resolve(url);
+                } catch (error) {
+                  console.error("Error getting download URL:", error);
+                  reject(error);
+                }
+              }
+            );
+          });
+
+          uploadedUrls.push(downloadURL);
+        } catch (error) {
+          console.error("Error uploading file:", file.name, error);
+          // Continue with next file even if one fails
+          continue;
         }
-        return plan;
-      });
+      }
 
-      setFloorPlans(updatedPlans);
-      setSelectedPlan({
-        ...selectedPlan,
-        images: [...selectedPlan.images, ...uploadedUrls]
-      });
-      setSelectedImages([]);
+      if (uploadedUrls.length > 0) {
+        // Update the selected plan with new images
+        const updatedPlans = floorPlans.map((plan) => {
+          if (
+            plan.type === selectedPlan.type &&
+            plan.value === selectedPlan.value
+          ) {
+            return {
+              ...plan,
+              images: [...plan.images, ...uploadedUrls],
+            };
+          }
+          return plan;
+        });
+
+        setFloorPlans(updatedPlans);
+        setSelectedPlan({
+          ...selectedPlan,
+          images: [...selectedPlan.images, ...uploadedUrls],
+        });
+        setSelectedImages([]);
+      }
+    } catch (error) {
+      console.error("Error in upload process:", error);
+      // Consider showing an error message to the user
+    } finally {
+      setUploading(false);
     }
-  } catch (error) {
-    console.error("Error in upload process:", error);
-    // Consider showing an error message to the user
-  } finally {
-    setUploading(false);
-  }
-};
+  };
 
   // Save floor plans to Firestore
   const saveFloorPlans = async () => {
@@ -979,11 +1003,14 @@ const FloorPlans = ({ societyId }) => {
 
     try {
       // Remove from Firestore first
-      const updatedPlans = floorPlans.map(plan => {
-        if (plan.type === selectedPlan.type && plan.value === selectedPlan.value) {
+      const updatedPlans = floorPlans.map((plan) => {
+        if (
+          plan.type === selectedPlan.type &&
+          plan.value === selectedPlan.value
+        ) {
           return {
             ...plan,
-            images: plan.images.filter(img => img !== imageUrl)
+            images: plan.images.filter((img) => img !== imageUrl),
           };
         }
         return plan;
@@ -992,7 +1019,7 @@ const FloorPlans = ({ societyId }) => {
       setFloorPlans(updatedPlans);
       setSelectedPlan({
         ...selectedPlan,
-        images: selectedPlan.images.filter(img => img !== imageUrl)
+        images: selectedPlan.images.filter((img) => img !== imageUrl),
       });
 
       // Delete from Firebase Storage
@@ -1007,15 +1034,23 @@ const FloorPlans = ({ societyId }) => {
   const UnitNavigation = () => (
     <div className="unit-navigation">
       {floorPlans.map((plan, index) => (
-        <div key={`${plan.type}-${plan.value}-${index}`} className="unit-btn-container">
+        <div
+          key={`${plan.type}-${plan.value}-${index}`}
+          className="unit-btn-container"
+        >
           <button
-            className={`unit-btn ${selectedPlan?.type === plan.type && selectedPlan?.value === plan.value ? 'active' : ''}`}
+            className={`unit-btn ${
+              selectedPlan?.type === plan.type &&
+              selectedPlan?.value === plan.value
+                ? "active"
+                : ""
+            }`}
             onClick={() => setSelectedPlan(plan)}
           >
             {plan.value} {plan.type}
           </button>
           {editMode && (
-            <button 
+            <button
               className="delete-unit-btn"
               onClick={() => deleteUnitType(index)}
               title="Delete this unit type"
@@ -1101,7 +1136,9 @@ const FloorPlans = ({ societyId }) => {
             <div className="current-unit">
               <div className="unit-info">
                 <h3>
-                  {selectedPlan.value} {selectedPlan.type} - {selectedPlan.minSize} to {selectedPlan.maxSize} {selectedPlan.sizeUnit}
+                  {selectedPlan.value} {selectedPlan.type} -{" "}
+                  {selectedPlan.minSize} to {selectedPlan.maxSize}{" "}
+                  {selectedPlan.sizeUnit}
                 </h3>
 
                 {/* Image Upload */}
@@ -1113,12 +1150,18 @@ const FloorPlans = ({ societyId }) => {
                       multiple
                       accept="image/*"
                       onChange={handleImageSelect}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                   </label>
                   {selectedImages.length > 0 && (
-                    <button onClick={uploadImages} disabled={uploading} className="upload-submit-btn">
-                      {uploading ? `Uploading... ${Math.round(uploadProgress)}%` : 'Upload Images'}
+                    <button
+                      onClick={uploadImages}
+                      disabled={uploading}
+                      className="upload-submit-btn"
+                    >
+                      {uploading
+                        ? `Uploading... ${Math.round(uploadProgress)}%`
+                        : "Upload Images"}
                     </button>
                   )}
                 </div>
@@ -1129,8 +1172,17 @@ const FloorPlans = ({ societyId }) => {
                 <div className="selected-images">
                   {selectedImages.map((file, index) => (
                     <div key={index} className="image-preview">
-                      <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
-                      <button onClick={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}>
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Preview ${index}`}
+                      />
+                      <button
+                        onClick={() =>
+                          setSelectedImages((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
                         <FaTimes />
                       </button>
                     </div>
@@ -1159,7 +1211,11 @@ const FloorPlans = ({ societyId }) => {
 
           {/* Save Button */}
           <div className="action-buttons">
-            <button onClick={saveFloorPlans} disabled={floorPlans.length === 0} className="save-btn">
+            <button
+              onClick={saveFloorPlans}
+              disabled={floorPlans.length === 0}
+              className="save-btn"
+            >
               <FaSave /> Save Changes
             </button>
             <button onClick={() => setEditMode(false)} className="cancel-btn">
@@ -1175,7 +1231,9 @@ const FloorPlans = ({ societyId }) => {
           {selectedPlan && (
             <div className="unit-display">
               <h3>
-                {selectedPlan.value} {selectedPlan.type} - {selectedPlan.minSize} to {selectedPlan.maxSize} {selectedPlan.sizeUnit}
+                {selectedPlan.value} {selectedPlan.type} -{" "}
+                {selectedPlan.minSize} to {selectedPlan.maxSize}{" "}
+                {selectedPlan.sizeUnit}
               </h3>
 
               {selectedPlan.images.length > 0 ? (
@@ -1196,7 +1254,6 @@ const FloorPlans = ({ societyId }) => {
     </div>
   );
 };
-
 
 const UnitTypeAnimator = ({ unitTypes = [] }) => {
   const [currentText, setCurrentText] = useState("");
@@ -2060,7 +2117,7 @@ const SocietyOverview = ({ country, state, city, locality, societyId }) => {
           {" - "}
           <span className="to">₹ {societyData.priceTo} Cr</span>
         </div>
-        <div className="bhk">3 BHK Flats</div>
+        <div className="bhk">Multiple Type Flats</div>
       </div>
 
       <button className={styles.contactBtn}>Contact Now</button>
@@ -2079,6 +2136,7 @@ const SocietyOverview = ({ country, state, city, locality, societyId }) => {
 const EditModal = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
   const [currentUnitType, setCurrentUnitType] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -2086,6 +2144,10 @@ const EditModal = ({ data, onClose, onSave }) => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    // Clear error when user makes changes
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleUnitTypeAdd = () => {
@@ -2105,9 +2167,35 @@ const EditModal = ({ data, onClose, onSave }) => {
     }));
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    const currentYear = new Date().getFullYear();
+
+
+    // Launched year validation
+    if (formData.launchedYear) {
+      if (parseInt(formData.launchedYear) > currentYear) {
+        newErrors.launchedYear = "Launched year cannot be in the future";
+      }
+    }
+
+    // Possession year validation
+    if (formData.possessionYear) {
+      if (parseInt(formData.possessionYear) < currentYear) {
+        newErrors.possessionYear = "Possession year cannot be in the past";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    
+    if (validateForm()) {
+      onSave(formData);
+    }
   };
 
   return (
@@ -2193,28 +2281,160 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="readyToMove"
-                  checked={formData.readyToMove}
-                  onChange={handleChange}
-                />
-                Ready to Move
-              </label>
+              <label>Project Size in Acre</label>
+              <input
+                id="productSize"
+                type="text"
+                name="projectSize"
+                value={formData.projectSize || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length > 3) value = value.slice(0, 3);
+                  setFormData({ ...formData, projectSize: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter project size"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Units</label>
+              <input
+                id="totalUnits"
+                type="text"
+                name="totalUnits"
+                value={formData.totalUnits || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, ""); // allow only digits
+                  if (value.length > 4) value = value.slice(0, 4); // limit to 4 digits
+                  setFormData({ ...formData, totalUnits: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter total units"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Towers</label>
+              <input
+                id="totalTowers"
+                type="text"
+                name="totalTowers"
+                value={formData.totalTowers || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length > 3) value = value.slice(0, 3);
+                  setFormData({ ...formData, totalTowers: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter total towers"
+              />
+            </div>
+
+            <div className="form-group toggle-group">
+              <label className="toggle-label">Approved By RERA </label>
+              <div
+                className={`toggle-switch ${formData.reraApproved ? "active" : ""}`}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    reraApproved: !prev.reraApproved,
+                  }))
+                }
+              >
+                <div className="toggle-circle" />
+              </div>
+            </div>
+            <div className="form-group toggle-group">
+              <label className="toggle-label">Ready to Move In</label>
+              <div
+                className={`toggle-switch ${formData.readyToMove ? "active" : ""}`}
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    readyToMove: !prev.readyToMove,
+                  }))
+                }
+              >
+                <div className="toggle-circle" />
+              </div>
             </div>
 
             {!formData.readyToMove && (
               <div className="form-group">
-                <label>Possession Date</label>
+                <label>Possession Year</label>
                 <input
-                  type="date"
-                  name="possessionDate"
-                  value={formData.possessionDate}
-                  onChange={handleChange}
+                  type="text"
+                  name="possessionYear"
+                  value={formData.possessionYear || ""}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, ""); // only digits
+                    if (value.length > 4) value = value.slice(0, 4); // max 4 digits
+                    setFormData({ ...formData, possessionYear: value });
+                  }}
+                  inputMode="numeric"
+                  placeholder="YYYY"
                 />
+                {errors.possessionYear && (
+                  <span className="error">{errors.possessionYear}</span>
+                )}
               </div>
             )}
+
+            {formData.readyToMove && (
+              <div className="form-group">
+                <label>Launched Year</label>
+                <input
+                  type="text"
+                  name="launchedYear"
+                  value={formData.launchedYear || ""}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, ""); // only digits
+                    if (value.length > 4) value = value.slice(0, 4); // max 4 digits
+                    setFormData({ ...formData, launchedYear: value });
+                  }}
+                  inputMode="numeric"
+                  placeholder="YYYY"
+                />
+                {errors.launchedYear && (
+                  <span className="error">{errors.launchedYear}</span>
+                )}
+              </div>
+            )}
+
+
+            {/* <div className="form-group">
+              <label>Unit Types</label>
+              <div className="unit-types-container">
+                <input
+                  type="text"
+                  value={currentUnitType}
+                  onChange={(e) => setCurrentUnitType(e.target.value)}
+                  placeholder="Add unit type"
+                />
+                <button
+                  type="button"
+                  onClick={handleUnitTypeAdd}
+                  className="add-unit-type-btn"
+                >
+                  Add
+                </button>
+              </div>
+              <div className="unit-types-list">
+                {formData.unitTypes?.map((type) => (
+                  <div key={type} className="unit-type-tag">
+                    {type}
+                    <button
+                      type="button"
+                      onClick={() => handleUnitTypeRemove(type)}
+                      className="remove-unit-type-btn"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div> */}
           </div>
 
           <div className="form-actions">
@@ -2270,7 +2490,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
       <div className="modal-content">
         <h2>Edit Society Details</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-grid">
+          {/* <div className="form-grid">
             <div className="form-group">
               <label>Project Size in Acre</label>
               <input
@@ -2361,7 +2581,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
                   onChange={handleChange}
                 />
               </div>
-            )}
+            )} */}
 
             {/* Description field moved to full width at the end */}
             <div className="form-group full-width">
@@ -2374,7 +2594,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 rows="5"
               />
             </div>
-          </div>
+          {/* </div> */}
 
           <div className="form-actions">
             <button type="button" className="cancel-btn" onClick={onClose}>
@@ -2392,24 +2612,55 @@ const EditAbout = ({ data, onClose, onSave }) => {
 
 const EditRates = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
+    const numValue = parseFloat(value) || 0;
+    
+    // Clear error when user makes changes
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: numValue,
     }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const maxValues = {
+      electricityRateAuthority: 99,
+      electricityRatePowerBackup: 99,
+      waterCharges: 99,
+      commonAreaMaintenance: 99,
+      commonAreaElectricity: 99,
+      clubCharges: 9999
+    };
+
+    Object.keys(maxValues).forEach(field => {
+      if (formData[field] > maxValues[field]) {
+        newErrors[field] = `Value cannot exceed ${maxValues[field]}`;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData); // Send all updated data back to parent
+    if (validateForm()) {
+      onSave(formData);
+    }
   };
 
   return (
     <div className="edit-modal">
       <div className="modal-content">
-        <h2>Edit Society Details</h2>
+        <h2>Edit Society Rates</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
@@ -2417,22 +2668,35 @@ const EditRates = ({ data, onClose, onSave }) => {
               <input
                 type="number"
                 name="electricityRateAuthority"
-                value={formData.electricityRateAuthority}
+                value={formData.electricityRateAuthority || ''}
                 onChange={handleChange}
-                placeholder="Enter electricity rate (Authority)"
+                placeholder="Enter rate"
                 min="0"
+                max="99"
+                step="0.01"
               />
+              {errors.electricityRateAuthority && (
+                <span className="error">{errors.electricityRateAuthority}</span>
+              )}
+              <p className="rate-description">₹ per unit</p>
             </div>
+
             <div className="form-group">
               <label>Electricity Rate (Power Backup)</label>
               <input
                 type="number"
                 name="electricityRatePowerBackup"
-                value={formData.electricityRatePowerBackup}
+                value={formData.electricityRatePowerBackup || ''}
                 onChange={handleChange}
-                placeholder="Enter electricity rate (Power Backup)"
+                placeholder="Enter rate"
                 min="0"
+                max="99"
+                step="0.01"
               />
+              {errors.electricityRatePowerBackup && (
+                <span className="error">{errors.electricityRatePowerBackup}</span>
+              )}
+              <p className="rate-description">₹ per unit</p>
             </div>
 
             <div className="form-group">
@@ -2440,11 +2704,17 @@ const EditRates = ({ data, onClose, onSave }) => {
               <input
                 type="number"
                 name="waterCharges"
-                value={formData.waterCharges}
+                value={formData.waterCharges || ''}
                 onChange={handleChange}
-                placeholder="Enter Water Charges"
+                placeholder="Enter rate"
                 min="0"
+                max="99"
+                step="0.01"
               />
+              {errors.waterCharges && (
+                <span className="error">{errors.waterCharges}</span>
+              )}
+              <p className="rate-description">₹ per 1000L</p>
             </div>
 
             <div className="form-group">
@@ -2452,11 +2722,17 @@ const EditRates = ({ data, onClose, onSave }) => {
               <input
                 type="number"
                 name="commonAreaMaintenance"
-                value={formData.commonAreaMaintenance}
+                value={formData.commonAreaMaintenance || ''}
                 onChange={handleChange}
-                placeholder="Enter Common Area Maintenance Charges"
+                placeholder="Enter rate"
                 min="0"
+                max="99"
+                step="0.01"
               />
+              {errors.commonAreaMaintenance && (
+                <span className="error">{errors.commonAreaMaintenance}</span>
+              )}
+              <p className="rate-description">₹ per sq.ft/month</p>
             </div>
 
             <div className="form-group">
@@ -2464,11 +2740,17 @@ const EditRates = ({ data, onClose, onSave }) => {
               <input
                 type="number"
                 name="commonAreaElectricity"
-                value={formData.commonAreaElectricity}
+                value={formData.commonAreaElectricity || ''}
                 onChange={handleChange}
-                placeholder="Enter Common Area Electricity Charges"
+                placeholder="Enter rate"
                 min="0"
+                max="99"
+                step="0.01"
               />
+              {errors.commonAreaElectricity && (
+                <span className="error">{errors.commonAreaElectricity}</span>
+              )}
+              <p className="rate-description">₹ per sq.ft/month</p>
             </div>
 
             <div className="form-group">
@@ -2476,11 +2758,17 @@ const EditRates = ({ data, onClose, onSave }) => {
               <input
                 type="number"
                 name="clubCharges"
-                value={formData.clubCharges}
+                value={formData.clubCharges || ''}
                 onChange={handleChange}
-                placeholder="Enter Club Charges"
+                placeholder="Enter rate"
                 min="0"
+                max="9999"
+                step="1"
               />
+              {errors.clubCharges && (
+                <span className="error">{errors.clubCharges}</span>
+              )}
+              <p className="rate-description">₹ per month</p>
             </div>
           </div>
 
@@ -2636,11 +2924,11 @@ const MeetingPoint = ({ state, city, locality, societyId }) => {
   useEffect(() => {
     const fetchMapLink = async () => {
       if (!societyId) return;
-      
+
       try {
         const docRef = doc(projectFirestore, "m_societies", societyId);
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists() && docSnap.data().mapLink) {
           setMapLink(docSnap.data().mapLink);
         }
@@ -2666,7 +2954,7 @@ const MeetingPoint = ({ state, city, locality, societyId }) => {
     try {
       const docRef = doc(projectFirestore, "m_societies", societyId);
       await updateDoc(docRef, {
-        mapLink: tempMapLink
+        mapLink: tempMapLink,
       });
       setMapLink(tempMapLink);
       setIsEditing(false);
@@ -2694,12 +2982,12 @@ const MeetingPoint = ({ state, city, locality, societyId }) => {
           </button>
         )}
       </div>
-      
+
       <div className="location">
         <FaMapMarkerAlt className="location-icon" /> {formattedLocality},{" "}
         {formattedCity}, {formattedState}
       </div>
-      
+
       {isEditing ? (
         <form onSubmit={handleSave} className="map-edit-form">
           <div className="form-group">
@@ -2713,11 +3001,16 @@ const MeetingPoint = ({ state, city, locality, societyId }) => {
               required
             />
             <small className="help-text">
-              How to get the embed link: On Google Maps, click "Share" → "Embed a map" → Copy the iframe src URL
+              How to get the embed link: On Google Maps, click "Share" → "Embed
+              a map" → Copy the iframe src URL
             </small>
           </div>
           <div className="form-actions">
-            <button type="button" onClick={handleCancel} className="cancel-button">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="cancel-button"
+            >
               <FaTimes /> Cancel
             </button>
             <button type="submit" className="save-button">
@@ -2732,7 +3025,10 @@ const MeetingPoint = ({ state, city, locality, societyId }) => {
           ) : (
             <iframe
               title="Meeting Point"
-              src={mapLink || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61291.449298734176!2d73.8777386!3d15.5026635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb4fd095d6bff%3A0x427e9f60f589e059!2sViceroy's%20Arch!5e0!3m2!1sen!2sin!4v1694150123456!5m2!1sen!2sin"}
+              src={
+                mapLink ||
+                "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61291.449298734176!2d73.8777386!3d15.5026635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb4fd095d6bff%3A0x427e9f60f589e059!2sViceroy's%20Arch!5e0!3m2!1sen!2sin!4v1694150123456!5m2!1sen!2sin"
+              }
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -2980,7 +3276,8 @@ const HeroSection = ({ societyId }) => {
 
       {allImages.length > 6 && (
         <button className="view-all-btn" onClick={() => setViewerOpen(true)}>
-          View All Photos ({allImages.length})
+          View All Photos
+          {/* ({allImages.length}) */}
         </button>
       )}
 
@@ -3045,16 +3342,21 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
   const sliderRef = useRef(null);
   const [videos, setVideos] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newVideo, setNewVideo] = useState({ url: '', title: '', category: '' });
+  const [newVideo, setNewVideo] = useState({
+    url: "",
+    title: "",
+    category: "",
+  });
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
   // Fetch videos from Firestore
-    useEffect(() => {
+  useEffect(() => {
     const societyDocRef = doc(projectFirestore, "m_societies", societyId);
-    
+
     const unsubscribe = onSnapshot(societyDocRef, (doc) => {
-      if (doc.exists) {  // <-- Correct property access
+      if (doc.exists) {
+        // <-- Correct property access
         const data = doc.data();
         setVideos(data?.videos || []);
       } else {
@@ -3078,18 +3380,18 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
       );
     };
 
-    slider.addEventListener('scroll', handleScroll);
+    slider.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial check
 
-    return () => slider.removeEventListener('scroll', handleScroll);
+    return () => slider.removeEventListener("scroll", handleScroll);
   }, [videos]);
 
   const scrollLeft = () => {
-    sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
   };
 
   const handleInputChange = (e) => {
@@ -3099,65 +3401,68 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
 
   const extractVideoId = (url) => {
     // Handle regular YouTube URLs
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
-    
+
     // Handle YouTube Shorts URLs
     const shortsRegExp = /^.*(youtube.com\/shorts\/)([^#&?]*).*/;
     const shortsMatch = url.match(shortsRegExp);
-    
+
     if (match && match[2].length === 11) {
       return match[2];
     } else if (shortsMatch && shortsMatch[2].length === 11) {
       return shortsMatch[2];
     }
-    
+
     return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const videoId = extractVideoId(newVideo.url);
-    
+
     if (!videoId) {
-      alert('Please enter a valid YouTube URL');
+      alert("Please enter a valid YouTube URL");
       return;
     }
 
     try {
       await projectFirestore
-        .collection('m_societies')
+        .collection("m_societies")
         .doc(societyId)
         .update({
-          videos: [...videos, { 
-            id: videoId, 
-            title: newVideo.title, 
-            category: newVideo.category 
-          }]
+          videos: [
+            ...videos,
+            {
+              id: videoId,
+              title: newVideo.title,
+            },
+          ],
         });
 
-      setNewVideo({ url: '', title: '', category: '' });
+      setNewVideo({ url: "", title: "" });
       setShowForm(false);
     } catch (error) {
-      console.error('Error adding video:', error);
-      alert('Failed to add video');
+      console.error("Error adding video:", error);
+      alert("Failed to add video");
     }
   };
 
   const handleDeleteVideo = async (index) => {
-    if (!window.confirm('Are you sure you want to delete this video?')) return;
-    
+    if (!window.confirm("Are you sure you want to delete this video?")) return;
+
     try {
       const updatedVideos = [...videos];
       updatedVideos.splice(index, 1);
-      
+
       await projectFirestore
-        .collection('m_societies')
+        .collection("m_societies")
         .doc(societyId)
         .update({ videos: updatedVideos });
     } catch (error) {
-      console.error('Error deleting video:', error);
-      alert('Failed to delete video');
+      console.error("Error deleting video:", error);
+      alert("Failed to delete video");
     }
   };
 
@@ -3165,20 +3470,14 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
     <div className="yt-slider-container">
       <div className="yt-slider-header">
         <h2 className="yt-slider-title">{title}</h2>
-        <button 
-          className="yt-add-btn" 
-          onClick={() => setShowForm(!showForm)}
-        >
+        <button className="yt-add-btn" onClick={() => setShowForm(!showForm)}>
           <FaPlus /> Add Video
         </button>
       </div>
 
       {showForm && (
         <div className="yt-video-form">
-          <button 
-            className="yt-close-form" 
-            onClick={() => setShowForm(false)}
-          >
+          <button className="yt-close-form" onClick={() => setShowForm(false)}>
             <FaTimes />
           </button>
           <form onSubmit={handleSubmit}>
@@ -3204,7 +3503,7 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
                 required
               />
             </div>
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Category:</label>
               <input
                 type="text"
@@ -3214,7 +3513,7 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
                 placeholder="Video category"
                 required
               />
-            </div>
+            </div> */}
             <button type="submit" className="yt-submit-btn">
               Add Video
             </button>
@@ -3241,7 +3540,7 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
-                  <button 
+                  <button
                     className="yt-delete-btn"
                     onClick={() => handleDeleteVideo(index)}
                   >
@@ -3250,7 +3549,7 @@ const YouTubeVideoSlider = ({ societyId, title }) => {
                 </div>
                 <div className="yt-card-footer">
                   <h3>{video.title}</h3>
-                  <span>{video.category}</span>
+                  {/* <span>{video.category}</span> */}
                 </div>
               </div>
             ))
@@ -3276,57 +3575,57 @@ const SocietyInfoForm = ({ societyId }) => {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     manager: {
-      name: '',
-      designation: 'Society Manager',
-      mobile: '',
-      email: '',
-      responseRate: '100%',
-      responseTime: 'within an hour'
+      name: "",
+      designation: "Society Manager",
+      mobile: "",
+      email: "",
+      responseRate: "100%",
+      responseTime: "within an hour",
     },
     maintenance: {
-      companyName: '',
-      contactPerson: '',
-      phone: '',
-      email: '',
-      contractStart: '',
-      contractEnd: ''
-    }
+      companyName: "",
+      contactPerson: "",
+      phone: "",
+      email: "",
+      contractStart: "",
+      contractEnd: "",
+    },
   });
 
   // Fetch existing society info
   useEffect(() => {
     const fetchSocietyInfo = async () => {
       try {
-        const docRef = doc(projectFirestore, 'm_societies', societyId);
+        const docRef = doc(projectFirestore, "m_societies", societyId);
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
           const data = docSnap.data();
           setFormData({
             manager: {
-              name: data.manager?.name || '',
-              designation: data.manager?.designation || 'Society Manager',
-              mobile: data.manager?.mobile || '',
-              email: data.manager?.email || '',
-              responseRate: data.manager?.responseRate || '100%',
-              responseTime: data.manager?.responseTime || 'within an hour'
+              name: data.manager?.name || "",
+              designation: data.manager?.designation || "Society Manager",
+              mobile: data.manager?.mobile || "",
+              email: data.manager?.email || "",
+              responseRate: data.manager?.responseRate || "100%",
+              responseTime: data.manager?.responseTime || "within an hour",
             },
             maintenance: {
-              companyName: data.maintenance?.companyName || '',
-              contactPerson: data.maintenance?.contactPerson || '',
-              phone: data.maintenance?.phone || '',
-              email: data.maintenance?.email || '',
-              contractStart: data.maintenance?.contractStart || '',
-              contractEnd: data.maintenance?.contractEnd || ''
-            }
+              companyName: data.maintenance?.companyName || "",
+              contactPerson: data.maintenance?.contactPerson || "",
+              phone: data.maintenance?.phone || "",
+              email: data.maintenance?.email || "",
+              contractStart: data.maintenance?.contractStart || "",
+              contractEnd: data.maintenance?.contractEnd || "",
+            },
           });
         } else {
           console.log("No such document for societyId:", societyId);
         }
       } catch (error) {
-        console.error('Error fetching society info:', error);
+        console.error("Error fetching society info:", error);
         // Display a user-friendly message instead of alert()
-        // alert('Failed to load society information.'); 
+        // alert('Failed to load society information.');
       } finally {
         setLoading(false);
       }
@@ -3337,24 +3636,24 @@ const SocietyInfoForm = ({ societyId }) => {
 
   const handleInputChange = (e, section) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [name]: value
-      }
+        [name]: value,
+      },
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const docRef = doc(projectFirestore, 'm_societies', societyId);
+      const docRef = doc(projectFirestore, "m_societies", societyId);
       await updateDoc(docRef, formData);
       setEditMode(false);
       // alert('Information saved successfully!'); // Use custom modal instead
     } catch (error) {
-      console.error('Error updating society info:', error);
+      console.error("Error updating society info:", error);
       // alert('Failed to save information'); // Use custom modal instead
     }
   };
@@ -3385,7 +3684,7 @@ const SocietyInfoForm = ({ societyId }) => {
                 type="text"
                 name="name"
                 value={formData.manager.name}
-                onChange={(e) => handleInputChange(e, 'manager')}
+                onChange={(e) => handleInputChange(e, "manager")}
                 required
               />
             </div>
@@ -3397,7 +3696,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="tel"
                   name="mobile"
                   value={formData.manager.mobile}
-                  onChange={(e) => handleInputChange(e, 'manager')}
+                  onChange={(e) => handleInputChange(e, "manager")}
                   required
                 />
               </div>
@@ -3408,7 +3707,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="email"
                   name="email"
                   value={formData.manager.email}
-                  onChange={(e) => handleInputChange(e, 'manager')}
+                  onChange={(e) => handleInputChange(e, "manager")}
                   required
                 />
               </div>
@@ -3420,7 +3719,7 @@ const SocietyInfoForm = ({ societyId }) => {
                 <select
                   name="responseRate"
                   value={formData.manager.responseRate}
-                  onChange={(e) => handleInputChange(e, 'manager')}
+                  onChange={(e) => handleInputChange(e, "manager")}
                 >
                   <option value="100%">100%</option>
                   <option value="90%">90%</option>
@@ -3433,7 +3732,7 @@ const SocietyInfoForm = ({ societyId }) => {
                 <select
                   name="responseTime"
                   value={formData.manager.responseTime}
-                  onChange={(e) => handleInputChange(e, 'manager')}
+                  onChange={(e) => handleInputChange(e, "manager")}
                 >
                   <option value="within an hour">within an hour</option>
                   <option value="within a few hours">within a few hours</option>
@@ -3452,7 +3751,7 @@ const SocietyInfoForm = ({ societyId }) => {
                 type="text"
                 name="companyName"
                 value={formData.maintenance.companyName}
-                onChange={(e) => handleInputChange(e, 'maintenance')}
+                onChange={(e) => handleInputChange(e, "maintenance")}
                 required
               />
             </div>
@@ -3463,7 +3762,7 @@ const SocietyInfoForm = ({ societyId }) => {
                 type="text"
                 name="contactPerson"
                 value={formData.maintenance.contactPerson}
-                onChange={(e) => handleInputChange(e, 'maintenance')}
+                onChange={(e) => handleInputChange(e, "maintenance")}
               />
             </div>
 
@@ -3474,7 +3773,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="tel"
                   name="phone"
                   value={formData.maintenance.phone}
-                  onChange={(e) => handleInputChange(e, 'maintenance')}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
                   required
                 />
               </div>
@@ -3485,7 +3784,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="email"
                   name="email"
                   value={formData.maintenance.email}
-                  onChange={(e) => handleInputChange(e, 'maintenance')}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
                 />
               </div>
             </div>
@@ -3497,7 +3796,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="date"
                   name="contractStart"
                   value={formData.maintenance.contractStart}
-                  onChange={(e) => handleInputChange(e, 'maintenance')}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
                 />
               </div>
               <div className="form-group">
@@ -3506,7 +3805,7 @@ const SocietyInfoForm = ({ societyId }) => {
                   type="date"
                   name="contractEnd"
                   value={formData.maintenance.contractEnd}
-                  onChange={(e) => handleInputChange(e, 'maintenance')}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
                 />
               </div>
             </div>
@@ -3524,7 +3823,7 @@ const SocietyInfoForm = ({ societyId }) => {
           {/* Society Manager Card */}
           <div className="society-contact-card manager-card">
             <div className="card-header">
-              <h3>{formData.manager.name || 'Not specified'}</h3>
+              <h3>{formData.manager.name || "Not specified"}</h3>
               <span className="card-badge">{formData.manager.designation}</span>
             </div>
             {/* You can add more manager details here if needed */}
@@ -3538,17 +3837,17 @@ const SocietyInfoForm = ({ societyId }) => {
           {/* Maintenance Company Card */}
           <div className="society-contact-card maintenance-card">
             <div className="card-header">
-              <h3>{formData.maintenance.companyName || 'Not specified'}</h3>
+              <h3>{formData.maintenance.companyName || "Not specified"}</h3>
               <span className="card-badge">Maintenance Company</span>
             </div>
             <div className="card-dates">
               <div className="date-item">
                 <span>Contract Start:</span>
-                <span>{formData.maintenance.contractStart || '-'}</span>
+                <span>{formData.maintenance.contractStart || "-"}</span>
               </div>
               <div className="date-item">
                 <span>Contract End:</span>
-                <span>{formData.maintenance.contractEnd || '-'}</span>
+                <span>{formData.maintenance.contractEnd || "-"}</span>
               </div>
             </div>
             <div className="card-footer">
@@ -3565,6 +3864,2696 @@ const SocietyInfoForm = ({ societyId }) => {
 
 
 
+const SocietyDetails = ( { country, state, city, locality, societyId }) => {
+  const [societyData, setSocietyData] = useState({
+    societyType: "Residential",
+    society: "New Society",
+    builder: "",
+    address: "",
+    priceFrom: "",
+    priceTo: "",
+    possessionYear: "",
+    readyToMove: false,
+    launchedYear: "",
+    totalUnits: "",
+    totalTowers: "",
+    projectSize: "",
+    reraApproved: false // Array of unit types like ["2BHK", "3BHK"]
+  });
+  console.log(country, state, city, locality, societyId);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch society data from Firestore (No changes needed here)
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          setSocietyData((prev) => ({ ...prev, ...data }));
+        }
+      } catch (err) {
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  // FIX 1: Correctly handle the save action
+  const handleSave = async (updatedData) => {
+    try {
+      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+
+      // FIX 1.1: Use the correct keys from formData ('name', 'type')
+      // The `updatedData` object already has the correct structure.
+      const updateObject = {
+        ...updatedData, // Spread the form data
+        lastUpdated: new Date(),
+      };
+
+      await docRef.set(updateObject, { merge: true });
+
+      // FIX 1.2: Update state correctly with the data from the form
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
+      setShowEditModal(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save changes.");
+    }
+  };
+
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+
+  // FIX 2: Use the formatAddress function for a clean and consistent location display
+  const formattedState = formatStateName(state);
+  const formattedCity = formatStateName(city);
+  const formattedLocality = formatStateName(locality);
+  return (
+    <section className="society-details-section">
+      <div className="container">
+        <div className="content-grid">
+          {/* Left Column - Society Details */}
+          <div className="details-column">
+            {/* Status Badges */}
+            
+            <div className="badges-full">
+              <div className="badges-container">
+                {societyData.readyToMove &&
+                  <div className="badge badge--ready-to-move">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="icon icon--left"
+                  >
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-8.5" />
+                    <path d="M22 4L12 14.01l-3-3" />
+                  </svg>
+                  Ready to Move
+                </div>
+                }
+                {societyData.reraApproved &&
+              <div className="badge badge--rera-approved">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="icon icon--left"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                RERA Approved
+              </div>
+}
+              </div>
+              <button className="edit-btn" onClick={() => setShowEditModal(true)}>
+                <FaEdit />
+              </button>
+            </div>
+
+            {/* Society Name & Developer */}
+            <div className="name-developer-container">
+              <h1 className="society-name">
+                {societyData.society || "New Society"}
+              </h1>
+              <div className="developer-info">
+                <p className="developer-name">by {societyData.builder || "Unknown Developer"}</p>
+                <div className="location-info">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="icon icon--left"
+                  >
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <span className="location-text">
+                    {formattedLocality},{" "}{formattedCity}, {formattedState}
+                  </span>
+                  <button className="map-link">View on Map</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Price Range */}
+            <div className="price-card">
+              <div className="price-content">
+                <p className="price-label">Price Range</p>
+                <div className="price-value">₹ {societyData.priceFrom} Cr – ₹ {societyData.priceTo} Cr</div>
+                <p className="price-description">
+                Multiple Types • {societyData.societyType} • {societyData.readyToMove && "Ready to Move"}
+                </p>
+              </div>
+            </div>
+
+            {/* Key Facts */}
+            <div className="facts-grid">
+              <div className="fact-card">
+                <div className="fact-content">
+                  <div className="fact-icon-wrapper">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="icon"
+                    >
+                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="fact-label">Project Size</p>
+                    <p className="fact-value">{societyData.projectSize || 0} Acres</p>
+                  </div>
+                </div>
+              </div>
+              <div className="fact-card">
+                <div className="fact-content">
+                  <div className="fact-icon-wrapper">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="icon"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="fact-label">Total Units</p>
+                    <p className="fact-value">{societyData.totalUnits || 0} Units</p>
+                  </div>
+                </div>
+              </div>
+              <div className="fact-card">
+                <div className="fact-content">
+                  <div className="fact-icon-wrapper">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="icon"
+                    >
+                      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="fact-label">Total Towers</p>
+                    <p className="fact-value">{societyData.totalTowers || 0} Towers</p>
+                  </div>
+                </div>
+              </div>
+              <div className="fact-card">
+                {societyData.readyToMove && 
+                  <div className="fact-content">
+                    <div className="fact-icon-wrapper">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="fact-label">Year Launched</p>
+                      <p className="fact-value">{societyData.launchedYear || 0}</p>
+                    </div>
+                  </div>
+                }
+                {!societyData.readyToMove && 
+                  <div className="fact-content">
+                    <div className="fact-icon-wrapper">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="fact-label">Possession Date</p>
+                      <p className="fact-value">{societyData.possessionYear || 0}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+            {showEditModal && (
+              <EditModal
+                data={societyData}
+                onClose={() => setShowEditModal(false)}
+                onSave={handleSave}
+              />
+            )}
+          </div>
+
+          {/* Right Column - Images */}
+          <div className="images-column-wrapper">
+            <div className="images-grid">
+              <div className="image-group">
+                <div className="image-container">
+                  {Array.isArray(societyData.images) && societyData.images[0] ? (
+                    <img
+                      src={societyData.images[0]}
+                      alt="Luxury Lobby"
+                      className="image-style"
+                    />
+                  ) : (
+                    <span>No image available</span>
+                  )}
+                </div>
+                <div className="image-container image-container--video">
+                  {Array.isArray(societyData.images) && societyData.images[1] ? (
+                    <img
+                      src={societyData.images[1]}
+                      alt="Luxury Lobby"
+                      className="image-style"
+                    />
+                  ) : (
+                    <span>No image available</span>
+                  )}
+                </div>
+              </div>
+              <div className="image-group image-group--padded">
+                <div className="image-container image-container--video">
+                  {Array.isArray(societyData.images) && societyData.images[3] ? (
+                    <img
+                      src={societyData.images[3]}
+                      alt="Swimming Pool"
+                      className="image-style"
+                    />
+                  ) : (
+                    <span>No image available</span>
+                  )}
+                </div>
+                <div className="image-container">
+                  {Array.isArray(societyData.images) && societyData.images[4] ? (
+                    <img
+                      src={societyData.images[4]}
+                      alt="Garden Area"
+                      className="image-style"
+                    />
+                  ) : (
+                    <span>No image available</span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Floating Rating Badge */}
+            <div className="floating-rating">
+              <div className="rating-card">
+                <div className="rating-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="star-icon"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                  <span className="rating-value">4.2</span>
+                  <span className="review-count">(127 reviews)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+};
+
+const PropertiesSection = ({ societyName }) => {
+  const [filter, setFilter] = useState("all");
+  const [properties, setProperties] = useState([]);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchProperties = async (purpose = null, limitCount = 10) => {
+    try {
+      setLoading(true);
+      
+      // Create base query
+      let q = query(
+        collection(projectFirestore, "properties-propdial"),
+        where("society", "==", societyName)
+      );
+
+      // Add purpose filter if not "all"
+      if (purpose && purpose !== "all") {
+        q = query(q, where("purpose", "==", purpose));
+      }
+
+      // Get total count
+      const totalSnap = await getDocs(q);
+      setTotalCount(totalSnap.size);
+
+      // Get limited properties
+      const limitedQuery = query(q, limit(limitCount));
+      const limitedSnap = await getDocs(limitedQuery);
+      const data = limitedSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProperties(data);
+      setLoadedCount(data.length);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const nextLimit = loadedCount + 10;
+      
+      let q = query(
+        collection(projectFirestore, "properties-propdial"),
+        where("society", "==", societyName),
+        // where("isActiveInactiveReview", "==", "Active")
+      );
+
+      if (filter !== "all") {
+        q = query(q, where("purpose", "==", filter));
+      }
+
+      const limitedQuery = query(q, limit(nextLimit));
+      const limitedSnap = await getDocs(limitedQuery);
+      const data = limitedSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProperties(data);
+      setLoadedCount(data.length);
+    } catch (error) {
+      console.error("Error loading more properties:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (societyName) {
+      const purpose = filter === "all" ? null : filter === "sale" ? "Sale" : "Rent";
+      fetchProperties(purpose);
+    }
+  }, [societyName, filter]);
+
+  return (
+    <section className="properties-section">
+      <div className="container">
+        <div className="text-center mb-12">
+          <h2 className="section-title">Available Properties</h2>
+          <p className="section-description">
+            Discover your perfect home from our collection of premium apartments
+            and villas
+          </p>
+        </div>
+
+        {/* Filter Buttons */}
+        <div className="filter-buttons">
+          <button
+            className={`filter-button ${
+              filter === "all" ? "filter-button--active" : ""
+            }`}
+            onClick={() => setFilter("all")}
+          >
+            All Properties
+          </button>
+          <button
+            className={`filter-button ${
+              filter === "sale" ? "filter-button--active" : ""
+            }`}
+            onClick={() => setFilter("sale")}
+          >
+            Buy
+          </button>
+          <button
+            className={`filter-button ${
+              filter === "rent" ? "filter-button--active" : ""
+            }`}
+            onClick={() => setFilter("rent")}
+          >
+            Rent
+          </button>
+        </div>
+
+        {/* Properties Container with Horizontal Scroll */}
+        <div className="properties-container">
+          <div className="properties-scroll">
+            {properties.length > 0 ? (
+              properties.map((property) => (
+                <Link to={`/propertydetails/${property.id}`}>
+                <div key={property.id} className="property-card">
+                  <span
+                    className={`property-card__badge ${
+                      property.purpose === "Sale"
+                        ? "property-card__badge--sale"
+                        : "property-card__badge--rent"
+                    }`}
+                  >
+                    {property.purpose === "Sale" ? "For Sale" : "For Rent"}
+                  </span>
+                  <div className="property-card__image-wrapper">
+                    <img
+                      src={property.images?.[0] || "/placeholder.svg"}
+                      alt={property.propertyName || "Property"}
+                      className="property-card__image"
+                    />
+                  </div>
+
+                  <div className="property-card__header">
+                    {/* <h3 className="property-card__title">
+                      {property.propertyName || "Property"}
+                    </h3> */}
+                    <div className="property-card__price-area-container">
+                      <span className="property-card__price">
+                        ₹ {property.purpose === "Sale" 
+                          ? property.demandPriceSale || "N/A"
+                          : property.demandPriceRent || "N/A"}
+                      </span>
+                      <span className="property-card__area">
+                        {property.carpetArea || "N/A"} {" "}  {property.carpetAreaUnit}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="property-card__content">
+                    <p className="property-card__floor">
+                      {property.bhk} {property.propertyType}
+                    </p>
+                    <div className="property-card__features">
+
+                      {property.category && (
+                      <span className="property-card__feature-badge">
+                        {property.category}
+                      </span>
+                      )}
+                      
+                      {property.furnishing && (
+                      <span className="property-card__feature-badge">
+                        {property.furnishing}
+                      </span>
+                      )}
+
+                      {property.package && (
+                      <span className="property-card__feature-badge">
+                        {property.package}
+                      </span>
+                      )}
+
+                        {/* <span className="property-card__no-feature">
+                          No features listed
+                        </span> */}
+                     
+                    </div>
+                  </div>
+
+                  <div className="property-card__footer">
+                    <Link 
+                      to={`/propertydetails/${property.id}`}
+                      className="property-card__action-button"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+                </Link>
+              ))
+            ) : (
+              !loading && <p className="no-properties">No properties found.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Load More Button */}
+        {loadedCount < totalCount && (
+          <div className="load-more-container">
+            <button 
+              className="load-more-button" 
+              onClick={loadMore}
+              disabled={loading}
+            >
+              {loading ? 'Loading...' : 'Load More'}
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const amenitiesData = {
+  club: [
+    {
+      title: "Grand Clubhouse",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Premium clubhouse with lounge and event spaces",
+    },
+    {
+      title: "Banquet Hall",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Spacious hall for celebrations and gatherings",
+    },
+    {
+      title: "Library",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Quiet reading space with extensive collection",
+    },
+    {
+      title: "Business Center",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Professional workspace for residents",
+    },
+  ],
+  sports: [
+    {
+      title: "Swimming Pool",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Olympic-size swimming pool with deck area",
+    },
+    {
+      title: "Fitness Center",
+      image: "/assets/img/society/hero5.jpg",
+      description: "State-of-the-art gym with latest equipment",
+    },
+    {
+      title: "Tennis Court",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Professional tennis court with night lighting",
+    },
+    {
+      title: "Yoga Studio",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Serene space for yoga and meditation",
+    },
+  ],
+  children: [
+    {
+      title: "Kids Play Area",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Safe and fun playground for children",
+    },
+    {
+      title: "Daycare Center",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Professional childcare facility",
+    },
+    {
+      title: "Activity Room",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Indoor activities and learning space",
+    },
+    {
+      title: "Mini Theater",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Entertainment space for kids and families",
+    },
+  ],
+  security: [
+    {
+      title: "24/7 Security",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Round-the-clock security personnel",
+    },
+    {
+      title: "CCTV Surveillance",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Complete CCTV coverage of premises",
+    },
+    {
+      title: "Access Control",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Smart card access for residents",
+    },
+    {
+      title: "Fire Safety",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Advanced fire detection and safety systems",
+    },
+  ],
+  general: [
+    {
+      title: "Landscaped Gardens",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Beautifully maintained green spaces",
+    },
+    {
+      title: "Power Backup",
+      image: "/assets/img/society/hero3.jpg",
+      description: "100% power backup for all common areas",
+    },
+    {
+      title: "Water Treatment",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Advanced water purification system",
+    },
+    {
+      title: "Waste Management",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Eco-friendly waste processing",
+    },
+  ],
+};
+
+const categories = [
+  { key: "club", label: "Club" },
+  { key: "sports", label: "Sports & Fitness" },
+  { key: "children", label: "For Children" },
+  { key: "security", label: "Safety & Security" },
+  { key: "general", label: "General Amenities" },
+];
+
+const NewAmenitiesSection = () => {
+  const [activeCategory, setActiveCategory] = useState("club");
+
+  return (
+    <section className="amenities_section">
+      <div className="container">
+        <div className="text-center mb-12">
+          <h2 className="section-title">World-Class Amenities</h2>
+          <p className="section-description">
+            Experience luxury living with our comprehensive range of premium
+            amenities
+          </p>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="category-tabs">
+          {categories.map((category) => (
+            <button
+              key={category.key}
+              className={`category-button ${
+                activeCategory === category.key ? "category-button--active" : ""
+              }`}
+              onClick={() => setActiveCategory(category.key)}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Amenities Grid */}
+        <div className="amenities-grid">
+          {(amenitiesData[activeCategory] || []).map((amenity, index) => (
+            <div key={index} className="amenity-card">
+              <div className="amenity-card__image-wrapper">
+                <img
+                  src={amenity.image || "/placeholder.svg"}
+                  alt={amenity.title}
+                  className="amenity-card__image"
+                />
+              </div>
+              <div className="amenity-card__content">
+                <h3 className="amenity-card__title">{amenity.title}</h3>
+                <p className="amenity-card__description">
+                  {amenity.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const AboutSocietySection = ({ societyId }) => {
+  const [societyData, setSocietyData] = useState({
+    possessionDate: "",
+    readyToMove: false,
+    description: "",
+    launchDate: "",
+    totalUnits: "",
+    totalTowers: "",
+    projectSize: "",
+    unitTypes: [], // Array of unit types like ["2BHK", "3BHK"]
+  });
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch society data from Firestore (No changes needed here)
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId);
+        const doc = await docRef.get();
+
+        if (doc.exists) {
+          const data = doc.data();
+          setSocietyData((prev) => ({ ...prev, ...data }));
+        }
+      } catch (err) {
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  // FIX 1: Correctly handle the save action
+  const handleSave = async (updatedData) => {
+    try {
+      const docRef = projectFirestore.collection("m_societies").doc(societyId);
+
+      // FIX 1.1: Use the correct keys from formData ('name', 'type')
+      // The `updatedData` object already has the correct structure.
+      const updateObject = {
+        ...updatedData, // Spread the form data
+        lastUpdated: new Date(),
+      };
+
+      await docRef.set(updateObject, { merge: true });
+
+      // FIX 1.2: Update state correctly with the data from the form
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
+      setShowEditModal(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save changes.");
+    }
+  };
+
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+  return (
+    <section className="about-society-section">
+      <div className="container">
+        <div className="about-container">
+          <h2 className="about-title">About {societyData.society}</h2>
+
+          <p className="about-description">
+            {societyData.description === "" ? (
+              <span className="no-description">No description available.</span>
+            ) : (
+              societyData.description
+            )}
+          </p>
+
+          <button className="edit-btn" onClick={() => setShowEditModal(true)}>
+            <FaEdit />
+          </button>
+        </div>
+        <div className="about-society-content">
+          <div className="about-card">
+            <div className="about-card__content">
+              <div className="about-card__grid">
+                <div className="about-card__column">
+                  <div className="about-card__fact">
+                    <span className="about-card__fact-title">Product Size:</span>
+                    <span className="about-card__fact-value">
+                      {societyData.projectSize && societyData.projectAge ? (
+                        `${societyData.projectSize} Acres (${societyData.projectAge} Years)`
+                      ) : societyData.projectSize ? (
+                        `${societyData.projectSize} Acres`
+                      ) : (
+                        "!"
+                      )}
+                    </span>
+                  </div>
+
+                  {societyData.readyToMove ? (
+                    <div className="about-card__fact">
+                      <span className="about-card__fact-title">Launched Year:</span>
+                      <span className="about-card__fact-value">
+                        {societyData.launchedYear ? societyData.launchedYear : "!"}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="about-card__fact">
+                      <span className="about-card__fact-title">Possession Year:</span>
+                      <span className="about-card__fact-value">
+                        {societyData.possessionYear ? societyData.possessionYear : "!"}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="about-card__fact">
+                    <span className="about-card__fact-title">Total Units:</span>
+                    <span className="about-card__fact-value">
+                      {societyData.totalUnits ? `${societyData.totalUnits} Units` : "!"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="about-card__column">
+                  <div className="about-card__fact">
+                    <span className="about-card__fact-title">Total Towers:</span>
+                    <span className="about-card__fact-value">
+                      {societyData.totalTowers ? `${societyData.totalTowers} Towers` : "!"}
+                    </span>
+                  </div>
+
+                  <div className="about-card__fact">
+                    <span className="about-card__fact-title">Society Types:</span>
+                    <span className="about-card__fact-value">
+                      {societyData.societyType ? societyData.societyType : "!"}
+                    </span>
+                  </div>
+
+                  <div className="about-card__fact">
+                    <span className="about-card__fact-title">Possession:</span>
+                    <span className="about-card__fact-value">
+                      {societyData.readyToMove
+                        ? "Immediate Possession"
+                        : societyData.possessionYear
+                        ? societyData.possessionYear
+                        : "!"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showEditModal && (
+        <EditAbout
+          data={societyData}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleSave}
+        />
+      )}
+    </section>
+  );
+};
+
+const FloorPlansSection = ({ societyId }) => {
+  // State for floor plans - initialize as object with array values
+  const [floorPlans, setFloorPlans] = useState({});
+  const [editMode, setEditMode] = useState(false);
+  const [activeUnit, setActiveUnit] = useState("");
+  const [activeVariant, setActiveVariant] = useState(0);
+  
+  // State for new unit type
+  const [newUnitType, setNewUnitType] = useState("BHK");
+  const [newUnitValue, setNewUnitValue] = useState("");
+  
+  // State for new variant
+  const [newVariantSize, setNewVariantSize] = useState("");
+  const [newVariantUnit, setNewVariantUnit] = useState("Sq-ft");
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
+
+  // Fetch floor plans data
+  useEffect(() => {
+    const fetchFloorPlans = async () => {
+      if (!societyId) return;
+
+      try {
+        const docRef = doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "floor_plans"
+        );
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          // Ensure each unit type has an array of variants
+          const plans = data.plans || {};
+          const validatedPlans = {};
+          
+          Object.keys(plans).forEach(unitType => {
+            validatedPlans[unitType] = Array.isArray(plans[unitType]) 
+              ? plans[unitType].map(variant => ({
+                  ...variant,
+                  image: variant.image || ""
+                }))
+              : [];
+          });
+
+          setFloorPlans(validatedPlans);
+          
+          // Set initial active unit if data exists
+          const unitTypes = Object.keys(validatedPlans);
+          if (unitTypes.length > 0) {
+            setActiveUnit(unitTypes[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching floor plans:", error);
+      }
+    };
+
+    fetchFloorPlans();
+  }, [societyId]);
+
+  // Add a new unit type
+  const addUnitType = () => {
+    if (!newUnitType || !newUnitValue) return;
+    
+    const unitKey = `${newUnitValue}${newUnitType}`;
+    
+    if (floorPlans[unitKey]) {
+      alert("This unit type already exists");
+      return;
+    }
+
+    const updatedPlans = {
+      ...floorPlans,
+      [unitKey]: [] // Initialize with empty array
+    };
+
+    setFloorPlans(updatedPlans);
+    setActiveUnit(unitKey);
+    setNewUnitValue("");
+  };
+
+  // Add a new variant to the active unit
+  const addVariant = () => {
+    if (!newVariantSize || !activeUnit) return;
+    
+    const variantName = `${newVariantSize} ${newVariantUnit}`;
+    const newVariant = {
+      size: variantName,
+      image: ""
+    };
+
+    const updatedPlans = {
+      ...floorPlans,
+      [activeUnit]: [...(floorPlans[activeUnit] || []), newVariant]
+    };
+
+    setFloorPlans(updatedPlans);
+    setActiveVariant(updatedPlans[activeUnit].length - 1);
+    setNewVariantSize("");
+  };
+
+  // Handle image selection
+  const handleImageSelect = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedImages(files);
+  };
+
+  // Upload image for the active variant
+  const uploadImageForVariant = async () => {
+    if (selectedImages.length === 0 || !activeUnit || !floorPlans[activeUnit]?.[activeVariant]) return;
+
+    setUploading(true);
+    setUploadProgress(0);
+
+    try {
+      const file = selectedImages[0];
+      const timestamp = Date.now();
+      const fileName = `${timestamp}-${file.name.replace(/\s+/g, "_")}`;
+      const imageRef = ref(
+        projectStorage,
+        `society_images/${societyId}/${fileName}`
+      );
+
+      const uploadTask = uploadBytesResumable(imageRef, file);
+
+      const downloadURL = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress(progress);
+          },
+          (error) => {
+            console.error("Upload error:", error);
+            reject(error);
+          },
+          async () => {
+            try {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            } catch (error) {
+              console.error("Error getting download URL:", error);
+              reject(error);
+            }
+          }
+        );
+      });
+
+      // Update the specific variant with the new image
+      const updatedPlans = { ...floorPlans };
+      updatedPlans[activeUnit][activeVariant].image = downloadURL;
+      setFloorPlans(updatedPlans);
+      setSelectedImages([]);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Delete a variant
+  const deleteVariant = (index) => {
+    if (!window.confirm("Are you sure you want to delete this variant?")) return;
+    
+    const updatedPlans = { ...floorPlans };
+    updatedPlans[activeUnit].splice(index, 1);
+    
+    if (updatedPlans[activeUnit].length === 0) {
+      delete updatedPlans[activeUnit];
+      setActiveUnit(Object.keys(updatedPlans)[0] || "");
+    }
+    
+    setFloorPlans(updatedPlans);
+    setActiveVariant(0);
+  };
+
+  // Delete a unit type
+  const deleteUnitType = (unitKey) => {
+    if (!window.confirm("Are you sure you want to delete this unit type and all its variants?")) return;
+    
+    const updatedPlans = { ...floorPlans };
+    delete updatedPlans[unitKey];
+    
+    setFloorPlans(updatedPlans);
+    setActiveUnit(Object.keys(updatedPlans)[0] || "");
+    setActiveVariant(0);
+  };
+
+  // Save floor plans to Firestore
+  const saveFloorPlans = async () => {
+    if (!societyId || Object.keys(floorPlans).length === 0) return;
+
+    setSaving(true);
+
+    try {
+      // Save the floor plans data
+      const docRef = doc(
+        projectFirestore,
+        "m_societies",
+        societyId,
+        "society_information",
+        "floor_plans"
+      );
+
+      await setDoc(docRef, { plans: floorPlans });
+      setEditMode(false);
+    } catch (error) {
+      console.error("Error saving floor plans:", error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Safely get variants for the active unit
+  const getVariantsForActiveUnit = () => {
+    if (!activeUnit || !floorPlans[activeUnit]) return [];
+    return Array.isArray(floorPlans[activeUnit]) ? floorPlans[activeUnit] : [];
+  };
+
+  return (
+    <section className="floor-plans-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Unit Floor Plans</h2>
+          <p>
+            Explore our thoughtfully designed floor plans that maximize space
+            and comfort
+          </p>
+          
+          {!editMode && (
+            <button 
+              onClick={() => setEditMode(true)} 
+              className="edit-button"
+            >
+              <FaEdit /> Edit
+            </button>
+          )}
+        </div>
+
+        {editMode ? (
+          <div className="edit-mode">
+            {/* Unit Type Tabs */}
+            <div className="unit-tabs">
+              {Object.keys(floorPlans).map((unitType) => (
+                <div key={unitType} className="tab-container">
+                  <button
+                    className={`tab-button ${
+                      activeUnit === unitType ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      setActiveUnit(unitType);
+                      setActiveVariant(0);
+                      setSelectedImages([]);
+                    }}
+                  >
+                    {unitType}
+                  </button>
+                  <button 
+                    className="delete-unit-button"
+                    onClick={() => deleteUnitType(unitType)}
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              ))}
+              
+              {/* Add Unit Type Form */}
+              <div className="add-unit-form">
+                <select
+                  value={newUnitType}
+                  onChange={(e) => setNewUnitType(e.target.value)}
+                >
+                  <option value="EWS">EWS</option>
+                  <option value="RK">RK</option>
+                  <option value="BHK">BHK</option>
+                  <option value="Hall">Hall</option>
+                  <option value="Studio">Studio</option>
+                </select>
+                <input
+                  type="text"
+                  value={newUnitValue}
+                  onChange={(e) => setNewUnitValue(e.target.value)}
+                  placeholder="Unit value (e.g., 1, 2, 3)"
+                />
+                <button onClick={addUnitType} className="add-button">
+                  Add Unit Type
+                </button>
+              </div>
+            </div>
+
+            {/* Variant Selection */}
+            {activeUnit && (
+              <>
+                <div className="variant-tabs">
+                  {getVariantsForActiveUnit().map((variant, index) => (
+                    <div key={index} className="variant-container">
+                      <button
+                        className={`variant-button ${
+                          activeVariant === index ? "active" : ""
+                        }`}
+                        onClick={() => {
+                          setActiveVariant(index);
+                          setSelectedImages([]);
+                        }}
+                      >
+                        {variant.size}
+                      </button>
+                      <button 
+                        className="delete-variant-button"
+                        onClick={() => deleteVariant(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  {/* Add Variant Form */}
+                  <div className="add-variant-form">
+                    <input
+                      type="number"
+                      value={newVariantSize}
+                      onChange={(e) => setNewVariantSize(e.target.value)}
+                      placeholder="Size value"
+                      min="0"
+                      step="0.01"
+                    />
+                    <select
+                      value={newVariantUnit}
+                      onChange={(e) => setNewVariantUnit(e.target.value)}
+                    >
+                      <option value="Sq-ft">SqFt</option>
+                      <option value="Sq-m">SqMtr</option>
+                      <option value="Sq-yard">SqYard</option>
+                    </select>
+                    <button onClick={addVariant} className="add-button">
+                      Add Variant
+                    </button>
+                  </div>
+                </div>
+
+                {/* Image Upload for Active Variant */}
+                {activeUnit && floorPlans[activeUnit]?.[activeVariant] && (
+                  <div className="image-upload-section">
+                    <div className="image-upload">
+                      <label className="upload-button">
+                        <FaUpload /> Select Image
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageSelect}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                      {selectedImages.length > 0 && (
+                        <button
+                          onClick={uploadImageForVariant}
+                          disabled={uploading}
+                          className="upload-button"
+                        >
+                          {uploading ? `Uploading... ${Math.round(uploadProgress)}%` : "Upload Image"}
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* Selected Image Preview */}
+                    {selectedImages.length > 0 && (
+                      <div className="image-preview">
+                        <img 
+                          src={URL.createObjectURL(selectedImages[0])} 
+                          alt="Preview" 
+                        />
+                        <button onClick={() => setSelectedImages([])}>
+                          <FaTimes />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Current Image */}
+                    {floorPlans[activeUnit][activeVariant].image && (
+                      <div className="current-image">
+                        <p>Current Floor Plan:</p>
+                        <img 
+                          src={floorPlans[activeUnit][activeVariant].image} 
+                          alt="Current floor plan" 
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Save/Cancel Buttons */}
+            <div className="action-buttons">
+              <button 
+                onClick={saveFloorPlans} 
+                disabled={Object.keys(floorPlans).length === 0 || saving}
+                className="save-button"
+              >
+                {saving ? 'Saving...' : (
+                  <>
+                    <FaSave /> Save Changes
+                  </>
+                )}
+              </button>
+              <button 
+                onClick={() => setEditMode(false)} 
+                className="cancel-button"
+                disabled={saving}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="view-mode">
+            {/* Unit Type Tabs */}
+            {Object.keys(floorPlans).length > 0 ? (
+              <>
+                <div className="unit-tabs">
+                  {Object.keys(floorPlans).map((unitType) => (
+                    <button
+                      key={unitType}
+                      className={`tab-button ${
+                        activeUnit === unitType ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        setActiveUnit(unitType);
+                        setActiveVariant(0);
+                      }}
+                    >
+                      {unitType}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Variant Selection */}
+                {activeUnit && getVariantsForActiveUnit().length > 0 && (
+                  <div className="variant-tabs">
+                    {getVariantsForActiveUnit().map((variant, index) => (
+                      <button
+                        key={index}
+                        className={`variant-button ${
+                          activeVariant === index ? "active" : ""
+                        }`}
+                        onClick={() => setActiveVariant(index)}
+                      >
+                        {variant.size}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Floor Plan Display */}
+                <div className="floor-plan-display">
+                  {activeUnit && floorPlans[activeUnit]?.[activeVariant]?.image ? (
+                    <div className="card-floorPlan">
+                      
+                        <div className="image-container">
+                          <img
+                            src={floorPlans[activeUnit][activeVariant].image}
+                            alt={`${activeUnit} ${floorPlans[activeUnit][activeVariant].size} floor plan`}
+                          />
+                        </div>
+          
+                    </div>
+                  ) : (
+                    <p className="no-image-message">No floor plan image available</p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <p className="no-data-message">No floor plans available</p>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const SocietyRatesSection = ({ societyId }) => {
+  const [societyData, setSocietyData] = useState({
+    electricityRateAuthority: "",
+    electricityRatePowerBackup: "",
+    waterCharges: "",
+    commonAreaMaintenance: "",
+    commonAreaElectricity: "",
+    clubCharges: "",
+  });
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data from society_information collection
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const docRef = projectFirestore
+          .collection("m_societies")
+          .doc(societyId)
+          .collection("society_information") // lowercase as per your screenshot
+          .doc("Rates");
+
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          setSocietyData(docSnap.data());
+        } else {
+          console.log("No rates found in society_information.");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  // Save only in society_information collection
+  const handleSave = async (updatedData) => {
+    try {
+      const infoDocRef = projectFirestore
+        .collection("m_societies")
+        .doc(societyId)
+        .collection("society_information")
+        .doc("Rates");
+
+      await infoDocRef.set(
+        {
+          ...updatedData,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+
+      setSocietyData((prev) => ({ ...prev, ...updatedData }));
+      setShowEditModal(false);
+    } catch (err) {
+      console.error("Save error:", err);
+      setError("Failed to save changes.");
+    }
+  };
+
+  // Format currency in Indian numbering system
+  const formatRupees = (value) => {
+    return new Intl.NumberFormat("en-IN", {
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
+  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (error) return <div className="error-message">{error}</div>;
+
+  return (
+    <section className="society-rates-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Society Rates & Charges</h2>
+          <p>
+            Transparent pricing structure for all society-related services and
+            amenities
+          </p>
+          <button className="edit-btn" onClick={() => setShowEditModal(true)}>
+            <FaEdit />
+          </button>
+        </div>
+
+        <div className="rates-grid">
+            <div  className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaBolt className="icon" />
+                  Electricity Rate (Authority)
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.electricityRateAuthority} per unit</p>
+
+                </div>
+              </div>
+            </div>
+            <div  className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaBatteryFull className="icon" />
+                  Power Backup
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.electricityRatePowerBackup} per unit</p>
+
+                </div>
+              </div>
+            </div>
+            <div  className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaTint className="icon" />
+                  Water Charges
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.waterCharges} per 1000L</p>
+
+                </div>
+              </div>
+            </div>
+            <div  className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaRegBuilding className="icon" />
+                  Common Area Maintenance
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.commonAreaMaintenance} per sq.ft/month</p>
+                </div>
+              </div>
+            </div>
+            <div  className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaRegBuilding className="icon" />
+                  Common Area Electricity
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.commonAreaElectricity} per sq.ft/month</p>
+                </div>
+              </div>
+            </div>
+            <div className="rate-card">
+              <div className="card-header">
+                <h3 className="card-title">
+                  <FaRegBuilding className="icon" />
+                  Club Charges
+                </h3>
+              </div>
+              <div className="card-content">
+                <div className="rate-details">
+                  <p className="rate-value">₹{societyData.clubCharges} per month</p>
+                  {/* <p className="rate-description">Access to all club amenities</p> */}
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div className="payment-info">
+          <div className="info-card">
+            <div className="card-content">
+              <h3 className="info-title">
+                Charges Information (Last Updated on{" "}
+                {societyData.updatedAt
+                  ? new Date(societyData.updatedAt.seconds * 1000).toLocaleDateString("en-IN", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "N/A"}
+                )
+              </h3>
+              <p className="info-text">
+                All charges are subject to applicable taxes. Monthly charges are billed in advance. Online payment options are available through our resident portal.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showEditModal && (
+        <EditRates
+          data={societyData}
+          onClose={() => setShowEditModal(false)}
+          onSave={handleSave}
+        />
+      )}
+    </section>
+  );
+};
+
+const MapLocationSection = ({ state, city, locality, societyId }) => {
+  const [societyData, setSocietyData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [mapLink, setMapLink] = useState('');
+  const [nearbyLocations, setNearbyLocations] = useState([]);
+  const [newLocation, setNewLocation] = useState({
+    place: '',
+    distance: '',
+    time: ''
+  });
+  const [tempMapLink, setTempMapLink] = useState('');
+  const [tempLocations, setTempLocations] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!societyId) return;
+
+      try {
+        const docRef = doc(projectFirestore, "m_societies", societyId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setSocietyData(docSnap.data());
+          if (docSnap.data().mapLink) {
+            setMapLink(docSnap.data().mapLink);
+            setTempMapLink(docSnap.data().mapLink);
+          }
+          if (docSnap.data().locations) {
+            setNearbyLocations(docSnap.data().locations);
+            setTempLocations(docSnap.data().locations);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, [societyId]);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setTempMapLink(mapLink);
+    setTempLocations([...nearbyLocations]);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setTempMapLink(mapLink);
+    setTempLocations([...nearbyLocations]);
+  };
+
+  const handleSave = async () => {
+    try {
+      const docRef = doc(projectFirestore, "m_societies", societyId);
+      await updateDoc(docRef, {
+        mapLink: tempMapLink,
+        locations: tempLocations
+      });
+      setMapLink(tempMapLink);
+      setNearbyLocations(tempLocations);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error saving data: ", error);
+      alert("Failed to save changes. Please try again.");
+    }
+  };
+
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === 'distance' || name === 'time') {
+      // Only allow numbers and limit length
+      const numericValue = value.replace(/\D/g, '');
+      if (name === 'distance' && numericValue.length > 3) return;
+      if (name === 'time' && numericValue.length > 2) return;
+      
+      setNewLocation({
+        ...newLocation,
+        [name]: numericValue
+      });
+    } else {
+      setNewLocation({
+        ...newLocation,
+        [name]: value
+      });
+    }
+  };
+
+  const handleAddLocation = () => {
+    if (newLocation.place && newLocation.distance && newLocation.time) {
+      const locationToAdd = {
+        place: newLocation.place,
+        distance: `${newLocation.distance} km`,
+        time: `${newLocation.time} mins`
+      };
+      
+      setTempLocations([...tempLocations, locationToAdd]);
+      setNewLocation({
+        place: '',
+        distance: '',
+        time: ''
+      });
+    }
+  };
+
+  const handleRemoveLocation = (index) => {
+    const updatedLocations = [...tempLocations];
+    updatedLocations.splice(index, 1);
+    setTempLocations(updatedLocations);
+  };
+
+  const handleMapLinkChange = (e) => {
+    setTempMapLink(e.target.value);
+  };
+  const formattedState = formatStateName(state);
+  const formattedCity = formatStateName(city);
+  const formattedLocality = formatStateName(locality);
+
+  return (
+    <section className="map-location-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Location & Connectivity</h2>
+          <p>
+            Strategically located in the heart of Whitefield with excellent
+            connectivity to key destinations
+          </p>
+          {!isEditing && (
+            <button className="edit-button" onClick={handleEditClick}>
+              <FaEdit />Edit
+            </button>
+          )}
+        </div>
+
+        {isEditing ? (
+          <div className="edit-form">
+            <div className="form-group">
+              <label>Google Maps Embed Link</label>
+              <input
+                type="text"
+                value={tempMapLink}
+                onChange={handleMapLinkChange}
+                placeholder="Paste Google Maps embed link here"
+              />
+              <small className="help-text">
+                How to get the embed link: On Google Maps, click "Share" → "Embed a map" → Copy the iframe src URL
+              </small>
+            </div>
+
+            <div className="locations-form">
+              <h3>Nearby Locations</h3>
+              <div className="locations-list">
+                {tempLocations.map((location, index) => (
+                  <div key={index} className="location-item">
+                    <div className="location-info">
+                      <MapPin className="location-icon" />
+                      <input
+                        type="text"
+                        name="place"
+                        value={location.place}
+                        onChange={(e) => {
+                          const updated = [...tempLocations];
+                          updated[index].place = e.target.value;
+                          setTempLocations(updated);
+                        }}
+                      />
+                    </div>
+                    <div className="location-meta">
+                      <div className="distance-input-container">
+                        <input
+                          type="text"
+                          name="distance"
+                          value={location.distance.replace(' km', '')}
+                          onChange={(e) => {
+                            const numericValue = e.target.value.replace(/\D/g, '');
+                            if (numericValue.length > 3) return;
+                            const updated = [...tempLocations];
+                            updated[index].distance = `${numericValue} km`;
+                            setTempLocations(updated);
+                          }}
+                          placeholder="Distance"
+                        />
+                        
+                      </div>
+                      <div className="time-input-container">
+                        <input
+                          type="text"
+                          name="time"
+                          value={location.time.replace(' mins', '')}
+                          onChange={(e) => {
+                            const numericValue = e.target.value.replace(/\D/g, '');
+                            if (numericValue.length > 2) return;
+                            const updated = [...tempLocations];
+                            updated[index].time = `${numericValue} mins`;
+                            setTempLocations(updated);
+                          }}
+                          placeholder="Time"
+                        />
+                        
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveLocation(index)}
+                      className="remove-button"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="add-location-form">
+                <h4>Add New Location</h4>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>Place Name</label>
+                    <input
+                      type="text"
+                      name="place"
+                      value={newLocation.place}
+                      onChange={handleLocationChange}
+                      placeholder="e.g. Shopping Mall"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Distance (in km)</label>
+                    <div className="distance-input-container">
+                      <input
+                        type="text"
+                        name="distance"
+                        value={newLocation.distance}
+                        onChange={handleLocationChange}
+                        placeholder="e.g. 1.5"
+                        maxLength={3}
+                      />
+                      
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Time (in mins)</label>
+                    <div className="time-input-container">
+                      <input
+                        type="text"
+                        name="time"
+                        value={newLocation.time}
+                        onChange={handleLocationChange}
+                        placeholder="e.g. 10"
+                        maxLength={2}
+                      />
+                      
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={handleAddLocation}
+                  className="add-button"
+                  disabled={!newLocation.place || !newLocation.distance || !newLocation.time}
+                >
+                  <FaPlus /> Add Location
+                </button>
+              </div>
+            </div>
+
+            <div className="form-actions">
+              <button onClick={handleCancel} className="cancel-button">
+                <FaTimes /> Cancel
+              </button>
+              <button onClick={handleSave} className="save-button">
+                <FaSave /> Save Changes
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="content-grid">
+            {/* Map Section */}
+            <div className="map-container">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">
+                    <MapPin className="icon" />
+                    Society Location
+                  </h3>
+                </div>
+                <div className="card-content">
+                  <div className="map-iframe">
+                    <iframe
+                      title="Society Location"
+                      src={mapLink || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.007168164708!2d77.75055731482193!3d12.972462990856818!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae0d8a8f69a5a9%3A0x7a2c2b3e3e3e3e3e!2sWhitefield%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  </div>
+                  <div className="address-details">
+                    <p className="address-label">Complete Address:</p>
+                    <p>{societyData.address}</p>
+                    <p> 
+        {formattedCity}, {formattedState}</p>
+                    {/* <p>Near ITPL, Whitefield, Bangalore - 560066, Karnataka</p> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Nearby Locations Section */}
+            <div className="locations-container">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title">Nearby Locations</h3>
+                </div>
+                <div className="card-content">
+                  <div className="locations-list">
+                    {nearbyLocations.map((location, index) => (
+                      <div key={index} className="location-item">
+                        <div className="location-info">
+                          <MapPin className="location-icon" />
+                          <span className="location-name">{location.place}</span>
+                        </div>
+                        <div className="location-meta">
+                          <span className="distance">{location.distance}</span>
+                          <div className="time-info">
+                            <Clock className="time-icon" />
+                            <span>{location.time}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const PropertyVideosSection = ({ societyId }) => {
+  const sliderRef = useRef(null);
+  const [videos, setVideos] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newVideo, setNewVideo] = useState({
+    url: "",
+    title: "",
+  });
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  // Fetch videos from Firestore
+  useEffect(() => {
+    if (!societyId) return;
+
+    const societyDocRef = doc(projectFirestore, "m_societies", societyId);
+    const unsubscribe = onSnapshot(societyDocRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setVideos(data?.videos || []);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [societyId]);
+
+  // Check scroll position to show/hide arrows
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    const handleScroll = () => {
+      setShowLeftArrow(slider.scrollLeft > 0);
+      setShowRightArrow(
+        slider.scrollLeft < slider.scrollWidth - slider.clientWidth - 1
+      );
+    };
+
+    slider.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => slider.removeEventListener("scroll", handleScroll);
+  }, [videos]);
+
+  const scrollLeft = () => {
+    sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewVideo({ ...newVideo, [name]: value });
+  };
+
+  const extractVideoId = (url) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const shortsRegExp = /^.*(youtube.com\/shorts\/)([^#&?]*).*/;
+    const shortsMatch = url.match(shortsRegExp);
+
+    if (match && match[2].length === 11) return match[2];
+    if (shortsMatch && shortsMatch[2].length === 11) return shortsMatch[2];
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const videoId = extractVideoId(newVideo.url);
+
+    if (!videoId) {
+      alert("Please enter a valid YouTube URL");
+      return;
+    }
+
+    try {
+      await updateDoc(doc(projectFirestore, "m_societies", societyId), {
+        videos: [
+          ...videos,
+          {
+            id: videoId,
+            title: newVideo.title,
+            thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            duration: "0:00"
+          }
+        ]
+      });
+      setNewVideo({ url: "", title: "" });
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error adding video:", error);
+      alert("Failed to add video");
+    }
+  };
+
+  const handleDeleteVideo = async (index) => {
+    if (!window.confirm("Are you sure you want to delete this video?")) return;
+
+    try {
+      const updatedVideos = [...videos];
+      updatedVideos.splice(index, 1);
+      await updateDoc(doc(projectFirestore, "m_societies", societyId), {
+        videos: updatedVideos
+      });
+    } catch (error) {
+      console.error("Error deleting video:", error);
+      alert("Failed to delete video");
+    }
+  };
+
+  return (
+    <section className="property-videos-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Property Videos</h2>
+          <p>
+            Get an immersive experience of our residential society through these
+            detailed video tours
+          </p>
+          <button 
+            className="edit-button" 
+            onClick={() => setShowForm(!showForm)}
+          >
+            <FaPlus /> Add Video
+          </button>
+        </div>
+
+        {showForm && (
+          <div className="video-form">
+            <button 
+              className="close-form-button" 
+              onClick={() => setShowForm(false)}
+            >
+              <FaTimes />
+            </button>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>YouTube URL:</label>
+                <input
+                  type="text"
+                  name="url"
+                  value={newVideo.url}
+                  onChange={handleInputChange}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Title:</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={newVideo.title}
+                  onChange={handleInputChange}
+                  placeholder="Video title"
+                  required
+                />
+              </div>
+              <button type="submit" className="submit-button">
+                Add Video
+              </button>
+            </form>
+          </div>
+        )}
+
+        <div className="videos-slider-wrapper">
+          {showLeftArrow && (
+            <button className="slider-button left" onClick={scrollLeft}>
+              <FaChevronLeft />
+            </button>
+          )}
+
+          <div className="videos-slider" ref={sliderRef}>
+            {videos.length > 0 ? (
+              videos.map((video, index) => (
+                <div key={index} className="video-card">
+                  <div className="thumbnail-container">
+                    {video.id ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${video.id}`}
+                        title={video.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    ) : (
+                      <>
+                        <img
+                          src={video.thumbnail || "/placeholder.svg"}
+                          alt={video.title}
+                          className="thumbnail-image"
+                        />
+                        
+                      </>
+                    )}
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteVideo(index)}
+                    >
+                      <FaTimes />
+                    </button>
+                    {/* <div className="duration-badge">{video.duration}</div> */}
+                  </div>
+                  <h3 className="video-title">{video.title}</h3>
+                </div>
+              ))
+            ) : (
+              <div className="empty-state">
+                <p>No videos added yet</p>
+              </div>
+            )}
+          </div>
+
+          {showRightArrow && videos.length > 0 && (
+            <button className="slider-button right" onClick={scrollRight}>
+              <FaChevronRight />
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ContactSection = ({ societyId }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    manager: {
+      name: "",
+      designation: "Society Manager",
+      mobile: "",
+      email: "",
+      responseRate: "100%",
+      responseTime: "within an hour",
+    },
+    maintenance: {
+      companyName: "",
+      contactPerson: "",
+      phone: "",
+      email: "",
+      contractStart: "",
+      contractEnd: "",
+    },
+  });
+
+  // Fetch existing society info
+  useEffect(() => {
+    const fetchSocietyInfo = async () => {
+      try {
+        const docRef = doc(projectFirestore, "m_societies", societyId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setFormData({
+            manager: {
+              name: data.manager?.name || "",
+              designation: data.manager?.designation || "Society Manager",
+              mobile: data.manager?.mobile || "",
+              email: data.manager?.email || "",
+              responseRate: data.manager?.responseRate || "100%",
+              responseTime: data.manager?.responseTime || "within an hour",
+            },
+            maintenance: {
+              companyName: data.maintenance?.companyName || "",
+              contactPerson: data.maintenance?.contactPerson || "",
+              phone: data.maintenance?.phone || "",
+              email: data.maintenance?.email || "",
+              contractStart: data.maintenance?.contractStart || "",
+              contractEnd: data.maintenance?.contractEnd || "",
+            },
+          });
+        } else {
+          console.log("No such document for societyId:", societyId);
+        }
+      } catch (error) {
+        console.error("Error fetching society info:", error);
+        // Display a user-friendly message instead of alert()
+        // alert('Failed to load society information.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSocietyInfo();
+  }, [societyId]);
+
+  const handleInputChange = (e, section) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const docRef = doc(projectFirestore, "m_societies", societyId);
+      await updateDoc(docRef, formData);
+      setEditMode(false);
+      // alert('Information saved successfully!'); // Use custom modal instead
+    } catch (error) {
+      console.error("Error updating society info:", error);
+      // alert('Failed to save information'); // Use custom modal instead
+    }
+  };
+
+  if (loading) {
+    return <div className="society-info-loading">Loading...</div>;
+  }
+  return (
+    <section className="contact-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Society Contact Information</h2>
+          <p>
+            Get in touch with our management team for any queries or assistance
+          </p>
+         {!editMode && (
+          <button className="edit-button" onClick={() => setEditMode(true)}>
+            <FaEdit />Edit
+          </button>
+        )}
+        </div>
+      
+
+      {editMode ? (
+        <form onSubmit={handleSubmit} className="society-info-form">
+          {/* Society Manager Form */}
+          <div className="profile-section">
+            <h3>Society Manager</h3>
+            <div className="form-group">
+              <label>Name:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.manager.name}
+                onChange={(e) => handleInputChange(e, "manager")}
+                placeholder="Enter name"
+                required
+              />
+            </div>
+
+            <div className="contact-grid">
+              <div className="form-group">
+                <label>Mobile:</label>
+                <input
+                  type="tel"
+                  name="mobile"
+                  value={formData.manager.mobile}
+                  onChange={(e) => handleInputChange(e, "manager")}
+                  placeholder="Enter mobile number"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.manager.email}
+                  onChange={(e) => handleInputChange(e, "manager")}
+                  placeholder="Enter email"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="response-info">
+              <div className="form-group">
+                <label>Response Rate:</label>
+                <select
+                  name="responseRate"
+                  value={formData.manager.responseRate}
+                  onChange={(e) => handleInputChange(e, "manager")}
+                >
+                  <option value="100%">100%</option>
+                  <option value="90%">90%</option>
+                  <option value="80%">80%</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Response Time:</label>
+                <select
+                  name="responseTime"
+                  value={formData.manager.responseTime}
+                  onChange={(e) => handleInputChange(e, "manager")}
+                >
+                  <option value="within an hour">within an hour</option>
+                  <option value="within a few hours">within a few hours</option>
+                  <option value="within a day">within a day</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Maintenance Company Form */}
+          <div className="profile-section">
+            <h3>Maintenance Company</h3>
+            <div className="form-group">
+              <label>Company Name:</label>
+              <input
+                type="text"
+                name="companyName"
+                value={formData.maintenance.companyName}
+                onChange={(e) => handleInputChange(e, "maintenance")}
+                placeholder="Enter company name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Contact Person:</label>
+              <input
+                type="text"
+                name="contactPerson"
+                value={formData.maintenance.contactPerson}
+                onChange={(e) => handleInputChange(e, "maintenance")}
+                placeholder="Enter contact person name"
+                
+              />
+            </div>
+
+            <div className="contact-grid">
+              <div className="form-group">
+                <label>Phone:</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.maintenance.phone}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
+                  placeholder="Enter phone number"
+                  // required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.maintenance.email}
+                  onChange={(e) => handleInputChange(e, "maintenance")}
+                  placeholder="Enter email"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Contract Start:</label>
+                  <input
+                    type="text"   // text so we can control length
+                    name="contractStart"
+                    value={formData.maintenance.contractStart}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d{0,4}$/.test(value)) {   // only 0–4 digits allowed
+                        handleInputChange(e, "maintenance");
+                      }
+                    }}
+                    placeholder="Enter contract starting year"
+                    inputMode="numeric"  // shows numeric keyboard on mobile
+                    pattern="\d*"        // hint for numeric only
+                  />
+                <span className="input-info">Year (YYYY)</span>
+              </div>
+              <div className="form-group">
+                <label>Contract End:</label>
+                  <input
+                    type="text"   // use text instead of number
+                    name="contractEnd"
+                    value={formData.maintenance.contractEnd}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d{0,4}$/.test(value)) {  // allow only up to 4 digits
+                        handleInputChange(e, "maintenance");
+                      }
+                    }}
+                    placeholder="Enter contract ending year"
+                    inputMode="numeric"
+                    pattern="\d*"
+                  />
+                  <span className="input-info">Year (YYYY)</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" onClick={() => setEditMode(false)}>
+              Cancel
+            </button>
+            <button type="submit">Save</button>
+          </div>
+        </form>
+      ) : (
+        <div className="contact-grid">
+          {/* Society Manager */}
+          <div className="contact-card">
+            <div className="card-header">
+              <h3 className="card-title">
+                <User className="icon" />
+                Society Manager
+              </h3>
+            </div>
+            <div className="card-content">
+              <div className="contact-person">
+                <p className="name">{formData.manager.name || "Not specified"}</p>
+                <p className="designation">Senior Property Manager</p>
+              </div>
+              <div className="contact-details">
+                <div className="contact-item">
+                  <Phone className="contact-icon" />
+                  <span>{formData.manager.mobile || "Not specified"}</span>
+                </div>
+                <div className="contact-item">
+                  <Mail className="contact-icon" />
+                  <span>{formData.manager.email || "Not specified"}</span>
+                </div>
+              </div>
+              <div className="availability">
+                <p>Response Rate: {formData.manager.responseRate || "Not specified"}</p>
+                <p>Response Time: {formData.manager.responseTime || "Not specified"}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Maintenance Company */}
+          <div className="contact-card">
+            <div className="card-header">
+              <h3 className="card-title">
+                <Building className="icon" />
+                Maintenance Company
+              </h3>
+            </div>
+            <div className="card-content">
+              <div className="contact-person">
+                <p className="name">{formData.maintenance.companyName || "Not specified"}</p>
+                <p className="designation">Professional Maintenance Services</p>
+              </div>
+              <div className="contact-details">
+                <div className="contact-item">
+                  <Phone className="contact-icon" />
+                  <span>{formData.maintenance.phone || "Not specified"}</span>
+                </div>
+                <div className="contact-item">
+                  <Mail className="contact-icon" />
+                  <span>{formData.maintenance.email || "Not specified"}</span>
+                </div>
+              </div>
+              <div className="contract-details">
+                <div className="contract-item">
+                  <Calendar className="contract-icon" />
+                  <div>
+                    <p className="contract-label">Contract Period</p>
+                    <p className="contract-date">{formData.maintenance.contractStart || "Not specified"} - {formData.maintenance.contractEnd || "Not specified"}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+const reviews = [
+  {
+    name: "Priya Sharma",
+    rating: 5,
+    date: "2 months ago",
+    review:
+      "Excellent society with world-class amenities. The maintenance is top-notch and the security is very good. My family loves the swimming pool and kids play area.",
+    apartment: "3BHK, Tower A",
+  },
+  {
+    name: "Amit Patel",
+    rating: 5,
+    date: "3 months ago",
+    review:
+      "Great location with easy access to IT parks and malls. The clubhouse is amazing and the gym has all modern equipment. Highly recommend for IT professionals.",
+    apartment: "2BHK, Tower B",
+  },
+  {
+    name: "Sneha Reddy",
+    rating: 4,
+    date: "1 month ago",
+    review:
+      "Beautiful society with lush green landscaping. The apartments are spacious and well-designed. The management is responsive to all queries and complaints.",
+    apartment: "4BHK, Tower C",
+  },
+  {
+    name: "Rajesh Kumar",
+    rating: 5,
+    date: "4 months ago",
+    review:
+      "Premium quality construction and excellent amenities. The society has a great community feel. Kids love the playground and the library is well-maintained.",
+    apartment: "3BHK, Tower D",
+  },
+  {
+    name: "Meera Joshi",
+    rating: 4,
+    date: "2 weeks ago",
+    review:
+      "Good connectivity to major areas of Bangalore. The society is well-planned with ample parking space. The power backup system works efficiently.",
+    apartment: "2BHK, Tower E",
+  },
+  {
+    name: "Vikram Singh",
+    rating: 5,
+    date: "5 months ago",
+    review:
+      "Outstanding society with professional management. The security is excellent with 24/7 CCTV surveillance. Great investment for the future.",
+    apartment: "4BHK, Tower F",
+  },
+];
+
+const ReviewsSection = () => {
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        className={`star-icon ${i < rating ? "filled" : "empty"}`}
+      />
+    ));
+  };
+
+  return (
+    <section className="reviews-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Resident Reviews</h2>
+          <p>
+            Hear what our residents have to say about their living experience at
+            Emerald Heights
+          </p>
+        </div>
+
+        <div className="reviews-grid">
+          {reviews.map((review, index) => (
+            <div key={index} className="review-card">
+              <div className="card-content">
+                <div className="review-content">
+                  <Quote className="quote-icon" />
+                  <div className="review-details">
+                    <div className="rating-container">
+                      <div className="stars">{renderStars(review.rating)}</div>
+                      <span className="review-date">{review.date}</span>
+                    </div>
+                    <p className="review-text">{review.review}</p>
+                    <div className="reviewer-info">
+                      <p className="reviewer-name">{review.name}</p>
+                      <p className="reviewer-apartment">{review.apartment}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="average-rating">
+          <div className="rating-badge">
+            <div className="stars">{renderStars(5)}</div>
+            <span className="rating-score">4.8/5</span>
+            <span className="rating-count">• Based on 150+ reviews</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const PGSocietyPage = () => {
   // The 'society' param from the URL is the slug, e.g., "best-12345"
@@ -3655,15 +6644,22 @@ const PGSocietyPage = () => {
           ))}
         </div>
       </div> */}
-      <HeroSection societyId={id} />
+      {/* <HeroSection societyId={id} /> */}
 
+      <SocietyDetails 
+        country={country}
+        state={state}
+        city={city}
+        locality={locality}
+        societyId={id}
+      />
       {/* Sticky Tab Bar */}
       <StickyTabBar />
 
       {/* Overview Section */}
 
       <div id="Overview" className={styles.contentWrapper}>
-        <div className={styles.overviewSection}>
+        {/* <div className={styles.overviewSection}>
           <div className={styles.contact}>
             <div>
               <SocietyOverview
@@ -3678,33 +6674,40 @@ const PGSocietyPage = () => {
               <ContactForm />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Buy Rent Tabs */}
-        <div>
-          {/* Available Properties Section */}
+        {/* Available Properties Section */}
+        <PropertiesSection societyName={society.society}/>
+        {/* <div>
           <AvailableProperties societyName={society.society} />
-        </div>
+        </div> */}
 
         {/* Amenities */}
-        <div id="Amenities">
+        <NewAmenitiesSection />
+        {/* <div id="Amenities">
           <AmenitiesSection societyId={id} />
-        </div>
+        </div> */}
 
         {/* About Project */}
-        <div id="About-Project" className="projectInfoSection">
+        <AboutSocietySection societyId={id}/>
+        {/* <div id="About-Project" className="projectInfoSection">
           <ProjectInfo societyId={id} />
-        </div>
+        </div> */}
 
         {/* Location Advantages */}
-        <div id="Nearby-Locations" className="locationAdvantages">
+        {/* <div id="Nearby-Locations" className="locationAdvantages">
           <LocationAdvantages societyId={id} />
-        </div>
+        </div> */}
 
         {/* Floor Plans */}
-        <div id="Units-Floor-Plans" className="floorPlansSection">
+        <FloorPlansSection societyId={id} />
+        {/* <div id="Units-Floor-Plans" className="floorPlansSection">
           <FloorPlans societyId={id} />
-        </div>
+        </div> */}
+
+        {/* Society rate */}
+        <SocietyRatesSection societyId={id} />
 
         {/* Photo Gallery */}
         <div id="Photo-Gallery" className="gallerySection">
@@ -3716,34 +6719,38 @@ const PGSocietyPage = () => {
         </div>
 
         {/* Meeting Point */}
-        <div id="Meeting-Point" className="meetingPointSection">
+        <MapLocationSection state={state} city={city} locality={locality} societyId={id}/>
+        {/* <div id="Meeting-Point" className="meetingPointSection">
           <MeetingPoint state={state} city={city} locality={locality} societyId={id} />
-        </div>
+        </div> */}
 
         {/* ComponentBuilder */}
         {/* <div id="ComponentBuilder">
           <ComponentBuilder />
         </div> */}
 
-        {/* YouTube Video Slider */}
-        <div id="YouTube-Videos" className="videoSection">
-          <YouTubeVideoSlider societyId={id} title="Property Videos" />
-        </div>
-
         {/* Society management info */}
-        <div id="Society-Management" className="societyInfoSection">
+        <ContactSection societyId={id} />
+        {/* <div id="Society-Management" className="societyInfoSection">
           <SocietyInfoForm societyId={id} />
-        </div>
+        </div> */}
+
+        {/* YouTube Video Slider */}
+        <PropertyVideosSection societyId={id} />
+        {/* <div id="YouTube-Videos" className="videoSection">
+          <YouTubeVideoSlider societyId={id} title="Property Videos" />
+        </div> */}
 
         {/* Things to Know */}
-        <div id="Things-to-Know" className="thingsToKnowSection">
+        {/* <div id="Things-to-Know" className="thingsToKnowSection">
           <ThingsToKnow societyId={id} />
-        </div>
+        </div> */}
 
         {/* Reviews and Locality */}
-        <div id="Ratings-Reviews" className="reviewsSection">
+        <ReviewsSection />
+        {/* <div id="Ratings-Reviews" className="reviewsSection">
           <ReviewSummary />
-        </div>
+        </div> */}
 
         {/* About Developer */}
         <div id="About-Developer">
