@@ -31,6 +31,7 @@ export default function Footer() {
     "/updateproperty/:propertyid",
     "/addproperty_quick",
     "/updateproperty",
+    "/chatapp"
     // "/newproperty",
   ];
   const shouldPageFooterHide = pageFooterHidePaths.includes(location.pathname);

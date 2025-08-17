@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import firebase from "firebase/compat/app";
 import { projectFirestore } from "../../firebase/config";
-import { FaUserCheck, FaUserTie, FaCalendarCheck } from "react-icons/fa";
+import { FaUserCheck, FaUserTie } from "react-icons/fa";
 import "./Tracker.scss";
 
 const WeeklyTrackerModal = () => {
   const { user } = useAuthContext();
   const [show, setShow] = useState(false);
+  const [trackerStarted, setTrackerStarted] = useState(false);
   const [questions, setQuestions] = useState([
     { id: "selfReview", label: "Self review meeting done?", icon: <FaUserCheck />, type: "radio", allowNA: true, answer: "", updatedAt: null },
     { id: "managerReview", label: "Manager review meeting done?", icon: <FaUserTie />, type: "radio", allowNA: true, answer: "", updatedAt: null },
-    // { id: "meetingsCount", label: "How many meetings you done?", icon: <FaCalendarCheck />, type: "text", answer: "", updatedAt: null },
   ]);
   const [docId, setDocId] = useState(null);
 
-  // We track by week instead of date
   const getCurrentWeek = () => {
     const now = new Date();
     const firstJan = new Date(now.getFullYear(), 0, 1);
@@ -27,30 +26,43 @@ const WeeklyTrackerModal = () => {
 
   const currentWeek = getCurrentWeek();
 
-  const handleShow = async () => {
-    const snapshot = await projectFirestore
-      .collection("weeklyTracker")
-      .where("createdBy", "==", user.phoneNumber)
-      .get();
+  // ✅ Component mount hote hi status check
+  useEffect(() => {
+    const fetchTracker = async () => {
+      if (!user?.phoneNumber) return;
 
-    let thisWeekDoc = null;
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      if (data.week === currentWeek) {
-        thisWeekDoc = { id: doc.id, ...data };
+      const snapshot = await projectFirestore
+        .collection("weeklyTracker")
+        .where("createdBy", "==", user.phoneNumber)
+        .get();
+
+      let thisWeekDoc = null;
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.week === currentWeek) {
+          thisWeekDoc = { id: doc.id, ...data };
+        }
+      });
+
+      if (thisWeekDoc) {
+        setTrackerStarted(true);
+        setDocId(thisWeekDoc.id);
+        setQuestions((prev) =>
+          prev.map((q) => ({
+            ...q,
+            answer: thisWeekDoc[q.id]?.answer || "",
+            updatedAt: thisWeekDoc[q.id]?.updatedAt || null
+          }))
+        );
       }
-    });
+    };
 
-    if (thisWeekDoc) {
-      setDocId(thisWeekDoc.id);
-      setQuestions((prev) =>
-        prev.map((q) => ({
-          ...q,
-          answer: thisWeekDoc[q.id]?.answer || "",
-          updatedAt: thisWeekDoc[q.id]?.updatedAt || null
-        }))
-      );
-    } else {
+    fetchTracker();
+  }, [user?.phoneNumber, currentWeek]);
+
+  const handleShow = async () => {
+    if (!docId) {
+      // Naya tracker create karo
       const newDoc = {
         createdBy: user.phoneNumber,
         week: currentWeek,
@@ -63,6 +75,7 @@ const WeeklyTrackerModal = () => {
       const docRef = await projectFirestore.collection("weeklyTracker").add(newDoc);
       setDocId(docRef.id);
       setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
+      setTrackerStarted(true);
     }
     setShow(true);
   };
@@ -96,8 +109,11 @@ const WeeklyTrackerModal = () => {
 
   return (
     <>
-      <button onClick={handleShow} className="theme_btn btn_fill no_icon text-center mt-2">
-        Weekly Tracker
+      <button
+        onClick={handleShow}
+        className={`theme_btn btn_fill no_icon text-center mt-2 ${trackerStarted ? "btn_border" : "btn_fill"}`}
+      >
+        {trackerStarted ? "Weekly Tracking Started" : "Weekly Tracker"}
       </button>
 
       <Modal show={show} onHide={handleClose} centered className="tracker-modal">

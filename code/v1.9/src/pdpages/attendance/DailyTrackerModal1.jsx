@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import firebase from "firebase/compat/app";
@@ -9,7 +9,6 @@ import "./Tracker.scss";
 const DailyTrackerModal = () => {
   const { user } = useAuthContext();
   const [show, setShow] = useState(false);
-    const [trackerStarted, setTrackerStarted] = useState(false);
   const [questions, setQuestions] = useState([
     { id: "punchIn", label: "Punch-In done?", icon: <FaSignInAlt />, type: "radio", allowNA: true, answer: "", updatedAt: null },
     { id: "punchOut", label: "Punch-Out done?", icon: <FaSignOutAlt />, type: "radio", allowNA: true, answer: "", updatedAt: null },
@@ -21,10 +20,8 @@ const DailyTrackerModal = () => {
   const [docId, setDocId] = useState(null);
 
   const todayDate = new Date().toLocaleDateString("en-CA");
-useEffect(() => {
-  const fetchTracker = async () => {
-    if (!user?.phoneNumber) return;
 
+  const handleShow = async () => {
     const snapshot = await projectFirestore
       .collection("dailyTracker")
       .where("createdBy", "==", user.phoneNumber)
@@ -42,7 +39,6 @@ useEffect(() => {
     });
 
     if (todayDoc) {
-      setTrackerStarted(true);
       setDocId(todayDoc.id);
       setQuestions((prev) =>
         prev.map((q) => ({
@@ -51,31 +47,21 @@ useEffect(() => {
           updatedAt: todayDoc[q.id]?.updatedAt || null
         }))
       );
+    } else {
+      const newDoc = {
+        createdBy: user.phoneNumber,
+        createdAt: firebase.firestore.Timestamp.now(),
+        updatedAt: firebase.firestore.Timestamp.now(),
+      };
+      questions.forEach((q) => {
+        newDoc[q.id] = { answer: "", updatedAt: null };
+      });
+      const docRef = await projectFirestore.collection("dailyTracker").add(newDoc);
+      setDocId(docRef.id);
+      setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
     }
+    setShow(true);
   };
-
-  fetchTracker();
-}, [user?.phoneNumber]);
-
-const handleShow = async () => {
-  if (!docId) {
-    // Create new tracker if not started yet
-    const newDoc = {
-      createdBy: user.phoneNumber,
-      createdAt: firebase.firestore.Timestamp.now(),
-      updatedAt: firebase.firestore.Timestamp.now(),
-    };
-    questions.forEach((q) => {
-      newDoc[q.id] = { answer: "", updatedAt: null };
-    });
-    const docRef = await projectFirestore.collection("dailyTracker").add(newDoc);
-    setDocId(docRef.id);
-    setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
-    setTrackerStarted(true);
-  }
-  setShow(true);
-};
-
 
   const handleClose = () => setShow(false);
 
@@ -106,15 +92,9 @@ const handleShow = async () => {
 
   return (
     <>
-     <button
-  onClick={handleShow}
-  className={`theme_btn text-center mt-2 ${
-    trackerStarted ? "btn_border" : "btn_fill"
-  }`}
->
-  {trackerStarted ? "Daily Tracking Started" : "Start Daily Tracker"}
-</button>
-
+      <button onClick={handleShow} className="theme_btn btn_fill no_icon text-center mt-2">
+        Daily Tracker
+      </button>
 
       <Modal show={show} onHide={handleClose} centered className="tracker-modal" size="lg">
         <Modal.Header closeButton>
