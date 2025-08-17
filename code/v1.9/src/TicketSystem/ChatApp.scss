@@ -46,7 +46,8 @@ $error-color: #e74c3c;
 /* ========== CHAT APP CONTAINER ========== */
 .chat-app {
   display: flex;
-height: calc(100vh - 70px);
+// height: calc(100vh - 70px);
+height: 100vh;
   position: relative;
   overflow: hidden;
   background: $background-dark;
