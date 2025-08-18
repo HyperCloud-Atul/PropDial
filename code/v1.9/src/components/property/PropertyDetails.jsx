@@ -942,12 +942,294 @@ const PropertyDetails = () => {
   const [showActiveReviewModal, setShowActiveReviewModal] = useState(false);
   const [selectedAorROption, setSelectedAorROption] = useState(null); // Store selected option (Active/In-Review)
   const [isProcessing, setIsProcessing] = useState(false); // For tracking the processing state
+  const [validationErrors, setValidationErrors] = useState([]);
+  const [canActivate, setCanActivate] = useState(false);
+
 
   // Function to show the modal and store the selected option
-  const handleShowActiveReviewModal = (option) => {
-    setSelectedAorROption(option); // Set the option clicked (Active/In-Review)
-    setShowActiveReviewModal(true); // Show modal
+  // Show modal
+  // const handleShowActiveReviewModal = async (option) => {
+  //   setSelectedAorROption(option);
+
+  //   if (option === "Active") {
+  //     // Step 1: Property fields
+  //     const missingFields = validateProperty(propertyDocument);
+
+  //     // Step 2: Owner + Manager
+  //     const { ownerAssigned, managerAssigned } = await checkOwnerAndManager(propertyid);
+
+  //     // Step 3: Layout check
+  //     const layoutExists = await checkPropertyLayout(propertyid);
+
+  //     let errors = [];
+  //     if (missingFields.length > 0) {
+  //       errors.push(`Missing fields: ${missingFields.join(", ")}`);
+  //     }
+  //     if (!ownerAssigned) errors.push("Owner not assigned");
+  //     if (!managerAssigned) errors.push("Manager not assigned");
+  //     if (!layoutExists) errors.push("No layout added");
+
+  //     if (errors.length > 0) {
+  //       setValidationErrors(errors);
+  //       setCanActivate(false); // ❌ Don’t allow Yes/No
+  //     } else {
+  //       setValidationErrors([]);
+  //       setCanActivate(true); // ✅ Allow Yes/No
+  //     }
+  //   }
+
+  //   setShowActiveReviewModal(true);
+  // };
+  const handleShowActiveReviewModal = async (option) => {
+  setSelectedAorROption(option);
+
+  if (option === "Active") {
+    // Step 1: Property fields
+    const missingFields = validateProperty(propertyDocument);
+
+    // Labels for Residential fields
+  const fieldLabelsResidential = {
+  bhk: "BHK",
+  superArea: "Super Area",
+  carpetArea: "Carpet Area",
+  furnishing: "Furnishing",
+  numberOfBedrooms: "Bedroom",
+  numberOfBathrooms: "Bathroom",
+};
+
+const fieldLabelsCommercial = {
+  mainDoorFacing: "Direction Facing",  
+  superArea: "Super Area",
+  carpetArea: "Carpet Area",
+  propertyType: "Property Type",
+  additionalRooms: "Property Sub-Type",
+  furnishing: "Furnishing",
+};
+
+const fieldLabelsPlot = {
+  isParkFacingPlot: "Park Facing",
+  mainDoorFacing: "Direction Facing",
+  superArea: "Area",
+  isCornerSidePlot: "Corner Side Plot",
+  roadWidth: "Road Width",
+};
+
+
+    // Convert missingFields → UI labels
+    let uiMissingFields = [];
+    if (propertyDocument.category === "Residential") {
+      uiMissingFields = missingFields.map(
+        (field) => fieldLabelsResidential[field] || field
+      );
+    } else if (propertyDocument.category === "Commercial") {
+      uiMissingFields = missingFields.map(
+        (field) => fieldLabelsCommercial[field] || field
+      );
+    } else if (propertyDocument.category === "Plot") {
+      uiMissingFields = missingFields.map(
+        (field) => fieldLabelsPlot[field] || field
+      );
+    }
+
+    // Step 2: Owner + Manager
+    const { ownerAssigned, managerAssigned } = await checkOwnerAndManager(propertyid);
+
+    // Step 3: Layout check
+    const layoutExists = await checkPropertyLayout(propertyid);
+
+    let errors = [];
+    if (uiMissingFields.length > 0) {
+      errors.push(`Missing fields: ${uiMissingFields.join(", ")}`);
+    }
+    if (!ownerAssigned) errors.push("Owner not assigned");
+    if (!managerAssigned) errors.push("Manager not assigned");
+    if (!layoutExists) errors.push("No layout added");
+
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      setCanActivate(false); // ❌ Don’t allow Yes/No
+    } else {
+      setValidationErrors([]);
+      setCanActivate(true); // ✅ Allow Yes/No
+    }
+  }
+
+  setShowActiveReviewModal(true);
+};
+
+  // active check validation
+  // ✅ Validation function
+// const validateProperty = (property) => {
+//   let requiredFields = [];
+
+//   if (property.category === "Residential") {
+//     requiredFields = [
+//       "bhk",
+//       "superArea",
+//       "carpetArea",
+//       "furnishing",
+//       "numberOfBedrooms",
+//       "numberOfBathrooms",
+//     ];
+//   } else if (property.category === "Commercial") {
+//     requiredFields = ["office", "area", "commonBathroom"];
+//   } else if (property.category === "Plot") {
+//     requiredFields = ["area", "isCorner"];
+//   }
+
+//   // Special check for superArea OR carpetArea (at least one required)
+//   const hasArea = property.superArea || property.carpetArea;
+
+//   // Custom validation
+//   return requiredFields.filter((field) => {
+//     if (field === "superArea" || field === "carpetArea") {
+//       return !hasArea; // dono me se koi ek to chahiye
+//     }
+
+//     if (field === "numberOfBedrooms") {
+//       return (
+//         property.numberOfBedrooms === undefined ||
+//         property.numberOfBedrooms === null ||
+//         property.numberOfBedrooms === 0 ||
+//         property.numberOfBedrooms === "0"
+//       );
+//     }
+
+//     if (field === "numberOfBathrooms") {
+//       return (
+//         property.numberOfBathrooms === undefined ||
+//         property.numberOfBathrooms === null ||
+//         property.numberOfBathrooms === 0 ||
+//         property.numberOfBathrooms === "0"
+//       );
+//     }
+
+//     return !property[field];
+//   });
+// };
+// ✅ Validation function
+const validateProperty = (property) => {
+  let requiredFields = [];
+
+  if (property.category === "Residential") {
+    requiredFields = [
+      "bhk",
+      "superArea",
+      "carpetArea",
+      "furnishing",
+      "numberOfBedrooms",
+      "numberOfBathrooms",
+    ];
+  } else if (property.category === "Commercial") {
+    requiredFields = [
+      "mainDoorFacing",
+      "superArea",
+      "carpetArea",
+      "propertyType",
+      "additionalRooms",
+      "furnishing",
+    ];
+  } else if (property.category === "Plot") {
+    requiredFields = [
+      "isParkFacingPlot",
+      "mainDoorFacing",
+      "superArea",
+      "isCornerSidePlot",
+      "roadWidth",
+    ];
+  }
+
+  // Special check for superArea OR carpetArea (at least one required)
+  const hasArea = property.superArea || property.carpetArea;
+
+  // Custom validation
+  return requiredFields.filter((field) => {
+    // Residential: superArea OR carpetArea
+    if (field === "superArea" || field === "carpetArea") {
+      return !hasArea;
+    }
+
+    // Bedrooms
+    if (field === "numberOfBedrooms") {
+      return (
+        property.numberOfBedrooms === undefined ||
+        property.numberOfBedrooms === null ||
+        property.numberOfBedrooms === 0 ||
+        property.numberOfBedrooms === "0"
+      );
+    }
+
+    // Bathrooms
+    if (field === "numberOfBathrooms") {
+      return (
+        property.numberOfBathrooms === undefined ||
+        property.numberOfBathrooms === null ||
+        property.numberOfBathrooms === 0 ||
+        property.numberOfBathrooms === "0"
+      );
+    }
+
+    // Commercial: additionalRooms → should have items
+    if (field === "additionalRooms") {
+      return !(
+        Array.isArray(property.additionalRooms) &&
+        property.additionalRooms.length > 0
+      );
+    }
+
+    // Default check
+    return !property[field];
+  });
+};
+
+
+
+  // ✅ Check owner and manager in propertyusers collection
+  const checkOwnerAndManager = async (propertyId) => {
+    const snapshot = await projectFirestore
+      .collection("propertyusers")
+      .where("propertyId", "==", propertyId)
+      .get();
+
+    let ownerAssigned = false;
+    let managerAssigned = false;
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.userType === "propertyowner") {
+        ownerAssigned = true;
+      }
+      if (
+        data.userType === "propertymanager"
+      ) {
+        managerAssigned = true;
+      }
+    });
+
+    return { ownerAssigned, managerAssigned };
   };
+  // ✅ Layout check function
+const checkPropertyLayout = async (propertyId) => {
+  const snapshot = await projectFirestore
+    .collection("property-layout-propdial")
+    .where("propertyId", "==", propertyId)
+    .get();
+
+  let hasLayout = false;
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (
+      data.layouts &&
+      typeof data.layouts === "object" &&
+      Object.keys(data.layouts).length > 0
+    ) {
+      hasLayout = true;
+    }
+  });
+
+  return hasLayout;
+};
+
 
   // Function to close the modal
   const handleCloseActiveReviewModal = () => {
@@ -958,19 +1240,20 @@ const PropertyDetails = () => {
   // Function to handle confirmation when user clicks "Yes"
   const handleConfirm = async () => {
     if (selectedAorROption) {
-      setIsProcessing(true); // Set processing state to true when clicked
+      console.log("Confirming option:", selectedAorROption);
+
+      setIsProcessing(true);
       try {
-        await handleIsActiveInactiveReview(selectedAorROption); // Pass the selected option (Active/In-Review)
-        setShowActiveReviewModal(false); // Close modal after successful update
-        setSelectedAorROption(null); // Reset option
+        await handleIsActiveInactiveReview(selectedAorROption);
+        setShowActiveReviewModal(false);
+        setSelectedAorROption(null);
       } catch (error) {
-        console.error("Error updating property:", error); // Handle error case
+        console.error("Error updating property:", error);
       } finally {
-        setIsProcessing(false); // Set processing state to false after completion
+        setIsProcessing(false);
       }
     }
   };
-
   const handleIsActiveInactiveReview = async (option) => {
     // e.preventDefault();
 
@@ -989,12 +1272,13 @@ const PropertyDetails = () => {
     }
 
     // Optionally, you can log the updated object for debugging
-    console.log("Updated Property:", updatedProperty);
+    // console.log("Updated Property:", updatedProperty);
 
     // Update the document with the updated property data
     await updateDocument(propertyid, updatedProperty);
   };
   // code for active or review property end
+
   // modal controls start
   // start modal for property layout in detail
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -1776,70 +2060,84 @@ const PropertyDetails = () => {
                                       </div>
                                     </div>
                                     {/* Modal for confirmation */}
-                                    <Modal
-                                      show={showActiveReviewModal}
-                                      onHide={handleCloseActiveReviewModal}
-                                      centered
-                                    >
-                                      <Modal.Header
-                                        className="justify-content-center"
-                                        style={{
-                                          paddingBottom: "0px",
-                                          border: "none",
-                                        }}
-                                      >
-                                        <h5>Confirmation</h5>
+
+
+                                    <Modal show={showActiveReviewModal} onHide={handleCloseActiveReviewModal} centered>
+                                      <Modal.Header className="justify-content-center" style={{ paddingBottom: "0px", border: "none" }}>
+
+                                     {selectedAorROption === "Active" ? (
+  validationErrors.length > 0 ? (
+    <h5 className="text-center text_red">
+      You can't make this property Active.
+    </h5>
+  ) : (
+    <h5>Activate Property</h5>
+  )
+) : (
+  <h5>Confirmation</h5>
+)}
+
+
                                       </Modal.Header>
-                                      <Modal.Body
-                                        className="text-center"
-                                        style={{
-                                          color: "#303030",
-                                          fontSize: "20px",
-                                          border: "none",
-                                        }}
-                                      >
-                                        Are you sure you want to{" "}
-                                        <span
-                                          style={{
-                                            color:
-                                              selectedAorROption === "Active"
-                                                ? "var(--theme-green2)"
-                                                : selectedAorROption ===
-                                                  "In-Review"
-                                                  ? "var(--theme-blue)"
-                                                  : "inherit",
-                                          }}
-                                        >
-                                          Make This {selectedAorROption}?
-                                        </span>
+
+                                      <Modal.Body className="text-center mt-3 p-0" style={{ color: "#303030", fontSize: "18px", border: "none" }}>
+                                        {selectedAorROption === "Active" ? (
+                                          validationErrors.length > 0 ? (
+                                                                                        
+                                              <ol style={{ textAlign: "left", fontSize:"16px" }}>
+                                                {validationErrors.map((err, i) => (
+                                                  <li key={i}>{err}</li>
+                                                ))}
+                                              </ol>
+                                            
+                                          ) : (
+                                            <p>
+                                              Are you sure you want to{" "}
+                                              <span style={{ color: "var(--theme-green2)" }}>Make This Active?</span>
+                                            </p>
+                                          )
+                                        ) : (
+                                          <p>
+                                            Are you sure you want to{" "}
+                                            <span style={{ color: "var(--theme-blue)" }}>Make This In-Review?</span>
+                                          </p>
+                                        )}
                                       </Modal.Body>
+
                                       <Modal.Footer
-                                        className="d-grid"
-                                        style={{
-                                          border: "none",
-                                          gap: "15px",
-                                          gridTemplateColumns: "repeat(2,1fr)",
-                                        }}
+                                        className="d-grid p-0"
+                                        style={{ border: "none", gap: "15px", gridTemplateColumns: "repeat(2,1fr)" }}
                                       >
-                                        <div
-                                          className="theme_btn btn_border no_icon text-center"
-                                          onClick={handleCloseActiveReviewModal}
-                                        >
-                                          No
-                                        </div>
-                                        <div
-                                          className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"
-                                            }`}
-                                          onClick={
-                                            !isProcessing ? handleConfirm : null
-                                          } // Disable click when processing
-                                        >
-                                          {isProcessing
-                                            ? "Processing..."
-                                            : "Yes"}
-                                        </div>
+                                        {canActivate || selectedAorROption === "In-Review" ? (
+                                          <>
+                                            <div className="theme_btn btn_border no_icon text-center" onClick={handleCloseActiveReviewModal}>
+                                              No
+                                            </div>
+                                            <div
+                                              className={`theme_btn btn_fill no_icon text-center ${isProcessing && "disabled"}`}
+                                              onClick={!isProcessing ? handleConfirm : null}
+                                            >
+                                              {isProcessing ? "Processing..." : "Yes"}
+                                            </div>
+                                          </>
+                                        ) : (
+                                        <>
+                                          <div
+                                                                                  
+                                          >
+                                            
+                                          </div>
+                                            <div
+                                            className="theme_btn btn_border no_icon text-center"
+                                            onClick={handleCloseActiveReviewModal}
+                                          >
+                                            Close
+                                          </div>
+                                        </>
+                                        )}
                                       </Modal.Footer>
                                     </Modal>
+
                                     <div className="radio_group_single">
                                       <div
                                         className={
@@ -3240,11 +3538,11 @@ const PropertyDetails = () => {
                                   <div
                                     className={`${user &&
 
-                                        (user?.role === "admin" ||
-                                          isPropertyManager ||
-                                          user?.role === "superAdmin")
-                                        ? "col-sm-11 col-10"
-                                        : "col-12"
+                                      (user?.role === "admin" ||
+                                        isPropertyManager ||
+                                        user?.role === "superAdmin")
+                                      ? "col-sm-11 col-10"
+                                      : "col-12"
                                       }`}
                                   >
                                     <div className="property_layout_card">
@@ -3777,10 +4075,10 @@ const PropertyDetails = () => {
                               <div
                                 className={`${user &&
 
-                                    (user?.role === "admin" ||
-                                      user?.role === "superAdmin")
-                                    ? "col-sm-11 col-10"
-                                    : "col-12"
+                                  (user?.role === "admin" ||
+                                    user?.role === "superAdmin")
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
                                   }`}
                               >
                                 <div className="tenant_card">
@@ -3872,11 +4170,11 @@ const PropertyDetails = () => {
                                                         : ""
                                                     }
                                                     className={`t_name ${user &&
-                                                        (user?.role === "admin" ||
-                                                          user.role ===
-                                                          "superAdmin")
-                                                        ? "pointer"
-                                                        : ""
+                                                      (user?.role === "admin" ||
+                                                        user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
                                                       }`}
                                                   >
                                                     {propUser.fullName}
@@ -4192,10 +4490,10 @@ const PropertyDetails = () => {
                                 )}
                               <div
                                 className={`${user &&
-                                    (user?.role === "admin" ||
-                                      user?.role === "superAdmin")
-                                    ? "col-sm-11 col-10"
-                                    : "col-12"
+                                  (user?.role === "admin" ||
+                                    user?.role === "superAdmin")
+                                  ? "col-sm-11 col-10"
+                                  : "col-12"
                                   }`}
                               >
                                 <div className="tenant_card">
@@ -4289,11 +4587,11 @@ const PropertyDetails = () => {
                                                         : ""
                                                     }
                                                     className={`t_name ${user &&
-                                                        (user?.role === "admin" ||
-                                                          user.role ===
-                                                          "superAdmin")
-                                                        ? "pointer"
-                                                        : ""
+                                                      (user?.role === "admin" ||
+                                                        user.role ===
+                                                        "superAdmin")
+                                                      ? "pointer"
+                                                      : ""
                                                       }`}
                                                   >
                                                     {propUser.fullName}
