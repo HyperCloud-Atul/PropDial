@@ -10,6 +10,7 @@ import { generateSlug } from "../../utils/generateSlug";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import usePropertyUsersData from "../../utils/usePropertyUsersData";
+import usePropertyStats from "../../hooks/usePropertyStats";
 // Convert digit into comma formate start
 function formatNumberWithCommas(number) {
   // Convert number to a string if it's not already
@@ -64,6 +65,8 @@ const PropertyCard = ({ propertyid }) => {
     "properties-propdial",
     propertyid
   );
+  const stats = usePropertyStats(propertydoc?.id);
+
   const { documents: inspections, errors: inspectionsError } = useCollection(
     "inspections",
     ["propertyId", "==", propertyid]
@@ -309,9 +312,9 @@ const PropertyCard = ({ propertyid }) => {
             //   ? "residential"
             //   : "commercial"
             //   }`}
-            className="category residential"
+            className={`category residential ${propertydoc?.flag}`}
           >
-            {propertydoc.flag}
+            {propertydoc?.flag}
           </div>
         )}
         {propertydoc && (
@@ -812,13 +815,13 @@ const PropertyCard = ({ propertyid }) => {
               <div className="parent">
                 <div className="child">
                   <div className="left">
-                    <h5>0</h5>
+                  <h5>{stats.inspections.total}</h5>
                     <h6>Inspection</h6>
                   </div>
                 </div>
                 <div className="child">
                   <div className="left">
-                    <h5>0</h5>
+                    <h5>{stats.bills}</h5>
                     <h6>Bill</h6>
                   </div>
                 </div>

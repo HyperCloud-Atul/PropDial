@@ -340,6 +340,8 @@ const CreateProperty = () => {
       const ref = await projectFirestore
         .collection("m_cities")
         .where("state", "==", option.value)
+        .where("isShowInPropdial", "==", true)
+        .where("status", "==", "active")
         .orderBy("city", "asc");
       ref.onSnapshot(
         async (snapshot) => {
@@ -1869,6 +1871,16 @@ const CreateProperty = () => {
                           >
                             Pent House - Duplex
                           </option>
+                          <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Basement"
+                                ? true
+                                : false
+                            }
+                          >
+                            Basement
+                          </option>
                         </select>
                       ) : propertyDetails &&
                         propertyDetails.Category === "Commercial" ? (
@@ -1955,6 +1967,17 @@ const CreateProperty = () => {
                             }
                           >
                             Hospitality
+                          </option>
+                           
+                            <option
+                            defaultValue={
+                              propertyDetails &&
+                                propertyDetails.PropertyType === "Basement"
+                                ? true
+                                : false
+                            }
+                          >
+                            Basement
                           </option>
                           <option
                             defaultValue={
