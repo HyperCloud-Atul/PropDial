@@ -20,6 +20,7 @@ import { Link, useParams } from "react-router-dom";
 import { projectStorage, projectFirestore } from "../../firebase/config";
 import imageCompression from "browser-image-compression";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import "./PGSociety.scss";
 import "./new-society.scss";
 import ComponentBuilder from "./ComponentBuilder";
@@ -1918,11 +1919,12 @@ const StickyTabBar = () => {
     "Overview",
     "Available Properties",
     "Amenities",
-    "About Project",
+    "About Society",
     "Nearby Locations",
     "Units-Floor Plans",
+    "Things to Know",
     "Photo Gallery",
-    "Ratings-Reviews",
+    "Society Videos",
     "About Developer",
   ];
 
@@ -2201,11 +2203,11 @@ const EditModal = ({ data, onClose, onSave }) => {
   return (
     <div className="edit-modal">
       <div className="modal-content">
-        <h2>Edit Society Details</h2>
+        <h2>Society Profile Management</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
-              <label>Society Type</label>
+              {/* <label>Society Type</label>
               <select
                 name="societyType"
                 value={formData.societyType}
@@ -2215,7 +2217,14 @@ const EditModal = ({ data, onClose, onSave }) => {
                 <option value="Residential">Residential</option>
                 <option value="Commercial">Commercial</option>
                 <option value="Both">Both</option>
-              </select>
+              </select> */}
+              <label>Society Type</label>
+              <input
+                type="text"
+                name="societyType"
+                value={formData.societyType || ""}
+                readOnly
+              />
             </div>
 
             <div className="form-group">
@@ -2224,19 +2233,33 @@ const EditModal = ({ data, onClose, onSave }) => {
                 type="text"
                 name="society"
                 value={formData.society}
-                onChange={handleChange}
-                placeholder="Enter society name"
-                required
+                readOnly
+                // onChange={handleChange}
+                // placeholder="Enter society name"
+                // required
               />
             </div>
 
             <div className="form-group">
-              <label>Builder Name</label>
+              {/* <label>Builder Name</label>
               <input
                 type="text"
                 name="builder"
                 value={formData.builder}
                 onChange={handleChange}
+                placeholder="Enter builder name"
+              /> */}
+              <label>Builder Name</label>
+              <input
+                type="text"
+                name="builder"
+                value={formData.builder}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  // Allow only letters and spaces
+                  value = value.replace(/[^a-zA-Z\s]/g, "");
+                  setFormData({ ...formData, builder: value });
+                }}
                 placeholder="Enter builder name"
               />
             </div>
@@ -2332,73 +2355,87 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group toggle-group">
-              <label className="toggle-label">Approved By RERA </label>
-              <div
-                className={`toggle-switch ${formData.reraApproved ? "active" : ""}`}
-                onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    reraApproved: !prev.reraApproved,
-                  }))
-                }
-              >
-                <div className="toggle-circle" />
+              <div className="toggle-description">
+                <label className="toggle-label">Approved By RERA </label>
+                <div
+                  className={`toggle-switch ${formData.reraApproved ? "active" : ""}`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      reraApproved: !prev.reraApproved,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div>
+                <div className="toggle-description">
+                <label className="toggle-label">Ready to Move In</label>
+                <div
+                  className={`toggle-switch ${formData.readyToMove ? "active" : ""}`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      readyToMove: !prev.readyToMove,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
               </div>
             </div>
-            <div className="form-group toggle-group">
-              <label className="toggle-label">Ready to Move In</label>
-              <div
-                className={`toggle-switch ${formData.readyToMove ? "active" : ""}`}
-                onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    readyToMove: !prev.readyToMove,
-                  }))
-                }
-              >
-                <div className="toggle-circle" />
-              </div>
-            </div>
+            {/* <div className="form-group toggle-group">
+             
+            </div> */}
 
             {!formData.readyToMove && (
               <div className="form-group">
-                <label>Possession Year</label>
-                <input
-                  type="text"
-                  name="possessionYear"
-                  value={formData.possessionYear || ""}
-                  onChange={(e) => {
-                    let value = e.target.value.replace(/\D/g, ""); // only digits
-                    if (value.length > 4) value = value.slice(0, 4); // max 4 digits
-                    setFormData({ ...formData, possessionYear: value });
-                  }}
-                  inputMode="numeric"
-                  placeholder="YYYY"
-                />
-                {errors.possessionYear && (
-                  <span className="error">{errors.possessionYear}</span>
-                )}
+              <label>Possession Year</label>
+              <select
+                name="possessionYear"
+                value={formData.possessionYear || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, possessionYear: e.target.value })
+                }
+              >
+                <option value="">Select Year</option>
+                {Array.from({ length: 70 }, (_, i) => {
+                  const year = new Date().getFullYear() + i; // current + next 70 years
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+
+              {errors.possessionYear && (
+                <span className="error">{errors.possessionYear}</span>
+              )}
               </div>
             )}
 
             {formData.readyToMove && (
               <div className="form-group">
                 <label>Launched Year</label>
-                <input
-                  type="text"
+                <select
                   name="launchedYear"
                   value={formData.launchedYear || ""}
-                  onChange={(e) => {
-                    let value = e.target.value.replace(/\D/g, ""); // only digits
-                    if (value.length > 4) value = value.slice(0, 4); // max 4 digits
-                    setFormData({ ...formData, launchedYear: value });
-                  }}
-                  inputMode="numeric"
-                  placeholder="YYYY"
-                />
-                {errors.launchedYear && (
-                  <span className="error">{errors.launchedYear}</span>
-                )}
+                  onChange={(e) =>
+                    setFormData({ ...formData, launchedYear: e.target.value })
+                  }
+                >
+                  <option value="">Select Year</option>
+                  {Array.from({ length: 50 }, (_, i) => {
+                    const year = new Date().getFullYear() - i; // Last 50 years
+                    return (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.launchedYear && <span className="error">{errors.launchedYear}</span>}
               </div>
             )}
 
@@ -3865,6 +3902,7 @@ const SocietyInfoForm = ({ societyId }) => {
 
 
 const SocietyDetails = ( { country, state, city, locality, societyId }) => {
+  const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({
     societyType: "Residential",
     society: "New Society",
@@ -3947,7 +3985,8 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
       <div className="container">
         <div className="content-grid">
           {/* Left Column - Society Details */}
-          <div className="details-column">
+          {(societyData.builder && societyData.address && societyData.priceFrom && societyData.priceTo && societyData.totalUnits && societyData.totalTowers && societyData.projectSize) ?
+          (<div className="details-column">
             {/* Status Badges */}
             
             <div className="badges-full">
@@ -3992,9 +4031,11 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
               </div>
 }
               </div>
+              {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
               <button className="edit-btn" onClick={() => setShowEditModal(true)}>
                 <FaEdit />
               </button>
+              )}
             </div>
 
             {/* Society Name & Developer */}
@@ -4178,7 +4219,28 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                 onSave={handleSave}
               />
             )}
-          </div>
+          </div>) : (
+            <>
+            {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details" onClick={() => setShowEditModal(true)}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>)}
+              {showEditModal && (
+              <EditModal
+                data={societyData}
+                onClose={() => setShowEditModal(false)}
+                onSave={handleSave}
+              />
+            )}
+            </>
+            // <div >
+            //   <p>No details available</p>
+            // </div>
+          )}
+
 
           {/* Right Column - Images */}
           <div className="images-column-wrapper">
@@ -4192,7 +4254,11 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                       className="image-style"
                     />
                   ) : (
-                    <span>No image available</span>
+                    <img
+                      src="/assets/img/society/hero1.jpg"
+                      alt="Luxury Lobby"
+                      className="image-style"
+                    />
                   )}
                 </div>
                 <div className="image-container image-container--video">
@@ -4203,7 +4269,11 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                       className="image-style"
                     />
                   ) : (
-                    <span>No image available</span>
+                    <img
+                      src="/assets/img/society/hero2.jpg"
+                      alt="Luxury Lobby"
+                      className="image-style"
+                    />
                   )}
                 </div>
               </div>
@@ -4216,7 +4286,11 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                       className="image-style"
                     />
                   ) : (
-                    <span>No image available</span>
+                    <img
+                      src="/assets/img/society/hero3.jpg"
+                      alt="Swimming Pool"
+                      className="image-style"
+                    />
                   )}
                 </div>
                 <div className="image-container">
@@ -4227,7 +4301,11 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                       className="image-style"
                     />
                   ) : (
-                    <span>No image available</span>
+                    <img
+                      src="/assets/img/society/hero4.jpg"
+                      alt="Garden Area"
+                      className="image-style"
+                    />
                   )}
                 </div>
               </div>
@@ -4237,7 +4315,7 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
             <div className="floating-rating">
               <div className="rating-card">
                 <div className="rating-content">
-                  <svg
+                  {/* <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -4250,9 +4328,9 @@ const SocietyDetails = ( { country, state, city, locality, societyId }) => {
                     className="star-icon"
                   >
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                  <span className="rating-value">4.2</span>
-                  <span className="review-count">(127 reviews)</span>
+                  </svg> */}
+                  <span className="rating-value">{societyData.societyType}</span>
+                  <span className="review-count">Society</span>
                 </div>
               </div>
             </div>
@@ -4346,6 +4424,8 @@ const PropertiesSection = ({ societyName }) => {
   }, [societyName, filter]);
 
   return (
+    <>
+    {properties.length > 0 ? (
     <section className="properties-section">
       <div className="container">
         <div className="text-center mb-12">
@@ -4485,7 +4565,8 @@ const PropertiesSection = ({ societyName }) => {
           </div>
         )}
       </div>
-    </section>
+    </section>): null}
+    </>
   );
 };
 
@@ -5287,7 +5368,7 @@ const FloorPlansSection = ({ societyId }) => {
                         }`}
                         onClick={() => setActiveVariant(index)}
                       >
-                        {variant.size}
+                        {variant.size} Variant
                       </button>
                     ))}
                   </div>
@@ -6645,6 +6726,7 @@ const PGSocietyPage = () => {
         </div>
       </div> */}
       {/* <HeroSection societyId={id} /> */}
+      <div id="Overview">
 
       <SocietyDetails 
         country={country}
@@ -6653,12 +6735,13 @@ const PGSocietyPage = () => {
         locality={locality}
         societyId={id}
       />
+      </div>
       {/* Sticky Tab Bar */}
       <StickyTabBar />
 
       {/* Overview Section */}
 
-      <div id="Overview" className={styles.contentWrapper}>
+      <div className={styles.contentWrapper}>
         {/* <div className={styles.overviewSection}>
           <div className={styles.contact}>
             <div>
@@ -6678,36 +6761,40 @@ const PGSocietyPage = () => {
 
         {/* Buy Rent Tabs */}
         {/* Available Properties Section */}
+      <div  id="Available-Properties" >
         <PropertiesSection societyName={society.society}/>
-        {/* <div>
-          <AvailableProperties societyName={society.society} />
-        </div> */}
+          {/* <AvailableProperties societyName={society.society} /> */}
+        </div>
 
         {/* Amenities */}
-        <NewAmenitiesSection />
-        {/* <div id="Amenities">
-          <AmenitiesSection societyId={id} />
-        </div> */}
+        <div id="Amenities">
+          <NewAmenitiesSection />
+          {/* <AmenitiesSection societyId={id} /> */}
+        </div> 
 
         {/* About Project */}
+        <div id="About-Society" > 
         <AboutSocietySection societyId={id}/>
-        {/* <div id="About-Project" className="projectInfoSection">
-          <ProjectInfo societyId={id} />
-        </div> */}
+          {/* <ProjectInfo societyId={id} /> */}
+        </div>
 
         {/* Location Advantages */}
-        {/* <div id="Nearby-Locations" className="locationAdvantages">
+         {/* <div id="Nearby-Locations" className="locationAdvantages">
           <LocationAdvantages societyId={id} />
-        </div> */}
+        </div>  */}
 
         {/* Floor Plans */}
-        <FloorPlansSection societyId={id} />
-        {/* <div id="Units-Floor-Plans" className="floorPlansSection">
-          <FloorPlans societyId={id} />
-        </div> */}
+        <div id="Units-Floor-Plans" >
+        <FloorPlansSection id="Units-Floor-Plans" societyId={id} />
+        {/* className="floorPlansSection"
+          <FloorPlans societyId={id} /> */}
+        </div> 
 
         {/* Society rate */}
+        <div id="Things-to-Know" >
+
         <SocietyRatesSection societyId={id} />
+        </div>
 
         {/* Photo Gallery */}
         <div id="Photo-Gallery" className="gallerySection">
@@ -6719,26 +6806,28 @@ const PGSocietyPage = () => {
         </div>
 
         {/* Meeting Point */}
-        <MapLocationSection state={state} city={city} locality={locality} societyId={id}/>
-        {/* <div id="Meeting-Point" className="meetingPointSection">
-          <MeetingPoint state={state} city={city} locality={locality} societyId={id} />
-        </div> */}
+        <div id="Nearby-Locations" >
+          <MapLocationSection state={state} city={city} locality={locality} societyId={id}/>
+          {/* className="meetingPointSection"
+          <MeetingPoint state={state} city={city} locality={locality} societyId={id} /> */}
+        </div> 
 
         {/* ComponentBuilder */}
         {/* <div id="ComponentBuilder">
           <ComponentBuilder />
         </div> */}
 
+        {/* YouTube Video Slider */}
+        <div id="Society-Videos" >
+        <PropertyVideosSection  societyId={id} />
+        {/* className="videoSection"
+          <YouTubeVideoSlider societyId={id} title="Property Videos" /> */}
+        </div> 
+
         {/* Society management info */}
         <ContactSection societyId={id} />
         {/* <div id="Society-Management" className="societyInfoSection">
           <SocietyInfoForm societyId={id} />
-        </div> */}
-
-        {/* YouTube Video Slider */}
-        <PropertyVideosSection societyId={id} />
-        {/* <div id="YouTube-Videos" className="videoSection">
-          <YouTubeVideoSlider societyId={id} title="Property Videos" />
         </div> */}
 
         {/* Things to Know */}
@@ -6747,7 +6836,7 @@ const PGSocietyPage = () => {
         </div> */}
 
         {/* Reviews and Locality */}
-        <ReviewsSection />
+        {/* <ReviewsSection /> */}
         {/* <div id="Ratings-Reviews" className="reviewsSection">
           <ReviewSummary />
         </div> */}

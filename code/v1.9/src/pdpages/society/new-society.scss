@@ -340,6 +340,31 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
     font-size: 0.875rem;
     color: #4b5563;
   }
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
+  }
 }
 
 // --- Properties Section Styles ---
@@ -1086,13 +1111,13 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
       justify-content: center;
       align-items: center;
       border-radius: 0.5rem;
-      width: 600px;
+      width: 700px;
       height: auto;
       border-radius: 12px;
       // overflow: hidden;
 
       .image-container {
-        width: 600px;
+        width: 700px;
         height: auto;
         border-radius: 12px;
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),  0 4px 6px -2px rgba(0, 0, 0, 0.05);
