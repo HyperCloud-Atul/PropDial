@@ -42,6 +42,7 @@ const PropertyUtilityBills = () => {
   const [authorityName, setAuthorityName] = useState("");
   const [billId, setBillId] = useState("");
   const [billWebsiteLink, setBillWebsiteLink] = useState("");
+  const [attachedMobileNumber, setAttachedMobileNumber] = useState("");
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const [amountDue, setAmountDue] = useState("");
   const [billStatus, setBillStatus] = useState("");
@@ -58,6 +59,7 @@ const PropertyUtilityBills = () => {
     setAuthorityName("");
     setBillId("");
     setBillWebsiteLink("");
+    setAttachedMobileNumber("");
     setSelectedPaymentType("");
     setAmountDue("");
     setDueDate("");
@@ -93,6 +95,23 @@ const PropertyUtilityBills = () => {
       setErrors((prevErrors) => ({ ...prevErrors, billWebsiteLink: "" }));
     }
   };
+
+  // attachedMobileNumber change handler
+const handleAttachedMobileNumberChange = (event) => {
+  setAttachedMobileNumber(event.target.value);
+
+  // error sirf tab clear karna hai jab billType "propertyTax" ho
+  if (
+    selectedBillType === "Property Tax" &&
+    errors.attachedMobileNumber
+  ) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      attachedMobileNumber: "",
+    }));
+  }
+};
+
 
   const handlePaymentTypeChange = (event) => {
     setSelectedPaymentType(event.target.value);
@@ -186,6 +205,9 @@ const PropertyUtilityBills = () => {
       newErrors.selectedPaymentType = "Please select payment type";
     if (!selectedPaymentType)
       newErrors.selectedPaymentType = "Please select payment type";
+    if (selectedBillType === "Property Tax" && !attachedMobileNumber) {
+  newErrors.attachedMobileNumber = "Attached mobile number is required for Property Tax";
+}
     if (
       billWebsiteLink &&
       !/^https:\/\/.+\..+/.test(billWebsiteLink.trim())
@@ -197,7 +219,7 @@ const PropertyUtilityBills = () => {
     // if (!amountDue) newErrors.amountDue = "Please enter amount due";
     // if (!rawDate) newErrors.rawDate = "Please select due date";
     // if (!billStatus) newErrors.billStatus = "Please select bill status";
-      // Optional: Bill website link must be a valid URL format if entered
+    // Optional: Bill website link must be a valid URL format if entered
 
 
     setErrors(newErrors);
@@ -220,6 +242,8 @@ const PropertyUtilityBills = () => {
     if (rawDate) setErrors((prevErrors) => ({ ...prevErrors, rawDate: "" }));
     if (billWebsiteLink)
       setErrors((prevErrors) => ({ ...prevErrors, billWebsiteLink: "" }));
+      if (attachedMobileNumber)
+    setErrors((prevErrors) => ({ ...prevErrors, attachedMobileNumber: "" }));
   }, [
     selectedBillType,
     authorityName,
@@ -229,6 +253,7 @@ const PropertyUtilityBills = () => {
     selectedPaymentType,
     amountDue,
     rawDate,
+    attachedMobileNumber,
   ]);
 
   // add document code
@@ -244,6 +269,7 @@ const PropertyUtilityBills = () => {
         billWebsiteLink,
         paymentType: selectedPaymentType,
         amountDue,
+        attachedMobileNumber,
         billStatus,
         dueDate,
         pid: propertydoc.pid,
@@ -256,6 +282,7 @@ const PropertyUtilityBills = () => {
       setBillWebsiteLink("");
       setSelectedPaymentType("");
       setAmountDue("");
+      setAttachedMobileNumber("");
       setDueDate("");
       setRawDate("");
       setBillStatus("");
@@ -269,6 +296,7 @@ const PropertyUtilityBills = () => {
       setBillId("");
       setBillWebsiteLink("");
       setSelectedPaymentType("");
+      setAttachedMobileNumber("");
       setAmountDue("");
       setBillStatus("");
       setDueDate("");
@@ -350,77 +378,79 @@ const PropertyUtilityBills = () => {
   ];
 
 
-    const [isPropertyOwner, setIsPropertyOwner] = useState(false);
-    const [propertyUserOwnerData, setPropertyUserOwnerData] = useState(null);
   
-    const [isPropertyManager, setIsPropertyManager] = useState(false);
-    const [propertyUserManagerData, setPropertyUserManagerData] = useState(null);
-  
-    // Check for Property Owner
-    useEffect(() => {
-      let unsubscribe;
-  
-      if (propertyId && user?.phoneNumber) {
-        const query = projectFirestore
-          .collection("propertyusers")
-          .where("propertyId", "==", propertyId)
-          .where("userId", "==", user.phoneNumber)
-          .where("userType", "==", "propertyowner");
-  
-        unsubscribe = query.onSnapshot(
-          (snapshot) => {
-            if (!snapshot.empty) {
-              const doc = snapshot.docs[0];
-              setIsPropertyOwner(true);
-              setPropertyUserOwnerData({ id: doc.id, ...doc.data() });
-            } else {
-              setIsPropertyOwner(false);
-              setPropertyUserOwnerData(null);
-            }
-          },
-          (error) => {
-            console.error("Error fetching property owner doc:", error);
+
+  const [isPropertyOwner, setIsPropertyOwner] = useState(false);
+  const [propertyUserOwnerData, setPropertyUserOwnerData] = useState(null);
+
+  const [isPropertyManager, setIsPropertyManager] = useState(false);
+  const [propertyUserManagerData, setPropertyUserManagerData] = useState(null);
+
+  // Check for Property Owner
+  useEffect(() => {
+    let unsubscribe;
+
+    if (propertyId && user?.phoneNumber) {
+      const query = projectFirestore
+        .collection("propertyusers")
+        .where("propertyId", "==", propertyId)
+        .where("userId", "==", user.phoneNumber)
+        .where("userType", "==", "propertyowner");
+
+      unsubscribe = query.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            setIsPropertyOwner(true);
+            setPropertyUserOwnerData({ id: doc.id, ...doc.data() });
+          } else {
+            setIsPropertyOwner(false);
+            setPropertyUserOwnerData(null);
           }
-        );
-      }
-  
-      return () => {
-        if (unsubscribe) unsubscribe();
-      };
-    }, [propertyId, user]);
-  
-    // Check for Property Manager
-    useEffect(() => {
-      let unsubscribe;
-  
-      if (propertyId && user?.phoneNumber) {
-        const query = projectFirestore
-          .collection("propertyusers")
-          .where("propertyId", "==", propertyId)
-          .where("userId", "==", user.phoneNumber)
-          .where("userType", "==", "propertymanager");
-  
-        unsubscribe = query.onSnapshot(
-          (snapshot) => {
-            if (!snapshot.empty) {
-              const doc = snapshot.docs[0];
-              setIsPropertyManager(true);
-              setPropertyUserManagerData({ id: doc.id, ...doc.data() });
-            } else {
-              setIsPropertyManager(false);
-              setPropertyUserManagerData(null);
-            }
-          },
-          (error) => {
-            console.error("Error fetching property manager doc:", error);
+        },
+        (error) => {
+          console.error("Error fetching property owner doc:", error);
+        }
+      );
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [propertyId, user]);
+
+  // Check for Property Manager
+  useEffect(() => {
+    let unsubscribe;
+
+    if (propertyId && user?.phoneNumber) {
+      const query = projectFirestore
+        .collection("propertyusers")
+        .where("propertyId", "==", propertyId)
+        .where("userId", "==", user.phoneNumber)
+        .where("userType", "==", "propertymanager");
+
+      unsubscribe = query.onSnapshot(
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            setIsPropertyManager(true);
+            setPropertyUserManagerData({ id: doc.id, ...doc.data() });
+          } else {
+            setIsPropertyManager(false);
+            setPropertyUserManagerData(null);
           }
-        );
-      }
-  
-      return () => {
-        if (unsubscribe) unsubscribe();
-      };
-    }, [propertyId, user]);
+        },
+        (error) => {
+          console.error("Error fetching property manager doc:", error);
+        }
+      );
+    }
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [propertyId, user]);
 
   return (
     <>
@@ -434,18 +464,18 @@ const PropertyUtilityBills = () => {
                     OnePlace for Property Utility Bills
                   </h2>
                   {/* <h6 className="text-center mt-1 mb-2">Your Central Hub for Viewing, Downloading, and Uploading Property Documents</h6> */}
-               {!showAIForm &&
-  user?.status === "active" &&
-  (user.role === "admin" ||
-    user.role === "superAdmin" ||
-    isPropertyManager) && (
-    <div
-      className="theme_btn btn_fill no_icon text-center short_btn"
-      onClick={handleShowAIForm}
-    >
-      Add New Utility Bill
-    </div>
-)}
+                  {!showAIForm &&
+                    user?.status === "active" &&
+                    (user.role === "admin" ||
+                      user.role === "superAdmin" ||
+                      isPropertyManager) && (
+                      <div
+                        className="theme_btn btn_fill no_icon text-center short_btn"
+                        onClick={handleShowAIForm}
+                      >
+                        Add New Utility Bill
+                      </div>
+                    )}
 
                 </div>
               </div>
@@ -624,7 +654,45 @@ const PropertyUtilityBills = () => {
                           )}
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      {selectedBillType === "Property Tax" && (
+                          <div className="col-md-6">
+                        <div
+                          className="form_field w-100"
+                          style={{
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: "1px solid rgb(3 70 135 / 22%)",
+                          }}
+                        >
+                          <h6
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "500",
+                              marginBottom: "8px",
+                              color: "var(--theme-blue)",
+                            }}
+                          >
+                            Attached Mobile Number
+                          </h6>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              value={attachedMobileNumber}
+                              onChange={handleAttachedMobileNumberChange}
+                              placeholder="eg: +911234567890"
+                              className="w-100"
+                            />
+                          </div>
+                          {errors.attachedMobileNumber && (
+                            <div className="field_error w-100">
+                              {errors.attachedMobileNumber}
+                            </div>
+                          )}
+
+                        </div>
+                      </div>
+                      )}
+                      <div className={`${selectedBillType === "Property Tax" ? "col-md-6" : "col-md-12"}`}>
                         <div
                           className="form_field w-100"
                           style={{
@@ -657,9 +725,11 @@ const PropertyUtilityBills = () => {
                               {errors.billWebsiteLink}
                             </div>
                           )}
-                      
+
                         </div>
                       </div>
+
+                       
 
                       {/* plz don't delete this comment  */}
                       {/* <div className="col-md-4">
@@ -792,9 +862,8 @@ const PropertyUtilityBills = () => {
                           </div>
                           <div className="col-md-3 col-6">
                             <div
-                              className={`theme_btn btn_fill text-center no_icon ${
-                                isUploading ? "disabled" : ""
-                              }`}
+                              className={`theme_btn btn_fill text-center no_icon ${isUploading ? "disabled" : ""
+                                }`}
                               onClick={isUploading ? null : addUtilityBill}
                             >
                               {isUploading ? "Uploading..." : "Save"}
@@ -834,19 +903,19 @@ const PropertyUtilityBills = () => {
                       <span
                         className="material-symbols-outlined delete_icon_top"
                         style={{
-                          top:"0",
-                          right:"0"
+                          top: "0",
+                          right: "0"
                         }}
                         onClick={() => handleDeleteClick(doc.id)} // Set the document to delete
                       >
                         delete_forever
                       </span>
                     )}
-                  
+
                     <div className="left">
                       <div className="img_div">
                         {doc.billType === "Common Area Maintenance (CAM)" ||
-                        doc.billType.toLowerCase() === "maintenance" ? (
+                          doc.billType.toLowerCase() === "maintenance" ? (
                           <img
                             src="/assets/img/icons/maintainance.png"
                             alt="propdial"
@@ -857,8 +926,8 @@ const PropertyUtilityBills = () => {
                             alt="propdial"
                           />
                         ) : doc.billType === "Common Area Electricity (CAE)" ||
-                        doc.billType === "Electricity and Usage Charges"                        
-                        ||
+                          doc.billType === "Electricity and Usage Charges"
+                          ||
                           doc.billType.toLowerCase() === "electricity" ? (
                           <img
                             src="/assets/img/icons/electicitybill.png"
@@ -906,23 +975,28 @@ const PropertyUtilityBills = () => {
                         <h6 className="sub_title">
                           Payment Type: {doc.paymentType}
                         </h6>
-                        {doc.billWebsiteLink && (
-                        <Link 
-                        className="sub_title text_green" 
-                        target="_blank" 
-                        to={doc.billWebsiteLink}
-                        style={{
-                          display: "-webkit-box",
-                          WebkitLineClamp: 1,
-                          WebkitBoxOrient: "vertical",
-                          overflow: "hidden"
-                        }}
-                      >
-                        Website: {doc.billWebsiteLink}
-                      </Link>
-                      
+                        {doc.billType === "Property Tax" && (
+                           <h6 className="sub_title">
+                          Attached Mobile Number: {doc.attachedMobileNumber}
+                        </h6>
                         )}
-                        
+                        {doc.billWebsiteLink && (
+                          <Link
+                            className="sub_title text_green"
+                            target="_blank"
+                            to={doc.billWebsiteLink}
+                            style={{
+                              display: "-webkit-box",
+                              WebkitLineClamp: 1,
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden"
+                            }}
+                          >
+                            Website: {doc.billWebsiteLink}
+                          </Link>
+
+                        )}
+
                       </div>
                     </div>
                     {/* plz don't delete this comment  */}
@@ -950,31 +1024,31 @@ const PropertyUtilityBills = () => {
             </div>
           </div>
           <Modal
-                      show={showConfirmModal}
-                      onHide={handleConfirmClose}
-                      className="delete_modal"
-                      centered
-                    >
-                      <div className="alert_text text-center">Alert</div>
+            show={showConfirmModal}
+            onHide={handleConfirmClose}
+            className="delete_modal"
+            centered
+          >
+            <div className="alert_text text-center">Alert</div>
 
-                      <div className="sure_content text-center">
-                        Are you sure you want to remove this utility bill?
-                      </div>
-                      <div className="yes_no_btn">
-                        <div
-                          className="theme_btn full_width no_icon text-center btn_border"
-                          onClick={confirmDeleteDocument} // Confirm and delete
-                        >
-                          Yes
-                        </div>
-                        <div
-                          className="theme_btn full_width no_icon text-center btn_fill"
-                          onClick={handleConfirmClose} // Close modal without deleting
-                        >
-                          No
-                        </div>
-                      </div>
-                    </Modal>
+            <div className="sure_content text-center">
+              Are you sure you want to remove this utility bill?
+            </div>
+            <div className="yes_no_btn">
+              <div
+                className="theme_btn full_width no_icon text-center btn_border"
+                onClick={confirmDeleteDocument} // Confirm and delete
+              >
+                Yes
+              </div>
+              <div
+                className="theme_btn full_width no_icon text-center btn_fill"
+                onClick={handleConfirmClose} // Close modal without deleting
+              >
+                No
+              </div>
+            </div>
+          </Modal>
         </div>
       ) : (
         <InactiveUserCard />

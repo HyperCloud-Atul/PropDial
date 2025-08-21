@@ -84,7 +84,8 @@ const PGAdminProperty = () => {
     const unsubscribe = projectFirestore
       .collection("m_cities")
       .where("state", "==", selectedStateId)
-      .where("status", "==", "active")
+      .where("isShowInPropdial", "==", true)
+        .where("status", "==", "active")
       .onSnapshot((snapshot) => {
         const options = snapshot.docs.map((doc) => ({
           value: doc.data().city,

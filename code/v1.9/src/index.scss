@@ -761,6 +761,24 @@
 
     &.residential {
       background: var(--theme-blue);
+      &.Rented.Out{
+        background: red;
+         &::after {
+        background: red;
+      }
+      }
+        &.Sold.Out{
+        background: red;
+         &::after {
+        background: red;
+      }
+      }
+        &.Rented.But.Sale{
+        background: var(--theme-orange);
+         &::after {
+        background: var(--theme-orange);
+      }
+      }
 
       &::after {
         background: var(--theme-blue);

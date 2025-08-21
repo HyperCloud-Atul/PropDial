@@ -4821,6 +4821,22 @@ const checkPropertyLayout = async (propertyId) => {
                         <div className="more_detail_card_inner">
                           <h2 className="card_title">Property Detail</h2>
                           <div className="p_info">
+                              {/* property type  */}
+                            {propertyDocument &&
+                              propertyDocument.propertyType && (
+                                <div className="p_info_single">
+                                  <div className="pd_icon">
+                                    <img
+                                      src="/assets/img/propertytype.png"
+                                      alt="propdial"
+                                    />
+                                  </div>
+                                  <div className="pis_content">
+                                    <h6>Property Type</h6>
+                                    <h5>{propertyDocument.propertyType}</h5>
+                                  </div>
+                                </div>
+                              )}
                             {/* BHK  */}
                             {propertyDocument && propertyDocument.bhk && (
                               <div className="p_info_single">

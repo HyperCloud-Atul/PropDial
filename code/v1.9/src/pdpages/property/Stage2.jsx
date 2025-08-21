@@ -1219,6 +1219,16 @@ const Stage2 = (props) => {
                     >
                       Pent House - Duplex
                     </option>
+                    <option
+                      defaultValue={
+                        propertyDetails &&
+                        propertyDetails.PropertyType === "Basement"
+                          ? true
+                          : false
+                      }
+                    >
+                      Basement
+                    </option>
                   </select>
                 ) : propertyDetails &&
                   propertyDetails.Category === "Commercial" ? (
@@ -1304,6 +1314,18 @@ const Stage2 = (props) => {
                     >
                       Hospitality
                     </option>
+                      <option
+                      defaultValue={
+                        propertyDetails &&
+                        propertyDetails.PropertyType === "Basement"
+                          ? true
+                          : false
+                      }
+                    >
+                      Basement
+                    </option>
+                    
+
                     <option
                       defaultValue={
                         propertyDetails &&

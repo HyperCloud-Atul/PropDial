@@ -433,6 +433,8 @@ const Stage1 = (props) => {
     const ref = await projectFirestore
       .collection("m_cities")
       .where("state", "==", stateid)
+        .where("isShowInPropdial", "==", true)
+        .where("status", "==", "active")
       .orderBy("city", "asc");
     ref.onSnapshot(
       async (snapshot) => {
