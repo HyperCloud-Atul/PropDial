@@ -803,6 +803,32 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
   .about-card__fact-value {
     color: $muted-color;
   }
+
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
+  }
 }
 
 // Floor and unit plans
@@ -1144,6 +1170,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
     padding: 2rem;
     color: #666;
   }
+  
 }
 
 // Society Rates
@@ -1301,6 +1328,31 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
       }
     }
   }
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
+  }
 }
 
 // Map Location Section
@@ -1455,19 +1507,45 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
           align-items: center;
 
           input {
-            width: 60px;
+            width: 50px;
             padding: 0.5rem;
-            padding-right: 1.5rem;
+            padding-right: 0rem;
             border: 1px solid #ddd;
+            border-right: none;
             border-radius: 4px;
             text-align: right;
           }
 
           .unit {
-            position: absolute;
-            right: 0.5rem;
+            padding: 0.5rem;
+            padding-left: 0.2rem;
+            width: auto;
+            height: 100%;
+            // border: none;
+            // background: transparent;
+            border: 1px solid #ddd;
+            border-left: none;
             color: #777;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+          }
+
+          .time-unit-select {
+            padding: 0.5rem;
+            width: auto;
+            height: 100%;
+            // border: none;
+            // background: transparent;
+            border: 1px solid #ddd;
+            border-left: none;
+            color: #777;
+            font-size: 0.85rem;
+            cursor: pointer;
+            appearance: none;
+            padding-right: 0.5rem;
+            
+            &:focus {
+              outline: none;
+            }
           }
         }
       }
@@ -1515,28 +1593,53 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
       }
     }
 
-    .distance-input-container,
-    .time-input-container {
+    .distance-input-container {
       position: relative;
       display: flex;
       align-items: center;
-
+      
       input {
         width: 100%;
         padding: 0.75rem;
-        padding-right: 2rem;
+        padding-right: 2.2rem;
         border: 1px solid #ddd;
         border-radius: 4px;
         text-align: right;
       }
-
+     
       .unit {
         position: absolute;
         right: 0.75rem;
         color: #777;
         pointer-events: none;
       }
+
+
     }
+     .timeBox{
+        input {
+          width: 70%;
+          padding: 0.75rem;
+          padding-right: 2rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          text-align: right;
+        }
+        .time-unit-select {
+          width: auto;
+          border: 1px solid #ddd;
+          color: #777;
+          font-size: 1rem;
+          cursor: pointer;
+          // appearance: none;
+          padding: 0.75rem;
+          
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+      
 
     .add-button {
       background: #FA6304;
@@ -1689,6 +1792,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
 
     .location-info {
       display: flex;
+      // width: 60%;
       align-items: center;
       gap: 0.75rem;
 
@@ -1724,13 +1828,40 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
         }
       }
     }
+    
+  }
+
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
   }
 }
 
 // video section
 .property-videos-section {
   padding: 3rem 0;
-  background-color: oklch(98.5% 0.002 247.839);
+  background-color: #f4f4f4;
   font-family: 'Segoe UI', sans-serif;
   padding-bottom: 40px;
 
@@ -2025,6 +2156,31 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
       display: none;
     }
   }
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
+  }
 }
 
 // contact info
@@ -2283,6 +2439,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
         }
       }
     }
+    
   }
 
   @media (max-width: 768px) {
@@ -2319,7 +2476,31 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
       }
     }
   }
-
+  .no-details{
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1.5rem;
+    border: 3px dashed #ccc;
+    border-radius: 16px;
+    background-color: oklch(98.5% 0.002 247.839);
+    transition: ease-in-out 0.3s;
+    .no-details-text{
+      font-size: 1.25rem;
+      color: #666;
+      margin-top: 1rem;
+    }
+    &:hover {
+      color: $primary-color;
+      border: 3px dashed $primary-color;
+      background-color: #f4f4f4;
+    }
+  }
 }
 
 //review Section
@@ -2480,3 +2661,4 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.
     }
   }
 }
+

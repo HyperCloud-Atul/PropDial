@@ -73,7 +73,6 @@ import {
 import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { PiBuildingsDuotone } from "react-icons/pi";
-import Modal from "react-modal";
 import {
   IndianRupee,
   MapPin,
@@ -163,418 +162,6 @@ const ReviewSummary = () => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
-
-const GalleryPreview = ({ societyId, societyName, societyType }) => {
-  const [images, setImages] = useState([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [editMode, setEditMode] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [viewerOpen, setViewerOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // Reference to the society's document in Firestore
-  const societyDocRef = doc(projectFirestore, "m_societies", societyId);
-
-  // Fetch existing images for this society from Firestore
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const docSnap = await getDoc(societyDocRef);
-        if (docSnap.exists()) {
-          const societyData = docSnap.data();
-          // Ensure we have an array of image URLs (fallback to empty array)
-          setImages(societyData.images || []);
-        } else {
-          console.log("No such document!");
-          setImages([]);
-        }
-      } catch (error) {
-        console.error("Error fetching images:", error);
-        setImages([]);
-      }
-    };
-
-    fetchImages();
-  }, [societyId]);
-
-  const handleUploadClick = () => {
-    setEditMode(true);
-    setSelectedImages([]);
-  };
-
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      fileType: "image/jpeg",
-    };
-
-    try {
-      return await imageCompression(file, options);
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      return file; // Return original if compression fails
-    }
-  };
-
-  const handleFileSelect = async (e) => {
-    const files = Array.from(e.target.files);
-
-    // Check if total images would exceed 10
-    if (images.length + selectedImages.length + files.length > 10) {
-      alert(
-        `Maximum 10 images allowed. You can add ${
-          10 - (images.length + selectedImages.length)
-        } more.`
-      );
-      return;
-    }
-
-    // Compress images before adding to selection
-    const compressedFiles = await Promise.all(
-      files.map((file) => compressImage(file))
-    );
-
-    setSelectedImages((prev) => [...prev, ...compressedFiles]);
-  };
-
-  const handleSaveAll = async () => {
-    if (uploading) return;
-
-    setUploading(true);
-    setUploadProgress(0);
-
-    try {
-      const newUrls = [];
-
-      // Upload selected images sequentially
-      for (const file of selectedImages) {
-        const fileName = `${Date.now()}-${file.name}`;
-        const imageRef = ref(
-          projectStorage,
-          `society_images/${societyId}/${fileName}`
-        );
-        const uploadTask = uploadBytesResumable(imageRef, file);
-
-        const downloadURL = await new Promise((resolve, reject) => {
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              setUploadProgress(Math.round(progress));
-            },
-            (error) => reject(error),
-            async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
-          );
-        });
-
-        newUrls.push(downloadURL);
-      }
-
-      // Update Firestore document with new image URLs
-      const updatedImages = [...images, ...newUrls];
-      await updateDoc(societyDocRef, {
-        images: updatedImages,
-      });
-
-      // Update local state
-      setImages(updatedImages);
-      setSelectedImages([]);
-      setUploadProgress(100);
-
-      setTimeout(() => {
-        setUploading(false);
-        setEditMode(false);
-      }, 1000);
-    } catch (error) {
-      console.error("Upload failed:", error);
-      alert("Failed to upload images. Please try again.");
-      setUploading(false);
-    }
-  };
-
-  const openImageViewer = (index) => {
-    setCurrentImageIndex(index);
-    setViewerOpen(true);
-  };
-
-  const closeImageViewer = () => {
-    setViewerOpen(false);
-  };
-
-  const goToPrevious = () => {
-    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleDeleteExisting = async (index) => {
-    try {
-      // Get the image URL to delete
-      const imageUrl = images[index];
-
-      // Delete from Firebase storage
-      const imageRef = ref(projectStorage, imageUrl);
-      await deleteObject(imageRef);
-
-      // Update Firestore document
-      const updatedImages = images.filter((_, i) => i !== index);
-      await updateDoc(societyDocRef, {
-        images: updatedImages,
-      });
-
-      // Update local state
-      setImages(updatedImages);
-    } catch (error) {
-      console.error("Error deleting image:", error);
-    }
-  };
-
-  const handleDeleteNew = (index) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleDeleteAll = async () => {
-    if (window.confirm("Are you sure you want to delete all images?")) {
-      try {
-        // Delete all from Firebase storage
-        await Promise.all(
-          images.map((url) => {
-            const imageRef = ref(projectStorage, url);
-            return deleteObject(imageRef).catch((error) => {
-              console.error("Error deleting image:", error);
-            });
-          })
-        );
-
-        // Update Firestore document
-        await updateDoc(societyDocRef, {
-          images: [],
-        });
-
-        // Update local state
-        setImages([]);
-        setSelectedImages([]);
-      } catch (error) {
-        console.error("Error deleting all images:", error);
-      }
-    }
-  };
-
-  const renderGallery = () => {
-    if (editMode) {
-      return (
-        <div className="edit-mode-gallery">
-          <div className="edit-mode-controls">
-            <label className="add-images-btn">
-              <FaUpload /> Add Images
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileSelect}
-                style={{ display: "none" }}
-              />
-            </label>
-            <button
-              className="delete-all-btn"
-              onClick={handleDeleteAll}
-              disabled={selectedImages.length === 0 && images.length === 0}
-            >
-              Delete All
-            </button>
-            <button
-              className="save-all-btn"
-              onClick={handleSaveAll}
-              disabled={uploading}
-            >
-              {uploading ? "Uploading..." : "Save All"}
-            </button>
-            <button
-              className="cancel-btn"
-              onClick={() => setEditMode(false)}
-              disabled={uploading}
-            >
-              Cancel
-            </button>
-          </div>
-
-          <div className="selected-images-preview">
-            {images.length > 0 && (
-              <div className="existing-images-section">
-                <h4>Existing Images</h4>
-                <div className="selected-images-grid">
-                  {images.map((url, index) => (
-                    <div
-                      key={`existing-${index}`}
-                      className="selected-image-item"
-                    >
-                      <img src={url} alt={`Existing ${index}`} />
-                      <button
-                        className="delete-image-btn"
-                        onClick={() => handleDeleteExisting(index)}
-                      >
-                        <FaTimes />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {selectedImages.length > 0 && (
-              <div className="new-images-section">
-                <h4>New Images to Upload</h4>
-                <div className="selected-images-grid">
-                  {selectedImages.map((file, index) => (
-                    <div key={`new-${index}`} className="selected-image-item">
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`Selected ${index}`}
-                      />
-                      <button
-                        className="delete-image-btn"
-                        onClick={() => handleDeleteNew(index)}
-                      >
-                        <FaTimes />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {images.length === 0 && selectedImages.length === 0 && (
-              <p className="no-images-text">No images selected</p>
-            )}
-          </div>
-
-          {uploading && (
-            <div className="upload-progress">
-              <progress value={uploadProgress} max="100" />
-              <span>Uploading... {Math.round(uploadProgress)}%</span>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    if (images.length === 0) {
-      return (
-        <div className="empty-gallery">
-          <p>No images uploaded yet</p>
-          <button className="upload-btn" onClick={handleUploadClick}>
-            <FaUpload /> Upload Images
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="gallery-grid">
-        {images.length >= 1 && (
-          <div className="main-photo" onClick={() => openImageViewer(0)}>
-            <img src={images[0]} alt="Main View" />
-          </div>
-        )}
-
-        {images.length >= 2 && (
-          <div className="sub-photo" onClick={() => openImageViewer(1)}>
-            <img src={images[1]} alt="View 2" />
-          </div>
-        )}
-
-        {images.length >= 3 && (
-          <div
-            className={`sub-photo photo ${images.length === 3 ? "end" : ""}`}
-            onClick={() => openImageViewer(2)}
-          >
-            <img src={images[2]} alt="View 3" />
-          </div>
-        )}
-
-        {images.length >= 4 && (
-          <div className="sub-photo " onClick={() => openImageViewer(3)}>
-            <img src={images[3]} alt="View 4" />
-          </div>
-        )}
-
-        {images.length >= 5 && (
-          <div
-            className={`sub-photo endphoto ${
-              images.length === 5 ? "end2" : ""
-            }`}
-            onClick={() => openImageViewer(4)}
-          >
-            <img src={images[4]} alt="View 5" />
-          </div>
-        )}
-
-        {images.length > 5 && (
-          <div className="show-more" onClick={() => openImageViewer(5)}>
-            <button className="show-all-btn">
-              <MdOutlinePhotoLibrary size={20} />
-              Show all {images.length} photos
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  return (
-    <div className="gallery-preview">
-      <div className="gallery-header">
-        <h2 className="gallery-title">
-          {societyName} - {societyType} Apartment
-        </h2>
-        <div className="gallery-icons">
-          {images.length > 0 && !editMode && (
-            <button
-              className="upload-btn icon"
-              title="Upload Images"
-              onClick={handleUploadClick}
-            >
-              <FaUpload />
-            </button>
-          )}
-          <FaShareAlt className="icon" title="Share" />
-          {/* <FaRegHeart className="icon" title="Save" /> */}
-        </div>
-      </div>
-
-      {renderGallery()}
-
-      {viewerOpen && (
-        <div className="image-viewer-overlay">
-          <div className="image-viewer-content">
-            <button className="close-viewer" onClick={closeImageViewer}>
-              <FaTimes />
-            </button>
-            <button className="nav-button prev" onClick={goToPrevious}>
-              <FaChevronLeft />
-            </button>
-            <img
-              src={images[currentImageIndex]}
-              alt={`Gallery ${currentImageIndex}`}
-            />
-            <button className="nav-button next" onClick={goToNext}>
-              <FaChevronRight />
-            </button>
-            <div className="image-counter">
-              {currentImageIndex + 1} / {images.length}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -1474,475 +1061,6 @@ const ProjectInfo = ({ societyId }) => {
   );
 };
 
-// Define all amenities categorized as per the images
-const allAmenitiesByCategory = {
-  Club: [
-    { name: "Club House", icon: "FaRegBuilding" },
-    { name: "Steam Bath Room", icon: "FaShower" },
-    { name: "Saltwater Pool (Indoor)", icon: "FaSwimmingPool" },
-    { name: "Sauna Room", icon: "FaShower" },
-    { name: "Swimming Pool (Indoor)", icon: "FaSwimmingPool" },
-    { name: "Swimming Pool (Outdoor)", icon: "FaSwimmingPool" },
-    { name: "Card Room", icon: "FaGamepad" },
-    { name: "Party Room Small", icon: "MdMeetingRoom" },
-    { name: "Party Room Big", icon: "MdMeetingRoom" },
-    { name: "Sun Deck", icon: "FaTree" },
-    { name: "Library", icon: "BsFileEarmarkText" },
-    { name: "Roof Deck Lounge", icon: "FaRegBuilding" },
-    { name: "Pool Deck Area", icon: "FaSwimmingPool" },
-    { name: "Spa Massage Room", icon: "FaShower" },
-    { name: "BBQ Area", icon: "FaRegBuilding" },
-    { name: "Multi Utility Store", icon: "FaRegBuilding" },
-    { name: "Bar", icon: "FaRegBuilding" },
-    { name: "Jacuzzi Spa", icon: "FaSwimmingPool" },
-    { name: "Valet service", icon: "FaRegBuilding" },
-  ],
-  "Sports & Fitness": [
-    { name: "Cycle Track", icon: "FaWalking" },
-    { name: "Meditation Area", icon: "FaPrayingHands" },
-    { name: "Billiard Room", icon: "FaGamepad" },
-    { name: "Gymnastic Room", icon: "FaDumbbell" },
-    { name: "Squash Court", icon: "FaRegBuilding" },
-    { name: "Gymnasium", icon: "FaDumbbell" },
-    { name: "Badminton (Indoor)", icon: "FaRegBuilding" },
-    { name: "Cricket Pitch", icon: "FaRegBuilding" },
-    { name: "Rock Climbing Walls", icon: "FaRegBuilding" },
-    { name: "Volleyball Court", icon: "FaRegBuilding" },
-    { name: "Health Club", icon: "FaDumbbell" },
-    { name: "Badminton (Outdoor)", icon: "FaRegBuilding" },
-    { name: "Football Ground", icon: "FaRegBuilding" },
-    { name: "Skating Ring", icon: "FaGamepad" },
-    { name: "Basket Ball", icon: "FaRegBuilding" },
-    { name: "Golf Course", icon: "FaRegBuilding" },
-    { name: "Skating Track", icon: "FaGamepad" },
-    { name: "Tennis Court", icon: "FaRegBuilding" },
-    { name: "Table Tennis", icon: "FaGamepad" },
-    { name: "Bowling Alley", icon: "FaGamepad" },
-    {
-      name: "Dance Room",
-      icon: "FaRegBuilding",
-    },
-    {
-      name: "Yoga Deck",
-      icon: "FaPrayingHands",
-    },
-    {
-      name: "Horsebacking Ride",
-      icon: "FaRegBuilding",
-    },
-    {
-      name: "Garden Gym",
-      icon: "FaDumbbell",
-    },
-    {
-      name: "Yoga Room",
-      icon: "FaPrayingHands",
-    },
-    {
-      name: "Cricket Ground",
-      icon: "FaRegBuilding",
-    },
-    {
-      name: "Pool Table",
-      icon: "FaGamepad",
-    },
-    {
-      name: "Jogging Track",
-      icon: "FaWalking",
-    },
-  ],
-  "For Children": [
-    { name: "Kids Pool", icon: "FaSwimmingPool" },
-    { name: "Toddler Pool", icon: "FaSwimmingPool" },
-    { name: "Heated Lap Pool", icon: "FaSwimmingPool" },
-    { name: "Children Play Area (Indoor)", icon: "FaGamepad" },
-    { name: "Children Play Area (Outdoor)", icon: "FaGamepad" },
-    { name: "Creche and daycare", icon: "FaRegBuilding" },
-    { name: "Miniature Golf", icon: "FaRegBuilding" },
-    { name: "Dance Room", icon: "FaRegBuilding" },
-    { name: "Yoga Deck", icon: "FaPrayingHands" },
-    { name: "Horseback Riding", icon: "FaRegBuilding" },
-    { name: "Play School", icon: "FaRegBuilding" },
-    { name: "Pre-Primary School", icon: "FaRegBuilding" },
-    { name: "Primary School", icon: "FaRegBuilding" },
-  ],
-  "Safety & Security": [
-    { name: "cctv-in Common Area", icon: "FaVideo" },
-    { name: "Fire Fighting", icon: "FaUserShield" },
-    { name: "Intercom", icon: "FaUserShield" },
-    { name: "PNG (Pipeline gas)", icon: "FaUserShield" },
-    { name: "Security (3 tier)", icon: "FaUserShield" },
-    { name: "Security (Roaming)", icon: "FaUserShield" },
-    { name: "Security (Single Guard)", icon: "FaUserShield" },
-  ],
-  "General Amenities": [
-    { name: "Central Garden Atrium", icon: "FaTree" },
-    { name: "Outdoor Party Area", icon: "FaRegBuilding" },
-    { name: "Cafeteria", icon: "FaRegBuilding" },
-    { name: "Laundry Service", icon: "FaRegBuilding" },
-    { name: "Convenience Store", icon: "FaRegBuilding" },
-    { name: "Saloon", icon: "FaRegBuilding" },
-    { name: "Concierge", icon: "FaRegBuilding" },
-    { name: "Lounge Area", icon: "FaRegBuilding" },
-    { name: "Fountain", icon: "FaRegBuilding" },
-    { name: "Sky Garden", icon: "FaTree" },
-    { name: "Conference Room", icon: "MdMeetingRoom" },
-    { name: "Meeting Room", icon: "MdMeetingRoom" },
-    { name: "Medical Store", icon: "FaRegBuilding" },
-    { name: "Sky Lounge", icon: "FaRegBuilding" },
-    { name: "Extended Sky Patios", icon: "FaRegBuilding" },
-    { name: "Mini Theater", icon: "FaRegBuilding" },
-    { name: "Vegetable Shop", icon: "FaRegBuilding" },
-    { name: "Gazebos", icon: "FaRegBuilding" },
-    { name: "Restaurant", icon: "FaRegBuilding" },
-    { name: "24 Hour Water Supply", icon: "FaShower" },
-    { name: "Car Parking (Basement)", icon: "FaParking" },
-    { name: "Car Parking (Under Shade)", icon: "FaParking" },
-    { name: "Car Parking (For Visitors)", icon: "FaParking" },
-    { name: "Car Parking (Open)", icon: "FaParking" },
-    { name: "Designated Pet Area", icon: "FaTree" },
-    { name: "Gardens", icon: "FaTree" },
-    { name: "Lifts", icon: "MdElevator" },
-    { name: "High Speed Lifts", icon: "MdElevator" },
-    { name: "Landscaped Gardens", icon: "FaTree" },
-    { name: "Rainwater Harvesting", icon: "FaShower" },
-    { name: "Power Back (Full)", icon: "FaBolt" },
-    { name: "Power Backup (Partial)", icon: "FaBolt" },
-    { name: "Power Back (Lift Only)", icon: "FaBolt" },
-  ],
-};
-
-const iconComponents = {
-  FaRegBuilding: <FaRegBuilding />,
-  FaVideo: <FaVideo />,
-  FaWalking: <FaWalking />,
-  FaBolt: <FaBolt />,
-  FaSwimmingPool: <FaSwimmingPool />,
-  FaUserShield: <FaUserShield />,
-  FaTree: <FaTree />,
-  FaParking: <FaParking />,
-  FaDumbbell: <FaDumbbell />,
-  FaGamepad: <FaGamepad />,
-  FaShower: <FaShower />,
-  FaPrayingHands: <FaPrayingHands />,
-  FaBed: <FaBed />,
-  MdElevator: <MdElevator />,
-  MdMeetingRoom: <MdMeetingRoom />,
-  BsFileEarmarkText: <BsFileEarmarkText />,
-  FaPlus: <FaPlus />,
-  FaSearch: <FaSearch />,
-};
-
-const AmenitiesSection = ({ societyId }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedAmenities, setSelectedAmenities] = useState({});
-  const [tempSelected, setTempSelected] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState("Club");
-  const [isEditing, setIsEditing] = useState(false);
-
-  // Fetch amenities from Firebase
-  useEffect(() => {
-    const fetchAmenities = async () => {
-      try {
-        const doc = await projectFirestore
-          .collection("m_societies")
-          .doc(societyId)
-          .collection("society_information")
-          .doc("Amenities")
-          .get();
-
-        if (doc.exists) {
-          setSelectedAmenities(doc.data() || {});
-          // Initialize tempSelected with all selected amenities from all categories
-          const allSelected = Object.values(doc.data() || {}).flat();
-          setTempSelected(allSelected.map((a) => a.name));
-        } else {
-          // Initialize with empty categories
-          const initialAmenities = {};
-          Object.keys(allAmenitiesByCategory).forEach((category) => {
-            initialAmenities[category] = [];
-          });
-          setSelectedAmenities(initialAmenities);
-          setTempSelected([]);
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAmenities();
-  }, [societyId]);
-
-  // Save amenities to Firebase
-  const saveAmenitiesToFirebase = async (amenities) => {
-    try {
-      if (!societyId) throw new Error("Society ID is missing");
-
-      // Structure the data by category
-      const amenitiesByCategory = {};
-      Object.keys(allAmenitiesByCategory).forEach((category) => {
-        amenitiesByCategory[category] = allAmenitiesByCategory[category]
-          .filter((amenity) => amenities.includes(amenity.name))
-          .map((amenity) => ({
-            ...amenity,
-            highlight:
-              selectedAmenities[category]?.some(
-                (a) => a.name === amenity.name && a.highlight
-              ) || false,
-          }));
-      });
-
-      await projectFirestore
-        .collection("m_societies")
-        .doc(societyId)
-        .collection("society_information")
-        .doc("Amenities")
-        .set(amenitiesByCategory, { merge: true });
-
-      console.log("Amenities saved successfully");
-      return true;
-    } catch (err) {
-      console.error("Firebase save error:", err);
-      alert("Failed to save amenities. Please try again.");
-      return false;
-    }
-  };
-
-  const handleAddAmenities = () => {
-    setIsEditing(true);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setIsEditing(false);
-  };
-
-  const handleCheckboxChange = (amenityName) => {
-    setTempSelected((prev) =>
-      prev.includes(amenityName)
-        ? prev.filter((name) => name !== amenityName)
-        : [...prev, amenityName]
-    );
-  };
-
-  const handleSaveAmenities = async () => {
-    await saveAmenitiesToFirebase(tempSelected);
-
-    // Update local state with the new selections
-    const updatedAmenities = {};
-    Object.keys(allAmenitiesByCategory).forEach((category) => {
-      updatedAmenities[category] = allAmenitiesByCategory[category]
-        .filter((amenity) => tempSelected.includes(amenity.name))
-        .map((amenity) => ({
-          ...amenity,
-          highlight:
-            selectedAmenities[category]?.some(
-              (a) => a.name === amenity.name && a.highlight
-            ) || false,
-        }));
-    });
-
-    setSelectedAmenities(updatedAmenities);
-    setShowModal(false);
-    setIsEditing(false);
-  };
-
-  const toggleHighlight = async (amenityName, category) => {
-    const updatedAmenities = { ...selectedAmenities };
-    updatedAmenities[category] = updatedAmenities[category].map((amenity) =>
-      amenity.name === amenityName
-        ? { ...amenity, highlight: !amenity.highlight }
-        : amenity
-    );
-
-    setSelectedAmenities(updatedAmenities);
-
-    // Save to Firebase
-    await projectFirestore
-      .collection("m_societies")
-      .doc(societyId)
-      .collection("society_information")
-      .doc("Amenities")
-      .set(updatedAmenities, { merge: true });
-  };
-
-  const filteredAmenities = allAmenitiesByCategory[activeCategory].filter(
-    (amenity) => amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  if (loading)
-    return <div className="loading-spinner">Loading amenities...</div>;
-
-  return (
-    <div className="amenities-section">
-      <h2 className="amenities-heading">Amenities</h2>
-
-      {/* Navigation Bar for Categories */}
-      <div className="amenities-categories">
-        {Object.keys(allAmenitiesByCategory).map((category) => (
-          <button
-            key={category}
-            className={`category-btn ${
-              activeCategory === category ? "active" : ""
-            }`}
-            onClick={() => setActiveCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      <div className="amenities-grid">
-        {selectedAmenities[activeCategory]?.map((item, index) => (
-          <div
-            className={`amenity-card ${item.highlight ? "highlighted" : ""}`}
-            key={index}
-            onClick={() => toggleHighlight(item.name, activeCategory)}
-          >
-            {item.highlight && <div className="flag"></div>}
-            <div className="icon">
-              {iconComponents[item.icon] || <FaRegBuilding />}
-            </div>
-            <div className="label">{item.name}</div>
-          </div>
-        ))}
-        <div className="add-amenity-card" onClick={handleAddAmenities}>
-          <div className="plus-icon">
-            <FaPlus />
-          </div>
-          <div className="label">Add Amenities</div>
-        </div>
-      </div>
-
-      <div className="amenities-footer">
-        <p className="show-more">
-          Showing {selectedAmenities[activeCategory]?.length || 0} of{" "}
-          {allAmenitiesByCategory[activeCategory].length} amenities in{" "}
-          {activeCategory}
-        </p>
-        <button className="contact-btn">Contact Builder</button>
-      </div>
-
-      {showModal && (
-        <div className="amenities-modal">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>
-                Select Amenities ({tempSelected.length} selected)
-                {isEditing && <span> - Editing: {activeCategory}</span>}
-              </h2>
-              <button className="close-btn" onClick={handleCloseModal}>
-                &times;
-              </button>
-            </div>
-
-            {!isEditing && (
-              <div className="amenities-categories">
-                {Object.keys(allAmenitiesByCategory).map((category) => (
-                  <button
-                    key={category}
-                    className={`category-btn ${
-                      activeCategory === category ? "active" : ""
-                    }`}
-                    onClick={() => setActiveCategory(category)}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="search-box">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search amenities..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-
-            <div className="amenities-list">
-              {filteredAmenities.map((amenity) => (
-                <div className="amenity-item" key={amenity.name}>
-                  <input
-                    type="checkbox"
-                    id={`amenity-${amenity.name}`}
-                    checked={tempSelected.includes(amenity.name)}
-                    onChange={() => handleCheckboxChange(amenity.name)}
-                  />
-                  <label htmlFor={`amenity-${amenity.name}`}>
-                    <span className="amenity-icon">
-                      {iconComponents[amenity.icon] || <FaRegBuilding />}
-                    </span>
-                    {amenity.name}
-                  </label>
-                </div>
-              ))}
-              {filteredAmenities.length === 0 && (
-                <div className="no-results">No amenities found</div>
-              )}
-            </div>
-
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={handleCloseModal}>
-                Cancel
-              </button>
-              <button className="save-btn" onClick={handleSaveAmenities}>
-                Save {tempSelected.length} Amenities
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const StickyTabBar = () => {
-  const [isSticky, setIsSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 350); // Change threshold if needed
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const sections = [
-    "Overview",
-    "Available Properties",
-    "Amenities",
-    "About Society",
-    "Nearby Locations",
-    "Units-Floor Plans",
-    "Things to Know",
-    "Photo Gallery",
-    "Society Videos",
-    "About Developer",
-  ];
-
-  return (
-    <div className={`${styles.tabContainer} ${isSticky ? styles.sticky : ""}`}>
-      {sections.map((section, idx) => (
-        <a
-          href={`#${section.replace(/\s+/g, "-")}`} // remove extra backslashes
-          key={idx}
-          className={styles.tabLink}
-        >
-          {section}
-        </a>
-      ))}
-      {/* <span className={styles.arrow}>&gt;</span> */}
-    </div>
-  );
-};
 
 const ContactForm = () => {
   return (
@@ -1974,14 +1092,6 @@ const ContactForm = () => {
     </div>
   );
 };
-
-function formatStateName(slug) {
-  return slug
-    .replace(/-/g, " ") // Replace dashes with spaces
-    .split(" ") // Split into words
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
-    .join(" ");
-}
 
 const SocietyOverview = ({ country, state, city, locality, societyId }) => {
   const [societyData, setSocietyData] = useState({
@@ -2135,693 +1245,7 @@ const SocietyOverview = ({ country, state, city, locality, societyId }) => {
   );
 };
 
-const EditModal = ({ data, onClose, onSave }) => {
-  const [formData, setFormData] = useState(data);
-  const [currentUnitType, setCurrentUnitType] = useState("");
-  const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-    // Clear error when user makes changes
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const handleUnitTypeAdd = () => {
-    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
-      setFormData((prev) => ({
-        ...prev,
-        unitTypes: [...prev.unitTypes, currentUnitType],
-      }));
-      setCurrentUnitType("");
-    }
-  };
-
-  const handleUnitTypeRemove = (typeToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    const currentYear = new Date().getFullYear();
-
-
-    // Launched year validation
-    if (formData.launchedYear) {
-      if (parseInt(formData.launchedYear) > currentYear) {
-        newErrors.launchedYear = "Launched year cannot be in the future";
-      }
-    }
-
-    // Possession year validation
-    if (formData.possessionYear) {
-      if (parseInt(formData.possessionYear) < currentYear) {
-        newErrors.possessionYear = "Possession year cannot be in the past";
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (validateForm()) {
-      onSave(formData);
-    }
-  };
-
-  return (
-    <div className="edit-modal">
-      <div className="modal-content">
-        <h2>Society Profile Management</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
-              {/* <label>Society Type</label>
-              <select
-                name="societyType"
-                value={formData.societyType}
-                onChange={handleChange}
-              >
-                <option value="">Select Type</option>
-                <option value="Residential">Residential</option>
-                <option value="Commercial">Commercial</option>
-                <option value="Both">Both</option>
-              </select> */}
-              <label>Society Type</label>
-              <input
-                type="text"
-                name="societyType"
-                value={formData.societyType || ""}
-                readOnly
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Society Name</label>
-              <input
-                type="text"
-                name="society"
-                value={formData.society}
-                readOnly
-                // onChange={handleChange}
-                // placeholder="Enter society name"
-                // required
-              />
-            </div>
-
-            <div className="form-group">
-              {/* <label>Builder Name</label>
-              <input
-                type="text"
-                name="builder"
-                value={formData.builder}
-                onChange={handleChange}
-                placeholder="Enter builder name"
-              /> */}
-              <label>Builder Name</label>
-              <input
-                type="text"
-                name="builder"
-                value={formData.builder}
-                onChange={(e) => {
-                  let value = e.target.value;
-                  // Allow only letters and spaces
-                  value = value.replace(/[^a-zA-Z\s]/g, "");
-                  setFormData({ ...formData, builder: value });
-                }}
-                placeholder="Enter builder name"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter full address"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Price From (₹ Cr)</label>
-              <input
-                type="number"
-                name="priceFrom"
-                value={formData.priceFrom}
-                onChange={handleChange}
-                placeholder="e.g., 2.02"
-                step="0.01"
-                min="0"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Price To (₹ Cr)</label>
-              <input
-                type="number"
-                name="priceTo"
-                value={formData.priceTo}
-                onChange={handleChange}
-                placeholder="e.g., 2.52"
-                step="0.01"
-                min="0"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Project Size in Acre</label>
-              <input
-                id="productSize"
-                type="text"
-                name="projectSize"
-                value={formData.projectSize || ""}
-                onChange={(e) => {
-                  let value = e.target.value.replace(/\D/g, "");
-                  if (value.length > 3) value = value.slice(0, 3);
-                  setFormData({ ...formData, projectSize: value });
-                }}
-                inputMode="numeric"
-                placeholder="Enter project size"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Total Units</label>
-              <input
-                id="totalUnits"
-                type="text"
-                name="totalUnits"
-                value={formData.totalUnits || ""}
-                onChange={(e) => {
-                  let value = e.target.value.replace(/\D/g, ""); // allow only digits
-                  if (value.length > 4) value = value.slice(0, 4); // limit to 4 digits
-                  setFormData({ ...formData, totalUnits: value });
-                }}
-                inputMode="numeric"
-                placeholder="Enter total units"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Total Towers</label>
-              <input
-                id="totalTowers"
-                type="text"
-                name="totalTowers"
-                value={formData.totalTowers || ""}
-                onChange={(e) => {
-                  let value = e.target.value.replace(/\D/g, "");
-                  if (value.length > 3) value = value.slice(0, 3);
-                  setFormData({ ...formData, totalTowers: value });
-                }}
-                inputMode="numeric"
-                placeholder="Enter total towers"
-              />
-            </div>
-
-            <div className="form-group toggle-group">
-              <div className="toggle-description">
-                <label className="toggle-label">Approved By RERA </label>
-                <div
-                  className={`toggle-switch ${formData.reraApproved ? "active" : ""}`}
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      reraApproved: !prev.reraApproved,
-                    }))
-                  }
-                >
-                  <div className="toggle-circle" />
-                </div>
-              </div>
-                <div className="toggle-description">
-                <label className="toggle-label">Ready to Move In</label>
-                <div
-                  className={`toggle-switch ${formData.readyToMove ? "active" : ""}`}
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      readyToMove: !prev.readyToMove,
-                    }))
-                  }
-                >
-                  <div className="toggle-circle" />
-                </div>
-              </div>
-            </div>
-            {/* <div className="form-group toggle-group">
-             
-            </div> */}
-
-            {!formData.readyToMove && (
-              <div className="form-group">
-              <label>Possession Year</label>
-              <select
-                name="possessionYear"
-                value={formData.possessionYear || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, possessionYear: e.target.value })
-                }
-              >
-                <option value="">Select Year</option>
-                {Array.from({ length: 70 }, (_, i) => {
-                  const year = new Date().getFullYear() + i; // current + next 70 years
-                  return (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  );
-                })}
-              </select>
-
-              {errors.possessionYear && (
-                <span className="error">{errors.possessionYear}</span>
-              )}
-              </div>
-            )}
-
-            {formData.readyToMove && (
-              <div className="form-group">
-                <label>Launched Year</label>
-                <select
-                  name="launchedYear"
-                  value={formData.launchedYear || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, launchedYear: e.target.value })
-                  }
-                >
-                  <option value="">Select Year</option>
-                  {Array.from({ length: 50 }, (_, i) => {
-                    const year = new Date().getFullYear() - i; // Last 50 years
-                    return (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    );
-                  })}
-                </select>
-                {errors.launchedYear && <span className="error">{errors.launchedYear}</span>}
-              </div>
-            )}
-
-
-            {/* <div className="form-group">
-              <label>Unit Types</label>
-              <div className="unit-types-container">
-                <input
-                  type="text"
-                  value={currentUnitType}
-                  onChange={(e) => setCurrentUnitType(e.target.value)}
-                  placeholder="Add unit type"
-                />
-                <button
-                  type="button"
-                  onClick={handleUnitTypeAdd}
-                  className="add-unit-type-btn"
-                >
-                  Add
-                </button>
-              </div>
-              <div className="unit-types-list">
-                {formData.unitTypes?.map((type) => (
-                  <div key={type} className="unit-type-tag">
-                    {type}
-                    <button
-                      type="button"
-                      onClick={() => handleUnitTypeRemove(type)}
-                      className="remove-unit-type-btn"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div> */}
-          </div>
-
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-const EditAbout = ({ data, onClose, onSave }) => {
-  const [formData, setFormData] = useState(data);
-  const [currentUnitType, setCurrentUnitType] = useState("");
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleUnitTypeAdd = () => {
-    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
-      setFormData((prev) => ({
-        ...prev,
-        unitTypes: [...prev.unitTypes, currentUnitType],
-      }));
-      setCurrentUnitType("");
-    }
-  };
-
-  const handleUnitTypeRemove = (typeToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-  };
-
-  return (
-    <div className="edit-modal">
-      <div className="modal-content">
-        <h2>Edit Society Details</h2>
-        <form onSubmit={handleSubmit}>
-          {/* <div className="form-grid">
-            <div className="form-group">
-              <label>Project Size in Acre</label>
-              <input
-                type="number"
-                name="projectSize"
-                value={formData.projectSize}
-                onChange={handleChange}
-                placeholder="Enter project size in Acres"
-                min="0"
-              />
-            </div>
-            <div className="form-group">
-              <label>Total Units</label>
-              <input
-                type="number"
-                name="totalUnits"
-                value={formData.totalUnits}
-                onChange={handleChange}
-                placeholder="Enter total units"
-                min="0"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Total Towers</label>
-              <input
-                type="number"
-                name="totalTowers"
-                value={formData.totalTowers}
-                onChange={handleChange}
-                placeholder="Enter number of towers"
-                min="0"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Unit Types</label>
-              <div className="unit-types-input">
-                <input
-                  type="text"
-                  value={currentUnitType}
-                  onChange={(e) => setCurrentUnitType(e.target.value)}
-                  placeholder="e.g. 2 BHK, 3BHK, etc."
-                />
-                <button
-                  type="button"
-                  className="add-unit-btn"
-                  onClick={handleUnitTypeAdd}
-                >
-                  Add
-                </button>
-              </div>
-              <div className="unit-tags">
-                {formData.unitTypes.map((type) => (
-                  <span key={type} className="unit-tag">
-                    {type}
-                    <button
-                      type="button"
-                      onClick={() => handleUnitTypeRemove(type)}
-                      className="remove-tag"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>
-                <input
-                  type="checkbox"
-                  name="readyToMove"
-                  checked={formData.readyToMove}
-                  onChange={handleChange}
-                />
-                Ready to Move
-              </label>
-            </div>
-
-            {!formData.readyToMove && (
-              <div className="form-group">
-                <label>Possession Date</label>
-                <input
-                  type="date"
-                  name="possessionDate"
-                  value={formData.possessionDate}
-                  onChange={handleChange}
-                />
-              </div>
-            )} */}
-
-            {/* Description field moved to full width at the end */}
-            <div className="form-group full-width">
-              <label>Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter society description"
-                rows="5"
-              />
-            </div>
-          {/* </div> */}
-
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-const EditRates = ({ data, onClose, onSave }) => {
-  const [formData, setFormData] = useState(data);
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const numValue = parseFloat(value) || 0;
-    
-    // Clear error when user makes changes
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: numValue,
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    const maxValues = {
-      electricityRateAuthority: 99,
-      electricityRatePowerBackup: 99,
-      waterCharges: 99,
-      commonAreaMaintenance: 99,
-      commonAreaElectricity: 99,
-      clubCharges: 9999
-    };
-
-    Object.keys(maxValues).forEach(field => {
-      if (formData[field] > maxValues[field]) {
-        newErrors[field] = `Value cannot exceed ${maxValues[field]}`;
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSave(formData);
-    }
-  };
-
-  return (
-    <div className="edit-modal">
-      <div className="modal-content">
-        <h2>Edit Society Rates</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Electricity Rate (Authority)</label>
-              <input
-                type="number"
-                name="electricityRateAuthority"
-                value={formData.electricityRateAuthority || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="99"
-                step="0.01"
-              />
-              {errors.electricityRateAuthority && (
-                <span className="error">{errors.electricityRateAuthority}</span>
-              )}
-              <p className="rate-description">₹ per unit</p>
-            </div>
-
-            <div className="form-group">
-              <label>Electricity Rate (Power Backup)</label>
-              <input
-                type="number"
-                name="electricityRatePowerBackup"
-                value={formData.electricityRatePowerBackup || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="99"
-                step="0.01"
-              />
-              {errors.electricityRatePowerBackup && (
-                <span className="error">{errors.electricityRatePowerBackup}</span>
-              )}
-              <p className="rate-description">₹ per unit</p>
-            </div>
-
-            <div className="form-group">
-              <label>Water Charges</label>
-              <input
-                type="number"
-                name="waterCharges"
-                value={formData.waterCharges || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="99"
-                step="0.01"
-              />
-              {errors.waterCharges && (
-                <span className="error">{errors.waterCharges}</span>
-              )}
-              <p className="rate-description">₹ per 1000L</p>
-            </div>
-
-            <div className="form-group">
-              <label>Common Area Maintenance</label>
-              <input
-                type="number"
-                name="commonAreaMaintenance"
-                value={formData.commonAreaMaintenance || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="99"
-                step="0.01"
-              />
-              {errors.commonAreaMaintenance && (
-                <span className="error">{errors.commonAreaMaintenance}</span>
-              )}
-              <p className="rate-description">₹ per sq.ft/month</p>
-            </div>
-
-            <div className="form-group">
-              <label>Common Area Electricity</label>
-              <input
-                type="number"
-                name="commonAreaElectricity"
-                value={formData.commonAreaElectricity || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="99"
-                step="0.01"
-              />
-              {errors.commonAreaElectricity && (
-                <span className="error">{errors.commonAreaElectricity}</span>
-              )}
-              <p className="rate-description">₹ per sq.ft/month</p>
-            </div>
-
-            <div className="form-group">
-              <label>Club Charges</label>
-              <input
-                type="number"
-                name="clubCharges"
-                value={formData.clubCharges || ''}
-                onChange={handleChange}
-                placeholder="Enter rate"
-                min="0"
-                max="9999"
-                step="1"
-              />
-              {errors.clubCharges && (
-                <span className="error">{errors.clubCharges}</span>
-              )}
-              <p className="rate-description">₹ per month</p>
-            </div>
-          </div>
-
-          <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className="save-btn">
-              Save Changes
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
 const ThingsToKnow = ({ societyId }) => {
   const [societyData, setSocietyData] = useState({
     electricityRateAuthority: "",
@@ -3899,6 +2323,988 @@ const SocietyInfoForm = ({ societyId }) => {
   );
 };
 
+const amenitiesData = {
+  club: [
+    {
+      title: "Grand Clubhouse",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Premium clubhouse with lounge and event spaces",
+    },
+    {
+      title: "Banquet Hall",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Spacious hall for celebrations and gatherings",
+    },
+    {
+      title: "Library",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Quiet reading space with extensive collection",
+    },
+    {
+      title: "Business Center",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Professional workspace for residents",
+    },
+  ],
+  sports: [
+    {
+      title: "Swimming Pool",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Olympic-size swimming pool with deck area",
+    },
+    {
+      title: "Fitness Center",
+      image: "/assets/img/society/hero5.jpg",
+      description: "State-of-the-art gym with latest equipment",
+    },
+    {
+      title: "Tennis Court",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Professional tennis court with night lighting",
+    },
+    {
+      title: "Yoga Studio",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Serene space for yoga and meditation",
+    },
+  ],
+  children: [
+    {
+      title: "Kids Play Area",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Safe and fun playground for children",
+    },
+    {
+      title: "Daycare Center",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Professional childcare facility",
+    },
+    {
+      title: "Activity Room",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Indoor activities and learning space",
+    },
+    {
+      title: "Mini Theater",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Entertainment space for kids and families",
+    },
+  ],
+  security: [
+    {
+      title: "24/7 Security",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Round-the-clock security personnel",
+    },
+    {
+      title: "CCTV Surveillance",
+      image: "/assets/img/society/hero3.jpg",
+      description: "Complete CCTV coverage of premises",
+    },
+    {
+      title: "Access Control",
+      image: "/assets/img/society/hero4.jpg",
+      description: "Smart card access for residents",
+    },
+    {
+      title: "Fire Safety",
+      image: "/assets/img/society/hero5.jpg",
+      description: "Advanced fire detection and safety systems",
+    },
+  ],
+  general: [
+    {
+      title: "Landscaped Gardens",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Beautifully maintained green spaces",
+    },
+    {
+      title: "Power Backup",
+      image: "/assets/img/society/hero3.jpg",
+      description: "100% power backup for all common areas",
+    },
+    {
+      title: "Water Treatment",
+      image: "/assets/img/society/hero1.jpg",
+      description: "Advanced water purification system",
+    },
+    {
+      title: "Waste Management",
+      image: "/assets/img/society/hero2.jpg",
+      description: "Eco-friendly waste processing",
+    },
+  ],
+};
+
+const categories = [
+  { key: "club", label: "Club" },
+  { key: "sports", label: "Sports & Fitness" },
+  { key: "children", label: "For Children" },
+  { key: "security", label: "Safety & Security" },
+  { key: "general", label: "General Amenities" },
+];
+
+const NewAmenitiesSection = () => {
+  const [activeCategory, setActiveCategory] = useState("club");
+
+  return (
+    <section className="amenities_section">
+      <div className="container">
+        <div className="text-center mb-12">
+          <h2 className="section-title">World-Class Amenities</h2>
+          <p className="section-description">
+            Experience luxury living with our comprehensive range of premium
+            amenities
+          </p>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="category-tabs">
+          {categories.map((category) => (
+            <button
+              key={category.key}
+              className={`category-button ${
+                activeCategory === category.key ? "category-button--active" : ""
+              }`}
+              onClick={() => setActiveCategory(category.key)}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Amenities Grid */}
+        <div className="amenities-grid">
+          {(amenitiesData[activeCategory] || []).map((amenity, index) => (
+            <div key={index} className="amenity-card">
+              <div className="amenity-card__image-wrapper">
+                <img
+                  src={amenity.image || "/placeholder.svg"}
+                  alt={amenity.title}
+                  className="amenity-card__image"
+                />
+              </div>
+              <div className="amenity-card__content">
+                <h3 className="amenity-card__title">{amenity.title}</h3>
+                <p className="amenity-card__description">
+                  {amenity.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const reviews = [
+  {
+    name: "Priya Sharma",
+    rating: 5,
+    date: "2 months ago",
+    review:
+      "Excellent society with world-class amenities. The maintenance is top-notch and the security is very good. My family loves the swimming pool and kids play area.",
+    apartment: "3BHK, Tower A",
+  },
+  {
+    name: "Amit Patel",
+    rating: 5,
+    date: "3 months ago",
+    review:
+      "Great location with easy access to IT parks and malls. The clubhouse is amazing and the gym has all modern equipment. Highly recommend for IT professionals.",
+    apartment: "2BHK, Tower B",
+  },
+  {
+    name: "Sneha Reddy",
+    rating: 4,
+    date: "1 month ago",
+    review:
+      "Beautiful society with lush green landscaping. The apartments are spacious and well-designed. The management is responsive to all queries and complaints.",
+    apartment: "4BHK, Tower C",
+  },
+  {
+    name: "Rajesh Kumar",
+    rating: 5,
+    date: "4 months ago",
+    review:
+      "Premium quality construction and excellent amenities. The society has a great community feel. Kids love the playground and the library is well-maintained.",
+    apartment: "3BHK, Tower D",
+  },
+  {
+    name: "Meera Joshi",
+    rating: 4,
+    date: "2 weeks ago",
+    review:
+      "Good connectivity to major areas of Bangalore. The society is well-planned with ample parking space. The power backup system works efficiently.",
+    apartment: "2BHK, Tower E",
+  },
+  {
+    name: "Vikram Singh",
+    rating: 5,
+    date: "5 months ago",
+    review:
+      "Outstanding society with professional management. The security is excellent with 24/7 CCTV surveillance. Great investment for the future.",
+    apartment: "4BHK, Tower F",
+  },
+];
+
+const ReviewsSection = () => {
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        className={`star-icon ${i < rating ? "filled" : "empty"}`}
+      />
+    ));
+  };
+
+  return (
+    <section className="reviews-section">
+      <div className="container">
+        <div className="section-header">
+          <h2>Resident Reviews</h2>
+          <p>
+            Hear what our residents have to say about their living experience at
+            Emerald Heights
+          </p>
+        </div>
+
+        <div className="reviews-grid">
+          {reviews.map((review, index) => (
+            <div key={index} className="review-card">
+              <div className="card-content">
+                <div className="review-content">
+                  <Quote className="quote-icon" />
+                  <div className="review-details">
+                    <div className="rating-container">
+                      <div className="stars">{renderStars(review.rating)}</div>
+                      <span className="review-date">{review.date}</span>
+                    </div>
+                    <p className="review-text">{review.review}</p>
+                    <div className="reviewer-info">
+                      <p className="reviewer-name">{review.name}</p>
+                      <p className="reviewer-apartment">{review.apartment}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="average-rating">
+          <div className="rating-badge">
+            <div className="stars">{renderStars(5)}</div>
+            <span className="rating-score">4.8/5</span>
+            <span className="rating-count">• Based on 150+ reviews</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+
+
+function formatStateName(slug) {
+  return slug
+    .replace(/-/g, " ") // Replace dashes with spaces
+    .split(" ") // Split into words
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+    .join(" ");
+}
+
+const EditModal = ({ data, onClose, onSave }) => {
+  const [formData, setFormData] = useState(data);
+  const [currentUnitType, setCurrentUnitType] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    // Clear error when user makes changes
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleUnitTypeAdd = () => {
+    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
+      setFormData((prev) => ({
+        ...prev,
+        unitTypes: [...prev.unitTypes, currentUnitType],
+      }));
+      setCurrentUnitType("");
+    }
+  };
+
+  const handleUnitTypeRemove = (typeToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const currentYear = new Date().getFullYear();
+
+
+    // Launched year validation
+    if (formData.launchedYear) {
+      if (parseInt(formData.launchedYear) > currentYear) {
+        newErrors.launchedYear = "Launched year cannot be in the future";
+      }
+    }
+
+    // Possession year validation
+    if (formData.possessionYear) {
+      if (parseInt(formData.possessionYear) < currentYear) {
+        newErrors.possessionYear = "Possession year cannot be in the past";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      onSave(formData);
+    }
+  };
+
+  return (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Society Profile Management</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              {/* <label>Society Type</label>
+              <select
+                name="societyType"
+                value={formData.societyType}
+                onChange={handleChange}
+              >
+                <option value="">Select Type</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Both">Both</option>
+              </select> */}
+              <label>Society Type</label>
+              <input
+                type="text"
+                name="societyType"
+                value={formData.societyType || ""}
+                readOnly
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Society Name</label>
+              <input
+                type="text"
+                name="society"
+                value={formData.society}
+                readOnly
+                // onChange={handleChange}
+                // placeholder="Enter society name"
+                // required
+              />
+            </div>
+
+            <div className="form-group">
+              {/* <label>Builder Name</label>
+              <input
+                type="text"
+                name="builder"
+                value={formData.builder}
+                onChange={handleChange}
+                placeholder="Enter builder name"
+              /> */}
+              <label>Builder Name</label>
+              <input
+                type="text"
+                name="builder"
+                value={formData.builder}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  // Allow only letters and spaces
+                  value = value.replace(/[^a-zA-Z\s]/g, "");
+                  setFormData({ ...formData, builder: value });
+                }}
+                placeholder="Enter builder name"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter full address"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Price From (₹ Cr)</label>
+              <input
+                type="number"
+                name="priceFrom"
+                value={formData.priceFrom}
+                onChange={handleChange}
+                placeholder="e.g., 2.02"
+                step="0.01"
+                min="0"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Price To (₹ Cr)</label>
+              <input
+                type="number"
+                name="priceTo"
+                value={formData.priceTo}
+                onChange={handleChange}
+                placeholder="e.g., 2.52"
+                step="0.01"
+                min="0"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Project Size in Acre</label>
+              <input
+                id="productSize"
+                type="text"
+                name="projectSize"
+                value={formData.projectSize || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length > 3) value = value.slice(0, 3);
+                  setFormData({ ...formData, projectSize: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter project size"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Units</label>
+              <input
+                id="totalUnits"
+                type="text"
+                name="totalUnits"
+                value={formData.totalUnits || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, ""); // allow only digits
+                  if (value.length > 4) value = value.slice(0, 4); // limit to 4 digits
+                  setFormData({ ...formData, totalUnits: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter total units"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Towers</label>
+              <input
+                id="totalTowers"
+                type="text"
+                name="totalTowers"
+                value={formData.totalTowers || ""}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/\D/g, "");
+                  if (value.length > 3) value = value.slice(0, 3);
+                  setFormData({ ...formData, totalTowers: value });
+                }}
+                inputMode="numeric"
+                placeholder="Enter total towers"
+              />
+            </div>
+
+            <div className="form-group toggle-group">
+              <div className="toggle-description">
+                <label className="toggle-label">Approved By RERA </label>
+                <div
+                  className={`toggle-switch ${formData.reraApproved ? "active" : ""}`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      reraApproved: !prev.reraApproved,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div>
+                <div className="toggle-description">
+                <label className="toggle-label">Ready to Move In</label>
+                <div
+                  className={`toggle-switch ${formData.readyToMove ? "active" : ""}`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      readyToMove: !prev.readyToMove,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div>
+            </div>
+            {/* <div className="form-group toggle-group">
+             
+            </div> */}
+
+            {!formData.readyToMove && (
+              <div className="form-group">
+              <label>Possession Year</label>
+              <select
+                name="possessionYear"
+                value={formData.possessionYear || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, possessionYear: e.target.value })
+                }
+              >
+                <option value="">Select Year</option>
+                {Array.from({ length: 70 }, (_, i) => {
+                  const year = new Date().getFullYear() + i; // current + next 70 years
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+
+              {errors.possessionYear && (
+                <span className="error">{errors.possessionYear}</span>
+              )}
+              </div>
+            )}
+
+            {formData.readyToMove && (
+              <div className="form-group">
+                <label>Launched Year</label>
+                <select
+                  name="launchedYear"
+                  value={formData.launchedYear || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, launchedYear: e.target.value })
+                  }
+                >
+                  <option value="">Select Year</option>
+                  {Array.from({ length: 50 }, (_, i) => {
+                    const year = new Date().getFullYear() - i; // Last 50 years
+                    return (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.launchedYear && <span className="error">{errors.launchedYear}</span>}
+              </div>
+            )}
+
+
+            {/* <div className="form-group">
+              <label>Unit Types</label>
+              <div className="unit-types-container">
+                <input
+                  type="text"
+                  value={currentUnitType}
+                  onChange={(e) => setCurrentUnitType(e.target.value)}
+                  placeholder="Add unit type"
+                />
+                <button
+                  type="button"
+                  onClick={handleUnitTypeAdd}
+                  className="add-unit-type-btn"
+                >
+                  Add
+                </button>
+              </div>
+              <div className="unit-types-list">
+                {formData.unitTypes?.map((type) => (
+                  <div key={type} className="unit-type-tag">
+                    {type}
+                    <button
+                      type="button"
+                      onClick={() => handleUnitTypeRemove(type)}
+                      className="remove-unit-type-btn"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div> */}
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const EditAbout = ({ data, onClose, onSave }) => {
+  const [formData, setFormData] = useState(data);
+  const [currentUnitType, setCurrentUnitType] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleUnitTypeAdd = () => {
+    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
+      setFormData((prev) => ({
+        ...prev,
+        unitTypes: [...prev.unitTypes, currentUnitType],
+      }));
+      setCurrentUnitType("");
+    }
+  };
+
+  const handleUnitTypeRemove = (typeToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Edit Society Details</h2>
+        <form onSubmit={handleSubmit}>
+          {/* <div className="form-grid">
+            <div className="form-group">
+              <label>Project Size in Acre</label>
+              <input
+                type="number"
+                name="projectSize"
+                value={formData.projectSize}
+                onChange={handleChange}
+                placeholder="Enter project size in Acres"
+                min="0"
+              />
+            </div>
+            <div className="form-group">
+              <label>Total Units</label>
+              <input
+                type="number"
+                name="totalUnits"
+                value={formData.totalUnits}
+                onChange={handleChange}
+                placeholder="Enter total units"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Total Towers</label>
+              <input
+                type="number"
+                name="totalTowers"
+                value={formData.totalTowers}
+                onChange={handleChange}
+                placeholder="Enter number of towers"
+                min="0"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Unit Types</label>
+              <div className="unit-types-input">
+                <input
+                  type="text"
+                  value={currentUnitType}
+                  onChange={(e) => setCurrentUnitType(e.target.value)}
+                  placeholder="e.g. 2 BHK, 3BHK, etc."
+                />
+                <button
+                  type="button"
+                  className="add-unit-btn"
+                  onClick={handleUnitTypeAdd}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="unit-tags">
+                {formData.unitTypes.map((type) => (
+                  <span key={type} className="unit-tag">
+                    {type}
+                    <button
+                      type="button"
+                      onClick={() => handleUnitTypeRemove(type)}
+                      className="remove-tag"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>
+                <input
+                  type="checkbox"
+                  name="readyToMove"
+                  checked={formData.readyToMove}
+                  onChange={handleChange}
+                />
+                Ready to Move
+              </label>
+            </div>
+
+            {!formData.readyToMove && (
+              <div className="form-group">
+                <label>Possession Date</label>
+                <input
+                  type="date"
+                  name="possessionDate"
+                  value={formData.possessionDate}
+                  onChange={handleChange}
+                />
+              </div>
+            )} */}
+
+            {/* Description field moved to full width at the end */}
+            <div className="form-group full-width">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter society description"
+                rows="5"
+              />
+            </div>
+          {/* </div> */}
+
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const EditRates = ({ data, onClose, onSave }) => {
+  const [formData, setFormData] = useState(data);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const numValue = parseFloat(value) || 0;
+    
+    // Clear error when user makes changes
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: numValue,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    const maxValues = {
+      electricityRateAuthority: 99,
+      electricityRatePowerBackup: 99,
+      waterCharges: 99,
+      commonAreaMaintenance: 99,
+      commonAreaElectricity: 99,
+      clubCharges: 9999
+    };
+
+    Object.keys(maxValues).forEach(field => {
+      if (formData[field] > maxValues[field]) {
+        newErrors[field] = `Value cannot exceed ${maxValues[field]}`;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      onSave(formData);
+    }
+  };
+
+  return (
+    <div className="edit-modal">
+      <div className="modal-content">
+        <h2>Edit Society Rates</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              <label>Electricity Rate (Authority)</label>
+              <input
+                type="number"
+                name="electricityRateAuthority"
+                value={formData.electricityRateAuthority || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="99"
+                step="0.01"
+              />
+              {errors.electricityRateAuthority && (
+                <span className="error">{errors.electricityRateAuthority}</span>
+              )}
+              <p className="rate-description">₹ per unit</p>
+            </div>
+
+            <div className="form-group">
+              <label>Electricity Rate (Power Backup)</label>
+              <input
+                type="number"
+                name="electricityRatePowerBackup"
+                value={formData.electricityRatePowerBackup || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="99"
+                step="0.01"
+              />
+              {errors.electricityRatePowerBackup && (
+                <span className="error">{errors.electricityRatePowerBackup}</span>
+              )}
+              <p className="rate-description">₹ per unit</p>
+            </div>
+
+            <div className="form-group">
+              <label>Water Charges</label>
+              <input
+                type="number"
+                name="waterCharges"
+                value={formData.waterCharges || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="99"
+                step="0.01"
+              />
+              {errors.waterCharges && (
+                <span className="error">{errors.waterCharges}</span>
+              )}
+              <p className="rate-description">₹ per 1000L</p>
+            </div>
+
+            <div className="form-group">
+              <label>Common Area Maintenance</label>
+              <input
+                type="number"
+                name="commonAreaMaintenance"
+                value={formData.commonAreaMaintenance || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="99"
+                step="0.01"
+              />
+              {errors.commonAreaMaintenance && (
+                <span className="error">{errors.commonAreaMaintenance}</span>
+              )}
+              <p className="rate-description">₹ per sq.ft/month</p>
+            </div>
+
+            <div className="form-group">
+              <label>Common Area Electricity</label>
+              <input
+                type="number"
+                name="commonAreaElectricity"
+                value={formData.commonAreaElectricity || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="99"
+                step="0.01"
+              />
+              {errors.commonAreaElectricity && (
+                <span className="error">{errors.commonAreaElectricity}</span>
+              )}
+              <p className="rate-description">₹ per sq.ft/month</p>
+            </div>
+
+            <div className="form-group">
+              <label>Club Charges</label>
+              <input
+                type="number"
+                name="clubCharges"
+                value={formData.clubCharges || ''}
+                onChange={handleChange}
+                placeholder="Enter rate"
+                min="0"
+                max="9999"
+                step="1"
+              />
+              {errors.clubCharges && (
+                <span className="error">{errors.clubCharges}</span>
+              )}
+              <p className="rate-description">₹ per month</p>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
 
 
 const SocietyDetails = ( { country, state, city, locality, societyId }) => {
@@ -4570,134 +3976,337 @@ const PropertiesSection = ({ societyName }) => {
   );
 };
 
-const amenitiesData = {
-  club: [
-    {
-      title: "Grand Clubhouse",
-      image: "/assets/img/society/hero1.jpg",
-      description: "Premium clubhouse with lounge and event spaces",
-    },
-    {
-      title: "Banquet Hall",
-      image: "/assets/img/society/hero2.jpg",
-      description: "Spacious hall for celebrations and gatherings",
-    },
-    {
-      title: "Library",
-      image: "/assets/img/society/hero3.jpg",
-      description: "Quiet reading space with extensive collection",
-    },
-    {
-      title: "Business Center",
-      image: "/assets/img/society/hero4.jpg",
-      description: "Professional workspace for residents",
-    },
+const StickyTabBar = () => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 350); // Change threshold if needed
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const sections = [
+    "Overview",
+    "Available Properties",
+    "Amenities",
+    "About Society",
+    "Nearby Locations",
+    "Units-Floor Plans",
+    "Things to Know",
+    "Photo Gallery",
+    "Society Videos",
+    "About Developer",
+  ];
+
+  return (
+    <div className={`${styles.tabContainer} ${isSticky ? styles.sticky : ""}`}>
+      {sections.map((section, idx) => (
+        <a
+          href={`#${section.replace(/\s+/g, "-")}`} // remove extra backslashes
+          key={idx}
+          className={styles.tabLink}
+        >
+          {section}
+        </a>
+      ))}
+      {/* <span className={styles.arrow}>&gt;</span> */}
+    </div>
+  );
+};
+
+const allAmenitiesByCategory = {
+  Club: [
+    { name: "Club House", icon: "FaRegBuilding", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_club%20house_.jpg?alt=media&token=1b1980a3-ade2-4cdd-b99e-7bfe18b50526" },
+    { name: "Steam Bath Room", icon: "FaShower", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_steam%20bathroom_.jpg?alt=media&token=5272eaa9-4e88-403e-af46-184d975892d8" },
+    { name: "Toddler Pool", icon: "FaSwimmingPool", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2Ftoddler%20pool.jpg?alt=media&token=64500230-007b-42dd-bd88-c1bf6406e88b" },
+    { name: "Sauna Room", icon: "FaShower", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_sauna%20room_.jpg?alt=media&token=71a02f91-c3ab-48d0-b503-890d0ae03688" },
+    { name: "Swimming Pool (Indoor)", icon: "FaSwimmingPool", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_swimming%20pool%20indoor_.jpg?alt=media&token=897710a3-1ec3-4f20-828d-7d11bd8a4d3b" },
+    { name: "Swimming Pool (Outdoor)", icon: "FaSwimmingPool", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F__Swimming__pooL%20outdoor.jpg?alt=media&token=48b5fcbb-ad0d-4359-abf3-769c78d092f0" },
+    { name: "Card Room", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_card_room.jpg?alt=media&token=5b993d9d-4b4b-4563-b1e4-99890f78db15" },
+    { name: "Party Room Small", icon: "MdMeetingRoom", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_party%20room%20small_.jpg?alt=media&token=aa257fad-9ba5-4e16-9648-7f9ddcc85b11" },
+    { name: "Party Room Big", icon: "MdMeetingRoom", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_party_room_big.jpg?alt=media&token=27a02f5f-bffa-4166-8f24-1bab0fd72a9c" },
+    { name: "Sun Deck", icon: "FaTree", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F__sun_deck.jpg?alt=media&token=33c347ce-278d-4745-bb94-5bb3284a0295" },
+    { name: "Library", icon: "BsFileEarmarkText", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_library_.jpg?alt=media&token=65880d83-4796-4f81-a767-4bffc690c2cc" },
+    { name: "Roof Deck Lounge", icon: "FaRegBuilding", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_roof%20deck%20lounge_.jpg?alt=media&token=914b20fa-ca18-484b-9959-b5155da06664"},
+    { name: "Pool Deck Area", icon: "FaSwimmingPool", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_pool%20deck%20area_.jpg?alt=media&token=2dff684b-ac0e-409d-96b2-6383a5862ad9"},
+    { name: "Spa Massage Room", icon: "FaShower", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_spa%20message%20room_.jpg?alt=media&token=5a4afe25-2491-431b-81b4-e71f978a1b15" },
+    { name: "Kids Pool", icon: "FaRegBuilding", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_kids_pool.jpg?alt=media&token=282b8a5a-5201-4964-808c-a936765e5044" },
+    { name: "Heated Lap Pool", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FclubAmenities%2F_heated%20lap%20pool_.jpg?alt=media&token=8024eccc-b6e5-4012-a5d3-cc5d3f6ed9ee"},
+    // { name: "BBQ Area", icon: "FaRegBuilding" },
+    // { name: "Multi Utility Store", icon: "FaRegBuilding" },
+    // { name: "Bar", icon: "FaRegBuilding" },
+    // { name: "Jacuzzi Spa", icon: "FaSwimmingPool" },
   ],
-  sports: [
-    {
-      title: "Swimming Pool",
-      image: "/assets/img/society/hero5.jpg",
-      description: "Olympic-size swimming pool with deck area",
-    },
-    {
-      title: "Fitness Center",
-      image: "/assets/img/society/hero5.jpg",
-      description: "State-of-the-art gym with latest equipment",
-    },
-    {
-      title: "Tennis Court",
-      image: "/assets/img/society/hero1.jpg",
-      description: "Professional tennis court with night lighting",
-    },
-    {
-      title: "Yoga Studio",
-      image: "/assets/img/society/hero2.jpg",
-      description: "Serene space for yoga and meditation",
-    },
+  "Sports & Fitness": [
+    { name: "Cycle Track", icon: "FaWalking", link:"https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FCycle-Track.jpg?alt=media&token=f37783fa-23cd-42fb-b45d-0e7215930f99" },
+    { name: "Dance Room", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FDance-Room.jpg?alt=media&token=06f6763b-eadd-457a-8bea-dd664a7f1ee4" },
+    { name: "Garden Gym", icon: "FaDumbbell", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FGarden-Gymasium.jpg?alt=media&token=28c5ed0e-22e4-45f9-b57c-f4f500c6e4da" },
+    { name: "Gymnesium", icon: "FaDumbbell", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FGymnesium.jpg?alt=media&token=e2c19c53-5be4-4065-89bd-daca84e93f98" },
+    { name: "Health Club", icon: "FaPrayingHands", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FHealth-Club.jpg?alt=media&token=e1647b43-ccd2-41d6-aa77-296111385ef3" },
+    { name: "Jogging Track", icon: "FaWalking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FJogging-Track.jpg?alt=media&token=e5703af6-dce3-48c7-86e9-84a2c0f180c7" },
+    { name: "Meditation", icon: "FaPrayingHands", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FMeditation.jpg?alt=media&token=ab26f0ab-05da-47b0-a88d-b1fc3dc1b985" },
+    { name: "Yoga Deck", icon: "FaPrayingHands", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FYoga-Deck.jpg?alt=media&token=feca9864-50bb-46d2-9d1a-00b25e4b9937" },
+    { name: "Yoga Room", icon: "FaPrayingHands", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FfitnessFreak%2FYoga-Room.jpg?alt=media&token=58c4c00c-1c1e-4a11-b0aa-049c2f4e8c0c" },
+    { name: "Basket Ball", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Basket%20ball_.jpg?alt=media&token=b7fa719f-29d1-4353-9d02-c8872bac0ad8" },
+    { name: "Billiards", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Billiards_.jpg?alt=media&token=382a7221-6260-4778-a757-cbd1479125f4" },
+    { name: "Squash Court", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Squash%20court_.jpg?alt=media&token=4542a683-2569-48e3-8422-f4d9d43600be" },
+    { name: "Cricket Pitch", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Cricket%20pitch_.jpg?alt=media&token=baeabef1-b809-4f4a-b663-892d3987fb6a" },
+    { name: "Hourseback Riding", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_horseback%20riding_.jpg?alt=media&token=5eb87375-e090-4e10-bdf5-741a3e0cef31" },
+    { name: "Volleyball Court", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_volleyball%20court_.jpg?alt=media&token=75c4964c-32f0-4211-92b5-1f6c53c5657f" },
+    { name: "Badminton (Indoor)", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_badminton%20court%20indoor_.jpg?alt=media&token=ab98331f-bc9d-4076-a7f8-aba59be2d089" },
+    { name: "Badminton (Outdoor)", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_badminton%20outdoor_.jpg?alt=media&token=0569318e-d8d1-483c-aa20-3858834bbc74" },
+    { name: "Football Ground", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_football%20ground_.jpg?alt=media&token=21bcfd20-d98b-42b5-bd95-30ecc12cf103" },
+    { name: "Golf Course", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Golf_course.jpg?alt=media&token=848ca032-1c01-496f-ab14-754789cb250a" },
+    { name: "Skating Track", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_skating%20rink_.jpg?alt=media&token=7ddd3802-36e9-4e59-9b83-9460599f24bb" },
+    { name: "Tennis Court", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Tennis%20court_.jpg?alt=media&token=96d28ec9-5ea5-41c5-a164-b2c6f9a53e89" },
+    { name: "Table Tennis", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Table%20tennis_.jpg?alt=media&token=b6889230-e307-479d-9619-1a009b158089" },
+    { name: "Bowling Alley", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_Bowling%20alley_.jpg?alt=media&token=515726d7-444e-4173-842f-2aeb3e91c379" },
+    { name: "Pool Table", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsportsLover%2F_pool%20table_.jpg?alt=media&token=a36b6b5e-8776-4d35-b5e8-9c4474e67bcf" },
+    // { name: "Skating Ring", icon: "FaGamepad", link: "" },
+    // { name: "Horsebacking Ride", icon: "FaRegBuilding", link: "" },
+    // { name: "Gymnasium", icon: "FaDumbbell", link: "" },
+    // { name: "Cricket Ground", icon: "FaRegBuilding", link: "" },
+    // { name: "Health Club", icon: "FaDumbbell", link: "" },
   ],
-  children: [
-    {
-      title: "Kids Play Area",
-      image: "/assets/img/society/hero3.jpg",
-      description: "Safe and fun playground for children",
-    },
-    {
-      title: "Daycare Center",
-      image: "/assets/img/society/hero4.jpg",
-      description: "Professional childcare facility",
-    },
-    {
-      title: "Activity Room",
-      image: "/assets/img/society/hero5.jpg",
-      description: "Indoor activities and learning space",
-    },
-    {
-      title: "Mini Theater",
-      image: "/assets/img/society/hero1.jpg",
-      description: "Entertainment space for kids and families",
-    },
+  "For Children": [
+    { name: "Creche&daycare", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren10_Creche%26daycare.jpg?alt=media&token=cd00649a-7ea6-4f63-a516-997def8b1345" },
+    { name: "Kids Pool", icon: "FaSwimmingPool", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren1_kidsPool.jpg?alt=media&token=51c65118-b671-462e-9a46-e92052866f6e" },
+    { name: "Toodler Pool", icon: "FaSwimmingPool", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren4_ToodlerPool.jpg?alt=media&token=24fc23a9-bb69-411d-aee1-9181baa39f09" },
+    { name: "Heated Lap Pool", icon: "FaSwimmingPool", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren5_HeatedLapPool.jpg?alt=media&token=e46257de-16b4-4080-b35d-55ef185448a1" },
+    { name: "Children Play Area (Indoor)", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren2_ChildrenPlayArea(Indoor).jpg?alt=media&token=60e3fd23-edad-4c82-b382-4aa09b2a2533" },
+    { name: "Children Play Area (Outdoor)", icon: "FaGamepad", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren3_ChildrenPlayArea(Outdoor).jpg?alt=media&token=77692755-1120-4228-ad27-0cc90a5ec131" },
+    { name: "Miniature Golf", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren9_MiniatureGolf.jpg?alt=media&token=b313d3fd-ef77-41cd-bf0b-a5e73ab22987" },
+    { name: "Play School", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren6_PlaySchool.jpg?alt=media&token=14ee1e35-8396-4d9a-bfd3-dbbd621e3999" },
+    { name: "Pre-Primary School", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren7_PrePrimarySchool.jpg?alt=media&token=c6f059dc-949a-4b1d-94db-9a3d4dfccaab" },
+    { name: "Primary School", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FforChildren%2FForChildren8_PrimarySchool.jpg?alt=media&token=d96c069d-1222-4d57-8ea8-240ee461adc2" },
+    // { name: "Dance Room", icon: "FaRegBuilding", link: "" },
+    // { name: "Yoga Deck", icon: "FaPrayingHands", link: "" },
+    // { name: "Horseback Riding", icon: "FaRegBuilding", link: "" },
+    // { name: "Creche and daycare", icon: "FaRegBuilding", link: "" },
   ],
-  security: [
-    {
-      title: "24/7 Security",
-      image: "/assets/img/society/hero2.jpg",
-      description: "Round-the-clock security personnel",
-    },
-    {
-      title: "CCTV Surveillance",
-      image: "/assets/img/society/hero3.jpg",
-      description: "Complete CCTV coverage of premises",
-    },
-    {
-      title: "Access Control",
-      image: "/assets/img/society/hero4.jpg",
-      description: "Smart card access for residents",
-    },
-    {
-      title: "Fire Safety",
-      image: "/assets/img/society/hero5.jpg",
-      description: "Advanced fire detection and safety systems",
-    },
+  "Safety & Security": [
+    { name: "cctv-in Common Area", icon: "FaVideo", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity6_CCTVincommonarea.jpg?alt=media&token=d0359d0f-9bf1-4bc7-a198-0e5afc29cbbc" },
+    { name: "Fire Fighting System", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity4_FireFightingSystems.jpg?alt=media&token=85a49c24-b5db-478d-9837-53f992280f21" },
+    { name: "Intercom", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity5_Intercom.jpg?alt=media&token=ed590729-74ae-4884-87e2-eab89ea45356" },
+    { name: "PNG (Pipeline gas)", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity7_PipedNaturalGas(PNG).jpg?alt=media&token=6c6712a8-5e23-4e00-9f15-6c097caa1c48" },
+    { name: "Security (3 tier)", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity1_Security3-Tier.jpg?alt=media&token=b7ad650b-8b79-427f-b4ad-82dd27fc93c2" },
+    { name: "Security (Roaming)", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity3_RoamingGuardSecurity.jpg?alt=media&token=86beb0ea-9882-4ae6-9177-61b027715b97" },
+    { name: "Security (Single Guard)", icon: "FaUserShield", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FsafetySecurity%2FSafetyandSecurity2_.SingleGuardSecurity.jpg?alt=media&token=f43ee078-9ae6-4aa3-8ea0-f956920ac4a2" },
+
   ],
-  general: [
-    {
-      title: "Landscaped Gardens",
-      image: "/assets/img/society/hero1.jpg",
-      description: "Beautifully maintained green spaces",
-    },
-    {
-      title: "Power Backup",
-      image: "/assets/img/society/hero3.jpg",
-      description: "100% power backup for all common areas",
-    },
-    {
-      title: "Water Treatment",
-      image: "/assets/img/society/hero1.jpg",
-      description: "Advanced water purification system",
-    },
-    {
-      title: "Waste Management",
-      image: "/assets/img/society/hero2.jpg",
-      description: "Eco-friendly waste processing",
-    },
+  "General Amenities": [
+    // { name: "Central Garden Atrium", icon: "FaTree", link: "" },
+    // { name: "Outdoor Party Area", icon: "FaRegBuilding", link: "" },
+    // { name: "Cafeteria", icon: "FaRegBuilding", link: "" },
+    // { name: "Laundry Service", icon: "FaRegBuilding", link: "" },
+    // { name: "Convenience Store", icon: "FaRegBuilding", link: "" },
+    // { name: "Saloon", icon: "FaRegBuilding", link: "" },
+    // { name: "Concierge", icon: "FaRegBuilding", link: "" },
+    // { name: "Lounge Area", icon: "FaRegBuilding", link: "" },
+    // { name: "Fountain", icon: "FaRegBuilding", link: "" },
+    // { name: "Sky Garden", icon: "FaTree", link: "" },
+    // { name: "Conference Room", icon: "MdMeetingRoom", link: "" },
+    // { name: "Meeting Room", icon: "MdMeetingRoom", link: "" },
+    // { name: "Medical Store", icon: "FaRegBuilding", link: "" },
+    // { name: "Sky Lounge", icon: "FaRegBuilding", link: "" },
+    // { name: "Extended Sky Patios", icon: "FaRegBuilding", link: "" },
+    // { name: "Mini Theater", icon: "FaRegBuilding", link: "" },
+    // { name: "Vegetable Shop", icon: "FaRegBuilding", link: "" },
+    // { name: "Gazebos", icon: "FaRegBuilding", link: "" },
+    // { name: "Restaurant", icon: "FaRegBuilding", link: "" },
+    { name: "24 Hour Water Supply", icon: "FaShower", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FwaterSupply.jpg?alt=media&token=67ad62ff-e007-46f5-8a9e-2972060711b9" },
+    { name: "Car Parking (Basement)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FBasementCarParking.jpg?alt=media&token=e0b8e202-7dbe-4ca2-873c-3386250a55e0" },
+    { name: "Car Parking (Under Shade)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FStiltCarParking.jpg?alt=media&token=25db3184-9ab1-4f96-99a1-0cc5c8c9b8ea" },
+    { name: "Car Parking (For Visitors)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FStiltCarParking.jpg?alt=media&token=25db3184-9ab1-4f96-99a1-0cc5c8c9b8ea" },
+    { name: "Car Parking (Open)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FOpenCarParking.jpg?alt=media&token=3323683b-7bc2-469b-8c0e-7295199e667b" },
+    { name: "Designated Pet Area", icon: "FaTree", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FDesignatedPetArea.jpg?alt=media&token=85e67d62-0e89-41cb-a378-6ebcc6cd4f9b" },
+    { name: "Gardens", icon: "FaTree", link: "" },
+    { name: "Rain Water Harvesting", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FRainWaterHarvesting.jpg?alt=media&token=f526e87c-0042-49a8-8873-831d2ad4f6e8" },
+    { name: "Lifts", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FLift.jpg?alt=media&token=a7b6d8d1-8986-4b05-9a1c-a51614a45d0e" },
+    { name: "High Speed Lifts", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FHighSpeedLifts.jpg?alt=media&token=3e115c3f-34a0-4aaa-b901-6d90acd421b1" },
+    { name: "High Speed Elevator", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FHighSpeedElevators.jpg?alt=media&token=3335c0bb-0bd4-4904-8c30-8720f1450780" },
+    { name: "Landscaped Gardens", icon: "FaTree", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FLandscapeGardens.jpg?alt=media&token=c9d525cf-51d1-43ac-8a39-b01bf4ea9147" },
+    { name: "Rainwater Harvesting", icon: "FaShower", link: "" },
+    { name: "Power Back (Full)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2F100PowerBackUp.jpg?alt=media&token=a3cb33e4-26a8-4abe-a2df-e13e17fc539c" },
+    { name: "Power Backup (Partial)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2F80PowerBackUp.jpg?alt=media&token=4c0b715c-adc7-4d2d-a81d-069737e93d88" },
+    { name: "Power Back (Lift Only)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FPowerBackUpLift.jpg?alt=media&token=094f9683-10cd-4df3-b3f3-1cf85b60919b" },
+
   ],
 };
 
-const categories = [
-  { key: "club", label: "Club" },
-  { key: "sports", label: "Sports & Fitness" },
-  { key: "children", label: "For Children" },
-  { key: "security", label: "Safety & Security" },
-  { key: "general", label: "General Amenities" },
-];
+const iconComponents = {
+  FaRegBuilding: <FaRegBuilding />,
+  FaVideo: <FaVideo />,
+  FaWalking: <FaWalking />,
+  FaBolt: <FaBolt />,
+  FaSwimmingPool: <FaSwimmingPool />,
+  FaUserShield: <FaUserShield />,
+  FaTree: <FaTree />,
+  FaParking: <FaParking />,
+  FaDumbbell: <FaDumbbell />,
+  FaGamepad: <FaGamepad />,
+  FaShower: <FaShower />,
+  FaPrayingHands: <FaPrayingHands />,
+  FaBed: <FaBed />,
+  MdElevator: <MdElevator />,
+  MdMeetingRoom: <MdMeetingRoom />,
+  BsFileEarmarkText: <BsFileEarmarkText />,
+  FaPlus: <FaPlus />,
+  FaSearch: <FaSearch />,
+};
 
-const NewAmenitiesSection = () => {
-  const [activeCategory, setActiveCategory] = useState("club");
+const AmenitiesSection = ({ societyId }) => {
+  const { user } = useAuthContext();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAmenities, setSelectedAmenities] = useState({});
+  const [tempSelected, setTempSelected] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("Club");
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Fetch amenities from Firebase
+  useEffect(() => {
+    const fetchAmenities = async () => {
+      try {
+        const doc = await projectFirestore
+          .collection("m_societies")
+          .doc(societyId)
+          .collection("society_information")
+          .doc("Amenities")
+          .get();
+
+        if (doc.exists) {
+          setSelectedAmenities(doc.data() || {});
+          // Initialize tempSelected with all selected amenities from all categories
+          const allSelected = Object.values(doc.data() || {}).flat();
+          setTempSelected(allSelected.map((a) => a.name));
+        } else {
+          // Initialize with empty categories
+          const initialAmenities = {};
+          Object.keys(allAmenitiesByCategory).forEach((category) => {
+            initialAmenities[category] = [];
+          });
+          setSelectedAmenities(initialAmenities);
+          setTempSelected([]);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAmenities();
+  }, [societyId]);
+
+  // Save amenities to Firebase
+  const saveAmenitiesToFirebase = async (amenities) => {
+    try {
+      if (!societyId) throw new Error("Society ID is missing");
+
+      // Structure the data by category
+      const amenitiesByCategory = {};
+      Object.keys(allAmenitiesByCategory).forEach((category) => {
+        amenitiesByCategory[category] = allAmenitiesByCategory[category]
+          .filter((amenity) => amenities.includes(amenity.name))
+          .map((amenity) => ({
+            ...amenity,
+            highlight:
+              selectedAmenities[category]?.some(
+                (a) => a.name === amenity.name && a.highlight
+              ) || false,
+          }));
+      });
+
+      await projectFirestore
+        .collection("m_societies")
+        .doc(societyId)
+        .collection("society_information")
+        .doc("Amenities")
+        .set(amenitiesByCategory, { merge: true });
+
+      console.log("Amenities saved successfully");
+      return true;
+    } catch (err) {
+      console.error("Firebase save error:", err);
+      alert("Failed to save amenities. Please try again.");
+      return false;
+    }
+  };
+
+  const handleAddAmenities = () => {
+    setIsEditing(true);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setIsEditing(false);
+  };
+
+  const handleCheckboxChange = (amenityName) => {
+    setTempSelected((prev) =>
+      prev.includes(amenityName)
+        ? prev.filter((name) => name !== amenityName)
+        : [...prev, amenityName]
+    );
+  };
+
+  const handleSaveAmenities = async () => {
+    await saveAmenitiesToFirebase(tempSelected);
+
+    // Update local state with the new selections
+    const updatedAmenities = {};
+    Object.keys(allAmenitiesByCategory).forEach((category) => {
+      updatedAmenities[category] = allAmenitiesByCategory[category]
+        .filter((amenity) => tempSelected.includes(amenity.name))
+        .map((amenity) => ({
+          ...amenity,
+          highlight:
+            selectedAmenities[category]?.some(
+              (a) => a.name === amenity.name && a.highlight
+            ) || false,
+        }));
+    });
+
+    setSelectedAmenities(updatedAmenities);
+    setShowModal(false);
+    setIsEditing(false);
+  };
+
+  const toggleHighlight = async (amenityName, category) => {
+    const updatedAmenities = { ...selectedAmenities };
+    updatedAmenities[category] = updatedAmenities[category].map((amenity) =>
+      amenity.name === amenityName
+        ? { ...amenity, highlight: !amenity.highlight }
+        : amenity
+    );
+
+    setSelectedAmenities(updatedAmenities);
+
+    // Save to Firebase
+    await projectFirestore
+      .collection("m_societies")
+      .doc(societyId)
+      .collection("society_information")
+      .doc("Amenities")
+      .set(updatedAmenities, { merge: true });
+  };
+
+  const filteredAmenities = allAmenitiesByCategory[activeCategory].filter(
+    (amenity) => amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading)
+    return <div className="loading-spinner">Loading amenities...</div>;
 
   return (
-    <section className="amenities_section">
+    <div className="amenities-section">
       <div className="container">
-        <div className="text-center mb-12">
+      <div className="text-center mb-12">
           <h2 className="section-title">World-Class Amenities</h2>
           <p className="section-description">
             Experience luxury living with our comprehensive range of premium
@@ -4705,47 +4314,156 @@ const NewAmenitiesSection = () => {
           </p>
         </div>
 
-        {/* Category Tabs */}
-        <div className="category-tabs">
-          {categories.map((category) => (
-            <button
-              key={category.key}
-              className={`category-button ${
-                activeCategory === category.key ? "category-button--active" : ""
-              }`}
-              onClick={() => setActiveCategory(category.key)}
-            >
-              {category.label}
-            </button>
-          ))}
-        </div>
+      {/* Navigation Bar for Categories */}
+      <div className="category-tabs">
+        {Object.keys(allAmenitiesByCategory).map((category) => (
+          <button
+            key={category}
+            className={`category-button ${
+              activeCategory === category ? "active" : ""
+            }`}
+            onClick={() => setActiveCategory(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
 
-        {/* Amenities Grid */}
-        <div className="amenities-grid">
-          {(amenitiesData[activeCategory] || []).map((amenity, index) => (
-            <div key={index} className="amenity-card">
+      <div className="amenities-grid">
+        {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+        <div className="add-amenity-card" onClick={handleAddAmenities}>
+          <div className="plus-icon">
+            <FaPlus />
+          </div>
+          <div className="label">Add Amenities</div>
+        </div>) : null }
+        {selectedAmenities[activeCategory] && selectedAmenities[activeCategory].length > 0 ? (
+        selectedAmenities[activeCategory]?.map((item, index) => (
+          <div
+            className={`amenity-card ${item.highlight ? "highlighted" : ""}`}
+            key={index}
+            // onClick={() => toggleHighlight(item.name, activeCategory)}
+          >
+            {/* {item.highlight && <div className="flag"></div>}
+            <div className="icon">
+              {iconComponents[item.icon] || <FaRegBuilding />}
+            </div>
+            <div className="label">{item.name}</div> */}
+             
               <div className="amenity-card__image-wrapper">
                 <img
-                  src={amenity.image || "/placeholder.svg"}
-                  alt={amenity.title}
+                  src={item.link || "/placeholder.svg"}
+                  alt={item.name}
                   className="amenity-card__image"
                 />
               </div>
               <div className="amenity-card__content">
-                <h3 className="amenity-card__title">{amenity.title}</h3>
-                <p className="amenity-card__description">
-                  {amenity.description}
-                </p>
+                <h3 className="amenity-card__title">{item.name}</h3>
+                {/* <p className="amenity-card__description">
+                  {item.name}
+                </p> */}
               </div>
             </div>
-          ))}
-        </div>
+          
+        )) ) : (
+           (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? null :
+        (
+        <div className="no-amenities"> <p>No data amenities available</p> </div>
+
+        )
+        )}
+        
       </div>
-    </section>
+
+      {/* <div className="amenities-footer">
+        <p className="show-more">
+          Showing {selectedAmenities[activeCategory]?.length || 0} of{" "}
+          {allAmenitiesByCategory[activeCategory].length} amenities in{" "}
+          {activeCategory}
+        </p>
+        <button className="contact-btn">Contact Builder</button>
+      </div> */}
+
+      {showModal && (
+        <div className="amenities-modal">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>
+                Select Amenities ({tempSelected.length} selected)
+                {isEditing && <span> - Editing: {activeCategory}</span>}
+              </h2>
+              <button className="close-btn" onClick={handleCloseModal}>
+                &times;
+              </button>
+            </div>
+
+            {!isEditing && (
+              <div className="amenities-categories">
+                {Object.keys(allAmenitiesByCategory).map((category) => (
+                  <button
+                    key={category}
+                    className={`category-btn ${
+                      activeCategory === category ? "active" : ""
+                    }`}
+                    onClick={() => setActiveCategory(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <div className="search-box">
+              <FaSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search amenities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="amenities-list">
+              {filteredAmenities.map((amenity) => (
+                <div className="amenity-item" key={amenity.name}>
+                  <input
+                    type="checkbox"
+                    id={`amenity-${amenity.name}`}
+                    checked={tempSelected.includes(amenity.name)}
+                    onChange={() => handleCheckboxChange(amenity.name)}
+                  />
+                  <label htmlFor={`amenity-${amenity.name}`}>
+                    <span className="amenity-icon">
+                      {iconComponents[amenity.icon] || <FaRegBuilding />}
+                    </span>
+                    {amenity.name}
+                  </label>
+                </div>
+              ))}
+              {filteredAmenities.length === 0 && (
+                <div className="no-results">No amenities found</div>
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={handleCloseModal}>
+                Cancel
+              </button>
+              <button className="save-btn" onClick={handleSaveAmenities}>
+                Save Amenities
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      </div>
+    </div>
   );
 };
 
+
 const AboutSocietySection = ({ societyId }) => {
+  const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({
     possessionDate: "",
     readyToMove: false,
@@ -4810,14 +4528,17 @@ const AboutSocietySection = ({ societyId }) => {
       setError("Failed to save changes.");
     }
   };
-
+  console.log(societyData.description)
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
   return (
+
     <section className="about-society-section">
       <div className="container">
-        <div className="about-container">
-          <h2 className="about-title">About {societyData.society}</h2>
+        {(!societyData.description == "") ? (
+          <>
+            <div className="about-container">
+              <h2 className="about-title">About {societyData.society}</h2>
 
           <p className="about-description">
             {societyData.description === "" ? (
@@ -4827,9 +4548,10 @@ const AboutSocietySection = ({ societyId }) => {
             )}
           </p>
 
+           {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
           <button className="edit-btn" onClick={() => setShowEditModal(true)}>
             <FaEdit />
-          </button>
+          </button> ): null }
         </div>
         <div className="about-society-content">
           <div className="about-card">
@@ -4903,6 +4625,23 @@ const AboutSocietySection = ({ societyId }) => {
             </div>
           </div>
         </div>
+        </>) :(
+          <>
+          <div className="about-container">
+              <h2 className="about-title">About {societyData.society}</h2>
+              </div>
+          
+            
+            {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details" onClick={() => setShowEditModal(true)}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>
+              )}
+              </>
+        )}
       </div>
       {showEditModal && (
         <EditAbout
@@ -4917,6 +4656,7 @@ const AboutSocietySection = ({ societyId }) => {
 
 const FloorPlansSection = ({ societyId }) => {
   // State for floor plans - initialize as object with array values
+  const { user } = useAuthContext();
   const [floorPlans, setFloorPlans] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [activeUnit, setActiveUnit] = useState("");
@@ -5150,14 +4890,14 @@ const FloorPlansSection = ({ societyId }) => {
             and comfort
           </p>
           
-          {!editMode && (
+          {!editMode && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
             <button 
               onClick={() => setEditMode(true)} 
               className="edit-button"
             >
               <FaEdit /> Edit
             </button>
-          )}
+          ):null}
         </div>
 
         {editMode ? (
@@ -5403,6 +5143,7 @@ const FloorPlansSection = ({ societyId }) => {
 };
 
 const SocietyRatesSection = ({ societyId }) => {
+  const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({
     electricityRateAuthority: "",
     electricityRatePowerBackup: "",
@@ -5491,117 +5232,134 @@ const SocietyRatesSection = ({ societyId }) => {
             Transparent pricing structure for all society-related services and
             amenities
           </p>
+          {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
           <button className="edit-btn" onClick={() => setShowEditModal(true)}>
             <FaEdit />
-          </button>
+          </button> ) : null }
         </div>
 
-        <div className="rates-grid">
-            <div  className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaBolt className="icon" />
-                  Electricity Rate (Authority)
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.electricityRateAuthority} per unit</p>
+        {(societyData.electricityRateAuthority && societyData.electricityRatePowerBackup && societyData.waterCharges && societyData.commonAreaMaintenance && societyData.commonAreaElectricity && societyData.clubCharges ) ? (
+          <>
+            <div className="rates-grid">
+                <div  className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaBolt className="icon" />
+                      Electricity Rate (Authority)
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.electricityRateAuthority} per unit</p>
 
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div  className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaBatteryFull className="icon" />
-                  Power Backup
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.electricityRatePowerBackup} per unit</p>
+                <div  className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaBatteryFull className="icon" />
+                      Power Backup
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.electricityRatePowerBackup} per unit</p>
 
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div  className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaTint className="icon" />
-                  Water Charges
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.waterCharges} per 1000L</p>
+                <div  className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaTint className="icon" />
+                      Water Charges
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.waterCharges} per 1000L</p>
 
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div  className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaRegBuilding className="icon" />
-                  Common Area Maintenance
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.commonAreaMaintenance} per sq.ft/month</p>
+                <div  className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaRegBuilding className="icon" />
+                      Common Area Maintenance
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.commonAreaMaintenance} per sq.ft/month</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div  className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaRegBuilding className="icon" />
-                  Common Area Electricity
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.commonAreaElectricity} per sq.ft/month</p>
+                <div  className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaRegBuilding className="icon" />
+                      Common Area Electricity
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.commonAreaElectricity} per sq.ft/month</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="rate-card">
-              <div className="card-header">
-                <h3 className="card-title">
-                  <FaRegBuilding className="icon" />
-                  Club Charges
-                </h3>
-              </div>
-              <div className="card-content">
-                <div className="rate-details">
-                  <p className="rate-value">₹{societyData.clubCharges} per month</p>
-                  {/* <p className="rate-description">Access to all club amenities</p> */}
+                <div className="rate-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <FaRegBuilding className="icon" />
+                      Club Charges
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="rate-details">
+                      <p className="rate-value">₹{societyData.clubCharges} per month</p>
+                      {/* <p className="rate-description">Access to all club amenities</p> */}
+                    </div>
+                  </div>
                 </div>
-              </div>
             </div>
-        </div>
 
-        <div className="payment-info">
-          <div className="info-card">
-            <div className="card-content">
-              <h3 className="info-title">
-                Charges Information (Last Updated on{" "}
-                {societyData.updatedAt
-                  ? new Date(societyData.updatedAt.seconds * 1000).toLocaleDateString("en-IN", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
-                  : "N/A"}
-                )
-              </h3>
-              <p className="info-text">
-                All charges are subject to applicable taxes. Monthly charges are billed in advance. Online payment options are available through our resident portal.
-              </p>
+            <div className="payment-info">
+              <div className="info-card">
+                <div className="card-content">
+                  <h3 className="info-title">
+                    Charges Information (Last Updated on{" "}
+                    {societyData.updatedAt
+                      ? new Date(societyData.updatedAt.seconds * 1000).toLocaleDateString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })
+                      : "N/A"}
+                    )
+                  </h3>
+                  <p className="info-text">
+                    All charges are subject to applicable taxes. Monthly charges are billed in advance. Online payment options are available through our resident portal.
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+        </> ) : (
+          <>
+            {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details" onClick={() => setShowEditModal(true)}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>
+              )}
+          </>
+        )}
       </div>
+
+
       {showEditModal && (
         <EditRates
           data={societyData}
@@ -5613,7 +5371,551 @@ const SocietyRatesSection = ({ societyId }) => {
   );
 };
 
+const GalleryPreview = ({ societyId, societyName, societyType }) => {
+  const [images, setImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImageIndexes, setSelectedImageIndexes] = useState([]);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const fileInputRef = useRef(null);
+
+  // Reference to the society's document in Firestore
+  const societyDocRef = doc(projectFirestore, "m_societies", societyId);
+
+  // Fetch existing images for this society from Firestore
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const docSnap = await getDoc(societyDocRef);
+        if (docSnap.exists()) {
+          const societyData = docSnap.data();
+          // Ensure we have an array of image URLs (fallback to empty array)
+          setImages(societyData.images || []);
+        } else {
+          console.log("No such document!");
+          setImages([]);
+        }
+      } catch (error) {
+        console.error("Error fetching images:", error);
+        setImages([]);
+      }
+    };
+
+    fetchImages();
+  }, [societyId]);
+
+  const handleUploadClick = () => {
+    // If there are no images, trigger file selection directly
+    if (images.length === 0) {
+      fileInputRef.current?.click();
+    } else {
+      // If there are existing images, open edit mode
+      setEditMode(true);
+      setSelectedImages([]);
+      setSelectedImageIndexes([]);
+    }
+  };
+
+  const compressImage = async (file) => {
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+      fileType: "image/jpeg",
+    };
+
+    try {
+      return await imageCompression(file, options);
+    } catch (error) {
+      console.error("Error compressing image:", error);
+      return file; // Return original if compression fails
+    }
+  };
+
+  const handleFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+
+    // Check if total images would exceed 10
+    if (images.length + selectedImages.length + files.length > 10) {
+      alert(
+        `Maximum 10 images allowed. You can add ${
+          10 - (images.length + selectedImages.length)
+        } more.`
+      );
+      return;
+    }
+
+    // Compress images before adding to selection
+    const compressedFiles = await Promise.all(
+      files.map((file) => compressImage(file))
+    );
+
+    setSelectedImages((prev) => [...prev, ...compressedFiles]);
+    
+    // If there were no existing images, automatically open edit mode
+    if (images.length === 0) {
+      setEditMode(true);
+    }
+  };
+
+  const handleSaveAll = async () => {
+    if (uploading) return;
+
+    setUploading(true);
+    setUploadProgress(0);
+
+    try {
+      const newUrls = [];
+
+      // Upload selected images sequentially
+      for (const file of selectedImages) {
+        const fileName = `${Date.now()}-${file.name}`;
+        const imageRef = ref(
+          projectStorage,
+          `society_images/${societyId}/${fileName}`
+        );
+        const uploadTask = uploadBytesResumable(imageRef, file);
+
+        const downloadURL = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              setUploadProgress(Math.round(progress));
+            },
+            (error) => reject(error),
+            async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
+          );
+        });
+
+        newUrls.push(downloadURL);
+      }
+
+      // Update Firestore document with new image URLs
+      const updatedImages = [...images, ...newUrls];
+      await updateDoc(societyDocRef, {
+        images: updatedImages,
+      });
+
+      // Update local state
+      setImages(updatedImages);
+      setSelectedImages([]);
+      setSelectedImageIndexes([]);
+      setUploadProgress(100);
+
+      setTimeout(() => {
+        setUploading(false);
+        setEditMode(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Failed to upload images. Please try again.");
+      setUploading(false);
+    }
+  };
+
+  const openImageViewer = (index) => {
+    setCurrentImageIndex(index);
+    setViewerOpen(true);
+  };
+
+  const closeImageViewer = () => {
+    setViewerOpen(false);
+  };
+
+  const goToPrevious = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleDeleteExisting = async (index) => {
+    try {
+      // Get the image URL to delete
+      const imageUrl = images[index];
+
+      // Delete from Firebase storage
+      const imageRef = ref(projectStorage, imageUrl);
+      await deleteObject(imageRef);
+
+      // Update Firestore document
+      const updatedImages = images.filter((_, i) => i !== index);
+      await updateDoc(societyDocRef, {
+        images: updatedImages,
+      });
+
+      // Update local state
+      setImages(updatedImages);
+      setSelectedImageIndexes(selectedImageIndexes.filter(i => i !== index));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+  };
+
+  const handleDeleteSelectedExisting = async () => {
+    if (selectedImageIndexes.length === 0) return;
+    
+    try {
+      // Sort in descending order to avoid index issues when deleting multiple items
+      const sortedIndexes = [...selectedImageIndexes].sort((a, b) => b - a);
+      
+      // Delete from Firebase storage
+      await Promise.all(
+        sortedIndexes.map(index => {
+          const imageUrl = images[index];
+          const imageRef = ref(projectStorage, imageUrl);
+          return deleteObject(imageRef).catch((error) => {
+            console.error("Error deleting image:", error);
+          });
+        })
+      );
+
+      // Update Firestore document
+      const updatedImages = images.filter((_, i) => !selectedImageIndexes.includes(i));
+      await updateDoc(societyDocRef, {
+        images: updatedImages,
+      });
+
+      // Update local state
+      setImages(updatedImages);
+      setSelectedImageIndexes([]);
+    } catch (error) {
+      console.error("Error deleting selected images:", error);
+    }
+  };
+
+  const handleDeleteNew = (index) => {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteSelectedNew = () => {
+    if (selectedImageIndexes.length === 0) return;
+    
+    // Sort in descending order to avoid index issues when deleting multiple items
+    const sortedIndexes = [...selectedImageIndexes].sort((a, b) => b - a);
+    
+    setSelectedImages(prev => prev.filter((_, i) => !selectedImageIndexes.includes(i)));
+    setSelectedImageIndexes([]);
+  };
+
+  const handleDeleteAll = async () => {
+    if (window.confirm("Are you sure you want to delete all images?")) {
+      try {
+        // Delete all from Firebase storage
+        await Promise.all(
+          images.map((url) => {
+            const imageRef = ref(projectStorage, url);
+            return deleteObject(imageRef).catch((error) => {
+              console.error("Error deleting image:", error);
+            });
+          })
+        );
+
+        // Update Firestore document
+        await updateDoc(societyDocRef, {
+          images: [],
+        });
+
+        // Update local state
+        setImages([]);
+        setSelectedImages([]);
+        setSelectedImageIndexes([]);
+      } catch (error) {
+        console.error("Error deleting all images:", error);
+      }
+    }
+  };
+
+  const toggleImageSelection = (index) => {
+    setSelectedImageIndexes(prev => 
+      prev.includes(index) 
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  const selectAllImages = () => {
+    const totalImages = images.length + selectedImages.length;
+    if (selectedImageIndexes.length === totalImages) {
+      // If all are selected, deselect all
+      setSelectedImageIndexes([]);
+    } else {
+      // Select all images
+      setSelectedImageIndexes(Array.from({length: totalImages}, (_, i) => i));
+    }
+  };
+
+  const renderGallery = () => {
+    if (editMode) {
+      return (
+        <div className="edit-mode-gallery">
+          <div className="edit-mode-controls">
+            <label className="add-images-btn">
+              <FaUpload /> Add Images
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleFileSelect}
+                style={{ display: "none" }}
+              />
+            </label>
+            
+            {selectedImageIndexes.length > 0 && (
+              <>
+                <button
+                  className="clear-all-btn"
+                  onClick={() => setSelectedImageIndexes([])}
+                >
+                  Clear Selection
+                </button>
+                <button
+                  className="delete-selected-btn"
+                  onClick={images.length > 0 ? handleDeleteSelectedExisting : handleDeleteSelectedNew}
+                >
+                  Delete Selected ({selectedImageIndexes.length})
+                </button>
+              </>
+            )}
+            
+            <button
+              className="select-all-btn"
+              onClick={selectAllImages}
+            >
+              {selectedImageIndexes.length === images.length + selectedImages.length ? 
+                "Deselect All" : "Select All"}
+            </button>
+            
+            <button
+              className="delete-all-btn"
+              onClick={handleDeleteAll}
+              disabled={selectedImages.length === 0 && images.length === 0}
+            >
+              Delete All
+            </button>
+            <button
+              className="save-all-btn"
+              onClick={handleSaveAll}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Save All"}
+            </button>
+            <button
+              className="cancel-btn"
+              onClick={() => setEditMode(false)}
+              disabled={uploading}
+            >
+              Cancel
+            </button>
+          </div>
+
+          <div className="selected-images-preview">
+            {images.length > 0 && (
+              <div className="existing-images-section">
+                <h4>Existing Images</h4>
+                <div className="selected-images-grid">
+                  {images.map((url, index) => (
+                    <div
+                      key={`existing-${index}`}
+                      className="selected-image-item"
+                    >
+                      <div className="image-checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={selectedImageIndexes.includes(index)}
+                          onChange={() => toggleImageSelection(index)}
+                          className="image-checkbox"
+                        />
+                      </div>
+                      <img src={url} alt={`Existing ${index}`} />
+                      <button
+                        className="delete-image-btn"
+                        onClick={() => handleDeleteExisting(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {selectedImages.length > 0 && (
+              <div className="new-images-section">
+                <h4>New Images to Upload</h4>
+                <div className="selected-images-grid">
+                  {selectedImages.map((file, index) => {
+                    const adjustedIndex = images.length + index;
+                    return (
+                      <div key={`new-${index}`} className="selected-image-item">
+                        <div className="image-checkbox-container">
+                          <input
+                            type="checkbox"
+                            checked={selectedImageIndexes.includes(adjustedIndex)}
+                            onChange={() => toggleImageSelection(adjustedIndex)}
+                            className="image-checkbox"
+                          />
+                        </div>
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Selected ${index}`}
+                        />
+                        <button
+                          className="delete-image-btn"
+                          onClick={() => handleDeleteNew(index)}
+                        >
+                          <FaTimes />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {images.length === 0 && selectedImages.length === 0 && (
+              <p className="no-images-text">No images selected</p>
+            )}
+          </div>
+
+          {uploading && (
+            <div className="upload-progress">
+              <progress value={uploadProgress} max="100" />
+              <span>Uploading... {Math.round(uploadProgress)}%</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (images.length === 0) {
+      return (
+        <div className="empty-gallery">
+          <p>No images uploaded yet</p>
+          <button className="upload-btn" onClick={handleUploadClick}>
+            <FaUpload /> Upload Images
+          </button>
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleFileSelect}
+            ref={fileInputRef}
+            style={{ display: "none" }}
+          />
+        </div>
+      );
+    }
+
+    return (
+ <div className="gallery-grid">
+        {images.length >= 1 && (
+          <div className="main-photo" onClick={() => openImageViewer(0)}>
+            <img src={images[0]} alt="Main View" />
+          </div>
+        )}
+
+        {images.length >= 2 && (
+          <div className="sub-photo" onClick={() => openImageViewer(1)}>
+            <img src={images[1]} alt="View 2" />
+          </div>
+        )}
+
+        {images.length >= 3 && (
+          <div
+            className={`sub-photo photo ${images.length === 3 ? "end" : ""}`}
+            onClick={() => openImageViewer(2)}
+          >
+            <img src={images[2]} alt="View 3" />
+          </div>
+        )}
+
+        {images.length >= 4 && (
+          <div className="sub-photo " onClick={() => openImageViewer(3)}>
+            <img src={images[3]} alt="View 4" />
+          </div>
+        )}
+
+        {images.length >= 5 && (
+          <div
+            className={`sub-photo endphoto ${
+              images.length === 5 ? "end2" : ""
+            }`}
+            onClick={() => openImageViewer(4)}
+          >
+            <img src={images[4]} alt="View 5" />
+          </div>
+        )}
+
+        {images.length > 5 && (
+          <div className="show-more" onClick={() => openImageViewer(5)}>
+            <button className="show-all-btn">
+              <MdOutlinePhotoLibrary size={20} />
+              Show all {images.length} photos
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="gallery-preview">
+      <div className="gallery-header">
+        <h2 className="gallery-title">
+          {societyName} - {societyType} Apartment
+        </h2>
+        <div className="gallery-icons">
+          {images.length > 0 && !editMode && (
+            <button
+              className="upload-btn icon"
+              title="Upload Images"
+              onClick={handleUploadClick}
+            >
+              <FaUpload />
+            </button>
+          )}
+          <FaShareAlt className="icon" title="Share" />
+          {/* <FaRegHeart className="icon" title="Save" /> */}
+        </div>
+      </div>
+
+      {renderGallery()}
+
+      {viewerOpen && (
+        <div className="image-viewer-overlay">
+          <div className="image-viewer-content">
+            <button className="close-viewer" onClick={closeImageViewer}>
+              <FaTimes />
+            </button>
+            <button className="nav-button prev" onClick={goToPrevious}>
+              <FaChevronLeft />
+            </button>
+            <img
+              src={images[currentImageIndex]}
+              alt={`Gallery ${currentImageIndex}`}
+            />
+            <button className="nav-button next" onClick={goToNext}>
+              <FaChevronRight />
+            </button>
+            <div className="image-counter">
+              {currentImageIndex + 1} / {images.length}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const MapLocationSection = ({ state, city, locality, societyId }) => {
+  const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [mapLink, setMapLink] = useState('');
@@ -5621,7 +5923,8 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   const [newLocation, setNewLocation] = useState({
     place: '',
     distance: '',
-    time: ''
+    time: '',
+    timeUnit: 'mins' // Default time unit
   });
   const [tempMapLink, setTempMapLink] = useState('');
   const [tempLocations, setTempLocations] = useState([]);
@@ -5684,11 +5987,19 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   const handleLocationChange = (e) => {
     const { name, value } = e.target;
     
-    if (name === 'distance' || name === 'time') {
+    if (name === 'distance') {
       // Only allow numbers and limit length
       const numericValue = value.replace(/\D/g, '');
-      if (name === 'distance' && numericValue.length > 3) return;
-      if (name === 'time' && numericValue.length > 2) return;
+      if (numericValue.length > 3) return;
+      
+      setNewLocation({
+        ...newLocation,
+        [name]: numericValue
+      });
+    } else if (name === 'time') {
+      // Only allow numbers and limit length
+      const numericValue = value.replace(/\D/g, '');
+      if (numericValue.length > 2) return;
       
       setNewLocation({
         ...newLocation,
@@ -5707,14 +6018,15 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
       const locationToAdd = {
         place: newLocation.place,
         distance: `${newLocation.distance} km`,
-        time: `${newLocation.time} mins`
+        time: `${newLocation.time} ${newLocation.timeUnit}`
       };
       
       setTempLocations([...tempLocations, locationToAdd]);
       setNewLocation({
         place: '',
         distance: '',
-        time: ''
+        time: '',
+        timeUnit: 'mins'
       });
     }
   };
@@ -5728,6 +6040,19 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   const handleMapLinkChange = (e) => {
     setTempMapLink(e.target.value);
   };
+
+  // Helper function to parse time value and unit from stored format
+  const parseTimeValue = (timeString) => {
+    const match = timeString.match(/(\d+)\s*(mins|hrs)/);
+    if (match) {
+      return {
+        value: match[1],
+        unit: match[2]
+      };
+    }
+    return { value: '', unit: 'mins' };
+  };
+
   const formattedState = formatStateName(state);
   const formattedCity = formatStateName(city);
   const formattedLocality = formatStateName(locality);
@@ -5741,7 +6066,7 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
             Strategically located in the heart of Whitefield with excellent
             connectivity to key destinations
           </p>
-          {!isEditing && (
+          {!isEditing && (societyData.description=="") && nearbyLocations.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
             <button className="edit-button" onClick={handleEditClick}>
               <FaEdit />Edit
             </button>
@@ -5766,63 +6091,77 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
             <div className="locations-form">
               <h3>Nearby Locations</h3>
               <div className="locations-list">
-                {tempLocations.map((location, index) => (
-                  <div key={index} className="location-item">
-                    <div className="location-info">
-                      <MapPin className="location-icon" />
-                      <input
-                        type="text"
-                        name="place"
-                        value={location.place}
-                        onChange={(e) => {
-                          const updated = [...tempLocations];
-                          updated[index].place = e.target.value;
-                          setTempLocations(updated);
-                        }}
-                      />
-                    </div>
-                    <div className="location-meta">
-                      <div className="distance-input-container">
+                {tempLocations.map((location, index) => {
+                  const timeData = parseTimeValue(location.time);
+                  return (
+                    <div key={index} className="location-item">
+                      <div className="location-info">
+                        <MapPin className="location-icon" />
                         <input
                           type="text"
-                          name="distance"
-                          value={location.distance.replace(' km', '')}
+                          name="place"
+                          value={location.place}
                           onChange={(e) => {
-                            const numericValue = e.target.value.replace(/\D/g, '');
-                            if (numericValue.length > 3) return;
                             const updated = [...tempLocations];
-                            updated[index].distance = `${numericValue} km`;
+                            updated[index].place = e.target.value;
                             setTempLocations(updated);
                           }}
-                          placeholder="Distance"
                         />
-                        
                       </div>
-                      <div className="time-input-container">
-                        <input
-                          type="text"
-                          name="time"
-                          value={location.time.replace(' mins', '')}
-                          onChange={(e) => {
-                            const numericValue = e.target.value.replace(/\D/g, '');
-                            if (numericValue.length > 2) return;
-                            const updated = [...tempLocations];
-                            updated[index].time = `${numericValue} mins`;
-                            setTempLocations(updated);
-                          }}
-                          placeholder="Time"
-                        />
-                        
+                      <div className="location-meta">
+                        <div className="distance-input-container">
+                          <input
+                            type="text"
+                            name="distance"
+                            value={location.distance.replace(' km', '')}
+                            onChange={(e) => {
+                              const numericValue = e.target.value.replace(/\D/g, '');
+                              if (numericValue.length > 3) return;
+                              const updated = [...tempLocations];
+                              updated[index].distance = `${numericValue} km`;
+                              setTempLocations(updated);
+                            }}
+                            placeholder="Distance"
+                          />
+                          <span className="unit">km</span>
+                        </div>
+                        <div className="time-input-container">
+                          <input
+                            type="text"
+                            name="time"
+                            value={timeData.value}
+                            onChange={(e) => {
+                              const numericValue = e.target.value.replace(/\D/g, '');
+                              if (numericValue.length > 2) return;
+                              const updated = [...tempLocations];
+                              updated[index].time = `${numericValue} ${timeData.unit}`;
+                              setTempLocations(updated);
+                            }}
+                            placeholder="Time"
+                          />
+                          <select
+                            value={timeData.unit}
+                            onChange={(e) => {
+                              const updated = [...tempLocations];
+                              updated[index].time = `${timeData.value} ${e.target.value}`;
+                              setTempLocations(updated);
+                            }}
+                            className="time-unit-select"
+                          >
+                            <option value="mins">mins</option>
+                            <option value="hrs">hrs</option>
+                          </select>
+                        </div>
                       </div>
+                      <button
+                        onClick={() => handleRemoveLocation(index)}
+                        className="remove-button"
+                      >
+                        ×
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleRemoveLocation(index)}
-                      className="remove-button"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="add-location-form">
@@ -5849,12 +6188,12 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                         placeholder="e.g. 1.5"
                         maxLength={3}
                       />
-                      
+                      <span className="unit">km</span>
                     </div>
                   </div>
-                  <div className="form-group">
-                    <label>Time (in mins)</label>
-                    <div className="time-input-container">
+                  <div className="form-group timeBox">
+                    <label>Time</label>
+                    
                       <input
                         type="text"
                         name="time"
@@ -5863,8 +6202,16 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                         placeholder="e.g. 10"
                         maxLength={2}
                       />
-                      
-                    </div>
+                      <select
+                        name="timeUnit"
+                        value={newLocation.timeUnit}
+                        onChange={handleLocationChange}
+                        className="time-unit-select"
+                      >
+                        <option value="mins">mins</option>
+                        <option value="hrs">hrs</option>
+                      </select>
+                    
                   </div>
                 </div>
                 <button
@@ -5887,6 +6234,7 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
             </div>
           </div>
         ) : (
+          (societyData.description=="" && nearbyLocations.length > 0) ? (
           <div className="content-grid">
             {/* Map Section */}
             <div className="map-container">
@@ -5912,7 +6260,6 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                     <p>{societyData.address}</p>
                     <p> 
         {formattedCity}, {formattedState}</p>
-                    {/* <p>Near ITPL, Whitefield, Bangalore - 560066, Karnataka</p> */}
                   </div>
                 </div>
               </div>
@@ -5946,6 +6293,14 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
               </div>
             </div>
           </div>
+                  ) : 
+                   (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details"  onClick={handleEditClick}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>) 
         )}
       </div>
     </section>
@@ -5953,6 +6308,7 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
 };
 
 const PropertyVideosSection = ({ societyId }) => {
+  const { user } = useAuthContext();
   const sliderRef = useRef(null);
   const [videos, setVideos] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -6073,12 +6429,14 @@ const PropertyVideosSection = ({ societyId }) => {
             Get an immersive experience of our residential society through these
             detailed video tours
           </p>
+           {videos.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
           <button 
             className="edit-button" 
             onClick={() => setShowForm(!showForm)}
           >
             <FaPlus /> Add Video
           </button>
+           ): null}
         </div>
 
         {showForm && (
@@ -6161,9 +6519,13 @@ const PropertyVideosSection = ({ societyId }) => {
                 </div>
               ))
             ) : (
-              <div className="empty-state">
-                <p>No videos added yet</p>
-              </div>
+              (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details"  onClick={() => setShowForm(!showForm)}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>)
             )}
           </div>
 
@@ -6179,6 +6541,7 @@ const PropertyVideosSection = ({ societyId }) => {
 };
 
 const ContactSection = ({ societyId }) => {
+  const { user } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -6270,6 +6633,8 @@ const ContactSection = ({ societyId }) => {
     return <div className="society-info-loading">Loading...</div>;
   }
   return (
+    <>
+    {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
     <section className="contact-section">
       <div className="container">
         <div className="section-header">
@@ -6277,7 +6642,7 @@ const ContactSection = ({ societyId }) => {
           <p>
             Get in touch with our management team for any queries or assistance
           </p>
-         {!editMode && (
+         {!editMode && formData.manager.name && formData.manager.mobile  && formData.manager.email && formData.manager.responseRate && formData.manager.responseTime && formData.maintenance.companyName && formData.maintenance.phone && formData.maintenance.email && formData.maintenance.contractStart && formData.maintenance.contractEnd && (
           <button className="edit-button" onClick={() => setEditMode(true)}>
             <FaEdit />Edit
           </button>
@@ -6457,6 +6822,8 @@ const ContactSection = ({ societyId }) => {
           </div>
         </form>
       ) : (
+        (formData.manager.name && formData.manager.mobile  && formData.manager.email && formData.manager.responseRate && formData.manager.responseTime && formData.maintenance.companyName && formData.maintenance.phone && formData.maintenance.email && formData.maintenance.contractStart && formData.maintenance.contractEnd) ?
+          (
         <div className="contact-grid">
           {/* Society Manager */}
           <div className="contact-card">
@@ -6522,117 +6889,18 @@ const ContactSection = ({ societyId }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>): 
+        (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+              <button className="no-details"   onClick={() => setEditMode(true)}>
+                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+              </button>) : (
+              <div className="no-details">
+                <p>No details available</p>
+              </div>)
         )}
       </div>
-    </section>
-  );
-};
-
-const reviews = [
-  {
-    name: "Priya Sharma",
-    rating: 5,
-    date: "2 months ago",
-    review:
-      "Excellent society with world-class amenities. The maintenance is top-notch and the security is very good. My family loves the swimming pool and kids play area.",
-    apartment: "3BHK, Tower A",
-  },
-  {
-    name: "Amit Patel",
-    rating: 5,
-    date: "3 months ago",
-    review:
-      "Great location with easy access to IT parks and malls. The clubhouse is amazing and the gym has all modern equipment. Highly recommend for IT professionals.",
-    apartment: "2BHK, Tower B",
-  },
-  {
-    name: "Sneha Reddy",
-    rating: 4,
-    date: "1 month ago",
-    review:
-      "Beautiful society with lush green landscaping. The apartments are spacious and well-designed. The management is responsive to all queries and complaints.",
-    apartment: "4BHK, Tower C",
-  },
-  {
-    name: "Rajesh Kumar",
-    rating: 5,
-    date: "4 months ago",
-    review:
-      "Premium quality construction and excellent amenities. The society has a great community feel. Kids love the playground and the library is well-maintained.",
-    apartment: "3BHK, Tower D",
-  },
-  {
-    name: "Meera Joshi",
-    rating: 4,
-    date: "2 weeks ago",
-    review:
-      "Good connectivity to major areas of Bangalore. The society is well-planned with ample parking space. The power backup system works efficiently.",
-    apartment: "2BHK, Tower E",
-  },
-  {
-    name: "Vikram Singh",
-    rating: 5,
-    date: "5 months ago",
-    review:
-      "Outstanding society with professional management. The security is excellent with 24/7 CCTV surveillance. Great investment for the future.",
-    apartment: "4BHK, Tower F",
-  },
-];
-
-const ReviewsSection = () => {
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`star-icon ${i < rating ? "filled" : "empty"}`}
-      />
-    ));
-  };
-
-  return (
-    <section className="reviews-section">
-      <div className="container">
-        <div className="section-header">
-          <h2>Resident Reviews</h2>
-          <p>
-            Hear what our residents have to say about their living experience at
-            Emerald Heights
-          </p>
-        </div>
-
-        <div className="reviews-grid">
-          {reviews.map((review, index) => (
-            <div key={index} className="review-card">
-              <div className="card-content">
-                <div className="review-content">
-                  <Quote className="quote-icon" />
-                  <div className="review-details">
-                    <div className="rating-container">
-                      <div className="stars">{renderStars(review.rating)}</div>
-                      <span className="review-date">{review.date}</span>
-                    </div>
-                    <p className="review-text">{review.review}</p>
-                    <div className="reviewer-info">
-                      <p className="reviewer-name">{review.name}</p>
-                      <p className="reviewer-apartment">{review.apartment}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="average-rating">
-          <div className="rating-badge">
-            <div className="stars">{renderStars(5)}</div>
-            <span className="rating-score">4.8/5</span>
-            <span className="rating-count">• Based on 150+ reviews</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    </section>): null}
+    </>
   );
 };
 
@@ -6768,8 +7036,8 @@ const PGSocietyPage = () => {
 
         {/* Amenities */}
         <div id="Amenities">
-          <NewAmenitiesSection />
-          {/* <AmenitiesSection societyId={id} /> */}
+          {/* <NewAmenitiesSection /> */}
+          <AmenitiesSection societyId={id} />
         </div> 
 
         {/* About Project */}
