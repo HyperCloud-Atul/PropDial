@@ -34,6 +34,7 @@ import {
 } from "react-icons/md"; // Add this
 import {
   FaRegBuilding,
+  FaSpinner,
   FaWalking,
   FaBolt,
   FaSwimmingPool,
@@ -3250,7 +3251,7 @@ const EditRates = ({ data, onClose, onSave }) => {
               {errors.commonAreaMaintenance && (
                 <span className="error">{errors.commonAreaMaintenance}</span>
               )}
-              <p className="rate-description">₹ per sq.ft/month</p>
+              <p className="rate-description">₹ per month</p>
             </div>
 
             <div className="form-group">
@@ -3268,7 +3269,7 @@ const EditRates = ({ data, onClose, onSave }) => {
               {errors.commonAreaElectricity && (
                 <span className="error">{errors.commonAreaElectricity}</span>
               )}
-              <p className="rate-description">₹ per sq.ft/month</p>
+              <p className="rate-description">₹ per month</p>
             </div>
 
             <div className="form-group">
@@ -3295,7 +3296,7 @@ const EditRates = ({ data, onClose, onSave }) => {
               Cancel
             </button>
             <button type="submit" className="save-btn">
-              Save Changes
+              Save
             </button>
           </div>
         </form>
@@ -4122,13 +4123,12 @@ const allAmenitiesByCategory = {
     { name: "Car Parking (For Visitors)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FStiltCarParking.jpg?alt=media&token=25db3184-9ab1-4f96-99a1-0cc5c8c9b8ea" },
     { name: "Car Parking (Open)", icon: "FaParking", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FOpenCarParking.jpg?alt=media&token=3323683b-7bc2-469b-8c0e-7295199e667b" },
     { name: "Designated Pet Area", icon: "FaTree", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FDesignatedPetArea.jpg?alt=media&token=85e67d62-0e89-41cb-a378-6ebcc6cd4f9b" },
-    { name: "Gardens", icon: "FaTree", link: "" },
-    { name: "Rain Water Harvesting", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FRainWaterHarvesting.jpg?alt=media&token=f526e87c-0042-49a8-8873-831d2ad4f6e8" },
+    // { name: "Gardens", icon: "FaTree", link: "" },
+    { name: "Rainwater Harvesting", icon: "FaRegBuilding", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FRainWaterHarvesting.jpg?alt=media&token=f526e87c-0042-49a8-8873-831d2ad4f6e8" },
     { name: "Lifts", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FLift.jpg?alt=media&token=a7b6d8d1-8986-4b05-9a1c-a51614a45d0e" },
     { name: "High Speed Lifts", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FHighSpeedLifts.jpg?alt=media&token=3e115c3f-34a0-4aaa-b901-6d90acd421b1" },
     { name: "High Speed Elevator", icon: "MdElevator", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FHighSpeedElevators.jpg?alt=media&token=3335c0bb-0bd4-4904-8c30-8720f1450780" },
     { name: "Landscaped Gardens", icon: "FaTree", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FLandscapeGardens.jpg?alt=media&token=c9d525cf-51d1-43ac-8a39-b01bf4ea9147" },
-    { name: "Rainwater Harvesting", icon: "FaShower", link: "" },
     { name: "Power Back (Full)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2F100PowerBackUp.jpg?alt=media&token=a3cb33e4-26a8-4abe-a2df-e13e17fc539c" },
     { name: "Power Backup (Partial)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2F80PowerBackUp.jpg?alt=media&token=4c0b715c-adc7-4d2d-a81d-069737e93d88" },
     { name: "Power Back (Lift Only)", icon: "FaBolt", link: "https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/societyAmenities%2FgeneralAmenities%2FPowerBackUpLift.jpg?alt=media&token=094f9683-10cd-4df3-b3f3-1cf85b60919b" },
@@ -5292,7 +5292,7 @@ const SocietyRatesSection = ({ societyId }) => {
                   </div>
                   <div className="card-content">
                     <div className="rate-details">
-                      <p className="rate-value">₹{societyData.commonAreaMaintenance} per sq.ft/month</p>
+                      <p className="rate-value">₹{societyData.commonAreaMaintenance} per  month</p>
                     </div>
                   </div>
                 </div>
@@ -5305,7 +5305,7 @@ const SocietyRatesSection = ({ societyId }) => {
                   </div>
                   <div className="card-content">
                     <div className="rate-details">
-                      <p className="rate-value">₹{societyData.commonAreaElectricity} per sq.ft/month</p>
+                      <p className="rate-value">₹{societyData.commonAreaElectricity} per month</p>
                     </div>
                   </div>
                 </div>
@@ -5918,13 +5918,14 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [mapLink, setMapLink] = useState('');
   const [nearbyLocations, setNearbyLocations] = useState([]);
   const [newLocation, setNewLocation] = useState({
     place: '',
     distance: '',
     time: '',
-    timeUnit: 'mins' // Default time unit
+    timeUnit: 'mins'
   });
   const [tempMapLink, setTempMapLink] = useState('');
   const [tempLocations, setTempLocations] = useState([]);
@@ -5969,6 +5970,7 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   };
 
   const handleSave = async () => {
+    setIsSaving(true);
     try {
       const docRef = doc(projectFirestore, "m_societies", societyId);
       await updateDoc(docRef, {
@@ -5981,6 +5983,8 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
     } catch (error) {
       console.error("Error saving data: ", error);
       alert("Failed to save changes. Please try again.");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -5988,7 +5992,6 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
     const { name, value } = e.target;
     
     if (name === 'distance') {
-      // Only allow numbers and limit length
       const numericValue = value.replace(/\D/g, '');
       if (numericValue.length > 3) return;
       
@@ -5997,7 +6000,6 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
         [name]: numericValue
       });
     } else if (name === 'time') {
-      // Only allow numbers and limit length
       const numericValue = value.replace(/\D/g, '');
       if (numericValue.length > 2) return;
       
@@ -6041,7 +6043,6 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
     setTempMapLink(e.target.value);
   };
 
-  // Helper function to parse time value and unit from stored format
   const parseTimeValue = (timeString) => {
     const match = timeString.match(/(\d+)\s*(mins|hrs)/);
     if (match) {
@@ -6066,175 +6067,195 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
             Strategically located in the heart of Whitefield with excellent
             connectivity to key destinations
           </p>
-          {!isEditing && (societyData.description=="") && nearbyLocations.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
+          {!isEditing && (societyData.description === "") && nearbyLocations.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
             <button className="edit-button" onClick={handleEditClick}>
               <FaEdit />Edit
             </button>
           )}
         </div>
 
-        {isEditing ? (
-          <div className="edit-form">
-            <div className="form-group">
-              <label>Google Maps Embed Link</label>
-              <input
-                type="text"
-                value={tempMapLink}
-                onChange={handleMapLinkChange}
-                placeholder="Paste Google Maps embed link here"
-              />
-              <small className="help-text">
-                How to get the embed link: On Google Maps, click "Share" → "Embed a map" → Copy the iframe src URL
-              </small>
-            </div>
+        {/* Edit Form Popup */}
+        {isEditing && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h3>Edit Location Details</h3>
+                <button className="modal-close" onClick={handleCancel}>
+                  <FaTimes />
+                </button>
+              </div>
+              
+              <div className="modal-body">
+                <div className="form-group">
+                  <label>Google Maps Embed Link</label>
+                  <input
+                    type="text"
+                    value={tempMapLink}
+                    onChange={handleMapLinkChange}
+                    placeholder="Paste Google Maps embed link here"
+                  />
+                  <small className="help-text">
+                    How to get the embed link: On Google Maps, click "Share" → "Embed a map" → Copy the iframe src URL
+                  </small>
+                </div>
 
-            <div className="locations-form">
-              <h3>Nearby Locations</h3>
-              <div className="locations-list">
-                {tempLocations.map((location, index) => {
-                  const timeData = parseTimeValue(location.time);
-                  return (
-                    <div key={index} className="location-item">
-                      <div className="location-info">
-                        <MapPin className="location-icon" />
+                <div className="locations-form">
+                  <h3>Nearby Locations</h3>
+                  <div className="locations-list">
+                    {tempLocations.map((location, index) => {
+                      const timeData = parseTimeValue(location.time);
+                      return (
+                        <div key={index} className="location-item">
+                          <div className="location-info">
+                            <MapPin className="location-icon" />
+                            <input
+                              type="text"
+                              name="place"
+                              value={location.place}
+                              onChange={(e) => {
+                                const updated = [...tempLocations];
+                                updated[index].place = e.target.value;
+                                setTempLocations(updated);
+                              }}
+                            />
+                          </div>
+                          <div className="location-meta">
+                            <div className="distance-input-container">
+                              <input
+                                type="text"
+                                name="distance"
+                                value={location.distance.replace(' km', '')}
+                                onChange={(e) => {
+                                  const numericValue = e.target.value.replace(/\D/g, '');
+                                  if (numericValue.length > 3) return;
+                                  const updated = [...tempLocations];
+                                  updated[index].distance = `${numericValue} km`;
+                                  setTempLocations(updated);
+                                }}
+                                placeholder="Distance"
+                              />
+                              <span className="unit">km</span>
+                            </div>
+                            <div className="time-input-container">
+                              <input
+                                type="text"
+                                name="time"
+                                value={timeData.value}
+                                onChange={(e) => {
+                                  const numericValue = e.target.value.replace(/\D/g, '');
+                                  if (numericValue.length > 2) return;
+                                  const updated = [...tempLocations];
+                                  updated[index].time = `${numericValue} ${timeData.unit}`;
+                                  setTempLocations(updated);
+                                }}
+                                placeholder="Time"
+                              />
+                              <select
+                                value={timeData.unit}
+                                onChange={(e) => {
+                                  const updated = [...tempLocations];
+                                  updated[index].time = `${timeData.value} ${e.target.value}`;
+                                  setTempLocations(updated);
+                                }}
+                                className="time-unit-select"
+                              >
+                                <option value="mins">mins</option>
+                                <option value="hrs">hrs</option>
+                              </select>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveLocation(index)}
+                            className="remove-button"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="add-location-form">
+                    <h4>Add New Location</h4>
+                    <div className="form-grid">
+                      <div className="form-group">
+                        <label>Place Name</label>
                         <input
                           type="text"
                           name="place"
-                          value={location.place}
-                          onChange={(e) => {
-                            const updated = [...tempLocations];
-                            updated[index].place = e.target.value;
-                            setTempLocations(updated);
-                          }}
+                          value={newLocation.place}
+                          onChange={handleLocationChange}
+                          placeholder="e.g. Shopping Mall"
                         />
                       </div>
-                      <div className="location-meta">
+                      <div className="form-group">
+                        <label>Distance (in km)</label>
                         <div className="distance-input-container">
                           <input
                             type="text"
                             name="distance"
-                            value={location.distance.replace(' km', '')}
-                            onChange={(e) => {
-                              const numericValue = e.target.value.replace(/\D/g, '');
-                              if (numericValue.length > 3) return;
-                              const updated = [...tempLocations];
-                              updated[index].distance = `${numericValue} km`;
-                              setTempLocations(updated);
-                            }}
-                            placeholder="Distance"
+                            value={newLocation.distance}
+                            onChange={handleLocationChange}
+                            placeholder="e.g. 1.5"
+                            maxLength={3}
                           />
                           <span className="unit">km</span>
                         </div>
-                        <div className="time-input-container">
-                          <input
-                            type="text"
-                            name="time"
-                            value={timeData.value}
-                            onChange={(e) => {
-                              const numericValue = e.target.value.replace(/\D/g, '');
-                              if (numericValue.length > 2) return;
-                              const updated = [...tempLocations];
-                              updated[index].time = `${numericValue} ${timeData.unit}`;
-                              setTempLocations(updated);
-                            }}
-                            placeholder="Time"
-                          />
-                          <select
-                            value={timeData.unit}
-                            onChange={(e) => {
-                              const updated = [...tempLocations];
-                              updated[index].time = `${timeData.value} ${e.target.value}`;
-                              setTempLocations(updated);
-                            }}
-                            className="time-unit-select"
-                          >
-                            <option value="mins">mins</option>
-                            <option value="hrs">hrs</option>
-                          </select>
-                        </div>
                       </div>
-                      <button
-                        onClick={() => handleRemoveLocation(index)}
-                        className="remove-button"
-                      >
-                        ×
-                      </button>
+                      <div className="form-group timeBox">
+                        <label>Time</label>
+                        <input
+                          type="text"
+                          name="time"
+                          value={newLocation.time}
+                          onChange={handleLocationChange}
+                          placeholder="e.g. 10"
+                          maxLength={2}
+                        />
+                        <select
+                          name="timeUnit"
+                          value={newLocation.timeUnit}
+                          onChange={handleLocationChange}
+                          className="time-unit-select"
+                        >
+                          <option value="mins">mins</option>
+                          <option value="hrs">hrs</option>
+                        </select>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
-
-              <div className="add-location-form">
-                <h4>Add New Location</h4>
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Place Name</label>
-                    <input
-                      type="text"
-                      name="place"
-                      value={newLocation.place}
-                      onChange={handleLocationChange}
-                      placeholder="e.g. Shopping Mall"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Distance (in km)</label>
-                    <div className="distance-input-container">
-                      <input
-                        type="text"
-                        name="distance"
-                        value={newLocation.distance}
-                        onChange={handleLocationChange}
-                        placeholder="e.g. 1.5"
-                        maxLength={3}
-                      />
-                      <span className="unit">km</span>
-                    </div>
-                  </div>
-                  <div className="form-group timeBox">
-                    <label>Time</label>
-                    
-                      <input
-                        type="text"
-                        name="time"
-                        value={newLocation.time}
-                        onChange={handleLocationChange}
-                        placeholder="e.g. 10"
-                        maxLength={2}
-                      />
-                      <select
-                        name="timeUnit"
-                        value={newLocation.timeUnit}
-                        onChange={handleLocationChange}
-                        className="time-unit-select"
-                      >
-                        <option value="mins">mins</option>
-                        <option value="hrs">hrs</option>
-                      </select>
-                    
+                    <button
+                      onClick={handleAddLocation}
+                      className="add-button"
+                      disabled={!newLocation.place || !newLocation.distance || !newLocation.time}
+                    >
+                      <FaPlus /> Add Location
+                    </button>
                   </div>
                 </div>
-                <button
-                  onClick={handleAddLocation}
-                  className="add-button"
-                  disabled={!newLocation.place || !newLocation.distance || !newLocation.time}
-                >
-                  <FaPlus /> Add Location
+              </div>
+
+              <div className="modal-footer">
+                <button onClick={handleCancel} className="cancel-button" disabled={isSaving}>
+                  <FaTimes /> Cancel
+                </button>
+                <button onClick={handleSave} className="save-button" disabled={isSaving}>
+                  {isSaving ? (
+                    <>
+                      <FaSpinner className="spinner" /> Saving...
+                    </>
+                  ) : (
+                    <>
+                      <FaSave /> Save Changes
+                    </>
+                  )}
                 </button>
               </div>
             </div>
-
-            <div className="form-actions">
-              <button onClick={handleCancel} className="cancel-button">
-                <FaTimes /> Cancel
-              </button>
-              <button onClick={handleSave} className="save-button">
-                <FaSave /> Save Changes
-              </button>
-            </div>
           </div>
-        ) : (
-          (societyData.description=="" && nearbyLocations.length > 0) ? (
+        )}
+
+        {/* Main Content Display */}
+        {(societyData.description === "" && nearbyLocations.length > 0) ? (
           <div className="content-grid">
             {/* Map Section */}
             <div className="map-container">
@@ -6259,7 +6280,8 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                     <p className="address-label">Complete Address:</p>
                     <p>{societyData.address}</p>
                     <p> 
-        {formattedCity}, {formattedState}</p>
+                      {formattedCity}, {formattedState}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -6293,14 +6315,14 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
               </div>
             </div>
           </div>
-                  ) : 
-                   (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
-              <button className="no-details"  onClick={handleEditClick}>
-                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
-              </button>) : (
-              <div className="no-details">
-                <p>No details available</p>
-              </div>) 
+        ) : (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+          <button className="no-details" onClick={handleEditClick}>
+            <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
+          </button>
+        ) : (
+          <div className="no-details">
+            <p>No details available</p>
+          </div>
         )}
       </div>
     </section>
@@ -6318,6 +6340,7 @@ const PropertyVideosSection = ({ societyId }) => {
   });
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch videos from Firestore
   useEffect(() => {
@@ -6378,10 +6401,12 @@ const PropertyVideosSection = ({ societyId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     const videoId = extractVideoId(newVideo.url);
 
     if (!videoId) {
       alert("Please enter a valid YouTube URL");
+      setIsSaving(false);
       return;
     }
 
@@ -6402,6 +6427,8 @@ const PropertyVideosSection = ({ societyId }) => {
     } catch (error) {
       console.error("Error adding video:", error);
       alert("Failed to add video");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -6429,51 +6456,77 @@ const PropertyVideosSection = ({ societyId }) => {
             Get an immersive experience of our residential society through these
             detailed video tours
           </p>
-           {videos.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
-          <button 
-            className="edit-button" 
-            onClick={() => setShowForm(!showForm)}
-          >
-            <FaPlus /> Add Video
-          </button>
-           ): null}
+          {videos.length > 0 && user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+            <button 
+              className="edit-button" 
+              onClick={() => setShowForm(true)}
+            >
+              <FaPlus /> Add Video
+            </button>
+          ) : null}
         </div>
 
+        {/* Video Form Modal */}
         {showForm && (
-          <div className="video-form">
-            <button 
-              className="close-form-button" 
-              onClick={() => setShowForm(false)}
-            >
-              <FaTimes />
-            </button>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>YouTube URL:</label>
-                <input
-                  type="text"
-                  name="url"
-                  value={newVideo.url}
-                  onChange={handleInputChange}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  required
-                />
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h3>Add New Video</h3>
+                <button 
+                  className="modal-close" 
+                  onClick={() => setShowForm(false)}
+                  disabled={isSaving}
+                >
+                  <FaTimes />
+                </button>
               </div>
-              <div className="form-group">
-                <label>Title:</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={newVideo.title}
-                  onChange={handleInputChange}
-                  placeholder="Video title"
-                  required
-                />
+              
+              <div className="modal-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label>YouTube URL:</label>
+                    <input
+                      type="text"
+                      name="url"
+                      value={newVideo.url}
+                      onChange={handleInputChange}
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      required
+                      disabled={isSaving}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Title:</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={newVideo.title}
+                      onChange={handleInputChange}
+                      placeholder="Video title"
+                      required
+                      disabled={isSaving}
+                    />
+                  </div>
+                  <div className="modal-footer">
+                    <button 
+                      type="button" 
+                      onClick={() => setShowForm(false)} 
+                      className="cancel-button"
+                      disabled={isSaving}
+                    >
+                      <FaTimes /> Cancel
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="submit-button"
+                      disabled={isSaving}
+                    >
+                      {isSaving ? "Adding..." : "Add Video"}
+                    </button>
+                  </div>
+                </form>
               </div>
-              <button type="submit" className="submit-button">
-                Add Video
-              </button>
-            </form>
+            </div>
           </div>
         )}
 
@@ -6504,28 +6557,30 @@ const PropertyVideosSection = ({ societyId }) => {
                           alt={video.title}
                           className="thumbnail-image"
                         />
-                        
                       </>
                     )}
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDeleteVideo(index)}
-                    >
-                      <FaTimes />
-                    </button>
-                    {/* <div className="duration-badge">{video.duration}</div> */}
+                    {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteVideo(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    )}
                   </div>
                   <h3 className="video-title">{video.title}</h3>
                 </div>
               ))
             ) : (
               (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
-              <button className="no-details"  onClick={() => setShowForm(!showForm)}>
-                <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
-              </button>) : (
-              <div className="no-details">
-                <p>No details available</p>
-              </div>)
+                <button className="no-details" onClick={() => setShowForm(true)}>
+                  <FaPlus /> <span className="no-details-text">Click Here to Upload Videos</span>
+                </button>
+              ) : (
+                <div className="no-details">
+                  <p>No videos available</p>
+                </div>
+              )
             )}
           </div>
 
@@ -6544,6 +6599,7 @@ const ContactSection = ({ societyId }) => {
   const { user } = useAuthContext();
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     manager: {
       name: "",
@@ -6563,6 +6619,22 @@ const ContactSection = ({ societyId }) => {
     },
   });
 
+  // Format phone number for display (remove +91 if present)
+  const formatPhoneForDisplay = (phone) => {
+    if (!phone) return "";
+    return phone.replace(/^\+91/, '');
+  };
+
+  // Format phone number for storage (add +91 prefix)
+  const formatPhoneForStorage = (phone) => {
+    if (!phone) return "";
+    const digitsOnly = phone.replace(/\D/g, '');
+    if (digitsOnly.length === 10) {
+      return `+91${digitsOnly}`;
+    }
+    return phone.startsWith('+91') ? phone : `+91${digitsOnly}`;
+  };
+
   // Fetch existing society info
   useEffect(() => {
     const fetchSocietyInfo = async () => {
@@ -6576,7 +6648,7 @@ const ContactSection = ({ societyId }) => {
             manager: {
               name: data.manager?.name || "",
               designation: data.manager?.designation || "Society Manager",
-              mobile: data.manager?.mobile || "",
+              mobile: formatPhoneForDisplay(data.manager?.mobile || ""),
               email: data.manager?.email || "",
               responseRate: data.manager?.responseRate || "100%",
               responseTime: data.manager?.responseTime || "within an hour",
@@ -6584,7 +6656,7 @@ const ContactSection = ({ societyId }) => {
             maintenance: {
               companyName: data.maintenance?.companyName || "",
               contactPerson: data.maintenance?.contactPerson || "",
-              phone: data.maintenance?.phone || "",
+              phone: formatPhoneForDisplay(data.maintenance?.phone || ""),
               email: data.maintenance?.email || "",
               contractStart: data.maintenance?.contractStart || "",
               contractEnd: data.maintenance?.contractEnd || "",
@@ -6595,8 +6667,6 @@ const ContactSection = ({ societyId }) => {
         }
       } catch (error) {
         console.error("Error fetching society info:", error);
-        // Display a user-friendly message instead of alert()
-        // alert('Failed to load society information.');
       } finally {
         setLoading(false);
       }
@@ -6607,6 +6677,25 @@ const ContactSection = ({ societyId }) => {
 
   const handleInputChange = (e, section) => {
     const { name, value } = e.target;
+    
+    // Handle phone number inputs with +91 prefix and 10-digit limit
+    if ((name === 'mobile' || name === 'phone')) {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      
+      // Limit to 10 digits
+      if (digitsOnly.length <= 10) {
+        setFormData((prev) => ({
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [name]: digitsOnly,
+          },
+        }));
+      }
+      return;
+    }
+    
     setFormData((prev) => ({
       ...prev,
       [section]: {
@@ -6618,288 +6707,380 @@ const ContactSection = ({ societyId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
+      // Format phone numbers with +91 prefix before saving
+      const dataToSave = {
+        manager: {
+          ...formData.manager,
+          mobile: formatPhoneForStorage(formData.manager.mobile),
+        },
+        maintenance: {
+          ...formData.maintenance,
+          phone: formatPhoneForStorage(formData.maintenance.phone),
+        },
+      };
+      
       const docRef = doc(projectFirestore, "m_societies", societyId);
-      await updateDoc(docRef, formData);
+      await updateDoc(docRef, dataToSave);
       setEditMode(false);
-      // alert('Information saved successfully!'); // Use custom modal instead
     } catch (error) {
       console.error("Error updating society info:", error);
-      // alert('Failed to save information'); // Use custom modal instead
+    } finally {
+      setIsSaving(false);
     }
+  };
+
+  const hasContactData = () => {
+    return (
+      formData.manager.name && 
+      formData.manager.mobile && 
+      formData.manager.email && 
+      formData.maintenance.companyName && 
+      formData.maintenance.phone
+    );
+  };
+
+  // Format phone number for display with +91 prefix
+  const formatDisplayPhone = (phone) => {
+    if (!phone) return "Not specified";
+    const digitsOnly = phone.replace(/\D/g, '');
+    if (digitsOnly.length === 10) {
+      return `+91 ${digitsOnly}`;
+    }
+    return phone.startsWith('+91') ? phone : `+91 ${phone}`;
   };
 
   if (loading) {
     return <div className="society-info-loading">Loading...</div>;
   }
+
   return (
     <>
-    {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
-    <section className="contact-section">
-      <div className="container">
-        <div className="section-header">
-          <h2>Society Contact Information</h2>
-          <p>
-            Get in touch with our management team for any queries or assistance
-          </p>
-         {!editMode && formData.manager.name && formData.manager.mobile  && formData.manager.email && formData.manager.responseRate && formData.manager.responseTime && formData.maintenance.companyName && formData.maintenance.phone && formData.maintenance.email && formData.maintenance.contractStart && formData.maintenance.contractEnd && (
-          <button className="edit-button" onClick={() => setEditMode(true)}>
-            <FaEdit />Edit
-          </button>
-        )}
-        </div>
-      
-
-      {editMode ? (
-        <form onSubmit={handleSubmit} className="society-info-form">
-          {/* Society Manager Form */}
-          <div className="profile-section">
-            <h3>Society Manager</h3>
-            <div className="form-group">
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.manager.name}
-                onChange={(e) => handleInputChange(e, "manager")}
-                placeholder="Enter name"
-                required
-              />
+      {(user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
+        <section className="contact-section">
+          <div className="container">
+            <div className="section-header">
+              <h2>Society Contact Information</h2>
+              <p>
+                Get in touch with our management team for any queries or assistance
+              </p>
+              {!editMode && hasContactData() && (
+                <button className="edit-button" onClick={() => setEditMode(true)}>
+                  <FaEdit />Edit
+                </button>
+              )}
             </div>
 
-            <div className="contact-grid">
-              <div className="form-group">
-                <label>Mobile:</label>
-                <input
-                  type="tel"
-                  name="mobile"
-                  value={formData.manager.mobile}
-                  onChange={(e) => handleInputChange(e, "manager")}
-                  placeholder="Enter mobile number"
-                  required
-                />
-              </div>
+            {/* Edit Form Modal */}
+            {editMode && (
+              <div className="modal-overlay">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h3>Edit Contact Information</h3>
+                    <button 
+                      className="modal-close" 
+                      onClick={() => setEditMode(false)}
+                      disabled={isSaving}
+                    >
+                      <FaTimes />
+                    </button>
+                  </div>
+                  
+                  <div className="modal-body">
+                    <form onSubmit={handleSubmit} className="society-info-form">
+                      {/* Society Manager Form */}
+                      <div className="profile-section">
+                        <h3>Society Manager</h3>
+                        <div className="form-group">
+                          <label>Name:</label>
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.manager.name}
+                            onChange={(e) => handleInputChange(e, "manager")}
+                            placeholder="Enter name"
+                            required
+                            disabled={isSaving}
+                          />
+                        </div>
 
-              <div className="form-group">
-                <label>Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.manager.email}
-                  onChange={(e) => handleInputChange(e, "manager")}
-                  placeholder="Enter email"
-                  required
-                />
-              </div>
-            </div>
+                        <div className="contact-grid">
+                          <div className="form-group">
+                            <label>Mobile:</label>
+                            <div className="phone-input-container">
+                              <span className="phone-prefix">+91</span>
+                              <input
+                                type="tel"
+                                name="mobile"
+                                value={formData.manager.mobile}
+                                onChange={(e) => handleInputChange(e, "manager")}
+                                placeholder="Enter mobile number"
+                                required
+                                disabled={isSaving}
+                                maxLength={10}
+                                pattern="[0-9]{10}"
+                                title="Please enter a 10-digit mobile number"
+                              />
+                            </div>
+                            <span className="input-info">10-digit mobile number</span>
+                          </div>
 
-            <div className="response-info">
-              <div className="form-group">
-                <label>Response Rate:</label>
-                <select
-                  name="responseRate"
-                  value={formData.manager.responseRate}
-                  onChange={(e) => handleInputChange(e, "manager")}
-                >
-                  <option value="100%">100%</option>
-                  <option value="90%">90%</option>
-                  <option value="80%">80%</option>
-                </select>
-              </div>
+                          <div className="form-group">
+                            <label>Email:</label>
+                            <input
+                              type="email"
+                              name="email"
+                              value={formData.manager.email}
+                              onChange={(e) => handleInputChange(e, "manager")}
+                              placeholder="Enter email"
+                              required
+                              disabled={isSaving}
+                            />
+                          </div>
+                        </div>
 
-              <div className="form-group">
-                <label>Response Time:</label>
-                <select
-                  name="responseTime"
-                  value={formData.manager.responseTime}
-                  onChange={(e) => handleInputChange(e, "manager")}
-                >
-                  <option value="within an hour">within an hour</option>
-                  <option value="within a few hours">within a few hours</option>
-                  <option value="within a day">within a day</option>
-                </select>
-              </div>
-            </div>
-          </div>
+                        <div className="response-info">
+                          <div className="form-group">
+                            <label>Response Rate:</label>
+                            <select
+                              name="responseRate"
+                              value={formData.manager.responseRate}
+                              onChange={(e) => handleInputChange(e, "manager")}
+                              disabled={isSaving}
+                            >
+                              <option value="100%">100%</option>
+                              <option value="90%">90%</option>
+                              <option value="80%">80%</option>
+                            </select>
+                          </div>
 
-          {/* Maintenance Company Form */}
-          <div className="profile-section">
-            <h3>Maintenance Company</h3>
-            <div className="form-group">
-              <label>Company Name:</label>
-              <input
-                type="text"
-                name="companyName"
-                value={formData.maintenance.companyName}
-                onChange={(e) => handleInputChange(e, "maintenance")}
-                placeholder="Enter company name"
-                required
-              />
-            </div>
+                          <div className="form-group">
+                            <label>Response Time:</label>
+                            <select
+                              name="responseTime"
+                              value={formData.manager.responseTime}
+                              onChange={(e) => handleInputChange(e, "manager")}
+                              disabled={isSaving}
+                            >
+                              <option value="within an hour">within an hour</option>
+                              <option value="within a few hours">within a few hours</option>
+                              <option value="within a day">within a day</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
 
-            <div className="form-group">
-              <label>Contact Person:</label>
-              <input
-                type="text"
-                name="contactPerson"
-                value={formData.maintenance.contactPerson}
-                onChange={(e) => handleInputChange(e, "maintenance")}
-                placeholder="Enter contact person name"
-                
-              />
-            </div>
+                      {/* Maintenance Company Form */}
+                      <div className="profile-section">
+                        <h3>Maintenance Company</h3>
+                        <div className="form-group">
+                          <label>Company Name:</label>
+                          <input
+                            type="text"
+                            name="companyName"
+                            value={formData.maintenance.companyName}
+                            onChange={(e) => handleInputChange(e, "maintenance")}
+                            placeholder="Enter company name"
+                            required
+                            disabled={isSaving}
+                          />
+                        </div>
 
-            <div className="contact-grid">
-              <div className="form-group">
-                <label>Phone:</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.maintenance.phone}
-                  onChange={(e) => handleInputChange(e, "maintenance")}
-                  placeholder="Enter phone number"
-                  // required
-                />
-              </div>
+                        <div className="form-group">
+                          <label>Contact Person:</label>
+                          <input
+                            type="text"
+                            name="contactPerson"
+                            value={formData.maintenance.contactPerson}
+                            onChange={(e) => handleInputChange(e, "maintenance")}
+                            placeholder="Enter contact person name"
+                            disabled={isSaving}
+                          />
+                        </div>
 
-              <div className="form-group">
-                <label>Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.maintenance.email}
-                  onChange={(e) => handleInputChange(e, "maintenance")}
-                  placeholder="Enter email"
-                />
-              </div>
-            </div>
+                        <div className="contact-grid">
+                          <div className="form-group">
+                            <label>Phone:</label>
+                            <div className="phone-input-container">
+                              <span className="phone-prefix">+91</span>
+                              <input
+                                type="tel"
+                                name="phone"
+                                value={formData.maintenance.phone}
+                                onChange={(e) => handleInputChange(e, "maintenance")}
+                                placeholder="Enter phone number"
+                                disabled={isSaving}
+                                maxLength={10}
+                                pattern="[0-9]{10}"
+                                title="Please enter a 10-digit phone number"
+                              />
+                            </div>
+                            <span className="input-info">10-digit phone number</span>
+                          </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label>Contract Start:</label>
-                  <input
-                    type="text"   // text so we can control length
-                    name="contractStart"
-                    value={formData.maintenance.contractStart}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\d{0,4}$/.test(value)) {   // only 0–4 digits allowed
-                        handleInputChange(e, "maintenance");
-                      }
-                    }}
-                    placeholder="Enter contract starting year"
-                    inputMode="numeric"  // shows numeric keyboard on mobile
-                    pattern="\d*"        // hint for numeric only
-                  />
-                <span className="input-info">Year (YYYY)</span>
-              </div>
-              <div className="form-group">
-                <label>Contract End:</label>
-                  <input
-                    type="text"   // use text instead of number
-                    name="contractEnd"
-                    value={formData.maintenance.contractEnd}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (/^\d{0,4}$/.test(value)) {  // allow only up to 4 digits
-                        handleInputChange(e, "maintenance");
-                      }
-                    }}
-                    placeholder="Enter contract ending year"
-                    inputMode="numeric"
-                    pattern="\d*"
-                  />
-                  <span className="input-info">Year (YYYY)</span>
-              </div>
-            </div>
-          </div>
+                          <div className="form-group">
+                            <label>Email:</label>
+                            <input
+                              type="email"
+                              name="email"
+                              value={formData.maintenance.email}
+                              onChange={(e) => handleInputChange(e, "maintenance")}
+                              placeholder="Enter email"
+                              disabled={isSaving}
+                            />
+                          </div>
+                        </div>
 
-          <div className="form-actions">
-            <button type="button" onClick={() => setEditMode(false)}>
-              Cancel
-            </button>
-            <button type="submit">Save</button>
-          </div>
-        </form>
-      ) : (
-        (formData.manager.name && formData.manager.mobile  && formData.manager.email && formData.manager.responseRate && formData.manager.responseTime && formData.maintenance.companyName && formData.maintenance.phone && formData.maintenance.email && formData.maintenance.contractStart && formData.maintenance.contractEnd) ?
-          (
-        <div className="contact-grid">
-          {/* Society Manager */}
-          <div className="contact-card">
-            <div className="card-header">
-              <h3 className="card-title">
-                <User className="icon" />
-                Society Manager
-              </h3>
-            </div>
-            <div className="card-content">
-              <div className="contact-person">
-                <p className="name">{formData.manager.name || "Not specified"}</p>
-                <p className="designation">Senior Property Manager</p>
-              </div>
-              <div className="contact-details">
-                <div className="contact-item">
-                  <Phone className="contact-icon" />
-                  <span>{formData.manager.mobile || "Not specified"}</span>
-                </div>
-                <div className="contact-item">
-                  <Mail className="contact-icon" />
-                  <span>{formData.manager.email || "Not specified"}</span>
-                </div>
-              </div>
-              <div className="availability">
-                <p>Response Rate: {formData.manager.responseRate || "Not specified"}</p>
-                <p>Response Time: {formData.manager.responseTime || "Not specified"}</p>
-              </div>
-            </div>
-          </div>
+                        <div className="form-row">
+                          <div className="form-group">
+                            <label>Contract Start:</label>
+                            <input
+                              type="text"
+                              name="contractStart"
+                              value={formData.maintenance.contractStart}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (/^\d{0,4}$/.test(value)) {
+                                  handleInputChange(e, "maintenance");
+                                }
+                              }}
+                              placeholder="Enter contract starting year"
+                              inputMode="numeric"
+                              pattern="\d*"
+                              disabled={isSaving}
+                            />
+                            <span className="input-info">Year (YYYY)</span>
+                          </div>
+                          <div className="form-group">
+                            <label>Contract End:</label>
+                            <input
+                              type="text"
+                              name="contractEnd"
+                              value={formData.maintenance.contractEnd}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (/^\d{0,4}$/.test(value)) {
+                                  handleInputChange(e, "maintenance");
+                                }
+                              }}
+                              placeholder="Enter contract ending year"
+                              inputMode="numeric"
+                              pattern="\d*"
+                              disabled={isSaving}
+                            />
+                            <span className="input-info">Year (YYYY)</span>
+                          </div>
+                        </div>
+                      </div>
 
-          {/* Maintenance Company */}
-          <div className="contact-card">
-            <div className="card-header">
-              <h3 className="card-title">
-                <Building className="icon" />
-                Maintenance Company
-              </h3>
-            </div>
-            <div className="card-content">
-              <div className="contact-person">
-                <p className="name">{formData.maintenance.companyName || "Not specified"}</p>
-                <p className="designation">Professional Maintenance Services</p>
-              </div>
-              <div className="contact-details">
-                <div className="contact-item">
-                  <Phone className="contact-icon" />
-                  <span>{formData.maintenance.phone || "Not specified"}</span>
-                </div>
-                <div className="contact-item">
-                  <Mail className="contact-icon" />
-                  <span>{formData.maintenance.email || "Not specified"}</span>
-                </div>
-              </div>
-              <div className="contract-details">
-                <div className="contract-item">
-                  <Calendar className="contract-icon" />
-                  <div>
-                    <p className="contract-label">Contract Period</p>
-                    <p className="contract-date">{formData.maintenance.contractStart || "Not specified"} - {formData.maintenance.contractEnd || "Not specified"}</p>
+                      <div className="modal-footer">
+                        <button 
+                          type="button" 
+                          onClick={() => setEditMode(false)} 
+                          className="cancel-button"
+                          disabled={isSaving}
+                        >
+                          <FaTimes /> Cancel
+                        </button>
+                        <button 
+                          type="submit" 
+                          className="save-button"
+                          disabled={isSaving}
+                        >
+                          {isSaving ? (
+                            <>
+                              <FaSpinner className="spinner" /> Saving...
+                            </>
+                          ) : (
+                            <>
+                              <FaSave /> Save
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>): 
-        (user && ["frontdesk", "admin", "superAdmin"].includes(user.role)) ? (
-              <button className="no-details"   onClick={() => setEditMode(true)}>
+            )}
+
+            {/* Display Contact Information */}
+            {hasContactData() ? (
+              <div className="contact-grid">
+                {/* Society Manager */}
+                <div className="contact-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <User className="icon" />
+                      Society Manager
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="contact-person">
+                      <p className="name">{formData.manager.name || "Not specified"}</p>
+                      <p className="designation">Senior Property Manager</p>
+                    </div>
+                    <div className="contact-details">
+                      <div className="contact-item">
+                        <Phone className="contact-icon" />
+                        <span>{formatDisplayPhone(formData.manager.mobile)}</span>
+                      </div>
+                      <div className="contact-item">
+                        <Mail className="contact-icon" />
+                        <span>{formData.manager.email || "Not specified"}</span>
+                      </div>
+                    </div>
+                    <div className="availability">
+                      <p>Response Rate: {formData.manager.responseRate || "Not specified"}</p>
+                      <p>Response Time: {formData.manager.responseTime || "Not specified"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Maintenance Company */}
+                <div className="contact-card">
+                  <div className="card-header">
+                    <h3 className="card-title">
+                      <Building className="icon" />
+                      Maintenance Company
+                    </h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="contact-person">
+                      <p className="name">{formData.maintenance.companyName || "Not specified"}</p>
+                      <p className="designation">Professional Maintenance Services</p>
+                    </div>
+                    <div className="contact-details">
+                      <div className="contact-item">
+                        <Phone className="contact-icon" />
+                        <span>{formatDisplayPhone(formData.maintenance.phone)}</span>
+                      </div>
+                      <div className="contact-item">
+                        <Mail className="contact-icon" />
+                        <span>{formData.maintenance.email || "Not specified"}</span>
+                      </div>
+                    </div>
+                    <div className="contract-details">
+                      <div className="contract-item">
+                        <Calendar className="contract-icon" />
+                        <div>
+                          <p className="contract-label">Contract Period</p>
+                          <p className="contract-date">{formData.maintenance.contractStart || "Not specified"} - {formData.maintenance.contractEnd || "Not specified"}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button className="no-details" onClick={() => setEditMode(true)}>
                 <FaPlus /> <span className="no-details-text">Click Here to Upload Details</span>
-              </button>) : (
-              <div className="no-details">
-                <p>No details available</p>
-              </div>)
-        )}
-      </div>
-    </section>): null}
+              </button>
+            )}
+          </div>
+        </section>
+      ) : null}
     </>
   );
 };
