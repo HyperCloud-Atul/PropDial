@@ -37,6 +37,7 @@ import {
 import {
   FaRegBuilding,
   FaLocationArrow,
+  FaExclamationTriangle,
   FaExpand,
   FaSpinner,
   FaWalking,
@@ -66,6 +67,7 @@ import {
   FaVectorSquare,
   FaExclamationCircle,
   FaCheckCircle,
+  FaImage,
   FaToilet,
   FaExpandArrowsAlt,
   FaStar,
@@ -451,7 +453,8 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group toggle-group">
-              <div className="toggle-description">
+
+              {/* <div className="toggle-description">
                 <label className="toggle-label">Approved By RERA </label>
                 <div
                   className={`toggle-switch ${
@@ -466,7 +469,8 @@ const EditModal = ({ data, onClose, onSave }) => {
                 >
                   <div className="toggle-circle" />
                 </div>
-              </div>
+              </div> */}
+
               <div className="toggle-description">
                 <label className="toggle-label">Ready to Move In</label>
                 <div
@@ -692,7 +696,8 @@ const EditAbout = ({ data, onClose, onSave }) => {
               />
             </div>
             <div className="form-group toggle-group">
-              <div className="toggle-description">
+
+              {/* <div className="toggle-description">
                 <label className="toggle-label">Approved By RERA </label>
                 <div
                   className={`toggle-switch ${
@@ -707,7 +712,8 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 >
                   <div className="toggle-circle" />
                 </div>
-              </div>
+              </div> */}
+
               <div className="toggle-description">
                 <label className="toggle-label">Ready to Move In</label>
                 <div
@@ -881,7 +887,7 @@ const EditRates = ({ data, onClose, onSave }) => {
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
-              <label>Electricity Rate (Authority)</label>
+              <label>Electricity Rate</label>
               <input
                 ref={electricityAuthRef}
                 type="number"
@@ -901,7 +907,7 @@ const EditRates = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Electricity Rate (Power Backup)</label>
+              <label>Power Backup</label>
               <input
                 ref={electricityBackupRef}
                 type="number"
@@ -922,7 +928,7 @@ const EditRates = ({ data, onClose, onSave }) => {
               <p className="rate-description">₹ per unit</p>
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Water Charges</label>
               <input
                 ref={waterChargesRef}
@@ -940,7 +946,7 @@ const EditRates = ({ data, onClose, onSave }) => {
                 <span className="error">{errors.waterCharges}</span>
               )}
               <p className="rate-description">₹ per 1000L</p>
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label>Common Area Maintenance</label>
@@ -959,10 +965,10 @@ const EditRates = ({ data, onClose, onSave }) => {
               {errors.commonAreaMaintenance && (
                 <span className="error">{errors.commonAreaMaintenance}</span>
               )}
-              <p className="rate-description">₹ per month</p>
+              <p className="rate-description">₹ per sq/ft</p>
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Common Area Electricity</label>
               <input
                 ref={commonElectricityRef}
@@ -980,7 +986,7 @@ const EditRates = ({ data, onClose, onSave }) => {
                 <span className="error">{errors.commonAreaElectricity}</span>
               )}
               <p className="rate-description">₹ per month</p>
-            </div>
+            </div> */}
 
             <div className="form-group">
               <label>Club Charges</label>
@@ -1033,9 +1039,8 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
     totalUnits: "",
     totalTowers: "",
     projectSize: "",
-    reraApproved: false, // Array of unit types like ["2BHK", "3BHK"]
+    // reraApproved: false, 
   });
-  console.log(country, state, city, locality, societyId);
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1131,10 +1136,13 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-8.5" />
                         <path d="M22 4L12 14.01l-3-3" />
                       </svg>
-                      Ready to Move
+                      <p style={{  fontSize: "16px" }}>
+                        Ready to Move Since{" "}
+                        <span style={{ fontWeight: "700" }}>'{societyData?.launchedYear || "N/A"}'</span>
+                      </p>
                     </div>
                   )}
-                  {societyData.reraApproved && (
+                  {/* {societyData.reraApproved && (
                     <div className="badge badge--rera-approved">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1152,7 +1160,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                       </svg>
                       RERA Approved
                     </div>
-                  )}
+                  )} */}
                 </div>
                 {user &&
                   ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
@@ -2566,7 +2574,6 @@ const AboutSocietySection = ({ societyId }) => {
     totalUnits: "",
     totalTowers: "",
     projectSize: "",
-    unitTypes: [], // Array of unit types like ["2BHK", "3BHK"]
   });
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -2622,7 +2629,6 @@ const AboutSocietySection = ({ societyId }) => {
       setError("Failed to save changes.");
     }
   };
-  console.log(societyData.description);
   if (loading) return <div className="loading-spinner">Loading...</div>;
   if (error) return <div className="error-message">{error}</div>;
   return (
@@ -2789,11 +2795,11 @@ const SocietyRatesSection = ({ societyId }) => {
   const [societyData, setSocietyData] = useState({
     electricityRateAuthority: "",
     electricityRatePowerBackup: "",
-    waterCharges: "",
     commonAreaMaintenance: "",
-    commonAreaElectricity: "",
     clubCharges: "",
   });
+  // commonAreaElectricity: "",
+  // waterCharges: "",
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -2893,7 +2899,7 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-header">
                   <h3 className="card-title">
                     <FaBolt className="icon" />
-                    Electricity Rate (Authority)
+                    Electricity Rate
                   </h3>
                 </div>
                 <div className="card-content">
@@ -2919,7 +2925,7 @@ const SocietyRatesSection = ({ societyId }) => {
                   </div>
                 </div>
               </div>
-              <div className="rate-card">
+              {/* <div className="rate-card">
                 <div className="card-header">
                   <h3 className="card-title">
                     <FaTint className="icon" />
@@ -2933,7 +2939,7 @@ const SocietyRatesSection = ({ societyId }) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="rate-card">
                 <div className="card-header">
                   <h3 className="card-title">
@@ -2944,12 +2950,12 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-content">
                   <div className="rate-details">
                     <p className="rate-value">
-                      ₹{societyData.commonAreaMaintenance} per month
+                      ₹{societyData.commonAreaMaintenance} per sq/ft
                     </p>
                   </div>
                 </div>
               </div>
-              <div className="rate-card">
+              {/* <div className="rate-card">
                 <div className="card-header">
                   <h3 className="card-title">
                     <FaRegBuilding className="icon" />
@@ -2963,7 +2969,7 @@ const SocietyRatesSection = ({ societyId }) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="rate-card">
                 <div className="card-header">
                   <h3 className="card-title">
@@ -3061,8 +3067,14 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
 
   // Firestore document reference
   const societyDocRef = projectFirestore
-    ? doc(projectFirestore, "m_societies", societyId)
-    : null;
+  ? doc(
+      projectFirestore,
+      "m_societies",
+      societyId,
+      "society_information",
+      "images"
+    )
+  : null;
 
   // Effect to fetch existing images from Firestore when component mounts or societyId changes
   useEffect(() => {
@@ -3170,7 +3182,8 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
 
       const updatedImages = [...images, ...newUrls];
       if (societyDocRef) {
-        await updateDoc(societyDocRef, { images: updatedImages });
+        await setDoc(societyDocRef, { images: updatedImages }, { merge: true });
+
       }
 
       setImages(updatedImages);
@@ -3241,7 +3254,8 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
 
       // Update Firestore document
       if (societyDocRef) {
-        await updateDoc(societyDocRef, { images: updatedImages });
+        await setDoc(societyDocRef, { images: updatedImages }, { merge: true });
+
       }
 
       setImages(updatedImages);
@@ -3387,7 +3401,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
 
       // Clear images array in Firestore
       if (societyDocRef) {
-        await updateDoc(societyDocRef, { images: [] });
+        await setDoc(societyDocRef, { images: [] }, { merge: true });
       }
 
       setImages([]);
@@ -3822,7 +3836,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
   );
 };
 
-const MapLocationSection = ({ state, city, locality, societyId }) => {
+const MapLocationSection = ({ state, city, locality, address, societyId }) => {
   const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -3843,7 +3857,8 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
       if (!societyId) return;
 
       try {
-        const docRef = doc(projectFirestore, "m_societies", societyId);
+        const docRef = doc(projectFirestore, "m_societies", societyId, "society_information",
+      "map_location");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -3880,11 +3895,17 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const docRef = doc(projectFirestore, "m_societies", societyId);
-      await updateDoc(docRef, {
+      const docRef = doc(
+        projectFirestore,
+        "m_societies",
+        societyId,
+        "society_information",
+        "map_location"
+      );
+      await setDoc(docRef, {
         mapLink: tempMapLink,
         locations: tempLocations,
-      });
+      }, { merge: true });
       setMapLink(tempMapLink);
       setNearbyLocations(tempLocations);
       setIsEditing(false);
@@ -4204,7 +4225,7 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                   </h3>
                 </div>
                 <div className="card-content">
-                  <div className="map-iframe">
+                  {/* <div className="map-iframe">
                     <iframe
                       title="Society Location"
                       src={
@@ -4215,10 +4236,14 @@ const MapLocationSection = ({ state, city, locality, societyId }) => {
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                     ></iframe>
-                  </div>
+                  </div> */}
+                  <div
+                    className="map-iframe"
+                    dangerouslySetInnerHTML={{ __html: mapLink }}
+                  />
                   <div className="address-details">
                     <p className="address-label">Complete Address:</p>
-                    <p>{societyData.address}</p>
+                    <p>{address}</p>
                     <p>
                       {formattedCity}, {formattedState}
                     </p>
@@ -4292,7 +4317,8 @@ const PropertyVideosSection = ({ societyId }) => {
   useEffect(() => {
     if (!societyId) return;
 
-    const societyDocRef = doc(projectFirestore, "m_societies", societyId);
+    const societyDocRef = doc(projectFirestore, "m_societies", societyId, "society_information",
+      "videos");
     const unsubscribe = onSnapshot(societyDocRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data();
@@ -4358,7 +4384,9 @@ const PropertyVideosSection = ({ societyId }) => {
     }
 
     try {
-      await updateDoc(doc(projectFirestore, "m_societies", societyId), {
+    await setDoc(
+      doc(projectFirestore, "m_societies", societyId, "society_information", "videos"),
+      {
         videos: [
           ...videos,
           {
@@ -4368,7 +4396,7 @@ const PropertyVideosSection = ({ societyId }) => {
             duration: "0:00",
           },
         ],
-      });
+      },  { merge: true }  );
       setNewVideo({ url: "", title: "" });
       setShowForm(false);
     } catch (error) {
@@ -4385,9 +4413,11 @@ const PropertyVideosSection = ({ societyId }) => {
     try {
       const updatedVideos = [...videos];
       updatedVideos.splice(index, 1);
-      await updateDoc(doc(projectFirestore, "m_societies", societyId), {
-        videos: updatedVideos,
-      });
+      await setDoc(
+        doc(projectFirestore, "m_societies", societyId, "society_information", "videos"),
+        { videos: updatedVideos },
+        { merge: true }
+      );
     } catch (error) {
       console.error("Error deleting video:", error);
       alert("Failed to delete video");
@@ -4556,11 +4586,70 @@ const PropertyVideosSection = ({ societyId }) => {
   );
 };
 
+// ✅ Function to format number with Indian commas
+const formatIndianNumber = (num) => {
+  if (!num) return "";
+  return new Intl.NumberFormat("en-IN").format(num);
+};
+
+// ✅ Function to convert number to words
+const numberToWords = (num) => {
+  if (!num) return "";
+
+  const a = [
+    "",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+    "Eleven",
+    "Twelve",
+    "Thirteen",
+    "Fourteen",
+    "Fifteen",
+    "Sixteen",
+    "Seventeen",
+    "Eighteen",
+    "Nineteen",
+  ];
+  const b = [
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
+  ];
+
+  const inWords = (n) => {
+    if (n < 20) return a[n];
+    if (n < 100) return b[Math.floor(n / 10)] + " " + a[n % 10];
+    if (n < 1000)
+      return a[Math.floor(n / 100)] + " Hundred " + inWords(n % 100);
+    if (n < 100000)
+      return inWords(Math.floor(n / 1000)) + " Thousand " + inWords(n % 1000);
+    if (n < 10000000)
+      return inWords(Math.floor(n / 100000)) + " Lakh " + inWords(n % 100000);
+    return inWords(Math.floor(n / 10000000)) + " Crore " + inWords(n % 10000000);
+  };
+
+  return inWords(num).trim();
+};
 
 const FloorPlans = ({ societyId }) => {
   const { user } = useAuthContext();
   // const user = { role: 'admin' };
-
+  const [price, setPrice] = useState("");
   const [floorPlans, setFloorPlans] = useState([]);
   const [unitTypes, setUnitTypes] = useState([]);
   const [currentBhk, setCurrentBHK] = useState("All");
@@ -4598,74 +4687,110 @@ const FloorPlans = ({ societyId }) => {
   ];
 
   const bhkOptions = [
-    "1 Room",
+    "EWS",
     "1 RK",
+    "Studio",
     "1 BHK",
+    "1.5 BHK",
     "2 BHK",
+    "2.5 BHK",
     "3 BHK",
+    "3.5 BHK",
     "4 BHK",
     "5 BHK",
     "6 BHK",
     "7 BHK",
     "8 BHK",
+    "9 BHK",
+    "9+ BHK",
+    "Hall"
   ];
+
+  const bedroomOptions = [
+    "1 Bedroom",
+    "2 Bedrooms",
+    "3 Bedrooms",
+    "4 Bedrooms",
+    "5 Bedrooms",
+    "6 Bedrooms",
+    "7 Bedrooms",
+    "8 Bedrooms",
+    "9 Bedrooms",
+    "10+ Bedrooms"
+  ];
+
+  const bathroomOptions = ["1 Bathroom", "2 Bathrooms", "3 Bathrooms", "4 Bathrooms", "5 Bathrooms", "6 Bathrooms"];
 
   const bhkOrder = [
-    "1 Room",
+    "EWS",
     "1 RK",
+    "Studio",
     "1 BHK",
+    "1.5 BHK",
     "2 BHK",
+    "2.5 BHK",
     "3 BHK",
+    "3.5 BHK",
     "4 BHK",
     "5 BHK",
     "6 BHK",
     "7 BHK",
     "8 BHK",
+    "9 BHK",
+    "9+ BHK",
+    "Hall",
   ];
-
-  const toiletOptions = ["1T", "2T", "3T", "4T", "5T", "6T"];
 
   const additionalOptions = [
     "Servant",
     "Study",
     "Store",
     "Puja",
-    "Balcony",
-    "Garden",
-    "Swimming Pool",
-    "Gym",
   ];
 
   const areaUnitOptions = ["SqFt", "SqMtr", "SqYard", "Acres", "Hectares"];
-  const priceUnitOptions = ["Lacs", "Cr"];
 
-  const updateUnitTypes = (plans) => {
-    if (!Array.isArray(plans)) {
-      setUnitTypes(["All"]);
-      return;
-    }
+const updateUnitTypes = async (plans) => {
+  if (!Array.isArray(plans)) {
+    setUnitTypes(["All"]);
+    return;
+  }
 
-    const uniqueBhkTypes = ["All", ...new Set(plans.map((plan) => plan.bhk))];
+  const uniqueBhkTypes = ["All", ...new Set(plans.map((plan) => plan.bhk))];
 
-    uniqueBhkTypes.sort((a, b) => {
-      if (a === "All") return -1;
-      if (b === "All") return 1;
+  uniqueBhkTypes.sort((a, b) => {
+    if (a === "All") return -1;
+    if (b === "All") return 1;
 
-      const indexA = bhkOrder.indexOf(a);
-      const indexB = bhkOrder.indexOf(b);
+    const indexA = bhkOrder.indexOf(a);
+    const indexB = bhkOrder.indexOf(b);
 
-      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-      if (indexA === -1) return 1;
-      if (indexB === -1) return -1;
+    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
 
-      return indexA - indexB;
-    });
+    return indexA - indexB;
+  });
 
-    setUnitTypes(uniqueBhkTypes);
-    if (!uniqueBhkTypes.includes(currentBhk)) {
-      setCurrentBHK("All");
-    }
-  };
+  setUnitTypes(uniqueBhkTypes);
+
+  if (!uniqueBhkTypes.includes(currentBhk)) {
+    setCurrentBHK("All");
+  }
+
+  // ✅ Save to Firestore (skip "All")
+  try {
+    const docRef = doc(projectFirestore, "m_societies", societyId);
+    await setDoc(
+      docRef,
+      { unitTypes: uniqueBhkTypes.filter((t) => t !== "All") },
+      { merge: true }
+    );
+   
+  } catch (error) {
+    console.error("❌ Error saving unit types:", error);
+  }
+};
 
   useEffect(() => {
     const fetchFloorPlans = async () => {
@@ -4729,16 +4854,14 @@ const FloorPlans = ({ societyId }) => {
         ? { ...plan }
         : {
             type: "Apartment",
-            bhk: "1 Room",
-            toilet: "1T",
+            bhk: "1 BHK",
+            bedrooms: "1 Bedroom",
+            bathrooms: "1 Bathroom",
             additional: [],
             superArea: "",
-            superAreaUnit: "SqFt",
             carpetArea: "",
-            carpetAreaUnit: "SqFt",
-            priceFrom: "",
-            priceTo: "",
-            priceUnit: "Lacs",
+            areaUnit: "SqFt",
+            price: "",
             image: null,
           }
     );
@@ -4780,22 +4903,12 @@ const FloorPlans = ({ societyId }) => {
     if (parseFloat(plan.carpetArea) > parseFloat(plan.superArea)) {
       newErrors.carpetArea = "Carpet area cannot be larger than super area.";
     }
-    if (plan.carpetAreaUnit !== plan.superAreaUnit) {
-      newErrors.areaUnit =
-        "Super area unit and Carpet area unit must be the same.";
-    }
-    if (
-      plan.priceFrom &&
-      plan.priceTo &&
-      parseFloat(plan.priceFrom) > parseFloat(plan.priceTo)
-    ) {
-      newErrors.priceRange = "Min price cannot be greater than max price.";
-    }
-    if (!plan.type || !plan.bhk || !plan.toilet) {
+    if (!plan.type || !plan.bhk || !plan.bedrooms || !plan.bathrooms) {
       newErrors.required = "Please fill all required fields (*).";
     }
     setErrors(newErrors);
   };
+
 
   const saveChangesAndPersist = async () => {
     if (!currentPlan || Object.keys(errors).length > 0) {
@@ -4972,6 +5085,27 @@ const FloorPlans = ({ societyId }) => {
     return <div className="loading">Loading floor plans...</div>;
   }
 
+const handlePriceChange = (field, value) => {
+  // remove commas before storing
+  const rawValue = value.replace(/,/g, "");
+
+  if (!isNaN(rawValue) && rawValue !== "") {
+    setCurrentPlan((prev) => {
+      const updatedPlan = { ...prev, [field]: rawValue };
+      validatePlan(updatedPlan);
+      return updatedPlan;
+    });
+  } else {
+    // empty or invalid
+    setCurrentPlan((prev) => {
+      const updatedPlan = { ...prev, [field]: "" };
+      validatePlan(updatedPlan);
+      return updatedPlan;
+    });
+  }
+};
+
+
   const canEdit =
     user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
 
@@ -5054,7 +5188,7 @@ const FloorPlans = ({ societyId }) => {
                           <h3>
                             {plan.type} - {plan.bhk}
                           </h3>
-                          {canEdit && (
+                          { user && ["admin", "superAdmin"].includes(user.role) && (
                             <div className="plan-actions">
                               <button
                                 onClick={() => openModal(plan, index)}
@@ -5074,11 +5208,28 @@ const FloorPlans = ({ societyId }) => {
 
                         <div className="area-bathroom-row">
                           <div className="detail-item">
+                            <FaBed className="icon-fa" size={18} />
+                            <div className="name-flex">
+                              <span className="name">Bedrooms</span>
+                              <span className="value">{plan.bedrooms}</span>
+                            </div>
+                          </div>
+                          <div className="detail-item">
+                            <FaShower className="icon-fa" size={18} />
+                            <div className="name-flex">
+                              <span className="name">Bathrooms</span>
+                              <span className="value">{plan.bathrooms}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="area-bathroom-row">
+                          <div className="detail-item">
                             <FaVectorSquare className="icon-fa" size={18} />
                             <div className="name-flex">
                               <span className="name">Super Area</span>
                               <span className="value">
-                                {plan.superArea} {plan.superAreaUnit}
+                                {plan.superArea} {plan.areaUnit}
                               </span>
                             </div>
                           </div>
@@ -5087,31 +5238,24 @@ const FloorPlans = ({ societyId }) => {
                             <div className="name-flex">
                               <span className="name">Carpet Area</span>
                               <span className="value">
-                                {plan.carpetArea} {plan.carpetAreaUnit}
+                                {plan.carpetArea} {plan.areaUnit}
                               </span>
-                            </div>
-                          </div>
-                          <div className="detail-item">
-                            <FaShower className="icon-fa" size={18} />
-                            <div className="name-flex">
-                              <span className="name">Toilets</span>
-                              <span className="value">{plan.toilet}</span>
                             </div>
                           </div>
                         </div>
 
-                        {plan.priceFrom && plan.priceTo && (
+                        {plan.price && (
                           <div className="detail-row price-range-row">
                             <span className="label">Price:</span>
                             <span className="value">
-                              {plan.priceFrom} - {plan.priceTo} {plan.priceUnit}
+                              ₹{new Intl.NumberFormat("en-IN").format(plan.price)}
                             </span>
                           </div>
                         )}
 
                         {plan.additional && plan.additional.length > 0 && (
                           <div className="detail-row additional-features-row">
-                            <span className="label">Add. Features:</span>
+                            <span className="label">Add. Rooms:</span>
                             <div className="value-container">
                               {plan.additional.map((feature, idx) => (
                                 <span key={idx} className="value feature-pill">
@@ -5210,15 +5354,15 @@ const FloorPlans = ({ societyId }) => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="toilet">Toilet *</label>
+                      <label htmlFor="bedrooms">Bedrooms *</label>
                       <select
-                        id="toilet"
-                        value={currentPlan.toilet}
+                        id="bedrooms"
+                        value={currentPlan.bedrooms}
                         onChange={(e) =>
-                          handleInputChange("toilet", e.target.value)
+                          handleInputChange("bedrooms", e.target.value)
                         }
                       >
-                        {toiletOptions.map((option) => (
+                        {bedroomOptions.map((option) => (
                           <option key={option} value={option}>
                             {option}
                           </option>
@@ -5227,114 +5371,67 @@ const FloorPlans = ({ societyId }) => {
                     </div>
 
                     <div className="form-group">
-                      <label>Super Area</label>
-                      <div className="input-with-unit">
-                        <input
-                          type="number"
-                          value={currentPlan.superArea}
-                          onChange={(e) =>
-                            handleInputChange("superArea", e.target.value)
-                          }
-                          placeholder="Area"
-                          min="0"
-                        />
-                        <select
-                          value={currentPlan.superAreaUnit}
-                          onChange={(e) =>
-                            handleInputChange("superAreaUnit", e.target.value)
-                          }
-                        >
-                          {areaUnitOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      <label htmlFor="bathrooms">Bathrooms *</label>
+                      <select
+                        id="bathrooms"
+                        value={currentPlan.bathrooms}
+                        onChange={(e) =>
+                          handleInputChange("bathrooms", e.target.value)
+                        }
+                      >
+                        {bathroomOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
-                    <div className="form-group">
-                      <label>Carpet Area</label>
-                      <div className="input-with-unit">
-                        <input
-                          type="number"
-                          value={currentPlan.carpetArea}
-                          onChange={(e) =>
-                            handleInputChange("carpetArea", e.target.value)
-                          }
-                          placeholder="Area"
-                          min="0"
-                          step="0.1"
-                          className={errors.carpetArea ? "error" : ""}
-                        />
-                        <select
-                          value={currentPlan.carpetAreaUnit}
-                          onChange={(e) =>
-                            handleInputChange("carpetAreaUnit", e.target.value)
-                          }
-                          className={errors.areaUnit ? "error" : ""}
-                        >
-                          {areaUnitOptions.map((option) => (
-                            <option key={option} value={option}>
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      {errors.carpetArea && (
-                        <p className="error-message">{errors.carpetArea}</p>
-                      )}
-                      {errors.areaUnit && (
-                        <p className="error-message">{errors.areaUnit}</p>
-                      )}
-                    </div>
-
-                    <div className="form-group">
-                      <label>Price Range</label>
-                      <div className="price-input-group">
-                        <div className="price-input-from">
-                          <label htmlFor="priceFrom" className="label-price">
-                            From
+                    <div className="form-group full-width">
+                      <label>Area Details</label>
+                      <div className="area-input-group">
+                        <div className="area-input">
+                          <label htmlFor="superArea" className="label-area">
+                            Super Area
                           </label>
                           <input
-                            id="priceFrom"
+                            id="superArea"
                             type="number"
-                            value={currentPlan.priceFrom}
+                            value={currentPlan.superArea}
                             onChange={(e) =>
-                              handleInputChange("priceFrom", e.target.value)
+                              handleInputChange("superArea", e.target.value)
                             }
-                            placeholder="Min price"
+                            placeholder="Super area"
                             min="0"
                             step="0.1"
-                            className={errors.priceRange ? "error" : ""}
                           />
                         </div>
-                        <div className="price-input-to">
-                          <label htmlFor="priceTo" className="label-price">
-                            To
+                        <div className="area-input">
+                          <label htmlFor="carpetArea" className="label-area">
+                            Carpet Area
                           </label>
                           <input
-                            id="priceTo"
+                            id="carpetArea"
                             type="number"
-                            value={currentPlan.priceTo}
+                            value={currentPlan.carpetArea}
                             onChange={(e) =>
-                              handleInputChange("priceTo", e.target.value)
+                              handleInputChange("carpetArea", e.target.value)
                             }
-                            placeholder="Max price"
+                            placeholder="Carpet area"
                             min="0"
                             step="0.1"
-                            className={errors.priceRange ? "error" : ""}
+                            className={errors.carpetArea ? "error" : ""}
                           />
                         </div>
-                        <div className="price-unit-select">
-                          <label className="label-price">Unit</label>
+                        <div className="area-unit-select">
+                          <label className="label-area">Unit</label>
                           <select
-                            value={currentPlan.priceUnit}
+                            value={currentPlan.areaUnit}
                             onChange={(e) =>
-                              handleInputChange("priceUnit", e.target.value)
+                              handleInputChange("areaUnit", e.target.value)
                             }
                           >
-                            {priceUnitOptions.map((option) => (
+                            {areaUnitOptions.map((option) => (
                               <option key={option} value={option}>
                                 {option}
                               </option>
@@ -5342,10 +5439,26 @@ const FloorPlans = ({ societyId }) => {
                           </select>
                         </div>
                       </div>
-                      {errors.priceRange && (
-                        <p className="error-message">{errors.priceRange}</p>
+                      {errors.carpetArea && (
+                        <p className="error-message">{errors.carpetArea}</p>
                       )}
                     </div>
+
+                      <div className="form-group full-width">
+                        <label htmlFor="price">Price</label>
+                        <input
+                          id="price"
+                          type="text"
+                          value={formatIndianNumber(currentPlan.price)}
+                          onChange={(e) => handlePriceChange("price", e.target.value)}
+                          placeholder="Enter price"
+                        />
+                        {currentPlan.price && (
+                          <p className="price-in-words">
+                            {numberToWords(parseInt(currentPlan.price))} Only
+                          </p>
+                        )}
+                      </div>
                   </div>
 
                   <div className="form-group full-width">
@@ -5535,16 +5648,14 @@ const ContactSection = ({ societyId }) => {
     manager: {
       name: "",
       designation: "Society Manager",
-      mobile: "",
-      email: "",
-      responseRate: "100%",
-      responseTime: "within an hour",
+      mobiles: [""],
+      emails: [""],
     },
     maintenance: {
       companyName: "",
       contactPerson: "",
-      phone: "",
-      email: "",
+      phones: [""],
+      emails: [""],
       contractStart: "",
       contractEnd: "",
     },
@@ -5552,12 +5663,12 @@ const ContactSection = ({ societyId }) => {
 
   // Refs for each input to scroll into view on focus
   const managerNameRef = useRef(null);
-  const managerMobileRef = useRef(null);
-  const managerEmailRef = useRef(null);
+  const managerMobilesRefs = useRef([React.createRef()]);
+  const managerEmailsRefs = useRef([React.createRef()]);
   const maintenanceCompanyRef = useRef(null);
   const maintenanceContactRef = useRef(null);
-  const maintenancePhoneRef = useRef(null);
-  const maintenanceEmailRef = useRef(null);
+  const maintenancePhonesRefs = useRef([React.createRef()]);
+  const maintenanceEmailsRefs = useRef([React.createRef()]);
   const contractStartRef = useRef(null);
   const contractEndRef = useRef(null);
 
@@ -5581,7 +5692,13 @@ const ContactSection = ({ societyId }) => {
   useEffect(() => {
     const fetchSocietyInfo = async () => {
       try {
-        const docRef = doc(projectFirestore, "m_societies", societyId);
+        const docRef = doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "contact_info"
+        );
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -5590,16 +5707,22 @@ const ContactSection = ({ societyId }) => {
             manager: {
               name: data.manager?.name || "",
               designation: data.manager?.designation || "Society Manager",
-              mobile: formatPhoneForDisplay(data.manager?.mobile || ""),
-              email: data.manager?.email || "",
-              responseRate: data.manager?.responseRate || "100%",
-              responseTime: data.manager?.responseTime || "within an hour",
+              mobiles: data.manager?.mobiles?.length > 0 
+                ? data.manager.mobiles.map(formatPhoneForDisplay) 
+                : [formatPhoneForDisplay(data.manager?.mobile || "")],
+              emails: data.manager?.emails?.length > 0 
+                ? data.manager.emails 
+                : [data.manager?.email || ""],
             },
             maintenance: {
               companyName: data.maintenance?.companyName || "",
               contactPerson: data.maintenance?.contactPerson || "",
-              phone: formatPhoneForDisplay(data.maintenance?.phone || ""),
-              email: data.maintenance?.email || "",
+              phones: data.maintenance?.phones?.length > 0 
+                ? data.maintenance.phones.map(formatPhoneForDisplay) 
+                : [formatPhoneForDisplay(data.maintenance?.phone || "")],
+              emails: data.maintenance?.emails?.length > 0 
+                ? data.maintenance.emails 
+                : [data.maintenance?.email || ""],
               contractStart: data.maintenance?.contractStart || "",
               contractEnd: data.maintenance?.contractEnd || "",
             },
@@ -5617,32 +5740,97 @@ const ContactSection = ({ societyId }) => {
     fetchSocietyInfo();
   }, [societyId]);
 
-  const handleInputChange = (e, section) => {
+  const handleInputChange = (e, section, field, index = 0) => {
     const { name, value } = e.target;
 
     // Handle phone number inputs with +91 prefix and 10-digit limit
-    if (name === "mobile" || name === "phone") {
+    if ((field === "mobiles" || field === "phones") && name === `value-${index}`) {
       const digitsOnly = value.replace(/\D/g, "");
 
       if (digitsOnly.length <= 10) {
-        setFormData((prev) => ({
-          ...prev,
-          [section]: {
-            ...prev[section],
-            [name]: digitsOnly,
-          },
-        }));
+        setFormData((prev) => {
+          const newArray = [...prev[section][field]];
+          newArray[index] = digitsOnly;
+          return {
+            ...prev,
+            [section]: {
+              ...prev[section],
+              [field]: newArray,
+            },
+          };
+        });
       }
       return;
     }
+
+    // Handle regular inputs
+    if (field && index !== undefined) {
+      // For array fields (mobiles, emails, phones)
+      setFormData((prev) => {
+        const newArray = [...prev[section][field]];
+        newArray[index] = value;
+        return {
+          ...prev,
+          [section]: {
+            ...prev[section],
+            [field]: newArray,
+          },
+        };
+      });
+    } else {
+      // For single value fields
+      setFormData((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [name]: value,
+        },
+      }));
+    }
+  };
+
+  const addField = (section, field) => {
+    setFormData((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: [...prev[section][field], ""],
+      },
+    }));
+
+    // Create new refs for the new fields
+    if (field === "mobiles") {
+      managerMobilesRefs.current.push(React.createRef());
+    } else if (field === "emails" && section === "manager") {
+      managerEmailsRefs.current.push(React.createRef());
+    } else if (field === "phones") {
+      maintenancePhonesRefs.current.push(React.createRef());
+    } else if (field === "emails" && section === "maintenance") {
+      maintenanceEmailsRefs.current.push(React.createRef());
+    }
+  };
+
+  const removeField = (section, field, index) => {
+    if (formData[section][field].length <= 1) return;
 
     setFormData((prev) => ({
       ...prev,
       [section]: {
         ...prev[section],
-        [name]: value,
+        [field]: prev[section][field].filter((_, i) => i !== index),
       },
     }));
+
+    // Remove the corresponding ref
+    if (field === "mobiles") {
+      managerMobilesRefs.current.splice(index, 1);
+    } else if (field === "emails" && section === "manager") {
+      managerEmailsRefs.current.splice(index, 1);
+    } else if (field === "phones") {
+      maintenancePhonesRefs.current.splice(index, 1);
+    } else if (field === "emails" && section === "maintenance") {
+      maintenanceEmailsRefs.current.splice(index, 1);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -5652,16 +5840,19 @@ const ContactSection = ({ societyId }) => {
       const dataToSave = {
         manager: {
           ...formData.manager,
-          mobile: formatPhoneForStorage(formData.manager.mobile),
+          mobiles: formData.manager.mobiles.map(formatPhoneForStorage).filter(mobile => mobile !== "+91"),
+          emails: formData.manager.emails.filter(email => email !== ""),
         },
         maintenance: {
           ...formData.maintenance,
-          phone: formatPhoneForStorage(formData.maintenance.phone),
+          phones: formData.maintenance.phones.map(formatPhoneForStorage).filter(phone => phone !== "+91"),
+          emails: formData.maintenance.emails.filter(email => email !== ""),
         },
       };
 
-      const docRef = doc(projectFirestore, "m_societies", societyId);
-      await updateDoc(docRef, dataToSave);
+      const docRef = doc(projectFirestore, "m_societies", societyId, "society_information", "contact_info");
+      await setDoc(docRef, dataToSave, { merge: true });
+
       setEditMode(false);
     } catch (error) {
       console.error("Error updating society info:", error);
@@ -5673,10 +5864,10 @@ const ContactSection = ({ societyId }) => {
   const hasContactData = () => {
     return (
       formData.manager.name &&
-      formData.manager.mobile &&
-      formData.manager.email &&
+      formData.manager.mobiles[0] &&
+      formData.manager.emails[0] &&
       formData.maintenance.companyName &&
-      formData.maintenance.phone
+      formData.maintenance.phones[0]
     );
   };
 
@@ -5691,7 +5882,7 @@ const ContactSection = ({ societyId }) => {
 
   // Function to scroll the element into view
   const handleFocus = (ref) => {
-    if (ref.current) {
+    if (ref && ref.current) {
       setTimeout(() => {
         ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 300); // Small delay to let the keyboard appear
@@ -5754,7 +5945,7 @@ const ContactSection = ({ societyId }) => {
                             onChange={(e) => {
                               const value = e.target.value;
                               if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "manager");
+                                handleInputChange(e, "manager", null);
                               }
                             }}
                             onFocus={() => handleFocus(managerNameRef)}
@@ -5766,76 +5957,92 @@ const ContactSection = ({ societyId }) => {
 
                         <div className="contact-grid">
                           <div className="form-group">
-                            <label>Mobile:</label>
-                            <div className="phone-input-container">
-                              <span className="phone-prefix">+91</span>
-                              <input
-                                ref={managerMobileRef}
-                                type="tel"
-                                name="mobile"
-                                value={formData.manager.mobile}
-                                onChange={(e) => handleInputChange(e, "manager")}
-                                onFocus={() => handleFocus(managerMobileRef)}
-                                placeholder="Enter mobile number"
-                                required
-                                disabled={isSaving}
-                                maxLength={10}
-                                pattern="[0-9]{10}"
-                                title="Please enter a 10-digit mobile number"
-                              />
-                            </div>
-                            <span className="input-info">
-                              10-digit mobile number
-                            </span>
+                            <label>Mobile Numbers:</label>
+                            {formData.manager.mobiles.map((mobile, index) => (
+                              <div key={index} className="multi-field-group">
+                                <div className="phone-input-container">
+                                  <span className="phone-prefix">+91</span>
+                                  <input
+                                    ref={managerMobilesRefs.current[index]}
+                                    type="tel"
+                                    name={`value-${index}`}
+                                    value={mobile}
+                                    onChange={(e) => handleInputChange(e, "manager", "mobiles", index)}
+                                    onFocus={() => handleFocus(managerMobilesRefs.current[index])}
+                                    placeholder="Enter mobile number"
+                                    required={index === 0}
+                                    disabled={isSaving}
+                                    maxLength={10}
+                                    pattern="[0-9]{10}"
+                                    title="Please enter a 10-digit mobile number"
+                                  />
+                                </div>
+                                {index === 0 && (
+                                  <span className="input-info">
+                                    10-digit mobile number
+                                  </span>
+                                )}
+                                {formData.manager.mobiles.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove-field-btn"
+                                    onClick={() => removeField("manager", "mobiles", index)}
+                                    disabled={isSaving}
+                                  >
+                                    <FaTimes />
+                                  </button>
+                                )}
+                                {index === formData.manager.mobiles.length - 1 && (
+                                  <button
+                                    type="button"
+                                    className="add-field-btn"
+                                    onClick={() => addField("manager", "mobiles")}
+                                    disabled={isSaving}
+                                  >
+                                    <FaPlus /> Add Another
+                                  </button>
+                                )}
+                              </div>
+                            ))}
                           </div>
 
                           <div className="form-group">
-                            <label>Email:</label>
-                            <input
-                              ref={managerEmailRef}
-                              type="email"
-                              name="email"
-                              value={formData.manager.email}
-                              onChange={(e) => handleInputChange(e, "manager")}
-                              onFocus={() => handleFocus(managerEmailRef)}
-                              placeholder="Enter email"
-                              required
-                              disabled={isSaving}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="response-info">
-                          <div className="form-group">
-                            <label>Response Rate:</label>
-                            <select
-                              name="responseRate"
-                              value={formData.manager.responseRate}
-                              onChange={(e) => handleInputChange(e, "manager")}
-                              disabled={isSaving}
-                            >
-                              <option value="100%">100%</option>
-                              <option value="90%">90%</option>
-                              <option value="80%">80%</option>
-                            </select>
-                          </div>
-
-                          <div className="form-group">
-                            <label>Response Time:</label>
-                            <select
-                              name="responseTime"
-                              value={formData.manager.responseTime}
-                              onChange={(e) => handleInputChange(e, "manager")}
-                              disabled={isSaving}
-                            >
-                              <option value="within an hour">
-                                within an hour
-                              </option>
-                              <option value="within a few hours">
-                                within a few hours
-                              </option>
-                              <option value="within a day">within a day</option>
-                            </select>
+                            <label>Email Addresses:</label>
+                            {formData.manager.emails.map((email, index) => (
+                              <div key={index} className="multi-field-group">
+                                <input
+                                  ref={managerEmailsRefs.current[index]}
+                                  type="email"
+                                  name={`value-${index}`}
+                                  value={email}
+                                  onChange={(e) => handleInputChange(e, "manager", "emails", index)}
+                                  onFocus={() => handleFocus(managerEmailsRefs.current[index])}
+                                  placeholder="Enter email"
+                                  required={index === 0}
+                                  disabled={isSaving}
+                                />
+                                {formData.manager.emails.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove-field-btn"
+                                    onClick={() => removeField("manager", "emails", index)}
+                                    disabled={isSaving}
+                                  >
+                                    <FaTimes />
+                                  </button>
+                                )}
+                                {index === formData.manager.emails.length - 1 && (
+                                  <button
+                                    type="button"
+                                    className="add-field-btn"
+                                    onClick={() => addField("manager", "emails")}
+                                    disabled={isSaving}
+                                  >
+                                    <FaPlus /> Add Another
+                                  </button>
+                                )}
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -5853,7 +6060,7 @@ const ContactSection = ({ societyId }) => {
                             onChange={(e) => {
                               const value = e.target.value;
                               if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "maintenance");
+                                handleInputChange(e, "maintenance", null);
                               }
                             }}
                             onFocus={() => handleFocus(maintenanceCompanyRef)}
@@ -5873,7 +6080,7 @@ const ContactSection = ({ societyId }) => {
                             onChange={(e) => {
                               const value = e.target.value;
                               if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "maintenance");
+                                handleInputChange(e, "maintenance", null);
                               }
                             }}
                             onFocus={() => handleFocus(maintenanceContactRef)}
@@ -5884,40 +6091,92 @@ const ContactSection = ({ societyId }) => {
 
                         <div className="contact-grid">
                           <div className="form-group">
-                            <label>Phone:</label>
-                            <div className="phone-input-container">
-                              <span className="phone-prefix">+91</span>
-                              <input
-                                ref={maintenancePhoneRef}
-                                type="tel"
-                                name="phone"
-                                value={formData.maintenance.phone}
-                                onChange={(e) => handleInputChange(e, "maintenance")}
-                                onFocus={() => handleFocus(maintenancePhoneRef)}
-                                placeholder="Enter phone number"
-                                disabled={isSaving}
-                                maxLength={10}
-                                pattern="[0-9]{10}"
-                                title="Please enter a 10-digit phone number"
-                              />
-                            </div>
-                            <span className="input-info">
-                              10-digit phone number
-                            </span>
+                            <label>Phone Numbers:</label>
+                            {formData.maintenance.phones.map((phone, index) => (
+                              <div key={index} className="multi-field-group">
+                                <div className="phone-input-container">
+                                  <span className="phone-prefix">+91</span>
+                                  <input
+                                    ref={maintenancePhonesRefs.current[index]}
+                                    type="tel"
+                                    name={`value-${index}`}
+                                    value={phone}
+                                    onChange={(e) => handleInputChange(e, "maintenance", "phones", index)}
+                                    onFocus={() => handleFocus(maintenancePhonesRefs.current[index])}
+                                    placeholder="Enter phone number"
+                                    required={index === 0}
+                                    disabled={isSaving}
+                                    maxLength={10}
+                                    pattern="[0-9]{10}"
+                                    title="Please enter a 10-digit phone number"
+                                  />
+                                </div>
+                                {index === 0 && (
+                                  <span className="input-info">
+                                    10-digit phone number
+                                  </span>
+                                )}
+                                {formData.maintenance.phones.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove-field-btn"
+                                    onClick={() => removeField("maintenance", "phones", index)}
+                                    disabled={isSaving}
+                                  >
+                                    <FaTimes />
+                                  </button>
+                                )}
+                                {index === formData.maintenance.phones.length - 1 && (
+                                  <button
+                                    type="button"
+                                    className="add-field-btn"
+                                    onClick={() => addField("maintenance", "phones")}
+                                    disabled={isSaving}
+                                  >
+                                    <FaPlus /> Add Another
+                                  </button>
+                                )}
+                              </div>
+                            ))}
                           </div>
 
                           <div className="form-group">
-                            <label>Email:</label>
-                            <input
-                              ref={maintenanceEmailRef}
-                              type="email"
-                              name="email"
-                              value={formData.maintenance.email}
-                              onChange={(e) => handleInputChange(e, "maintenance")}
-                              onFocus={() => handleFocus(maintenanceEmailRef)}
-                              placeholder="Enter email"
-                              disabled={isSaving}
-                            />
+                            <label>Email Addresses:</label>
+                            {formData.maintenance.emails.map((email, index) => (
+                              <div key={index} className="multi-field-group">
+                                <input
+                                  ref={maintenanceEmailsRefs.current[index]}
+                                  type="email"
+                                  name={`value-${index}`}
+                                  value={email}
+                                  onChange={(e) => handleInputChange(e, "maintenance", "emails", index)}
+                                  onFocus={() => handleFocus(maintenanceEmailsRefs.current[index])}
+                                  placeholder="Enter email"
+                                  required={index === 0}
+                                  disabled={isSaving}
+                                />
+                                {formData.maintenance.emails.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove-field-btn"
+                                    onClick={() => removeField("maintenance", "emails", index)}
+                                    disabled={isSaving}
+                                  >
+                                    <FaTimes />
+                                  </button>
+                                )}
+                                {index === formData.maintenance.emails.length - 1 && (
+                                  <button
+                                    type="button"
+                                    className="add-field-btn"
+                                    onClick={() => addField("maintenance", "emails")}
+                                    disabled={isSaving}
+                                  >
+                                    <FaPlus /> Add Another
+                                  </button>
+                                )}
+                              </div>
+                            ))}
                           </div>
                         </div>
 
@@ -5928,7 +6187,7 @@ const ContactSection = ({ societyId }) => {
                               ref={contractStartRef}
                               name="contractStart"
                               value={formData.maintenance.contractStart}
-                              onChange={(e) => handleInputChange(e, "maintenance")}
+                              onChange={(e) => handleInputChange(e, "maintenance", null)}
                               onFocus={() => handleFocus(contractStartRef)}
                               disabled={isSaving}
                             >
@@ -5953,7 +6212,7 @@ const ContactSection = ({ societyId }) => {
                               ref={contractEndRef}
                               name="contractEnd"
                               value={formData.maintenance.contractEnd}
-                              onChange={(e) => handleInputChange(e, "maintenance")}
+                              onChange={(e) => handleInputChange(e, "maintenance", null)}
                               onFocus={() => handleFocus(contractEndRef)}
                               disabled={isSaving}
                             >
@@ -6024,24 +6283,24 @@ const ContactSection = ({ societyId }) => {
                     <div className="contact-details">
                       <div className="contact-item">
                         <Phone className="contact-icon" />
-                        <span>
-                          {formatDisplayPhone(formData.manager.mobile)}
-                        </span>
+                        <div className="multi-contact-values">
+                          {formData.manager.mobiles.filter(mobile => mobile).map((mobile, index) => (
+                            <span key={index}>
+                              {formatDisplayPhone(mobile)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                       <div className="contact-item">
                         <Mail className="contact-icon" />
-                        <span>{formData.manager.email || "Not specified"}</span>
+                        <div className="multi-contact-values">
+                          {formData.manager.emails.filter(email => email).map((email, index) => (
+                            <span key={index}>
+                              {email || "Not specified"}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div className="availability">
-                      <p>
-                        Response Rate:{" "}
-                        {formData.manager.responseRate || "Not specified"}
-                      </p>
-                      <p>
-                        Response Time:{" "}
-                        {formData.manager.responseTime || "Not specified"}
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -6066,15 +6325,23 @@ const ContactSection = ({ societyId }) => {
                     <div className="contact-details">
                       <div className="contact-item">
                         <Phone className="contact-icon" />
-                        <span>
-                          {formatDisplayPhone(formData.maintenance.phone)}
-                        </span>
+                        <div className="multi-contact-values">
+                          {formData.maintenance.phones.filter(phone => phone).map((phone, index) => (
+                            <span key={index}>
+                              {formatDisplayPhone(phone)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                       <div className="contact-item">
                         <Mail className="contact-icon" />
-                        <span>
-                          {formData.maintenance.email || "Not specified"}
-                        </span>
+                        <div className="multi-contact-values">
+                          {formData.maintenance.emails.filter(email => email).map((email, index) => (
+                            <span key={index}>
+                              {email || "Not specified"}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
                     <div className="contract-details">
@@ -6110,15 +6377,422 @@ const ContactSection = ({ societyId }) => {
   );
 };
 
+// const SocietyLayout = ({ layoutImage, title, description, highlights }) => {
+//   return (
+//     <section className="society-layout">
+//       <div className="container">
+//       <div className="society-layout__content">
+//         <h2 className="society-layout__title">{title}</h2>
+//         <p className="society-layout__description">{description}</p>
+
+//         <ul className="society-layout__highlights">
+//           {highlights.map((item, index) => (
+//             <li key={index} className="society-layout__highlight">
+//               <span className="bullet"></span> {item}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+
+//       <div className="society-layout__image-wrapper">
+//         <img
+//           src={layoutImage}
+//           alt="Society Layout"
+//           className="society-layout__image"
+//         />
+//         <div className="society-layout__overlay">
+//           <h3>Explore the Layout</h3>
+//           <p>Click to view full plan</p>
+//         </div>
+//       </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
+  const { user } = useAuthContext();
+  const [layoutImage, setLayoutImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [tempImage, setTempImage] = useState(null);
+  const [fullScreenMode, setFullScreenMode] = useState(false);
+  
+  const [popup, setPopup] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+    onConfirm: null,
+  });
+
+  // Check if Firebase services are available
+  const isFirebaseAvailable = projectFirestore && projectStorage;
+
+  // Firestore document reference - only create if Firebase is available
+  const layoutDocRef = isFirebaseAvailable && societyId
+    ? doc(
+        projectFirestore,
+        "m_societies",
+        societyId,
+        "society_information",
+        "layout"
+      )
+    : null;
+
+  // Effect to fetch existing layout image from Firestore
+  useEffect(() => {
+    const fetchLayoutImage = async () => {
+      if (!layoutDocRef || !societyId) return;
+      try {
+        const docSnap = await getDoc(layoutDocRef);
+        if (docSnap.exists()) {
+          const layoutData = docSnap.data();
+          setLayoutImage(layoutData.imageUrl || "");
+        }
+      } catch (error) {
+        console.error("Error fetching layout image:", error);
+      }
+    };
+    
+    if (isFirebaseAvailable) {
+      fetchLayoutImage();
+    }
+  }, [societyId, layoutDocRef, isFirebaseAvailable]);
+
+  // Trigger file input when user clicks upload button with no image
+  useEffect(() => {
+    if (editMode && !layoutImage && !tempImage) {
+      document.getElementById('layout-image-input').click();
+    }
+  }, [editMode, layoutImage, tempImage]);
+
+  // Handle escape key to exit full screen
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && fullScreenMode) {
+        setFullScreenMode(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [fullScreenMode]);
+
+  const handleEditClick = () => {
+    if (!isFirebaseAvailable) {
+      setPopup({
+        isOpen: true,
+        message: "Firebase services are not available. Please check your configuration.",
+        type: "error",
+      });
+      return;
+    }
+    setEditMode(true);
+    setTempImage(null);
+  };
+
+  const handleCancel = () => {
+    setEditMode(false);
+    setTempImage(null);
+  };
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setPopup({
+          isOpen: true,
+          message: "Please select a valid image file.",
+          type: "error",
+        });
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setPopup({
+          isOpen: true,
+          message: "Image size should be less than 5MB.",
+          type: "error",
+        });
+        return;
+      }
+      
+      setTempImage(file);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!tempImage || !isFirebaseAvailable || !societyId) return;
+    
+    setUploading(true);
+    
+    try {
+      // Delete old image if exists
+      if (layoutImage) {
+        try {
+          const oldImageRef = ref(projectStorage, layoutImage);
+          await deleteObject(oldImageRef);
+        } catch (error) {
+          console.warn("Could not delete old image:", error);
+          // Continue with upload even if deletion fails
+        }
+      }
+      
+      // Upload new image
+      const fileName = `layout-${Date.now()}-${tempImage.name}`;
+      const imageRef = ref(
+        projectStorage,
+        `society_layouts/${societyId}/${fileName}`
+      );
+      
+      const uploadTask = uploadBytesResumable(imageRef, tempImage);
+      
+      const downloadURL = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          null,
+          (error) => reject(error),
+          async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
+        );
+      });
+      
+      // Save to Firestore
+      if (layoutDocRef) {
+        await setDoc(layoutDocRef, { imageUrl: downloadURL }, { merge: true });
+      }
+      
+      setLayoutImage(downloadURL);
+      setEditMode(false);
+      setTempImage(null);
+      
+      setPopup({
+        isOpen: true,
+        message: "Layout image updated successfully!",
+        type: "success",
+      });
+    } catch (error) {
+      console.error("Error uploading layout image:", error);
+      setPopup({
+        isOpen: true,
+        message: "Failed to upload layout image. Please try again.",
+        type: "error",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!layoutImage || !isFirebaseAvailable) return;
+    
+    setPopup({
+      isOpen: true,
+      message: "Are you sure you want to delete the layout image?",
+      type: "confirm",
+      onConfirm: async () => {
+        try {
+          // Delete from Firebase Storage
+          const imageRef = ref(projectStorage, layoutImage);
+          await deleteObject(imageRef);
+          
+          // Remove from Firestore
+          if (layoutDocRef) {
+            await setDoc(layoutDocRef, { imageUrl: "" }, { merge: true });
+          }
+          
+          setLayoutImage("");
+          setEditMode(false);
+          
+          setPopup({
+            isOpen: true,
+            message: "Layout image deleted successfully.",
+            type: "success",
+          });
+        } catch (error) {
+          console.error("Error deleting layout image:", error);
+          setPopup({
+            isOpen: true,
+            message: "Failed to delete layout image. Please try again.",
+            type: "error",
+          });
+        }
+      },
+    });
+  };
+
+  const handleFullScreenToggle = () => {
+    setFullScreenMode(!fullScreenMode);
+  };
+
+  const canEdit = user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
+
+  return (
+    <>
+      <section className="society-layout-section">
+        <div className="container">
+          <div className="society-layout-section__header">
+            <h2>{title || "Society Layout"}</h2>
+            <p>{subtitle}</p>
+            
+            {canEdit && layoutImage && !editMode && (
+              <button className="edit-button" onClick={handleEditClick}>
+                <FaEdit /> Change
+              </button>
+            )}
+          </div>
+
+          {!isFirebaseAvailable ? (
+            <div className="no-layout-image">
+              <FaExclamationTriangle size={64} />
+              <p>Firebase services are not available. Please check your configuration.</p>
+            </div>
+          ) : editMode ? (
+            <div className="layout-edit-mode">
+              <div className="layout-image-preview">
+                {tempImage ? (
+                  <img src={URL.createObjectURL(tempImage)} alt="Layout preview" />
+                ) : layoutImage ? (
+                  <img src={layoutImage} alt="Current layout" />
+                ) : (
+                  <div className="no-image-preview">
+                    <FaImage size={48} />
+                    <p>No layout image selected</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="layout-edit-controls">
+                {!tempImage && (
+                  <label className="upload-layout-btn">
+                    <FaUpload /> {layoutImage ? "Replace Image" : "Select Image"}
+                    <input
+                      id="layout-image-input"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                )}
+                
+                <div className="layout-action-buttons">
+                  <button 
+                    className="cancel-btn" 
+                    onClick={handleCancel}
+                    disabled={uploading}
+                  >
+                    Cancel
+                  </button>
+                  
+                  {tempImage && (
+                    <button 
+                      className="save-btn" 
+                      onClick={handleSave}
+                      disabled={uploading}
+                    >
+                      {uploading ? "Uploading..." : "Save Changes"}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : layoutImage ? (
+            <div className="society-layout-section__image">
+              <div className="image-container" onClick={handleFullScreenToggle}>
+                <img src={layoutImage} alt="Society Layout" />
+                <button className="expand-button" onClick={handleFullScreenToggle}>
+                  <FaExpand />
+                </button>
+              </div>
+            </div>
+          ) : canEdit ? (
+            <div className="no-layout-image">
+              <FaImage size={64} />
+              <p>No layout image uploaded yet</p>
+              <button className="upload-layout-btn" onClick={handleEditClick}>
+                <FaUpload /> Upload Layout Image
+              </button>
+            </div>
+          ) : (
+            <div className="no-layout-image">
+              <FaImage size={64} />
+              <p>No layout image available</p>
+            </div>
+          )}
+
+          {/* Popup for messages and confirmations */}
+          {popup.isOpen && (
+            <div className="popup-overlay">
+              <div className={`popup-content ${popup.type}`}>
+                <div className="popup-icon">
+                  {popup.type === "success" && <FaCheckCircle />}
+                  {popup.type === "error" && <FaExclamationCircle />}
+                  {popup.type === "confirm" && <FaExclamationCircle />}
+                </div>
+                <div className="popup-message">
+                  <p>{popup.message}</p>
+                </div>
+                <div className="popup-actions">
+                  {popup.type === "confirm" && (
+                    <>
+                      <button
+                        className="btn-cancel"
+                        onClick={() =>
+                          setPopup({ isOpen: false, message: "", type: "" })
+                        }
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="btn-confirm"
+                        onClick={() => {
+                          if (popup.onConfirm) {
+                            popup.onConfirm();
+                          }
+                          setPopup({ isOpen: false, message: "", type: "" });
+                        }}
+                      >
+                        Confirm
+                      </button>
+                    </>
+                  )}
+                  {(popup.type === "success" || popup.type === "error") && (
+                    <button
+                      className="btn-close-popup"
+                      onClick={() =>
+                        setPopup({ isOpen: false, message: "", type: "" })
+                      }
+                    >
+                      Close
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Full Screen Overlay */}
+      {fullScreenMode && (
+        <div className="full-screen-overlay" onClick={() => setFullScreenMode(false)}>
+          <div className="full-screen-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-full-screen" onClick={() => setFullScreenMode(false)}>
+              &times;
+            </button>
+            <img src={layoutImage} alt="Society Layout Full Screen" />
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
 const PGSocietyPage = () => {
   // The 'society' param from the URL is the slug, e.g., "best-12345"
   const { country, state, city, locality, societyName, id } = useParams();
-  console.log("Country:", country);
-  console.log("State:", state);
-  console.log("City:", city);
-  console.log("Locality:", locality);
-  console.log("Society:", societyName);
-  console.log("Society ID:", id);
 
   const [society, setSociety] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -6164,41 +6838,15 @@ const PGSocietyPage = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
-  console.log(society);
   const videos = [
     { id: "abc123", title: "Luxury Apartment Tour", category: "Property Tour" },
     { id: "def456", title: "Project Overview", category: "Overview" },
     { id: "ghi789", title: "Nearby Amenities", category: "Amenities" },
   ];
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} society-page-whole-wrapper `}>
       {/* Header Image Slider */}
-      {/* <div className={styles.heroSection}>
-        <div
-          className={styles.sliderWrapper}
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((img, idx) => (
-            <img
-              key={idx}
-              src={`/assets/img/society/${img}`}
-              alt={`Slide ${idx + 1}`}
-              className={styles.heroImage}
-            />
-          ))}
-        </div>
-        <button className={styles.viewAllBtn}>View All Photos</button>
-        <div className={styles.dotsWrapper}>
-          {images.map((_, idx) => (
-            <span
-              key={idx}
-              className={`${styles.dot} ${
-                currentIndex === idx ? styles.activeDot : ""
-              }`}
-            ></span>
-          ))}
-        </div>
-      </div> */}
+     
       {/* <HeroSection societyId={id} /> */}
       <div id="Overview">
         <SocietyDetails
@@ -6213,26 +6861,8 @@ const PGSocietyPage = () => {
       <StickyTabBar />
 
       {/* Overview Section */}
-
       <div className={styles.contentWrapper}>
-        {/* <div className={styles.overviewSection}>
-          <div className={styles.contact}>
-            <div>
-              <SocietyOverview
-                country={country}
-                state={state}
-                city={city}
-                locality={locality}
-                societyId={id}
-              />
-            </div>
-            <div>
-              <ContactForm />
-            </div>
-          </div>
-        </div> */}
 
-        {/* Buy Rent Tabs */}
         {/* Available Properties Section */}
         <div id="Available-Properties">
           <PropertiesSection societyName={society.society} />
@@ -6255,6 +6885,15 @@ const PGSocietyPage = () => {
         {/* <div id="Nearby-Locations" className="locationAdvantages">
           <LocationAdvantages societyId={id} />
         </div>  */}
+
+        {/* Society Layout */}
+
+        <SocietyLayoutSection
+        societyId={id}
+          title={society.society}
+          subtitle="Discover the master layout of our premium society, thoughtfully designed to create a modern and sustainable lifestyle."
+        />
+        
 
         {/* Floor Plans */}
         <div id="Units-Floor-Plans">
@@ -6283,6 +6922,7 @@ const PGSocietyPage = () => {
             state={state}
             city={city}
             locality={locality}
+            address={society.address}
             societyId={id}
           />
           {/* className="meetingPointSection"
