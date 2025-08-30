@@ -238,7 +238,6 @@ const EditModal = ({ data, onClose, onSave }) => {
   const possessionYearRef = useRef(null);
   const launchedYearRef = useRef(null);
 
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -302,7 +301,7 @@ const EditModal = ({ data, onClose, onSave }) => {
   const handleFocus = (ref) => {
     if (ref.current) {
       setTimeout(() => {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300); // Small delay to let the keyboard appear
     }
   };
@@ -453,7 +452,6 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group toggle-group">
-
               {/* <div className="toggle-description">
                 <label className="toggle-label">Approved By RERA </label>
                 <div
@@ -620,12 +618,15 @@ const EditAbout = ({ data, onClose, onSave }) => {
     e.preventDefault();
     onSave(formData);
   };
-  
+
   // New function to handle focus and scroll
   const handleFocus = () => {
     if (descriptionRef.current) {
       setTimeout(() => {
-        descriptionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        descriptionRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }, 300); // A small delay to allow the keyboard to appear
     }
   };
@@ -696,7 +697,6 @@ const EditAbout = ({ data, onClose, onSave }) => {
               />
             </div>
             <div className="form-group toggle-group">
-
               {/* <div className="toggle-description">
                 <label className="toggle-label">Approved By RERA </label>
                 <div
@@ -875,7 +875,7 @@ const EditRates = ({ data, onClose, onSave }) => {
   const handleFocus = (ref) => {
     if (ref.current) {
       setTimeout(() => {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300); // Small delay to let the keyboard appear
     }
   };
@@ -1023,7 +1023,6 @@ const EditRates = ({ data, onClose, onSave }) => {
   );
 };
 
-
 const SocietyDetails = ({ country, state, city, locality, societyId }) => {
   const { user } = useAuthContext();
   const [societyData, setSocietyData] = useState({
@@ -1039,7 +1038,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
     totalUnits: "",
     totalTowers: "",
     projectSize: "",
-    // reraApproved: false, 
+    // reraApproved: false,
   });
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -1136,9 +1135,11 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-8.5" />
                         <path d="M22 4L12 14.01l-3-3" />
                       </svg>
-                      <p style={{  fontSize: "16px" }}>
+                      <p style={{ fontSize: "16px" }}>
                         Ready to Move Since{" "}
-                        <span style={{ fontWeight: "700" }}>'{societyData?.launchedYear || "N/A"}'</span>
+                        <span style={{ fontWeight: "700" }}>
+                          '{societyData?.launchedYear || "N/A"}'
+                        </span>
                       </p>
                     </div>
                   )}
@@ -1570,7 +1571,7 @@ const PropertiesSection = ({ societyName }) => {
     try {
       setLoading(true);
       const nextLimit = loadedCount + 10;
-      
+
       let q = query(
         collection(projectFirestore, "properties-propdial"),
         where("society", "==", societyName)
@@ -1687,84 +1688,82 @@ const PropertiesSection = ({ societyName }) => {
             </div>
             <div className="properties-container">
               <div className="properties-scroll" ref={scrollRef}>
-                {properties.length > 0 ? (
-                  properties.map((property) => (
-                    <Link
-                      to={`/propertydetails/${property.id}`}
-                      key={property.id}
-                      className="property-card-link"
-                    >
-                      <div className="property-card">
-                        <span
-                          className={`property-card__badge ${
-                            property.purpose === "Sale"
-                              ? "property-card__badge--sale"
-                              : "property-card__badge--rent"
-                          }`}
-                        >
-                          {property.purpose === "Sale"
-                            ? "For Sale"
-                            : "For Rent"}
-                        </span>
-                        <div className="property-card__image-wrapper">
-                          <img
-                            src={property.images?.[0] || "/placeholder.svg"}
-                            alt={property.propertyName || "Property"}
-                            className="property-card__image"
-                          />
-                        </div>
-                        <div className="property-card__header">
-                          <div className="property-card__price-area-container">
-                            <span className="property-card__price">
-                              ₹{" "}
-                              {property.purpose === "Sale"
-                                ? property.demandPriceSale || "N/A"
-                                : property.demandPriceRent || "N/A"}
-                            </span>
-                            <span className="property-card__area">
-                              {property.carpetArea || "N/A"}{" "}
-                              {property.carpetAreaUnit}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="property-card__content">
-                          <p className="property-card__floor">
-                            {property.bhk} {property.propertyType}
-                          </p>
-                          <div className="property-card__features">
-                            {property.category && (
-                              <span className="property-card__feature-badge">
-                                {property.category}
-                              </span>
-                            )}
-                            {property.furnishing && (
-                              <span className="property-card__feature-badge">
-                                {property.furnishing}
-                              </span>
-                            )}
-                            {property.package && (
-                              <span className="property-card__feature-badge">
-                                {property.package}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="property-card__footer">
-                          <Link
-                            to={`/propertydetails/${property.id}`}
-                            className="property-card__action-button"
+                {properties.length > 0
+                  ? properties.map((property) => (
+                      <Link
+                        to={`/propertydetails/${property.id}`}
+                        key={property.id}
+                        className="property-card-link"
+                      >
+                        <div className="property-card">
+                          <span
+                            className={`property-card__badge ${
+                              property.purpose === "Sale"
+                                ? "property-card__badge--sale"
+                                : "property-card__badge--rent"
+                            }`}
                           >
-                            View Details
-                          </Link>
+                            {property.purpose === "Sale"
+                              ? "For Sale"
+                              : "For Rent"}
+                          </span>
+                          <div className="property-card__image-wrapper">
+                            <img
+                              src={property.images?.[0] || "/placeholder.svg"}
+                              alt={property.propertyName || "Property"}
+                              className="property-card__image"
+                            />
+                          </div>
+                          <div className="property-card__header">
+                            <div className="property-card__price-area-container">
+                              <span className="property-card__price">
+                                ₹{" "}
+                                {property.purpose === "Sale"
+                                  ? property.demandPriceSale || "N/A"
+                                  : property.demandPriceRent || "N/A"}
+                              </span>
+                              <span className="property-card__area">
+                                {property.carpetArea || "N/A"}{" "}
+                                {property.carpetAreaUnit}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="property-card__content">
+                            <p className="property-card__floor">
+                              {property.bhk} {property.propertyType}
+                            </p>
+                            <div className="property-card__features">
+                              {property.category && (
+                                <span className="property-card__feature-badge">
+                                  {property.category}
+                                </span>
+                              )}
+                              {property.furnishing && (
+                                <span className="property-card__feature-badge">
+                                  {property.furnishing}
+                                </span>
+                              )}
+                              {property.package && (
+                                <span className="property-card__feature-badge">
+                                  {property.package}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="property-card__footer">
+                            <Link
+                              to={`/propertydetails/${property.id}`}
+                              className="property-card__action-button"
+                            >
+                              View Details
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))
-                ) : (
-                  !loading && (
-                    <p className="no-properties">No properties found.</p>
-                  )
-                )}
+                      </Link>
+                    ))
+                  : !loading && (
+                      <p className="no-properties">No properties found.</p>
+                    )}
 
                 {/* Load More Button at the end of the scroll container */}
                 {loadedCount < totalCount && (
@@ -2420,6 +2419,10 @@ const AmenitiesSection = ({ societyId }) => {
             Experience luxury living with our comprehensive range of premium
             amenities
           </p>
+          <p className="note">
+            Note: All amenity photos are for representation only, not actual
+            images.
+          </p>
         </div>
 
         {/* Navigation Bar for Categories */}
@@ -2491,10 +2494,7 @@ const AmenitiesSection = ({ societyId }) => {
           <div className="amenities-modal">
             <div className="modal-content">
               <div className="modal-header">
-                <h2>
-                  Select Amenities: For {activeCategory}
-                  
-                </h2>
+                <h2>Select Amenities: For {activeCategory}</h2>
                 <button className="close-btn" onClick={handleCloseModal}>
                   &times;
                 </button>
@@ -3067,14 +3067,14 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
 
   // Firestore document reference
   const societyDocRef = projectFirestore
-  ? doc(
-      projectFirestore,
-      "m_societies",
-      societyId,
-      "society_information",
-      "images"
-    )
-  : null;
+    ? doc(
+        projectFirestore,
+        "m_societies",
+        societyId,
+        "society_information",
+        "images"
+      )
+    : null;
 
   // Effect to fetch existing images from Firestore when component mounts or societyId changes
   useEffect(() => {
@@ -3183,7 +3183,6 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
       const updatedImages = [...images, ...newUrls];
       if (societyDocRef) {
         await setDoc(societyDocRef, { images: updatedImages }, { merge: true });
-
       }
 
       setImages(updatedImages);
@@ -3255,7 +3254,6 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
       // Update Firestore document
       if (societyDocRef) {
         await setDoc(societyDocRef, { images: updatedImages }, { merge: true });
-
       }
 
       setImages(updatedImages);
@@ -3857,8 +3855,13 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
       if (!societyId) return;
 
       try {
-        const docRef = doc(projectFirestore, "m_societies", societyId, "society_information",
-      "map_location");
+        const docRef = doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "map_location"
+        );
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -3902,10 +3905,14 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
         "society_information",
         "map_location"
       );
-      await setDoc(docRef, {
-        mapLink: tempMapLink,
-        locations: tempLocations,
-      }, { merge: true });
+      await setDoc(
+        docRef,
+        {
+          mapLink: tempMapLink,
+          locations: tempLocations,
+        },
+        { merge: true }
+      );
       setMapLink(tempMapLink);
       setNearbyLocations(tempLocations);
       setIsEditing(false);
@@ -4317,8 +4324,13 @@ const PropertyVideosSection = ({ societyId }) => {
   useEffect(() => {
     if (!societyId) return;
 
-    const societyDocRef = doc(projectFirestore, "m_societies", societyId, "society_information",
-      "videos");
+    const societyDocRef = doc(
+      projectFirestore,
+      "m_societies",
+      societyId,
+      "society_information",
+      "videos"
+    );
     const unsubscribe = onSnapshot(societyDocRef, (doc) => {
       if (doc.exists()) {
         const data = doc.data();
@@ -4384,19 +4396,27 @@ const PropertyVideosSection = ({ societyId }) => {
     }
 
     try {
-    await setDoc(
-      doc(projectFirestore, "m_societies", societyId, "society_information", "videos"),
-      {
-        videos: [
-          ...videos,
-          {
-            id: videoId,
-            title: newVideo.title,
-            thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-            duration: "0:00",
-          },
-        ],
-      },  { merge: true }  );
+      await setDoc(
+        doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "videos"
+        ),
+        {
+          videos: [
+            ...videos,
+            {
+              id: videoId,
+              title: newVideo.title,
+              thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+              duration: "0:00",
+            },
+          ],
+        },
+        { merge: true }
+      );
       setNewVideo({ url: "", title: "" });
       setShowForm(false);
     } catch (error) {
@@ -4414,7 +4434,13 @@ const PropertyVideosSection = ({ societyId }) => {
       const updatedVideos = [...videos];
       updatedVideos.splice(index, 1);
       await setDoc(
-        doc(projectFirestore, "m_societies", societyId, "society_information", "videos"),
+        doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "videos"
+        ),
         { videos: updatedVideos },
         { merge: true }
       );
@@ -4427,7 +4453,10 @@ const PropertyVideosSection = ({ societyId }) => {
   const handleFocus = () => {
     if (titleRef.current) {
       setTimeout(() => {
-        titleRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        titleRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       }, 300); // Small delay to let the keyboard show up first
     }
   };
@@ -4640,7 +4669,9 @@ const numberToWords = (num) => {
       return inWords(Math.floor(n / 1000)) + " Thousand " + inWords(n % 1000);
     if (n < 10000000)
       return inWords(Math.floor(n / 100000)) + " Lakh " + inWords(n % 100000);
-    return inWords(Math.floor(n / 10000000)) + " Crore " + inWords(n % 10000000);
+    return (
+      inWords(Math.floor(n / 10000000)) + " Crore " + inWords(n % 10000000)
+    );
   };
 
   return inWords(num).trim();
@@ -4703,7 +4734,7 @@ const FloorPlans = ({ societyId }) => {
     "8 BHK",
     "9 BHK",
     "9+ BHK",
-    "Hall"
+    "Hall",
   ];
 
   const bedroomOptions = [
@@ -4716,10 +4747,17 @@ const FloorPlans = ({ societyId }) => {
     "7 Bedrooms",
     "8 Bedrooms",
     "9 Bedrooms",
-    "10+ Bedrooms"
+    "10+ Bedrooms",
   ];
 
-  const bathroomOptions = ["1 Bathroom", "2 Bathrooms", "3 Bathrooms", "4 Bathrooms", "5 Bathrooms", "6 Bathrooms"];
+  const bathroomOptions = [
+    "1 Bathroom",
+    "2 Bathrooms",
+    "3 Bathrooms",
+    "4 Bathrooms",
+    "5 Bathrooms",
+    "6 Bathrooms",
+  ];
 
   const bhkOrder = [
     "EWS",
@@ -4741,56 +4779,50 @@ const FloorPlans = ({ societyId }) => {
     "Hall",
   ];
 
-  const additionalOptions = [
-    "Servant",
-    "Study",
-    "Store",
-    "Puja",
-  ];
+  const additionalOptions = ["Servant", "Study", "Store", "Puja"];
 
-  const areaUnitOptions = ["SqFt", "SqMtr", "SqYard", "Acres", "Hectares"];
+  const areaUnitOptions = ["SqFt", "SqYd", "SqMtr"]; //, "Acres", "Hectares"
 
-const updateUnitTypes = async (plans) => {
-  if (!Array.isArray(plans)) {
-    setUnitTypes(["All"]);
-    return;
-  }
+  const updateUnitTypes = async (plans) => {
+    if (!Array.isArray(plans)) {
+      setUnitTypes(["All"]);
+      return;
+    }
 
-  const uniqueBhkTypes = ["All", ...new Set(plans.map((plan) => plan.bhk))];
+    const uniqueBhkTypes = ["All", ...new Set(plans.map((plan) => plan.bhk))];
 
-  uniqueBhkTypes.sort((a, b) => {
-    if (a === "All") return -1;
-    if (b === "All") return 1;
+    uniqueBhkTypes.sort((a, b) => {
+      if (a === "All") return -1;
+      if (b === "All") return 1;
 
-    const indexA = bhkOrder.indexOf(a);
-    const indexB = bhkOrder.indexOf(b);
+      const indexA = bhkOrder.indexOf(a);
+      const indexB = bhkOrder.indexOf(b);
 
-    if (indexA === -1 && indexB === -1) return a.localeCompare(b);
-    if (indexA === -1) return 1;
-    if (indexB === -1) return -1;
+      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
 
-    return indexA - indexB;
-  });
+      return indexA - indexB;
+    });
 
-  setUnitTypes(uniqueBhkTypes);
+    setUnitTypes(uniqueBhkTypes);
 
-  if (!uniqueBhkTypes.includes(currentBhk)) {
-    setCurrentBHK("All");
-  }
+    if (!uniqueBhkTypes.includes(currentBhk)) {
+      setCurrentBHK("All");
+    }
 
-  // ✅ Save to Firestore (skip "All")
-  try {
-    const docRef = doc(projectFirestore, "m_societies", societyId);
-    await setDoc(
-      docRef,
-      { unitTypes: uniqueBhkTypes.filter((t) => t !== "All") },
-      { merge: true }
-    );
-   
-  } catch (error) {
-    console.error("❌ Error saving unit types:", error);
-  }
-};
+    // ✅ Save to Firestore (skip "All")
+    try {
+      const docRef = doc(projectFirestore, "m_societies", societyId);
+      await setDoc(
+        docRef,
+        { unitTypes: uniqueBhkTypes.filter((t) => t !== "All") },
+        { merge: true }
+      );
+    } catch (error) {
+      console.error("❌ Error saving unit types:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchFloorPlans = async () => {
@@ -4908,7 +4940,6 @@ const updateUnitTypes = async (plans) => {
     }
     setErrors(newErrors);
   };
-
 
   const saveChangesAndPersist = async () => {
     if (!currentPlan || Object.keys(errors).length > 0) {
@@ -5085,26 +5116,25 @@ const updateUnitTypes = async (plans) => {
     return <div className="loading">Loading floor plans...</div>;
   }
 
-const handlePriceChange = (field, value) => {
-  // remove commas before storing
-  const rawValue = value.replace(/,/g, "");
+  const handlePriceChange = (field, value) => {
+    // remove commas before storing
+    const rawValue = value.replace(/,/g, "");
 
-  if (!isNaN(rawValue) && rawValue !== "") {
-    setCurrentPlan((prev) => {
-      const updatedPlan = { ...prev, [field]: rawValue };
-      validatePlan(updatedPlan);
-      return updatedPlan;
-    });
-  } else {
-    // empty or invalid
-    setCurrentPlan((prev) => {
-      const updatedPlan = { ...prev, [field]: "" };
-      validatePlan(updatedPlan);
-      return updatedPlan;
-    });
-  }
-};
-
+    if (!isNaN(rawValue) && rawValue !== "") {
+      setCurrentPlan((prev) => {
+        const updatedPlan = { ...prev, [field]: rawValue };
+        validatePlan(updatedPlan);
+        return updatedPlan;
+      });
+    } else {
+      // empty or invalid
+      setCurrentPlan((prev) => {
+        const updatedPlan = { ...prev, [field]: "" };
+        validatePlan(updatedPlan);
+        return updatedPlan;
+      });
+    }
+  };
 
   const canEdit =
     user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
@@ -5188,22 +5218,23 @@ const handlePriceChange = (field, value) => {
                           <h3>
                             {plan.type} - {plan.bhk}
                           </h3>
-                          { user && ["admin", "superAdmin"].includes(user.role) && (
-                            <div className="plan-actions">
-                              <button
-                                onClick={() => openModal(plan, index)}
-                                className="btn-icon"
-                              >
-                                <FaEdit />
-                              </button>
-                              <button
-                                onClick={() => removeFloorPlan(index)}
-                                className="btn-icon btn-remove"
-                              >
-                                <FaTrash />
-                              </button>
-                            </div>
-                          )}
+                          {user &&
+                            ["admin", "superAdmin"].includes(user.role) && (
+                              <div className="plan-actions">
+                                <button
+                                  onClick={() => openModal(plan, index)}
+                                  className="btn-icon"
+                                >
+                                  <FaEdit />
+                                </button>
+                                <button
+                                  onClick={() => removeFloorPlan(index)}
+                                  className="btn-icon btn-remove"
+                                >
+                                  <FaTrash />
+                                </button>
+                              </div>
+                            )}
                         </div>
 
                         <div className="area-bathroom-row">
@@ -5248,7 +5279,10 @@ const handlePriceChange = (field, value) => {
                           <div className="detail-row price-range-row">
                             <span className="label">Price:</span>
                             <span className="value">
-                              ₹{new Intl.NumberFormat("en-IN").format(plan.price)}
+                              ₹
+                              {new Intl.NumberFormat("en-IN").format(
+                                plan.price
+                              )}
                             </span>
                           </div>
                         )}
@@ -5387,8 +5421,8 @@ const handlePriceChange = (field, value) => {
                       </select>
                     </div>
 
-                    <div className="form-group full-width">
-                      <label>Area Details</label>
+                    <div className="form-group">
+                      {/* <label>Area Details</label> */}
                       <div className="area-input-group">
                         <div className="area-input">
                           <label htmlFor="superArea" className="label-area">
@@ -5444,25 +5478,27 @@ const handlePriceChange = (field, value) => {
                       )}
                     </div>
 
-                      <div className="form-group full-width">
-                        <label htmlFor="price">Price</label>
-                        <input
-                          id="price"
-                          type="text"
-                          value={formatIndianNumber(currentPlan.price)}
-                          onChange={(e) => handlePriceChange("price", e.target.value)}
-                          placeholder="Enter price"
-                        />
-                        {currentPlan.price && (
-                          <p className="price-in-words">
-                            {numberToWords(parseInt(currentPlan.price))} Only
-                          </p>
-                        )}
-                      </div>
+                    <div className="form-group">
+                      <label htmlFor="price">Price</label>
+                      <input
+                        id="price"
+                        type="text"
+                        value={formatIndianNumber(currentPlan.price)}
+                        onChange={(e) =>
+                          handlePriceChange("price", e.target.value)
+                        }
+                        placeholder="Enter price"
+                      />
+                      {currentPlan.price && (
+                        <p className="price-in-words">
+                          {numberToWords(parseInt(currentPlan.price))} Only
+                        </p>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="form-group full-width">
-                    <label>Additional Features</label>
+                  <div className="form-group full-width addRoom">
+                    <label>Additional Rooms</label>
                     <div className="checkbox-grid">
                       {additionalOptions.map((option) => (
                         <label key={option} className="checkbox-label">
@@ -5479,7 +5515,7 @@ const handlePriceChange = (field, value) => {
                     </div>
                   </div>
 
-                  <div className="form-group full-width">
+                  <div className="form-group full-width addRoom">
                     <label>Floor Plan Image</label>
                     <div className="image-upload-container">
                       {currentPlan.image ? (
@@ -5707,22 +5743,26 @@ const ContactSection = ({ societyId }) => {
             manager: {
               name: data.manager?.name || "",
               designation: data.manager?.designation || "Society Manager",
-              mobiles: data.manager?.mobiles?.length > 0 
-                ? data.manager.mobiles.map(formatPhoneForDisplay) 
-                : [formatPhoneForDisplay(data.manager?.mobile || "")],
-              emails: data.manager?.emails?.length > 0 
-                ? data.manager.emails 
-                : [data.manager?.email || ""],
+              mobiles:
+                data.manager?.mobiles?.length > 0
+                  ? data.manager.mobiles.map(formatPhoneForDisplay)
+                  : [formatPhoneForDisplay(data.manager?.mobile || "")],
+              emails:
+                data.manager?.emails?.length > 0
+                  ? data.manager.emails
+                  : [data.manager?.email || ""],
             },
             maintenance: {
               companyName: data.maintenance?.companyName || "",
               contactPerson: data.maintenance?.contactPerson || "",
-              phones: data.maintenance?.phones?.length > 0 
-                ? data.maintenance.phones.map(formatPhoneForDisplay) 
-                : [formatPhoneForDisplay(data.maintenance?.phone || "")],
-              emails: data.maintenance?.emails?.length > 0 
-                ? data.maintenance.emails 
-                : [data.maintenance?.email || ""],
+              phones:
+                data.maintenance?.phones?.length > 0
+                  ? data.maintenance.phones.map(formatPhoneForDisplay)
+                  : [formatPhoneForDisplay(data.maintenance?.phone || "")],
+              emails:
+                data.maintenance?.emails?.length > 0
+                  ? data.maintenance.emails
+                  : [data.maintenance?.email || ""],
               contractStart: data.maintenance?.contractStart || "",
               contractEnd: data.maintenance?.contractEnd || "",
             },
@@ -5744,7 +5784,10 @@ const ContactSection = ({ societyId }) => {
     const { name, value } = e.target;
 
     // Handle phone number inputs with +91 prefix and 10-digit limit
-    if ((field === "mobiles" || field === "phones") && name === `value-${index}`) {
+    if (
+      (field === "mobiles" || field === "phones") &&
+      name === `value-${index}`
+    ) {
       const digitsOnly = value.replace(/\D/g, "");
 
       if (digitsOnly.length <= 10) {
@@ -5840,17 +5883,27 @@ const ContactSection = ({ societyId }) => {
       const dataToSave = {
         manager: {
           ...formData.manager,
-          mobiles: formData.manager.mobiles.map(formatPhoneForStorage).filter(mobile => mobile !== "+91"),
-          emails: formData.manager.emails.filter(email => email !== ""),
+          mobiles: formData.manager.mobiles
+            .map(formatPhoneForStorage)
+            .filter((mobile) => mobile !== "+91"),
+          emails: formData.manager.emails.filter((email) => email !== ""),
         },
         maintenance: {
           ...formData.maintenance,
-          phones: formData.maintenance.phones.map(formatPhoneForStorage).filter(phone => phone !== "+91"),
-          emails: formData.maintenance.emails.filter(email => email !== ""),
+          phones: formData.maintenance.phones
+            .map(formatPhoneForStorage)
+            .filter((phone) => phone !== "+91"),
+          emails: formData.maintenance.emails.filter((email) => email !== ""),
         },
       };
 
-      const docRef = doc(projectFirestore, "m_societies", societyId, "society_information", "contact_info");
+      const docRef = doc(
+        projectFirestore,
+        "m_societies",
+        societyId,
+        "society_information",
+        "contact_info"
+      );
       await setDoc(docRef, dataToSave, { merge: true });
 
       setEditMode(false);
@@ -5884,7 +5937,7 @@ const ContactSection = ({ societyId }) => {
   const handleFocus = (ref) => {
     if (ref && ref.current) {
       setTimeout(() => {
-        ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 300); // Small delay to let the keyboard appear
     }
   };
@@ -5967,8 +6020,19 @@ const ContactSection = ({ societyId }) => {
                                     type="tel"
                                     name={`value-${index}`}
                                     value={mobile}
-                                    onChange={(e) => handleInputChange(e, "manager", "mobiles", index)}
-                                    onFocus={() => handleFocus(managerMobilesRefs.current[index])}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "manager",
+                                        "mobiles",
+                                        index
+                                      )
+                                    }
+                                    onFocus={() =>
+                                      handleFocus(
+                                        managerMobilesRefs.current[index]
+                                      )
+                                    }
                                     placeholder="Enter mobile number"
                                     required={index === 0}
                                     disabled={isSaving}
@@ -5986,17 +6050,22 @@ const ContactSection = ({ societyId }) => {
                                   <button
                                     type="button"
                                     className="remove-field-btn"
-                                    onClick={() => removeField("manager", "mobiles", index)}
+                                    onClick={() =>
+                                      removeField("manager", "mobiles", index)
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaTimes />
                                   </button>
                                 )}
-                                {index === formData.manager.mobiles.length - 1 && (
+                                {index ===
+                                  formData.manager.mobiles.length - 1 && (
                                   <button
                                     type="button"
                                     className="add-field-btn"
-                                    onClick={() => addField("manager", "mobiles")}
+                                    onClick={() =>
+                                      addField("manager", "mobiles")
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaPlus /> Add Another
@@ -6015,8 +6084,19 @@ const ContactSection = ({ societyId }) => {
                                   type="email"
                                   name={`value-${index}`}
                                   value={email}
-                                  onChange={(e) => handleInputChange(e, "manager", "emails", index)}
-                                  onFocus={() => handleFocus(managerEmailsRefs.current[index])}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      "manager",
+                                      "emails",
+                                      index
+                                    )
+                                  }
+                                  onFocus={() =>
+                                    handleFocus(
+                                      managerEmailsRefs.current[index]
+                                    )
+                                  }
                                   placeholder="Enter email"
                                   required={index === 0}
                                   disabled={isSaving}
@@ -6025,17 +6105,22 @@ const ContactSection = ({ societyId }) => {
                                   <button
                                     type="button"
                                     className="remove-field-btn"
-                                    onClick={() => removeField("manager", "emails", index)}
+                                    onClick={() =>
+                                      removeField("manager", "emails", index)
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaTimes />
                                   </button>
                                 )}
-                                {index === formData.manager.emails.length - 1 && (
+                                {index ===
+                                  formData.manager.emails.length - 1 && (
                                   <button
                                     type="button"
                                     className="add-field-btn"
-                                    onClick={() => addField("manager", "emails")}
+                                    onClick={() =>
+                                      addField("manager", "emails")
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaPlus /> Add Another
@@ -6101,8 +6186,19 @@ const ContactSection = ({ societyId }) => {
                                     type="tel"
                                     name={`value-${index}`}
                                     value={phone}
-                                    onChange={(e) => handleInputChange(e, "maintenance", "phones", index)}
-                                    onFocus={() => handleFocus(maintenancePhonesRefs.current[index])}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        "maintenance",
+                                        "phones",
+                                        index
+                                      )
+                                    }
+                                    onFocus={() =>
+                                      handleFocus(
+                                        maintenancePhonesRefs.current[index]
+                                      )
+                                    }
                                     placeholder="Enter phone number"
                                     required={index === 0}
                                     disabled={isSaving}
@@ -6120,17 +6216,26 @@ const ContactSection = ({ societyId }) => {
                                   <button
                                     type="button"
                                     className="remove-field-btn"
-                                    onClick={() => removeField("maintenance", "phones", index)}
+                                    onClick={() =>
+                                      removeField(
+                                        "maintenance",
+                                        "phones",
+                                        index
+                                      )
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaTimes />
                                   </button>
                                 )}
-                                {index === formData.maintenance.phones.length - 1 && (
+                                {index ===
+                                  formData.maintenance.phones.length - 1 && (
                                   <button
                                     type="button"
                                     className="add-field-btn"
-                                    onClick={() => addField("maintenance", "phones")}
+                                    onClick={() =>
+                                      addField("maintenance", "phones")
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaPlus /> Add Another
@@ -6149,8 +6254,19 @@ const ContactSection = ({ societyId }) => {
                                   type="email"
                                   name={`value-${index}`}
                                   value={email}
-                                  onChange={(e) => handleInputChange(e, "maintenance", "emails", index)}
-                                  onFocus={() => handleFocus(maintenanceEmailsRefs.current[index])}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      "maintenance",
+                                      "emails",
+                                      index
+                                    )
+                                  }
+                                  onFocus={() =>
+                                    handleFocus(
+                                      maintenanceEmailsRefs.current[index]
+                                    )
+                                  }
                                   placeholder="Enter email"
                                   required={index === 0}
                                   disabled={isSaving}
@@ -6159,17 +6275,26 @@ const ContactSection = ({ societyId }) => {
                                   <button
                                     type="button"
                                     className="remove-field-btn"
-                                    onClick={() => removeField("maintenance", "emails", index)}
+                                    onClick={() =>
+                                      removeField(
+                                        "maintenance",
+                                        "emails",
+                                        index
+                                      )
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaTimes />
                                   </button>
                                 )}
-                                {index === formData.maintenance.emails.length - 1 && (
+                                {index ===
+                                  formData.maintenance.emails.length - 1 && (
                                   <button
                                     type="button"
                                     className="add-field-btn"
-                                    onClick={() => addField("maintenance", "emails")}
+                                    onClick={() =>
+                                      addField("maintenance", "emails")
+                                    }
                                     disabled={isSaving}
                                   >
                                     <FaPlus /> Add Another
@@ -6187,7 +6312,9 @@ const ContactSection = ({ societyId }) => {
                               ref={contractStartRef}
                               name="contractStart"
                               value={formData.maintenance.contractStart}
-                              onChange={(e) => handleInputChange(e, "maintenance", null)}
+                              onChange={(e) =>
+                                handleInputChange(e, "maintenance", null)
+                              }
                               onFocus={() => handleFocus(contractStartRef)}
                               disabled={isSaving}
                             >
@@ -6212,7 +6339,9 @@ const ContactSection = ({ societyId }) => {
                               ref={contractEndRef}
                               name="contractEnd"
                               value={formData.maintenance.contractEnd}
-                              onChange={(e) => handleInputChange(e, "maintenance", null)}
+                              onChange={(e) =>
+                                handleInputChange(e, "maintenance", null)
+                              }
                               onFocus={() => handleFocus(contractEndRef)}
                               disabled={isSaving}
                             >
@@ -6284,21 +6413,25 @@ const ContactSection = ({ societyId }) => {
                       <div className="contact-item">
                         <Phone className="contact-icon" />
                         <div className="multi-contact-values">
-                          {formData.manager.mobiles.filter(mobile => mobile).map((mobile, index) => (
-                            <span key={index}>
-                              {formatDisplayPhone(mobile)}
-                            </span>
-                          ))}
+                          {formData.manager.mobiles
+                            .filter((mobile) => mobile)
+                            .map((mobile, index) => (
+                              <span key={index}>
+                                {formatDisplayPhone(mobile)}
+                              </span>
+                            ))}
                         </div>
                       </div>
                       <div className="contact-item">
                         <Mail className="contact-icon" />
                         <div className="multi-contact-values">
-                          {formData.manager.emails.filter(email => email).map((email, index) => (
-                            <span key={index}>
-                              {email || "Not specified"}
-                            </span>
-                          ))}
+                          {formData.manager.emails
+                            .filter((email) => email)
+                            .map((email, index) => (
+                              <span key={index}>
+                                {email || "Not specified"}
+                              </span>
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -6326,21 +6459,25 @@ const ContactSection = ({ societyId }) => {
                       <div className="contact-item">
                         <Phone className="contact-icon" />
                         <div className="multi-contact-values">
-                          {formData.maintenance.phones.filter(phone => phone).map((phone, index) => (
-                            <span key={index}>
-                              {formatDisplayPhone(phone)}
-                            </span>
-                          ))}
+                          {formData.maintenance.phones
+                            .filter((phone) => phone)
+                            .map((phone, index) => (
+                              <span key={index}>
+                                {formatDisplayPhone(phone)}
+                              </span>
+                            ))}
                         </div>
                       </div>
                       <div className="contact-item">
                         <Mail className="contact-icon" />
                         <div className="multi-contact-values">
-                          {formData.maintenance.emails.filter(email => email).map((email, index) => (
-                            <span key={index}>
-                              {email || "Not specified"}
-                            </span>
-                          ))}
+                          {formData.maintenance.emails
+                            .filter((email) => email)
+                            .map((email, index) => (
+                              <span key={index}>
+                                {email || "Not specified"}
+                              </span>
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -6377,39 +6514,6 @@ const ContactSection = ({ societyId }) => {
   );
 };
 
-// const SocietyLayout = ({ layoutImage, title, description, highlights }) => {
-//   return (
-//     <section className="society-layout">
-//       <div className="container">
-//       <div className="society-layout__content">
-//         <h2 className="society-layout__title">{title}</h2>
-//         <p className="society-layout__description">{description}</p>
-
-//         <ul className="society-layout__highlights">
-//           {highlights.map((item, index) => (
-//             <li key={index} className="society-layout__highlight">
-//               <span className="bullet"></span> {item}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-
-//       <div className="society-layout__image-wrapper">
-//         <img
-//           src={layoutImage}
-//           alt="Society Layout"
-//           className="society-layout__image"
-//         />
-//         <div className="society-layout__overlay">
-//           <h3>Explore the Layout</h3>
-//           <p>Click to view full plan</p>
-//         </div>
-//       </div>
-//       </div>
-//     </section>
-//   );
-// }
-
 const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
   const { user } = useAuthContext();
   const [layoutImage, setLayoutImage] = useState("");
@@ -6417,7 +6521,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
   const [editMode, setEditMode] = useState(false);
   const [tempImage, setTempImage] = useState(null);
   const [fullScreenMode, setFullScreenMode] = useState(false);
-  
+
   const [popup, setPopup] = useState({
     isOpen: false,
     message: "",
@@ -6429,15 +6533,16 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
   const isFirebaseAvailable = projectFirestore && projectStorage;
 
   // Firestore document reference - only create if Firebase is available
-  const layoutDocRef = isFirebaseAvailable && societyId
-    ? doc(
-        projectFirestore,
-        "m_societies",
-        societyId,
-        "society_information",
-        "layout"
-      )
-    : null;
+  const layoutDocRef =
+    isFirebaseAvailable && societyId
+      ? doc(
+          projectFirestore,
+          "m_societies",
+          societyId,
+          "society_information",
+          "layout"
+        )
+      : null;
 
   // Effect to fetch existing layout image from Firestore
   useEffect(() => {
@@ -6453,7 +6558,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
         console.error("Error fetching layout image:", error);
       }
     };
-    
+
     if (isFirebaseAvailable) {
       fetchLayoutImage();
     }
@@ -6462,27 +6567,28 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
   // Trigger file input when user clicks upload button with no image
   useEffect(() => {
     if (editMode && !layoutImage && !tempImage) {
-      document.getElementById('layout-image-input').click();
+      document.getElementById("layout-image-input").click();
     }
   }, [editMode, layoutImage, tempImage]);
 
   // Handle escape key to exit full screen
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && fullScreenMode) {
+      if (e.key === "Escape" && fullScreenMode) {
         setFullScreenMode(false);
       }
     };
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
   }, [fullScreenMode]);
 
   const handleEditClick = () => {
     if (!isFirebaseAvailable) {
       setPopup({
         isOpen: true,
-        message: "Firebase services are not available. Please check your configuration.",
+        message:
+          "Firebase services are not available. Please check your configuration.",
         type: "error",
       });
       return;
@@ -6500,7 +6606,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
     const file = e.target.files[0];
     if (file) {
       // Validate file type
-      if (!file.type.startsWith('image/')) {
+      if (!file.type.startsWith("image/")) {
         setPopup({
           isOpen: true,
           message: "Please select a valid image file.",
@@ -6508,7 +6614,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
         });
         return;
       }
-      
+
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setPopup({
@@ -6518,16 +6624,16 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
         });
         return;
       }
-      
+
       setTempImage(file);
     }
   };
 
   const handleSave = async () => {
     if (!tempImage || !isFirebaseAvailable || !societyId) return;
-    
+
     setUploading(true);
-    
+
     try {
       // Delete old image if exists
       if (layoutImage) {
@@ -6539,16 +6645,16 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
           // Continue with upload even if deletion fails
         }
       }
-      
+
       // Upload new image
       const fileName = `layout-${Date.now()}-${tempImage.name}`;
       const imageRef = ref(
         projectStorage,
         `society_layouts/${societyId}/${fileName}`
       );
-      
+
       const uploadTask = uploadBytesResumable(imageRef, tempImage);
-      
+
       const downloadURL = await new Promise((resolve, reject) => {
         uploadTask.on(
           "state_changed",
@@ -6557,16 +6663,16 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
           async () => resolve(await getDownloadURL(uploadTask.snapshot.ref))
         );
       });
-      
+
       // Save to Firestore
       if (layoutDocRef) {
         await setDoc(layoutDocRef, { imageUrl: downloadURL }, { merge: true });
       }
-      
+
       setLayoutImage(downloadURL);
       setEditMode(false);
       setTempImage(null);
-      
+
       setPopup({
         isOpen: true,
         message: "Layout image updated successfully!",
@@ -6586,7 +6692,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
 
   const handleDelete = async () => {
     if (!layoutImage || !isFirebaseAvailable) return;
-    
+
     setPopup({
       isOpen: true,
       message: "Are you sure you want to delete the layout image?",
@@ -6596,15 +6702,15 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
           // Delete from Firebase Storage
           const imageRef = ref(projectStorage, layoutImage);
           await deleteObject(imageRef);
-          
+
           // Remove from Firestore
           if (layoutDocRef) {
             await setDoc(layoutDocRef, { imageUrl: "" }, { merge: true });
           }
-          
+
           setLayoutImage("");
           setEditMode(false);
-          
+
           setPopup({
             isOpen: true,
             message: "Layout image deleted successfully.",
@@ -6626,16 +6732,17 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
     setFullScreenMode(!fullScreenMode);
   };
 
-  const canEdit = user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
+  const canEdit =
+    user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
 
   return (
     <>
       <section className="society-layout-section">
         <div className="container">
           <div className="society-layout-section__header">
-            <h2>{title || "Society Layout"}</h2>
+            <h2>{"Society Layout"}</h2>
             <p>{subtitle}</p>
-            
+
             {canEdit && layoutImage && !editMode && (
               <button className="edit-button" onClick={handleEditClick}>
                 <FaEdit /> Change
@@ -6646,13 +6753,19 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
           {!isFirebaseAvailable ? (
             <div className="no-layout-image">
               <FaExclamationTriangle size={64} />
-              <p>Firebase services are not available. Please check your configuration.</p>
+              <p>
+                Firebase services are not available. Please check your
+                configuration.
+              </p>
             </div>
           ) : editMode ? (
             <div className="layout-edit-mode">
               <div className="layout-image-preview">
                 {tempImage ? (
-                  <img src={URL.createObjectURL(tempImage)} alt="Layout preview" />
+                  <img
+                    src={URL.createObjectURL(tempImage)}
+                    alt="Layout preview"
+                  />
                 ) : layoutImage ? (
                   <img src={layoutImage} alt="Current layout" />
                 ) : (
@@ -6662,11 +6775,12 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
                   </div>
                 )}
               </div>
-              
+
               <div className="layout-edit-controls">
                 {!tempImage && (
                   <label className="upload-layout-btn">
-                    <FaUpload /> {layoutImage ? "Replace Image" : "Select Image"}
+                    <FaUpload />{" "}
+                    {layoutImage ? "Replace Image" : "Select Image"}
                     <input
                       id="layout-image-input"
                       type="file"
@@ -6676,19 +6790,19 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
                     />
                   </label>
                 )}
-                
+
                 <div className="layout-action-buttons">
-                  <button 
-                    className="cancel-btn" 
+                  <button
+                    className="cancel-btn"
                     onClick={handleCancel}
                     disabled={uploading}
                   >
                     Cancel
                   </button>
-                  
+
                   {tempImage && (
-                    <button 
-                      className="save-btn" 
+                    <button
+                      className="save-btn"
                       onClick={handleSave}
                       disabled={uploading}
                     >
@@ -6702,7 +6816,10 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
             <div className="society-layout-section__image">
               <div className="image-container" onClick={handleFullScreenToggle}>
                 <img src={layoutImage} alt="Society Layout" />
-                <button className="expand-button" onClick={handleFullScreenToggle}>
+                <button
+                  className="expand-button"
+                  onClick={handleFullScreenToggle}
+                >
                   <FaExpand />
                 </button>
               </div>
@@ -6777,9 +6894,18 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
 
       {/* Full Screen Overlay */}
       {fullScreenMode && (
-        <div className="full-screen-overlay" onClick={() => setFullScreenMode(false)}>
-          <div className="full-screen-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-full-screen" onClick={() => setFullScreenMode(false)}>
+        <div
+          className="full-screen-overlay"
+          onClick={() => setFullScreenMode(false)}
+        >
+          <div
+            className="full-screen-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="close-full-screen"
+              onClick={() => setFullScreenMode(false)}
+            >
               &times;
             </button>
             <img src={layoutImage} alt="Society Layout Full Screen" />
@@ -6846,7 +6972,7 @@ const PGSocietyPage = () => {
   return (
     <div className={`${styles.container} society-page-whole-wrapper `}>
       {/* Header Image Slider */}
-     
+
       {/* <HeroSection societyId={id} /> */}
       <div id="Overview">
         <SocietyDetails
@@ -6862,7 +6988,6 @@ const PGSocietyPage = () => {
 
       {/* Overview Section */}
       <div className={styles.contentWrapper}>
-
         {/* Available Properties Section */}
         <div id="Available-Properties">
           <PropertiesSection societyName={society.society} />
@@ -6889,11 +7014,10 @@ const PGSocietyPage = () => {
         {/* Society Layout */}
 
         <SocietyLayoutSection
-        societyId={id}
+          societyId={id}
           title={society.society}
           subtitle="Discover the master layout of our premium society, thoughtfully designed to create a modern and sustainable lifestyle."
         />
-        
 
         {/* Floor Plans */}
         <div id="Units-Floor-Plans">
