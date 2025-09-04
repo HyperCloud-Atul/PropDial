@@ -562,6 +562,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
   const [currentUnitType, setCurrentUnitType] = useState("");
   const [errors, setErrors] = useState({});
+  const [currentPlan, setCurrentPlan] = useState(null);
   const descriptionRef = useRef(null); // Step 1: Create a ref
 
   const handleChange = (e) => {
@@ -630,6 +631,41 @@ const EditAbout = ({ data, onClose, onSave }) => {
       }, 300); // A small delay to allow the keyboard to appear
     }
   };
+  const backup = [
+    "No Backup",
+    "Full Backup",
+    "Partial Backup",
+    "Lift Only",
+    "Inverter",
+  ];
+
+    const unitTypes = [
+    "EWS",
+    "1 RK",
+    "Studio",
+    "1 BHK",
+    "1.5 BHK",
+    "2 BHK",
+    "2.5 BHK",
+    "3 BHK",
+    "3.5 BHK",
+    "4 BHK",
+    "5 BHK",
+    "6 BHK",
+    "7 BHK",
+    "8 BHK",
+    "9 BHK",
+    "9+ BHK",
+    "Hall",
+  ];
+  const handleUnitTypeChange = (option, isChecked) => {
+  setFormData((prev) => {
+    const newUnitTypes = isChecked
+      ? [...(prev.unitTypes || []), option]
+      : (prev.unitTypes || []).filter((item) => item !== option);
+    return { ...prev, unitTypes: newUnitTypes };
+  });
+};
 
   return (
     <div className="edit-modal">
@@ -737,7 +773,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
 
             {!formData.readyToMove && (
               <div className="form-group">
-                <label>Possession Year</label>
+                <label>Year of Handover</label>
                 <select
                   name="possessionYear"
                   value={formData.possessionYear || ""}
@@ -764,7 +800,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
 
             {formData.readyToMove && (
               <div className="form-group">
-                <label>Launched Year</label>
+                <label>Built In</label>
                 <select
                   name="launchedYear"
                   value={formData.launchedYear || ""}
@@ -787,6 +823,114 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 )}
               </div>
             )}
+
+            <div className="form-group">
+              <label>Power Backup</label>
+                <select
+                  id="powerBackup"
+                  value={formData.powerBackup || "No Backup"}
+                  onChange={(e) =>setFormData({ ...formData, powerBackup: e.target.value })
+                  }
+                >
+                  {backup.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+            </div>
+
+            <div className="form-group toggle-group">
+              <div className="toggle-description">
+                <label className="toggle-label">Visitor Parking</label>
+                <div
+                  className={`toggle-switch ${
+                    formData.visitorParking ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      visitorParking: !prev.visitorParking,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div> 
+
+              <div className="toggle-description">
+                <label className="toggle-label">Club</label>
+                <div
+                  className={`toggle-switch ${
+                    formData.club ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      club: !prev.club,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group toggle-group">
+              <div className="toggle-description">
+                <label className="toggle-label">Swimming Pool</label>
+                <div
+                  className={`toggle-switch ${
+                    formData.swimmingPool? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      swimmingPool: !prev.swimmingPool,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div> 
+
+              <div className="toggle-description">
+                <label className="toggle-label">Gym</label>
+                <div
+                  className={`toggle-switch ${
+                    formData.gym ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      gym: !prev.gym,
+                    }))
+                  }
+                >
+                  <div className="toggle-circle" />
+                </div>
+              </div>
+            </div>
+
+           <div className="form-group full-width">
+            <label>Unit Types</label>
+            <div className="checkbox-grid">
+              {unitTypes.map((option) => (
+                <label key={option} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={formData.unitTypes?.includes(option) || false}
+                    onChange={(e) =>
+                      handleUnitTypeChange(option, e.target.checked)
+                    }
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+
             {/* Description field moved to full width at the end */}
             <div className="form-group full-width">
               <label>Description</label>
@@ -1094,7 +1238,10 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
     }
   };
 
-  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if (loading) return  (<div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading Society Details...</p>
+        </div>);
   if (error) return <div className="error-message">{error}</div>;
 
   // FIX 2: Use the formatAddress function for a clean and consistent location display
@@ -1648,6 +1795,13 @@ const PropertiesSection = ({ societyName }) => {
     };
   }, [properties]);
 
+  // if(loading) return (
+  //   <div className="loading-spinner">
+  //         <FaSpinner className="spin" size={40} />
+  //         <p>Loading properties...</p>
+  //       </div>
+  // );
+
   return (
     <>
       {properties.length > 0 ? (
@@ -1688,7 +1842,13 @@ const PropertiesSection = ({ societyName }) => {
             </div>
             <div className="properties-container">
               <div className="properties-scroll" ref={scrollRef}>
-                {properties.length > 0
+                {loading ? (
+                  <div className="loading-spinner">
+                    <FaSpinner className="spin" size={40} />
+                    <p>Loading properties...</p>
+                  </div>
+                ) :
+                (properties.length > 0
                   ? properties.map((property) => (
                       <Link
                         to={`/propertydetails/${property.id}`}
@@ -1709,7 +1869,7 @@ const PropertiesSection = ({ societyName }) => {
                           </span>
                           <div className="property-card__image-wrapper">
                             <img
-                              src={property.images?.[0] || "/placeholder.svg"}
+                              src={property.images?.[0] || "/assets/img/society/hero3.jpg"}
                               alt={property.propertyName || "Property"}
                               className="property-card__image"
                             />
@@ -1763,20 +1923,21 @@ const PropertiesSection = ({ societyName }) => {
                     ))
                   : !loading && (
                       <p className="no-properties">No properties found.</p>
-                    )}
+                    ))}
 
                 {/* Load More Button at the end of the scroll container */}
-                {loadedCount < totalCount && (
+                {loading ? null : (loadedCount < totalCount && (
                   <div className="load-more-container">
                     <button
                       className="load-more-button"
                       onClick={loadMore}
                       disabled={loading}
                     >
-                      {loading ? "Loading..." : "Load More"}
+                      {/* {loading ? "Loading..." : "Load More"} */}
+                      Load More
                     </button>
                   </div>
-                )}
+                ))}
               </div>
               <div className="scroll-buttons-container">
                 <button
@@ -2407,8 +2568,12 @@ const AmenitiesSection = ({ societyId }) => {
     (amenity) => amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading)
-    return <div className="loading-spinner">Loading amenities...</div>;
+  if(loading) return (
+    <div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading Amenities...</p>
+        </div>
+  );
 
   return (
     <div className="amenities-section">
@@ -2416,13 +2581,15 @@ const AmenitiesSection = ({ societyId }) => {
         <div className="text-center mb-12">
           <h2 className="section-title">World-Class Amenities</h2>
           <p className="section-description">
-            Experience luxury living with our comprehensive range of premium
-            amenities
-          </p>
-          <p className="note">
+            {/* Experience luxury living with our comprehensive range of premium
+            amenities */}
             Note: All amenity photos are for representation only, not actual
             images.
           </p>
+          {/* <p className="note">
+            Note: All amenity photos are for representation only, not actual
+            images.
+          </p> */}
         </div>
 
         {/* Navigation Bar for Categories */}
@@ -2569,11 +2736,17 @@ const AboutSocietySection = ({ societyId }) => {
   const [societyData, setSocietyData] = useState({
     possessionDate: "",
     readyToMove: false,
+    visitorParking: false,
+    club: false,
+    swimmingPool: false,
+    gym: false,
     description: "",
     launchDate: "",
     totalUnits: "",
     totalTowers: "",
     projectSize: "",
+    powerBackup: "No Backup",
+    unitTypes: [],
   });
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -2629,7 +2802,12 @@ const AboutSocietySection = ({ societyId }) => {
       setError("Failed to save changes.");
     }
   };
-  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if(loading) return (
+    <div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading Society info...</p>
+        </div>
+  );
   if (error) return <div className="error-message">{error}</div>;
   return (
     <section className="about-society-section">
@@ -2637,7 +2815,7 @@ const AboutSocietySection = ({ societyId }) => {
         {!societyData.description == "" ? (
           <>
             <div className="about-container">
-              <h2 className="about-title">About {societyData.society}</h2>
+              <h2 className="about-title">Discover {societyData.society}</h2>
 
               <p className="about-description">
                 {societyData.description === "" ? (
@@ -2666,7 +2844,7 @@ const AboutSocietySection = ({ societyId }) => {
                     <div className="about-card__column">
                       <div className="about-card__fact">
                         <span className="about-card__fact-title">
-                          Product Size:
+                          Project Size:
                         </span>
                         <span className="about-card__fact-value">
                           {societyData.projectSize && societyData.projectAge
@@ -2680,7 +2858,7 @@ const AboutSocietySection = ({ societyId }) => {
                       {societyData.readyToMove ? (
                         <div className="about-card__fact">
                           <span className="about-card__fact-title">
-                            Launched Year:
+                            Built In:
                           </span>
                           <span className="about-card__fact-value">
                             {societyData.launchedYear
@@ -2691,7 +2869,7 @@ const AboutSocietySection = ({ societyId }) => {
                       ) : (
                         <div className="about-card__fact">
                           <span className="about-card__fact-title">
-                            Possession Year:
+                            Year of Handover:
                           </span>
                           <span className="about-card__fact-value">
                             {societyData.possessionYear
@@ -2711,6 +2889,29 @@ const AboutSocietySection = ({ societyId }) => {
                             : "!"}
                         </span>
                       </div>
+
+                      <div className="about-card__fact">
+                        <span className="about-card__fact-title">
+                          Power Backup:
+                        </span>
+                        <span className="about-card__fact-value">
+                          {societyData.powerBackup
+                            ? societyData.powerBackup
+                            : "!"}
+                        </span>
+                      </div>
+
+                       <div className="about-card__fact">
+                        <span className="about-card__fact-title">
+                          Gym:
+                        </span>
+                        <span className="about-card__fact-value">
+                          {societyData.powerBackup
+                            ? "Yes"
+                            : "No"}
+                        </span>
+                      </div>
+
                     </div>
 
                     <div className="about-card__column">
@@ -2727,25 +2928,47 @@ const AboutSocietySection = ({ societyId }) => {
 
                       <div className="about-card__fact">
                         <span className="about-card__fact-title">
-                          Society Types:
+                          Unit Types:
                         </span>
                         <span className="about-card__fact-value">
-                          {societyData.societyType
-                            ? societyData.societyType
+                          {societyData.unitTypes && societyData.unitTypes.length > 0
+                            ? societyData.unitTypes.join(", ")
                             : "!"}
                         </span>
                       </div>
 
                       <div className="about-card__fact">
                         <span className="about-card__fact-title">
-                          Possession:
+                          Visitor Parking:
                         </span>
                         <span className="about-card__fact-value">
-                          {societyData.readyToMove
-                            ? "Immediate Possession"
-                            : societyData.possessionYear
-                            ? societyData.possessionYear
-                            : "!"}
+                          {societyData.visitorParking
+                            ? "Yes"
+                            : "No"}
+                        </span>
+                      </div>
+
+                      <div className="about-card__fact">
+                        <span className="about-card__fact-title">
+                          Club:
+                        </span>
+                        <span className="about-card__fact-value">
+                          {societyData.club
+                            ? "Yes"
+                            : "No"
+                            }
+                        </span>
+                      </div>
+
+                      <div className="about-card__fact">
+                        <span className="about-card__fact-title">
+                          Swimming Pool:
+                        </span>
+                        <span className="about-card__fact-value">
+                          {societyData.swimmingPool
+                            ? "Yes"
+                            : "No"
+                            }
                         </span>
                       </div>
                     </div>
@@ -2868,7 +3091,12 @@ const SocietyRatesSection = ({ societyId }) => {
     }).format(value);
   };
 
-  if (loading) return <div className="loading-spinner">Loading...</div>;
+  if(loading) return (
+    <div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading Society Rates...</p>
+        </div>
+  );
   if (error) return <div className="error-message">{error}</div>;
 
   return (
@@ -2944,7 +3172,7 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-header">
                   <h3 className="card-title">
                     <FaRegBuilding className="icon" />
-                    Common Area Maintenance
+                    Maintenance
                   </h3>
                 </div>
                 <div className="card-content">
@@ -3004,11 +3232,11 @@ const SocietyRatesSection = ({ societyId }) => {
                       : "N/A"}
                     )
                   </h3>
-                  <p className="info-text">
+                  {/* <p className="info-text">
                     All charges are subject to applicable taxes. Monthly charges
                     are billed in advance. Online payment options are available
                     through our resident portal.
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -3052,10 +3280,11 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [editMode, setEditMode] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]); // Files selected for new upload
-  const [selectedImageIndexes, setSelectedImageIndexes] = useState([]); // Indexes of images (existing + new) for selection
+  const [selectedImages, setSelectedImages] = useState([]); 
+  const [selectedImageIndexes, setSelectedImageIndexes] = useState([]); 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
   const fileInputRef = useRef(null);
 
   const [popup, setPopup] = useState({
@@ -3066,6 +3295,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
   });
 
   // Firestore document reference
+  const isFirebaseAvailable = projectFirestore && projectStorage;
   const societyDocRef = projectFirestore
     ? doc(
         projectFirestore,
@@ -3077,24 +3307,43 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
     : null;
 
   // Effect to fetch existing images from Firestore when component mounts or societyId changes
-  useEffect(() => {
+   useEffect(() => {
+    let isMounted = true; // ✅ prevent state update if unmounted
+
     const fetchImages = async () => {
-      if (!societyDocRef) return;
-      try {
-        const docSnap = await getDoc(societyDocRef);
-        if (docSnap.exists()) {
-          const societyData = docSnap.data();
-          setImages(societyData.images || []);
-        } else {
+      if (!isFirebaseAvailable || !societyId) {
+        if (isMounted) {
+          setLoading(false);
           setImages([]);
+        }
+        return;
+      }
+      
+      try {
+        if (isMounted) setLoading(true);
+        const docSnap = await getDoc(societyDocRef);
+        if (isMounted) {
+          if (docSnap.exists()) {
+            const societyData = docSnap.data();
+            setImages(societyData.images || []);
+          } else {
+            setImages([]);
+          }
         }
       } catch (error) {
         console.error("Error fetching images:", error);
-        setImages([]);
+        if (isMounted) setImages([]);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
+
     fetchImages();
-  }, [societyId, societyDocRef]);
+
+    return () => {
+      isMounted = false; // cleanup
+    };
+  }, [societyId, isFirebaseAvailable]); 
 
   // Handler for clicking the upload button
   const handleUploadClick = () => {
@@ -3658,7 +3907,19 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
       </div>
 
       {/* Conditional rendering for the main gallery view */}
-      {editMode ? (
+      {loading ? (
+        <div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading gallery...</p>
+        </div>
+      ) : !isFirebaseAvailable ? (
+        <div className="no-images">
+          <FaExclamationTriangle size={64} />
+          <p>
+            Firebase services are not available. Please check your configuration.
+          </p>
+        </div>
+      ) : editMode ? (
         renderEditModeGallery()
       ) : images.length > 0 ? (
         <>
@@ -4779,7 +5040,7 @@ const FloorPlans = ({ societyId }) => {
     "Hall",
   ];
 
-  const additionalOptions = ["Servant", "Study", "Store", "Puja"];
+  const additionalOptions = ["Servant", "Study", "Store", "Puja", "Utility", "Powder", "Basement"];
 
   const areaUnitOptions = ["SqFt", "SqYd", "SqMtr"]; //, "Acres", "Hectares"
 
@@ -5112,9 +5373,12 @@ const FloorPlans = ({ societyId }) => {
     }
   };
 
-  if (loading) {
-    return <div className="loading">Loading floor plans...</div>;
-  }
+  if(loading) return (
+    <div className="loading-spinner">
+          <FaSpinner className="spin" size={40} />
+          <p>Loading floors plans...</p>
+        </div>
+  );
 
   const handlePriceChange = (field, value) => {
     // remove commas before storing
@@ -5277,7 +5541,7 @@ const FloorPlans = ({ societyId }) => {
 
                         {plan.price && (
                           <div className="detail-row price-range-row">
-                            <span className="label">Price:</span>
+                            <span className="label">Sale Price:</span>
                             <span className="value">
                               ₹
                               {new Intl.NumberFormat("en-IN").format(
@@ -5479,7 +5743,7 @@ const FloorPlans = ({ societyId }) => {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="price">Price</label>
+                      <label htmlFor="price">Sale Price</label>
                       <input
                         id="price"
                         type="text"
@@ -5680,51 +5944,40 @@ const ContactSection = ({ societyId }) => {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+
   const [formData, setFormData] = useState({
-    manager: {
-      name: "",
-      designation: "Society Manager",
-      mobiles: [""],
-      emails: [""],
-    },
-    maintenance: {
-      companyName: "",
-      contactPerson: "",
-      phones: [""],
-      emails: [""],
-      contractStart: "",
-      contractEnd: "",
-    },
+    manager: { name: "", mobile: "", email: "" },
+    maintenance: { companyName: "", landline: "", phone: "", email: "" },
+    otherContacts: [{ phone: "", email: "" }],
   });
 
-  // Refs for each input to scroll into view on focus
+  // Refs
   const managerNameRef = useRef(null);
-  const managerMobilesRefs = useRef([React.createRef()]);
-  const managerEmailsRefs = useRef([React.createRef()]);
+  const managerMobileRef = useRef(null);
+  const managerEmailRef = useRef(null);
   const maintenanceCompanyRef = useRef(null);
-  const maintenanceContactRef = useRef(null);
-  const maintenancePhonesRefs = useRef([React.createRef()]);
-  const maintenanceEmailsRefs = useRef([React.createRef()]);
-  const contractStartRef = useRef(null);
-  const contractEndRef = useRef(null);
+  const maintenanceLandlineRef = useRef(null);
+  const maintenancePhoneRef = useRef(null);
+  const maintenanceEmailRef = useRef(null);
+  const otherContactsRefs = useRef([
+    { phone: React.createRef(), email: React.createRef() },
+  ]);
 
-  // Format phone number for display (remove +91 if present)
+  // Format phone for display
   const formatPhoneForDisplay = (phone) => {
     if (!phone) return "";
     return phone.replace(/^\+91/, "");
   };
 
-  // Format phone number for storage (add +91 prefix)
+  // Format phone for storage
   const formatPhoneForStorage = (phone) => {
     if (!phone) return "";
     const digitsOnly = phone.replace(/\D/g, "");
-    if (digitsOnly.length === 10) {
-      return `+91${digitsOnly}`;
-    }
+    if (digitsOnly.length === 10) return `+91${digitsOnly}`;
     return phone.startsWith("+91") ? phone : `+91${digitsOnly}`;
   };
 
-  // Fetch existing society info
+  // Fetch society info
   useEffect(() => {
     const fetchSocietyInfo = async () => {
       try {
@@ -5738,35 +5991,45 @@ const ContactSection = ({ societyId }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const data = docSnap.data();
+          const data = docSnap.data() || {};
+
+          const managerMobile =
+            data.manager?.mobiles?.[0] || data.manager?.mobile || "";
+          const managerEmail =
+            data.manager?.emails?.[0] || data.manager?.email || "";
+          const maintenancePhone =
+            data.maintenance?.phones?.[0] || data.maintenance?.phone || "";
+          const maintenanceEmail =
+            data.maintenance?.emails?.[0] || data.maintenance?.email || "";
+
+          let otherContacts =
+            Array.isArray(data.otherContacts) && data.otherContacts.length > 0
+              ? data.otherContacts.map((c) => ({
+                  phone: formatPhoneForDisplay(c.phone || ""),
+                  email: c.email || "",
+                }))
+              : [{ phone: "", email: "" }];
+
           setFormData({
             manager: {
               name: data.manager?.name || "",
-              designation: data.manager?.designation || "Society Manager",
-              mobiles:
-                data.manager?.mobiles?.length > 0
-                  ? data.manager.mobiles.map(formatPhoneForDisplay)
-                  : [formatPhoneForDisplay(data.manager?.mobile || "")],
-              emails:
-                data.manager?.emails?.length > 0
-                  ? data.manager.emails
-                  : [data.manager?.email || ""],
+              mobile: formatPhoneForDisplay(managerMobile),
+              email: managerEmail,
             },
             maintenance: {
               companyName: data.maintenance?.companyName || "",
-              contactPerson: data.maintenance?.contactPerson || "",
-              phones:
-                data.maintenance?.phones?.length > 0
-                  ? data.maintenance.phones.map(formatPhoneForDisplay)
-                  : [formatPhoneForDisplay(data.maintenance?.phone || "")],
-              emails:
-                data.maintenance?.emails?.length > 0
-                  ? data.maintenance.emails
-                  : [data.maintenance?.email || ""],
-              contractStart: data.maintenance?.contractStart || "",
-              contractEnd: data.maintenance?.contractEnd || "",
+              landline: data.maintenance?.landline || "",
+              phone: formatPhoneForDisplay(maintenancePhone),
+              email: maintenanceEmail,
             },
+            otherContacts,
           });
+
+          // sync refs
+          otherContactsRefs.current = otherContacts.map(() => ({
+            phone: React.createRef(),
+            email: React.createRef(),
+          }));
         } else {
           console.log("No such document for societyId:", societyId);
         }
@@ -5777,103 +6040,67 @@ const ContactSection = ({ societyId }) => {
       }
     };
 
-    fetchSocietyInfo();
+    if (societyId) fetchSocietyInfo();
   }, [societyId]);
 
-  const handleInputChange = (e, section, field, index = 0) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e, section, field, index = null) => {
+    const value = e.target.value;
 
-    // Handle phone number inputs with +91 prefix and 10-digit limit
-    if (
-      (field === "mobiles" || field === "phones") &&
-      name === `value-${index}`
-    ) {
+    // phone/landline only allow digits max 10
+    if (["mobile", "phone", "landline"].includes(field)) {
       const digitsOnly = value.replace(/\D/g, "");
-
       if (digitsOnly.length <= 10) {
-        setFormData((prev) => {
-          const newArray = [...prev[section][field]];
-          newArray[index] = digitsOnly;
-          return {
+        if (section === "otherContacts" && index !== null) {
+          setFormData((prev) => {
+            const newContacts = [...prev.otherContacts];
+            newContacts[index][field] = digitsOnly;
+            return { ...prev, otherContacts: newContacts };
+          });
+        } else {
+          setFormData((prev) => ({
             ...prev,
-            [section]: {
-              ...prev[section],
-              [field]: newArray,
-            },
-          };
-        });
+            [section]: { ...prev[section], [field]: digitsOnly },
+          }));
+        }
       }
       return;
     }
 
-    // Handle regular inputs
-    if (field && index !== undefined) {
-      // For array fields (mobiles, emails, phones)
+    // other contacts email
+    if (section === "otherContacts" && index !== null) {
       setFormData((prev) => {
-        const newArray = [...prev[section][field]];
-        newArray[index] = value;
-        return {
-          ...prev,
-          [section]: {
-            ...prev[section],
-            [field]: newArray,
-          },
-        };
+        const newContacts = [...prev.otherContacts];
+        newContacts[index][field] = value;
+        return { ...prev, otherContacts: newContacts };
       });
-    } else {
-      // For single value fields
-      setFormData((prev) => ({
-        ...prev,
-        [section]: {
-          ...prev[section],
-          [name]: value,
-        },
-      }));
+      return;
     }
-  };
 
-  const addField = (section, field) => {
+    // default
     setFormData((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: [...prev[section][field], ""],
-      },
+      [section]: { ...prev[section], [field]: value },
     }));
-
-    // Create new refs for the new fields
-    if (field === "mobiles") {
-      managerMobilesRefs.current.push(React.createRef());
-    } else if (field === "emails" && section === "manager") {
-      managerEmailsRefs.current.push(React.createRef());
-    } else if (field === "phones") {
-      maintenancePhonesRefs.current.push(React.createRef());
-    } else if (field === "emails" && section === "maintenance") {
-      maintenanceEmailsRefs.current.push(React.createRef());
-    }
   };
 
-  const removeField = (section, field, index) => {
-    if (formData[section][field].length <= 1) return;
-
+  const addOtherContact = () => {
     setFormData((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: prev[section][field].filter((_, i) => i !== index),
-      },
+      otherContacts: [...prev.otherContacts, { phone: "", email: "" }],
     }));
+    otherContactsRefs.current.push({
+      phone: React.createRef(),
+      email: React.createRef(),
+    });
+  };
 
-    // Remove the corresponding ref
-    if (field === "mobiles") {
-      managerMobilesRefs.current.splice(index, 1);
-    } else if (field === "emails" && section === "manager") {
-      managerEmailsRefs.current.splice(index, 1);
-    } else if (field === "phones") {
-      maintenancePhonesRefs.current.splice(index, 1);
-    } else if (field === "emails" && section === "maintenance") {
-      maintenanceEmailsRefs.current.splice(index, 1);
-    }
+  const removeOtherContact = (index) => {
+    if (formData.otherContacts.length <= 1) return;
+    setFormData((prev) => ({
+      ...prev,
+      otherContacts: prev.otherContacts.filter((_, i) => i !== index),
+    }));
+    otherContactsRefs.current.splice(index, 1);
   };
 
   const handleSubmit = async (e) => {
@@ -5882,19 +6109,28 @@ const ContactSection = ({ societyId }) => {
     try {
       const dataToSave = {
         manager: {
-          ...formData.manager,
-          mobiles: formData.manager.mobiles
-            .map(formatPhoneForStorage)
-            .filter((mobile) => mobile !== "+91"),
-          emails: formData.manager.emails.filter((email) => email !== ""),
+          name: formData.manager.name,
+          mobiles: formData.manager.mobile
+            ? [formatPhoneForStorage(formData.manager.mobile)]
+            : [],
+          emails: formData.manager.email ? [formData.manager.email] : [],
         },
         maintenance: {
-          ...formData.maintenance,
-          phones: formData.maintenance.phones
-            .map(formatPhoneForStorage)
-            .filter((phone) => phone !== "+91"),
-          emails: formData.maintenance.emails.filter((email) => email !== ""),
+          companyName: formData.maintenance.companyName,
+          landline: formData.maintenance.landline,
+          phones: formData.maintenance.phone
+            ? [formatPhoneForStorage(formData.maintenance.phone)]
+            : [],
+          emails: formData.maintenance.email
+            ? [formData.maintenance.email]
+            : [],
         },
+        otherContacts: formData.otherContacts
+          .filter((c) => c.phone || c.email)
+          .map((c) => ({
+            phone: c.phone ? formatPhoneForStorage(c.phone) : "",
+            email: c.email || "",
+          })),
       };
 
       const docRef = doc(
@@ -5905,7 +6141,6 @@ const ContactSection = ({ societyId }) => {
         "contact_info"
       );
       await setDoc(docRef, dataToSave, { merge: true });
-
       setEditMode(false);
     } catch (error) {
       console.error("Error updating society info:", error);
@@ -5914,37 +6149,36 @@ const ContactSection = ({ societyId }) => {
     }
   };
 
-  const hasContactData = () => {
-    return (
-      formData.manager.name &&
-      formData.manager.mobiles[0] &&
-      formData.manager.emails[0] &&
-      formData.maintenance.companyName &&
-      formData.maintenance.phones[0]
-    );
-  };
+  const hasContactData = () =>
+    formData.manager.name ||
+    formData.manager.mobile ||
+    formData.manager.email ||
+    formData.maintenance.companyName ||
+    formData.maintenance.landline ||
+    formData.maintenance.phone ||
+    formData.maintenance.email ||
+    formData.otherContacts.some((c) => c.phone || c.email);
 
   const formatDisplayPhone = (phone) => {
     if (!phone) return "Not specified";
     const digitsOnly = phone.replace(/\D/g, "");
-    if (digitsOnly.length === 10) {
-      return `+91 ${digitsOnly}`;
-    }
-    return phone.startsWith("+91") ? phone : `+91 ${phone}`;
+    if (digitsOnly.length === 10) return `+91${digitsOnly}`;
+    return phone.startsWith("+91") ? phone : `+91${phone}`;
   };
 
-  // Function to scroll the element into view
   const handleFocus = (ref) => {
-    if (ref && ref.current) {
+    if (ref?.current) {
       setTimeout(() => {
         ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300); // Small delay to let the keyboard appear
+      }, 300);
     }
   };
 
-  if (loading) {
-    return <div className="society-info-loading">Loading...</div>;
-  }
+  if (loading) return <div className="society-info-loading">Loading...</div>;
+
+  const otherContacts = Array.isArray(formData.otherContacts)
+    ? formData.otherContacts
+    : [{ phone: "", email: "" }];
 
   return (
     <>
@@ -5998,136 +6232,55 @@ const ContactSection = ({ societyId }) => {
                             onChange={(e) => {
                               const value = e.target.value;
                               if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "manager", null);
+                                handleInputChange(e, "manager", "name");
                               }
                             }}
                             onFocus={() => handleFocus(managerNameRef)}
                             placeholder="Enter name"
-                            required
                             disabled={isSaving}
                           />
                         </div>
 
                         <div className="contact-grid">
                           <div className="form-group">
-                            <label>Mobile Numbers:</label>
-                            {formData.manager.mobiles.map((mobile, index) => (
-                              <div key={index} className="multi-field-group">
-                                <div className="phone-input-container">
-                                  <span className="phone-prefix">+91</span>
-                                  <input
-                                    ref={managerMobilesRefs.current[index]}
-                                    type="tel"
-                                    name={`value-${index}`}
-                                    value={mobile}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        e,
-                                        "manager",
-                                        "mobiles",
-                                        index
-                                      )
-                                    }
-                                    onFocus={() =>
-                                      handleFocus(
-                                        managerMobilesRefs.current[index]
-                                      )
-                                    }
-                                    placeholder="Enter mobile number"
-                                    required={index === 0}
-                                    disabled={isSaving}
-                                    maxLength={10}
-                                    pattern="[0-9]{10}"
-                                    title="Please enter a 10-digit mobile number"
-                                  />
-                                </div>
-                                {index === 0 && (
-                                  <span className="input-info">
-                                    10-digit mobile number
-                                  </span>
-                                )}
-                                {formData.manager.mobiles.length > 1 && (
-                                  <button
-                                    type="button"
-                                    className="remove-field-btn"
-                                    onClick={() =>
-                                      removeField("manager", "mobiles", index)
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaTimes />
-                                  </button>
-                                )}
-                                {index ===
-                                  formData.manager.mobiles.length - 1 && (
-                                  <button
-                                    type="button"
-                                    className="add-field-btn"
-                                    onClick={() =>
-                                      addField("manager", "mobiles")
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaPlus /> Add Another
-                                  </button>
-                                )}
-                              </div>
-                            ))}
+                            <label>Mobile Number:</label>
+                            <div className="phone-input-container">
+                              <span className="phone-prefix">+91</span>
+                              <input
+                                ref={managerMobileRef}
+                                type="tel"
+                                name="value"
+                                value={formData.manager.mobile}
+                                onChange={(e) =>
+                                  handleInputChange(e, "manager", "mobile")
+                                }
+                                onFocus={() => handleFocus(managerMobileRef)}
+                                placeholder="Enter mobile number"
+                                disabled={isSaving}
+                                maxLength={10}
+                                pattern="[0-9]{10}"
+                                title="Please enter a 10-digit mobile number"
+                              />
+                            </div>
+                            <span className="input-info">
+                              10-digit mobile number
+                            </span>
                           </div>
 
                           <div className="form-group">
-                            <label>Email Addresses:</label>
-                            {formData.manager.emails.map((email, index) => (
-                              <div key={index} className="multi-field-group">
-                                <input
-                                  ref={managerEmailsRefs.current[index]}
-                                  type="email"
-                                  name={`value-${index}`}
-                                  value={email}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      e,
-                                      "manager",
-                                      "emails",
-                                      index
-                                    )
-                                  }
-                                  onFocus={() =>
-                                    handleFocus(
-                                      managerEmailsRefs.current[index]
-                                    )
-                                  }
-                                  placeholder="Enter email"
-                                  required={index === 0}
-                                  disabled={isSaving}
-                                />
-                                {formData.manager.emails.length > 1 && (
-                                  <button
-                                    type="button"
-                                    className="remove-field-btn"
-                                    onClick={() =>
-                                      removeField("manager", "emails", index)
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaTimes />
-                                  </button>
-                                )}
-                                {index ===
-                                  formData.manager.emails.length - 1 && (
-                                  <button
-                                    type="button"
-                                    className="add-field-btn"
-                                    onClick={() =>
-                                      addField("manager", "emails")
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaPlus /> Add Another
-                                  </button>
-                                )}
-                              </div>
-                            ))}
+                            <label>Email Address:</label>
+                            <input
+                              ref={managerEmailRef}
+                              type="email"
+                              name="email"
+                              value={formData.manager.email}
+                              onChange={(e) =>
+                                handleInputChange(e, "manager", "email")
+                              }
+                              onFocus={() => handleFocus(managerEmailRef)}
+                              placeholder="Enter email"
+                              disabled={isSaving}
+                            />
                           </div>
                         </div>
                       </div>
@@ -6142,222 +6295,173 @@ const ContactSection = ({ societyId }) => {
                             type="text"
                             name="companyName"
                             value={formData.maintenance.companyName}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "maintenance", null);
-                              }
-                            }}
+                            onChange={(e) =>
+                              handleInputChange(e, "maintenance", "companyName")
+                            }
                             onFocus={() => handleFocus(maintenanceCompanyRef)}
                             placeholder="Enter company name"
-                            required
-                            disabled={isSaving}
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <label>Contact Person:</label>
-                          <input
-                            ref={maintenanceContactRef}
-                            type="text"
-                            name="contactPerson"
-                            value={formData.maintenance.contactPerson}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (/^[A-Za-z\s]*$/.test(value)) {
-                                handleInputChange(e, "maintenance", null);
-                              }
-                            }}
-                            onFocus={() => handleFocus(maintenanceContactRef)}
-                            placeholder="Enter contact person name"
                             disabled={isSaving}
                           />
                         </div>
 
                         <div className="contact-grid">
                           <div className="form-group">
-                            <label>Phone Numbers:</label>
-                            {formData.maintenance.phones.map((phone, index) => (
-                              <div key={index} className="multi-field-group">
-                                <div className="phone-input-container">
-                                  <span className="phone-prefix">+91</span>
-                                  <input
-                                    ref={maintenancePhonesRefs.current[index]}
-                                    type="tel"
-                                    name={`value-${index}`}
-                                    value={phone}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        e,
-                                        "maintenance",
-                                        "phones",
-                                        index
-                                      )
-                                    }
-                                    onFocus={() =>
-                                      handleFocus(
-                                        maintenancePhonesRefs.current[index]
-                                      )
-                                    }
-                                    placeholder="Enter phone number"
-                                    required={index === 0}
-                                    disabled={isSaving}
-                                    maxLength={10}
-                                    pattern="[0-9]{10}"
-                                    title="Please enter a 10-digit phone number"
-                                  />
-                                </div>
-                                {index === 0 && (
-                                  <span className="input-info">
-                                    10-digit phone number
-                                  </span>
-                                )}
-                                {formData.maintenance.phones.length > 1 && (
-                                  <button
-                                    type="button"
-                                    className="remove-field-btn"
-                                    onClick={() =>
-                                      removeField(
-                                        "maintenance",
-                                        "phones",
-                                        index
-                                      )
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaTimes />
-                                  </button>
-                                )}
-                                {index ===
-                                  formData.maintenance.phones.length - 1 && (
-                                  <button
-                                    type="button"
-                                    className="add-field-btn"
-                                    onClick={() =>
-                                      addField("maintenance", "phones")
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaPlus /> Add Another
-                                  </button>
-                                )}
-                              </div>
-                            ))}
+                            <label>Landline Number:</label>
+                            <div className="phone-input-container">
+                              <input
+                                ref={maintenanceLandlineRef}
+                                type="tel"
+                                name="landline"
+                                value={formData.maintenance.landline}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    e,
+                                    "maintenance",
+                                    "landline"
+                                  )
+                                }
+                                onFocus={() =>
+                                  handleFocus(maintenanceLandlineRef)
+                                }
+                                placeholder="Enter landline number"
+                                disabled={isSaving}
+                                maxLength={10}
+                                pattern="[0-9]{1,10}" // ✅ allows 1 to 10 digits
+                                title="Please enter up to a 10-digit landline number"
+                              />
+                            </div>
                           </div>
 
                           <div className="form-group">
-                            <label>Email Addresses:</label>
-                            {formData.maintenance.emails.map((email, index) => (
-                              <div key={index} className="multi-field-group">
+                            <label>Phone Number:</label>
+                            <div className="phone-input-container">
+                              <span className="phone-prefix">+91</span>
+                              <input
+                                ref={maintenancePhoneRef}
+                                type="tel"
+                                name="value"
+                                value={formData.maintenance.phone}
+                                onChange={(e) =>
+                                  handleInputChange(e, "maintenance", "phone")
+                                }
+                                onFocus={() => handleFocus(maintenancePhoneRef)}
+                                placeholder="Enter phone number"
+                                disabled={isSaving}
+                                maxLength={10}
+                                pattern="[0-9]{10}"
+                                title="Please enter a 10-digit phone number"
+                              />
+                            </div>
+                            <span className="input-info">
+                              10-digit phone number
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="form-group">
+                          <label>Email Address:</label>
+                          <input
+                            ref={maintenanceEmailRef}
+                            type="email"
+                            name="email"
+                            value={formData.maintenance.email}
+                            onChange={(e) =>
+                              handleInputChange(e, "maintenance", "email")
+                            }
+                            onFocus={() => handleFocus(maintenanceEmailRef)}
+                            placeholder="Enter email"
+                            disabled={isSaving}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Other Contacts Form */}
+                      <div className="profile-section">
+                        <h3>Other Contacts</h3>
+                        {otherContacts.map((contact, index) => (
+                          <div key={index} className="contact-grid">
+                            <div className="form-group">
+                              <label>Phone Number:</label>
+                              <div className="phone-input-container">
+                                <span className="phone-prefix">+91</span>
                                 <input
-                                  ref={maintenanceEmailsRefs.current[index]}
-                                  type="email"
-                                  name={`value-${index}`}
-                                  value={email}
+                                  ref={otherContactsRefs.current[index]?.phone}
+                                  type="tel"
+                                  name="value"
+                                  value={contact.phone}
                                   onChange={(e) =>
                                     handleInputChange(
                                       e,
-                                      "maintenance",
-                                      "emails",
+                                      "otherContacts",
+                                      "phone",
                                       index
                                     )
                                   }
                                   onFocus={() =>
                                     handleFocus(
-                                      maintenanceEmailsRefs.current[index]
+                                      otherContactsRefs.current[index]?.phone
                                     )
                                   }
-                                  placeholder="Enter email"
-                                  required={index === 0}
+                                  placeholder="Enter phone number"
                                   disabled={isSaving}
+                                  maxLength={10}
+                                  pattern="[0-9]{10}"
+                                  title="Please enter a 10-digit phone number"
                                 />
-                                {formData.maintenance.emails.length > 1 && (
-                                  <button
-                                    type="button"
-                                    className="remove-field-btn"
-                                    onClick={() =>
-                                      removeField(
-                                        "maintenance",
-                                        "emails",
-                                        index
-                                      )
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaTimes />
-                                  </button>
-                                )}
-                                {index ===
-                                  formData.maintenance.emails.length - 1 && (
-                                  <button
-                                    type="button"
-                                    className="add-field-btn"
-                                    onClick={() =>
-                                      addField("maintenance", "emails")
-                                    }
-                                    disabled={isSaving}
-                                  >
-                                    <FaPlus /> Add Another
-                                  </button>
-                                )}
                               </div>
-                            ))}
-                          </div>
-                        </div>
+                              <span className="input-info">
+                                10-digit phone number
+                              </span>
+                            </div>
 
-                        <div className="form-row">
-                          <div className="form-group">
-                            <label>Contract Start:</label>
-                            <select
-                              ref={contractStartRef}
-                              name="contractStart"
-                              value={formData.maintenance.contractStart}
-                              onChange={(e) =>
-                                handleInputChange(e, "maintenance", null)
-                              }
-                              onFocus={() => handleFocus(contractStartRef)}
-                              disabled={isSaving}
-                            >
-                              <option value="">Select year</option>
-                              {Array.from(
-                                { length: new Date().getFullYear() - 1979 },
-                                (_, i) => {
-                                  const year = 1980 + i;
-                                  return (
-                                    <option key={year} value={year}>
-                                      {year}
-                                    </option>
-                                  );
+                            <div className="form-group">
+                              <label>Email Address:</label>
+                              <input
+                                ref={otherContactsRefs.current[index]?.email}
+                                type="email"
+                                name="email"
+                                value={contact.email}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    e,
+                                    "otherContacts",
+                                    "email",
+                                    index
+                                  )
                                 }
-                              )}
-                            </select>
-                            <span className="input-info">Year (YYYY)</span>
+                                onFocus={() =>
+                                  handleFocus(
+                                    otherContactsRefs.current[index]?.email
+                                  )
+                                }
+                                placeholder="Enter email"
+                                disabled={isSaving}
+                              />
+                            </div>
+
+                            {otherContacts.length > 1 && (
+                              <div className="form-group full-width">
+                                <button
+                                  type="button"
+                                  className="remove-field-btn"
+                                  onClick={() => removeOtherContact(index)}
+                                  disabled={isSaving}
+                                >
+                                  <FaTimes /> Remove Contact
+                                </button>
+                              </div>
+                            )}
                           </div>
-                          <div className="form-group">
-                            <label>Contract End:</label>
-                            <select
-                              ref={contractEndRef}
-                              name="contractEnd"
-                              value={formData.maintenance.contractEnd}
-                              onChange={(e) =>
-                                handleInputChange(e, "maintenance", null)
-                              }
-                              onFocus={() => handleFocus(contractEndRef)}
-                              disabled={isSaving}
-                            >
-                              <option value="">Select year</option>
-                              {Array.from({ length: 50 }, (_, i) => {
-                                const year = new Date().getFullYear() + i;
-                                return (
-                                  <option key={year} value={year}>
-                                    {year}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                            <span className="input-info">Year (YYYY)</span>
-                          </div>
-                        </div>
+                        ))}
+
+                        <button
+                          type="button"
+                          className="add-field-btn"
+                          onClick={addOtherContact}
+                          disabled={isSaving}
+                        >
+                          <FaPlus /> Add Another Contact
+                        </button>
                       </div>
 
                       <div className="modal-footer">
@@ -6393,111 +6497,90 @@ const ContactSection = ({ societyId }) => {
 
             {/* Display Contact Information */}
             {hasContactData() ? (
-              <div className="contact-grid">
-                {/* Society Manager */}
-                <div className="contact-card">
-                  <div className="card-header">
-                    <h3 className="card-title">
-                      <User className="icon" />
-                      Society Manager
-                    </h3>
-                  </div>
-                  <div className="card-content">
-                    <div className="contact-person">
-                      <p className="name">
-                        {formData.manager.name || "Not specified"}
-                      </p>
-                      <p className="designation">Senior Property Manager</p>
+              <div className="contact-display">
+                <div className="contact-row">
+                  {/* Society Manager */}
+                  <div className="contact-section-display">
+                    <div  className="card-header">
+
+                    <h3 className=" card-title">  <User className="icon" />  Society Manager</h3>
                     </div>
-                    <div className="contact-details">
-                      <div className="contact-item">
-                        <Phone className="contact-icon" />
-                        <div className="multi-contact-values">
-                          {formData.manager.mobiles
-                            .filter((mobile) => mobile)
-                            .map((mobile, index) => (
-                              <span key={index}>
-                                {formatDisplayPhone(mobile)}
-                              </span>
-                            ))}
-                        </div>
+                    <div className="contact-details-grid">
+                      <div className="contact-detail">
+                        <strong>Name:</strong>{" "}
+                        {formData.manager.name || "Not specified"}
                       </div>
-                      <div className="contact-item">
-                        <Mail className="contact-icon" />
-                        <div className="multi-contact-values">
-                          {formData.manager.emails
-                            .filter((email) => email)
-                            .map((email, index) => (
-                              <span key={index}>
-                                {email || "Not specified"}
-                              </span>
-                            ))}
-                        </div>
+                      <div className="contact-detail">
+                        <strong>Mobile:</strong>{" "}
+                        {formData.manager.mobile
+                          ? formatDisplayPhone(formData.manager.mobile)
+                          : "Not specified"}
+                      </div>
+                      <div className="contact-detail">
+                        <strong>Email:</strong>{" "}
+                        {formData.manager.email || "Not specified"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Maintenance Company */}
+                  <div className="contact-section-display">
+                    <div  className="card-header">
+
+                    <h3 className="card-title"> <Building className="icon" /> Maintenance Company</h3>
+                    </div>
+                    <div className="contact-details-grid">
+                      <div className="contact-detail">
+                        <strong>Company Name:</strong>{" "}
+                        {formData.maintenance.companyName || "Not specified"}
+                      </div>
+                      <div className="contact-detail">
+                        <strong>Landline:</strong>{" "}
+                        {formData.maintenance.landline || "Not specified"}
+                      </div>
+                      <div className="contact-detail">
+                        <strong>Phone:</strong>{" "}
+                        {formData.maintenance.phone
+                          ? formatDisplayPhone(formData.maintenance.phone)
+                          : "Not specified"}
+                      </div>
+                      <div className="contact-detail">
+                        <strong>Email:</strong>{" "}
+                        {formData.maintenance.email || "Not specified"}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Maintenance Company */}
-                <div className="contact-card">
-                  <div className="card-header">
-                    <h3 className="card-title">
-                      <Building className="icon" />
-                      Maintenance Company
-                    </h3>
-                  </div>
-                  <div className="card-content">
-                    <div className="contact-person">
-                      <p className="name">
-                        {formData.maintenance.companyName || "Not specified"}
-                      </p>
-                      <p className="designation">
-                        Professional Maintenance Services
-                      </p>
-                    </div>
-                    <div className="contact-details">
-                      <div className="contact-item">
-                        <Phone className="contact-icon" />
-                        <div className="multi-contact-values">
-                          {formData.maintenance.phones
-                            .filter((phone) => phone)
-                            .map((phone, index) => (
-                              <span key={index}>
-                                {formatDisplayPhone(phone)}
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                      <div className="contact-item">
-                        <Mail className="contact-icon" />
-                        <div className="multi-contact-values">
-                          {formData.maintenance.emails
-                            .filter((email) => email)
-                            .map((email, index) => (
-                              <span key={index}>
-                                {email || "Not specified"}
-                              </span>
-                            ))}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="contract-details">
-                      <div className="contract-item">
-                        <Calendar className="contract-icon" />
-                        <div>
-                          <p className="contract-label">Contract Period</p>
-                          <p className="contract-date">
-                            {formData.maintenance.contractStart ||
-                              "Not specified"}{" "}
-                            -{" "}
-                            {formData.maintenance.contractEnd ||
-                              "Not specified"}
-                          </p>
-                        </div>
+                {/* Other Contacts */}
+                {otherContacts.some(
+                  (contact) => contact.phone || contact.email
+                ) && (
+                  <div className="contact-row">
+                    <div className="contact-section-display pair-height full-width">
+                      <h3>Other Contacts</h3>
+                      <div className="contact-details-others">
+                        {otherContacts.map(
+                          (contact, index) =>
+                            (contact.phone || contact.email) && (
+                              <div key={index} className="contact-pair">
+                                <div className="contact-detail">
+                                  <strong>Phone {index + 1}:</strong>{" "}
+                                  {contact.phone
+                                    ? (<span> {formatDisplayPhone(contact.phone)} </span> )
+                                    : "Not specified"}
+                                </div>
+                                <div className="contact-detail">
+                                  <strong>Email {index + 1}:</strong>{" "}
+                                  {contact.email || "Not specified"}
+                                </div>
+                              </div>
+                            )
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
               <button className="no-details" onClick={() => setEditMode(true)}>
@@ -6521,6 +6604,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
   const [editMode, setEditMode] = useState(false);
   const [tempImage, setTempImage] = useState(null);
   const [fullScreenMode, setFullScreenMode] = useState(false);
+  const [loading, setLoading] = useState(true); // ✅ new state
 
   const [popup, setPopup] = useState({
     isOpen: false,
@@ -6529,10 +6613,8 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
     onConfirm: null,
   });
 
-  // Check if Firebase services are available
   const isFirebaseAvailable = projectFirestore && projectStorage;
 
-  // Firestore document reference - only create if Firebase is available
   const layoutDocRef =
     isFirebaseAvailable && societyId
       ? doc(
@@ -6544,25 +6626,40 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
         )
       : null;
 
-  // Effect to fetch existing layout image from Firestore
   useEffect(() => {
+    let isMounted = true; // ✅ prevent state update if unmounted
+
     const fetchLayoutImage = async () => {
-      if (!layoutDocRef || !societyId) return;
+      if (!layoutDocRef || !societyId) {
+        if (isMounted) setLoading(false); 
+        return;
+      }
       try {
+        if (isMounted) setLoading(true); 
         const docSnap = await getDoc(layoutDocRef);
-        if (docSnap.exists()) {
+        if (docSnap.exists() && isMounted) {
           const layoutData = docSnap.data();
           setLayoutImage(layoutData.imageUrl || "");
         }
       } catch (error) {
         console.error("Error fetching layout image:", error);
+      } finally {
+        if (isMounted) setLoading(false); 
+        
       }
     };
 
     if (isFirebaseAvailable) {
       fetchLayoutImage();
+    } else {
+      setLoading(false);
     }
-  }, [societyId, layoutDocRef, isFirebaseAvailable]);
+
+    return () => {
+      isMounted = false; // cleanup
+    };
+  }, [societyId, isFirebaseAvailable]);
+
 
   // Trigger file input when user clicks upload button with no image
   useEffect(() => {
@@ -6750,7 +6847,12 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
             )}
           </div>
 
-          {!isFirebaseAvailable ? (
+          {loading ? (
+            <div className="loading-spinner">
+              <FaSpinner className="spin" size={40} />
+              <p>Loading layout...</p>
+            </div>
+          ) : !isFirebaseAvailable ? (
             <div className="no-layout-image">
               <FaExclamationTriangle size={64} />
               <p>

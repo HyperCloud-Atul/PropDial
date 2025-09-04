@@ -471,6 +471,25 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         justify-content: center;
       }
     }
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      margin: 2rem 0;
+
+      .spin {
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
   }
 
   // --- Properties Section Styles ---
@@ -796,6 +815,25 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       &:disabled {
         background-color: #e0e0e0;
         cursor: not-allowed;
+      }
+    }
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      margin: 2rem 0;
+
+      .spin {
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     }
   }
@@ -1356,6 +1394,25 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       justify-content: center;
       align-items: center;
     }
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      margin: 2rem 0;
+
+      .spin {
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
   }
 
   /* Edit Modal CSS */
@@ -1439,6 +1496,25 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           background-color: white !important;
           display: block;
           padding: 0 !important;
+        }
+        .checkbox-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 12px;
+          margin-top: 8px;
+          .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            input[type="checkbox"] {
+              width: auto;
+              margin: 0;
+            }
+            span {
+              font-size: 14px;
+            }
+          }
         }
       }
 
@@ -1801,6 +1877,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         background-color: #f4f4f4;
       }
     }
+    
   }
 
   // Society Layout
@@ -2237,6 +2314,26 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     @media (max-width: 575px) {
       padding: 3rem 10px;
     }
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      margin: 2rem 0;
+
+      .spin {
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
+
   }
 
   // Full screen overlay styles
@@ -2711,8 +2808,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
         .additional-features-row {
           display: flex;
-          justify-content: space-between; /* pushes label left, values right */
-          align-items: center; /* vertically center items */
+          flex-direction: column;
+          align-items: start;
 
           .label {
             flex-shrink: 0; /* keep label fixed */
@@ -2722,7 +2819,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           .value-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex-end; /* align pills to right */
+            justify-content: baseline;
             align-items: center;
             gap: 6px;
 
@@ -3476,10 +3573,10 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     .payment-info {
       margin-top: 3rem;
       max-width: 46rem;
-      padding: 1rem 2rem;
+      padding: 10px 10px;
       margin-left: auto;
       margin-right: auto;
-      border: 1px solid #00a8a8;
+      border: 0.075rem dashed #00a8a8;
       border-radius: 12px;
       background-color: #eef5f4;
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
@@ -3491,13 +3588,13 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         border: 1px solid rgba(var(--primary-rgb), 0.2);
 
         .card-content {
-          padding: 1.5rem;
+          padding: 1rem;
           text-align: center;
 
           .info-title {
             font-weight: 600;
             font-size: 1.125rem;
-            margin-bottom: 0.5rem;
+            // margin-bottom: 0.5rem;
           }
 
           .info-text {
@@ -4931,6 +5028,33 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
     }
 
+    .remove-field-btn {
+      padding: 5px 5px;
+      background: #f5f5f5;
+      border: 1px dashed rgba(255, 0, 0, 0.432);
+      border-radius: 8px;
+      color: red;
+      transition: all 0.2s;
+
+      &:hover {
+        border: 1px dashed rgba(255, 0, 0, 0.534);
+        background: #eee;
+      }
+    }
+    .add-field-btn {
+      padding: 10px 10px;
+      background: #f5f5f5;
+      border: 1px dashed #ddd;
+      border-radius: 8px;
+      color: #555;
+      transition: all 0.2s;
+
+      &:hover {
+        border: 1px dashed $primary-color;
+        background: #eee;
+      }
+    }
+
     .modal-footer {
       padding: 1rem 0 0;
       display: flex;
@@ -5053,7 +5177,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
         &:hover:not(:disabled) {
           border-color: #4a90e2;
-          color: #4a90e2;
+          color: #00a8a8;
         }
 
         &:disabled {
@@ -5063,26 +5187,90 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
     }
 
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-      max-width: 56rem;
-      margin: 0 auto;
+    .contact-display {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem; // space between rows
 
-      @media (min-width: 768px) {
-        grid-template-columns: 1fr 1fr;
+      .contact-row {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+        }
       }
-    }
 
-    .contact-card {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.219);
-      background-color: #f8f9fa;
+      .contact-section-display {
+        flex: 1;
+        background: #f9fafb;
+        max-height: 150px;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        @media (max-width: 492px) {
+          max-height: none;
+        }
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
 
+        h3 {
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          color: #2c3e50;
+          font-weight: 600;
+          border-bottom: 2px solid #f0f0f0;
+          padding-bottom: 0.5rem;
+        }
+
+        .contact-details-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .contact-details-others {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          .contact-pair {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: #f4f4f4;
+            padding: 1rem;
+            border-radius: 8px;
+
+            .contact-detail {
+              flex: 1;
+            }
+          }
+        }
+
+        .contact-detail {
+          font-size: 0.95rem;
+          color: #333;
+
+          strong {
+            color: #00a8a8;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .full-width {
+        flex: 100%;
+      }
+      .pair-height {
+        max-height: none;
+      }
       .card-header {
-        padding: 1.5rem 1.5rem 0;
+        // padding: 1.5rem 1.5rem 0;
 
         .card-title {
           font-size: 1.25rem;
@@ -5096,85 +5284,6 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
             height: 1.25rem;
             color: #00a8a8;
           }
-        }
-      }
-
-      .card-content {
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-    }
-
-    .contact-person {
-      .name {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--text-color, #333333);
-      }
-
-      .designation {
-        color: var(--muted-text-color, #666666);
-      }
-    }
-
-    .contact-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-
-      .contact-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-
-        .contact-icon {
-          width: 1rem;
-          height: 1rem;
-          color: #00a8a8;
-          margin-top: 0.25rem;
-          flex-shrink: 0;
-        }
-
-        .multi-contact-values {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-
-          span {
-            display: block;
-          }
-        }
-      }
-    }
-
-    .availability {
-      font-size: 0.875rem;
-      color: var(--muted-text-color, #666666);
-    }
-
-    .contract-details {
-      .contract-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.75rem;
-
-        .contract-icon {
-          width: 1rem;
-          height: 1rem;
-          color: #00a8a8;
-          margin-top: 0.125rem;
-        }
-
-        .contract-label {
-          font-weight: 500;
-          font-size: 0.875rem;
-        }
-
-        .contract-date {
-          font-size: 0.875rem;
-          color: var(--muted-text-color, #666666);
         }
       }
     }
@@ -6209,6 +6318,25 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
       }
     }
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      margin: 2rem 0;
+
+      .spin {
+        animation: spin 1s linear infinite;
+        margin-bottom: 0.5rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
   }
 
   /* Custom Popup Styles */
@@ -6391,6 +6519,28 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         justify-content: flex-end;
         margin-top: 16px;
         gap: 8px;
+      }
+    }
+    
+  }
+
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    margin: 2rem 0;
+    min-height: 400px;
+
+    .spin {
+      animation: spin 1s linear infinite;
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
   }
