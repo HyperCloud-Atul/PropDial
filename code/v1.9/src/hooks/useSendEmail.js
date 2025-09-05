@@ -14,10 +14,10 @@ export const useSendEmail = () => {
         try {
 
             var params = {
-                // from: 'atul@hyperclouddigital.com',
-                // pwd: 'grygbudwtyovrleb',
-                from: document.EMAIL.from,
-                pwd: document.EMAIL.serverPwd,
+                from: 'atul@hyperclouddigital.com',
+                pwd: 'grygbudwtyovrleb',
+                // from: document.EMAIL.from,
+                // pwd: document.EMAIL.serverPwd,
                 toList: toList,
                 ccList: ccList,
                 bccList: bccList,
