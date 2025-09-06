@@ -1265,7 +1265,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
 
               <div className="badges-full">
                 <div className="badges-container">
-                  {societyData.readyToMove && (
+                  {societyData.readyToMove ? (
                     <div className="badge badge--ready-to-move">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1289,7 +1289,30 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         </span>
                       </p>
                     </div>
+                  ) : (
+                    <div className="badge badge--under-construction">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon icon--left"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      <p style={{ fontSize: "16px" }}>
+                        <span style={{ fontWeight: "700" }}>Under Construction</span>
+                      </p>
+                    </div>
                   )}
+
                   {/* {societyData.reraApproved && (
                     <div className="badge badge--rera-approved">
                       <svg
@@ -1364,7 +1387,17 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                       </svg>
                       {formattedLocality}, {formattedCity}, {formattedState}
                     </span>
-                    <button className="map-link">View on Map</button>
+                    <button
+                      className="map-link"
+                      onClick={() => {
+                        const section = document.getElementById("Nearby-Locations");
+                        if (section) {
+                          section.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                    >
+                      View on Map
+                    </button>
                   </div>
                 </div>
               </div>
@@ -2752,6 +2785,7 @@ const AboutSocietySection = ({ societyId }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Fetch society data from Firestore (No changes needed here)
   useEffect(() => {
@@ -2802,6 +2836,11 @@ const AboutSocietySection = ({ societyId }) => {
       setError("Failed to save changes.");
     }
   };
+
+  const maxLength = 200;
+  const isLong = societyData.description && societyData.description.length > maxLength;
+  const shortText = isLong ? societyData.description.slice(0, maxLength) + "..." : societyData.description;
+
   if(loading) return (
     <div className="loading-spinner">
           <FaSpinner className="spin" size={40} />
@@ -2817,15 +2856,39 @@ const AboutSocietySection = ({ societyId }) => {
             <div className="about-container">
               <h2 className="about-title">Discover {societyData.society}</h2>
 
-              <p className="about-description">
+               <p className="about-description">
                 {societyData.description === "" ? (
-                  <span className="no-description">
-                    No description available.
-                  </span>
+                  <span className="no-description">No description available.</span>
                 ) : (
-                  societyData.description
+                  <>
+                    {shortText}
+                    {isLong && (
+                      <button
+                        className="read-more-btn"
+                        onClick={() => setShowPopup(true)}
+                      >
+                        Read More
+                      </button>
+                    )}
+                  </>
                 )}
               </p>
+
+              {/* Popup Modal */}
+              {showPopup && (
+                <div className="popup-overlay-about">
+                  <div className="popup-content-about">
+                    <h2>Full Description</h2>
+                    <p>{societyData.description}</p>
+                    <button
+                      className="close-btn-about"
+                      onClick={() => setShowPopup(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {user &&
               ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
@@ -3115,11 +3178,9 @@ const SocietyRatesSection = ({ societyId }) => {
           ) : null}
         </div>
 
-        {societyData.electricityRateAuthority &&
-        societyData.electricityRatePowerBackup &&
-        societyData.waterCharges &&
-        societyData.commonAreaMaintenance &&
-        societyData.commonAreaElectricity &&
+        {societyData.electricityRateAuthority ||
+        societyData.electricityRatePowerBackup ||
+        societyData.commonAreaMaintenance ||
         societyData.clubCharges ? (
           <>
             <div className="rates-grid">
@@ -3133,7 +3194,9 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-content">
                   <div className="rate-details">
                     <p className="rate-value">
-                      ₹{societyData.electricityRateAuthority} per unit
+                      {societyData.electricityRateAuthority
+                        ? `₹${societyData.electricityRateAuthority} per unit`
+                        : "N/A per unit"}
                     </p>
                   </div>
                 </div>
@@ -3148,9 +3211,11 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-content">
                   <div className="rate-details">
                     <p className="rate-value">
-                      ₹{societyData.electricityRatePowerBackup} per unit
+                      {societyData.electricityRatePowerBackup
+                        ? `₹${societyData.electricityRatePowerBackup} per unit`
+                        : "N/A per unit"}
                     </p>
-                  </div>
+                                      </div>
                 </div>
               </div>
               {/* <div className="rate-card">
@@ -3178,7 +3243,9 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-content">
                   <div className="rate-details">
                     <p className="rate-value">
-                      ₹{societyData.commonAreaMaintenance} per sq/ft
+                      {societyData.commonAreaMaintenance
+                        ? `₹${societyData.commonAreaMaintenance} per sq/ft`
+                        : "N/A per sq/ft"}
                     </p>
                   </div>
                 </div>
@@ -3208,7 +3275,9 @@ const SocietyRatesSection = ({ societyId }) => {
                 <div className="card-content">
                   <div className="rate-details">
                     <p className="rate-value">
-                      ₹{societyData.clubCharges} per month
+                      {societyData.clubCharges
+                        ? `₹${societyData.clubCharges} per month`
+                        : "N/A per month"}
                     </p>
                     {/* <p className="rate-description">Access to all club amenities</p> */}
                   </div>
@@ -4265,7 +4334,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
             connectivity to key destinations
           </p>
           {!isEditing &&
-            nearbyLocations.length > 0 &&
+            (nearbyLocations.length > 0 || mapLink) &&
             user &&
             ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
               <button className="edit-button" onClick={handleEditClick}>
@@ -4481,7 +4550,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
         )}
 
         {/* Main Content Display */}
-        {nearbyLocations.length > 0 ? (
+        {mapLink || nearbyLocations.length > 0 ? (
           <div className="content-grid">
             {/* Map Section */}
             <div className="map-container">
