@@ -2792,6 +2792,7 @@ export default function Stage3(props) {
                 </div>}
 
               {/* Visiting Hours From */}
+                 {propertyDocument?.purpose !== 'PMS' && (
               <div className="col-md-6">
                 <div className="form_field label_top">
                   <label htmlFor="">Visiting Hours From</label>
@@ -2814,7 +2815,9 @@ export default function Stage3(props) {
                   </div>
                 </div>
               </div>
+                 )}
               {/* Visiting Hours To */}
+                 {propertyDocument?.purpose !== 'PMS' && (
               <div className="col-md-6">
                 <div className="form_field label_top">
                   <label htmlFor="">Visiting Hours To</label>
@@ -2836,8 +2839,11 @@ export default function Stage3(props) {
                   </div>
                 </div>
               </div>
+                 )}
+            
               {/* Visiting Days */}
-              <div className="col-md-12">
+              {propertyDocument?.purpose !== 'PMS' && (
+  <div className="col-md-12">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Visiting Days</label>
                   <div className="radio_group">
@@ -3174,12 +3180,14 @@ export default function Stage3(props) {
                   </div>
                 </div>
               </div>
+              )}
+            
 
               {/* Bachelor Boys Allowed */}
               {
   propertyDocument &&
   propertyDocument.category === 'Residential' &&
-  propertyDocument.purpose !== 'Sale' && (
+  propertyDocument.purpose === 'Rent' && (
                   <div className="col-md-6">
                     <div className="form_field st-2 label_top">
                       <label htmlFor="">Bachelor Boys Allowed</label>
@@ -3263,7 +3271,7 @@ export default function Stage3(props) {
                   {
   propertyDocument &&
   propertyDocument.category === 'Residential' &&
-  propertyDocument.purpose !== 'Sale' && (
+  propertyDocument.purpose === 'Rent' && (
                <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Bachelor Girls Allowed</label>
@@ -3348,7 +3356,7 @@ export default function Stage3(props) {
                     {
   propertyDocument &&
   propertyDocument.category === 'Residential' &&
-  propertyDocument.purpose !== 'Sale' && (
+  propertyDocument.purpose === 'Rent' && (
                <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Pets Allowed</label>
@@ -3433,7 +3441,7 @@ export default function Stage3(props) {
                     {
   propertyDocument &&
   propertyDocument.category === 'Residential' &&
-  propertyDocument.purpose !== 'Sale' && (
+  propertyDocument.purpose === 'Rent' && (
                <div className="col-md-6">
                 <div className="form_field st-2 label_top">
                   <label htmlFor="">Food Habit</label>

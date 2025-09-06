@@ -10,12 +10,9 @@ const WeeklyTrackerModal = () => {
   const { user } = useAuthContext();
   const [show, setShow] = useState(false);
   const [trackerStarted, setTrackerStarted] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [formError, setFormError] = useState("");
-
   const [questions, setQuestions] = useState([
-    { id: "selfReview", label: "Self review meeting done?", icon: <FaUserCheck />, type: "radio", allowNA: true, answer: "", reason: "", updatedAt: null },
-    { id: "managerReview", label: "Manager review meeting done?", icon: <FaUserTie />, type: "radio", allowNA: true, answer: "", reason: "", updatedAt: null },
+    { id: "selfReview", label: "Self review meeting done?", icon: <FaUserCheck />, type: "radio", allowNA: true, answer: "", updatedAt: null },
+    { id: "managerReview", label: "Manager review meeting done?", icon: <FaUserTie />, type: "radio", allowNA: true, answer: "", updatedAt: null },
   ]);
   const [docId, setDocId] = useState(null);
 
@@ -54,7 +51,6 @@ const WeeklyTrackerModal = () => {
           prev.map((q) => ({
             ...q,
             answer: thisWeekDoc[q.id]?.answer || "",
-            reason: thisWeekDoc[q.id]?.reason || "",
             updatedAt: thisWeekDoc[q.id]?.updatedAt || null
           }))
         );
@@ -74,11 +70,11 @@ const WeeklyTrackerModal = () => {
         updatedAt: firebase.firestore.Timestamp.now(),
       };
       questions.forEach((q) => {
-        newDoc[q.id] = { answer: "", reason: "", updatedAt: null };
+        newDoc[q.id] = { answer: "", updatedAt: null };
       });
       const docRef = await projectFirestore.collection("weeklyTracker").add(newDoc);
       setDocId(docRef.id);
-      setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", reason: "", updatedAt: null })));
+      setQuestions((prev) => prev.map((q) => ({ ...q, answer: "", updatedAt: null })));
       setTrackerStarted(true);
     }
     setShow(true);
@@ -86,75 +82,30 @@ const WeeklyTrackerModal = () => {
 
   const handleClose = () => setShow(false);
 
-  // ✅ Save with validation
   const handleSave = async () => {
     const now = firebase.firestore.Timestamp.now();
-    let newErrors = {};
-
-    questions.forEach((q) => {
-      if ((q.answer === "no" || q.answer === "na") && !q.reason.trim()) {
-        newErrors[q.id] = "Reason is required when you select No or N/A";
-      }
-    });
-
-    setErrors(newErrors);
-
-    if (Object.keys(newErrors).length > 0) {
-      setFormError("⚠️ Please fill all mandatory fields before saving");
-      return;
-    }
-
-    setFormError("");
-
     const updates = questions.reduce((acc, q) => {
       acc[q.id] = {
         answer: q.answer,
-        reason: q.reason || "",
-        updatedAt: q.updatedAt || now,
+        updatedAt: q.updatedAt || now
       };
       return acc;
     }, {});
     updates.updatedAt = now;
-
     await projectFirestore.collection("weeklyTracker").doc(docId).update(updates);
     setShow(false);
   };
 
-  // ✅ Answer / Reason change
-const handleChange = (id, value, field = "answer") => {
-  const now = firebase.firestore.Timestamp.now();
-
-  setQuestions((prev) =>
-    prev.map((q) => {
-      if (q.id === id) {
-        // ✅ Agar answer change ho raha hai
-        if (field === "answer") {
-          return {
-            ...q,
-            answer: value,
-            reason: "", // answer badalte hi reason reset ho jaye
-            updatedAt: now,
-          };
-        }
-        // ✅ Agar reason change ho raha hai
-        return { ...q, [field]: value, updatedAt: now };
-      }
-      return q;
-    })
-  );
-
-  // ✅ Agar reason type kiya to error hata do
-  if (field === "reason") {
-    setErrors((prev) => {
-      const { [id]: removed, ...rest } = prev;
-      if (Object.keys(rest).length === 0) {
-        setFormError(""); // Global error bhi hatao
-      }
-      return rest;
-    });
-  }
-};
-
+  const handleChange = (id, value) => {
+    const now = firebase.firestore.Timestamp.now();
+    setQuestions((prev) =>
+      prev.map((q) =>
+        q.id === id
+          ? { ...q, answer: value, updatedAt: now }
+          : q
+      )
+    );
+  };
 
   return (
     <>
@@ -217,39 +168,17 @@ const handleChange = (id, value, field = "answer") => {
                     className="custom-input"
                   />
                 )}
-
-                {/* ✅ Reason textarea if No/NA */}
-                {(q.answer === "no" || q.answer === "na") && (
-                  <div className="mt-2">
-                    <Form.Control
-                      as="textarea"
-                      rows={2}
-                      placeholder={`Reason for ${q.answer.toUpperCase()}*`}
-                      value={q.reason}
-                      onChange={(e) => handleChange(q.id, e.target.value, "reason")}
-                      className={errors[q.id] ? "is-invalid" : ""}
-                    />
-                    {errors[q.id] && (
-                      <div className="text-danger small mt-1">{errors[q.id]}</div>
-                    )}
-                  </div>
-                )}
               </div>
             ))}
           </Form>
         </Modal.Body>
-        <Modal.Footer className="d-flex flex-column align-items-start">
-          {formError && (
-            <div className="text-danger fw-semibold mb-2">{formError}</div>
-          )}
-          <div className="d-flex w-100 justify-content-end">
-            <Button variant="secondary" onClick={handleClose} className="me-2">
-              Close
-            </Button>
-            <Button variant="success" onClick={handleSave}>
-              Save
-            </Button>
-          </div>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="success" onClick={handleSave}>
+            Save
+          </Button>
         </Modal.Footer>
       </Modal>
     </>

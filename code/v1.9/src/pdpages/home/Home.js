@@ -21,6 +21,7 @@ import Banner from "../../components/Banner";
 import TopCitiesInIndia from "../../components/TopCitiesInIndia";
 import ProductCarousel from "../../components/ProductCarousel";
 import CounterSection from "../../components/CounterSection";
+import GeneralEnquiry from "../../components/GeneralEnquiry";
 import ChatApp from "../../TicketSystem/ChatApp";
 import Testimonial from "../../components/Testimonial";
 import Blog from "../../components/Blog";
@@ -52,18 +53,18 @@ const Home = () => {
   // upcoming inspection reminder modal code  end
 
   // reminder for login code
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    if (authIsReady) {
-      // Ensure authIsReady is true before checking the user
-      if (!user) {
-        setShowModal(true); // Show modal if no user is logged in
-      } else {
-        setShowModal(false); // Hide modal if user is logged in
-      }
-    }
-  }, [authIsReady, user]);
+  // useEffect(() => {
+  //   if (authIsReady) {
+  //     // Ensure authIsReady is true before checking the user
+  //     if (!user) {
+  //       setShowModal(true); // Show modal if no user is logged in
+  //     } else {
+  //       setShowModal(false); // Hide modal if user is logged in
+  //     }
+  //   }
+  // }, [authIsReady, user]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -86,6 +87,7 @@ const Home = () => {
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
+        <GeneralEnquiry/>
         {/* <CreateNewDoc/> */}
         {/* <UpdateCreatedByComponent/>
         <DuplicateCollection/>
@@ -692,7 +694,7 @@ const Home = () => {
           </p>
         </Modal.Footer>
       </Modal> */}
-        <Modal
+        {/* <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
         centered
@@ -743,7 +745,7 @@ const Home = () => {
             Continue with mobile number
           </Link>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
 
       {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

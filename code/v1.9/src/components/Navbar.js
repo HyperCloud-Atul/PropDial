@@ -314,6 +314,7 @@ export default function Navbar() {
     "/localitylist",
     "/societylist",
     "/newproperty",
+  "/contact-us"
   ];
   const shouldMoreDesktopActive = moreDesktopActivePaths.includes(
     location.pathname
@@ -467,7 +468,7 @@ export default function Navbar() {
               <div
                 onClick={showThirdPage}
                 className={`menu_single pointer ${
-                  location.pathname === "/contact-us" ||
+                  
                   location.pathname === "/allproperties"
                     ? "active"
                     : ""

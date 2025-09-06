@@ -3514,11 +3514,11 @@ const Stage2 = (props) => {
                             done
                           </span>
                         </div>
-                        <h6>Servent Room 1</h6>
+                        <h6>Servent Room</h6>
                       </label>
                     </div>
                   </div>
-                  <div className="radio_group_single">
+                  {/* <div className="radio_group_single">
                     <div
                       className={
                         propertyDetails.ServentRoomTwoClick
@@ -3566,7 +3566,7 @@ const Stage2 = (props) => {
                         <h6>Servent Room 2</h6>
                       </label>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <div className="radio_group_single">
                   <div
                     className={
@@ -6260,7 +6260,7 @@ const Stage2 = (props) => {
          {propertyDetails &&
   (propertyDetails.Category === "Residential" ||
     propertyDetails.Category === "Commercial") &&
-  propertyDetails.Purpose !== "Sale" && (
+  propertyDetails.Purpose === "Rent" && (
               <div className="col-md-4">
                 <div className="form_field label_top">
                   <label htmlFor="">Lock-in Period</label>

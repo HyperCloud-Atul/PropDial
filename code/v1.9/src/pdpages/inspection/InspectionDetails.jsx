@@ -278,7 +278,7 @@ const InspectionDetails = () => {
               {/* <button onClick={handleDownloadPDF}>Download as PDF</button> */}
 
               <div className="report_header">
-                <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
+                {/* <h1>{inspectionDoc.inspectionType} Inspection Report</h1> */}
                 <div className="rh_inner">
                   <div className="inner date i_info">
                     <img src="/assets/img/icons/start-date.png" alt="" />
@@ -294,7 +294,7 @@ const InspectionDetails = () => {
                   </div>
                   <div className="inner logo">
                     <img src="/assets/img/logo_propdial.png" alt="" />
-                    <div className="company_address">
+                    {/* <div className="company_address">
                       <span>
                         #204, 2nd Floor, Vipul Trade Centre, Sector-48
                       </span>
@@ -302,7 +302,8 @@ const InspectionDetails = () => {
                       <span>
                         propdial.com&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info@prodial.com
                       </span>
-                    </div>
+                    </div> */}
+                       <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
                   </div>
                   <div
                     className="inner createdBy i_info"
@@ -462,10 +463,10 @@ const InspectionDetails = () => {
                             </div>
                             <div className="tenant_detail">
                               <h6 className="t_name">
-                                {tenant.name || "Tenant name"}
+                                {tenant?.name || "Tenant name"}
                               </h6>
                               <h6 className="t_number">
-                                {tenant.mobile.replace(
+                                {tenant?.mobile?.replace(
                                   /(\d{2})(\d{5})(\d{5})/,
                                   "+$1 $2-$3"
                                 ) || "Tenant phone"}
@@ -564,7 +565,7 @@ const InspectionDetails = () => {
                                   background: "#eeeeee",
                                 }}
                               >
-                               Amount: ₹{billDoc?.amount}
+                               Due Amount: ₹{billDoc?.amount}
                               </h5>
                             )}
                           </div>
