@@ -166,12 +166,12 @@ const PGContactUs = () => {
             backgroundImage: "url('./assets/img/contact_from_right.jpg')",
           }}
         >
-          {user && (
+          {/* {user && (
             <CreateTicket />
-          )}
-          {!user && (
+          )} */}
+          {/* {!user && ( */}
             <EnquiryForm />
-          )}
+          {/* )} */}
 
         </div>
       </section>

@@ -140,7 +140,7 @@ function Banner() {
                 </div> */}
                 <br></br>
                 <div className="search_property pointer">
-                  <Link to="/properties">
+                   <Link to="/properties">
                     <button className="theme_btn btn_fill no_icon">
                       Search Properties
                       <span className="material-symbols-outlined btn_arrow ba_animation">
@@ -148,6 +148,12 @@ function Banner() {
                       </span>
                     </button>
                   </Link>
+                  <a href="#enquiry_form" className="theme_btn btn_fill2 no_icon" style={{
+                    marginLeft:"15px"
+                  }}>
+                 Contact Now
+                  </a>
+                 
                 </div>
               </div>
             </div>
