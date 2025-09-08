@@ -109,7 +109,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
       &--under-construction {
         background-color: #fef3c7; // light amber/yellow background
-        color: #b45309;           // dark amber text
+        color: #b45309; // dark amber text
         &:hover {
           background-color: #fde68a; // slightly deeper amber on hover
         }
@@ -427,15 +427,15 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
       .facts-grid {
         grid-template-columns: 1fr;
-        margin-bottom: 10px; /* stack facts vertically */
+        margin-bottom: 10px; 
       }
 
       .floating-rating {
         margin: 1rem auto 0;
       }
       .edit-btn {
-        position: static; // 👈 no absolute positioning
-        margin: 10px auto 0; // 👈 center below text
+        position: static; 
+        margin: 10px auto 0; 
         display: inline-flex;
       }
       .rating-card {
@@ -948,7 +948,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       .amenity-card {
-        position: relative; // 👈 make the card the positioning context
+        position: relative; 
         border: 1px solid #eee;
         background-color: white;
         border-radius: 0.5rem;
@@ -1023,11 +1023,10 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
               color: white;
               font-weight: 400;
               font-size: 1.3rem;
-              text-shadow: 0 2px 6px rgba(0, 0, 0, 0.801); // 👈 shadow for contrast
+              text-shadow: 0 2px 6px rgba(0, 0, 0, 0.801); 
               z-index: 2;
             }
 
-            // optional gradient overlay for extra readability
             &::after {
               content: "";
               position: absolute;
@@ -1594,7 +1593,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
             background: var(--theme-green);
 
             .toggle-circle {
-              left: calc(100% - 23px); // slide to right
+              left: calc(100% - 23px); 
             }
           }
         }
@@ -1701,20 +1700,19 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
       .modal-content {
         padding: 1.2rem;
-        max-height: 90vh; // ✅ better fit for tablets/phones
+        max-height: 90vh; 
       }
     }
 
     @media (max-width: 480px) {
       .modal-content {
         padding: 1rem;
-        max-height: 85vh; // ✅ avoid keyboard issues on mobile
-        font-size: 0.9rem; // slightly smaller text for tight space
+        max-height: 85vh; 
+        font-size: 0.9rem; 
       }
     }
   }
 
-  // --- About Society Section Styles (New Component) ---
   .about-society-section {
     padding-top: 30px;
     padding-bottom: 40px;
@@ -1771,9 +1769,9 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     }
 
     .about-description p {
-      font-size: 1.125rem; /* text-lg */
-      color: rgba(107, 114, 128, 1); /* text-muted-foreground */
-      line-height: 1.625; /* leading-relaxed */
+      font-size: 1.125rem; 
+      color: rgba(107, 114, 128, 1); 
+      line-height: 1.625;
     }
 
     @media (max-width: 575px) {
@@ -1787,8 +1785,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       .edit-btn {
-        position: static; // 👈 no absolute positioning
-        margin: 10px auto 0; // 👈 center below text
+        position: static;
+        margin: 10px auto 0; 
         display: inline-flex;
       }
     }
@@ -1808,21 +1806,21 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       .edit-btn {
-        width: 100%; // 👈 takes full width for better tap targets
+        width: 100%; 
         justify-content: center;
       }
     }
     .about-description {
       text-align: center;
-      color: var(--muted-color, rgba(107, 114, 128, 1)); /* fallback to muted */
-      font-size: 1.125rem; /* text-lg */
+      color: var(--muted-color, rgba(107, 114, 128, 1));
+      font-size: 1.125rem;
       line-height: 30px;
       max-width: 70rem;
       margin: 10px auto 0 auto;
     }
 
     .no-description {
-      color: rgb(240, 97, 97); /* red for missing desc */
+      color: rgb(240, 97, 97);
       font-style: italic;
     }
 
@@ -1834,7 +1832,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
     .read-more-btn {
       margin-left: 8px;
-      color: $primary-color; /* blue */
+      color: $primary-color; 
       background: none;
       border: none;
       cursor: pointer;
@@ -1853,7 +1851,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.6);
+      background-color: rgba(0, 0, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1868,7 +1866,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       width: 90%;
       max-height: 70%;
       overflow-y: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
       animation: fadeIn 0.3s ease-in-out;
     }
 
@@ -1943,7 +1941,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       .popup-content-about p {
         font-size: 0.9rem;
       }
-}
+    }
     .about-card {
       background-color: $white;
       border-radius: 1rem;
@@ -2595,8 +2593,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
 
         .edit-button {
-          position: static; // 👈 no absolute positioning
-          margin: 10px auto 0; // 👈 center below text
+          position: static; 
+          margin: 10px auto 0; 
           display: inline-flex;
         }
       }
@@ -2615,7 +2613,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
 
         .edit-button {
-          width: 100%; // 👈 takes full width for better tap targets
+          width: 100%; 
           justify-content: center;
         }
       }
@@ -2659,7 +2657,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
       // responsive scrollable style
       @media (max-width: 575px) {
-        flex-wrap: nowrap; // 👈 important: prevents wrapping
+        flex-wrap: nowrap; 
         justify-content: flex-start;
         overflow-x: auto;
         overflow-y: hidden;
@@ -2680,7 +2678,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
 
         .filter-button {
-          flex: 0 0 auto; // 👈 ensures buttons don’t shrink
+          flex: 0 0 auto;
         }
       }
     }
@@ -2731,12 +2729,12 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       flex-wrap: nowrap;
       overflow-x: auto;
       gap: 24px;
-      padding-bottom: 10px; /* To prevent scrollbar from hiding content */
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
+      padding-bottom: 10px; 
+      -ms-overflow-style: none;
+      scrollbar-width: none; 
 
       &::-webkit-scrollbar {
-        display: none; /* Chrome, Safari, and Opera */
+        display: none; 
       }
     }
 
@@ -2783,7 +2781,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     }
 
     .floor-plan-display {
-      flex: 0 0 350px; /* default desktop/tablet width */
+      flex: 0 0 350px; 
       max-width: 100%;
       background-color: var(--card-bg-color, #fff);
       border-radius: 12px;
@@ -2957,7 +2955,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           align-items: start;
 
           .label {
-            flex-shrink: 0; /* keep label fixed */
+            flex-shrink: 0; 
             margin-right: 10px;
           }
 
@@ -2983,7 +2981,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
       }
       @media (max-width: 767px) {
-        flex: 0 0 320px; /* shrink slightly */
+        flex: 0 0 320px; 
         .plan-image-container {
           height: 180px;
         }
@@ -2999,7 +2997,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       @media (max-width: 575px) {
-        flex: 0 0 315px; /* full width */
+        flex: 0 0 315px;
         .plan-image-container {
           height: 160px;
         }
@@ -3009,14 +3007,14 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
             font-size: 15px;
           }
           .area-bathroom-row {
-            flex-wrap: wrap; /* allow wrapping */
+            flex-wrap: wrap; 
             gap: 6px;
           }
         }
       }
 
       @media (max-width: 360px) {
-        flex: 0 0 100%; /* full width */
+        flex: 0 0 100%;
         padding: 8px;
         .plan-image-container {
           height: 140px;
@@ -3028,7 +3026,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           }
           .area-bathroom-row {
             flex-direction: row;
-            flex-wrap: wrap; /* stack items */
+            flex-wrap: wrap;
             align-items: flex-start;
           }
           .additional-features-row {
@@ -3580,8 +3578,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           font-size: 1.05rem;
         }
         .edit-btn {
-          position: static; // 👈 no absolute positioning
-          margin: 10px auto 0; // 👈 center below text
+          position: static; 
+          margin: 10px auto 0; 
           display: inline-flex;
         }
       }
@@ -3598,7 +3596,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           font-size: 1rem;
         }
         .edit-btn {
-          width: 100%; // 👈 takes full width for better tap targets
+          width: 100%; 
           justify-content: center;
         }
       }
@@ -3890,8 +3888,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
 
         .edit-button {
-          position: static; // 👈 no absolute positioning
-          margin: 10px auto 0; // 👈 center below text
+          position: static; 
+          margin: 10px auto 0; 
           display: inline-flex;
         }
       }
@@ -3910,7 +3908,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         }
 
         .edit-button {
-          width: 100%; // 👈 takes full width for better tap targets
+          width: 100%;
           justify-content: center;
         }
       }
@@ -3926,10 +3924,10 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       background-color: rgba(0, 0, 0, 0.6);
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* keep header visible on mobile */
+      align-items: flex-start;
       z-index: 1050;
       padding: 1rem;
-      overflow-y: auto; /* allow overlay to scroll if content too tall */
+      overflow-y: auto; 
     }
 
     .modal-content {
@@ -3999,7 +3997,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
-      flex-wrap: wrap; /* makes buttons wrap on mobile */
+      flex-wrap: wrap; 
 
       button {
         padding: 0.6rem 1.25rem;
@@ -4056,7 +4054,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       .form-grid {
-        grid-template-columns: 1fr !important; /* stack inputs */
+        grid-template-columns: 1fr !important;
         gap: 1rem;
       }
 
@@ -4518,8 +4516,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       &:hover {
-        color: #fa6304;
-        border: 3px dashed #fa6304;
+        color: $primary-color;
+        border: 3px dashed $primary-color;
         background-color: #f4f4f4;
       }
     }
@@ -4973,8 +4971,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       &:hover {
-        color: #fa6304;
-        border: 3px dashed #fa6304;
+        color: $primary-color;
+        border: 3px dashed $primary-color;
         background-color: #f4f4f4;
       }
     }
@@ -5541,8 +5539,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
       }
 
       &:hover {
-        color: #fa6304;
-        border: 3px dashed #fa6304;
+        color: $primary-color;
+        border: 3px dashed $primary-color;
         background-color: #f4f4f4;
       }
     }
@@ -5820,8 +5818,8 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         align-items: center;
 
         @media (max-width: 525px) {
-          // width: 100%; // Take full width
-          // justify-content: flex-end; // Align icons to the right on mobile
+          // width: 100%; 
+          // justify-content: flex-end; 
         }
 
         .icon {
@@ -5845,7 +5843,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           background: white;
           border-radius: 4px;
           transition: all 0.2s;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Added shadow for better appearance
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 
           &:hover {
             background: var(--theme-green);
@@ -5864,14 +5862,14 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         border-radius: 8px !important;
         position: relative;
         // box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        cursor: pointer; // Indicate clickability for the entire grid elements
+        cursor: pointer;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           transition: transform 0.3s;
-          border-radius: 0; // Reset individual image border-radius here
+          border-radius: 0; 
 
           &:hover {
             transform: scale(1.02);
@@ -5929,19 +5927,19 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
 
           .main-photo,
           .sub-photo {
-            flex: 0 0 80%; /* Each image takes 80% of the container width */
+            flex: 0 0 80%; 
             margin-right: 10px;
             scroll-snap-align: start;
             aspect-ratio: 3/2;
-            border-radius: 8px; // Apply to the container div
+            border-radius: 8px;
             overflow: hidden;
 
             img {
-              border-radius: 8px !important; // Override specific border-radius for mobile
+              border-radius: 8px !important;
             }
           }
           .main-photo {
-            grid-row: auto; // Reset grid-row for mobile flex layout
+            grid-row: auto; 
           }
 
           // Reset specific border-radius for mobile as all images should be rounded uniformly
@@ -6041,7 +6039,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
           display: flex;
           gap: 10px;
           margin-bottom: 20px;
-          flex-wrap: wrap; // Allow buttons to wrap
+          flex-wrap: wrap; 
 
           // General button styling for edit mode controls
           button,
@@ -6255,7 +6253,7 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     }
 
     .image-viewer-overlay {
-       position: fixed;
+      position: fixed;
       top: 0;
       left: 0;
       right: 0;
