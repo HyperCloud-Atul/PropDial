@@ -239,7 +239,7 @@ height: 100vh;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        // -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         line-height: 1.4;
         margin-bottom: 8px;
@@ -1917,6 +1917,7 @@ height: 100vh;
     }
   }
 
+
   &__modal-overlay {
     position: fixed;
     top: 0;
@@ -1933,29 +1934,62 @@ height: 100vh;
     animation: fadeIn 0.3s ease;
   }
 
+
   &__modal {
     width: 100%;
     max-width: 500px;
+    max-height: 90vh;
     background: white;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    margin-top: 85px;
+    margin-bottom: 70px;
     transform: translateY(0);
     animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    @media (max-width: 768px) {
+      max-width: 90%;
+      margin: 20px auto;
+      margin-top: 85px;
+      margin-bottom: 70px;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      height: 100vh;
+      max-height: 100vh;
+      margin: 0;
+      border-radius: 0;
+      animation: none;
+      margin-top: 215px;
+      margin-bottom: 70px;
+    }
   }
+
 
   &__modal-header {
     background: #128c7e;
     color: white;
     padding: 20px 24px;
     position: relative;
-    
+
+
     h2 {
       margin: 0;
       font-size: 1.5rem;
       font-weight: 600;
+
+
+      @media (max-width: 480px) {
+        font-size: 1.2rem; // smaller text on mobile
+      }
     }
-    
+
+
     &::after {
       position: absolute;
       right: 24px;
@@ -1965,16 +1999,27 @@ height: 100vh;
       font-size: 1.2rem;
       opacity: 0.8;
       transition: opacity 0.2s;
-      
+
+
       &:hover {
         opacity: 1;
       }
     }
   }
+  
+
 
   &__modal-body {
+    flex: 1 1 auto;
     padding: 24px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+
+    @media (max-width: 480px) {
+      padding: 16px 20px;
+    }
   }
+
 
   .error-message {
     background: #ffebee;
@@ -2000,6 +2045,7 @@ height: 100vh;
       font-weight: bold;
     }
   }
+
 
   &__form {
     display: flex;
@@ -2044,6 +2090,7 @@ height: 100vh;
     }
   }
 
+
   &__button-group {
     display: flex;
     gap: 12px;
@@ -2072,6 +2119,7 @@ height: 100vh;
     }
   }
 
+
   @media (max-width: 600px) {
     &__modal {
       max-width: 100%;
@@ -2086,6 +2134,7 @@ height: 100vh;
     }
   }
 }
+
 
 /* ========== UTILITY CLASSES ========== */
 @keyframes fadeInOut {

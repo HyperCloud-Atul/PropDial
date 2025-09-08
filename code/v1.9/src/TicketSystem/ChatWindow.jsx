@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef, useMemo, useCallback, memo } from 'react';
 import { FaPaperPlane, FaSmile, FaMicrophone, FaArrowLeft, FaPaperclip, 
          FaTimes, FaChevronDown, FaChevronUp, FaIdCard, FaPhone, 
-         FaStop, FaPlay, FaPause, FaDownload, FaLock, FaClock } from 'react-icons/fa';
+         FaStop, FaPlay, FaPause, FaDownload, FaLock, FaClock, FaBuilding, 
+         FaCity, FaGlobe, FaUser, FaUserTag } from 'react-icons/fa';
 import { MdDoneAll, MdDone } from 'react-icons/md';
 import { projectFirestore, timestamp, projectAuth } from '../firebase/config';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -10,6 +11,7 @@ import data from '@emoji-mart/data';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { projectStorage } from "../firebase/config";
 import { signOut } from "firebase/auth";
+
 
 // Memoized Circular Progress Component
 const CircularProgress = memo(({ progress }) => (
@@ -33,12 +35,14 @@ const CircularProgress = memo(({ progress }) => (
   </div>
 ));
 
+
 // Memoized VoicePlayer component
 const VoicePlayer = memo(({ url, isSent }) => {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -65,6 +69,7 @@ const VoicePlayer = memo(({ url, isSent }) => {
     };
   }, []);
 
+
   const togglePlay = useCallback(() => {
     if (isPlaying) {
       audioRef.current.pause();
@@ -73,6 +78,7 @@ const VoicePlayer = memo(({ url, isSent }) => {
     }
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
+
 
   return (
     <div className={`voice-player ${isSent ? 'sent' : 'received'}`}>
@@ -88,6 +94,7 @@ const VoicePlayer = memo(({ url, isSent }) => {
   );
 });
 
+
 // Memoized MessageContent component
 const MessageContent = memo(({ 
   msg, 
@@ -99,6 +106,7 @@ const MessageContent = memo(({
   const isOptimistic = msg.tempId;
   const isPending = msg.pending;
   const hasError = msg.error;
+
 
   if (msg.isSystemMessage) {
     return (
@@ -189,6 +197,7 @@ const MessageContent = memo(({
   );
 });
 
+
 // Memoized AttachmentItem component
 const AttachmentItem = memo(({ 
   attachment, 
@@ -222,6 +231,7 @@ const AttachmentItem = memo(({
   );
 });
 
+
 const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const { user, dispatch } = useAuthContext();
   const [messages, setMessages] = useState([]);
@@ -250,6 +260,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [optimisticMessages, setOptimisticMessages] = useState([]);
 
+
   // Check if admin can close ticket
   useEffect(() => {
     if (user?.role === 'admin' && ticketInfo?.status === 'open') {
@@ -258,6 +269,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       setCanCloseTicket(false);
     }
   }, [user, ticketInfo]);
+
 
   // Close ticket function
   const closeTicket = useCallback(async () => {
@@ -298,12 +310,14 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   }, [canCloseTicket, ticketId, user]);
 
+
   // Memoized helper functions
   const truncateText = useCallback((text, maxLength) => {
     return text && text.length > maxLength 
       ? text.substring(0, maxLength) + '...' 
       : text || '';
   }, []);
+
 
   const getAvatarText = useCallback((issueType) => {
     if (!issueType) return 'T';
@@ -316,6 +330,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return words.map(word => word[0]).join('').substring(0, 2);
   }, []);
 
+
   const getAvatarColor = useCallback((str) => {
     if (!str) return '#128c7e';
     const hash = Array.from(str).reduce((acc, char) => 
@@ -323,9 +338,11 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return `hsl(${Math.abs(hash) % 360}, 70%, 60%)`;
   }, []);
 
+
   const formatTime = useCallback((date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }, []);
+
 
   const formatDate = useCallback((date) => {
     const today = new Date();
@@ -337,17 +354,21 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return date.toLocaleDateString();
   }, []);
 
+
   // Fetch ticket info, admin name, and creator name
   useEffect(() => {
     if (!ticketId) return;
 
+
     let isMounted = true;
+
 
     const unsubscribeTicket = projectFirestore
       .collection('tickets')
       .doc(ticketId)
       .onSnapshot(async (doc) => {
         if (!doc.exists || !isMounted) return;
+
 
         const ticketData = doc.data();
         const ticketInfo = {
@@ -357,6 +378,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           closedAt: ticketData.closedAt?.toDate() || null
         };
         setTicketInfo(ticketInfo);
+
 
         // Fetch admin name if assigned
         if (ticketData.adminId) {
@@ -374,6 +396,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
             console.error("Error fetching admin details:", error);
           }
         }
+
 
         // Fetch creator's full name
         if (ticketData.createdBy) {
@@ -397,15 +420,18 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         }
       });
 
+
     return () => {
       isMounted = false;
       unsubscribeTicket();
     };
   }, [ticketId]);
 
+
   // Fetch messages with duplicate prevention
   useEffect(() => {
     if (!ticketId) return;
+
 
     const unsubscribe = projectFirestore
       .collection('tickets')
@@ -427,8 +453,10 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           return prev.filter(optMsg => !confirmedIds.has(optMsg.tempId));
         });
 
+
         setMessages(msgs);
         setLoading(false);
+
 
         // Batch update read status
         const unreadMessages = snapshot.docs.filter(
@@ -448,8 +476,10 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         setError("Failed to load messages. Please try again.");
       });
 
+
     return () => unsubscribe();
   }, [ticketId, user.phoneNumber]);
+
 
   // Auto-scroll to bottom with throttling
   useEffect(() => {
@@ -462,6 +492,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     const timer = setTimeout(scrollToBottom, 100);
     return () => clearTimeout(timer);
   }, [messages, optimisticMessages]);
+
 
   // Close emoji picker when clicking outside
   useEffect(() => {
@@ -476,6 +507,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showEmojiPicker]);
+
 
   // Handle typing indicator with debouncing
   const handleInputChange = useCallback((e) => {
@@ -494,6 +526,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }, 2000);
   }, [isTyping]);
 
+
   // Handle authentication errors
   const handleAuthError = useCallback((error) => {
     console.error("Authentication error:", error);
@@ -503,6 +536,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       dispatch({ type: 'LOGOUT' });
     }).catch(console.error);
   }, [dispatch]);
+
 
   // Optimized sendMessage function
   const sendMessage = useCallback(async () => {
@@ -619,11 +653,13 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   }, [input, attachments, ticketInfo, user, ticketId, handleAuthError]);
 
+
   // Add emoji
   const addEmoji = useCallback((emoji) => {
     setInput(prev => prev + emoji.native);
     inputRef.current.focus();
   }, []);
+
 
   // Start voice recording
   const startRecording = useCallback(async () => {
@@ -672,6 +708,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   }, [ticketInfo]);
 
+
   // Stop voice recording
   const stopRecording = useCallback(() => {
     if (mediaRecorder && isRecording) {
@@ -680,12 +717,14 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     }
   }, [mediaRecorder, isRecording]);
 
+
   // Format recording time
   const formatRecordingTime = useCallback((seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }, []);
+
 
   // Handle file attachment
   const handleAttachment = useCallback((e) => {
@@ -706,10 +745,12 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     setAttachments(prev => [...prev, ...newAttachments]);
   }, [ticketInfo]);
 
+
   // Remove attachment
   const removeAttachment = useCallback((id) => {
     setAttachments(prev => prev.filter(att => att.id !== id));
   }, []);
+
 
   // Render attachment preview
   const renderAttachmentPreview = useCallback(() => {
@@ -727,6 +768,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         }
       }
     };
+
 
     return (
       <div 
@@ -792,6 +834,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     );
   }, [showAttachmentPreview, zoomLevel, pinchStartDistance]);
 
+
   // Memoized grouped messages
   const groupedMessages = useMemo(() => {
     const grouped = {};
@@ -806,7 +849,8 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     return grouped;
   }, [messages, optimisticMessages, formatDate]);
 
-  // Memoized ticket details panel
+
+  // Memoized ticket details panel with all new features
   const ticketDetailsPanel = useMemo(() => {
     if (!ticketInfo) return null;
     
@@ -825,21 +869,80 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         {showTicketDetails && (
           <div className="panel-content">
             <div className="detail-row">
-              <span className="detail-label">
-                <FaIdCard className="detail-icon" /> Ticket ID:
-              </span>
+              <span className="detail-label">Ticket ID:</span>
               <span className="detail-value">{ticketInfo.id}</span>
             </div>
+            
             <div className="detail-row">
-              <span className="detail-label">
-                <FaPhone className="detail-icon" /> Mobile:
-              </span>
+              <span className="detail-label">Mobile: </span>
               <span className="detail-value">{ticketInfo.createdBy}</span>
             </div>
+
+            {/* Property PID */}
+            {ticketInfo.propertyPid && (
+              <div className="detail-row">
+                <span className="detail-label">Property PID:</span>
+                <span className="detail-value">{ticketInfo.propertyPid}</span>
+              </div>
+            )}
+
+            {/* Property Name */}
+            {ticketInfo.propertyName && (
+              <div className="detail-row">
+                <span className="detail-label">Property Name:</span>
+                <span className="detail-value">{ticketInfo.propertyName}</span>
+              </div>
+            )}
+
+            {/* Property ID (Firestore Document ID) */}
+            <div className="detail-row">
+              <span className="detail-label">Property ID:</span>
+              <span className="detail-value">{ticketInfo.propertyId || "N/A"}</span>
+            </div>
+
+            {/* Country */}
+            {ticketInfo.country && (
+              <div className="detail-row">
+                <span className="detail-label">Country:</span>
+                <span className="detail-value">{ticketInfo.country}</span>
+              </div>
+            )}
+
+            {/* City */}
+            {ticketInfo.city && (
+              <div className="detail-row">
+                <span className="detail-label">City: </span>
+                <span className="detail-value">{ticketInfo.city}</span>
+              </div>
+            )}
+
+            {/* Created By Role */}
+            <div className="detail-row">
+              <span className="detail-label">Created By Role:</span>
+              <span className="detail-value">{ticketInfo.role || "N/A"}</span>
+            </div>
+
+            {/* User Type */}
+            {ticketInfo.userType && (
+              <div className="detail-row">
+                <span className="detail-label">User Type:</span>
+                <span className="detail-value">{ticketInfo.userType}</span>
+              </div>
+            )}
+
+            {/* User Tag */}
+            {ticketInfo.userTag && (
+              <div className="detail-row">
+                <span className="detail-label">User Tag:</span>
+                <span className="detail-value">{ticketInfo.userTag}</span>
+              </div>
+            )}
+
             <div className="detail-row">
               <span className="detail-label">Subject:</span>
               <span className="detail-value">{ticketInfo.subject || "No subject"}</span>
             </div>
+            
             <div className="detail-row">
               <span className="detail-label">Issue Type:</span>
               <span 
@@ -849,35 +952,61 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
                 {ticketInfo.issueType}
               </span>
             </div>
+            
             <div className="detail-row">
               <span className="detail-label">Description:</span>
               <span className="detail-value">{ticketInfo.description || "No description"}</span>
             </div>
+            
             <div className="detail-row">
               <span className="detail-label">Created:</span>
               <span className="detail-value">
                 {ticketInfo.createdAt.toLocaleDateString()} at {ticketInfo.createdAt.toLocaleTimeString()}
               </span>
             </div>
+            
             <div className="detail-row">
               <span className="detail-label">Status:</span>
               <span className={`status-badge status-${ticketInfo.status}`}>
                 {ticketInfo.status}
               </span>
             </div>
+            
             {ticketInfo.status === 'closed' && ticketInfo.closedAt && (
+              <>
+                <div className="detail-row">
+                  <span className="detail-label">Closed:</span>
+                  <span className="detail-value">
+                    {ticketInfo.closedAt.toLocaleDateString()} at {ticketInfo.closedAt.toLocaleTimeString()}
+                  </span>
+                </div>
+                
+                {ticketInfo.closedBy && (
+                  <div className="detail-row">
+                    <span className="detail-label">Closed By:</span>
+                    <span className="detail-value">
+                      {ticketInfo.closedBy === user.phoneNumber ? 'You' : ticketInfo.closedBy}
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* Admin Assignment (if applicable) */}
+            {ticketInfo.adminId && adminName && (
               <div className="detail-row">
-                <span className="detail-label">Closed:</span>
-                <span className="detail-value">
-                  {ticketInfo.closedAt.toLocaleDateString()} at {ticketInfo.closedAt.toLocaleTimeString()}
-                </span>
+                <span className="detail-label">Assigned Admin:</span>
+                <span className="detail-value">{adminName}</span>
               </div>
             )}
+
+
           </div>
         )}
       </div>
     );
-  }, [ticketInfo, showTicketDetails, getAvatarColor]);
+  }, [ticketInfo, showTicketDetails, getAvatarColor, adminName, creatorFullName, user.phoneNumber]);
+
 
   // Loading state
   if (loading) {
@@ -888,6 +1017,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       </div>
     );
   }
+
 
   return (
     <div className="chat-window">
@@ -924,6 +1054,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           </div>
         </div>
       )}
+
 
       <div className="chat-header">
         <div className="header-left">
@@ -997,6 +1128,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
       {/* Ticket Details Panel */}
       {ticketDetailsPanel}
 
+
       <div className="messages-container">
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date} className="message-date-group">
@@ -1038,6 +1170,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         <div ref={messagesEndRef} />
       </div>
 
+
       {attachments.length > 0 && (
         <div className="attachments-preview">
           {attachments.map(attachment => (
@@ -1051,6 +1184,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
         </div>
       )}
 
+
       {showEmojiPicker && (
         <div className="emoji-picker-container">
           <Picker 
@@ -1061,6 +1195,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
           />
         </div>
       )}
+
 
       {/* Input Area */}
       {ticketInfo?.status !== 'closed' ? (
@@ -1135,5 +1270,6 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
     </div>
   );
 };
+
 
 export default memo(ChatWindow);

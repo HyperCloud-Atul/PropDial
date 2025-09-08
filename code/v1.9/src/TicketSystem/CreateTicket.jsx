@@ -7,98 +7,214 @@ const CreateTicket = ({ onTicketCreated, onClose, isMobile }) => {
   const [issueType, setIssueType] = useState('');
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
+  const [properties, setProperties] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedProperty, setSelectedProperty] = useState('');
+  const [role, setRole] = useState('');
+  const [userType, setUserType] = useState('');
+  const [userTag, setUserTag] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [properties, setProperties] = useState([]);
-  const [selectedProperty, setSelectedProperty] = useState('');
-  const [loadingProperties, setLoadingProperties] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   const { user } = useAuthContext();
 
+  // Store dropdown options
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
+  const [filteredProperties, setFilteredProperties] = useState([]);
+
+  // Fetch user role + properties based on role
   useEffect(() => {
-    const fetchProperties = async () => {
-      if (!user || !user.phoneNumber) return;
-      
+    const fetchUserData = async () => {
       try {
-        setLoadingProperties(true);
-        let propertyIds = [];
+        if (!user?.phoneNumber) return;
         
-        // Check user role and fetch appropriate properties
-        if (user.role === 'owner') {
-          // Fetch properties where user is owner
-          const ownerPropertiesQuery = await projectFirestore
-            .collection('propertyusers')
-            .where('userId', '==', user.phoneNumber)
-            .where('userType', '==', 'propertyowner')
-            .where('userTag', 'in', ['Owner', 'owner'])
-            .get();
-            
-          propertyIds = ownerPropertiesQuery.docs.map(doc => doc.data().propertyId);
-        } else if (user.role === 'executive') {
-          // Fetch properties where user is executive
-          const executivePropertiesQuery = await projectFirestore
-            .collection('propertyusers')
-            .where('userId', '==', user.phoneNumber)
-            .where('userType', '==', 'propertymanager')
-            .where('userTag', 'in', ['Executive', 'executive'])
-            .get();
-            
-          propertyIds = executivePropertiesQuery.docs.map(doc => doc.data().propertyId);
-        }
+        setLoading(true);
         
-        if (propertyIds.length > 0) {
-          // Fetch property details from properties-propdial collection
-          const propertiesPromises = propertyIds.map(async (propertyId) => {
-            const propertyDoc = await projectFirestore
-              .collection('properties-propdial')
-              .doc(propertyId)
-              .get();
-              
-            if (propertyDoc.exists) {
-              return {
-                id: propertyId,
-                ...propertyDoc.data()
-              };
-            }
-            return null;
-          });
+        // Fetch user document from users-propdial
+        const userDoc = await projectFirestore
+          .collection('users-propdial')
+          .doc(user.phoneNumber.replace('+91', ''))
+          .get();
+
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          const userRole = userData.rolePropDial || '';
+          const userWhoAmI = userData.whoAmI || '';
           
-          const propertiesData = (await Promise.all(propertiesPromises)).filter(prop => prop !== null);
-          setProperties(propertiesData);
+          setRole(userRole);
+          setUserType(userWhoAmI);
+          setUserTag(`${userRole} (${userWhoAmI})`);
+
+          // Role-based property fetching
+          let propsQuery = projectFirestore.collection('properties-propdial');
+          
+          // Different query based on user role
+          switch (userRole.toLowerCase()) {
+            case 'admin':
+            case 'superadmin':
+            case 'super admin':
+              // Admins can see all properties - no filter needed
+              break;
+              
+            case 'property manager':
+            case 'propertymanager':
+            case 'manager':
+              // Property managers see properties where they are the manager
+              propsQuery = propsQuery.where('propertyManagerID', '==', user.phoneNumber.replace('+91', ''));
+              break;
+              
+            case 'owner':
+            case 'property owner':
+            case 'propertyowner':
+              // Property owners see their own properties
+              propsQuery = propsQuery.where('ownerId', '==', user.phoneNumber.replace('+91', ''));
+              break;
+              
+            case 'tenant':
+            case 'renter':
+              // Tenants see properties where they are assigned
+              propsQuery = propsQuery.where('tenantId', '==', user.phoneNumber.replace('+91', ''));
+              break;
+              
+            case 'agent':
+            case 'sales agent':
+            case 'salesagent':
+              // Agents see properties assigned to them
+              propsQuery = propsQuery.where('agentId', '==', user.phoneNumber.replace('+91', ''));
+              break;
+              
+            default:
+              // Default behavior - filter by propertyManagerID (fallback)
+              propsQuery = propsQuery.where('propertyManagerID', '==', user.phoneNumber.replace('+91', ''));
+              break;
+          }
+
+          const propsSnapshot = await propsQuery.get();
+          const propsList = propsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
+          // Filter out properties without required fields
+          const validProperties = propsList.filter(prop => 
+            prop.country && prop.city && prop.pid
+          );
+
+          setProperties(validProperties);
+
+          // Get unique country options
+          const uniqueCountries = [
+            ...new Set(validProperties.map(prop => prop.country).filter(Boolean))
+          ];
+          setCountryOptions(uniqueCountries);
+          
+          if (validProperties.length === 0) {
+            setError(`No properties found for role: ${userRole}. Please contact your administrator.`);
+          }
+        } else {
+          setError("User data not found. Please contact administrator.");
         }
       } catch (err) {
-        console.error("Error fetching properties:", err);
-        setError('Failed to load properties. Please try again.');
+        console.error("Error fetching user data:", err);
+        setError("Failed to load user data. Please try again.");
       } finally {
-        setLoadingProperties(false);
+        setLoading(false);
       }
     };
-    
-    fetchProperties();
+
+    fetchUserData();
   }, [user]);
+
+  // When a country is selected, populate city options
+  useEffect(() => {
+    if (selectedCountry) {
+      const cities = [
+        ...new Set(
+          properties
+            .filter(prop => prop.country === selectedCountry)
+            .map(prop => prop.city)
+            .filter(Boolean)
+        ),
+      ];
+      setCityOptions(cities);
+      setSelectedCity('');
+      setFilteredProperties([]);
+      setSelectedProperty('');
+    } else {
+      setCityOptions([]);
+      setSelectedCity('');
+      setFilteredProperties([]);
+      setSelectedProperty('');
+    }
+  }, [selectedCountry, properties]);
+
+  // When a city is selected, populate filtered properties
+  useEffect(() => {
+    if (selectedCity) {
+      const filtered = properties.filter(
+        prop => prop.country === selectedCountry && prop.city === selectedCity
+      );
+      setFilteredProperties(filtered);
+      setSelectedProperty('');
+    } else {
+      setFilteredProperties([]);
+      setSelectedProperty('');
+    }
+  }, [selectedCity, selectedCountry, properties]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
-    
-    if (!selectedProperty || !issueType || !subject || !description) {
+
+    if (!selectedCountry || !selectedCity || !selectedProperty || !issueType || !subject || !description) {
       setError('Please fill in all fields');
       setSubmitting(false);
       return;
     }
 
     try {
-      const docRef = await projectFirestore.collection('tickets').add({
+      // Find the selected property's info by PID
+      const propertyObj = filteredProperties.find(prop => prop.pid === selectedProperty);
+      
+      if (!propertyObj) {
+        setError('Selected property not found. Please try again.');
+        setSubmitting(false);
+        return;
+      }
+
+      // Create ticket with comprehensive data
+      const ticketData = {
+        propertyPid: propertyObj.pid,
+        propertyName: propertyObj.propertyName || '',
+        propertyId: propertyObj.id,
         issueType,
         subject,
         description,
         createdBy: user.phoneNumber,
+        role,
+        userType,
+        userTag,
+        country: selectedCountry,
+        city: selectedCity,
         createdAt: timestamp.now(),
         status: 'open',
         lastUpdated: timestamp.now(),
-        propertyId: selectedProperty // Store the selected property ID
-      });
+      };
 
+      const docRef = await projectFirestore.collection('tickets').add(ticketData);
+      
+      // Reset form
+      setIssueType('');
+      setSubject('');
+      setDescription('');
+      setSelectedCountry('');
+      setSelectedCity('');
+      setSelectedProperty('');
+      
       onTicketCreated(docRef.id);
     } catch (err) {
       console.error("Error creating ticket:", err);
@@ -112,110 +228,166 @@ const CreateTicket = ({ onTicketCreated, onClose, isMobile }) => {
     setIssueType('');
     setSubject('');
     setDescription('');
+    setSelectedCountry('');
+    setSelectedCity('');
     setSelectedProperty('');
     setError('');
     
-    if (onClose) onClose({
-      resetSelection: isMobile,
-      resetSearch: isMobile
-    });
+    if (onClose) {
+      onClose({
+        resetSelection: isMobile,
+        resetSearch: isMobile,
+      });
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="create-ticket__modal-overlay">
+        <div className="create-ticket__modal">
+          <div className="create-ticket__modal-body" style={{ textAlign: 'center', padding: '40px' }}>
+            <div>Loading...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="create-ticket__modal-overlay">
       <div className="create-ticket__modal">
         <div className="create-ticket__modal-header">
           <h2>Create New Ticket</h2>
+          {role && (
+            <p>
+              User Role: <strong>{role}</strong>
+            </p>
+          )}
+          {userTag && (
+            <p>
+              User Tag: <strong>{userTag}</strong>
+            </p>
+          )}
         </div>
-        
+
         <div className="create-ticket__modal-body">
           {error && <div className="error-message">{error}</div>}
-          
+
           <form className="create-ticket__form" onSubmit={handleSubmit}>
-            {loadingProperties ? (
-              <div>Loading properties...</div>
-            ) : properties.length > 0 ? (
+            {/* Country Dropdown */}
+            <label>Country</label>
+            <select
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              required
+              disabled={submitting || countryOptions.length === 0}
+            >
+              <option value="">Select a country</option>
+              {countryOptions.map(country => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+
+            {/* City Dropdown */}
+            {cityOptions.length > 0 && (
               <>
-                <label>Select Property</label>
+                <label>City</label>
+                <select
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  required
+                  disabled={submitting}
+                >
+                  <option value="">Select a city</option>
+                  {cityOptions.map(city => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
+
+            {/* Property (PID) Dropdown */}
+            {filteredProperties.length > 0 && (
+              <>
+                <label>Property</label>
                 <select
                   value={selectedProperty}
                   onChange={(e) => setSelectedProperty(e.target.value)}
                   required
                   disabled={submitting}
                 >
-                  <option value="">Select a property</option>
-                  {properties.map(property => (
-                    <option key={property.id} value={property.id}>
-                      {property.city || 'Unknown City'} - {property.id}
+                  <option value="">Select a property (PID)</option>
+                  {filteredProperties.map(prop => (
+                    <option key={prop.pid} value={prop.pid}>
+                      {prop.pid} - {prop.propertyName || prop.id}
                     </option>
                   ))}
                 </select>
-                
-                <label>Issue Type</label>
-                <select
-                  value={issueType}
-                  onChange={(e) => setIssueType(e.target.value)}
-                  required
-                  disabled={submitting}
-                >
-                  <option value="">Select an issue type</option>
-                  <option value="Bug">Bug Report</option>
-                  <option value="Feature Request">Feature Request</option>
-                  <option value="Login Issue">Login Issue</option>
-                  <option value="Payment Problem">Payment Problem</option>
-                  <option value="Account Issue">Account Issue</option>
-                  <option value="Other">Other</option>
-                </select>
-                
-                <label>Subject</label>
-                <input
-                  type="text"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                  required
-                  disabled={submitting}
-                  maxLength={100}
-                />
-                
-                <label>Description</label>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe your issue in detail..."
-                  required
-                  disabled={submitting}
-                />
-                
-                <div className="create-ticket__button-group">
-                  <button
-                    type="button"
-                    className="create-ticket__button-group-cancel"
-                    onClick={handleCancel}  
-                    disabled={submitting}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="create-ticket__button-group-submit"
-                    disabled={submitting}
-                  >
-                    {submitting ? 'Creating...' : 'Create Ticket'}
-                  </button>
-                </div>
               </>
-            ) : (
-              <div>
-                <p>No properties found for your account.</p>
-                <button
-                  type="button"
-                  className="create-ticket__button-group-cancel"
-                  onClick={handleCancel}
-                >
-                  Close
-                </button>
-              </div>
             )}
+
+            {/* Issue Type */}
+            <label>Issue Type</label>
+            <select
+              value={issueType}
+              onChange={(e) => setIssueType(e.target.value)}
+              required
+              disabled={submitting}
+            >
+              <option value="">Select an issue type</option>
+              <option value="Bug">Bug Report</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Login Issue">Login Issue</option>
+              <option value="Payment Problem">Payment Problem</option>
+              <option value="Account Issue">Account Issue</option>
+              <option value="Maintenance">Maintenance Request</option>
+              <option value="Other">Other</option>
+            </select>
+
+            {/* Subject */}
+            <label>Subject</label>
+            <input
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              required
+              disabled={submitting}
+              maxLength={100}
+              placeholder="Enter a brief subject..."
+            />
+
+            {/* Description */}
+            <label>Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Describe your issue in detail..."
+              required
+              disabled={submitting}
+              rows={4}
+            />
+
+            <div className="create-ticket__button-group">
+              <button
+                type="button"
+                className="create-ticket__button-group-cancel"
+                onClick={handleCancel}
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="create-ticket__button-group-submit"
+                disabled={submitting || properties.length === 0}
+              >
+                {submitting ? 'Creating...' : 'Create Ticket'}
+              </button>
+            </div>
           </form>
         </div>
       </div>
