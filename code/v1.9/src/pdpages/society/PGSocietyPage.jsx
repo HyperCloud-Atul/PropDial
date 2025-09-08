@@ -36,7 +36,6 @@ import {
 } from "react-icons/md"; // Add this
 import {
   FaRegBuilding,
-  FaLocationArrow,
   FaExclamationTriangle,
   FaExpand,
   FaSpinner,
@@ -53,7 +52,6 @@ import {
   FaBed,
   FaSearch,
   FaEdit,
-  FaShareAlt,
   FaPlus,
   FaBatteryFull,
   FaTint,
@@ -68,22 +66,6 @@ import {
   FaExclamationCircle,
   FaCheckCircle,
   FaImage,
-  FaToilet,
-  FaExpandArrowsAlt,
-  FaStar,
-  FaStarHalfAlt,
-  FaRegStar,
-  FaRegHeart,
-  FaRegCalendarAlt,
-  FaCheck,
-  FaMapMarkerAlt,
-  FaTools,
-  FaBuilding,
-  FaCloudUploadAlt,
-  FaHome,
-  FaUsers,
-  FaCalendarAlt,
-  FaMapPin,
 } from "react-icons/fa";
 import { BsFileEarmarkText } from "react-icons/bs";
 
@@ -99,12 +81,6 @@ import {
   Quote,
   Loader2,
   Upload,
-  Trash2,
-  Plus,
-  Edit,
-  Save,
-  IndianRupee,
-  X,
 } from "lucide-react";
 
 const reviews = [
@@ -639,7 +615,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
     "Inverter",
   ];
 
-    const unitTypes = [
+  const unitTypes = [
     "EWS",
     "1 RK",
     "Studio",
@@ -659,13 +635,13 @@ const EditAbout = ({ data, onClose, onSave }) => {
     "Hall",
   ];
   const handleUnitTypeChange = (option, isChecked) => {
-  setFormData((prev) => {
-    const newUnitTypes = isChecked
-      ? [...(prev.unitTypes || []), option]
-      : (prev.unitTypes || []).filter((item) => item !== option);
-    return { ...prev, unitTypes: newUnitTypes };
-  });
-};
+    setFormData((prev) => {
+      const newUnitTypes = isChecked
+        ? [...(prev.unitTypes || []), option]
+        : (prev.unitTypes || []).filter((item) => item !== option);
+      return { ...prev, unitTypes: newUnitTypes };
+    });
+  };
 
   return (
     <div className="edit-modal">
@@ -826,18 +802,19 @@ const EditAbout = ({ data, onClose, onSave }) => {
 
             <div className="form-group">
               <label>Power Backup</label>
-                <select
-                  id="powerBackup"
-                  value={formData.powerBackup || "No Backup"}
-                  onChange={(e) =>setFormData({ ...formData, powerBackup: e.target.value })
-                  }
-                >
-                  {backup.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+              <select
+                id="powerBackup"
+                value={formData.powerBackup || "No Backup"}
+                onChange={(e) =>
+                  setFormData({ ...formData, powerBackup: e.target.value })
+                }
+              >
+                {backup.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="form-group toggle-group">
@@ -856,14 +833,12 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 >
                   <div className="toggle-circle" />
                 </div>
-              </div> 
+              </div>
 
               <div className="toggle-description">
                 <label className="toggle-label">Club</label>
                 <div
-                  className={`toggle-switch ${
-                    formData.club ? "active" : ""
-                  }`}
+                  className={`toggle-switch ${formData.club ? "active" : ""}`}
                   onClick={() =>
                     setFormData((prev) => ({
                       ...prev,
@@ -881,7 +856,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 <label className="toggle-label">Swimming Pool</label>
                 <div
                   className={`toggle-switch ${
-                    formData.swimmingPool? "active" : ""
+                    formData.swimmingPool ? "active" : ""
                   }`}
                   onClick={() =>
                     setFormData((prev) => ({
@@ -892,14 +867,12 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 >
                   <div className="toggle-circle" />
                 </div>
-              </div> 
+              </div>
 
               <div className="toggle-description">
                 <label className="toggle-label">Gym</label>
                 <div
-                  className={`toggle-switch ${
-                    formData.gym ? "active" : ""
-                  }`}
+                  className={`toggle-switch ${formData.gym ? "active" : ""}`}
                   onClick={() =>
                     setFormData((prev) => ({
                       ...prev,
@@ -912,24 +885,23 @@ const EditAbout = ({ data, onClose, onSave }) => {
               </div>
             </div>
 
-           <div className="form-group full-width">
-            <label>Unit Types</label>
-            <div className="checkbox-grid">
-              {unitTypes.map((option) => (
-                <label key={option} className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={formData.unitTypes?.includes(option) || false}
-                    onChange={(e) =>
-                      handleUnitTypeChange(option, e.target.checked)
-                    }
-                  />
-                  <span>{option}</span>
-                </label>
-              ))}
+            <div className="form-group full-width">
+              <label>Unit Types</label>
+              <div className="checkbox-grid">
+                {unitTypes.map((option) => (
+                  <label key={option} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={formData.unitTypes?.includes(option) || false}
+                      onChange={(e) =>
+                        handleUnitTypeChange(option, e.target.checked)
+                      }
+                    />
+                    <span>{option}</span>
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
-
 
             {/* Description field moved to full width at the end */}
             <div className="form-group full-width">
@@ -1238,10 +1210,13 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
     }
   };
 
-  if (loading) return  (<div className="loading-spinner">
-          <FaSpinner className="spin" size={40} />
-          <p>Loading Society Details...</p>
-        </div>);
+  if (loading)
+    return (
+      <div className="loading-spinner">
+        <FaSpinner className="spin" size={40} />
+        <p>Loading Society Details...</p>
+      </div>
+    );
   if (error) return <div className="error-message">{error}</div>;
 
   // FIX 2: Use the formatAddress function for a clean and consistent location display
@@ -1308,7 +1283,9 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         <line x1="12" y1="15" x2="12" y2="3" />
                       </svg>
                       <p style={{ fontSize: "16px" }}>
-                        <span style={{ fontWeight: "700" }}>Under Construction</span>
+                        <span style={{ fontWeight: "700" }}>
+                          Under Construction
+                        </span>
                       </p>
                     </div>
                   )}
@@ -1333,15 +1310,14 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                     </div>
                   )} */}
                 </div>
-                {user &&
-                  ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
-                    <button
-                      className="edit-btn"
-                      onClick={() => setShowEditModal(true)}
-                    >
-                      <FaEdit />
-                    </button>
-                  )}
+                {user && ["admin", "superAdmin"].includes(user.role) && (
+                  <button
+                    className="edit-btn"
+                    onClick={() => setShowEditModal(true)}
+                  >
+                    <FaEdit />
+                  </button>
+                )}
               </div>
 
               {/* Society Name & Developer */}
@@ -1390,7 +1366,8 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                     <button
                       className="map-link"
                       onClick={() => {
-                        const section = document.getElementById("Nearby-Locations");
+                        const section =
+                          document.getElementById("Nearby-Locations");
                         if (section) {
                           section.scrollIntoView({ behavior: "smooth" });
                         }
@@ -1568,8 +1545,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
             </div>
           ) : (
             <>
-              {user &&
-              ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+              {user && ["admin", "superAdmin"].includes(user.role) ? (
                 <button
                   className="no-details"
                   onClick={() => setShowEditModal(true)}
@@ -1880,97 +1856,103 @@ const PropertiesSection = ({ societyName }) => {
                     <FaSpinner className="spin" size={40} />
                     <p>Loading properties...</p>
                   </div>
-                ) :
-                (properties.length > 0
-                  ? properties.map((property) => (
-                      <Link
-                        to={`/propertydetails/${property.id}`}
-                        key={property.id}
-                        className="property-card-link"
-                      >
-                        <div className="property-card">
-                          <span
-                            className={`property-card__badge ${
-                              property.purpose === "Sale"
-                                ? "property-card__badge--sale"
-                                : "property-card__badge--rent"
-                            }`}
-                          >
-                            {property.purpose === "Sale"
-                              ? "For Sale"
-                              : "For Rent"}
-                          </span>
-                          <div className="property-card__image-wrapper">
-                            <img
-                              src={property.images?.[0] || "/assets/img/society/hero3.jpg"}
-                              alt={property.propertyName || "Property"}
-                              className="property-card__image"
-                            />
-                          </div>
-                          <div className="property-card__header">
-                            <div className="property-card__price-area-container">
-                              <span className="property-card__price">
-                                ₹{" "}
-                                {property.purpose === "Sale"
-                                  ? property.demandPriceSale || "N/A"
-                                  : property.demandPriceRent || "N/A"}
-                              </span>
-                              <span className="property-card__area">
-                                {property.carpetArea || "N/A"}{" "}
-                                {property.carpetAreaUnit}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="property-card__content">
-                            <p className="property-card__floor">
-                              {property.bhk} {property.propertyType}
-                            </p>
-                            <div className="property-card__features">
-                              {property.category && (
-                                <span className="property-card__feature-badge">
-                                  {property.category}
-                                </span>
-                              )}
-                              {property.furnishing && (
-                                <span className="property-card__feature-badge">
-                                  {property.furnishing}
-                                </span>
-                              )}
-                              {property.package && (
-                                <span className="property-card__feature-badge">
-                                  {property.package}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <div className="property-card__footer">
-                            <Link
-                              to={`/propertydetails/${property.id}`}
-                              className="property-card__action-button"
-                            >
-                              View Details
-                            </Link>
+                ) : properties.length > 0 ? (
+                  properties.map((property) => (
+                    <Link
+                      to={`/propertydetails/${property.id}`}
+                      key={property.id}
+                      className="property-card-link"
+                    >
+                      <div className="property-card">
+                        <span
+                          className={`property-card__badge ${
+                            property.purpose === "Sale"
+                              ? "property-card__badge--sale"
+                              : "property-card__badge--rent"
+                          }`}
+                        >
+                          {property.purpose === "Sale"
+                            ? "For Sale"
+                            : "For Rent"}
+                        </span>
+                        <div className="property-card__image-wrapper">
+                          <img
+                            src={
+                              property.images?.[0] ||
+                              "/assets/img/society/hero3.jpg"
+                            }
+                            alt={property.propertyName || "Property"}
+                            className="property-card__image"
+                          />
+                        </div>
+                        <div className="property-card__header">
+                          <div className="property-card__price-area-container">
+                            <span className="property-card__price">
+                              ₹{" "}
+                              {property.purpose === "Sale"
+                                ? property.demandPriceSale || "N/A"
+                                : property.demandPriceRent || "N/A"}
+                            </span>
+                            <span className="property-card__area">
+                              {property.carpetArea || "N/A"}{" "}
+                              {property.carpetAreaUnit}
+                            </span>
                           </div>
                         </div>
-                      </Link>
-                    ))
-                  : !loading && (
-                      <p className="no-properties">No properties found.</p>
-                    ))}
+                        <div className="property-card__content">
+                          <p className="property-card__floor">
+                            {property.bhk} {property.propertyType}
+                          </p>
+                          <div className="property-card__features">
+                            {property.category && (
+                              <span className="property-card__feature-badge">
+                                {property.category}
+                              </span>
+                            )}
+                            {property.furnishing && (
+                              <span className="property-card__feature-badge">
+                                {property.furnishing}
+                              </span>
+                            )}
+                            {property.package && (
+                              <span className="property-card__feature-badge">
+                                {property.package}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="property-card__footer">
+                          <Link
+                            to={`/propertydetails/${property.id}`}
+                            className="property-card__action-button"
+                          >
+                            View Details
+                          </Link>
+                        </div>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  !loading && (
+                    <p className="no-properties">No properties found.</p>
+                  )
+                )}
 
                 {/* Load More Button at the end of the scroll container */}
-                {loading ? null : (loadedCount < totalCount && (
-                  <div className="load-more-container">
-                    <button
-                      className="load-more-button"
-                      onClick={loadMore}
-                      disabled={loading}
-                    >
-                      {/* {loading ? "Loading..." : "Load More"} */}
-                      Load More
-                    </button>
-                  </div>
-                ))}
+                {loading
+                  ? null
+                  : loadedCount < totalCount && (
+                      <div className="load-more-container">
+                        <button
+                          className="load-more-button"
+                          onClick={loadMore}
+                          disabled={loading}
+                        >
+                          {/* {loading ? "Loading..." : "Load More"} */}
+                          Load More
+                        </button>
+                      </div>
+                    )}
               </div>
               <div className="scroll-buttons-container">
                 <button
@@ -2601,12 +2583,13 @@ const AmenitiesSection = ({ societyId }) => {
     (amenity) => amenity.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if(loading) return (
-    <div className="loading-spinner">
-          <FaSpinner className="spin" size={40} />
-          <p>Loading Amenities...</p>
-        </div>
-  );
+  if (loading)
+    return (
+      <div className="loading-spinner">
+        <FaSpinner className="spin" size={40} />
+        <p>Loading Amenities...</p>
+      </div>
+    );
 
   return (
     <div className="amenities-section">
@@ -2641,7 +2624,7 @@ const AmenitiesSection = ({ societyId }) => {
         </div>
 
         <div className="amenities-grid">
-          {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+          {user && ["admin", "superAdmin"].includes(user.role) ? (
             <div className="add-amenity-card" onClick={handleAddAmenities}>
               <div className="plus-icon">
                 <FaPlus />
@@ -2672,8 +2655,7 @@ const AmenitiesSection = ({ societyId }) => {
                 </div>
               </div>
             ))
-          ) : user &&
-            ["frontdesk", "admin", "superAdmin"].includes(user.role) ? null : (
+          ) : user && ["admin", "superAdmin"].includes(user.role) ? null : (
             <div className="no-amenities">
               {" "}
               <p>No data amenities available</p>{" "}
@@ -2838,15 +2820,19 @@ const AboutSocietySection = ({ societyId }) => {
   };
 
   const maxLength = 200;
-  const isLong = societyData.description && societyData.description.length > maxLength;
-  const shortText = isLong ? societyData.description.slice(0, maxLength) + "..." : societyData.description;
+  const isLong =
+    societyData.description && societyData.description.length > maxLength;
+  const shortText = isLong
+    ? societyData.description.slice(0, maxLength) + "..."
+    : societyData.description;
 
-  if(loading) return (
-    <div className="loading-spinner">
-          <FaSpinner className="spin" size={40} />
-          <p>Loading Society info...</p>
-        </div>
-  );
+  if (loading)
+    return (
+      <div className="loading-spinner">
+        <FaSpinner className="spin" size={40} />
+        <p>Loading Society info...</p>
+      </div>
+    );
   if (error) return <div className="error-message">{error}</div>;
   return (
     <section className="about-society-section">
@@ -2856,9 +2842,11 @@ const AboutSocietySection = ({ societyId }) => {
             <div className="about-container">
               <h2 className="about-title">Discover {societyData.society}</h2>
 
-               <p className="about-description">
+              <p className="about-description">
                 {societyData.description === "" ? (
-                  <span className="no-description">No description available.</span>
+                  <span className="no-description">
+                    No description available.
+                  </span>
                 ) : (
                   <>
                     {shortText}
@@ -2890,8 +2878,7 @@ const AboutSocietySection = ({ societyId }) => {
                 </div>
               )}
 
-              {user &&
-              ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+              {user && ["admin", "superAdmin"].includes(user.role) ? (
                 <button
                   className="edit-btn"
                   onClick={() => setShowEditModal(true)}
@@ -2964,17 +2951,12 @@ const AboutSocietySection = ({ societyId }) => {
                         </span>
                       </div>
 
-                       <div className="about-card__fact">
-                        <span className="about-card__fact-title">
-                          Gym:
-                        </span>
+                      <div className="about-card__fact">
+                        <span className="about-card__fact-title">Gym:</span>
                         <span className="about-card__fact-value">
-                          {societyData.powerBackup
-                            ? "Yes"
-                            : "No"}
+                          {societyData.powerBackup ? "Yes" : "No"}
                         </span>
                       </div>
-
                     </div>
 
                     <div className="about-card__column">
@@ -2994,7 +2976,8 @@ const AboutSocietySection = ({ societyId }) => {
                           Unit Types:
                         </span>
                         <span className="about-card__fact-value">
-                          {societyData.unitTypes && societyData.unitTypes.length > 0
+                          {societyData.unitTypes &&
+                          societyData.unitTypes.length > 0
                             ? societyData.unitTypes.join(", ")
                             : "!"}
                         </span>
@@ -3005,21 +2988,14 @@ const AboutSocietySection = ({ societyId }) => {
                           Visitor Parking:
                         </span>
                         <span className="about-card__fact-value">
-                          {societyData.visitorParking
-                            ? "Yes"
-                            : "No"}
+                          {societyData.visitorParking ? "Yes" : "No"}
                         </span>
                       </div>
 
                       <div className="about-card__fact">
-                        <span className="about-card__fact-title">
-                          Club:
-                        </span>
+                        <span className="about-card__fact-title">Club:</span>
                         <span className="about-card__fact-value">
-                          {societyData.club
-                            ? "Yes"
-                            : "No"
-                            }
+                          {societyData.club ? "Yes" : "No"}
                         </span>
                       </div>
 
@@ -3028,10 +3004,7 @@ const AboutSocietySection = ({ societyId }) => {
                           Swimming Pool:
                         </span>
                         <span className="about-card__fact-value">
-                          {societyData.swimmingPool
-                            ? "Yes"
-                            : "No"
-                            }
+                          {societyData.swimmingPool ? "Yes" : "No"}
                         </span>
                       </div>
                     </div>
@@ -3046,8 +3019,7 @@ const AboutSocietySection = ({ societyId }) => {
               <h2 className="about-title">About {societyData.society}</h2>
             </div>
 
-            {user &&
-            ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+            {user && ["admin", "superAdmin"].includes(user.role) ? (
               <button
                 className="no-details"
                 onClick={() => setShowEditModal(true)}
@@ -3154,12 +3126,13 @@ const SocietyRatesSection = ({ societyId }) => {
     }).format(value);
   };
 
-  if(loading) return (
-    <div className="loading-spinner">
-          <FaSpinner className="spin" size={40} />
-          <p>Loading Society Rates...</p>
-        </div>
-  );
+  if (loading)
+    return (
+      <div className="loading-spinner">
+        <FaSpinner className="spin" size={40} />
+        <p>Loading Society Rates...</p>
+      </div>
+    );
   if (error) return <div className="error-message">{error}</div>;
 
   return (
@@ -3171,7 +3144,12 @@ const SocietyRatesSection = ({ societyId }) => {
             Transparent pricing structure for all society-related services and
             amenities
           </p>
-          {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+          {user &&
+          ["admin", "superAdmin"].includes(user.role) &&
+          (societyData.electricityRateAuthority ||
+            societyData.electricityRatePowerBackup ||
+            societyData.commonAreaMaintenance ||
+            societyData.clubCharges) ? (
             <button className="edit-btn" onClick={() => setShowEditModal(true)}>
               <FaEdit />
             </button>
@@ -3215,7 +3193,7 @@ const SocietyRatesSection = ({ societyId }) => {
                         ? `₹${societyData.electricityRatePowerBackup} per unit`
                         : "N/A per unit"}
                     </p>
-                                      </div>
+                  </div>
                 </div>
               </div>
               {/* <div className="rate-card">
@@ -3312,8 +3290,7 @@ const SocietyRatesSection = ({ societyId }) => {
           </>
         ) : (
           <>
-            {user &&
-            ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+            {user && ["admin", "superAdmin"].includes(user.role) ? (
               <button
                 className="no-details"
                 onClick={() => setShowEditModal(true)}
@@ -3349,8 +3326,8 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [editMode, setEditMode] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]); 
-  const [selectedImageIndexes, setSelectedImageIndexes] = useState([]); 
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImageIndexes, setSelectedImageIndexes] = useState([]);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -3376,7 +3353,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
     : null;
 
   // Effect to fetch existing images from Firestore when component mounts or societyId changes
-   useEffect(() => {
+  useEffect(() => {
     let isMounted = true; // ✅ prevent state update if unmounted
 
     const fetchImages = async () => {
@@ -3387,7 +3364,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
         }
         return;
       }
-      
+
       try {
         if (isMounted) setLoading(true);
         const docSnap = await getDoc(societyDocRef);
@@ -3412,7 +3389,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
     return () => {
       isMounted = false; // cleanup
     };
-  }, [societyId, isFirebaseAvailable]); 
+  }, [societyId, isFirebaseAvailable]);
 
   // Handler for clicking the upload button
   const handleUploadClick = () => {
@@ -3963,7 +3940,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
           {images.length > 0 &&
           !editMode &&
           user &&
-          ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+          ["admin", "superAdmin"].includes(user.role) ? (
             <button
               className="upload-btn icon"
               title="Upload Images"
@@ -3985,7 +3962,8 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
         <div className="no-images">
           <FaExclamationTriangle size={64} />
           <p>
-            Firebase services are not available. Please check your configuration.
+            Firebase services are not available. Please check your
+            configuration.
           </p>
         </div>
       ) : editMode ? (
@@ -4070,7 +4048,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
       ) : (
         <div className="empty-gallery">
           <p>No images uploaded yet</p>
-          {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+          {user && ["admin", "superAdmin"].includes(user.role) ? (
             <button className="upload-btn" onClick={handleUploadClick}>
               <FaUpload /> Upload Images
             </button>
@@ -4336,7 +4314,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
           {!isEditing &&
             (nearbyLocations.length > 0 || mapLink) &&
             user &&
-            ["frontdesk", "admin", "superAdmin"].includes(user.role) && (
+            ["admin", "superAdmin"].includes(user.role) && (
               <button className="edit-button" onClick={handleEditClick}>
                 <FaEdit />
                 Edit
@@ -4619,7 +4597,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
               </div>
             </div>
           </div>
-        ) : user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+        ) : user && ["admin", "superAdmin"].includes(user.role) ? (
           <button className="no-details" onClick={handleEditClick}>
             <FaPlus />{" "}
             <span className="no-details-text">
@@ -4802,7 +4780,7 @@ const PropertyVideosSection = ({ societyId }) => {
           </p>
           {videos.length > 0 &&
           user &&
-          ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+          ["admin", "superAdmin"].includes(user.role) ? (
             <button className="edit-button" onClick={() => setShowForm(true)}>
               <FaPlus /> Add Video
             </button>
@@ -4904,23 +4882,19 @@ const PropertyVideosSection = ({ societyId }) => {
                         />
                       </>
                     )}
-                    {user &&
-                      ["frontdesk", "admin", "superAdmin"].includes(
-                        user.role
-                      ) && (
-                        <button
-                          className="delete-button"
-                          onClick={() => handleDeleteVideo(index)}
-                        >
-                          <FaTimes />
-                        </button>
-                      )}
+                    {user && ["admin", "superAdmin"].includes(user.role) && (
+                      <button
+                        className="delete-button"
+                        onClick={() => handleDeleteVideo(index)}
+                      >
+                        <FaTimes />
+                      </button>
+                    )}
                   </div>
                   <h3 className="video-title">{video.title}</h3>
                 </div>
               ))
-            ) : user &&
-              ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+            ) : user && ["admin", "superAdmin"].includes(user.role) ? (
               <button className="no-details" onClick={() => setShowForm(true)}>
                 <FaPlus />{" "}
                 <span className="no-details-text">
@@ -5109,7 +5083,15 @@ const FloorPlans = ({ societyId }) => {
     "Hall",
   ];
 
-  const additionalOptions = ["Servant", "Study", "Store", "Puja", "Utility", "Powder", "Basement"];
+  const additionalOptions = [
+    "Servant",
+    "Study",
+    "Store",
+    "Puja",
+    "Utility",
+    "Powder",
+    "Basement",
+  ];
 
   const areaUnitOptions = ["SqFt", "SqYd", "SqMtr"]; //, "Acres", "Hectares"
 
@@ -5442,12 +5424,13 @@ const FloorPlans = ({ societyId }) => {
     }
   };
 
-  if(loading) return (
-    <div className="loading-spinner">
-          <FaSpinner className="spin" size={40} />
-          <p>Loading floors plans...</p>
-        </div>
-  );
+  if (loading)
+    return (
+      <div className="loading-spinner">
+        <FaSpinner className="spin" size={40} />
+        <p>Loading floors plans...</p>
+      </div>
+    );
 
   const handlePriceChange = (field, value) => {
     // remove commas before storing
@@ -5469,8 +5452,7 @@ const FloorPlans = ({ societyId }) => {
     }
   };
 
-  const canEdit =
-    user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
+  const canEdit = user && ["admin", "superAdmin"].includes(user.role);
 
   const filteredPlans = Array.isArray(floorPlans)
     ? floorPlans.filter(
@@ -5487,7 +5469,7 @@ const FloorPlans = ({ societyId }) => {
             Explore our thoughtfully designed floor plans that maximize space
             and comfort
           </p>
-          {canEdit && (
+          {canEdit && Array.isArray(floorPlans) && floorPlans.length !== 0 && (
             <button
               className="edit-button"
               onClick={() => openModal()}
@@ -5657,7 +5639,7 @@ const FloorPlans = ({ societyId }) => {
               </div>
             </div>
           </>
-        ) : user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+        ) : user && ["admin", "superAdmin"].includes(user.role) ? (
           <div className="no-details-container">
             <button className="no-details" onClick={() => openModal()}>
               <FaPlus /> <span className="no-details-text">Add New Plan</span>
@@ -6251,7 +6233,7 @@ const ContactSection = ({ societyId }) => {
 
   return (
     <>
-      {user && ["frontdesk", "admin", "superAdmin"].includes(user.role) ? (
+      {user && ["admin", "superAdmin"].includes(user.role) ? (
         <section className="contact-section">
           <div className="container">
             <div className="section-header">
@@ -6570,9 +6552,11 @@ const ContactSection = ({ societyId }) => {
                 <div className="contact-row">
                   {/* Society Manager */}
                   <div className="contact-section-display">
-                    <div  className="card-header">
-
-                    <h3 className=" card-title">  <User className="icon" />  Society Manager</h3>
+                    <div className="card-header">
+                      <h3 className=" card-title">
+                        {" "}
+                        <User className="icon" /> Society Manager
+                      </h3>
                     </div>
                     <div className="contact-details-grid">
                       <div className="contact-detail">
@@ -6594,9 +6578,11 @@ const ContactSection = ({ societyId }) => {
 
                   {/* Maintenance Company */}
                   <div className="contact-section-display">
-                    <div  className="card-header">
-
-                    <h3 className="card-title"> <Building className="icon" /> Maintenance Company</h3>
+                    <div className="card-header">
+                      <h3 className="card-title">
+                        {" "}
+                        <Building className="icon" /> Maintenance Company
+                      </h3>
                     </div>
                     <div className="contact-details-grid">
                       <div className="contact-detail">
@@ -6635,9 +6621,14 @@ const ContactSection = ({ societyId }) => {
                               <div key={index} className="contact-pair">
                                 <div className="contact-detail">
                                   <strong>Phone {index + 1}:</strong>{" "}
-                                  {contact.phone
-                                    ? (<span> {formatDisplayPhone(contact.phone)} </span> )
-                                    : "Not specified"}
+                                  {contact.phone ? (
+                                    <span>
+                                      {" "}
+                                      {formatDisplayPhone(contact.phone)}{" "}
+                                    </span>
+                                  ) : (
+                                    "Not specified"
+                                  )}
                                 </div>
                                 <div className="contact-detail">
                                   <strong>Email {index + 1}:</strong>{" "}
@@ -6700,11 +6691,11 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
 
     const fetchLayoutImage = async () => {
       if (!layoutDocRef || !societyId) {
-        if (isMounted) setLoading(false); 
+        if (isMounted) setLoading(false);
         return;
       }
       try {
-        if (isMounted) setLoading(true); 
+        if (isMounted) setLoading(true);
         const docSnap = await getDoc(layoutDocRef);
         if (docSnap.exists() && isMounted) {
           const layoutData = docSnap.data();
@@ -6713,8 +6704,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
       } catch (error) {
         console.error("Error fetching layout image:", error);
       } finally {
-        if (isMounted) setLoading(false); 
-        
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -6728,7 +6718,6 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
       isMounted = false; // cleanup
     };
   }, [societyId, isFirebaseAvailable]);
-
 
   // Trigger file input when user clicks upload button with no image
   useEffect(() => {
@@ -6898,8 +6887,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
     setFullScreenMode(!fullScreenMode);
   };
 
-  const canEdit =
-    user && ["frontdesk", "admin", "superAdmin"].includes(user.role);
+  const canEdit = user && ["admin", "superAdmin"].includes(user.role);
 
   return (
     <>
