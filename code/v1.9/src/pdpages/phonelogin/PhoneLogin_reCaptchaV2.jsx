@@ -511,7 +511,7 @@ const PhoneLogin_reCaptchaV2 = () => {
                       inputStyle={{
                         width: "100%",
                         height: "45px",
-                        paddingLeft: "45px",
+                        // paddingLeft: "45px",
                         fontSize: "16px",
                         borderRadius: "5px",
                         border: "1px solid #00A8A8",

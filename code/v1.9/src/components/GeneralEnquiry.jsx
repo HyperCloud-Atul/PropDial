@@ -55,7 +55,7 @@ const GeneralEnquiry = () => {
       const ccList = ["atul@hyperclouddigital.com"];
       const bccList = ["naman@hyperclouddigital.com"];
       const emailSubject = "New General Enquiry";
-      const emailBody = `You have received a new enquiry from ${formData.name} (${email}):\n\n${formData.message}`;
+      const emailBody = `You have received a ${<b>new</b>} enquiry from ${formData.name} (${email}):\n\n${formData.message}`;
       sendMyEmail(email, ccList, bccList, emailSubject, emailBody);
     } catch (error) {
       console.error("Error adding enquiry:", error);

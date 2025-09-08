@@ -217,6 +217,9 @@ section.form_sec .right_form::after {
     section.form_sec .right_form {
         width: 100%;
     }
+    section.form_sec .left_img {
+        display: none;
+    }
 
     section.form_sec .right_form {
         padding: 25px 15px;

@@ -35,6 +35,7 @@ import DuplicateCollection from "../../hooks/DuplicateCollection";
 import UpdateMulitpleFiled from "../../hooks/UpdateMulitpleFiled";
 import UpdateSameDoc from "../../hooks/UpdateSameDoc";
 import AddField from "../../hooks/AddField";
+import EnquiryForm from "../../components/EnquiryForm";
 
 const Home = () => {
   const { authIsReady, user } = useAuthContext();
@@ -87,7 +88,7 @@ const Home = () => {
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
-        <GeneralEnquiry/>
+        {/* <GeneralEnquiry/> */}
         {/* <CreateNewDoc/> */}
         {/* <UpdateCreatedByComponent/>
         <DuplicateCollection/>
@@ -574,6 +575,22 @@ const Home = () => {
             </div>
           </div>
         </section>
+          <section className="form_sec">
+                <div className="left_img">
+                  <img src="./assets/img/contact_from_left.jpg" alt="Left" />
+                </div>
+                <div
+                  className="right_form"
+                  style={{
+                    backgroundImage: "url('./assets/img/contact_from_right.jpg')",
+                  }}
+                >
+               
+                    <EnquiryForm />
+                
+        
+                </div>
+              </section>
         <Testimonial></Testimonial>
 
         <Blog></Blog>

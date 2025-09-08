@@ -28,6 +28,8 @@ export const useSendEmail = () => {
             }
 
             const emailStatus = projectFunctions.httpsCallable('sendAppEmail');
+
+            // const sendEmailFunction = httpsCallable(functions, "sendEmails");
             emailStatus(params).then(async (result) => {
                 console.log('Email Status : ', result);
             })

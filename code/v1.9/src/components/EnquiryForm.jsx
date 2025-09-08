@@ -1,72 +1,100 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFirestore } from "../hooks/useFirestore";
 import PhoneInput from "react-phone-input-2";
+
 const EnquiryForm = () => {
-  // add enquiry with add document start
-  const { addDocument, updateDocument, deleteDocument, error } =
-    useFirestore("enquiry-propdial");
+  const { addDocument } = useFirestore("enquiry-propdial");
 
   const [iAm, setIam] = useState("");
-  const [enquiryType, setEnquiryType] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
   const [description, setDescription] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleChangeName = (event) => setName(event.target.value);
-  const handleChangeIam = (event) => setIam(event.target.value);
-  const handleChangeEnquiryType = (event) => setEnquiryType(event.target.value);
-  const handleChangeEmail = (event) => setEmail(event.target.value);
-  const handleChangePhone = (value) => setPhone(value);
-  const handleChangeDescription = (event) => setDescription(event.target.value);
+  // ✅ Error state
+  const [errors, setErrors] = useState({});
 
+  // Validation function
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!name.trim()) newErrors.name = "Name is required";
+    if (!phone.trim()) newErrors.phone = "Phone number is required";
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Enter a valid email";
+    }
+    if (!iAm) newErrors.iAm = "Please select an option";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // onChange handlers with error reset
+  const handleChangeName = (e) => {
+    setName(e.target.value);
+    if (errors.name) setErrors({ ...errors, name: "" });
+  };
+
+  const handleChangeIam = (e) => {
+    setIam(e.target.value);
+    if (errors.iAm) setErrors({ ...errors, iAm: "" });
+  };
+
+  const handleChangeEmail = (e) => {
+    setEmail(e.target.value);
+    if (errors.email) setErrors({ ...errors, email: "" });
+  };
+
+  const handleChangePhone = (value) => {
+    setPhone(value);
+    if (errors.phone) setErrors({ ...errors, phone: "" });
+  };
+
+  const handleChangeDescription = (e) => setDescription(e.target.value);
+
+  // Submit
   const submitEnquiry = async (event) => {
     event.preventDefault();
 
-    if (!iAm || !name || !phone || !email || !description) {
-      alert("All fields are required!");
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       setIsUploading(true);
+
       const newStatusUpdate = {
         status: "open",
         updatedAt: new Date(),
       };
-      const docRef = await addDocument({
+
+      await addDocument({
         iAm,
         description,
         name,
         phone,
         email,
-        pid: "", // Add the selected property ID here
+        pid: "",
         enquiryFrom: iAm,
         postedBy: "Propdial",
-        propId:"",
+        propId: "",
         referredBy: "none",
-        enquiryType,
+        enquiryType: "",
         date: new Date().toISOString(),
         enquiryStatus: "open",
         source: "contact us page",
         employeeName: "",
         propertyOwner: "",
         propertyName: "",
-        statusUpdates: [newStatusUpdate], // Initialize statusUpdates with default status
+        statusUpdates: [newStatusUpdate],
       });
+
+      // Reset fields
       setIam("");
-      setEnquiryType("");
       setName("");
       setPhone("");
-      setCity("");
       setEmail("");
-      setCountry("");
-      setState("");
       setDescription("");
       setIsUploading(false);
     } catch (error) {
@@ -74,58 +102,59 @@ const EnquiryForm = () => {
       setIsUploading(false);
     }
   };
-  // add enquiry with add document end
+
   return (
     <div className="create_ticket_form">
       <form onSubmit={submitEnquiry}>
         <div className="row">
           <div className="col-12">
-            <h3 className="section_title mb-4 orange">Enquiry</h3>
+            <h3 className="section_title mb-4 orange" id="enquiry_form">Enquiry</h3>
           </div>
-          <div className="col-md-12">
+
+          {/* Name */}
+          <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="user_name" className="white">
-                Name
-              </label>
+              <label className="white">Name*</label>
               <div className="form_field_inner">
                 <input
                   type="text"
                   value={name}
                   onChange={handleChangeName}
                   placeholder="Name"
+                      onKeyPress={(e) => {
+                          const regex = /^[a-zA-Z\s]*$/; // Only letters and spaces allowed
+                          if (!regex.test(e.key)) {
+                            e.preventDefault(); // Prevent invalid input
+                          }
+                        }}
                 />
                 <div className="field_icon">
                   <span className="material-symbols-outlined">person</span>
                 </div>
               </div>
+              {errors.name && <p className="text-danger">{errors.name}</p>}
             </div>
             <div className="ff_gap"></div>
-          </div>          
+          </div>
+
+          {/* Phone */}
           <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="user_number" className="white">
-                Phone number
-              </label>
+              <label className="white">Phone number*</label>
               <div className="form_field_inner">
                 <PhoneInput
                   country={"in"}
                   value={phone}
                   onChange={handleChangePhone}
                   international
-                  keyboardType="phone-pad"
                   countryCodeEditable={true}
                   placeholder="Country code + mobile number"
-                  inputProps={{
-                    name: "phone",
-                    required: true,
-                    autoFocus: false,
-                  }}
                   inputStyle={{
                     width: "100%",
-                    paddingLeft: "45px",
+                    // paddingLeft: "45px",
                     fontSize: "16px",
                     borderRadius: "12px",
-                   height:"45px"
+                    height: "45px",
                   }}
                   buttonStyle={{
                     borderRadius: "12px",
@@ -133,18 +162,16 @@ const EnquiryForm = () => {
                     border: "1px solid #00A8A8",
                   }}
                 />
-                {/* <div className="field_icon">
-                  <span className="material-symbols-outlined">call</span>
-                </div> */}
               </div>
+              {errors.phone && <p className="text-danger">{errors.phone}</p>}
             </div>
             <div className="ff_gap"></div>
           </div>
+
+          {/* Email */}
           <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="user_name" className="white">
-                Email
-              </label>
+              <label className="white">Email*</label>
               <div className="form_field_inner">
                 <input
                   type="text"
@@ -156,54 +183,39 @@ const EnquiryForm = () => {
                   <span className="material-symbols-outlined">email</span>
                 </div>
               </div>
+              {errors.email && <p className="text-danger">{errors.email}</p>}
             </div>
             <div className="ff_gap"></div>
           </div>
+
+          {/* I am */}
           <div className="col-md-6">
             <div className="form_field">
-              <label htmlFor="ticket_for" className="white">
-                I am
-              </label>
+              <label className="white">I am*</label>
               <div className="form_field_inner">
                 <select value={iAm} onChange={handleChangeIam}>
                   <option value="" disabled>
                     Select
                   </option>
-                  <option value="Tenant">Tenant</option>
-                  <option value="Agent">Agent</option>
+                  <option value="home owner">Home Owner</option>
+                  <option value="prospective tenant">Prospective Tenant</option>
+                  <option value="prospective buyer">Prospective Buyer</option>
+                  <option value="agent">Agent</option>
+                  <option value="other">Other</option>
                 </select>
                 <div className="field_icon">
                   <span className="material-symbols-outlined">person</span>
                 </div>
               </div>
-              <div className="ff_gap"></div>
+              {errors.iAm && <p className="text-danger">{errors.iAm}</p>}
             </div>
-          </div>              
-          <div className="col-md-6">
-            <div className="form_field">
-              <label htmlFor="ticket_for" className="white">
-             For
-              </label>
-              <div className="form_field_inner">
-                <select value={enquiryType} onChange={handleChangeEnquiryType}>
-                  <option value="" disabled>
-                    Select
-                  </option>
-                  <option value="rent">Rent</option>
-                  <option value="sale">Sale</option>
-                </select>
-                <div className="field_icon">
-                  <span className="material-symbols-outlined">person</span>
-                </div>
-              </div>
-              <div className="ff_gap"></div>
-            </div>
+            <div className="ff_gap"></div>
           </div>
+
+          {/* Message */}
           <div className="col-12">
             <div className="form_field">
-              <label htmlFor="id_message" className="white">
-                Message
-              </label>
+              <label className="white">Message</label>
               <div className="form_field_inner">
                 <textarea
                   value={description}
@@ -215,20 +227,20 @@ const EnquiryForm = () => {
                 </div>
               </div>
             </div>
-
             <div className="ff_gap"></div>
           </div>
+
+          {/* Submit */}
           <div className="col-12">
             <div className="submit_btn mt-2">
               <button
                 type="submit"
-                className="theme_btn btn_fill no_icon"
+                className="theme_btn btn_fill no_icon w-100"
                 disabled={isUploading}
               >
                 {isUploading ? "Sending...." : "Send"}
               </button>
             </div>
-            {/* {formError && <p className="error">{formError}</p>} */}
           </div>
         </div>
       </form>
