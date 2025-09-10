@@ -6,7 +6,7 @@ import { projectFirestore } from "../firebase/config";
 import firebase from "firebase/compat/app"; // 
 import { useSendEmail } from "../hooks/useSendEmail";
 
-const GeneralEnquiry = () => {
+const EmailTest = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,7 +35,6 @@ const GeneralEnquiry = () => {
     setSuccessMsg("");
     setErrorMsg("");
 
-    console.log("handleSubmit")
     try {
       // ✅ Firestore collection "generalEnquiries" me save karenge
       await projectFirestore.collection("generalEnquiries").add({
@@ -56,19 +55,8 @@ const GeneralEnquiry = () => {
       const ccList = ["atul@hyperclouddigital.com"];
       const bccList = ["naman@hyperclouddigital.com"];
       const emailSubject = "New General Enquiry";
-            
-      const htmlEmailBody = `
-  <div class="profile-card">
-    <h2><b>Name: </b> ${formData.name}</h2>
-    <p><b>Email: </b>${formData.email}</p>
-    <p><b> Phone: </b> ${formData.phone}</p>
-    <p><b>Message: </b> ${formData.message}</p>
-  </div>
-`;
-      
-      
-      sendMyEmail(email, ccList, bccList, emailSubject, htmlEmailBody);
-
+      const emailBody = `You have received a new enquiry from ${formData.name} (${email}):\n\n${formData.message}`;
+      sendMyEmail(email, ccList, bccList, emailSubject, emailBody);
     } catch (error) {
       console.error("Error adding enquiry:", error);
       setErrorMsg("❌ Failed to submit enquiry. Please try again.");
@@ -193,4 +181,4 @@ const GeneralEnquiry = () => {
   );
 };
 
-export default GeneralEnquiry;
+export default EmailTest;

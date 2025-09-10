@@ -88,7 +88,7 @@ const Home = () => {
       <div>
         <BottomRightFixedIcon></BottomRightFixedIcon>
         <Banner></Banner>
-        {/* <GeneralEnquiry/> */}
+        <GeneralEnquiry/>
         {/* <CreateNewDoc/> */}
         {/* <UpdateCreatedByComponent/>
         <DuplicateCollection/>

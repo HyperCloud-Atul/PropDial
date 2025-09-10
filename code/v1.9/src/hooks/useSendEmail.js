@@ -27,9 +27,10 @@ export const useSendEmail = () => {
                 // attachFilePath: 'https://firebasestorage.googleapis.com/v0/b/propdial-dev-aa266.appspot.com/o/thumbnails%2F1BeFgheTiZPsvWM9C0qP4LgLpIZ2%2Fmanu.jpg?alt=media&token=9ab7ddd0-0894-49d1-b8ac-32f7dae28176',
             }
 
-            const emailStatus = projectFunctions.httpsCallable('sendAppEmail');
+            // const emailStatus = projectFunctions.httpsCallable('sendAppEmail');
+const emailStatus = projectFunctions.httpsCallable('sendEmails');
+            // const sendEmailFunction = projectFunctions.httpsCallable(functions, "sendEmails");
 
-            // const sendEmailFunction = httpsCallable(functions, "sendEmails");
             emailStatus(params).then(async (result) => {
                 console.log('Email Status : ', result);
             })
