@@ -295,6 +295,7 @@ const EditModal = ({ data, onClose, onSave }) => {
                 name="societyType"
                 value={formData.societyType || ""}
                 readOnly
+                disabled
               />
             </div>
 
@@ -305,6 +306,7 @@ const EditModal = ({ data, onClose, onSave }) => {
                 name="society"
                 value={formData.society}
                 readOnly
+                disabled
               />
             </div>
 
@@ -656,6 +658,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
                 name="societyType"
                 value={formData.societyType || ""}
                 readOnly
+                disabled
               />
             </div>
             <div className="form-group">
@@ -1386,10 +1389,10 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                   <div className="price-value">
                     ₹ {societyData.priceFrom} Cr – ₹ {societyData.priceTo} Cr
                   </div>
-                  <p className="price-description">
+                  {/* <p className="price-description">
                     Multiple Types • {societyData.societyType} •{" "}
                     {societyData.readyToMove && "Ready to Move"}
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -2596,16 +2599,15 @@ const AmenitiesSection = ({ societyId }) => {
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="section-title">World-Class Amenities</h2>
-          <p className="section-description">
-            {/* Experience luxury living with our comprehensive range of premium
-            amenities */}
-            Note: All amenity photos are for representation only, not actual
-            images.
-          </p>
-          {/* <p className="note">
+          {/* <p className="section-description">
+         
             Note: All amenity photos are for representation only, not actual
             images.
           </p> */}
+          <p className="note">
+            Note: All amenity photos are for representation only, not actual
+            images.
+          </p>
         </div>
 
         {/* Navigation Bar for Categories */}
@@ -2623,7 +2625,7 @@ const AmenitiesSection = ({ societyId }) => {
           ))}
         </div>
 
-        <div className="amenities-grid">
+        <div className={`amenities-grid ${selectedAmenities[activeCategory]?.length > 0 ? "yes" : "no"}`}>
           {user && ["admin", "superAdmin"].includes(user.role) ? (
             <div className="add-amenity-card" onClick={handleAddAmenities}>
               <div className="plus-icon">

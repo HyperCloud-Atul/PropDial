@@ -52,7 +52,7 @@ const GeneralEnquiry = () => {
         interest: "",
         message: "",
       });
-      const email = "sanskar@hyperclouddigital.com";
+      const email = formData.email;
       const ccList = ["atul@hyperclouddigital.com"];
       const bccList = ["naman@hyperclouddigital.com"];
       const emailSubject = "New General Enquiry";
@@ -63,12 +63,12 @@ const GeneralEnquiry = () => {
     <p><b>Email: </b>${formData.email}</p>
     <p><b> Phone: </b> ${formData.phone}</p>
     <p><b>Message: </b> ${formData.message}</p>
-  </div>
+  </div>  
 `;
       
       
       sendMyEmail(email, ccList, bccList, emailSubject, htmlEmailBody);
-
+//  sendMyEmail(email, emailSubject, htmlEmailBody);
     } catch (error) {
       console.error("Error adding enquiry:", error);
       setErrorMsg("❌ Failed to submit enquiry. Please try again.");
