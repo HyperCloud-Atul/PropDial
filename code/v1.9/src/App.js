@@ -45,6 +45,7 @@ import BlogDetail from "./pdpages/blogs/BlogDetail";
 import BlogEdit from "./pdpages/blogs/BlogEdit";
 import BlogAdd from "./pdpages/blogs/BlogAdd";
 import PGSocietyPage from "./pdpages/society/PGSocietyPage";
+import City from "./pdpages/city/City";
 
 // ------------------------------------------------------------------------------------
 
@@ -538,6 +539,9 @@ function App() {
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
                 <Route path="/:country/:state/:city/:locality/:societyName/:id" element={<PGSocietyPage />} />
+
+                {/* City Page Route */}
+                <Route path="/city-page" element={<City/>} />
 
 
 

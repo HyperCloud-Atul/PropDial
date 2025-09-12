@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link, useParams } from "react-router-dom";
+import { projectStorage, projectFirestore } from "../../firebase/config";
+import imageCompression from "browser-image-compression";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import ComponentBuilder from "./ComponentBuilder";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import styles from "./PropertyListingPage.module.scss";
+import "./new-society.scss";
+import { BsFileEarmarkText } from "react-icons/bs";
 import {
   collection,
   query,
@@ -17,15 +25,6 @@ import {
   deleteObject,
   uploadBytesResumable, // Use uploadBytesResumable for progress tracking
 } from "firebase/storage";
-import { Link, useParams } from "react-router-dom";
-import { projectStorage, projectFirestore } from "../../firebase/config";
-import imageCompression from "browser-image-compression";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { uploadBytes } from "firebase/storage";
-
-import "./new-society.scss";
-import ComponentBuilder from "./ComponentBuilder";
 import {
   MdAdd,
   MdClose,
@@ -67,8 +66,6 @@ import {
   FaCheckCircle,
   FaImage,
 } from "react-icons/fa";
-import { BsFileEarmarkText } from "react-icons/bs";
-
 import {
   MapPin,
   Clock,
@@ -202,6 +199,7 @@ const EditModal = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
   const [currentUnitType, setCurrentUnitType] = useState("");
   const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
 
   // Refs for each scrollable input field
   const builderRef = useRef(null);
@@ -214,38 +212,60 @@ const EditModal = ({ data, onClose, onSave }) => {
   const possessionYearRef = useRef(null);
   const launchedYearRef = useRef(null);
 
+  // Function to validate price comparison
+  const validatePriceComparison = (priceFrom, priceTo) => {
+    if (priceFrom && priceTo) {
+      const from = parseFloat(priceFrom);
+      const to = parseFloat(priceTo);
+      
+      if (from >= to) {
+        return "Price To must be greater than Price From";
+      }
+    }
+    return "";
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
+    
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
+    
     // Clear error when user makes changes
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
-  };
-
-  const handleUnitTypeAdd = () => {
-    if (currentUnitType && !formData.unitTypes.includes(currentUnitType)) {
-      setFormData((prev) => ({
-        ...prev,
-        unitTypes: [...prev.unitTypes, currentUnitType],
+    
+    // Real-time price validation
+    if (name === "priceFrom" || name === "priceTo") {
+      const priceFrom = name === "priceFrom" ? newValue : formData.priceFrom;
+      const priceTo = name === "priceTo" ? newValue : formData.priceTo;
+      
+      const priceError = validatePriceComparison(priceFrom, priceTo);
+      setErrors((prev) => ({ 
+        ...prev, 
+        priceComparison: priceError 
       }));
-      setCurrentUnitType("");
+      
+      // Clear price comparison error when either field is empty
+      if ((name === "priceFrom" && !newValue) || (name === "priceTo" && !newValue)) {
+        setErrors((prev) => ({ ...prev, priceComparison: "" }));
+      }
     }
-  };
-
-  const handleUnitTypeRemove = (typeToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
-    }));
   };
 
   const validateForm = () => {
     const newErrors = {};
     const currentYear = new Date().getFullYear();
+
+    // Price validation (already done in real-time, but double-check on submit)
+    const priceError = validatePriceComparison(formData.priceFrom, formData.priceTo);
+    if (priceError) {
+      newErrors.priceComparison = priceError;
+    }
 
     // Launched year validation
     if (formData.launchedYear) {
@@ -265,27 +285,37 @@ const EditModal = ({ data, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      onSave(formData);
+    
+    if (!validateForm()) return;
+    
+    setIsSaving(true);
+    
+    try {
+      await onSave(formData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  // Generic function to scroll an element into view
   const handleFocus = (ref) => {
     if (ref.current) {
       setTimeout(() => {
         ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 300); // Small delay to let the keyboard appear
+      }, 300);
     }
   };
 
   return (
     <div className="edit-modal">
       <div className="modal-content">
-        <h2>Society Profile Management</h2>
+        <div className="edit-header">
+          <h2>Society Profile Management</h2>
+          <button className="modal-close" onClick={onClose}><FaTimes /></button>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
@@ -328,7 +358,7 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group">
-              <label>Address</label>
+              <label>Society Full Address</label>
               <input
                 ref={addressRef}
                 type="text"
@@ -353,6 +383,7 @@ const EditModal = ({ data, onClose, onSave }) => {
                 step="0.01"
                 min="0"
                 required
+                className={errors.priceComparison ? "error-border" : ""}
               />
             </div>
 
@@ -369,7 +400,11 @@ const EditModal = ({ data, onClose, onSave }) => {
                 step="0.01"
                 min="0"
                 required
+                className={errors.priceComparison ? "error-border" : ""}
               />
+              {errors.priceComparison && (
+                <span className="error">{errors.priceComparison}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -430,23 +465,6 @@ const EditModal = ({ data, onClose, onSave }) => {
             </div>
 
             <div className="form-group toggle-group">
-              {/* <div className="toggle-description">
-                <label className="toggle-label">Approved By RERA </label>
-                <div
-                  className={`toggle-switch ${
-                    formData.reraApproved ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      reraApproved: !prev.reraApproved,
-                    }))
-                  }
-                >
-                  <div className="toggle-circle" />
-                </div>
-              </div> */}
-
               <div className="toggle-description">
                 <label className="toggle-label">Ready to Move In</label>
                 <div
@@ -467,7 +485,7 @@ const EditModal = ({ data, onClose, onSave }) => {
 
             {!formData.readyToMove && (
               <div className="form-group">
-                <label>Possession Year</label>
+                <label>Year of Handover</label>
                 <select
                   ref={possessionYearRef}
                   name="possessionYear"
@@ -495,7 +513,7 @@ const EditModal = ({ data, onClose, onSave }) => {
 
             {formData.readyToMove && (
               <div className="form-group">
-                <label>Launched Year</label>
+                <label>Built In</label>
                 <select
                   ref={launchedYearRef}
                   name="launchedYear"
@@ -523,11 +541,27 @@ const EditModal = ({ data, onClose, onSave }) => {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={onClose}
+              disabled={isSaving}
+            >
               Cancel
             </button>
-            <button type="submit" className="save-btn">
-              Save Changes
+            <button 
+              type="submit" 
+              className="save-btn"
+              disabled={isSaving || errors.priceComparison}
+            >
+              {isSaving ? (
+                <>
+                  <span className="saving-spinner"></span>
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </form>
@@ -535,13 +569,14 @@ const EditModal = ({ data, onClose, onSave }) => {
     </div>
   );
 };
-
 const EditAbout = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
   const [currentUnitType, setCurrentUnitType] = useState("");
   const [errors, setErrors] = useState({});
   const [currentPlan, setCurrentPlan] = useState(null);
   const descriptionRef = useRef(null); // Step 1: Create a ref
+  const [isSaving, setIsSaving] = useState(false); // New state for loading
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -565,12 +600,6 @@ const EditAbout = ({ data, onClose, onSave }) => {
     }
   };
 
-  const handleUnitTypeRemove = (typeToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      unitTypes: prev.unitTypes.filter((type) => type !== typeToRemove),
-    }));
-  };
   const validateForm = () => {
     const newErrors = {};
     const currentYear = new Date().getFullYear();
@@ -593,11 +622,21 @@ const EditAbout = ({ data, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(formData);
+    
+    if (!validateForm()) return;
+    
+    setIsSaving(true); // Set loading state
+    
+    try {
+      await onSave(formData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    } finally {
+      setIsSaving(false); // Reset loading state
+    }
   };
-
   // New function to handle focus and scroll
   const handleFocus = () => {
     if (descriptionRef.current) {
@@ -648,7 +687,11 @@ const EditAbout = ({ data, onClose, onSave }) => {
   return (
     <div className="edit-modal">
       <div className="modal-content">
-        <h2>Edit Society Details</h2>
+        <div className="edit-header">
+          <h2>Edit Society Details</h2>
+          <button className="modal-close" onClick={onClose}><FaTimes /></button>
+        </div>
+        
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
@@ -922,11 +965,27 @@ const EditAbout = ({ data, onClose, onSave }) => {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={onClose}
+              disabled={isSaving} // Disable cancel button while saving
+            >
               Cancel
             </button>
-            <button type="submit" className="save-btn">
-              Save Changes
+            <button 
+              type="submit" 
+              className="save-btn"
+              disabled={isSaving} // Disable save button while saving
+            >
+              {isSaving ? (
+                <>
+                  <span className="saving-spinner"></span>
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </form>
@@ -938,6 +997,7 @@ const EditAbout = ({ data, onClose, onSave }) => {
 const EditRates = ({ data, onClose, onSave }) => {
   const [formData, setFormData] = useState(data);
   const [errors, setErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false); // New state for loading
 
   // Refs for each input to scroll into view on focus
   const electricityAuthRef = useRef(null);
@@ -983,10 +1043,19 @@ const EditRates = ({ data, onClose, onSave }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSave(formData);
+    
+    if (!validateForm()) return;
+    
+    setIsSaving(true); // Set loading state
+    
+    try {
+      await onSave(formData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    } finally {
+      setIsSaving(false); // Reset loading state
     }
   };
 
@@ -1002,7 +1071,11 @@ const EditRates = ({ data, onClose, onSave }) => {
   return (
     <div className="edit-modal">
       <div className="modal-content">
-        <h2>Edit Society Rates</h2>
+        <div className="edit-header">
+          <h2>Edit Society Rates</h2>
+          <button className="modal-close" onClick={onClose}><FaTimes /></button>
+        </div>
+        
         <form onSubmit={handleSubmit}>
           <div className="form-grid">
             <div className="form-group">
@@ -1129,11 +1202,27 @@ const EditRates = ({ data, onClose, onSave }) => {
           </div>
 
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button 
+              type="button" 
+              className="cancel-btn" 
+              onClick={onClose}
+              disabled={isSaving} // Disable cancel button while saving
+            >
               Cancel
             </button>
-            <button type="submit" className="save-btn">
-              Save
+            <button 
+              type="submit" 
+              className="save-btn"
+              disabled={isSaving} // Disable save button while saving
+            >
+              {isSaving ? (
+                <>
+                  <span className="saving-spinner"></span>
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
+              )}
             </button>
           </div>
         </form>
@@ -1502,7 +1591,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="fact-label">Year Launched</p>
+                        <p className="fact-label">Built In</p>
                         <p className="fact-value">
                           {societyData.launchedYear || 0}
                         </p>
@@ -1529,7 +1618,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                         </svg>
                       </div>
                       <div>
-                        <p className="fact-label">Possession Date</p>
+                        <p className="fact-label">Year of Handover</p>
                         <p className="fact-value">
                           {societyData.possessionYear || 0}
                         </p>
@@ -5206,7 +5295,7 @@ const FloorPlans = ({ societyId }) => {
             additional: [],
             superArea: "",
             carpetArea: "",
-            areaUnit: "SqFt",
+            areaUnit: "",
             price: "",
             image: null,
           }
@@ -5503,122 +5592,145 @@ const FloorPlans = ({ societyId }) => {
             <div className="view-mode">
               <div className="scrollable-content-wrapper">
                 <div className="floor-plans-grid" ref={scrollRef}>
-                  {filteredPlans.map((plan, index) => (
-                    <div key={index} className="floor-plan-display">
-                      <div className="plan-image-container">
-                        {plan.image ? (
-                          <>
-                            <img
-                              src={plan.image}
-                              alt={`Floor plan ${index + 1}`}
-                              onClick={() => openFullScreen(plan.image)}
-                            />
-                            <button
-                              className="expand-button"
-                              onClick={() => openFullScreen(plan.image)}
-                            >
-                              <FaExpand />
-                            </button>
-                          </>
-                        ) : (
-                          <div className="no-image">
-                            <img
-                              src="https://placehold.co/400x200/e0e0e0/ffffff?text=No+Image"
-                              alt="No image available"
-                            />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="plan-details">
-                        <div className="plan-details-header">
-                          <h3>
-                            {plan.type} - {plan.bhk}
-                          </h3>
-                          {user &&
-                            ["admin", "superAdmin"].includes(user.role) && (
-                              <div className="plan-actions">
-                                <button
-                                  onClick={() => openModal(plan, index)}
-                                  className="btn-icon"
-                                >
-                                  <FaEdit />
-                                </button>
-                                <button
-                                  onClick={() => removeFloorPlan(index)}
-                                  className="btn-icon btn-remove"
-                                >
-                                  <FaTrash />
-                                </button>
-                              </div>
-                            )}
+                  {filteredPlans.map((plan, index) => {
+                    // Determine if we should show combined area field
+                    const hasSuperArea = plan.superArea && plan.superArea.trim() !== "";
+                    const hasCarpetArea = plan.carpetArea && plan.carpetArea.trim() !== "";
+                    const showCombinedArea = (hasSuperArea && !hasCarpetArea) || (!hasSuperArea && hasCarpetArea);
+                    const areaValue = hasSuperArea ? plan.superArea : plan.carpetArea;
+                    const areaType = hasSuperArea ? "Super Area" : "Carpet Area";
+                    
+                    return (
+                      <div key={index} className="floor-plan-display">
+                        <div className="plan-image-container">
+                          {plan.image ? (
+                            <>
+                              <img
+                                src={plan.image}
+                                alt={`Floor plan ${index + 1}`}
+                                onClick={() => openFullScreen(plan.image)}
+                              />
+                              <button
+                                className="expand-button"
+                                onClick={() => openFullScreen(plan.image)}
+                              >
+                                <FaExpand />
+                              </button>
+                            </>
+                          ) : (
+                            <div className="no-image">
+                              <img
+                                src="https://placehold.co/400x200/e0e0e0/ffffff?text=No+Image"
+                                alt="No image available"
+                              />
+                            </div>
+                          )}
                         </div>
 
-                        <div className="area-bathroom-row">
-                          <div className="detail-item">
-                            <FaBed className="icon-fa" size={18} />
-                            <div className="name-flex">
-                              <span className="name">Bedrooms</span>
-                              <span className="value">{plan.bedrooms}</span>
-                            </div>
-                          </div>
-                          <div className="detail-item">
-                            <FaShower className="icon-fa" size={18} />
-                            <div className="name-flex">
-                              <span className="name">Bathrooms</span>
-                              <span className="value">{plan.bathrooms}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="area-bathroom-row">
-                          <div className="detail-item">
-                            <FaVectorSquare className="icon-fa" size={18} />
-                            <div className="name-flex">
-                              <span className="name">Super Area</span>
-                              <span className="value">
-                                {plan.superArea} {plan.areaUnit}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="detail-item">
-                            <FaVectorSquare className="icon-fa" size={18} />
-                            <div className="name-flex">
-                              <span className="name">Carpet Area</span>
-                              <span className="value">
-                                {plan.carpetArea} {plan.areaUnit}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {plan.price && (
-                          <div className="detail-row price-range-row">
-                            <span className="label">Sale Price:</span>
-                            <span className="value">
-                              ₹
-                              {new Intl.NumberFormat("en-IN").format(
-                                plan.price
+                        <div className="plan-details">
+                          <div className="plan-details-header">
+                            <h3>
+                              {plan.type} - {plan.bhk}
+                            </h3>
+                            {user &&
+                              ["admin", "superAdmin"].includes(user.role) && (
+                                <div className="plan-actions">
+                                  <button
+                                    onClick={() => openModal(plan, index)}
+                                    className="btn-icon"
+                                  >
+                                    <FaEdit />
+                                  </button>
+                                  <button
+                                    onClick={() => removeFloorPlan(index)}
+                                    className="btn-icon btn-remove"
+                                  >
+                                    <FaTrash />
+                                  </button>
+                                </div>
                               )}
-                            </span>
                           </div>
-                        )}
 
-                        {plan.additional && plan.additional.length > 0 && (
-                          <div className="detail-row additional-features-row">
-                            <span className="label">Add. Rooms:</span>
-                            <div className="value-container">
-                              {plan.additional.map((feature, idx) => (
-                                <span key={idx} className="value feature-pill">
-                                  {feature}
-                                </span>
-                              ))}
+                          <div className="area-bathroom-row">
+                            <div className="detail-item">
+                              <FaBed className="icon-fa" size={18} />
+                              <div className="name-flex">
+                                <span className="name">Bedrooms</span>
+                                <span className="value">{plan.bedrooms}</span>
+                              </div>
+                            </div>
+                            <div className="detail-item">
+                              <FaShower className="icon-fa" size={18} />
+                              <div className="name-flex">
+                                <span className="name">Bathrooms</span>
+                                <span className="value">{plan.bathrooms}</span>
+                              </div>
                             </div>
                           </div>
-                        )}
+
+                          {/* Conditionally render area fields */}
+                          {showCombinedArea ? (
+                            <div className="detail-row area-row">
+                              <span className="label"> Area:</span>
+                              <span className="value">
+                                {areaValue} {plan.areaUnit}
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="area-bathroom-row">
+                              {hasSuperArea && (
+                                <div className="detail-item">
+                                  <FaVectorSquare className="icon-fa" size={18} />
+                                  <div className="name-flex">
+                                    <span className="name">Super Area</span>
+                                    <span className="value">
+                                      {plan.superArea} {plan.areaUnit}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                              {hasCarpetArea && (
+                                <div className="detail-item">
+                                  <FaVectorSquare className="icon-fa" size={18} />
+                                  <div className="name-flex">
+                                    <span className="name">Carpet Area</span>
+                                    <span className="value">
+                                      {plan.carpetArea} {plan.areaUnit}
+                                    </span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {plan.price && (
+                            <div className="detail-row price-range-row">
+                              <span className="label">Sale Price:</span>
+                              <span className="value">
+                                ₹
+                                {new Intl.NumberFormat("en-IN").format(
+                                  plan.price
+                                )}
+                              </span>
+                            </div>
+                          )}
+
+                          {plan.additional && plan.additional.length > 0 && (
+                            <div className="detail-row additional-features-row">
+                              <span className="label">Add. Rooms:</span>
+                              <div className="value-container">
+                                {plan.additional.map((feature, idx) => (
+                                  <span key={idx} className="value feature-pill">
+                                    {feature}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
               <div className="scroll-div">
@@ -5777,11 +5889,12 @@ const FloorPlans = ({ societyId }) => {
                         <div className="area-unit-select">
                           <label className="label-area">Unit</label>
                           <select
-                            value={currentPlan.areaUnit}
-                            onChange={(e) =>
-                              handleInputChange("areaUnit", e.target.value)
-                            }
+                            value={currentPlan.areaUnit || ""}   // fallback for undefined
+                            onChange={(e) => handleInputChange("areaUnit", e.target.value)}
                           >
+                            <option value="" disabled>
+                              Select Size
+                            </option>
                             {areaUnitOptions.map((option) => (
                               <option key={option} value={option}>
                                 {option}
