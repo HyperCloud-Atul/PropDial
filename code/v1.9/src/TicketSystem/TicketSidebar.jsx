@@ -48,7 +48,7 @@ const TicketSidebar = ({
 
     let ref = projectFirestore.collection("tickets").orderBy("createdAt", "desc");
 
-    if (user?.role === "super-admin") {
+    if (user?.role === "superAdmin") {
       // super admin can see ALL tickets → no filter
     } else if (user?.role === "admin") {
       // admin sees tickets assigned to their property
@@ -79,9 +79,9 @@ const TicketSidebar = ({
     return () => unsubscribe();
   }, [user]);
 
-  // 🔹 Fetch display names for admin/super-admin
+  // 🔹 Fetch display names for admin/superAdmin
   useEffect(() => {
-    if (!(user?.role === "admin" || user?.role === "super-admin") || tickets.length === 0) return;
+    if (!(user?.role === "admin" || user?.role === "superAdmin") || tickets.length === 0) return;
 
     const fetchDisplayNames = async () => {
       const names = {};
@@ -114,7 +114,7 @@ const TicketSidebar = ({
       ticket.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ticket.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ticket.status?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ((user?.role === "admin" || user?.role === "super-admin") &&
+      ((user?.role === "admin" || user?.role === "superAdmin") &&
         userDisplayNames[ticket.createdBy]?.toLowerCase().includes(searchQuery.toLowerCase()))
     );
     setFilteredTickets(filtered);
@@ -250,7 +250,7 @@ const TicketSidebar = ({
               const avatarText = getTwoLetters(ticket.issueType);
               const avatarColor = getAvatarColor(ticket.issueType);
               const mainText =
-                user?.role === "admin" || user?.role === "super-admin"
+                user?.role === "admin" || user?.role === "superAdmin"
                   ? userDisplayNames[ticket.createdBy] || ticket.issueType || "No title"
                   : ticket.issueType || "No title";
               const isClosed = ticket.status === "closed";

@@ -263,7 +263,7 @@ const ChatWindow = ({ ticketId, onBack, isMobile }) => {
 
   // Check if admin can close ticket
   useEffect(() => {
-    if (user?.role === 'admin' && ticketInfo?.status === 'open') {
+    if (user?.role === 'admin' || 'superAdmin' && ticketInfo?.status === 'open') {
       setCanCloseTicket(true);
     } else {
       setCanCloseTicket(false);
