@@ -45,6 +45,7 @@ import BlogDetail from "./pdpages/blogs/BlogDetail";
 import BlogEdit from "./pdpages/blogs/BlogEdit";
 import BlogAdd from "./pdpages/blogs/BlogAdd";
 import PGSocietyPage from "./pdpages/society/PGSocietyPage";
+import City from "./pdpages/city/City";
 
 // ------------------------------------------------------------------------------------
 
@@ -134,6 +135,7 @@ import PGReferral from "./pdpages/referral/PGReferral";
 import ReferralLogin from "./pdpages/phonelogin/ReferralLogin";
 import AlreadyLogin from "./pdpages/referral/AlreadyLogin";
 import Faq from "./pdpages/faq/Faq";
+import EmailTest from "./testing/EmailTest";
 import PGBlogs from "./pdpages/blogs/PGBlogs";
 import { ToastContainer } from "react-toastify";
 import AddAgent from "./pdpages/roles/superAdmin/agent/AddAgent";
@@ -528,6 +530,7 @@ function App() {
 
                 <Route path="/contact-us" element={<PGContactUs />}></Route>
                 <Route path="/faq" element={<Faq></Faq>}></Route>
+                <Route path="/emailTest" element={<EmailTest></EmailTest>}></Route>
                 <Route path="/properties" element={<PGProperties />}></Route>
                 {/* <Route path="/society-form" element={<PGSocietyForm />}></Route>
                 <Route path="/society-page" element={<PGSocietyPage />}></Route> */}
@@ -536,6 +539,9 @@ function App() {
                   element={<PGMoreMenu></PGMoreMenu>}
                 ></Route>
                 <Route path="/:country/:state/:city/:locality/:societyName/:id" element={<PGSocietyPage />} />
+
+                {/* City Page Route */}
+                <Route path="/city-page" element={<City/>} />
 
 
 
