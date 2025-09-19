@@ -33,4 +33,5 @@ exports.helloWorld = generic.helloWorld;
 // exports.helloWorld = helloWorldFunc;
 
 
-exports.sendEmails = emails.sendEmails;
+exports.sendEmailWithoutAuth = emails.sendEmailWithoutAuth;
+exports.sendEmailWithAuth = emails.sendEmailWithAuth;
