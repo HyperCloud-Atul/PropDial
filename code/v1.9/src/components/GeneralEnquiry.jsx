@@ -53,7 +53,7 @@ const GeneralEnquiry = () => {
         message: "",
       });
       const email = formData.email;
-      const ccList = ["atul@hyperclouddigital.com"];
+      const ccList = ["sanskar@hyperclouddigital.com"];
       const bccList = ["naman@hyperclouddigital.com"];
       const emailSubject = "New General Enquiry";
             

@@ -19,6 +19,7 @@ import formatCountry from "../../utils/formatCountry";
 
 // import scss
 import "./PGUserProfileDetails.scss";
+import ChangeEmployeeButton from "./ChangeEmployeeButton";
 import PropertyDetails from "../../components/property/PropertyDetails";
 
 export default function PGUserProfileDetails2() {
@@ -392,7 +393,7 @@ export default function PGUserProfileDetails2() {
           inactiveBy: user.phoneNumber, // Replace with actual user who is marking inactive
           inactiveAt: currentDate, // Store the current timestamp
           inactiveReason: reason, // Add the selected reason here
-          inactiveRemark: remark, // Add the remark here
+          inactiveRemark: remark, // Add the remark here      
         });
       }
 
@@ -1888,7 +1889,7 @@ export default function PGUserProfileDetails2() {
                           value="yes"
                           id="yes"
                           checked={
-                            userProfileDoc && userProfileDoc.isEmployee === true
+                            userProfileDoc?.isEmployee === true
                           }
                           onChange={() => handleRadioChange("yes")}
                         />
@@ -1900,9 +1901,8 @@ export default function PGUserProfileDetails2() {
                           name="isemployee"
                           value="no"
                           id="no"
-                          checked={
-                            userProfileDoc &&
-                            (userProfileDoc.isEmployee === false || isEmployee === false)
+                          checked={                           
+                            userProfileDoc?.isEmployee === false
                           }
                           onChange={() => handleRadioChange("no")}
                         />
@@ -1963,6 +1963,95 @@ export default function PGUserProfileDetails2() {
                   </Modal.Footer>
                 </Modal>
               </div>
+              {/* <div className="blue_single is_employee is_employeecard">
+  <h5>Is Employee?</h5>
+  <div className="form_field">
+    <div className="field_box theme_radio_new">
+      <div
+        className="theme_radio_container"
+        style={{
+          padding: "0px",
+          border: "none",
+          background: "transparent",
+        }}
+      >
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="isemployee"
+            value="yes"
+            id={`yes-${userProfileDoc?.id || "user"}`}
+            checked={isEmployee === true}
+            onChange={() => handleRadioChange("yes")}
+          />
+          <label htmlFor={`yes-${userProfileDoc?.id || "user"}`}>Yes</label>
+        </div>
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="isemployee"
+            value="no"
+            id={`no-${userProfileDoc?.id || "user"}`}
+            checked={isEmployee === false}
+            onChange={() => handleRadioChange("no")}
+          />
+          <label htmlFor={`no-${userProfileDoc?.id || "user"}`}>No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Modal
+    show={showConfirmationPopup}
+    onHide={() => setShowConfirmationPopup(false)}
+    centered
+  >
+    <Modal.Header
+      className="justify-content-center"
+      style={{
+        paddingBottom: "0px",
+        border: "none",
+      }}
+    >
+      <h5>Confirmation</h5>
+    </Modal.Header>
+    <Modal.Body
+      className="text-center"
+      style={{
+        color: "#FA6262",
+        fontSize: "20px",
+        border: "none",
+      }}
+    >
+      Are you sure you want to mark this user as{" "}
+      {selectedEmployeeStatus === "yes"
+        ? "an employee?"
+        : "not an employee?"}
+    </Modal.Body>
+    <Modal.Footer
+      className="d-flex justify-content-between"
+      style={{
+        border: "none",
+        gap: "15px",
+      }}
+    >
+      <button
+        className="cancel_btn"
+        onClick={handleUpdateIsEmployee}
+        disabled={loading}
+      >
+        {loading ? "Saving..." : "Yes, Update"}
+      </button>
+      <button
+        className="done_btn"
+        onClick={() => setShowConfirmationPopup(false)}
+      >
+        No
+      </button>
+    </Modal.Footer>
+  </Modal>
+</div>  */}
+
               {userProfileDoc && userProfileDoc.isEmployee && (
                 <div className="blue_single  is_employee is_attendance_required">
                   <h5>Is Attendance Required?</h5>
@@ -2385,6 +2474,7 @@ export default function PGUserProfileDetails2() {
             )}
           </div>
         </div>
+        <ChangeEmployeeButton userProfileId={userProfileId} user={user} />
         {userProfileDoc &&
           (userProfileDoc.rolePropDial === "owner" ||
             (userProfileDoc.rolesPropDial &&
