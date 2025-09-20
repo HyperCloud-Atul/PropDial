@@ -6114,7 +6114,7 @@ const ContactSection = ({ societyId }) => {
   const [formData, setFormData] = useState({
     manager: { name: "", mobile: "", email: "" },
     maintenance: { companyName: "", landline: "", phone: "", email: "" },
-    otherContacts: [{ phone: "", email: "" }],
+    otherContacts: [{ name: "", phone: "", email: "" }],
   });
 
   // Refs
@@ -6126,7 +6126,7 @@ const ContactSection = ({ societyId }) => {
   const maintenancePhoneRef = useRef(null);
   const maintenanceEmailRef = useRef(null);
   const otherContactsRefs = useRef([
-    { phone: React.createRef(), email: React.createRef() },
+    { name: React.createRef(), phone: React.createRef(), email: React.createRef() },
   ]);
 
   // Format phone for display
@@ -6171,10 +6171,11 @@ const ContactSection = ({ societyId }) => {
           let otherContacts =
             Array.isArray(data.otherContacts) && data.otherContacts.length > 0
               ? data.otherContacts.map((c) => ({
+                  name: c.name || "",
                   phone: formatPhoneForDisplay(c.phone || ""),
                   email: c.email || "",
                 }))
-              : [{ phone: "", email: "" }];
+              : [{ name: "", phone: "", email: "" }];
 
           setFormData({
             manager: {
@@ -6193,6 +6194,7 @@ const ContactSection = ({ societyId }) => {
 
           // sync refs
           otherContactsRefs.current = otherContacts.map(() => ({
+            name: React.createRef(),
             phone: React.createRef(),
             email: React.createRef(),
           }));
@@ -6232,7 +6234,7 @@ const ContactSection = ({ societyId }) => {
       return;
     }
 
-    // other contacts email
+    // other contacts fields
     if (section === "otherContacts" && index !== null) {
       setFormData((prev) => {
         const newContacts = [...prev.otherContacts];
@@ -6252,9 +6254,10 @@ const ContactSection = ({ societyId }) => {
   const addOtherContact = () => {
     setFormData((prev) => ({
       ...prev,
-      otherContacts: [...prev.otherContacts, { phone: "", email: "" }],
+      otherContacts: [...prev.otherContacts, { name: "", phone: "", email: "" }],
     }));
     otherContactsRefs.current.push({
+      name: React.createRef(),
       phone: React.createRef(),
       email: React.createRef(),
     });
@@ -6292,8 +6295,9 @@ const ContactSection = ({ societyId }) => {
             : [],
         },
         otherContacts: formData.otherContacts
-          .filter((c) => c.phone || c.email)
+          .filter((c) => c.name || c.phone || c.email)
           .map((c) => ({
+            name: c.name || "",
             phone: c.phone ? formatPhoneForStorage(c.phone) : "",
             email: c.email || "",
           })),
@@ -6323,7 +6327,7 @@ const ContactSection = ({ societyId }) => {
     formData.maintenance.landline ||
     formData.maintenance.phone ||
     formData.maintenance.email ||
-    formData.otherContacts.some((c) => c.phone || c.email);
+    formData.otherContacts.some((c) => c.name || c.phone || c.email);
 
   const formatDisplayPhone = (phone) => {
     if (!phone) return "Not specified";
@@ -6344,7 +6348,7 @@ const ContactSection = ({ societyId }) => {
 
   const otherContacts = Array.isArray(formData.otherContacts)
     ? formData.otherContacts
-    : [{ phone: "", email: "" }];
+    : [{ name: "", phone: "", email: "" }];
 
   return (
     <>
@@ -6499,7 +6503,7 @@ const ContactSection = ({ societyId }) => {
                           </div>
 
                           <div className="form-group">
-                            <label>Phone Number:</label>
+                            <label>Mobile Number:</label>
                             <div className="phone-input-container">
                               <span className="phone-prefix">+91</span>
                               <input
@@ -6545,9 +6549,33 @@ const ContactSection = ({ societyId }) => {
                       <div className="profile-section">
                         <h3>Other Contacts</h3>
                         {otherContacts.map((contact, index) => (
-                          <div key={index} className="contact-grid">
+                          <div key={index} className="contact-grid-other">
                             <div className="form-group">
-                              <label>Phone Number:</label>
+                              <label>Name:</label>
+                              <input
+                                ref={otherContactsRefs.current[index]?.name}
+                                type="text"
+                                name="name"
+                                value={contact.name}
+                                onChange={(e) => {
+                                  const onlyAlphabets = e.target.value.replace(/[^a-zA-Z\s]/g, ""); // allow only letters & space
+                                  handleInputChange(
+                                    { ...e, target: { ...e.target, value: onlyAlphabets } },
+                                    "otherContacts",
+                                    "name",
+                                    index
+                                  );
+                                }}
+                                onFocus={() =>
+                                  handleFocus(otherContactsRefs.current[index]?.name)
+                                }
+                                placeholder="Enter name"
+                                disabled={isSaving}
+                              />
+                            </div>
+
+                            <div className="form-group">
+                              <label>Moblie Number:</label>
                               <div className="phone-input-container">
                                 <span className="phone-prefix">+91</span>
                                 <input
@@ -6709,7 +6737,7 @@ const ContactSection = ({ societyId }) => {
                         {formData.maintenance.landline || "Not specified"}
                       </div>
                       <div className="contact-detail">
-                        <strong>Phone:</strong>{" "}
+                        <strong>Mobile:</strong>{" "}
                         {formData.maintenance.phone
                           ? formatDisplayPhone(formData.maintenance.phone)
                           : "Not specified"}
@@ -6724,7 +6752,7 @@ const ContactSection = ({ societyId }) => {
 
                 {/* Other Contacts */}
                 {otherContacts.some(
-                  (contact) => contact.phone || contact.email
+                  (contact) => contact.name || contact.phone || contact.email
                 ) && (
                   <div className="contact-row">
                     <div className="contact-section-display pair-height full-width">
@@ -6732,10 +6760,14 @@ const ContactSection = ({ societyId }) => {
                       <div className="contact-details-others">
                         {otherContacts.map(
                           (contact, index) =>
-                            (contact.phone || contact.email) && (
+                            (contact.name || contact.phone || contact.email) && (
                               <div key={index} className="contact-pair">
                                 <div className="contact-detail">
-                                  <strong>Phone {index + 1}:</strong>{" "}
+                                  <strong>Name {index + 1}:</strong>{" "}
+                                  {contact.name || "Not specified"}
+                                </div>
+                                <div className="contact-detail">
+                                  <strong>Mobile {index + 1}:</strong>{" "}
                                   {contact.phone ? (
                                     <span>
                                       {" "}
