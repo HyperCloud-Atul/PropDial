@@ -37,7 +37,7 @@ const ViewInspections = () => {
     "properties-propdial",
     propertyid
   );
-    const {
+  const {
     isPropertyOwner,
     propertyUserOwnerData,
     isPropertyManager,
@@ -409,14 +409,14 @@ const ViewInspections = () => {
   // role wise inspection visiblity 
   const userRolesWithFullAccess = ["admin", "superAdmin", "executive"];
 
-const visibleInspections = filteredInspections?.filter((iDoc) => {
-  // Admin, SuperAdmin, Executive ke liye sab dikhega
-  if (userRolesWithFullAccess.includes(user?.role)) {
-    return true;
-  }
-  // Baaki users ke liye sirf finalSubmit true ho tab dikhao
-  return iDoc.finalSubmit === true;
-});
+  const visibleInspections = filteredInspections?.filter((iDoc) => {
+    // Admin, SuperAdmin, Executive ke liye sab dikhega
+    if (userRolesWithFullAccess.includes(user?.role)) {
+      return true;
+    }
+    // Baaki users ke liye sirf finalSubmit true ho tab dikhao
+    return iDoc.finalSubmit === true;
+  });
 
 
   if (loading) {
@@ -451,16 +451,16 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                       OnePlace for Property Inspection
                     </h2>
 
-                   {user && (
-                    user.role === "admin" || user.role === "superAdmin" || isPropertyManager
-                   ) && (
-                    <div
-                    className="theme_btn btn_fill no_icon text-center short_btn"
-                    onClick={() => setShowPopup(true)}
-                  >
-                    Add Inspection
-                  </div>
-                   )}
+                    {user && (
+                      user.role === "admin" || user.role === "superAdmin" || isPropertyManager
+                    ) && (
+                        <div
+                          className="theme_btn btn_fill no_icon text-center short_btn"
+                          onClick={() => setShowPopup(true)}
+                        >
+                          Add Inspection
+                        </div>
+                      )}
                     <Modal
                       show={showPopup}
                       className="delete_modal inspection_modal"
@@ -475,8 +475,8 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                       <h5 className="text_blue text-center">
                         Select Inspection Type
                       </h5>
-{/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
-                      {/* <div className="inspection_types">
+                    
+                      <div className="inspection_types">
                         {["Regular", "Move-In", "Move-Out", "Full", "Issue Based"].map(
                           (type) => (
                             <div
@@ -515,44 +515,45 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                             </div>
                           )
                         )}
+                      </div>
+                        {/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
+                      {/* <div className="inspection_types">
+                        {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
+                          <div
+                            key={type}
+                            onClick={() =>
+                              type === "Regular"
+                                ? lastInspections[type]
+                                  ? navigate(`/add-inspection/${lastInspections[type].id}`)
+                                  : handleAddInspection(type)
+                                : null
+                            }
+                            className={`it_single ${type !== "Regular" ? "disabled" : ""}`}
+                            style={type !== "Regular" ? { cursor: "not-allowed", opacity: 0.6 } : {}}
+                          >
+                            <span>
+                              {type} Inspection{" "}
+                              {type === "Regular" && lastInspections[type] && (
+                                <div
+                                  style={{
+                                    color: "var(--theme-red)",
+                                    fontSize: "13px",
+                                  }}
+                                >
+                                  (Complete the last inspection first)
+                                </div>
+                              )}
+                            </span>
+                            {type !== "Regular" && (
+                              <div style={{ color: "gray", fontSize: "12px" }}>Coming Soon</div>
+                            )}
+                            <img
+                              src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
+                              alt="propdial"
+                            />
+                          </div>
+                        ))}
                       </div> */}
-                      <div className="inspection_types">
-  {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
-    <div
-      key={type}
-      onClick={() =>
-        type === "Regular"
-          ? lastInspections[type]
-            ? navigate(`/add-inspection/${lastInspections[type].id}`)
-            : handleAddInspection(type)
-          : null
-      }
-      className={`it_single ${type !== "Regular" ? "disabled" : ""}`}
-      style={type !== "Regular" ? { cursor: "not-allowed", opacity: 0.6 } : {}}
-    >
-      <span>
-        {type} Inspection{" "}
-        {type === "Regular" && lastInspections[type] && (
-          <div
-            style={{
-              color: "var(--theme-red)",
-              fontSize: "13px",
-            }}
-          >
-            (Complete the last inspection first)
-          </div>
-        )}
-      </span>
-      {type !== "Regular" && (
-        <div style={{ color: "gray", fontSize: "12px" }}>Coming Soon</div>
-      )}
-      <img
-        src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
-        alt="propdial"
-      />
-    </div>
-  ))}
-</div>
 
                     </Modal>
                   </div>
@@ -652,9 +653,8 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                       </div> */}
                       <div className="button_filter diff_views">
                         <div
-                          className={`bf_single ${
-                            viewMode === "card_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "card_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("card_view")}
                         >
                           <span className="material-symbols-outlined">
@@ -662,9 +662,8 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                           </span>
                         </div>
                         <div
-                          className={`bf_single ${
-                            viewMode === "table_view" ? "active" : ""
-                          }`}
+                          className={`bf_single ${viewMode === "table_view" ? "active" : ""
+                            }`}
                           onClick={() => handleModeChange("table_view")}
                         >
                           <span className="material-symbols-outlined">
@@ -701,11 +700,10 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                                 </div>
                               </div>
                               <div
-                                className={`wha_call_icon ${
-                                  iDoc.finalSubmit
+                                className={`wha_call_icon ${iDoc.finalSubmit
                                     ? "final_submit"
                                     : "final_submit"
-                                }`}
+                                  }`}
                               >
                                 {user && !iDoc.finalSubmit && (user.role === "admin" || user.role === "superAdmin" || isPropertyManager) && (
                                   <Link
@@ -758,11 +756,11 @@ const visibleInspections = filteredInspections?.filter((iDoc) => {
                                 </span>) : (<span>
                                   {format(iDoc.createdAt.toDate(), "dd-MMM-yy")}
                                 </span>)}
-                                
+
                               </div>
                               <div className="date_single">
                                 <strong>By</strong>:{" "}
-                                
+
                                 <span>
                                   {dbUserState &&
                                     dbUserState.find(

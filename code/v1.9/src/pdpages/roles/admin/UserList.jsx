@@ -66,7 +66,7 @@ const UserList = () => {
         // Filter by role
         switch (filter) {
           case "All":
-            roleMatch = document.status === "inactive";
+            // roleMatch = document.status === "inactive";
             break;
           case "Owner":
             roleMatch =
