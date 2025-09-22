@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+// old code without deepseek 
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate, Link} from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { projectFirestore, timestamp } from "../../firebase/config";
+import { useAuthContext } from "../../../hooks/useAuthContext";
+import { projectFirestore, timestamp, projectStorage } from "../../../firebase/config";
 import firebase from 'firebase/compat/app';
-import { projectStorage } from "../../firebase/config";
-import { useCallback } from "react";
-import { useDocument } from "../../hooks/useDocument";
+import { useDocument } from "../../../hooks/useDocument";
 import imageCompression from "browser-image-compression";
-import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash, FaRetweet } from "react-icons/fa";
 import { BarLoader, ClipLoader } from "react-spinners";
-import ScrollToTop from "../../components/ScrollToTop";
-import PropertySummaryCard from "../property/PropertySummaryCard";
+import ScrollToTop from "../../../components/ScrollToTop";
+import PropertySummaryCard from "../../property/PropertySummaryCard";
+
 const AddInspection = () => {
   const { inspectionId } = useParams();
   const navigate = useNavigate();

@@ -476,7 +476,7 @@ const ViewInspections = () => {
                         Select Inspection Type
                       </h5>
                     
-                      <div className="inspection_types">
+                      {/* <div className="inspection_types">
                         {["Regular", "Move-In", "Move-Out", "Full", "Issue Based"].map(
                           (type) => (
                             <div
@@ -515,9 +515,9 @@ const ViewInspections = () => {
                             </div>
                           )
                         )}
-                      </div>
+                      </div> */}
                         {/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
-                      {/* <div className="inspection_types">
+                      <div className="inspection_types">
                         {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
                           <div
                             key={type}
@@ -553,7 +553,7 @@ const ViewInspections = () => {
                             />
                           </div>
                         ))}
-                      </div> */}
+                      </div>
 
                     </Modal>
                   </div>

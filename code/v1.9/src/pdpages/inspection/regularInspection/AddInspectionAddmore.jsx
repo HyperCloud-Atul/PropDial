@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { projectFirestore, projectStorage, timestamp } from "../../firebase/config";
+import { projectFirestore, projectStorage, timestamp } from "../../../firebase/config";
 
 const AddInspection = () => {
   const { propertyid } = useParams();

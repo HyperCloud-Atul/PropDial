@@ -38,7 +38,7 @@ import MyProperties from "./pdpages/property/MyProperties";
 
 import ViewInspection from "./pdpages/inspection/ViewInspection";
 import InspectionDetails from "./pdpages/inspection/InspectionDetails";
-import AddInspection from "./pdpages/inspection/AddInspection";
+import AddInspection from "./pdpages/inspection/regularInspection/AddInspection";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
 import HowUse from "./pdpages/howUse/HowUse";
 import BlogDetail from "./pdpages/blogs/BlogDetail";
