@@ -5936,7 +5936,7 @@ const FloorPlans = ({ societyId }) => {
                         }
                         placeholder="Enter price"
                       />
-                      {currentPlan.price && (
+                      {currentPlan.salePrice && (
                         <p className="price-in-words">
                           {numberToWords(parseInt(currentPlan.salePrice))} Only
                         </p>
@@ -5954,7 +5954,7 @@ const FloorPlans = ({ societyId }) => {
                         }
                         placeholder="Enter price"
                       />
-                      {currentPlan.price && (
+                      {currentPlan.rentPrice && (
                         <p className="price-in-words">
                           {numberToWords(parseInt(currentPlan.rentPrice))} Only
                         </p>
