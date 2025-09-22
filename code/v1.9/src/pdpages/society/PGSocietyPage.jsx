@@ -5182,6 +5182,11 @@ const FloorPlans = ({ societyId }) => {
     "Utility",
     "Powder",
     "Basement",
+    "Front Yard",
+    "Back Yard",
+    "Terrace",
+    "Roof Rights",
+    "Garage",
   ];
 
   const areaUnitOptions = ["SqFt", "SqYd", "SqMtr"]; //, "Acres", "Hectares"
@@ -5296,7 +5301,8 @@ const FloorPlans = ({ societyId }) => {
             superArea: "",
             carpetArea: "",
             areaUnit: "",
-            price: "",
+            salePrice: "",
+            rentPrice: "",
             image: null,
           }
     );
@@ -5703,13 +5709,24 @@ const FloorPlans = ({ societyId }) => {
                             </div>
                           )}
 
-                          {plan.price && (
+                          {plan.rentPrice && (
+                            <div className="detail-row price-range-row">
+                              <span className="label">Rent Price:</span>
+                              <span className="value">
+                                ₹
+                                {new Intl.NumberFormat("en-IN").format(
+                                  plan.rentPrice
+                                )}
+                              </span>
+                            </div>
+                          )}
+                          {plan.salePrice && (
                             <div className="detail-row price-range-row">
                               <span className="label">Sale Price:</span>
                               <span className="value">
                                 ₹
                                 {new Intl.NumberFormat("en-IN").format(
-                                  plan.price
+                                  plan.salePrice
                                 )}
                               </span>
                             </div>
@@ -5913,15 +5930,33 @@ const FloorPlans = ({ societyId }) => {
                       <input
                         id="price"
                         type="text"
-                        value={formatIndianNumber(currentPlan.price)}
+                        value={formatIndianNumber(currentPlan.salePrice)}
                         onChange={(e) =>
-                          handlePriceChange("price", e.target.value)
+                          handlePriceChange("salePrice", e.target.value)
                         }
                         placeholder="Enter price"
                       />
                       {currentPlan.price && (
                         <p className="price-in-words">
-                          {numberToWords(parseInt(currentPlan.price))} Only
+                          {numberToWords(parseInt(currentPlan.salePrice))} Only
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="price">Rent Price</label>
+                      <input
+                        id="price"
+                        type="text"
+                        value={formatIndianNumber(currentPlan.rentPrice)}
+                        onChange={(e) =>
+                          handlePriceChange("rentPrice", e.target.value)
+                        }
+                        placeholder="Enter price"
+                      />
+                      {currentPlan.price && (
+                        <p className="price-in-words">
+                          {numberToWords(parseInt(currentPlan.rentPrice))} Only
                         </p>
                       )}
                     </div>
