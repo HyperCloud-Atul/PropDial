@@ -14,6 +14,7 @@ import html2pdf from "html2pdf.js";
 import jsPDF from "jspdf";
 import "./Inspection-report.scss";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { useSocietyRates } from "../../utils/useSocietyRates";
 const InspectionDetails = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
@@ -233,12 +234,15 @@ const InspectionDetails = () => {
     }
   };
 
-      const {
-        isPropertyOwner,
-        propertyUserOwnerData,
-        isPropertyManager,
-        propertyUserManagerData,
-      } = usePropertyUserRoles(propertyDocument?.id, user);
+  const {
+    isPropertyOwner,
+    propertyUserOwnerData,
+    isPropertyManager,
+    propertyUserManagerData,
+  } = usePropertyUserRoles(propertyDocument?.id, user);
+
+  // code for fetch so ciety rates 
+  const { floorPlans, loading, error } = useSocietyRates(propertyDocument?.society);
 
   return (
     <div className=" pd_single pg_bg inspection_report">
@@ -303,7 +307,20 @@ const InspectionDetails = () => {
                         propdial.com&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;info@prodial.com
                       </span>
                     </div> */}
-                       <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
+                    <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
+                    <div>
+                      <h3>Society Rates</h3>
+                      {floorPlans.map((plan, index) => (
+                        <div key={index}>
+                          <p><strong>{plan.bhk}</strong></p>
+                          <p>Rent: ₹{plan.rentPrice}</p>
+                          <p>Sale: ₹{plan.salePrice}</p>
+                          <p>Area: {plan.superArea} {plan.arealInit}</p>
+                        </div>
+                      ))}
+                    </div>
+
+
                   </div>
                   <div
                     className="inner createdBy i_info"
@@ -370,7 +387,7 @@ const InspectionDetails = () => {
                               {propertyDocument.purpose && " | "}
                               For{" "}
                               {propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth"
+                                "rentsaleboth"
                                 ? "Rent / Sale"
                                 : propertyDocument.purpose}
                             </>
@@ -379,29 +396,29 @@ const InspectionDetails = () => {
                               Your perfect {propertyDocument.propertyType}{" "}
                               awaits—on{" "}
                               {propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth"
+                                "rentsaleboth"
                                 ? "Rent / Lease Now"
                                 : propertyDocument.purpose.toLowerCase() ===
                                   "rent"
-                                ? "Lease Now"
-                                : propertyDocument.purpose.toLowerCase() ===
-                                  "sale"
-                                ? "Sale Now"
-                                : ""}
+                                  ? "Lease Now"
+                                  : propertyDocument.purpose.toLowerCase() ===
+                                    "sale"
+                                    ? "Sale Now"
+                                    : ""}
                             </>
                           ) : propertyDocument.category === "Plot" ? (
                             <>
                               {propertyDocument.propertyType} Plot | For{" "}
                               {propertyDocument.purpose.toLowerCase() ===
-                              "rentsaleboth"
+                                "rentsaleboth"
                                 ? "Rent / Lease"
                                 : propertyDocument.purpose.toLowerCase() ===
                                   "rent"
-                                ? "Lease"
-                                : propertyDocument.purpose.toLowerCase() ===
-                                  "sale"
-                                ? "Sale"
-                                : ""}
+                                  ? "Lease"
+                                  : propertyDocument.purpose.toLowerCase() ===
+                                    "sale"
+                                    ? "Sale"
+                                    : ""}
                             </>
                           ) : null)}
                       </h5>
@@ -531,10 +548,10 @@ const InspectionDetails = () => {
                               }}
                             >
                               <span>Last update at:{" "}
-                              {format(
-                                billDoc.thisBillUpdatedAt.toDate(),
-                                "dd-MMM-yyyy"
-                              )}</span>
+                                {format(
+                                  billDoc.thisBillUpdatedAt.toDate(),
+                                  "dd-MMM-yyyy"
+                                )}</span>
                             </div>
                           )}
 
@@ -554,7 +571,7 @@ const InspectionDetails = () => {
                                 background: "#eeeeee",
                               }}
                             >
-                             Bill ID: {billDoc.billId}
+                              Bill ID: {billDoc.billId}
                             </div>
                             {billDoc?.amount && (
                               <h5
@@ -565,7 +582,7 @@ const InspectionDetails = () => {
                                   background: "#eeeeee",
                                 }}
                               >
-                               Due Amount: ₹{billDoc?.amount}
+                                Due Amount: ₹{billDoc?.amount}
                               </h5>
                             )}
                           </div>

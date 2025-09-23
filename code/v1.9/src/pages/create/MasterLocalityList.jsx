@@ -4,7 +4,6 @@ import { projectFirestore } from "../../firebase/config";
 import { useFirestore } from "../../hooks/useFirestore";
 import { useCollection } from "../../hooks/useCollection";
 import { useCommon } from "../../hooks/useCommon";
-import Filters from "../../components/Filters";
 import Select from "react-select";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -13,51 +12,34 @@ import MasterLocalityTable from "./MasterLocalityTable";
 import NineDots from "../../components/NineDots";
 
 export default function MasterLocalityList() {
-  // Scroll to the top of the page whenever the location changes start
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+  
   const { user } = useAuthContext();
   const { camelCase } = useCommon();
-  // Scroll to the top of the page whenever the location changes end
-  // const { addDocument, response } = useFirestore("m_localities");
   const { addDocumentWithCustomDocId, response: responseAddDocument } = useFirestore("m_localities");
-  const { updateDocument, response: responseUpdateDocument } =
-    useFirestore("m_localities");
+  const { updateDocument, response: responseUpdateDocument } = useFirestore("m_localities");
 
   //Master Data Loading Initialisation - Start
-  const { documents: masterCountry, error: masterCountryerror } =
-    useCollection("m_countries", "", ["country", "asc"]);
-
+  const { documents: masterCountry, error: masterCountryerror } = useCollection("m_countries", "", ["country", "asc"]);
   const { documents: masterState, error: masterStateError } = useCollection(
-    "m_states", "", ["state", "asc"]
+    "m_states", 
+    ["country", "==", "_india"],
+    ["state", "asc"]
   );
-  const { documents: masterCity, error: masterCityError } = useCollection(
-    "m_cities", "", ["city", "asc"]
-  );
-  // const { documents: masterLocality, error: masterLocalityerror } =
-  //   useCollection("m_localities", "", ["locality", "asc"]);
+  const { documents: masterCity, error: masterCityError } = useCollection("m_cities", "", ["city", "asc"]);
 
   const [filteredLocalityData, setfilteredLocalityData] = useState();
+  const [country, setCountry] = useState({ label: "INDIA", value: "_india" });
+  const [state, setState] = useState(null);
+  const [city, setCity] = useState(null);
+  const [locality, setLocality] = useState("");
 
-  // const { documents: masterSociety, error: masterSocietyError } =
-  //   useCollection("m_societies", "", ["society", "asc"]);
-
-
-  const [country, setCountry] = useState();
-  const [state, setState] = useState();
-  const [city, setCity] = useState();
-  const [locality, setLocality] = useState();
-  const [society, setSociety] = useState();
-
-  let countryOptions = useRef([]);
-  let stateOptions = useRef([]);
-  let cityOptions = useRef([]);
-  // let localityOptions = useRef([]);
-  // let societyOptions = useRef([]);
-
-  //Master Data Loading Initialisation - End
+  // Use useState for options to ensure reactivity
+  const [stateOptions, setStateOptions] = useState([{ label: "Select State", value: "" }]);
+  const [cityOptions, setCityOptions] = useState([{ label: "Select City", value: "" }]);
 
   const [formError, setFormError] = useState(null);
   const [formErrorType, setFormErrorType] = useState(null);
@@ -65,272 +47,128 @@ export default function MasterLocalityList() {
   const [formBtnText, setFormBtnText] = useState("");
   const [currentDocid, setCurrentDocid] = useState(null);
   const [handleAddSectionFlag, sethandleAddSectionFlag] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
+  // Real-time listeners references
+  const citiesListenerRef = useRef(null);
+  const localitiesListenerRef = useRef(null);
+
+  // Initialize data on component mount
   useEffect(() => {
-    // console.log('in useeffect')
-    if (masterCountry) {
-      countryOptions.current = masterCountry.map((countryData) => ({
-        label: countryData.country,
-        value: countryData.id,
-      }));
-
-      // console.log("countryOptions: ", countryOptions)
-      handleCountryChange({ label: "INDIA", value: "_india" })
+    if (masterState && masterState.length > 0) {
+      setStateOptions([
+        { label: "Select State", value: "" },
+        ...masterState.map((stateData) => ({
+          label: stateData.state,
+          value: stateData.id,
+        }))
+      ]);
     }
+  }, [masterState]);
 
-  }, [masterCountry]);
-
-  // useEffect(() => {
-  //   // console.log('in useeffect')
-  //   if (masterLocality) {
-
-  //     filteredDataNew(city)
-  //   }
-  // }, [masterLocality]);
-
-  // Populate Master Data - Start
-  //Country select onchange
-  const handleCountryChange = async (option) => {
-    setCountry(option);
-    // let countryname = option.label;
-    // console.log('countryname:', countryname)
-    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
-    // console.log('countryid:', countryid)
-    const ref = await projectFirestore
-      .collection("m_states")
-      .where("country", "==", option.value)
-      .orderBy("state", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          stateOptions.current = snapshot.docs.map((stateData) => ({
-            label: stateData.data().state,
-            value: stateData.id,
-          }));
-
-          if (stateOptions.current.length === 0) {
-            console.log("No State")
-            handleStateChange(null)
-          }
-          else {
-            handleStateChange({
-              label: stateOptions.current[0].label,
-              value: stateOptions.current[0].value,
-            });
-          }
-
-        } else {
-          // setError('No such document exists')
-        }
-      },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
+  // Cleanup listeners on component unmount
+  useEffect(() => {
+    return () => {
+      if (citiesListenerRef.current) {
+        citiesListenerRef.current();
       }
-    );
-  };
+      if (localitiesListenerRef.current) {
+        localitiesListenerRef.current();
+      }
+    };
+  }, []);
 
-  //Stae select onchange
   const handleStateChange = async (option) => {
     setState(option);
-    // console.log('state.id:', option.value)    
-    const ref = await projectFirestore
+    setCity(null);
+    setfilteredLocalityData(null);
+    
+    // Cleanup previous listeners
+    if (citiesListenerRef.current) {
+      citiesListenerRef.current();
+    }
+    if (localitiesListenerRef.current) {
+      localitiesListenerRef.current();
+    }
+    
+    if (option && option.value) {
+      // Load cities only for selected state with real-time listener
+      setupCitiesRealTimeListener(option.value);
+    } else {
+      setCityOptions([{ label: "Select City", value: "" }]);
+    }
+  };
+
+  // Real-time listener for cities
+  const setupCitiesRealTimeListener = (stateId) => {
+    const ref = projectFirestore
       .collection("m_cities")
-      .where("state", "==", option.value)
+      .where("state", "==", stateId)
       .orderBy("city", "asc");
-    ref.onSnapshot(
-      async (snapshot) => {
-        if (snapshot.docs) {
-          cityOptions.current = snapshot.docs.map((cityData) => ({
-            label: cityData.data().city,
-            value: cityData.id,
-          }));
 
-          if (cityOptions.current.length === 0) {
-            // console.log("No City")
-            handleCityChange(null)
-          }
-          else {
-            handleCityChange({
-              label: cityOptions.current[0].label,
-              value: cityOptions.current[0].value,
-            });
-          }
-
+    citiesListenerRef.current = ref.onSnapshot(
+      (snapshot) => {
+        if (snapshot.docs && snapshot.docs.length > 0) {
+          setCityOptions([
+            { label: "Select City", value: "" },
+            ...snapshot.docs.map((cityData) => ({
+              label: cityData.data().city,
+              value: cityData.id,
+            }))
+          ]);
         } else {
-          // setError('No such document exists')
+          setCityOptions([{ label: "Select City", value: "" }]);
         }
+        
+        setCity(null);
       },
-      (err) => {
-        console.log(err.message);
-        // setError('failed to get document')
+      (error) => {
+        console.error("Error loading cities:", error);
+        setCityOptions([{ label: "Select City", value: "" }]);
+        setCity(null);
       }
     );
   };
 
-
-  //City select onchange
   const handleCityChange = async (option) => {
     setCity(option);
-    console.log('handleCityChange city.id:', option)
-
-    if (option) {
-      try {
-
-        const querySnapshot = await projectFirestore
-          .collection("m_localities")
-          .where("city", "==", option.value)
-          .orderBy("locality", "asc");
-
-        const unsubscribe = querySnapshot.onSnapshot(snapshot => {
-          let results = []
-          snapshot.docs.forEach(doc => {
-            results.push({ ...doc.data(), id: doc.id })
-          });
-
-          // console.log("results: ", results)
-
-          // // update state
-          setfilteredLocalityData(results)
-          // setError(null)
-        }, error => {
-          console.log(error)
-          // setError('could not fetch the data')
-        })
-
-        return () => unsubscribe(); // Cleanup listener when component unmounts
-
-
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    
+    // Cleanup previous locality listener
+    if (localitiesListenerRef.current) {
+      localitiesListenerRef.current();
     }
-
-    // if (option) {
-    //   const ref = await projectFirestore
-    //     .collection("m_localities")
-    //     .where("city", "==", option.value)
-    //     .orderBy("locality", "asc");
-    //   ref.onSnapshot(
-    //     async (snapshot) => {
-    //       if (snapshot.docs) {
-
-    //         localityOptions.current = snapshot.docs.map((localityData) => ({
-    //           label: localityData.data().locality,
-    //           value: localityData.id,
-    //         }));
-
-    //         console.log("localityOptions: ", localityOptions)
-
-    //         // console.log("localityOptions: ", localityOptions)   
-    //         filteredDataNew(option)
-
-    //       } else {
-    //         // setError('No such document exists')
-    //       }
-    //     },
-    //     (err) => {
-    //       console.log(err.message);
-    //       // setError('failed to get document')
-    //     }
-    //   );
-    // }
+    
+    if (option && option.value) {
+      // Setup real-time listener for localities
+      setupLocalitiesRealTimeListener(option.value);
+    } else {
+      setfilteredLocalityData(null);
+    }
   };
 
-  //Locality select onchange
-  // const handleLocalityChange = async (option) => {
-  //   setLocality(option);
-  //   // console.log('locality.id:', option.value)
+  // Real-time listener for localities
+  const setupLocalitiesRealTimeListener = (cityId) => {
+    const ref = projectFirestore
+      .collection("m_localities")
+      .where("city", "==", cityId)
+      .orderBy("locality", "asc");
 
-  //   if (option) {
-  //     const ref = await projectFirestore
-  //       .collection("m_societies")
-  //       .where("locality", "==", option.value)
-  //       .orderBy("society", "asc");
-  //     ref.onSnapshot(
-  //       async (snapshot) => {
-  //         if (snapshot.docs) {
-  //           societyOptions.current = snapshot.docs.map((societyData) => ({
-  //             label: societyData.data().society,
-  //             value: societyData.id,
-  //           }));
+    localitiesListenerRef.current = ref.onSnapshot(
+      (snapshot) => {
+        let results = [];
+        snapshot.forEach((doc) => {
+          results.push({ ...doc.data(), id: doc.id });
+        });
 
-  //         } else {
-  //           // handleSocietyChange(null)
-  //         }
-  //       },
-  //       (err) => {
-  //         console.log(err.message);
-  //         // setError('failed to get document')
-  //       }
-  //     );
-  //   }
-  // };
-
-  //Society select onchange
-  // const handleSocietyChange = async (option) => {
-  //   setSociety(option);
-  //   // console.log('society.id:', option.value)
-  // };
-
-  // Populate Master Data - End
-
-  let results = [];
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setFormError(null);
-
-  //   let localityname = camelCase(locality.trim());
-  //   // console.log("localityname: ", localityname)
-
-  //   let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase()
-  //   // console.log("value: ", isDuplicateLocality)
-
-  //   if (currentDocid) {
-  //     // console.log("country.value: ", country.value)
-  //     // console.log("state.value: ", state.value)
-  //     // console.log("city.value: ", city.value)
-  //     await updateDocument(currentDocid, {
-  //       country: country.value,
-  //       state: state.value,
-  //       city: city.value,
-  //       locality: localityname,
-  //     });
-  //     setFormError("Successfully updated");
-  //   } else {
-  //     let ref = projectFirestore
-  //       .collection("m_localities")
-  //       .where("docId", "==", isDuplicateLocality);
-
-  //     const unsubscribe = ref.onSnapshot(async (snapshot) => {
-  //       snapshot.docs.forEach((doc) => {
-  //         results.push({ ...doc.data(), id: doc.id });
-  //       });
-
-
-  //       if (results.length === 0) {
-  //         const dataSet = {
-  //           docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
-  //           country: country.value,
-  //           state: state.value,
-  //           city: city.value,
-  //           locality: localityname,
-  //           status: "active",
-  //         };
-  //         // console.log("dataSet: ", dataSet)
-  //         // await addDocument(dataSet);
-  //         const _customDocId = dataSet.docId
-  //         await addDocumentWithCustomDocId(dataSet, _customDocId);
-  //         setFormError("Successfully added");
-  //         // sethandleAddSectionFlag(!handleAddSectionFlag);
-  //       } else {
-  //         setFormError("Already added");
-  //         sethandleAddSectionFlag(!handleAddSectionFlag);
-  //       }
-  //     });
-  //   }
-  // };
+        console.log("Real-time localities update: ", results);
+        setfilteredLocalityData(results);
+      },
+      (error) => {
+        console.error("Error fetching localities:", error);
+        setfilteredLocalityData([]);
+      }
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -338,26 +176,18 @@ export default function MasterLocalityList() {
     setFormErrorType(null);
     setIsAdding(true);
 
-    // console.log("locality: ", locality)
-
-    if (locality) {
-
-
+    if (locality && city && city.value) {
       let localityname = camelCase(locality.trim());
       let isDuplicateLocality = city.value + "_" + localityname.split(" ").join("_").toLowerCase();
-      // console.log("Locality doc id: ", isDuplicateLocality)
 
       if (currentDocid) {
-
         const ref = projectFirestore
           .collection("m_localities")
           .where("docId", "==", isDuplicateLocality);
 
-        // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
         const snapshot = await ref.get();
 
         if (snapshot.empty) {
-
           const dataSet = {
             country: country.value,
             state: state.value,
@@ -365,53 +195,31 @@ export default function MasterLocalityList() {
             locality: localityname
           };
 
-          console.log("Edited Locality dataSet: ", dataSet)
-          console.log("currentDocid: ", currentDocid)
-
-          // Update existing document
-          await updateDocument(currentDocid, dataSet)
-          // await updateDocument(currentDocid, {
-          //   country: country.value,
-          //   state: state.value,
-          //   city: city.value,
-          //   locality: localityname,
-          // });
+          await updateDocument(currentDocid, dataSet);    
 
           setFormErrorType("success_msg");
           setFormError("Successfully updated");
           setIsAdding(false);
 
-          // Reset error message and locality after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
-        }
-        else {
-          // Handle duplicate case
+          // Form reset after successful update
+          if (!handleAddSectionFlag) {
+            setLocality("");
+            setCurrentDocid(null);
+          }
+        } else {
           setFormErrorType("error_msg");
           setFormError("Already added");
           setIsAdding(false);
-
-          // Reset error message after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
         }
       } else {
-        console.log("New Locality to be added")
-        // Query Firestore for duplicate document
         const ref = projectFirestore
           .collection("m_localities")
           .where("docId", "==", isDuplicateLocality);
 
-        // Use `get()` for a one-time read instead of `onSnapshot` to avoid repeated triggers
         const snapshot = await ref.get();
         const results = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
         if (results.length === 0) {
-          // No duplicates, proceed to add
           const dataSet = {
             docId: city.value + "_" + localityname.split(" ").join("_").toLowerCase(),
             country: country.value,
@@ -420,7 +228,6 @@ export default function MasterLocalityList() {
             locality: localityname,
             status: "active",
           };
-          console.log("New Locality dataSet: ", dataSet)
 
           const _customDocId = dataSet.docId;
           await addDocumentWithCustomDocId(dataSet, _customDocId);
@@ -428,48 +235,33 @@ export default function MasterLocalityList() {
           setFormErrorType("success_msg");
           setFormError("Successfully added");
           setIsAdding(false);
-
-          // Reset error message and locality after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-            setLocality("");
-          }, 5000);
+          setLocality("");
+          
+          // Locality automatically appear in the list due to real-time listener
         } else {
-          // Duplicate found
           setFormErrorType("error_msg");
           setFormError("Already added");
           setIsAdding(false);
-
-          // Reset error message after 5 seconds
-          setTimeout(() => {
-            setFormError(null);
-            setFormErrorType(null);
-          }, 5000);
         }
       }
-    }
-    else {
-      // Handle blank case
+    } else {
       setFormErrorType("error_msg");
-      setFormError("Locality should not be blank ");
+      setFormError("Locality and City are required");
       setIsAdding(false);
-
-      // Reset error message after 5 seconds
-      setTimeout(() => {
-        setFormError(null);
-        setFormErrorType(null);
-      }, 5000);
     }
+
+    setTimeout(() => {
+      setFormError(null);
+      setFormErrorType(null);
+    }, 5000);
   };
-
-
 
   const [handleMoreOptionsClick, setHandleMoreOptionsClick] = useState(false);
 
   const openMoreAddOptions = () => {
     setHandleMoreOptionsClick(true);
   };
+
   const closeMoreAddOptions = () => {
     setHandleMoreOptionsClick(false);
   };
@@ -477,380 +269,178 @@ export default function MasterLocalityList() {
   const handleAddSection = () => {
     setFormError(null);
     sethandleAddSectionFlag(!handleAddSectionFlag);
-    setFormBtnText("Add Locality");
-    setCountry({ label: "INDIA", value: "_india" })
-    // setState(null)
-    // setCity(null)
-    setLocality("");
-    setCurrentDocid(null);
+    setFormBtnText(handleAddSectionFlag ? "Add Locality" : "Update Locality");
+    if (!handleAddSectionFlag) {
+      setLocality("");
+      setCurrentDocid(null);
+    }
   };
 
-  // const [cityStatus, setCityStatus] = useState();
   const handleChangeStatus = async (docid, status) => {
-    // console.log('docid:', docid)
-    if (status === "active") status = "inactive";
-    else status = "active";
-    await updateDocument(docid, {
-      status,
-    });
+    const newStatus = status === "active" ? "inactive" : "active";
+    await updateDocument(docid, { status: newStatus });
+    // Status change automatically reflected due to real-time listener
   };
 
-  const handleEditCard = (
-    docid,
-    doccountry,
-    docstate,
-    doccity,
-    doclocality
-  ) => {
-    console.log('doclocality:', doclocality)
-
-    console.log("docid: ", docid)
-    // const countryname = (masterCountry && masterCountry.find((e) => e.id === doccountry)).country
-    // // console.log("country name: ", countryname)
-    // const statename = (masterState && masterState.find((e) => e.id === docstate)).state
-    // const cityname = (masterCity && masterCity.find((e) => e.id === doccity)).city
-
+  const handleEditCard = (docid, doccountry, docstate, doccity, doclocality) => {
     window.scrollTo(0, 0);
-    // setFormError(null);
-    // setCountry({ label: countryname, value: doccountry });
-    // setState({ label: statename, value: docstate });
-    // setCity({ label: cityname, value: doccity });
+    setFormError(null);
     setLocality(doclocality);
-    sethandleAddSectionFlag(!handleAddSectionFlag);
+    sethandleAddSectionFlag(true);
     setFormBtnText("Update Locality");
     setCurrentDocid(docid);
   };
 
-  const [searchInput, setSearchInput] = useState("");
-
-  // const filteredDataNew = (data) => {
-  //   // console.log(data)
-  //   let _filterList = [];
-  //   if (data) {
-  //     // _filterList = masterCity.filter(e => e.state === data.value)
-  //     // _filterList = masterLocality && masterLocality.filter(e => e.city === data.value)
-
-  //     _filterList = localityOptions && localityOptions.filter(e => e.city === data.value)
-  //   }
-  //   // console.log('_filterList', _filterList)
-  //   setFilteredData(_filterList)
-  //   // filterData
-  //   // console.log('filteredData', filteredData)
-
-  // }
-
   const handleSearchInputChange = (e) => {
-    // console.log("e.target.value: ", e.target.value)
     setSearchInput(e.target.value);
   };
 
-  // const filteredData = masterLocality
-  //   ? masterLocality.filter((document) => {
-  //     // Search input filtering
-
-  //     // console.log("document: ", document)
-  //     let _searchkey;
-  //     let _city = masterCity.find(e => e.id === document.city).city;
-  //     _searchkey = {
-  //       locality: document.locality,
-  //       city: _city
-  //     }
-  //     // console.log("_searchkey: ", _searchkey)
-
-  //     // Search input filtering
-  //     const searchMatch = searchInput
-  //       ? Object.values(_searchkey).some(
-  //         (field) =>
-  //           typeof field === "string" &&
-  //           field.toUpperCase().includes(searchInput.toUpperCase())
-  //       )
-  //       : true;
-
-  //     // const searchMatch = searchInput
-  //     //   ? Object.values(document).some(
-  //     //     (field) =>
-  //     //       typeof field === "string" &&
-  //     //       field.toUpperCase().includes(searchInput.toUpperCase())
-  //     //   )
-  //     //   : true;
-
-  //     return searchMatch;
-  //   })
-  //   : null;
+  // Filter localities based on search input
+  const filteredLocalities = filteredLocalityData ? filteredLocalityData.filter(locality => {
+    if (!searchInput) return true;
+    const searchLower = searchInput.toLowerCase();
+    return (
+      locality.locality.toLowerCase().includes(searchLower)
+    );
+  }) : [];
 
   // nine dots menu start
   const nineDotsAdminMenu = [
-    // { title: "Country's List", link: "/countrylist", icon: "public" },
-
     { title: "Society's List", link: "/societylist", icon: "home" },
   ];
+  
   const nineDotsMenu = [
-    // { title: "Country's List", link: "/countrylist", icon: "public" },
     { title: "State's List", link: "/statelist", icon: "map" },
-    {
-      title: "City's List",
-      link: "/citylist",
-      icon: "location_city",
-    },
+    { title: "City's List", link: "/citylist", icon: "location_city" },
     { title: "Society's List", link: "/societylist", icon: "home" },
   ];
-  // nine dots menu end
 
-  // View mode start
-  const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
+  const [viewMode, setviewMode] = useState("card_view");
+
   const handleModeChange = (newViewMode) => {
     setviewMode(newViewMode);
   };
-  // View mode end
 
   return (
-    <div className="top_header_pg pg_bg pg_adminproperty">
-      {/* <div
-        className={`page_spacing pg_min_height ${ masterLocality && masterLocality.length === 0 && "pg_min_height"
-          }`}
-      > */}
-      <div
-        className={`page_spacing pg_min_height ${filteredLocalityData && filteredLocalityData.length === 0 && "pg_min_height"
-          }`}
-      >
+    <div className="top_header_pg pg_bg pg_adminproperty">   
+      <div className={`page_spacing pg_min_height ${filteredLocalityData && filteredLocalityData.length === 0 && "pg_min_height"}`}>
         <NineDots nineDotsMenu={user && user.role === 'superAdmin' ? nineDotsMenu : nineDotsAdminMenu} />
 
-        {/* {masterLocality && masterLocality.length === 0 && ( */}
-        {/* {filteredLocalityData && filteredLocalityData.length === 0 && (
-          <div className={`pg_msg ${handleAddSectionFlag && "d-none"}`}>
+        <div className="pg_header d-flex justify-content-between">
+          <div className="left">
+            <h2 className="m22">Search for Localities</h2>
+          </div>
+          <div className="right">
+            <img src="/assets/img/icons/excel_logo.png" alt="propdial" className="excel_dowanload" />
+          </div>
+        </div>
+        
+        <div className="vg12"></div>
+        
+        <div className="filters">
+          <div className="left" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}>
+            {/* State Select */}
             <div>
-              No Locality Yet!
-              <div
-                onClick={handleAddSection}
-                className={`theme_btn no_icon header_btn mt-3 ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                  }`}
-              >
-                {handleAddSectionFlag ? "Cancel" : "Add New"}
+              <Select
+                key={stateOptions.length}
+                className=""
+                onChange={handleStateChange}
+                options={stateOptions}
+                value={state}
+                placeholder="Select State"
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    outline: "none",
+                    background: "#eee",
+                    borderBottom: "1px solid var(--theme-blue)",
+                    width: '300px',
+                  }),
+                }}
+              />
+            </div>
+
+            {/* City Select */}
+            <div>
+              <Select
+                key={cityOptions.length}
+                className=""
+                onChange={handleCityChange}
+                options={cityOptions}
+                value={city}
+                isDisabled={!state || !state.value}
+                placeholder={!state || !state.value ? "First select state" : "Select City"}
+                styles={{
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    outline: "none",
+                    background: "#eee",
+                    borderBottom: "1px solid var(--theme-blue)",
+                    width: '300px',
+                  }),
+                }}
+              />
+            </div>
+
+            <div className="rt_global_search search_field">
+              <input
+                placeholder="Search localities..."
+                value={searchInput}
+                onChange={handleSearchInputChange}
+              />
+              <div className="field_icon">
+                <span className="material-symbols-outlined">search</span>
               </div>
             </div>
           </div>
-        )} */}
-        {/* {masterLocality && masterLocality.length !== 0 && ( */}
-        {(
-          <>
-            <div className="pg_header d-flex justify-content-between">
-              <div className="left">
-                <h2 className="m22">
-                  Search for Localities
-                </h2>
+          
+          <div className="right">
+            <div className="button_filter diff_views">
+              <div className={`bf_single ${viewMode === "card_view" ? "active" : ""}`} onClick={() => handleModeChange("card_view")}>
+                <span className="material-symbols-outlined">calendar_view_month</span>
               </div>
-              <div className="right">
-                <img
-                  src="/assets/img/icons/excel_logo.png"
-                  alt="propdial"
-                  className="excel_dowanload"
-                />
+              <div className={`bf_single ${viewMode === "table_view" ? "active" : ""}`} onClick={() => handleModeChange("table_view")}>
+                <span className="material-symbols-outlined">view_list</span>
               </div>
             </div>
-            <div className="vg12"></div>
-            <div className="filters">
-              <div className="left"
-                style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}
-              >
-               
-                <div>
-                  <Select
-                    className=""
-                    // onChange={(option) => handleFilterStateChange(option)}
-                    // onChange={(option) => setState(option)}
-                    onChange={(e) => {
-                      setState(e)
-                      handleStateChange(e)
-
-                    }}
-                    // changeFilter={changeFilter}
-                    options={stateOptions.current}
-                    value={state}
-                    styles={{
-                      control: (baseStyles, state) => ({
-                        ...baseStyles,
-                        outline: "none",
-                        background: "#eee",
-                        borderBottom: " 1px solid var(--theme-blue)",
-                        width: '300px',
-                      }),
-                    }}
-                  />
-                </div>
-                <div>
-                  <Select
-                    className=""
-                    // onChange={(option) => handleFilterStateChange(option)}
-                    // onChange={(option) => setState(option)}
-                    onChange={(e) => {
-                      setCity(e)
-                      // filteredDataNew(e)
-                      handleCityChange(e)
-
-                    }}
-                    // changeFilter={changeFilter}
-                    options={cityOptions.current}
-                    value={city}
-                    styles={{
-                      control: (baseStyles, state) => ({
-                        ...baseStyles,
-                        outline: "none",
-                        background: "#eee",
-                        borderBottom: " 1px solid var(--theme-blue)",
-                        width: '300px',
-                      }),
-                    }}
-                  />
-                </div>
-                <div className="rt_global_search search_field">
-                  <input
-                    placeholder="Search"
-                    value={searchInput}
-                    onChange={handleSearchInputChange}
-                  />
-                  <div className="field_icon">
-                    <span className="material-symbols-outlined">search</span>
-                  </div>
-                </div>
-              </div>
-              <div className="right">
-                <div className="button_filter diff_views">
-                  <div
-                    className={`bf_single ${viewMode === "card_view" ? "active" : ""
-                      }`}
-                    onClick={() => handleModeChange("card_view")}
-                  >
-                    <span className="material-symbols-outlined">
-                      calendar_view_month
-                    </span>
-                  </div>
-                  <div
-                    className={`bf_single ${viewMode === "table_view" ? "active" : ""
-                      }`}
-                    onClick={() => handleModeChange("table_view")}
-                  >
-                    <span className="material-symbols-outlined">
-                      view_list
-                    </span>
-                  </div>
-                </div>
-                {!handleAddSectionFlag && (
-                  <div
-                    onClick={handleAddSection}
-                    className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"
-                      }`}
-                  >
-                    Add New
-                  </div>
-                )}
-
-              </div>
+            
+            <div onClick={handleAddSection} className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"}`}>
+              {handleAddSectionFlag ? "Cancel" : "Add New"}
             </div>
+          </div>
+        </div>
 
-          </>
-        )}
-
-        <div
-          style={{
-            overflow: handleAddSectionFlag ? "visible" : "hidden",
-            // transition: "1s",
-            opacity: handleAddSectionFlag ? "1" : "0",
-            maxHeight: handleAddSectionFlag ? "100%" : "0",
-            background: "var(--theme-blue-bg)",
-            marginLeft: handleAddSectionFlag ? "-22px" : "0px",
-            marginRight: handleAddSectionFlag ? "-22px" : "0px",
-            marginTop: handleAddSectionFlag ? "22px" : "0px",
-            padding: handleAddSectionFlag ? "32px 22px" : "0px",
-          }}
-        >
+        {/* Add Locality Form */}
+        <div style={{
+          overflow: handleAddSectionFlag ? "visible" : "hidden",
+          opacity: handleAddSectionFlag ? "1" : "0",
+          maxHeight: handleAddSectionFlag ? "100%" : "0",
+          background: "var(--theme-blue-bg)",
+          marginLeft: handleAddSectionFlag ? "-22px" : "0px",
+          marginRight: handleAddSectionFlag ? "-22px" : "0px",
+          marginTop: handleAddSectionFlag ? "22px" : "0px",
+          padding: handleAddSectionFlag ? "32px 22px" : "0px",
+          transition: "all 0.3s ease-in-out"
+        }}>
           <form>
             <div className="row row_gap form_full">
-              {/* <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">Country</label>
-                  <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={handleCountryChange}
-                      options={countryOptions.current}
-                      value={country}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div> */}
-              {/* <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">State</label>
-                  <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={handleStateChange}
-                      options={stateOptions.current}
-                      // options={stateList}
-                      value={state}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div> */}
-              {/* <div className="col-xl-4 col-lg-6">
-                <div className="form_field label_top">
-                  <label htmlFor="">City</label>
-                  <div className="form_field_inner">
-                    <Select
-                      className=""
-                      onChange={(option) => setCity(option)}
-                      options={cityOptions.current}
-                      // options={stateList}
-                      value={city}
-                      styles={{
-                        control: (baseStyles, state) => ({
-                          ...baseStyles,
-                          outline: "none",
-                          background: "#eee",
-                          borderBottom: " 1px solid var(--theme-blue)",
-                        }),
-                      }}
-                    />
-                  </div>
-                </div>
-              </div> */}
               <div className="col-xl-4 col-lg-6">
                 <div className="form_field label_top">
-                  <label htmlFor="">Locality</label>
+                  <label htmlFor="">Locality Name</label>
                   <div className="form_field_inner">
                     <input
                       required
                       type="text"
-                      placeholder="Entry Locality Name"
+                      placeholder="Enter Locality Name"
                       onChange={(e) => setLocality(e.target.value)}
                       value={locality}
-                      styles={{
-                        backgroundColor: "red",
-                        borderBottom: " 5px solid var(--theme-blue)",
-                      }}
                     />
                   </div>
                 </div>
               </div>
             </div>
+            
             <div className="vg22"></div>
-
 
             <div className="btn_and_msg_area">
               {formError && (
@@ -859,163 +449,110 @@ export default function MasterLocalityList() {
                 </div>
               )}
 
-              <div
-                className="d-flex align-items-center justify-content-end"
-                style={{
-                  gap: "15px",
-                }}
-              >
-                <div
-                  className="theme_btn btn_border_red no_icon text-center"
-                  onClick={handleAddSection}
-                  style={{
-                    minWidth: "140px",
-                  }}
-                >
+              <div className="d-flex align-items-center justify-content-end" style={{ gap: "15px" }}>
+                <div className="theme_btn btn_border_red no_icon text-center" onClick={handleAddSection} style={{ minWidth: "140px" }}>
                   Close
                 </div>
-                <div
-                  className="theme_btn btn_fill no_icon text-center"
-                  onClick={isAdding ? null : handleSubmit}
-                  style={{
-                    minWidth: "140px",
-                  }}
-                >
+                <div className="theme_btn btn_fill no_icon text-center" onClick={isAdding ? null : handleSubmit} style={{ minWidth: "140px" }}>
                   {isAdding ? "Processing..." : formBtnText}
                 </div>
               </div>
             </div>
           </form>
         </div>
-        {filteredLocalityData && filteredLocalityData.length > 0 ? (
-          <>
-            <div className="vg22"></div>
-            {filteredLocalityData && filteredLocalityData.length > 0 ? (
+
+        {/* Results Section */}
+        {filteredLocalities ? (
+          filteredLocalities.length > 0 ? (
+            <>
+              <div className="vg22"></div>
               <div className="m18">
-                Filtered Locality: <span className="text_orange">{filteredLocalityData.length}</span>
+                Found Localities: <span className="text_orange">{filteredLocalities.length}</span>
               </div>
-            ) : (
-              ""
-            )}
+            </>
+          ) : city && city.value ? (
+            <div className="m18">No localities found for selected city</div>
+          ) : null
+        ) : city && city.value ? (
+          <div className="m18">Loading localities...</div>
+        ) : (
+          <div className="m18">Please select a city to view localities</div>
+        )}
 
-            <div className="master_data_card">
-              {viewMode === "card_view" && (
-                <>
-                  {filteredLocalityData &&
-                    (filteredLocalityData.map((data) => <div className="property-status-padding-div">
-                      <div
-                        className="profile-card-div"
-                        style={{ position: "relative" }}
-                      >
-                        <div
-                          className="address-div"
-                          style={{ paddingBottom: "5px" }}
-                        >
+        {/* Locality List Display */}
+        {filteredLocalities && filteredLocalities.length > 0 && (
+          <div className="master_data_card">
+            {viewMode === "card_view" && (
+              <>
+                {filteredLocalities.map((data) => (
+                  <div className="property-status-padding-div" key={data.id}>
+                    <div className="profile-card-div" style={{ position: "relative" }}>
+                      <div className="address-div" style={{ paddingBottom: "5px" }}>
+                        <div className="icon" style={{ position: "relative", top: "-1px" }}>
+                          <span className="material-symbols-outlined" style={{ color: "var(--darkgrey-color)" }}>
+                            flag
+                          </span>
+                        </div>
+                        <div className="address-text">
                           <div
-                            className="icon"
-                            style={{ position: "relative", top: "-1px" }}
+                            onClick={() => handleEditCard(data.id, data.country, data.state, data.city, data.locality)}
+                            style={{
+                              width: "80%",
+                              height: "170%",
+                              textAlign: "left",
+                              display: "flex",
+                              justifyContent: "center",
+                              flexDirection: "column",
+                              transform: "translateY(-7px)",
+                              cursor: "pointer",
+                            }}
                           >
-                            <span
-                              className="material-symbols-outlined"
-                              style={{ color: "var(--darkgrey-color)" }}
-                            >
-                              flag
-                            </span>
+                            <h5 style={{ margin: "0", transform: "translateY(5px)" }}>
+                              {data.locality} <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
+                            </h5>
                           </div>
-                          <div className="address-text">
-                            <div
-                              onClick={() =>
-                                handleEditCard(
-                                  data.id,
-                                  data.country,
-                                  data.state,
-                                  data.city,
-                                  data.locality
-                                )
-                              }
-                              style={{
-                                width: "80%",
-                                height: "170%",
-                                textAlign: "left",
-                                display: "flex",
-                                justifyContent: "center",
-                                flexDirection: "column",
-                                transform: "translateY(-7px)",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <h5
-                                style={{
-                                  margin: "0",
-                                  transform: "translateY(5px)",
-                                }}
-                              >
-                                {data.locality}{" "}<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/></svg>
-                              </h5>
-                              <small
-                                style={{
-                                  margin: "0",
-                                  transform: "translateY(5px)",
-                                }}
-                              >
-                                {/* {(masterCity && masterCity.find((e) => e.id === data.city))?.city}, {" "} */}
-                                {/* {(masterState && masterState.find((e) => e.id === data.state))?.state}, {" "} */}
-                                {/* {(masterCountry && masterCountry.find((e) => e.id === data.country))?.country} */}
-
-                              </small>
-                            </div>
-                            <div
-                              className=""
-                              onClick={() =>
-                                handleChangeStatus(data.id, data.status)
-                              }
-                              style={{
-                                width: "20%",
-                                height: "calc(100% - -20px)",
-                                position: "relative",
-                                top: "-8px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <small
-                                style={{
-                                  margin: "0",
-                                  background:
-                                    data.status === "active"
-                                          ? "var(--theme-green2)"
-                                          : "var(--theme-red)",
-                                  color: "#fff",
-                                  padding: "3px 10px 3px 10px",
-                                  borderRadius: "4px",
-                                }}
-                              >
-                                {data.status}
-                              </small>
-                              {/* <span className="material-symbols-outlined">
-                                            chevron_right
-                                        </span> */}
-                            </div>
+                          <div
+                            className=""
+                            onClick={() => handleChangeStatus(data.id, data.status)}
+                            style={{
+                              width: "20%",
+                              height: "calc(100% - -20px)",
+                              position: "relative",
+                              top: "-8px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "flex-end",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <small style={{
+                              margin: "0",
+                              background: data.status === "active" ? "var(--theme-green2)" : "var(--theme-red)",
+                              color: "#fff",
+                              padding: "3px 10px 3px 10px",
+                              borderRadius: "4px",
+                            }}>
+                              {data.status}
+                            </small>
                           </div>
                         </div>
                       </div>
                     </div>
-                    ))}
-                </>
-              )}
-            </div>
-            {viewMode === "table_view" && (
-              <>{filteredLocalityData && <MasterLocalityTable filterData={filteredLocalityData} handleEditCard={handleEditCard} />}</>
+                  </div>
+                ))}
+              </>
             )}
+            
+            {viewMode === "table_view" && (
+              <MasterLocalityTable filterData={filteredLocalities} handleEditCard={handleEditCard} />
+            )}
+          </div>
+        )}
 
-          </>
-        ) : "No Locality Available"}
-
-
+        {!filteredLocalityData && !city && (
+          <div className="m18">Please select a state and city to view localities</div>
+        )}
       </div>
-
     </div>
   );
 }

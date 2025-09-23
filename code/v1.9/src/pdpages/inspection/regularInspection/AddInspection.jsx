@@ -995,7 +995,7 @@ const BillInspectionSection = ({
             <div className="row row_gap_20">
               <BillField
                 field="amount"
-                label="Amount*"
+                label="Due Amount*"
                 value={amount}
                 onChange={setAmount}
                 type="number"
@@ -1312,7 +1312,7 @@ const BillImageUpload = ({ billId, imageUrl, handleBillImageUpload, handleBillIm
   <div className="col-12">
     <div className="form_field w-100" style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
       <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
-        Upload bill image
+        Upload bill image if any
       </h6>
       <div className="image_upload_container">
         {imageUrl ? (
