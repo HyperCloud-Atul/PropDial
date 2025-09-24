@@ -308,17 +308,7 @@ const InspectionDetails = () => {
                       </span>
                     </div> */}
                     <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
-                    <div>
-                      <h3>Society Rates</h3>
-                      {floorPlans.map((plan, index) => (
-                        <div key={index}>
-                          <p><strong>{plan.bhk}</strong></p>
-                          <p>Rent: ₹{plan.rentPrice}</p>
-                          <p>Sale: ₹{plan.salePrice}</p>
-                          <p>Area: {plan.superArea} {plan.arealInit}</p>
-                        </div>
-                      ))}
-                    </div>
+                   
 
 
                   </div>
@@ -719,6 +709,61 @@ const InspectionDetails = () => {
                     )}
                   </div>
                 ))}
+                <div className="rwi_single socity-rate">
+                  <h2>Society Rates</h2>
+                  <div className="cards">
+                    {floorPlans.map((plan, index) => {
+                    // Logic for area display
+                    const hasSuperArea = plan.superArea && plan.arealInit;
+                    const hasCarpetArea = plan.carpetArea && plan.arealInit;
+
+                    return (
+                      <div key={index} className="socity-rate-card">
+                        {/* Header */}
+                        <div className="card-header">
+                          <h3>{plan.bhk}</h3>
+                        </div>
+
+                        {/* Body */}
+                        <div className="card-body">
+                          {/* Area display */}
+                          {plan.superArea && plan.carpetArea ? (
+                            <>
+                              <p className="area">
+                                Super Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                              </p>
+                              <p className="area">
+                                Carpet Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                              </p>
+                            </>
+                          ) : plan.superArea ? (
+                            <p className="area">
+                              Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                            </p>
+                          ) : plan.carpetArea ? (
+                            <p className="area">
+                              Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                            </p>
+                          ) : null}
+
+
+                          {/* Rent */}
+                          <div className="price-row">
+                            <span className="label">Rent Price:</span>
+                            <span className="rent">{plan.rentPrice? `₹${plan.rentPrice} `: NaN }</span>
+                          </div>
+
+                          {/* Sale */}
+                          <div className="price-row">
+                            <span className="label">Sale Price:</span>
+                            <span className="sale">{plan.salePrice? `₹${plan.salePrice}` : NaN}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  </div>
+                </div>
               </div>
             </div>
           )
