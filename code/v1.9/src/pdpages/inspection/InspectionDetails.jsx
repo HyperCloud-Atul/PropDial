@@ -761,7 +761,7 @@ const InspectionDetails = () => {
                           <div className="updatedAt-wrapper">
                             <div className="updatedAt-container">
                               <span className="label">Last updated at{" "}</span> 
-                              <span className="updatedAt"> {plan.updatedAt ? new Date(plan.updatedAt).toLocaleDateString("en-GB") : "N/A"}</span> 
+                              <span className="updatedAt"> {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString("en-GB") : new Date(plan.updatedAt).toLocaleDateString("en-GB")}</span> 
                             </div>
                           </div>
                         </div>
