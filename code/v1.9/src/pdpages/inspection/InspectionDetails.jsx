@@ -710,7 +710,7 @@ const InspectionDetails = () => {
                   </div>
                 ))}
                 <div className="rwi_single socity-rate">
-                  <h2>Society Rates</h2>
+                  <h2>Current Market Rate in your Society</h2>
                   <div className="cards">
                     {floorPlans.map((plan, index) => {
                     // Logic for area display
@@ -757,6 +757,12 @@ const InspectionDetails = () => {
                           <div className="price-row">
                             <span className="label">Sale Price:</span>
                             <span className="sale">{plan.salePrice? `₹${plan.salePrice}` : NaN}</span>
+                          </div>
+                          <div className="updatedAt-wrapper">
+                            <div className="updatedAt-container">
+                              <span className="label">Last updated at{" "}</span> 
+                              <span className="updatedAt"> {plan.updatedAt ? new Date(plan.updatedAt).toLocaleDateString("en-GB") : "N/A"}</span> 
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -513,6 +513,20 @@
 
       .socity-rate-card .card-body {
         padding: 15px;
+        .updatedAt-wrapper{
+          display: flex;
+          justify-content: end;
+          .updatedAt-container{
+            font-size: 12px;
+            .label{
+              color: var(--theme-grey);
+            }
+            .updatedAt{
+              color: var(--light-black);
+              font-weight: bold;
+            }
+          }
+        }
       }
 
       .socity-rate-card .area {

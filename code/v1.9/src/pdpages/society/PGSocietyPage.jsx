@@ -5304,6 +5304,13 @@ const FloorPlans = ({ societyId }) => {
             salePrice: "",
             rentPrice: "",
             image: null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            salePriceUpdatedAt: null,
+            rentPriceUpdatedAt: null,
+            salePriceUpdatedby: null,
+            rentPriceUpdatedby: null,
+            updatedBy:"",
           }
     );
     setCurrentIndex(index);
@@ -5349,6 +5356,16 @@ const FloorPlans = ({ societyId }) => {
     }
     setErrors(newErrors);
   };
+  const removeUndefined = (obj) => {
+    if (Array.isArray(obj)) {
+      return obj.map(removeUndefined);
+    } else if (obj && typeof obj === "object") {
+      return Object.fromEntries(
+        Object.entries(obj).map(([k, v]) => [k, removeUndefined(v)]).filter(([_, v]) => v !== undefined)
+      );
+    }
+    return obj;
+  };
 
   const saveChangesAndPersist = async () => {
     if (!currentPlan || Object.keys(errors).length > 0) {
@@ -5360,15 +5377,26 @@ const FloorPlans = ({ societyId }) => {
       return;
     }
 
-    setSaving(true);
-    const existingPlans = Array.isArray(floorPlans) ? floorPlans : [];
-    let updatedPlans = [...existingPlans];
+     setSaving(true);
+      const existingPlans = Array.isArray(floorPlans) ? floorPlans : [];
+      let updatedPlans = [...existingPlans];
 
-    if (currentIndex !== null) {
-      updatedPlans[currentIndex] = currentPlan;
-    } else {
-      updatedPlans.push(currentPlan);
-    }
+      let updatedPlan = {
+        ...currentPlan,
+        updatedAt: new Date().toISOString(),
+        updatedBy: user.phoneNumber || null,
+        salePriceUpdatedAt: currentPlan.salePriceUpdatedAt ,
+        salePriceUpdatedby: currentPlan.salePriceUpdatedby  ,
+        rentPriceUpdatedAt: currentPlan.rentPriceUpdatedAt ,
+        rentPriceUpdatedby: currentPlan.rentPriceUpdatedby,
+      };
+
+
+      if (currentIndex !== null) {
+        updatedPlans[currentIndex] = updatedPlan;
+      } else {
+        updatedPlans.push(updatedPlan);
+      }
 
     try {
       const docRef = doc(
@@ -5378,6 +5406,7 @@ const FloorPlans = ({ societyId }) => {
         "society_information",
         "floor_plans"
       );
+      
       await setDoc(docRef, { plans: updatedPlans });
 
       setFloorPlans(updatedPlans);
@@ -5530,24 +5559,35 @@ const FloorPlans = ({ societyId }) => {
     );
 
   const handlePriceChange = (field, value) => {
-    // remove commas before storing
     const rawValue = value.replace(/,/g, "");
+    const now = new Date().toISOString();
 
-    if (!isNaN(rawValue) && rawValue !== "") {
-      setCurrentPlan((prev) => {
-        const updatedPlan = { ...prev, [field]: rawValue };
-        validatePlan(updatedPlan);
-        return updatedPlan;
-      });
-    } else {
-      // empty or invalid
-      setCurrentPlan((prev) => {
-        const updatedPlan = { ...prev, [field]: "" };
-        validatePlan(updatedPlan);
-        return updatedPlan;
-      });
-    }
+    setCurrentPlan((prev) => {
+      let updatedPlan = { ...prev };
+
+      if (!isNaN(rawValue) && rawValue !== "") {
+        updatedPlan[field] = rawValue;
+      } else {
+        updatedPlan[field] = "";
+      }
+
+      if (currentPlan.salePrice) {
+        updatedPlan.salePriceUpdatedAt = now;
+        updatedPlan.salePriceUpdatedby = user.phoneNumber || null;
+      }
+
+      if (currentPlan.rentPrice) {
+        updatedPlan.rentPriceUpdatedAt = now;
+        updatedPlan.rentPriceUpdatedby = user.phoneNumber || null;
+      }
+
+
+
+      validatePlan(updatedPlan);
+      return updatedPlan;
+    });
   };
+
 
   const canEdit = user && ["admin", "superAdmin"].includes(user.role);
 
