@@ -1,13 +1,14 @@
+// this is new code with the help of deepseeker ai
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import { BarLoader, ClipLoader } from "react-spinners";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { projectFirestore, timestamp, projectStorage } from "../../../firebase/config";
 import firebase from 'firebase/compat/app';
 import { useDocument } from "../../../hooks/useDocument";
 import imageCompression from "browser-image-compression";
 import { FaPlus, FaTrash, FaRetweet } from "react-icons/fa";
-import { BarLoader, ClipLoader } from "react-spinners";
 import ScrollToTop from "../../../components/ScrollToTop";
 import PropertySummaryCard from "../../property/PropertySummaryCard";
 
@@ -19,6 +20,7 @@ const AddInspection = () => {
   // State management
   const [rooms, setRooms] = useState([]);
   const [inspectionData, setInspectionData] = useState({});
+  const [activeRoom, setActiveRoom] = useState(null);
   const [propertyId, setPropertyId] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({});
   const [isDataSaving, setIsDataSaving] = useState(false);
@@ -29,15 +31,8 @@ const AddInspection = () => {
   const [propertydoc, setPropertyDoc] = useState(null);
   const [propertyerror, setPropertyError] = useState(null);
   const [inspectionType, setInspectionType] = useState("");
-  const [activeInspection, setActiveInspection] = useState("bill");
-  const [fixtureInspectionDone, setFixtureInspectionDone] = useState(false);
-  const [fixtures, setFixtures] = useState([]);
-  const [fixtureInspectionData, setFixtureInspectionData] = useState({});
-
-  // Room inspection state
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [tenantAllowsInspection, setTenantAllowsInspection] = useState(true);
-  const [selectedFixture, setSelectedFixture] = useState(null);
+  const [activeInspection, setActiveInspection] = useState("layout");
+  const [layoutInspectionDone, setLayoutInspectionDone] = useState(false);
 
   // Bill inspection state
   const [bills, setBills] = useState([]);
@@ -53,6 +48,17 @@ const AddInspection = () => {
   const { document: inspectionDocument, error: inspectionDocumentError } =
     useDocument("inspections", inspectionId);
 
+  // Memoized values
+  const currentRoomData = useMemo(() =>
+    inspectionData[activeRoom] || {},
+    [inspectionData, activeRoom]
+  );
+
+  const currentBillData = useMemo(() =>
+    selectedBill ? billInspectionData[selectedBill.id] || {} : {},
+    [billInspectionData, selectedBill]
+  );
+
   // Combined data fetching effect
   useEffect(() => {
     if (!inspectionId) return;
@@ -67,16 +73,16 @@ const AddInspection = () => {
             setPropertyId(inspectionData.propertyId);
             setInspectionType(inspectionData.inspectionType || "Not Available");
 
-            if (inspectionData.fixtures) {
-              setFixtureInspectionData(inspectionData.fixtures);
+            if (inspectionData.rooms) {
+              const formattedRooms = {};
+              inspectionData.rooms.forEach((room) => {
+                formattedRooms[room.roomId] = room;
+              });
+              setInspectionData(formattedRooms);
             }
 
             if (inspectionData.bills) {
               setBillInspectionData(inspectionData.bills);
-            }
-
-            if (inspectionData.roomInspections) {
-              setInspectionData(inspectionData.roomInspections);
             }
 
             setInspectionDatabaseData(inspectionData);
@@ -117,7 +123,7 @@ const AddInspection = () => {
     return () => unsubscribe();
   }, [propertyId]);
 
-  // Rooms and fixtures data effect
+  // Rooms data effect
   useEffect(() => {
     if (!propertyId) return;
 
@@ -127,51 +133,37 @@ const AddInspection = () => {
       .onSnapshot(
         (snapshot) => {
           let roomsData = [];
-          let allFixtures = [];
 
           snapshot.forEach((doc) => {
             const layouts = doc.data().layouts || {};
 
             Object.entries(layouts).forEach(([roomKey, roomValue]) => {
-              const roomId = `${doc.id}_${roomKey}`;
-              const roomName = roomValue.roomName || roomKey;
-              
               roomsData.push({
-                id: roomId,
-                roomName: roomName,
+                id: `${doc.id}_${roomKey}`,
+                roomName: roomValue.roomName || roomKey,
               });
-
-              // Extract fixtures from each room
-              if (roomValue.fixtureBySelect && Array.isArray(roomValue.fixtureBySelect)) {
-                roomValue.fixtureBySelect.forEach((fixture) => {
-                  allFixtures.push({
-                    id: `${roomId}_${fixture.id || fixture.name}`,
-                    name: fixture.name,
-                    roomId: roomId,
-                    roomName: roomName
-                  });
-                });
-              }
             });
           });
 
           setRooms(roomsData);
-          setFixtures(allFixtures);
-          
-          // Initialize fixture inspection data
-          setFixtureInspectionData((prevData) => {
+
+          setInspectionData((prevData) => {
             const newData = { ...prevData };
-            allFixtures.forEach((fixture) => {
-              if (!newData[fixture.id]) {
-                newData[fixture.id] = {
-                  fixtureId: fixture.id,
-                  fixtureName: fixture.name,
-                  roomId: fixture.roomId,
-                  roomName: fixture.roomName,
-                  status: "",
-                  remark: "",
-                  images: [],
-                  inspectedAt: timestamp.now(),
+            roomsData.forEach((room) => {
+              if (!newData[room.id]) {
+                newData[room.id] = {
+                  roomId: room.id,
+                  roomName: room.roomName,
+                  seepage: "",
+                  seepageRemark: "",
+                  termites: "",
+                  termitesRemark: "",
+                  thisLayoutUpdateAt: timestamp.now(),
+                  otherIssue: "",
+                  otherIssueRemark: "",
+                  generalRemark: "",
+                  cleanRemark: "",
+                  isAllowForInspection: "yes",
                 };
               }
             });
@@ -215,28 +207,35 @@ const AddInspection = () => {
     fetchBills();
   }, [propertyId, inspectionId]);
 
-  // Fixture inspection completion check
-  const isAllFixtureInspectionDone = useCallback(() => {
-    const allFixturesInspected = fixtures.length > 0 && 
-      fixtures.every((fixture) => {
-        const fixtureData = fixtureInspectionData[fixture.id] || {};
-        return (
-          fixtureData.status && 
-          fixtureData.remark && 
-          fixtureData.images?.length > 0
-        );
-      });
+  // Layout inspection completion check
+  const isAllLayoutInspectionDone = useCallback(() => {
+    const allRoomsInspected = Object.values(inspectionData).every((room) => {
+      if (room.isAllowForInspection === "no") {
+        return Boolean(room.generalRemark);
+      }
 
-    if (fixtureInspectionDone !== allFixturesInspected) {
-      setFixtureInspectionDone(allFixturesInspected);
+      return (
+        Boolean(room.seepage) &&
+        Boolean(room.termites) &&
+        Boolean(room.otherIssue) &&
+        Boolean(room.seepageRemark) &&
+        Boolean(room.termitesRemark) &&
+        Boolean(room.otherIssueRemark) &&
+        Boolean(room.cleanRemark) &&
+        room.images?.length > 0
+      );
+    });
+
+    if (layoutInspectionDone !== allRoomsInspected) {
+      setLayoutInspectionDone(allRoomsInspected);
     }
 
-    return allFixturesInspected;
-  }, [fixtures, fixtureInspectionData, fixtureInspectionDone]);
+    return allRoomsInspected;
+  }, [inspectionData, layoutInspectionDone]);
 
   useEffect(() => {
-    isAllFixtureInspectionDone();
-  }, [fixtureInspectionData, isAllFixtureInspectionDone]);
+    isAllLayoutInspectionDone();
+  }, [inspectionData, isAllLayoutInspectionDone]);
 
   // Bill inspection completion check
   useEffect(() => {
@@ -257,11 +256,11 @@ const AddInspection = () => {
   }, [inspectionDocument?.finalSubmit, navigate, propertyId]);
 
   // Image handling functions
-  const handleImageUpload = async (e, fixtureId) => {
+  const handleImageUpload = async (e, roomId) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    const existingCount = fixtureInspectionData[fixtureId]?.images?.length || 0;
+    const existingCount = inspectionData[roomId]?.images?.length || 0;
     const remainingSlots = 10 - existingCount;
     const validFiles = files.slice(0, remainingSlots);
 
@@ -283,7 +282,7 @@ const AddInspection = () => {
 
         const compressedFile = await imageCompression(file, options);
         const storageRef = projectStorage.ref(
-          `inspection_images/${inspectionId}/${fixtureId}/${compressedFile.name}`
+          `inspection_images/${inspectionId}/${roomId}/${compressedFile.name}`
         );
         const uploadTask = storageRef.put(compressedFile);
 
@@ -306,12 +305,12 @@ const AddInspection = () => {
             async () => {
               try {
                 const url = await storageRef.getDownloadURL();
-                setFixtureInspectionData((prev) => ({
+                setInspectionData((prev) => ({
                   ...prev,
-                  [fixtureId]: {
-                    ...prev[fixtureId],
+                  [roomId]: {
+                    ...prev[roomId],
                     images: [
-                      ...(prev[fixtureId]?.images || []),
+                      ...(prev[roomId]?.images || []),
                       { url, name: compressedFile.name },
                     ],
                   },
@@ -337,19 +336,19 @@ const AddInspection = () => {
     }
   };
 
-  const handleImageDelete = async (fixtureId, image) => {
+  const handleImageDelete = async (roomId, image) => {
     setImageActionStatus("deleting");
     const storageRef = projectStorage.ref(
-      `inspection_images/${inspectionId}/${fixtureId}/${image.name}`
+      `inspection_images/${inspectionId}/${roomId}/${image.name}`
     );
 
     try {
       await storageRef.delete();
-      setFixtureInspectionData((prev) => ({
+      setInspectionData((prev) => ({
         ...prev,
-        [fixtureId]: {
-          ...prev[fixtureId],
-          images: prev[fixtureId]?.images?.filter((img) => img.url !== image.url),
+        [roomId]: {
+          ...prev[roomId],
+          images: prev[roomId]?.images?.filter((img) => img.url !== image.url),
         },
       }));
       setImageActionStatus(null);
@@ -360,124 +359,86 @@ const AddInspection = () => {
   };
 
   // Form handling functions
-  const handleFixtureChange = (fixtureId, field, value) => {
-    setFixtureInspectionData((prev) => ({
-      ...prev,
-      [fixtureId]: {
-        ...prev[fixtureId],
+  const handleChange = (roomId, field, value) => {
+    setInspectionData((prev) => {
+      const updatedRoomData = {
+        ...prev[roomId],
         [field]: value,
-      },
-    }));
-  };
+      };
 
-  // Room selection handler
-  const handleRoomSelect = (room) => {
-    setSelectedRoom(room);
-    setSelectedFixture(null);
-    
-    // Check if tenant allows inspection was already set for this room
-    if (inspectionData[room.id]?.tenantAllowsInspection !== undefined) {
-      setTenantAllowsInspection(inspectionData[room.id].tenantAllowsInspection);
-    } else {
-      setTenantAllowsInspection(true); // Default to yes
-    }
-  };
-
-  // Save tenant allowance for room
-  const saveTenantAllowance = async () => {
-    if (!selectedRoom) return;
-
-    setIsDataSaving(true);
-
-    try {
-      await projectFirestore
-        .collection("inspections")
-        .doc(inspectionId)
-        .update({
-          [`roomInspections.${selectedRoom.id}.tenantAllowsInspection`]: tenantAllowsInspection,
-          lastUpdatedAt: timestamp.now(),
-          lastUpdatedBy: user.phoneNumber,
-          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-            updatedAt: timestamp.now(),
-            updatedBy: user.phoneNumber,
-          }),
-        });
-
-      setInspectionData(prev => ({
-        ...prev,
-        [selectedRoom.id]: {
-          ...prev[selectedRoom.id],
-          tenantAllowsInspection
+      if (field === "seepage" || field === "termites" || field === "otherIssue") {
+        const remarkField = `${field}Remark`;
+        if (value === "no") {
+          updatedRoomData[remarkField] = "There is no issue";
+        } else if (value === "yes") {
+          updatedRoomData[remarkField] = "";
         }
-      }));
-    } catch (error) {
-      console.error("Error saving tenant allowance:", error);
-    } finally {
-      setIsDataSaving(false);
-    }
+      }
+
+      return {
+        ...prev,
+        [roomId]: updatedRoomData,
+      };
+    });
   };
 
   // UI helper functions
-  const getRoomButtonClass = (room) => {
-    const roomData = inspectionData[room.id] || {};
-    const fixturesInRoom = fixtures.filter(f => f.roomId === room.id);
-    const completedFixtures = fixturesInRoom.filter(f => {
-      const fixtureData = fixtureInspectionData[f.id] || {};
-      return fixtureData.status && fixtureData.remark && fixtureData.images?.length > 0;
-    });
+  const getRoomClass = (roomId) => {
+    const room = inspectionData[roomId];
+    if (!room) return "room-button";
 
     let className = "room-button";
 
-    if (completedFixtures.length === fixturesInRoom.length && fixturesInRoom.length > 0) {
-      className += " full";
-    } else if (completedFixtures.length > 0) {
-      className += " half";
+    if (room.isAllowForInspection === "no") {
+      className += " notallowed";
+    } else {
+      const filledFields = [
+        room.seepage,
+        room.seepageRemark,
+        room.termites,
+        room.termitesRemark,
+        room.otherIssue,
+        room.otherIssueRemark,
+        room.cleanRemark,
+        room.images?.length > 0,
+      ].filter(Boolean).length;
+
+      if (filledFields === 8) className += " full";
+      else if (filledFields > 0) className += " half";
     }
 
-    if (selectedRoom?.id === room.id) className += " active";
+    if (roomId === activeRoom) className += " active";
 
     return className;
   };
 
-  const getFixtureButtonClass = (fixture) => {
-    const fixtureData = fixtureInspectionData[fixture.id] || {};
-    
-    let className = "room-button";
+  const getFieldClass = (roomId, field) => {
+    const roomData = inspectionData[roomId] || {};
 
-    const filledFields = [
-      fixtureData.status,
-      fixtureData.remark,
-      fixtureData.images?.length > 0,
-    ].filter(Boolean).length;
-
-    if (filledFields === 3) className += " full";
-    else if (filledFields > 0) className += " half";
-
-    if (selectedFixture?.id === fixture.id) className += " active";
-
-    return className;
-  };
-
-  const getFixtureFieldClass = (fixtureId, field) => {
-    const fixtureData = fixtureInspectionData[fixtureId] || {};
-    
-    if (field === "images") {
-      return fixtureData.images && fixtureData.images.length > 0 ? "filled" : "notfilled";
+    if (field === "image") {
+      return roomData.images && roomData.images.length > 0 ? "filled" : "notfilled";
     }
 
-    return fixtureData[field] && fixtureData[field].trim() !== "" ? "filled" : "notfilled";
+    return roomData[field] && roomData[field].trim() !== "" ? "filled" : "notfilled";
   };
 
   const isFinalSubmitEnabled = () => {
     return (
       allBillInspectionComplete &&
-      fixtures.length > 0 &&
-      fixtures.every((fixture) => {
-        const fixtureData = fixtureInspectionData[fixture.id] || {};
+      Object.values(inspectionData).every((room) => {
+        if (room.isAllowForInspection === "no") {
+          return room.generalRemark;
+        }
+
         return (
-          fixtureData.status && 
-          fixtureData.remark && 
-          fixtureData.images?.length > 0
+          room.seepage &&
+          room.termites &&
+          room.otherIssue &&
+          room.seepageRemark &&
+          room.termitesRemark &&
+          room.otherIssueRemark &&
+          room.cleanRemark &&
+          room.images?.length > 0
         );
       })
     );
@@ -621,11 +582,10 @@ const AddInspection = () => {
         .collection("inspections")
         .doc(inspectionId)
         .update({
-          fixtures: fixtureInspectionData,
-          roomInspections: inspectionData,
+          rooms: Object.values(inspectionData),
           lastUpdatedAt: timestamp.now(),
           lastUpdatedBy: user.phoneNumber,
-          fixtureInspectionDone,
+          layoutInspectionDone,
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
             updatedBy: user.phoneNumber,
@@ -709,10 +669,9 @@ const AddInspection = () => {
         .collection("inspections")
         .doc(inspectionId)
         .update({
-          fixtures: fixtureInspectionData,
-          roomInspections: inspectionData,
+          rooms: Object.values(inspectionData),
           finalSubmit: true,
-          fixtureInspectionDone,
+          layoutInspectionDone,
           updatedAt: timestamp.now(),
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
@@ -729,24 +688,6 @@ const AddInspection = () => {
     }
   };
 
-  // Group fixtures by room
-  const fixturesByRoom = useMemo(() => {
-    const grouped = {};
-    fixtures.forEach(fixture => {
-      if (!grouped[fixture.roomId]) {
-        grouped[fixture.roomId] = [];
-      }
-      grouped[fixture.roomId].push(fixture);
-    });
-    return grouped;
-  }, [fixtures]);
-
-  // Get fixtures for selected room
-  const selectedRoomFixtures = useMemo(() => {
-    if (!selectedRoom) return [];
-    return fixturesByRoom[selectedRoom.id] || [];
-  }, [selectedRoom, fixturesByRoom]);
-
   // Component rendering
   return (
     <div className="pg_min_height">
@@ -761,18 +702,18 @@ const AddInspection = () => {
                     <h2 className="text-center">{inspectionType} Inspection</h2>
                     <div className="inspection_type_buttons">
                       <button
-                        onClick={() => setActiveInspection("bill")}
-                        className={`${activeInspection === "bill" ? "active " : ""}${allBillInspectionComplete ? "done" : ""}`}
+                        onClick={() => setActiveInspection("layout")}
+                        className={`${activeInspection === "layout" ? "active " : ""}${layoutInspectionDone ? "done" : ""}`}
                       >
-                        Bill Inspection
+                        Layout Inspection
                         <img src="/assets/img/icons/check-mark.png" alt="" />
                       </button>
 
                       <button
-                        onClick={() => setActiveInspection("fixture")}
-                        className={`${activeInspection === "fixture" ? "active " : ""}${fixtureInspectionDone ? "done" : ""}`}
+                        onClick={() => setActiveInspection("bill")}
+                        className={`${activeInspection === "bill" ? "active " : ""}${allBillInspectionComplete ? "done" : ""}`}
                       >
-                        Fixture Inspection
+                        Bill Inspection
                         <img src="/assets/img/icons/check-mark.png" alt="" />
                       </button>
                     </div>
@@ -784,14 +725,35 @@ const AddInspection = () => {
                 />
               </div>
 
-              {/* Bill Inspection Section - Show first */}
+              {/* Layout Inspection Section */}
+              {activeInspection === "layout" && (
+                <LayoutInspectionSection
+                  rooms={rooms}
+                  activeRoom={activeRoom}
+                  setActiveRoom={setActiveRoom}
+                  getRoomClass={getRoomClass}
+                  inspectionData={inspectionData}
+                  currentRoomData={currentRoomData}
+                  getFieldClass={getFieldClass}
+                  handleChange={handleChange}
+                  handleImageUpload={handleImageUpload}
+                  handleImageDelete={handleImageDelete}
+                  isFinalSubmitEnabled={isFinalSubmitEnabled}
+                  inspectionDatabaseData={inspectionDatabaseData}
+                  setFinalSubmit={setFinalSubmit}
+                  handleSave={handleSave}
+                  isDataSaving={isDataSaving}
+                />
+              )}
+
+              {/* Bill Inspection Section */}
               {activeInspection === "bill" && (
                 <BillInspectionSection
                   bills={bills}
                   selectedBill={selectedBill}
                   handleBillTypeClick={handleBillTypeClick}
                   getBillButtonClass={getBillButtonClass}
-                  currentBillData={billInspectionData[selectedBill?.id] || {}}
+                  currentBillData={currentBillData}
                   getBillFieldClass={getBillFieldClass}
                   amount={amount}
                   setAmount={setAmount}
@@ -807,141 +769,9 @@ const AddInspection = () => {
                 />
               )}
 
-              {/* Fixture Inspection Section */}
-              {activeInspection === "fixture" && (
-                <div>
-                  {/* Room Selection */}
-                  {!selectedRoom && (
-                    <div className="room-buttons">
-                      <h3>Select Room for Inspection</h3>
-                      <div className="rooms-grid">
-                        {rooms.map((room) => (
-                          <button
-                            key={room.id}
-                            onClick={() => handleRoomSelect(room)}
-                            className={getRoomButtonClass(room)}
-                          >
-                            <div className="room_name">{room.roomName}</div>
-                            <div className="status-indicator">
-                              {fixturesByRoom[room.id]?.length > 0 && (
-                                <span>
-                                  {fixturesByRoom[room.id].filter(f => {
-                                    const data = fixtureInspectionData[f.id] || {};
-                                    return data.status && data.remark && data.images?.length > 0;
-                                  }).length} / {fixturesByRoom[room.id].length}
-                                </span>
-                              )}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Room Inspection Form */}
-                  {selectedRoom && !selectedFixture && (
-                    <div className="room-inspection-form">
-                      <div className="back-button" onClick={() => setSelectedRoom(null)}>
-                        &larr; Back to Rooms
-                      </div>
-                      <h3>Inspecting {selectedRoom.roomName}</h3>
-                      
-                      {/* Tenant Allowance Field */}
-                      <div className="form-field">
-                        <label>Tenant Allows Inspection</label>
-                        <div className="radio-group">
-                          <label>
-                            <input
-                              type="radio"
-                              value="yes"
-                              checked={tenantAllowsInspection === true}
-                              onChange={() => {
-                                setTenantAllowsInspection(true);
-                                saveTenantAllowance();
-                              }}
-                            />
-                            Yes
-                          </label>
-                          <label>
-                            <input
-                              type="radio"
-                              value="no"
-                              checked={tenantAllowsInspection === false}
-                              onChange={() => {
-                                setTenantAllowsInspection(false);
-                                saveTenantAllowance();
-                              }}
-                            />
-                            No
-                          </label>
-                        </div>
-                      </div>
-
-                      {tenantAllowsInspection && (
-                        <>
-                          {/* Fixture Selection Dropdown */}
-                          <div className="form-field">
-                            <label>Select Fixture</label>
-                            <select
-                              value={selectedFixture?.id || ""}
-                              onChange={(e) => {
-                                const fixtureId = e.target.value;
-                                if (fixtureId) {
-                                  const fixture = selectedRoomFixtures.find(f => f.id === fixtureId);
-                                  setSelectedFixture(fixture);
-                                }
-                              }}
-                            >
-                              <option value="">Select a fixture</option>
-                              {selectedRoomFixtures.map(fixture => (
-                                <option key={fixture.id} value={fixture.id}>
-                                  {fixture.name}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-
-                          {/* Fixture List for the Room */}
-                          <div className="fixture-buttons">
-                            <h4>Fixtures in {selectedRoom.roomName}</h4>
-                            {selectedRoomFixtures.map((fixture) => (
-                              <button
-                                key={fixture.id}
-                                onClick={() => setSelectedFixture(fixture)}
-                                className={getFixtureButtonClass(fixture)}
-                              >
-                                <div className="room_name">{fixture.name}</div>
-                                <div className="status-indicator">
-                                  {fixtureInspectionData[fixture.id]?.status ? "Completed" : "Not Started"}
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Fixture Inspection Form */}
-                  {selectedRoom && selectedFixture && (
-                    <FixtureInspectionForm
-                      fixture={selectedFixture}
-                      fixtureData={fixtureInspectionData[selectedFixture.id] || {}}
-                      getFixtureFieldClass={getFixtureFieldClass}
-                      handleFixtureChange={handleFixtureChange}
-                      handleImageUpload={handleImageUpload}
-                      handleImageDelete={handleImageDelete}
-                      onBack={() => setSelectedFixture(null)}
-                      onSave={handleSave}
-                      isSaving={isDataSaving}
-                    />
-                  )}
-                </div>
-              )}
-
               {/* Final Submit Button */}
               {inspectionDatabaseData &&
-                inspectionDatabaseData.fixtureInspectionDone &&
+                inspectionDatabaseData.layoutInspectionDone &&
                 inspectionDatabaseData.allBillInspectionComplete && (
                   <div className="bottom_fixed_button">
                     <div className="next_btn_back">
@@ -985,102 +815,141 @@ const AddInspection = () => {
 };
 
 // Extracted components for better organization
-const FixtureInspectionForm = ({
-  fixture,
-  fixtureData,
-  getFixtureFieldClass,
-  handleFixtureChange,
+const LayoutInspectionSection = ({
+  rooms,
+  activeRoom,
+  setActiveRoom,
+  getRoomClass,
+  inspectionData,
+  currentRoomData,
+  getFieldClass,
+  handleChange,
   handleImageUpload,
   handleImageDelete,
-  onBack,
-  onSave,
-  isSaving
+  isFinalSubmitEnabled,
+  inspectionDatabaseData,
+  setFinalSubmit,
+  handleSave,
+  isDataSaving
 }) => (
-  <div>
-    <div className="back-button" onClick={onBack}>
-      &larr; Back to {fixture.roomName}
+  <>
+    <div className="room-buttons">
+      {rooms.map((room) => (
+        <RoomButton
+          key={room.id}
+          room={room}
+          isActive={activeRoom === room.id}
+          roomClass={getRoomClass(room.id)}
+          onClick={() => setActiveRoom(room.id)}
+        />
+      ))}
     </div>
-    <h3>Inspecting {fixture.name} in {fixture.roomName}</h3>
-    
-    <form className="add_inspection_form">
-      <div className="aai_form">
-        <div className="row row_gap_20">
-          <div className="col-xl-4 col-md-6">
-            <div className={`form_field w-100 ${getFixtureFieldClass(fixture.id, "status")}`}>
-              <h6>Fixture Status*</h6>
-              <select
-                value={fixtureData.status || ""}
-                onChange={(e) => handleFixtureChange(fixture.id, "status", e.target.value)}
-                className="w-100"
-              >
-                <option value="">Select Status</option>
-                <option value="working">Working</option>
-                <option value="not-working">Not Working</option>
-                <option value="good">Good Condition</option>
-                <option value="not-good">Not Good Condition</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="col-xl-8 col-md-6">
-            <div className={`form_field w-100 ${getFixtureFieldClass(fixture.id, "remark")}`}>
-              <h6>Remark*</h6>
-              <textarea
-                placeholder="Enter remarks about this fixture"
-                value={fixtureData.remark || ""}
-                className="w-100"
-                onChange={(e) => handleFixtureChange(fixture.id, "remark", e.target.value)}
-                rows={4}
+    <div className="vg22"></div>
+    {activeRoom && (
+      <div>
+        <form className="add_inspection_form">
+          <div className="aai_form">
+            <div className="row row_gap_20">
+              <InspectionField
+                field="isAllowForInspection"
+                label="Tenant Allowed for Inspection*"
+                value={currentRoomData.isAllowForInspection}
+                onChange={(value) => handleChange(activeRoom, "isAllowForInspection", value)}
+                type="radio"
+                options={["yes", "no"]}
+                fieldClass={getFieldClass(activeRoom, "isAllowForInspection")}
               />
-            </div>
-          </div>
 
-          <div className="col-12">
-            <div className={`form_field w-100 ${getFixtureFieldClass(fixture.id, "images")}`}>
-              <h6>Upload images* <span>(A minimum of 1 and a maximum of 10 images can be uploaded.)</span></h6>
-              <div className="add_and_images">
-                {fixtureData.images?.map((image, index) => (
-                  <div key={index} className="uploaded_images relative">
-                    <img src={image.url} alt="Uploaded" />
-                    <div className="trash_icon">
-                      <FaTrash size={14} color="red" onClick={() => handleImageDelete(fixture.id, image)} />
-                    </div>
-                  </div>
-                ))}
-                {(fixtureData.images?.length || 0) < 10 && (
-                  <div>
-                    <div
-                      onClick={() => document.getElementById(`file-input-${fixture.id}`).click()}
-                      className="add_icon"
-                    >
-                      <FaPlus size={24} color="#555" />
-                    </div>
-                    <input
-                      type="file"
-                      id={`file-input-${fixture.id}`}
-                      style={{ display: "none" }}
-                      multiple
-                      onChange={(e) => handleImageUpload(e, fixture.id)}
-                    />
-                  </div>
-                )}
-              </div>
+              {currentRoomData.isAllowForInspection === "yes" && (
+                <>
+                 <InspectionField
+  field="seepage"
+  label="Seepage*"
+  value={currentRoomData.seepage}
+  onChange={(value) => handleChange(activeRoom, "seepage", value)}
+  type="radio"
+  options={["yes", "no"]}
+  fieldClass={getFieldClass(activeRoom, "seepage")}
+  remarkField="seepageRemark"
+  remarkValue={currentRoomData.seepageRemark}
+  onRemarkChange={(value) => handleChange(activeRoom, "seepageRemark", value)}
+  showRemark={currentRoomData.seepage === "yes"}
+  required={true} // Add this line
+/>
+
+<InspectionField
+  field="termites"
+  label="Termites*"
+  value={currentRoomData.termites}
+  onChange={(value) => handleChange(activeRoom, "termites", value)}
+  type="radio"
+  options={["yes", "no"]}
+  fieldClass={getFieldClass(activeRoom, "termites")}
+  remarkField="termitesRemark"
+  remarkValue={currentRoomData.termitesRemark}
+  onRemarkChange={(value) => handleChange(activeRoom, "termitesRemark", value)}
+  showRemark={currentRoomData.termites === "yes"}
+  required={true} // Add this line
+/>
+
+<InspectionField
+  field="otherIssue"
+  label="Other Issue*"
+  value={currentRoomData.otherIssue}
+  onChange={(value) => handleChange(activeRoom, "otherIssue", value)}
+  type="radio"
+  options={["yes", "no"]}
+  fieldClass={getFieldClass(activeRoom, "otherIssue")}
+  remarkField="otherIssueRemark"
+  remarkValue={currentRoomData.otherIssueRemark}
+  onRemarkChange={(value) => handleChange(activeRoom, "otherIssueRemark", value)}
+  showRemark={currentRoomData.otherIssue === "yes"}
+  required={true} // Add this line
+/>
+
+                  <InspectionField
+                    field="cleanRemark"
+                    label="Cleaning Remark*"
+                    value={currentRoomData.cleanRemark}
+                    onChange={(value) => handleChange(activeRoom, "cleanRemark", value)}
+                    type="textarea"
+                    fieldClass={getFieldClass(activeRoom, "cleanRemark")}
+                  />
+                </>
+              )}
+
+              <InspectionField
+                field="generalRemark"
+                label={`General Remark${currentRoomData.isAllowForInspection === "yes" ? "" : "*"}`}
+                value={currentRoomData.generalRemark}
+                onChange={(value) => handleChange(activeRoom, "generalRemark", value)}
+                type="textarea"
+                fieldClass={currentRoomData.isAllowForInspection === "yes" ? "filled" : getFieldClass(activeRoom, "generalRemark")}
+              />
+
+              {currentRoomData.isAllowForInspection === "yes" && (
+                <ImageUploadSection
+                  roomId={activeRoom}
+                  images={currentRoomData.images || []}
+                  handleImageUpload={handleImageUpload}
+                  handleImageDelete={handleImageDelete}
+                  fieldClass={getFieldClass(activeRoom, "image")}
+                />
+              )}
             </div>
           </div>
-        </div>
+        </form>
+        <SaveButtons
+          isFinalSubmitEnabled={isFinalSubmitEnabled}
+          inspectionDatabaseData={inspectionDatabaseData}
+          setFinalSubmit={setFinalSubmit}
+          handleSave={handleSave}
+          isSaving={isDataSaving}
+          saveText="Save Inspection"
+        />
       </div>
-    </form>
-
-    <div className="save-buttons">
-      <button
-        className="theme_btn no_icon btn_fill"
-        onClick={onSave}
-        disabled={isSaving}
-      >
-        {isSaving ? "Saving..." : "Save Fixture Inspection"}
-      </button>
-    </div>
-  </div>
+    )}
+  </>
 );
 
 const BillInspectionSection = ({
@@ -1126,7 +995,7 @@ const BillInspectionSection = ({
             <div className="row row_gap_20">
               <BillField
                 field="amount"
-                label="Amount*"
+                label="Due Amount*"
                 value={amount}
                 onChange={setAmount}
                 type="number"
@@ -1166,21 +1035,192 @@ const BillInspectionSection = ({
 );
 
 // Helper components
-const BillButton = ({ bill, isActive, buttonClass, onClick }) => (
-  <button onClick={onClick} className={buttonClass}>
+const RoomButton = ({ room, isActive, roomClass, onClick }) => (
+  <button onClick={onClick} className={roomClass}>
     <div className="active_hand">
-      {/* SVG icon yahan aayega */}
+    <img src="/img1" alt="" />
     </div>
     <div className="icon_text">
       <div className="btn_icon">
         <div className="bi_icon add">
-          {/* Add icon SVG */}
+         <img src="/img1" alt="" />
         </div>
         <div className="bi_icon half">
-          {/* Half icon SVG */}
+        <img src="/img1" alt="" />
         </div>
         <div className="bi_icon full">
-          {/* Full icon SVG */}
+      <img src="/img1" alt="" />
+        </div>
+        <div className="bi_icon notallowed">
+          <img src="/img1" alt="" />
+        </div>
+      </div>
+      <div className="btn_text">
+        <h6 className="add">Start</h6>
+        <h6 className="half">In Progress</h6>
+        <h6 className="full">Completed</h6>
+        <h6 className="notallowed">Not Allowed</h6>
+      </div>
+    </div>
+    <div className="room_name">{room.roomName}</div>
+  </button>
+);
+
+const InspectionField = ({
+  field,
+  label,
+  value,
+  onChange,
+  type,
+  options,
+  fieldClass,
+  remarkField,
+  remarkValue,
+  onRemarkChange,
+  showRemark,
+  required // Add this prop to indicate if field is required
+}) => {
+  // Check if remark field should show validation
+  const shouldValidateRemark = showRemark && required;
+  const remarkFieldClass = shouldValidateRemark && (!remarkValue || remarkValue.trim() === "") 
+    ? "notfilled" 
+    : "filled";
+
+  return (
+    <div className="col-xl-3 col-md-6">
+      <div className={`form_field w-100 ${fieldClass}`} style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
+        <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
+          {label}
+        </h6>
+        <div className="field_box theme_radio_new">
+          {type === "radio" ? (
+            <div className="theme_radio_container">
+              {options.map(option => (
+                <div key={option} className="radio_single">
+                  <input
+                    type="radio"
+                    name={`${field}-${option}`}
+                    id={`${field}-${option}`}
+                    value={option}
+                    checked={value === option}
+                    onChange={(e) => onChange(e.target.value)}
+                  />
+                  <label htmlFor={`${field}-${option}`}>
+                    {option.charAt(0).toUpperCase() + option.slice(1)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <textarea
+              style={type === "textarea" ? { minHeight: "104px" } : {}}
+              placeholder={label}
+              value={value || ""}
+              className="w-100"
+              onChange={(e) => onChange(e.target.value)}
+            />
+          )}
+          
+          {showRemark && (
+            <>
+              <div className="vg12"></div>
+              <textarea
+                placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)} Remark*`}
+                value={remarkValue || ""}
+                className={`w-100 ${remarkFieldClass}`} // Apply validation class here
+                onChange={(e) => onRemarkChange(e.target.value)}
+              />
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ImageUploadSection = ({ roomId, images, handleImageUpload, handleImageDelete, fieldClass }) => (
+  <div className="col-12">
+    <div className={`form_field w-100 ${fieldClass}`} style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
+      <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
+        Upload images* <span style={{ fontSize: "13px" }}>(A minimum of 1 and a maximum of 10 images can be uploaded.)</span>
+      </h6>
+      <div className="add_and_images">
+        {images.map((image, index) => (
+          <div key={index} className="uploaded_images relative">
+            <img src={image.url} alt="Uploaded" />
+            <div className="trash_icon">
+              <FaTrash size={14} color="red" onClick={() => handleImageDelete(roomId, image)} />
+            </div>
+          </div>
+        ))}
+        {(images.length || 0) < 10 && (
+          <div>
+            <div
+              onClick={() => document.getElementById(`file-input-${roomId}`).click()}
+              className="add_icon"
+            >
+              <FaPlus size={24} color="#555" />
+            </div>
+            <input
+              type="file"
+              id={`file-input-${roomId}`}
+              style={{ display: "none" }}
+              multiple
+              onChange={(e) => handleImageUpload(e, roomId)}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+const SaveButtons = ({ isFinalSubmitEnabled, inspectionDatabaseData, setFinalSubmit, handleSave, isSaving, saveText }) => (
+  <div className="bottom_fixed_button" style={{ zIndex: "1000" }}>
+    <div className="next_btn_back">
+      {inspectionDatabaseData &&
+        inspectionDatabaseData.layoutInspectionDone &&
+        inspectionDatabaseData.allBillInspectionComplete && (
+          <button
+            className="theme_btn no_icon btn_fill2 full_width"
+            onClick={() => setFinalSubmit(true)}
+            disabled={!isFinalSubmitEnabled()}
+            style={{
+              opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+              cursor: !isFinalSubmitEnabled() ? "not-allowed" : "pointer",
+            }}
+          >
+            Final Submit
+          </button>
+        )}
+
+      <button
+        className="theme_btn no_icon btn_fill full_width"
+        onClick={handleSave}
+        disabled={isSaving}
+        style={{ opacity: isSaving ? "0.5" : "1" }}
+      >
+        {isSaving ? "Saving...." : saveText}
+      </button>
+    </div>
+  </div>
+);
+
+const BillButton = ({ bill, isActive, buttonClass, onClick }) => (
+  <button onClick={onClick} className={buttonClass}>
+    <div className="active_hand">
+    <img src="/img1" alt="" />
+    </div>
+    <div className="icon_text">
+      <div className="btn_icon">
+        <div className="bi_icon add">
+          <img src="/img1" alt="" />
+        </div>
+        <div className="bi_icon half">
+         <img src="/img1" alt="" />
+        </div>
+        <div className="bi_icon full">
+        <img src="/img1" alt="" />
         </div>
       </div>
       <div className="btn_text">
@@ -1223,8 +1263,10 @@ const BillInfoSection = ({ bill }) => (
 
 const BillField = ({ field, label, value, onChange, type, fieldClass }) => (
   <div className="col-xl-3 col-md-6">
-    <div className={`form_field w-100 ${fieldClass}`}>
-      <h6>{label}</h6>
+    <div className={`form_field w-100 ${fieldClass}`} style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
+      <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
+        {label}
+      </h6>
       <div className="field_box theme_radio_new">
         {type === "textarea" ? (
           <textarea
@@ -1250,8 +1292,10 @@ const BillField = ({ field, label, value, onChange, type, fieldClass }) => (
 
 const BillImageUpload = ({ billId, imageUrl, handleBillImageUpload, handleBillImageDelete }) => (
   <div className="col-12">
-    <div className="form_field w-100">
-      <h6>Upload bill image</h6>
+    <div className="form_field w-100" style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
+      <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
+        Upload bill image if any
+      </h6>
       <div className="image_upload_container">
         {imageUrl ? (
           <div className="image_preview">
@@ -1293,37 +1337,6 @@ const BillImageUpload = ({ billId, imageUrl, handleBillImageUpload, handleBillIm
           </>
         )}
       </div>
-    </div>
-  </div>
-);
-
-const SaveButtons = ({ isFinalSubmitEnabled, inspectionDatabaseData, setFinalSubmit, handleSave, isSaving, saveText }) => (
-  <div className="bottom_fixed_button" style={{ zIndex: "1000" }}>
-    <div className="next_btn_back">
-      {inspectionDatabaseData &&
-        inspectionDatabaseData.fixtureInspectionDone &&
-        inspectionDatabaseData.allBillInspectionComplete && (
-          <button
-            className="theme_btn no_icon btn_fill2 full_width"
-            onClick={() => setFinalSubmit(true)}
-            disabled={!isFinalSubmitEnabled()}
-            style={{
-              opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
-              cursor: !isFinalSubmitEnabled() ? "not-allowed" : "pointer",
-            }}
-          >
-            Final Submit
-          </button>
-        )}
-
-      <button
-        className="theme_btn no_icon btn_fill full_width"
-        onClick={handleSave}
-        disabled={isSaving}
-        style={{ opacity: isSaving ? "0.5" : "1" }}
-      >
-        {isSaving ? "Saving...." : saveText}
-      </button>
     </div>
   </div>
 );

@@ -642,7 +642,7 @@ const InspectionDetails = () => {
                         <div className="top">
                           <div className="i_single">
                             <h6>Seepage</h6>
-                            <h5 className={room.seepage.toLowerCase()}>
+                            <h5 className={room?.seepage?.toLowerCase()}>
                               {room.seepage}
                             </h5>
                             <p>
@@ -652,7 +652,7 @@ const InspectionDetails = () => {
                           </div>
                           <div className="i_single">
                             <h6>Termites</h6>
-                            <h5 className={room.termites.toLowerCase()}>
+                            <h5 className={room?.termites?.toLowerCase()}>
                               {room.termites}
                             </h5>
 
@@ -665,7 +665,7 @@ const InspectionDetails = () => {
                           </div>
                           <div className="i_single">
                             <h6>Other Issues</h6>
-                            <h5 className={room.otherIssue.toLowerCase()}>
+                            <h5 className={room?.otherIssue?.toLowerCase()}>
                               {room.otherIssue}
                             </h5>
                             <p>

@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
+// old code without deepseek 
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate, Link} from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { useAuthContext } from "../../../hooks/useAuthContext";
-import { projectFirestore, timestamp } from "../../../firebase/config";
-import firebase from "firebase";
-import { projectStorage } from "../../../firebase/config";
-import { useCallback } from "react";
+import { projectFirestore, timestamp, projectStorage } from "../../../firebase/config";
+import firebase from 'firebase/compat/app';
 import { useDocument } from "../../../hooks/useDocument";
 import imageCompression from "browser-image-compression";
-import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash, FaRetweet } from "react-icons/fa";
 import { BarLoader, ClipLoader } from "react-spinners";
 import ScrollToTop from "../../../components/ScrollToTop";
 import PropertySummaryCard from "../../property/PropertySummaryCard";
+
 const AddInspection = () => {
   const { inspectionId } = useParams();
   const navigate = useNavigate();
@@ -192,73 +189,90 @@ const AddInspection = () => {
     return () => unsubscribe();
   }, [propertyId]);
 
-  const handleImageUpload = async (e, roomId) => {
-    const file = e.target.files[0];
-    if (!file) return;
+const handleImageUpload = async (e, roomId) => {
+  const files = Array.from(e.target.files);
+  if (files.length === 0) return;
 
-    // Allowed image formats
+  // Get current images count to avoid exceeding 10
+  const existingCount = inspectionData[roomId]?.images?.length || 0;
+  const remainingSlots = 10 - existingCount;
+
+  // Only allow up to 10 images total
+  const validFiles = files.slice(0, remainingSlots);
+
+  for (const file of validFiles) {
     const allowedTypes = ["image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) {
       alert("Only JPG and PNG files are allowed.");
-      return;
+      continue;
     }
 
     setImageActionStatus("uploading");
 
     try {
-      // Image Compression Settings
       const options = {
-        maxSizeMB: 0.2, // Maximum size 200KB
-        maxWidthOrHeight: 1024, // Resize if necessary
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 1024,
         useWebWorker: true,
       };
 
-      // Compress Image
       const compressedFile = await imageCompression(file, options);
 
-      // Upload Process
       const storageRef = projectStorage.ref(
         `inspection_images/${inspectionId}/${roomId}/${compressedFile.name}`
       );
       const uploadTask = storageRef.put(compressedFile);
 
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadProgress((prev) => ({ ...prev, [file.name]: progress }));
-        },
-        (error) => {
-          console.error("Error uploading image:", error);
-          setImageActionStatus(null);
-        },
-        async () => {
-          try {
-            const url = await storageRef.getDownloadURL();
-            setInspectionData((prev) => ({
+      await new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setUploadProgress((prev) => ({
               ...prev,
-              [roomId]: {
-                ...prev[roomId],
-                images: [
-                  ...(prev[roomId]?.images || []),
-                  { url, name: compressedFile.name },
-                ],
-              },
+              [file.name]: progress,
             }));
-            setUploadProgress((prev) => ({ ...prev, [file.name]: 100 })); // Mark upload as complete
-          } catch (error) {
-            console.error("Error getting download URL:", error);
-          } finally {
+          },
+          (error) => {
+            console.error("Upload error:", error);
             setImageActionStatus(null);
+            reject(error);
+          },
+          async () => {
+            try {
+              const url = await storageRef.getDownloadURL();
+              setInspectionData((prev) => ({
+                ...prev,
+                [roomId]: {
+                  ...prev[roomId],
+                  images: [
+                    ...(prev[roomId]?.images || []),
+                    { url, name: compressedFile.name },
+                  ],
+                },
+              }));
+              setUploadProgress((prev) => ({
+                ...prev,
+                [file.name]: 100,
+              }));
+              resolve();
+            } catch (error) {
+              console.error("Download URL error:", error);
+              reject(error);
+            } finally {
+              setImageActionStatus(null);
+            }
           }
-        }
-      );
+        );
+      });
     } catch (error) {
-      console.error("Image compression error:", error);
-      setShow(false); // Stop uploading state if compression fails
+      console.error("Compression error:", error);
+      setImageActionStatus(null);
     }
-  };
+  }
+};
+
 
   const handleImageDelete = async (roomId, image) => {
     setImageActionStatus("deleting");
@@ -1892,14 +1906,14 @@ const AddInspection = () => {
                                       >
                                         <FaPlus size={24} color="#555" />
                                       </div>
-                                      <input
-                                        type="file"
-                                        id={`file-input-${activeRoom}`}
-                                        style={{ display: "none" }}
-                                        onChange={(e) =>
-                                          handleImageUpload(e, activeRoom)
-                                        }
-                                      />
+                                     <input
+  type="file"
+  id={`file-input-${activeRoom}`}
+  style={{ display: "none" }}
+  multiple // 👈 Add this line
+  onChange={(e) => handleImageUpload(e, activeRoom)}
+/>
+
                                     </div>
                                     )}
                                   </div>

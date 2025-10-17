@@ -17,7 +17,7 @@ export default function MasterSocietyList() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
-  
+
   const { user } = useAuthContext();
   const { camelCase } = useCommon();
   const { addDocument, response } = useFirestore("m_societies");
@@ -26,7 +26,7 @@ export default function MasterSocietyList() {
   //Master Data Loading Initialisation - Start
   const { documents: masterCountry, error: masterCountryerror } = useCollection("m_countries", "", ["country", "asc"]);
   const { documents: masterState, error: masterStateError } = useCollection(
-    "m_states", 
+    "m_states",
     ["country", "==", "_india"],
     ["state", "asc"]
   );
@@ -94,7 +94,7 @@ export default function MasterSocietyList() {
     setCity(null);
     setLocality(null);
     setfilteredSocietyData(null);
-    
+
     // Cleanup previous listeners
     if (citiesListenerRef.current) {
       citiesListenerRef.current();
@@ -105,7 +105,7 @@ export default function MasterSocietyList() {
     if (societiesListenerRef.current) {
       societiesListenerRef.current();
     }
-    
+
     if (option && option.value) {
       // Load cities only for selected state with real-time listener
       setupCitiesRealTimeListener(option.value);
@@ -135,7 +135,7 @@ export default function MasterSocietyList() {
         } else {
           setCityOptions([{ label: "Select City", value: "" }]);
         }
-        
+
         // Reset locality
         setLocalityOptions([{ label: "Select Locality", value: "" }]);
         setCity(null);
@@ -153,7 +153,7 @@ export default function MasterSocietyList() {
     setCity(option);
     setLocality(null);
     setfilteredSocietyData(null);
-    
+
     // Cleanup previous listeners
     if (localitiesListenerRef.current) {
       localitiesListenerRef.current();
@@ -161,7 +161,7 @@ export default function MasterSocietyList() {
     if (societiesListenerRef.current) {
       societiesListenerRef.current();
     }
-    
+
     if (option && option.value) {
       // Load localities only for selected city with real-time listener
       setupLocalitiesRealTimeListener(option.value);
@@ -175,6 +175,7 @@ export default function MasterSocietyList() {
     const ref = projectFirestore
       .collection("m_localities")
       .where("city", "==", cityId)
+       .where("status", "==", "active") 
       .orderBy("locality", "asc");
 
     localitiesListenerRef.current = ref.onSnapshot(
@@ -190,7 +191,7 @@ export default function MasterSocietyList() {
         } else {
           setLocalityOptions([{ label: "Select Locality", value: "" }]);
         }
-        
+
         setLocality(null);
       },
       (error) => {
@@ -203,12 +204,12 @@ export default function MasterSocietyList() {
 
   const handleLocalityChange = async (option) => {
     setLocality(option);
-    
+
     // Cleanup previous society listener
     if (societiesListenerRef.current) {
       societiesListenerRef.current();
     }
-    
+
     if (option && option.value) {
       // Setup real-time listener for societies
       setupSocietiesRealTimeListener(option.value);
@@ -249,7 +250,7 @@ export default function MasterSocietyList() {
     { id: "residential", value: "Residential", label: "Residential" },
     { id: "commercial", value: "Commercial", label: "Commercial" },
     { id: "both", value: "Both", label: "Both" },
-  ]; 
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -279,11 +280,11 @@ export default function MasterSocietyList() {
             society: societyname,
             category: selectedCategory,
           };
-          
+
           await updateDocument(currentDocid, dataSet);
           setFormErrorType("success_msg");
           setFormError("Successfully updated");
-          
+
           // Form reset after successful update
           if (!handleAddSectionFlag) {
             setSociety("");
@@ -321,7 +322,7 @@ export default function MasterSocietyList() {
           setFormErrorType("success_msg");
           setFormError("Successfully added");
           setSociety("");
-          
+
           // Society automatically appear in the list due to real-time listener
         } else {
           setFormErrorType("error_msg");
@@ -379,7 +380,7 @@ export default function MasterSocietyList() {
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
   };
-  
+
   // Filter societies based on search input
   const filteredSocieties = filteredSocietyData ? filteredSocietyData.filter(society => {
     if (!searchInput) return true;
@@ -393,7 +394,7 @@ export default function MasterSocietyList() {
   const nineDotsAdminMenu = [
     { title: "Society's List", link: "/societylist", icon: "home" },
   ];
-  
+
   const nineDotsMenu = [
     { title: "State's List", link: "/statelist", icon: "map" },
     { title: "Locality's List", link: "/localitylist", icon: "holiday_village" },
@@ -431,9 +432,9 @@ export default function MasterSocietyList() {
               <img src="/assets/img/icons/excel_logo.png" alt="propdial" className="excel_dowanload" />
             </div>
           </div>
-          
+
           <div className="vg12"></div>
-          
+
           <div className="filters">
             <div className="left" style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "15px" }}>
               {/* State Select */}
@@ -513,7 +514,7 @@ export default function MasterSocietyList() {
                 </div>
               </div>
             </div>
-            
+
             <div className="right">
               <div className="button_filter diff_views">
                 <div className={`bf_single ${viewMode === "card_view" ? "active" : ""}`} onClick={() => handleModeChange("card_view")}>
@@ -523,10 +524,12 @@ export default function MasterSocietyList() {
                   <span className="material-symbols-outlined">view_list</span>
                 </div>
               </div>
-              
-              <div onClick={handleAddSection} className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"}`}>
-                {handleAddSectionFlag ? "Cancel" : "Add New"}
-              </div>
+
+              {user?.role === "superAdmin" && (
+                <div onClick={handleAddSection} className={`theme_btn no_icon header_btn ${handleAddSectionFlag ? "btn_border" : "btn_fill"}`}>
+                  {handleAddSectionFlag ? "Cancel" : "Add New"}
+                </div>
+              )}
             </div>
           </div>
 
@@ -543,7 +546,7 @@ export default function MasterSocietyList() {
             transition: "all 0.3s ease-in-out"
           }}>
             <form>
-              <div className="row row_gap form_full">               
+              <div className="row row_gap form_full">
                 <div className="col-xl-4 col-lg-6">
                   <div className="form_field label_top">
                     <label htmlFor="">Society Name</label>
@@ -558,7 +561,7 @@ export default function MasterSocietyList() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="col-xl-4 col-lg-6">
                   <div className="form_field st-2 label_top">
                     <label htmlFor="">Category</label>
@@ -582,7 +585,7 @@ export default function MasterSocietyList() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="vg22"></div>
 
               <div className="btn_and_msg_area">
@@ -601,7 +604,7 @@ export default function MasterSocietyList() {
               </div>
             </form>
           </div>
-          
+
           <div className="vg22"></div>
 
           {/* Results Section */}
@@ -632,7 +635,7 @@ export default function MasterSocietyList() {
                     const countryName = masterCountry?.find((e) => e.id === data.country)?.country;
 
                     const url = `/${slugify(countryName || "")}/${slugify(stateName || "")}/${slugify(cityName || "")}/${slugify(localityName || "")}/${slugify(data.society || "")}/${data.id}`;
-                    
+
                     return (
                       <div className="property-status-padding-div" key={data.id}>
                         <div className="profile-card-div" style={{ position: "relative" }}>
@@ -642,25 +645,47 @@ export default function MasterSocietyList() {
                             </div>
                             <div className="address-text">
                               <div
-                                onClick={() => handleEditCard(data.id, data.country, data.state, data.city, data.locality, data.society, data.category || "Residential")}
+                                onClick={
+                                  user?.role === "superAdmin"
+                                    ? () =>
+                                      handleEditCard(
+                                        data.id,
+                                        data.country,
+                                        data.state,
+                                        data.city,
+                                        data.locality,
+                                        data.society,
+                                        data.category || "Residential"
+                                      )
+                                    : undefined // agar superAdmin nahi hai to click disabled
+                                }
                                 style={{ width: "80%", height: "170%", textAlign: "left", display: "flex", justifyContent: "center", flexDirection: "column", transform: "translateY(-7px)", cursor: "pointer" }}
                               >
                                 <h5 style={{ margin: "0", transform: "translateY(5px)" }}>
-                                  {data.society} <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" /></svg>
+                                  {data.society}
+
+                                  {user?.role === "superAdmin" && (
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#00a8a8"><path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" /></svg>
+                                  )}
+
                                 </h5>
                                 <small style={{ margin: "0", transform: "translateY(5px)" }}>
                                   {localityName}, {cityName}, {stateName}, {countryName}
                                 </small>
                               </div>
                               <div
-                                onClick={() => handleChangeStatus(data.id, data.status)}
+                                onClick={
+                                  user?.role === "superAdmin"
+                                    ? () => handleChangeStatus(data.id, data.status)
+                                    : undefined
+                                }
                                 style={{ width: "20%", height: "calc(100% - -20px)", position: "relative", top: "-8px", display: "flex", alignItems: "center", justifyContent: "flex-end", cursor: "pointer" }}
                               >
-                                <small style={{ 
-                                  margin: "0", 
-                                  background: data.status === "active" ? "var(--theme-green2)" : "var(--theme-red)", 
-                                  color: "#fff", 
-                                  padding: "3px 10px 3px 10px", 
+                                <small style={{
+                                  margin: "0",
+                                  background: data.status === "active" ? "var(--theme-green2)" : "var(--theme-red)",
+                                  color: "#fff",
+                                  padding: "3px 10px 3px 10px",
                                   borderRadius: "4px",
                                   cursor: "pointer"
                                 }}>
@@ -669,11 +694,11 @@ export default function MasterSocietyList() {
                               </div>
                             </div>
                           </div>
-                          
+
                           <Link to={url} state={{ societyId: data.id }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", borderTop: "1px solid #d4d0d0ff", padding: "5px 0px" }}>
                               <small style={{ margin: "0", cursor: "pointer", color: "var(--theme-green)", fontWeight: "500" }}>
-                                View Detail <span style={{ fontSize: "14px", fontWeight: "800" }}>→</span>  
+                                View Detail <span style={{ fontSize: "14px", fontWeight: "800" }}>→</span>
                               </small>
                             </div>
                           </Link>
@@ -683,7 +708,7 @@ export default function MasterSocietyList() {
                   })}
                 </>
               )}
-              
+
               {viewMode === "table_view" && (
                 <MasterSocietyTable filterData={filteredSocieties} handleEditCard={handleEditCard} />
               )}
@@ -694,3 +719,5 @@ export default function MasterSocietyList() {
     </>
   );
 }
+
+

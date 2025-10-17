@@ -475,7 +475,7 @@ const ViewInspections = () => {
                       <h5 className="text_blue text-center">
                         Select Inspection Type
                       </h5>
-                    
+
                       {/* <div className="inspection_types">
                         {["Regular", "Move-In", "Move-Out", "Full", "Issue Based"].map(
                           (type) => (
@@ -484,13 +484,12 @@ const ViewInspections = () => {
                               onClick={() =>
                                 lastInspections[type]
                                   ? navigate(
-                                      `/add-inspection/${lastInspections[type].id}`
-                                    )
+                                    `/add-inspection/${lastInspections[type].id}`
+                                  )
                                   : handleAddInspection(type)
                               }
-                              className={`it_single ${
-                                lastInspections[type] ? "disabled" : ""
-                              }`}
+                              className={`it_single ${lastInspections[type] ? "disabled" : ""
+                                }`}
                             >
                               <span>
                                 {type} Inspection{" "}
@@ -516,44 +515,56 @@ const ViewInspections = () => {
                           )
                         )}
                       </div> */}
-                        {/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
-                      <div className="inspection_types">
-                        {["Regular", "Move-In", "Move-Out", "Full"].map((type) => (
-                          <div
-                            key={type}
-                            onClick={() =>
-                              type === "Regular"
-                                ? lastInspections[type]
-                                  ? navigate(`/add-inspection/${lastInspections[type].id}`)
-                                  : handleAddInspection(type)
-                                : null
-                            }
-                            className={`it_single ${type !== "Regular" ? "disabled" : ""}`}
-                            style={type !== "Regular" ? { cursor: "not-allowed", opacity: 0.6 } : {}}
-                          >
-                            <span>
-                              {type} Inspection{" "}
-                              {type === "Regular" && lastInspections[type] && (
-                                <div
-                                  style={{
-                                    color: "var(--theme-red)",
-                                    fontSize: "13px",
-                                  }}
-                                >
-                                  (Complete the last inspection first)
-                                </div>
-                              )}
-                            </span>
-                            {type !== "Regular" && (
-                              <div style={{ color: "gray", fontSize: "12px" }}>Coming Soon</div>
-                            )}
-                            <img
-                              src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
-                              alt="propdial"
-                            />
-                          </div>
-                        ))}
-                      </div>
+                      {/* plz don't delete this code, this is the code for all move in move and full inspection click  */}
+                   <div className="inspection_types">
+  {["Regular", "Full", "Move-In", "Move-Out", "Issue Based"].map((type) => (
+    <div
+      key={type}
+      onClick={() => {
+        if (type === "Regular" || type === "Full") {
+          if (lastInspections[type]) {
+            navigate(`/add-inspection/${lastInspections[type].id}`);
+          } else {
+            handleAddInspection(type);
+          }
+        }
+      }}
+      className={`it_single ${
+        type !== "Regular" && type !== "Full" ? "disabled" : ""
+      }`}
+      style={
+        type !== "Regular" && type !== "Full"
+          ? { cursor: "not-allowed", opacity: 0.6 }
+          : {}
+      }
+    >
+      <span>
+        {type} Inspection{" "}
+        {(type === "Regular" || type === "Full") &&
+          lastInspections[type] && (
+            <div
+              style={{
+                color: "var(--theme-red)",
+                fontSize: "13px",
+              }}
+            >
+              (Complete the last inspection first)
+            </div>
+          )}
+      </span>
+
+      {type !== "Regular" && type !== "Full" && (
+        <div style={{ color: "gray", fontSize: "12px" }}>Coming Soon</div>
+      )}
+
+      <img
+        src={`/assets/img/${type.toLowerCase().replace("-", "")}.png`}
+        alt="propdial"
+      />
+    </div>
+  ))}
+</div>
+
 
                     </Modal>
                   </div>
@@ -593,64 +604,6 @@ const ViewInspections = () => {
                       </div>
                     </div>
                     <div className="right">
-                      {/* <div className="user_filters new_inline">
-                        <div className="form_field">
-              <div className="field_box theme_checkbox">
-                <div
-                  className="theme_checkbox_container"
-                  style={{
-                    padding: "0px",
-                    border: "none",
-                  }}
-                >
-                 {["Regular", "Move-In", "Move-Out", "Full"].map((type) => {
-                    const count = inspections.filter(
-                      (i) => i.inspectionType === type
-                    ).length;
-                    return (
-                      <div
-                        className="radio_single"
-                        key={type}
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedInspectionTypes.includes(type)}
-                          onChange={() => toggleInspectionType(type)}
-                          id={type}
-                        />
-                        <label htmlFor={type}>
-                        {type} ({count})
-                        </label>
-                      </div>
-                     );
-                    })}
-                </div>
-              </div>
-            </div>
-
-                        <select
-                    value={selectedDateRange}
-                    onChange={(e) => setSelectedDateRange(e.target.value)}
-                  >
-                    <option value="">All Time</option>
-                    <option value="last3months">Last 3 Months</option>
-                    <option value="last6months">Last 6 Months</option>
-                    <option value="lastyear">Last 1 Year</option>
-                  </select>
-                        <div className="active-filters">
-                  <h4>Active Filters</h4>
-                  {searchTerm && <span>Search: {searchTerm}</span>}
-                  {selectedInspectionTypes.length > 0 && (
-                    <span>
-                      Inspection Types: {selectedInspectionTypes.join(", ")}
-                    </span>
-                  )}
-                  {selectedDateRange && (
-                    <span>Date Range: {selectedDateRange}</span>
-                  )}
-                </div>
-                      </div> */}
                       <div className="button_filter diff_views">
                         <div
                           className={`bf_single ${viewMode === "card_view" ? "active" : ""
@@ -701,8 +654,8 @@ const ViewInspections = () => {
                               </div>
                               <div
                                 className={`wha_call_icon ${iDoc.finalSubmit
-                                    ? "final_submit"
-                                    : "final_submit"
+                                  ? "final_submit"
+                                  : "final_submit"
                                   }`}
                               >
                                 {user && !iDoc.finalSubmit && (user.role === "admin" || user.role === "superAdmin" || isPropertyManager) && (

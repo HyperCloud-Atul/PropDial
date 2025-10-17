@@ -1402,7 +1402,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
                     </div>
                   )} */}
                 </div>
-                {user && ["admin", "superAdmin"].includes(user.role) && (
+                {user && ["admin", "superAdmin", "executive"].includes(user.role) && (
                   <button
                     className="edit-btn"
                     onClick={() => setShowEditModal(true)}
@@ -1637,7 +1637,7 @@ const SocietyDetails = ({ country, state, city, locality, societyId }) => {
             </div>
           ) : (
             <>
-              {user && ["admin", "superAdmin"].includes(user.role) ? (
+              {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
                 <button
                   className="no-details"
                   onClick={() => setShowEditModal(true)}
@@ -2715,7 +2715,7 @@ const AmenitiesSection = ({ societyId }) => {
         </div>
 
         <div className={`amenities-grid ${selectedAmenities[activeCategory]?.length > 0 ? "yes" : "no"}`}>
-          {user && ["admin", "superAdmin"].includes(user.role) ? (
+          {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
             <div className="add-amenity-card" onClick={handleAddAmenities}>
               <div className="plus-icon">
                 <FaPlus />
@@ -2746,7 +2746,7 @@ const AmenitiesSection = ({ societyId }) => {
                 </div>
               </div>
             ))
-          ) : user && ["admin", "superAdmin"].includes(user.role) ? null : (
+          ) : user && ["admin", "superAdmin", "executive"].includes(user.role) ? null : (
             <div className="no-amenities">
               {" "}
               <p>No data amenities available</p>{" "}
@@ -2969,7 +2969,7 @@ const AboutSocietySection = ({ societyId }) => {
                 </div>
               )}
 
-              {user && ["admin", "superAdmin"].includes(user.role) ? (
+              {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
                 <button
                   className="edit-btn"
                   onClick={() => setShowEditModal(true)}
@@ -3110,7 +3110,7 @@ const AboutSocietySection = ({ societyId }) => {
               <h2 className="about-title">About {societyData.society}</h2>
             </div>
 
-            {user && ["admin", "superAdmin"].includes(user.role) ? (
+            {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
               <button
                 className="no-details"
                 onClick={() => setShowEditModal(true)}
@@ -3236,7 +3236,7 @@ const SocietyRatesSection = ({ societyId }) => {
             amenities
           </p>
           {user &&
-          ["admin", "superAdmin"].includes(user.role) &&
+          ["admin", "superAdmin", "executive"].includes(user.role) &&
           (societyData.electricityRateAuthority ||
             societyData.electricityRatePowerBackup ||
             societyData.commonAreaMaintenance ||
@@ -3381,7 +3381,7 @@ const SocietyRatesSection = ({ societyId }) => {
           </>
         ) : (
           <>
-            {user && ["admin", "superAdmin"].includes(user.role) ? (
+            {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
               <button
                 className="no-details"
                 onClick={() => setShowEditModal(true)}
@@ -4031,7 +4031,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
           {images.length > 0 &&
           !editMode &&
           user &&
-          ["admin", "superAdmin"].includes(user.role) ? (
+          ["admin", "superAdmin", "executive"].includes(user.role) ? (
             <button
               className="upload-btn icon"
               title="Upload Images"
@@ -4139,7 +4139,7 @@ const GalleryPreview = ({ societyId, societyName, societyType }) => {
       ) : (
         <div className="empty-gallery">
           <p>No images uploaded yet</p>
-          {user && ["admin", "superAdmin"].includes(user.role) ? (
+          {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
             <button className="upload-btn" onClick={handleUploadClick}>
               <FaUpload /> Upload Images
             </button>
@@ -4405,7 +4405,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
           {!isEditing &&
             (nearbyLocations.length > 0 || mapLink) &&
             user &&
-            ["admin", "superAdmin"].includes(user.role) && (
+            ["admin", "superAdmin", "executive"].includes(user.role) && (
               <button className="edit-button" onClick={handleEditClick}>
                 <FaEdit />
                 Edit
@@ -4688,7 +4688,7 @@ const MapLocationSection = ({ state, city, locality, address, societyId }) => {
               </div>
             </div>
           </div>
-        ) : user && ["admin", "superAdmin"].includes(user.role) ? (
+        ) : user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
           <button className="no-details" onClick={handleEditClick}>
             <FaPlus />{" "}
             <span className="no-details-text">
@@ -4871,7 +4871,7 @@ const PropertyVideosSection = ({ societyId }) => {
           </p>
           {videos.length > 0 &&
           user &&
-          ["admin", "superAdmin"].includes(user.role) ? (
+          ["admin", "superAdmin", "executive"].includes(user.role) ? (
             <button className="edit-button" onClick={() => setShowForm(true)}>
               <FaPlus /> Add Video
             </button>
@@ -4973,7 +4973,7 @@ const PropertyVideosSection = ({ societyId }) => {
                         />
                       </>
                     )}
-                    {user && ["admin", "superAdmin"].includes(user.role) && (
+                    {user && ["admin", "superAdmin", "executive"].includes(user.role) && (
                       <button
                         className="delete-button"
                         onClick={() => handleDeleteVideo(index)}
@@ -4985,7 +4985,7 @@ const PropertyVideosSection = ({ societyId }) => {
                   <h3 className="video-title">{video.title}</h3>
                 </div>
               ))
-            ) : user && ["admin", "superAdmin"].includes(user.role) ? (
+            ) : user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
               <button className="no-details" onClick={() => setShowForm(true)}>
                 <FaPlus />{" "}
                 <span className="no-details-text">
@@ -5589,7 +5589,7 @@ const FloorPlans = ({ societyId }) => {
   };
 
 
-  const canEdit = user && ["admin", "superAdmin"].includes(user.role);
+  const canEdit = user && ["admin", "superAdmin", "executive"].includes(user.role);
 
   const filteredPlans = Array.isArray(floorPlans)
     ? floorPlans.filter(
@@ -5679,7 +5679,7 @@ const FloorPlans = ({ societyId }) => {
                               {plan.type} - {plan.bhk}
                             </h3>
                             {user &&
-                              ["admin", "superAdmin"].includes(user.role) && (
+                              ["admin", "superAdmin", "executive"].includes(user.role) && (
                                 <div className="plan-actions">
                                   <button
                                     onClick={() => openModal(plan, index)}
@@ -5810,7 +5810,7 @@ const FloorPlans = ({ societyId }) => {
               </div>
             </div>
           </>
-        ) : user && ["admin", "superAdmin"].includes(user.role) ? (
+        ) : user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
           <div className="no-details-container">
             <button className="no-details" onClick={() => openModal()}>
               <FaPlus /> <span className="no-details-text">Add New Plan</span>
@@ -6427,7 +6427,7 @@ const ContactSection = ({ societyId }) => {
 
   return (
     <>
-      {user && ["admin", "superAdmin"].includes(user.role) ? (
+      {user && ["admin", "superAdmin", "executive"].includes(user.role) ? (
         <section className="contact-section">
           <div className="container">
             <div className="section-header">
@@ -7109,7 +7109,7 @@ const SocietyLayoutSection = ({ societyId, title, subtitle }) => {
     setFullScreenMode(!fullScreenMode);
   };
 
-  const canEdit = user && ["admin", "superAdmin"].includes(user.role);
+  const canEdit = user && ["admin", "superAdmin", "executive"].includes(user.role);
 
   return (
     <>

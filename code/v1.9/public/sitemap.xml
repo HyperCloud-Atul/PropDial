@@ -11,46 +11,118 @@
 
     <!-- Important Pages -->
     <url>
-        <loc>https://propdial.in/about-us/</loc>
+        <loc>https://propdial.in/blogs</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/properties</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/about-us</loc>
         <lastmod>2025-02-28</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://propdial.in/services/</loc>
-        <lastmod>2025-02-28</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://propdial.in/property-listings/</loc>
-        <lastmod>2025-02-28</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://propdial.in/contact-us/</loc>
+        <loc>https://propdial.in/contact-us</loc>
         <lastmod>2025-02-28</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
     </url>
 
-    <!-- Example Property Pages -->
-    <url>
-        <loc>https://propdial.in/property-listings/property-1/</loc>
+       <url>
+        <loc>https://propdial.in/faq</loc>
         <lastmod>2025-02-28</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
     </url>
 
+    <!-- Blog pages -->
     <url>
-        <loc>https://propdial.in/property-listings/property-2/</loc>
+        <loc>https://propdial.in/blog/top-challenges-nri-managing-indian-properties-remotely</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/blog/definitive-guide-property-management-2025</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+
+    <url>
+        <loc>https://propdial.in/blog/property-management-companies-india</loc>
         <lastmod>2025-02-28</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.7</priority>
     </url>
+
+    <url>
+        <loc>https://propdial.in/blog/nri-property-management-services-bangalore-guide</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc> https://propdial.in/blog/can-nris-buy-property-in-india</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/blog/what-to-expect-from-a-property-management-company</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+       <url>
+        <loc>https://propdial.in/blog/nri-property-management-services-india</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+     <url>
+        <loc>https://propdial.in/blog/how-to-manage-property-in-india-as-an-nri</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+      <url>
+        <loc>https://propdial.in/blog/property-management-definition-roles-types-duties</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://propdial.in/blog/importance-of-regular-property-maintenance-for-landlords</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+       <url>
+        <loc>https://propdial.in/blog/-choose-the-best-property-management-company-in-india</loc>
+        <lastmod>2025-02-28</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.7</priority>
+    </url>
+
 
 </urlset>

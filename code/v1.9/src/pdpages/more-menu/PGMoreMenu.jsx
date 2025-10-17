@@ -732,6 +732,8 @@ const PGMoreMenu = () => {
                 </section>
               }
 
+           
+
               <div className="dvg22"></div>
               {user.role === "superAdmin" && (
                 <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white coming_soon r0">
@@ -992,7 +994,49 @@ const PGMoreMenu = () => {
               </section>
             </div>
           )} */}
-
+   {user?.role === "executive" && (
+                <div>
+                    <div className="dvg22"></div>
+              {
+                <section className="mm_inner mm_inner_full_width card_shadow card_border_radius bg_white">
+                  <h6 className="title dm20 light_black">Master Data</h6>
+                  <div className="inner">                 
+                    <Link className="mm_single" to="/societylist">
+                      {/* <span className="material-symbols-outlined mms_icon">
+                      location_home
+                    </span> */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#00a8a8"
+                      >
+                        <path d="m480-840 320 240v480H160v-480l320-240Zm0 480q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0-80q-17 0-28.5-11.5T440-480q0-17 11.5-28.5T480-520q17 0 28.5 11.5T520-480q0 17-11.5 28.5T480-440Zm0 200q-41 0-80 10t-74 30h308q-35-20-74-30t-80-10ZM240-560v320q52-39 113-59.5T480-320q66 0 127 20.5T720-240v-320L480-740 240-560Zm240 80Z" />
+                      </svg>
+                      <h5 className="dr16">Society's list</h5>
+                      <h6>
+                        Add and manage societies for your listings and settings
+                      </h6>
+                      {/* <span className="material-symbols-outlined mms_ra">
+                      chevron_right
+                    </span> */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="mms_ra"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#00a8a8"
+                      >
+                        <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+                      </svg>
+                    </Link>
+                  </div>
+                </section>
+              }
+                </div>
+              )}
           <div className="dvg22"></div>
           <section className="more-menus_inner">
             <div className="mm_inner card_shadow card_border_radius bg_white">

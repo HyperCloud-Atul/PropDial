@@ -1035,7 +1035,7 @@ const fieldLabelsPlot = {
     const { ownerAssigned, managerAssigned } = await checkOwnerAndManager(propertyid);
 
     // Step 3: Layout check
-    const layoutExists = await checkPropertyLayout(propertyid);
+    // const layoutExists = await checkPropertyLayout(propertyid);
 
     let errors = [];
     if (uiMissingFields.length > 0) {
@@ -1043,7 +1043,7 @@ const fieldLabelsPlot = {
     }
     if (!ownerAssigned) errors.push("Owner not assigned");
     if (!managerAssigned) errors.push("Manager not assigned");
-    if (!layoutExists) errors.push("No layout added");
+    // if (!layoutExists) errors.push("No layout added");
 
     if (errors.length > 0) {
       setValidationErrors(errors);

@@ -39,7 +39,7 @@ import "./index.css";
 import "./index.scss";
 import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
-
+import Home from "./pdpages/home/Home";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { CityContextProvider } from "./context/CityContext";
 
@@ -78,13 +78,15 @@ const RootComponent = () => {
   }
 
   return (
-    <AuthContextProvider>
-      <BrowserRouter>
-        <CityContextProvider>
-          <App />
-        </CityContextProvider>
-      </BrowserRouter>
-    </AuthContextProvider>
+      
+      <AuthContextProvider>
+        <BrowserRouter>
+          <CityContextProvider>
+            <App />
+          </CityContextProvider>
+        </BrowserRouter>
+      </AuthContextProvider >
+   
   );
 };
 
@@ -95,7 +97,7 @@ root.render(
 );
 
 // Register service worker
-serviceWorkerRegistration.register();
+// serviceWorkerRegistration.register();
 
 //Register service worker for FCM Messaging
 // if ('serviceWorker' in navigator) {
