@@ -58,28 +58,6 @@ const AddPropertyLayout = () => {
     fetchFixtureOptions(); // Fixtures fetch hoga jab component mount hota hai
   }, [propertyLayoutId]);
 
-  // const fetchPropertyDetails = async (propId) => {
-  //   try {
-  //     const propRef = projectFirestore
-  //       .collection("properties-propdial")
-  //       .doc(propId);
-  //     const propSnap = await propRef.get();
-
-  //     if (propSnap.exists) {
-  //       const propertyData = propSnap.data();
-  //       setPropertyDocument(propertyData);
-
-  //       if (propertyData.layouts) {
-  //         setLayouts(propertyData.layouts);
-  //       }
-  //     } else {
-  //       console.log("Property document not found!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching property details:", error);
-  //   }
-  // };
-
   const fetchPropertyDetails = (propId) => {
     const propRef = projectFirestore
       .collection("properties-propdial")
@@ -109,35 +87,6 @@ const AddPropertyLayout = () => {
   // Fetch fixtures from Firestore
   const defaultFixtures = ["Walls", "Roof", "Floor", "Switches & Sockets"];
 
-  // const fetchFixtureOptions = async () => {
-  //   try {
-  //     const fixtureRef = projectFirestore
-  //       .collection("m_fixtures")
-  //       .doc("6jEq6BbUQiEOFPUGoEKJ");
-  //     const fixtureSnap = await fixtureRef.get();
-
-  //     if (fixtureSnap.exists) {
-  //       const fixturesFromDB = fixtureSnap.data().fixtures || [];
-
-  //       // Merge DB and default options without duplicates
-  //       const mergedFixtures = Array.from(
-  //         new Set([...fixturesFromDB, ...defaultFixtures])
-  //       );
-
-  //       // Sort A-Z
-  //       const sortedFixtures = mergedFixtures.sort((a, b) =>
-  //         a.localeCompare(b)
-  //       );
-
-  //       // Set for React Select
-  //       setFixtureOptions(
-  //         sortedFixtures.map((fixture) => ({ value: fixture, label: fixture }))
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching fixtures:", error);
-  //   }
-  // };
 
   const fetchFixtureOptions = () => {
     return projectFirestore
@@ -525,74 +474,21 @@ const AddPropertyLayout = () => {
                         <button
                           key={roomKey}
                           onClick={() => toggleField(roomKey)}
-                          className={`room-button ${
-                            openField === roomKey ? "active" : ""
-                          }`}
+                          className={`room-button ${openField === roomKey ? "active" : ""
+                            }`}
                         >
                           <div className="active_hand">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="20px"
-                              viewBox="0 -960 960 960"
-                              width="20px"
-                              fill="#FFFFFF"
-                            >
-                              <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
-                            </svg>
+                          <img src="image1" alt="" />
                           </div>
                           <div className="icon_text">
                             <div className="btn_icon">
                               <div className="bi_icon add">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  height="30px"
-                                  viewBox="0 -960 960 960"
-                                  width="30px"
-                                  fill="#3F5E98"
-                                  stroke-width="40"
-                                >
-                                  <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />
-                                </svg>
+                            <img src="image2  " alt="" />
                               </div>
-                              {/* <div className="bi_icon half">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
-                                viewBox="0 -960 960 960"
-                                width="24px"
-                                fill="#FFC107"
-                              >
-                                <path d="M240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400Z" />
-                              </svg>
-                            </div>
-                            <div className="bi_icon full">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
-                                viewBox="0 -960 960 960"
-                                width="24px"
-                                fill="#00a300"
-                              >
-                                <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                              </svg>
-                            </div>
-                            <div className="bi_icon notallowed">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                height="24px"
-                                viewBox="0 -960 960 960"
-                                width="24px"
-                                fill="#FA6262"
-                              >
-                                <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q54 0 104-17.5t92-50.5L228-676q-33 42-50.5 92T160-480q0 134 93 227t227 93Zm252-124q33-42 50.5-92T800-480q0-134-93-227t-227-93q-54 0-104 17.5T284-732l448 448Z" />
-                              </svg>
-                            </div> */}
+
                             </div>
                             <div className="btn_text">
-                              {/* <h6 className="add">{layouts[roomKey]?.roomName}</h6> */}
-                              {/* <h6 className="half">In Progress</h6>
-                            <h6 className="full">Completed</h6>
-                            <h6 className="notallowed">Not Allowed</h6> */}
+
                             </div>
                           </div>
                           <div className="room_name mt-2">
@@ -600,8 +496,8 @@ const AddPropertyLayout = () => {
                             {layouts[roomKey]?.roomName
                               ? layouts[roomKey]?.roomName
                               : room.count === 1
-                              ? room.key
-                              : `${room.key} ${index + 1}`}
+                                ? room.key
+                                : `${room.key} ${index + 1}`}
                             {/* {room.count === 1
                                 ? room.key
                                 : `${room.key} ${index + 1}`} */}
@@ -646,20 +542,8 @@ const AddPropertyLayout = () => {
                             Room Lenght <span>(In feet)</span>
                           </h6>
                           <div className="field_box w-100 unit_field">
-                            {/* <input
-                                type="number"
-                                className="w-100"
-                                placeholder="Enter room length"
-                                value={layouts[openField]?.length || ""}
-                                onChange={(e) =>
-                                  handleChange(
-                                    openField,
-                                    "length",
-                                    e.target.value
-                                  )
-                                }
-                              /> */}
-                            {/* <input
+
+                            <input
                               type="number"
                               step="0.01"
                               className="w-100"
@@ -669,34 +553,15 @@ const AddPropertyLayout = () => {
                                 const value = e.target.value;
                                 const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
 
-                                if (!regex.test(value)) {
-                                  e.target.value =
-                                    layouts[openField]?.length || "";
+                                // Reject if value is exactly "0"
+                                if (value === "0" || !regex.test(value)) {
+                                  e.target.value = layouts[openField]?.length || "";
                                   return;
                                 }
 
                                 handleChange(openField, "length", value);
                               }}
-                            /> */}
-<input
-  type="number"
-  step="0.01"
-  className="w-100"
-  placeholder="Enter room length"
-  value={layouts[openField]?.length || ""}
-  onInput={(e) => {
-    const value = e.target.value;
-    const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
-
-    // Reject if value is exactly "0"
-    if (value === "0" || !regex.test(value)) {
-      e.target.value = layouts[openField]?.length || "";
-      return;
-    }
-
-    handleChange(openField, "length", value);
-  }}
-/>
+                            />
 
                             <div className="unit">Ft</div>
                           </div>
@@ -708,20 +573,8 @@ const AddPropertyLayout = () => {
                             Room Width <span>(In feet)</span>
                           </h6>
                           <div className="field_box w-100 unit_field">
-                            {/* <input
-                                type="number"
-                                placeholder="Enter room width"
-                                className="w-100"
-                                value={layouts[openField]?.width || ""}
-                                onChange={(e) =>
-                                  handleChange(
-                                    openField,
-                                    "width",
-                                    e.target.value
-                                  )
-                                }
-                              /> */}
-                            {/* <input
+
+                            <input
                               type="number"
                               step="0.01"
                               className="w-100"
@@ -731,34 +584,16 @@ const AddPropertyLayout = () => {
                                 const value = e.target.value;
 
                                 const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
-                                if (!regex.test(value)) {
-                                  e.target.value =
-                                    layouts[openField]?.width || "";
+
+                                // Disallow if value is exactly "0"
+                                if (value === "0" || !regex.test(value)) {
+                                  e.target.value = layouts[openField]?.width || "";
                                   return;
                                 }
+
                                 handleChange(openField, "width", value);
                               }}
-                            /> */}
-                            <input
-  type="number"
-  step="0.01"
-  className="w-100"
-  placeholder="Enter room width"
-  value={layouts[openField]?.width || ""}
-  onInput={(e) => {
-    const value = e.target.value;
-
-    const regex = /^\d{0,2}(\.\d{0,2})?$/; // max 2 digits before & after decimal
-
-    // Disallow if value is exactly "0"
-    if (value === "0" || !regex.test(value)) {
-      e.target.value = layouts[openField]?.width || "";
-      return;
-    }
-
-    handleChange(openField, "width", value);
-  }}
-/>
+                            />
 
 
                             <div className="unit">Ft</div>
@@ -794,9 +629,9 @@ const AddPropertyLayout = () => {
                               value={
                                 layouts[openField]?.flooringType
                                   ? {
-                                      value: layouts[openField]?.flooringType,
-                                      label: layouts[openField]?.flooringType,
-                                    }
+                                    value: layouts[openField]?.flooringType,
+                                    label: layouts[openField]?.flooringType,
+                                  }
                                   : null
                               }
                               onChange={(selectedOption) =>
@@ -858,49 +693,33 @@ const AddPropertyLayout = () => {
                                 </div>
                               </div>
                             ))}
-                          {/* {(!layouts[openField]?.images ||
-                              layouts[openField].images.length < 5) && (
-                                                            <label className="add_icon">
-                                                              <FaPlus size={24} color="#555" />
 
-                                                              <input
-                                                                type="file"
-                                                                accept="image/*"
-                              capture="environment"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) =>
-                                                                  handleImageUpload(e, openField)
-                                                                }
-                                                              />
-                                                            </label>
-                             
-                            )} */}
                             {(!layouts[openField]?.images ||
                               layouts[openField].images.length < 5) && (
-                                                       
-                              <>
-                                <div
-                                  onClick={() =>
-                                    document
-                                      .getElementById(`file-input-${openField}`)
-                                      .click()
-                                  }
-                                  className="add_icon"
-                                >
-                                  <FaPlus size={24} color="#555" />
-                                </div>
-                                <input
-                                  type="file"
-                                  id={`file-input-${openField}`}
-                                  // accept="image/*"
-                                  // capture="environment"
-                                  style={{ display: "none" }}
-                                  onChange={(e) =>
-                                    handleImageUpload(e, openField)
-                                  }
-                                />
-                              </>
-                            )}
+
+                                <>
+                                  <div
+                                    onClick={() =>
+                                      document
+                                        .getElementById(`file-input-${openField}`)
+                                        .click()
+                                    }
+                                    className="add_icon"
+                                  >
+                                    <FaPlus size={24} color="#555" />
+                                  </div>
+                                  <input
+                                    type="file"
+                                    id={`file-input-${openField}`}
+                                    // accept="image/*"
+                                    // capture="environment"
+                                    style={{ display: "none" }}
+                                    onChange={(e) =>
+                                      handleImageUpload(e, openField)
+                                    }
+                                  />
+                                </>
+                              )}
                           </div>
                         </div>
                       </div>
@@ -919,56 +738,6 @@ const AddPropertyLayout = () => {
                     </div>
                   </div>
                 </form>
-                {/* <div
-                className="bottom_fixed_button"
-                style={{
-                  zIndex: "1000",
-                }}
-              >
-                <div className="next_btn_back">
-                  <button
-                    className="theme_btn no_icon btn_fill full_width"
-                    onClick={saveData}
-                    disabled={isLayoutSaving}
-                    style={{
-                      opacity: isLayoutSaving ? "0.5" : "1",
-                    }}
-                  >
-                    {isLayoutSaving ? "Saving..." : "Save"}
-                  </button>
-                </div>
-              </div> */}
-                {/* plz don't delete this commented section  */}
-                {/* add Fixtures Section */}
-                {/* <div
-                    className="d-flex"
-                    style={{
-                      gap: "10px",
-                    }}
-                  >
-                    <h4>Fixtures</h4>
-                    {layouts[openField]?.fixtures?.map((fixture, index) => (
-                      <div key={index}>
-                        <input
-                          type="text"
-                          value={fixture}
-                          onChange={(e) =>
-                            handleFixtureChange(
-                              openField,
-                              index,
-                              e.target.value
-                            )
-                          }
-                        />
-                        <button onClick={() => removeFixture(openField, index)}>
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button onClick={() => addFixture(openField)}>
-                      Add Fixture
-                    </button>
-                  </div> */}
                 {/* Fixtures Multi-Select */}
               </div>
             )}
@@ -985,8 +754,8 @@ const AddPropertyLayout = () => {
                     imageActionStatus === "uploading"
                       ? "var(--theme-green2)"
                       : imageActionStatus === "deleting"
-                      ? "var(--theme-red)"
-                      : "var(--theme-blue)", // Default fallback color
+                        ? "var(--theme-red)"
+                        : "var(--theme-blue)", // Default fallback color
                 }}
               >
                 {imageActionStatus === "uploading"
@@ -999,8 +768,8 @@ const AddPropertyLayout = () => {
                   imageActionStatus === "uploading"
                     ? "var(--theme-green2)"
                     : imageActionStatus === "deleting"
-                    ? "var(--theme-red)"
-                    : "var(--theme-blue)" // Default fallback color
+                      ? "var(--theme-red)"
+                      : "var(--theme-blue)" // Default fallback color
                 }
                 loading={true}
                 height={10}

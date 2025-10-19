@@ -1,0 +1,158 @@
+/* team member single card css start   */
+.tm_single .flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 370px;
+  perspective: 1000px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.tm_single {
+  cursor: pointer;
+}
+
+.tm_single .flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
+
+.tm_single .flip-card:focus {
+  outline: 0;
+}
+
+.tm_single .flip-card:hover .flip-card-inner,
+.tm_single .flip-card:focus .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.tm_single .flip-card-front,
+.tm_single .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.tm_single .flip-card-front {
+  z-index: 2;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+}
+
+.tm_single .flip-card-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
+  padding-bottom: 60px;
+  padding-top: 30px;
+}
+
+.tm_single .flip-card-back:after {
+  content: '';
+  background: black;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+}
+
+.tm_single .flip-card-back h3 {
+  font-size: 16px;
+  color: white;
+  position: relative;
+  z-index: 2;
+  font-weight: 400;
+  padding: 20px !important;
+  line-height: 24px;
+}
+
+.team_member {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+  margin-top: 30px;
+  position: relative;
+}
+
+.about_tm {
+  padding: 15px;
+  text-align: center;
+  background: var(--theme-orange);
+  border-radius: 10px;
+  position: relative;
+  width: 90%;
+  margin: 0 auto !important;
+  margin-top: -45px !important;
+}
+
+.about_tm h4 {
+  font-size: 18px;
+  color: var(--white-color);
+}
+
+.about_tm h5 {
+  font-size: 14px;
+  color: var(--white-color);
+  font-weight: 400;
+  margin-top: 2px !important;
+  text-transform: capitalize;
+}
+
+.tm_single .flip-card-front:after {
+  content: '';
+  background: var(--theme-orange);
+  background-image: url('../../public/assets/img/right-arrow.png');
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border-radius: 50%;
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.tm_single .flip-card-back:before {
+  content: '';
+  background: var(--theme-orange);
+  background-image: url('../../public/assets/img/right-arrow.png');
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  transform: rotate(180deg);
+  border-radius: 50%;
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 3;
+}
+
+@media (max-width: 991px) {
+  .team_member { 
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767px) {
+.team_member {
+  grid-template-columns: repeat(1, 1fr);
+}
+}

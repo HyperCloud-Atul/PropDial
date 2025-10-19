@@ -1,0 +1,365 @@
+.container {
+  font-family: Arial, sans-serif;
+  margin-top: 70px;
+
+  .heroSection {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+  }
+
+  .heroImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .contentWrapper {
+    background-color: #f4f4f4;
+
+    .detail {
+      flex-grow: 5;
+      min-height: 100%;
+    }
+    .headingBlock {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .headingBlock h1 {
+      font-size: 40px;
+      font-weight: lighter;
+      margin: 0;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .byline {
+      font-size: 14px;
+      color: #555;
+      flex-basis: 100%;
+    }
+
+    .possessionLine {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .circleIcon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .possessionText {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .reraIcon {
+      background-color: #00aa6c;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+    .overviewSection {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 1200px;
+      // padding: 0 40px;
+    }
+
+    .contactBtn {
+      background-color: #f4f4f4;
+      border: 2px solid var(--theme-green);
+      color: var(--theme-green);
+      padding: 6px 15px;
+      // border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    .contactBtn:hover {
+      color: white;
+      border: 1px solid var(--theme-blue);
+      background-color: var(--theme-blue); /* Darker green on hover */
+    }
+
+    .priceSummary {
+      margin-top: 15px;
+    }
+
+    .priceRange {
+      font-size: 20px;
+      font-weight: bold;
+      color: #d32f2f;
+    }
+
+    .subtext {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .section {
+      margin-top: 40px;
+    }
+
+    .amenitiesGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .amenity {
+      background: #f5f5f5;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      border-radius: 4px;
+    }
+
+    .projectDetails div {
+      margin: 5px 0;
+    }
+
+    .contact {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-bottom: 30px;
+    }
+
+    /*Contact form*/
+    .section {
+      width: 100%;
+      flex-grow: 2;
+    }
+    .section h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .contactForm {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      padding: 20px 0;
+    }
+
+    .inputField {
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+      width: 100%;
+      background-color: #f4f4f4;
+    }
+
+    .phoneGroup {
+      display: flex;
+      gap: 10px;
+    }
+
+    .countryCode {
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      width: 100px;
+      background-color: #f4f4f4;
+    }
+
+    .termsText {
+      font-size: 12px;
+      color: #555;
+    }
+
+    .termsText a {
+      color: #000;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+
+    .viewPhoneBtn {
+      border: 2px solid var(--theme-green);
+      background-color: #f4f4f4;
+      color: var(--theme-green);
+      padding: 12px;
+      // border: none;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: ease 0.3s;
+    }
+    .viewPhoneBtn:hover {
+      border: 1px solid var(--theme-blue);
+      color: white;
+      background-color: var(--theme-blue); /* Darker green on hover */
+    }
+  }
+
+  /* Hero setion */
+  .heroSection {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    width: 100%;
+  }
+
+  .sliderWrapper {
+    display: flex;
+    transition: transform 0.9s ease-in-out;
+    height: 100%;
+    width: 100%; /* Adjust if more images */
+  }
+
+  .heroImage {
+    width: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+    height: 100%;
+  }
+
+  .viewAllBtn {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 16px;
+    background-color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .dotsWrapper {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 50%;
+    transition: background 0.3s;
+  }
+
+  .activeDot {
+    background: #333;
+  }
+
+  /* Sticky bar */
+  .tabContainer {
+    display: flex;
+    gap: 24px;
+    background-color: #f4f4f4;
+    padding: 12px 24px;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+    justify-content: center; 
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    z-index: 1000;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0 2px 0px rgba(0, 0, 0, 0.03);
+
+    /* Hide scrollbar for a cleaner look */
+    -ms-overflow-style: none;
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* --- Responsive Adjustments --- */
+
+    /* For tablets and larger phones (e.g., screens up to 768px wide) */
+    @media (max-width: 768px) {
+      gap: 16px; 
+      padding: 10px 20px;
+    }
+
+    /* For smaller mobile devices (e.g., screens up to 480px wide) */
+    @media (max-width: 480px) {
+      gap: 12px; 
+      padding: 8px 15px; 
+      justify-content: flex-start;
+    }
+
+    /* For very small devices (e.g., screens up to 320px wide) */
+    @media (max-width: 320px) {
+      gap: 8px; 
+      padding: 6px 10px; 
+    }
+  }
+
+  .tabLink {
+    text-decoration: none;
+    color: #111;
+    font-size: 15px;
+    transition: color 0.2s ease;
+    flex-shrink: 0; 
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 13px; 
+    }
+  }
+
+  .tabLink:hover {
+    color: #00a8a8; 
+  }
+
+  .sticky {
+    position: fixed;
+    top: 67px;
+    left: 0;
+    right: 0;
+    background-color: var(
+      --bs-body-bg
+    ); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    
+    z-index: 1020; 
+    width: 100%; 
+  }
+
+  .arrow {
+    margin-left: auto;
+    font-weight: bold;
+    color: #888;
+    flex-shrink: 0; 
+  }
+}

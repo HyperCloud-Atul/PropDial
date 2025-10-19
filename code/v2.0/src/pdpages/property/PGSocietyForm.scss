@@ -1,0 +1,208 @@
+.pg-form-container-main {
+    padding-top: 0;
+  
+    @media (min-width: 768px) {
+      padding-top: 48px;
+    }
+  
+    .pg-form-container {
+      margin: 2rem auto;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 0.6s ease-out;
+  
+      @media (min-width: 768px) {
+        padding: 3.5rem;
+      }
+  
+      transition: box-shadow 0.3s ease;
+  
+      &:hover {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+      }
+  
+      > * {
+        margin: 0;
+        padding: 0;
+      }
+  
+      h2 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        color: #1e293b;
+        text-align: center;
+      }
+  
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #334155;
+      }
+  
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.85rem 1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        margin-top: 0.25rem;
+        font-size: 1rem;
+        transition: all 0.3s ease-in-out;
+        background-color: #fff;
+  
+        &:hover {
+          background-color: #f8fafc;
+        }
+  
+        &:focus {
+          outline: none;
+          border-color: #2563eb;
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+  
+        &::placeholder {
+          color: #94a3b8;
+          font-size: 0.95rem;
+        }
+      }
+  
+      .pg-form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+  
+        @media (min-width: 768px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+  
+        gap: 1.75rem;
+      }
+  
+      .pg-form-dynamic-input {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+  
+        input {
+          flex: 1;
+        }
+      }
+  
+      .pg-add-btn {
+        color: #2563eb;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem 0;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.95rem;
+        transition: all 0.3s ease-in-out;
+  
+        &:hover {
+          text-decoration: underline;
+          color: #1d4ed8;
+        }
+      }
+  
+      .pg-checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+  
+        label {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: #f1f5f9;
+          padding: 0.75rem 1rem;
+          border-radius: 10px;
+          cursor: pointer;
+          font-size: 0.95rem;
+          border: 1px solid #e2e8f0;
+          transition: all 0.2s ease-in-out;
+  
+          i {
+            font-size: 1.2rem;
+            color: #475569;
+          }
+  
+          input[type='checkbox'] {
+            transform: scale(1.1);
+          }
+  
+          &:hover {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+          }
+        }
+      }
+  
+      .pg-submit-btn {
+        background-color: #2563eb;
+        color: white;
+        padding: 1rem 2.25rem;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        margin-top: 2.5rem;
+  
+        &:hover {
+          background-color: #1e40af;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+      }
+  
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 2rem;
+        font-size: 0.95rem;
+        background-color: #f9fafb;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+  
+        th {
+          background-color: #e2e8f0;
+          color: #1e293b;
+          font-weight: 600;
+          padding: 0.85rem;
+          text-align: left;
+        }
+  
+        td {
+          padding: 0.85rem;
+          border-top: 1px solid #e2e8f0;
+          transition: background-color 0.2s ease;
+        }
+  
+        tr:hover {
+          background-color: #f1f5f9;
+        }
+      }
+    }
+  
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+  
