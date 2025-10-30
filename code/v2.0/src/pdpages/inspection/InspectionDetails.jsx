@@ -5,6 +5,7 @@ import { useDocument } from "../../hooks/useDocument";
 import { useCollection } from "../../hooks/useCollection";
 import { ClipLoader } from "react-spinners";
 import { generateSlug } from "../../utils/generateSlug";
+import { Modal, Button, Table } from 'react-bootstrap';
 import format from "date-fns/format";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -244,6 +245,27 @@ const InspectionDetails = () => {
   // code for fetch so ciety rates 
   const { floorPlans, loading, error } = useSocietyRates(propertyDocument?.society);
 
+  // full insection report modal code start 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFixture, setSelectedFixture] = useState(null);
+
+  // Fix: Properly handle the parameters
+  const handleShowDetails = (roomName, fixtureName, fixtureData) => {
+    setSelectedFixture({
+      roomName: roomName,
+      fixtureName: fixtureName,
+      ...fixtureData
+    });
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedFixture(null);
+  };
+  // full insection report modal code end
+
+
   return (
     <div className=" pd_single pg_bg inspection_report">
       <div className="page_spacing relative">
@@ -308,7 +330,7 @@ const InspectionDetails = () => {
                       </span>
                     </div> */}
                     <h1>{inspectionDoc.inspectionType} Inspection Report</h1>
-                   
+
 
 
                   </div>
@@ -628,148 +650,320 @@ const InspectionDetails = () => {
                 </div>
               </div>
               <div className="room_wise_inspection">
-                {inspectionDoc?.rooms?.map((room, idx) => (
-                  <div className="rwi_single" key={idx}>
-                    <h2>
-                      {room.roomName}
-                      {room.isAllowForInspection === "no" && (
-                        <h3>Not allowed by tenant for inspection</h3>
-                      )}
-                    </h2>
+                {inspectionDoc?.inspectionType?.toLowerCase() === "full" ? (
+                  //             <>
+                  //   {inspectionDoc?.rooms?.map((room, idx) => (
+                  //     <div className="rwi_single" key={idx}>
+                  //       <h2>
+                  //         {room.roomName}
+                  //         {room.isAllowForInspection === "no" && (
+                  //           <h3>Not allowed by tenant for inspection</h3>
+                  //         )}
+                  //       </h2>
 
-                    <div className="issues">
+                  //       <div className="issues">
+                  //         {room.isAllowForInspection === "yes" && (
+                  //           <div className="top">
+                  //             {/* Fixtures ko dynamically display karna */}
+                  //             {room.fixtures && Object.entries(room.fixtures).map(([fixtureName, fixtureData]) => (
+                  //               <div className="i_single" key={fixtureName}>
+                  //                 <h6>{fixtureName}</h6>
+                  //                 <h5 className={fixtureData?.status?.toLowerCase()}>
+                  //                   {fixtureData.status}
+                  //                 </h5>
+                  //                 <p>
+                  //                   {fixtureData.remark || ""}
+                  //                 </p>
+
+                  //                 {/* Fixture ki images display karna */}
+                  //                 {fixtureData.images && fixtureData.images.length > 0 && (
+                  //                   <div className="fixture-images">
+                  //                     <h6>Fixture Images</h6>
+                  //                     <div className="img_bunch_small">
+                  //                       {fixtureData.images.map((img, i) => (
+                  //                         <img src={img.url} alt={`${fixtureName} ${i}`} key={i} />
+                  //                       ))}
+                  //                     </div>
+                  //                   </div>
+                  //                 )}
+                  //               </div>
+                  //             ))}
+
+                  //             {/* Cleaning Remark (agar hai to) */}
+                  //             {room.cleanRemark && (
+                  //               <div className="i_single">
+                  //                 <h6>Cleaning Remark</h6>
+                  //                 <p>{room.cleanRemark}</p>
+                  //                 <img src="/assets/img/icons/testimonial.png" alt="" />
+                  //               </div>
+                  //             )}
+                  //           </div>
+                  //         )}
+
+                  //         {/* General Remark (agar hai to) */}
+                  //         {room.generalRemark && (
+                  //           <div className="bottom">
+                  //             <h6>General Remark</h6>
+                  //             <p>{room.generalRemark}</p>
+                  //           </div>
+                  //         )}
+                  //       </div>
+
+                  //       {/* Room level ki images (agar fixtures ke alag images nahi hai to) */}
+                  //       {room.isAllowForInspection === "yes" && room.images && room.images.length > 0 && (
+                  //         <div className="images_area">
+                  //           <h6>Room Images</h6>
+                  //           <div className="img_bunch">
+                  //             {room.images.map((img, i) => (
+                  //               <img src={img.url} alt={`Room ${i}`} key={i} />
+                  //             ))}
+                  //           </div>
+                  //         </div>
+                  //       )}
+                  //     </div>
+                  //   ))}
+                  // </>
+                  <div className="inspection-tables-container">
+                    {inspectionDoc?.rooms?.map((room, roomIdx) => (
+                      <div key={roomIdx} className="rwi_single">
+                        {/* Room Header */}
+                        <h2>{room.roomName}
+                          {room.isAllowForInspection === "no" && (
+                            <h3>
+                              Not allowed by tenant for inspection
+                            </h3>
+                          )}
+                        </h2>
+
+                        {/* Room Table - Only show if allowed */}
+                        {room.isAllowForInspection === "yes" ? (
+                          <div className="table-responsive">
+                            <table className="room-table">
+                              <thead>
+                                <tr>
+                                  <th>Fixture</th>
+                                  <th>Status</th>
+                                   <th>Images</th>
+                                  {/* <th>Remark</th> */}
+                                 
+                                  <th>Details</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {room.fixtures && Object.entries(room.fixtures).map(([fixtureName, fixtureData], fixtureIdx) => (
+                                  <tr key={fixtureIdx} className="fixture-row">
+                                    <td className="fixture-name">
+                                      {fixtureName}
+                                    </td>
+                                    <td className="status-cell">
+                                      <span className={`status-badge ${fixtureData?.status?.toLowerCase()}`}>
+                                        {fixtureData.status}
+                                      </span>
+                                    </td>
+                                
+                                    <td className="images-cell">
+                                      {fixtureData.images && fixtureData.images.length > 0 ? (
+                                        <div className="table-images">
+                                          {fixtureData.images.slice(0, 3).map((img, imgIdx) => (
+                                            <img
+                                              key={imgIdx}
+                                              src={img.url}
+                                              alt={`${fixtureName} ${imgIdx}`}
+                                              className="table-thumbnail"
+                                            />
+                                          ))}
+                                          {fixtureData.images.length > 3 && (
+                                            <span className="more-images">+{fixtureData.images.length - 3}</span>
+                                          )}
+                                        </div>
+                                      ) : (
+                                        '-'
+                                      )}
+                                    </td>
+                                        {/* <td className="remark-cell">
+                                      {fixtureData.remark || '-'}
+                                    </td> */}
+                                    <td className="details-cell">
+                                      <Button
+                                        variant="outline-primary"
+                                        size="sm"
+                                        onClick={() => handleShowDetails(room.roomName, fixtureName, fixtureData)}
+                                      >
+                                        View
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            {room.generalRemark && (
+                              <div className="issues">
+                                <div className="bottom">
+                                  <h6>General Remark</h6>
+                                  <p>{room.generalRemark || '-'}</p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )
+                          :
+                          (
+                            <div className="issues">
+                              <div className="bottom">
+                                <h6>General Remark</h6>
+                                <p>{room.generalRemark || '-'}</p>
+                              </div>
+                            </div>
+                          )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (<>
+                  {inspectionDoc?.rooms?.map((room, idx) => (
+                    <div className="rwi_single" key={idx}>
+                      <h2>
+                        {room.roomName}
+                        {room.isAllowForInspection === "no" && (
+                          <h3>Not allowed by tenant for inspection</h3>
+                        )}
+                      </h2>
+
+                      <div className="issues">
+                        {room.isAllowForInspection === "yes" && (
+                          <div className="top">
+                            <div className="i_single">
+                              <h6>Seepage</h6>
+                              <h5 className={room?.seepage?.toLowerCase()}>
+                                {room.seepage}
+                              </h5>
+                              <p>
+                                {room.seepage === "yes" ? room.seepageRemark : ""}
+                              </p>
+                              <img src="/assets/img/icons/seepage.png" alt="" />
+                            </div>
+                            <div className="i_single">
+                              <h6>Termites</h6>
+                              <h5 className={room?.termites?.toLowerCase()}>
+                                {room.termites}
+                              </h5>
+
+                              <p>
+                                {room.termites === "yes"
+                                  ? room.termitesRemark
+                                  : ""}
+                              </p>
+                              <img src="/assets/img/icons/termite.png" alt="" />
+                            </div>
+                            <div className="i_single">
+                              <h6>Other Issues</h6>
+                              <h5 className={room?.otherIssue?.toLowerCase()}>
+                                {room.otherIssue}
+                              </h5>
+                              <p>
+                                {room.otherIssue === "yes"
+                                  ? room.otherIssueRemark
+                                  : ""}
+                              </p>
+                              <img
+                                src="/assets/img/icons/problem-solving.png"
+                                alt=""
+                              />
+                            </div>
+                            <div className="i_single">
+                              <h6>Cleaning Remark</h6>
+                              <p>{room.cleanRemark}</p>
+                              <img
+                                src="/assets/img/icons/testimonial.png"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {room.generalRemark && (
+                          <div className="bottom">
+                            <h6>General Remark</h6>
+                            <p>{room.generalRemark}</p>
+                          </div>
+                        )}
+                      </div>
                       {room.isAllowForInspection === "yes" && (
-                        <div className="top">
-                          <div className="i_single">
-                            <h6>Seepage</h6>
-                            <h5 className={room?.seepage?.toLowerCase()}>
-                              {room.seepage}
-                            </h5>
-                            <p>
-                              {room.seepage === "yes" ? room.seepageRemark : ""}
-                            </p>
-                            <img src="/assets/img/icons/seepage.png" alt="" />
+                        <div className="images_area">
+                          <h6>Captured Images</h6>
+                          <div className="img_bunch">
+                            {room.images &&
+                              room.images.map((img, i) => (
+                                <img src={img.url} alt="" />
+                              ))}
                           </div>
-                          <div className="i_single">
-                            <h6>Termites</h6>
-                            <h5 className={room?.termites?.toLowerCase()}>
-                              {room.termites}
-                            </h5>
-
-                            <p>
-                              {room.termites === "yes"
-                                ? room.termitesRemark
-                                : ""}
-                            </p>
-                            <img src="/assets/img/icons/termite.png" alt="" />
-                          </div>
-                          <div className="i_single">
-                            <h6>Other Issues</h6>
-                            <h5 className={room?.otherIssue?.toLowerCase()}>
-                              {room.otherIssue}
-                            </h5>
-                            <p>
-                              {room.otherIssue === "yes"
-                                ? room.otherIssueRemark
-                                : ""}
-                            </p>
-                            <img
-                              src="/assets/img/icons/problem-solving.png"
-                              alt=""
-                            />
-                          </div>
-                          <div className="i_single">
-                            <h6>Cleaning Remark</h6>
-                            <p>{room.cleanRemark}</p>
-                            <img
-                              src="/assets/img/icons/testimonial.png"
-                              alt=""
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {room.generalRemark && (
-                        <div className="bottom">
-                          <h6>General Remark</h6>
-                          <p>{room.generalRemark}</p>
                         </div>
                       )}
                     </div>
-                    {room.isAllowForInspection === "yes" && (
-                      <div className="images_area">
-                        <h6>Captured Images</h6>
-                        <div className="img_bunch">
-                          {room.images &&
-                            room.images.map((img, i) => (
-                              <img src={img.url} alt="" />
-                            ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <div className="rwi_single socity-rate">
-                  <h2>Current Market Rate in your Society</h2>
-                  <div className="cards">
-                    {floorPlans.map((plan, index) => {
-                    // Logic for area display
-                    const hasSuperArea = plan.superArea && plan.arealInit;
-                    const hasCarpetArea = plan.carpetArea && plan.arealInit;
+                  ))}
+                </>)}
+                {floorPlans && floorPlans.length > 0 && (
+                  <div className="rwi_single socity-rate">
+                    <h2>Current Market Rate in your Society</h2>
+                    <div className="cards">
+                      {floorPlans.map((plan, index) => {
+                        // Logic for area display
+                        const hasSuperArea = plan.superArea && plan.arealInit;
+                        const hasCarpetArea = plan.carpetArea && plan.arealInit;
 
-                    return (
-                      <div key={index} className="socity-rate-card">
-                        {/* Header */}
-                        <div className="card-header">
-                          <h3>{plan.bhk}</h3>
-                        </div>
+                        return (
+                          <div key={index} className="socity-rate-card">
+                            {/* Header */}
+                            <div className="card-header">
+                              <h3>{plan.bhk}</h3>
+                            </div>
 
-                        {/* Body */}
-                        <div className="card-body">
-                          {/* Area display */}
-                          {plan.superArea && plan.carpetArea ? (
-                            <>
-                              <p className="area">
-                                Super Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
-                              </p>
-                              <p className="area">
-                                Carpet Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
-                              </p>
-                            </>
-                          ) : plan.superArea ? (
-                            <p className="area">
-                              Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
-                            </p>
-                          ) : plan.carpetArea ? (
-                            <p className="area">
-                              Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
-                            </p>
-                          ) : null}
+                            {/* Body */}
+                            <div className="card-body">
+                              {/* Area display */}
+                              {plan.superArea && plan.carpetArea ? (
+                                <>
+                                  <p className="area">
+                                    Super Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                                  </p>
+                                  <p className="area">
+                                    Carpet Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                                  </p>
+                                </>
+                              ) : plan.superArea ? (
+                                <p className="area">
+                                  Area: <span className="area-val">{plan.superArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                                </p>
+                              ) : plan.carpetArea ? (
+                                <p className="area">
+                                  Area: <span className="area-val">{plan.carpetArea} {plan.areaUnit} {plan.arealInit || ""}</span>
+                                </p>
+                              ) : null}
 
 
-                          {/* Rent */}
-                          <div className="price-row">
-                            <span className="label">Rent Price:</span>
-                            <span className="rent">{plan.rentPrice? `₹${plan.rentPrice} `: NaN }</span>
-                          </div>
+                              {/* Rent */}
+                              <div className="price-row">
+                                <span className="label">Rent Price:</span>
+                                <span className="rent">{plan.rentPrice ? `₹${plan.rentPrice} ` : NaN}</span>
+                              </div>
 
-                          {/* Sale */}
-                          <div className="price-row">
-                            <span className="label">Sale Price:</span>
-                            <span className="sale">{plan.salePrice? `₹${plan.salePrice}` : NaN}</span>
-                          </div>
-                          <div className="updatedAt-wrapper">
-                            <div className="updatedAt-container">
-                              <span className="label">Last updated at{" "}</span> 
-                              <span className="updatedAt"> {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString("en-GB") : new Date(plan.updatedAt).toLocaleDateString("en-GB")}</span> 
+                              {/* Sale */}
+                              <div className="price-row">
+                                <span className="label">Sale Price:</span>
+                                <span className="sale">{plan.salePrice ? `₹${plan.salePrice}` : NaN}</span>
+                              </div>
+                              <div className="updatedAt-wrapper">
+                                <div className="updatedAt-container">
+                                  <span className="label">Last updated at{" "}</span>
+                                  <span className="updatedAt"> {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString("en-GB") : new Date(plan.updatedAt).toLocaleDateString("en-GB")}</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           )
@@ -778,6 +972,56 @@ const InspectionDetails = () => {
             <ClipLoader color="var(--theme-green2)" loading={true} />
           </div>
         )}
+
+        {/* Details Modal */}
+        <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {selectedFixture?.roomName} - {selectedFixture?.fixtureName}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedFixture && (
+              <div className="modal-content">
+                <div className="fixture-details">
+                  <div className="detail-row">
+                    <strong>Status:</strong>
+                    <span className={`status-badge ${selectedFixture.status?.toLowerCase()}`}>
+                      {selectedFixture.status}
+                    </span>
+                  </div>
+
+                  <div className="detail-row">
+                    <strong>Remark:</strong>
+                    <p>{selectedFixture.remark || 'No remarks'}</p>
+                  </div>
+
+                  {selectedFixture.images && selectedFixture.images.length > 0 && (
+                    <div className="detail-row">
+                      <strong>Images ({selectedFixture.images.length}):</strong>
+                      <div className="modal-images">
+                        {selectedFixture.images.map((img, imgIdx) => (
+                          <div key={imgIdx} className="modal-image-item">
+                            <img
+                              src={img.url}
+                              alt={`${selectedFixture.fixtureName} ${imgIdx}`}
+                              className="modal-image"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

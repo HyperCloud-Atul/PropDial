@@ -92,7 +92,7 @@ const BillButton = ({ bill, isActive, buttonClass, onClick }) => (
       </svg>
     </div>
     <div className="icon_text">
-      <div className="btn_icon">
+   <div className="btn_icon">
         <div className="bi_icon add">
           <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#3F5E98" strokeWidth="40">
             <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />

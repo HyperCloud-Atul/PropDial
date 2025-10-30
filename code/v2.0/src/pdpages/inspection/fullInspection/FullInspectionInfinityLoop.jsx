@@ -1,3 +1,4 @@
+// this is new code with the help of deepseeker ai
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
@@ -67,10 +68,8 @@ const FullInspection = () => {
     [billInspectionData, selectedBill]
   );
 
-  // Function to compute room status - WITHOUT STATE UPDATE
-  const computeRoomStatus = useCallback((room) => {
-    if (!room) return "add";
-    
+  // Function to compute room status
+  const computeRoomStatus = (room) => {
     if (room.isAllowForInspection === "no") {
       return "notallowed";
     }
@@ -97,7 +96,7 @@ const FullInspection = () => {
     } else {
       return "add";
     }
-  }, []);
+  };
 
   // Combined data fetching effect
   useEffect(() => {
@@ -191,16 +190,14 @@ const FullInspection = () => {
 
           setInspectionData((prevData) => {
             const newData = { ...prevData };
-            let hasChanges = false;
-
             roomsData.forEach((room) => {
               if (!newData[room.id]) {
-                hasChanges = true;
                 newData[room.id] = {
                   roomId: room.id,
                   roomName: room.roomName,
                   isAllowForInspection: "yes",
                   generalRemark: "",
+                  inspectionStatus: "add", // Default status
                   fixtures: {}
                 };
 
@@ -214,8 +211,7 @@ const FullInspection = () => {
                 });
               }
             });
-
-            return hasChanges ? newData : prevData;
+            return newData;
           });
         },
         (error) => {
@@ -255,6 +251,23 @@ const FullInspection = () => {
     fetchBills();
   }, [propertyId, inspectionId]);
 
+  // Update room status when inspection data changes
+  useEffect(() => {
+    setInspectionData((prevData) => {
+      const updatedData = { ...prevData };
+      Object.keys(updatedData).forEach(roomId => {
+        const room = updatedData[roomId];
+        if (room) {
+          updatedData[roomId] = {
+            ...room,
+            inspectionStatus: computeRoomStatus(room)
+          };
+        }
+      });
+      return updatedData;
+    });
+  }, [inspectionData]); // This will update room status whenever inspection data changes
+
   // Layout inspection completion check
   const isAllLayoutInspectionDone = useCallback(() => {
     const allRoomsInspected = Object.values(inspectionData).every((room) => {
@@ -262,6 +275,7 @@ const FullInspection = () => {
         return Boolean(room.generalRemark);
       }
 
+      // Check if all fixtures in the room are inspected
       const fixtures = room.fixtures || {};
       const totalFixtures = Object.keys(fixtures).length;
       if (totalFixtures === 0) return false;
@@ -275,35 +289,27 @@ const FullInspection = () => {
       return allFixturesInspected;
     });
 
+    if (layoutInspectionDone !== allRoomsInspected) {
+      setLayoutInspectionDone(allRoomsInspected);
+    }
+
     return allRoomsInspected;
-  }, [inspectionData]);
+  }, [inspectionData, layoutInspectionDone]);
+
+  useEffect(() => {
+    isAllLayoutInspectionDone();
+  }, [inspectionData, isAllLayoutInspectionDone]);
 
   // Bill inspection completion check
-  const checkBillInspectionComplete = useCallback(() => {
+  useEffect(() => {
     const allBillInspectionFull = bills.length > 0 &&
       bills.every((bill) => {
         const billData = billInspectionData[bill.id] || {};
         return billData.amount && billData.remark;
       });
 
-    return allBillInspectionFull;
+    setAllBillInspectionComplete(allBillInspectionFull);
   }, [bills, billInspectionData]);
-
-  // Update layout inspection status only when needed
-  useEffect(() => {
-    const layoutDone = isAllLayoutInspectionDone();
-    if (layoutInspectionDone !== layoutDone) {
-      setLayoutInspectionDone(layoutDone);
-    }
-  }, [isAllLayoutInspectionDone, layoutInspectionDone]);
-
-  // Update bill inspection status only when needed
-  useEffect(() => {
-    const billsComplete = checkBillInspectionComplete();
-    if (allBillInspectionComplete !== billsComplete) {
-      setAllBillInspectionComplete(billsComplete);
-    }
-  }, [checkBillInspectionComplete, allBillInspectionComplete]);
 
   // Final submit redirect
   useEffect(() => {
@@ -362,25 +368,22 @@ const FullInspection = () => {
             async () => {
               try {
                 const url = await storageRef.getDownloadURL();
-                setInspectionData((prev) => {
-                  const updatedRoom = { ...prev[roomId] };
-                  const updatedFixtures = { ...updatedRoom.fixtures };
-                  const updatedFixture = { ...updatedFixtures[fixtureName] };
-                  
-                  updatedFixture.images = [
-                    ...(updatedFixture.images || []),
-                    { url, name: compressedFile.name },
-                  ];
-
-                  updatedFixtures[fixtureName] = updatedFixture;
-                  updatedRoom.fixtures = updatedFixtures;
-
-                  return {
-                    ...prev,
-                    [roomId]: updatedRoom
-                  };
-                });
-                
+                setInspectionData((prev) => ({
+                  ...prev,
+                  [roomId]: {
+                    ...prev[roomId],
+                    fixtures: {
+                      ...prev[roomId].fixtures,
+                      [fixtureName]: {
+                        ...prev[roomId].fixtures[fixtureName],
+                        images: [
+                          ...(prev[roomId]?.fixtures?.[fixtureName]?.images || []),
+                          { url, name: compressedFile.name },
+                        ],
+                      }
+                    }
+                  },
+                }));
                 setUploadProgress((prev) => ({
                   ...prev,
                   [file.name]: 100,
@@ -410,21 +413,19 @@ const FullInspection = () => {
 
     try {
       await storageRef.delete();
-      setInspectionData((prev) => {
-        const updatedRoom = { ...prev[roomId] };
-        const updatedFixtures = { ...updatedRoom.fixtures };
-        const updatedFixture = { ...updatedFixtures[fixtureName] };
-        
-        updatedFixture.images = updatedFixture.images?.filter((img) => img.url !== image.url) || [];
-        
-        updatedFixtures[fixtureName] = updatedFixture;
-        updatedRoom.fixtures = updatedFixtures;
-
-        return {
-          ...prev,
-          [roomId]: updatedRoom
-        };
-      });
+      setInspectionData((prev) => ({
+        ...prev,
+        [roomId]: {
+          ...prev[roomId],
+          fixtures: {
+            ...prev[roomId].fixtures,
+            [fixtureName]: {
+              ...prev[roomId].fixtures[fixtureName],
+              images: prev[roomId]?.fixtures?.[fixtureName]?.images?.filter((img) => img.url !== image.url),
+            }
+          }
+        },
+      }));
       setImageActionStatus(null);
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -444,22 +445,19 @@ const FullInspection = () => {
   };
 
   const handleFixtureChange = (roomId, fixtureName, field, value) => {
-    setInspectionData((prev) => {
-      const updatedRoom = { ...prev[roomId] };
-      const updatedFixtures = { ...updatedRoom.fixtures };
-      
-      updatedFixtures[fixtureName] = {
-        ...updatedFixtures[fixtureName],
-        [field]: value,
-      };
-
-      updatedRoom.fixtures = updatedFixtures;
-
-      return {
-        ...prev,
-        [roomId]: updatedRoom
-      };
-    });
+    setInspectionData((prev) => ({
+      ...prev,
+      [roomId]: {
+        ...prev[roomId],
+        fixtures: {
+          ...prev[roomId].fixtures,
+          [fixtureName]: {
+            ...prev[roomId].fixtures[fixtureName],
+            [field]: value,
+          }
+        }
+      },
+    }));
   };
 
   // UI helper functions for rooms
@@ -469,8 +467,8 @@ const FullInspection = () => {
 
     let className = "room-button";
 
-    // Compute status dynamically instead of storing it
-    const status = computeRoomStatus(room);
+    // Use the stored inspectionStatus from database
+    const status = room.inspectionStatus || "add";
     
     if (status === "notallowed") {
       className += " notallowed";
@@ -514,6 +512,7 @@ const FullInspection = () => {
           return room.generalRemark;
         }
 
+        // Check if all fixtures are completed
         const fixtures = room.fixtures || {};
         return Object.keys(fixtures).length > 0 && 
           Object.values(fixtures).every(fixture => 
@@ -534,23 +533,18 @@ const FullInspection = () => {
     setRemark(billData.remark || "");
   };
 
-  // Update bill data with debounce effect
   useEffect(() => {
     if (!selectedBill) return;
 
-    const timer = setTimeout(() => {
-      setBillInspectionData((prevData) => ({
-        ...prevData,
-        [selectedBill.id]: {
-          ...(prevData[selectedBill.id] || {}),
-          isBillAvailable,
-          amount,
-          remark,
-        },
-      }));
-    }, 300);
-
-    return () => clearTimeout(timer);
+    setBillInspectionData((prevData) => ({
+      ...prevData,
+      [selectedBill.id]: {
+        ...(prevData[selectedBill.id] || {}),
+        isBillAvailable,
+        amount,
+        remark,
+      },
+    }));
   }, [isBillAvailable, amount, remark, selectedBill]);
 
   const getBillButtonClass = (bill) => {
@@ -665,7 +659,7 @@ const FullInspection = () => {
       // Prepare rooms data with computed status
       const roomsToSave = Object.values(inspectionData).map(room => ({
         ...room,
-        inspectionStatus: computeRoomStatus(room)
+        inspectionStatus: computeRoomStatus(room) // Ensure latest status is saved
       }));
 
       await projectFirestore
@@ -751,13 +745,16 @@ const FullInspection = () => {
     setFinalSubmiting(true);
 
     try {
+      // Save bills first
       await handleSaveBill();
 
+      // Prepare rooms data with computed status for final submit
       const roomsToSave = Object.values(inspectionData).map(room => ({
         ...room,
-        inspectionStatus: computeRoomStatus(room)
+        inspectionStatus: computeRoomStatus(room) // Ensure latest status is saved
       }));
 
+      // Then final submit
       await projectFirestore
         .collection("inspections")
         .doc(inspectionId)
@@ -784,115 +781,116 @@ const FullInspection = () => {
   // Component rendering
   return (
     <>
-      <ScrollToTop />
+     
     
-      <div className="full_inspection">
-        {propertyId ? (
-          <>
-            <div className="row row_reverse_991">
-              <div className="col-lg-6">
-                <div className="title_card with_title mobile_full_575 mobile_gap h-100">
-                  <h2 className="text-center">{inspectionType} Inspection</h2>
-                  <div className="inspection_type_buttons">
-                    <button
-                      onClick={() => setActiveInspection("layout")}
-                      className={`${activeInspection === "layout" ? "active " : ""}${layoutInspectionDone ? "done" : ""}`}
-                    >
-                      Layout Inspection
-                      <img src="/assets/img/icons/check-mark.png" alt="" />
-                    </button>
+        <div className="full_inspection">
+          {propertyId ? (
+            <>
+              <div className="row row_reverse_991">
+                <div className="col-lg-6">
+                  <div className="title_card with_title mobile_full_575 mobile_gap h-100">
+                    <h2 className="text-center">{inspectionType} Inspection</h2>
+                    <div className="inspection_type_buttons">
+                      <button
+                        onClick={() => setActiveInspection("layout")}
+                        className={`${activeInspection === "layout" ? "active " : ""}${layoutInspectionDone ? "done" : ""}`}
+                      >
+                        Layout Inspection
+                        <img src="/assets/img/icons/check-mark.png" alt="" />
+                      </button>
 
-                    <button
-                      onClick={() => setActiveInspection("bill")}
-                      className={`${activeInspection === "bill" ? "active " : ""}${allBillInspectionComplete ? "done" : ""}`}
-                    >
-                      Bill Inspection
-                      <img src="/assets/img/icons/check-mark.png" alt="" />
-                    </button>
+                      <button
+                        onClick={() => setActiveInspection("bill")}
+                        className={`${activeInspection === "bill" ? "active " : ""}${allBillInspectionComplete ? "done" : ""}`}
+                      >
+                        Bill Inspection
+                        <img src="/assets/img/icons/check-mark.png" alt="" />
+                      </button>
+                    </div>
                   </div>
                 </div>
+                <PropertySummaryCard
+                  propertydoc={propertydoc}
+                  propertyId={propertyId}
+                />
               </div>
-              <PropertySummaryCard
-                propertydoc={propertydoc}
-                propertyId={propertyId}
-              />
-            </div>
 
-            {/* Layout Inspection Section */}
-            {activeInspection === "layout" && (
-              <LayoutInspectionSection
-                rooms={rooms}
-                activeRoom={activeRoom}
-                setActiveRoom={setActiveRoom}
-                activeFixture={activeFixture}
-                setActiveFixture={setActiveFixture}
-                getRoomClass={getRoomClass}
-                getFixtureClass={getFixtureClass}
-                inspectionData={inspectionData}
-                currentRoomData={currentRoomData}
-                currentFixtureData={currentFixtureData}
-                handleRoomChange={handleRoomChange}
-                handleFixtureChange={handleFixtureChange}
-                handleFixtureImageUpload={handleFixtureImageUpload}
-                handleFixtureImageDelete={handleFixtureImageDelete}
-                isFinalSubmitEnabled={isFinalSubmitEnabled}
-                inspectionDatabaseData={inspectionDatabaseData}
-                setFinalSubmit={setFinalSubmit}
-                handleSave={handleSave}
-                isDataSaving={isDataSaving}
-              />
-            )}
-
-            {/* Bill Inspection Section */}
-            {activeInspection === "bill" && (
-              <BillInspectionSection
-                bills={bills}
-                selectedBill={selectedBill}
-                handleBillTypeClick={handleBillTypeClick}
-                getBillButtonClass={getBillButtonClass}
-                currentBillData={currentBillData}
-                getBillFieldClass={getBillFieldClass}
-                amount={amount}
-                setAmount={setAmount}
-                remark={remark}
-                setRemark={setRemark}
-                handleBillImageUpload={handleBillImageUpload}
-                handleBillImageDelete={handleBillImageDelete}
-                isFinalSubmitEnabled={isFinalSubmitEnabled}
-                inspectionDatabaseData={inspectionDatabaseData}
-                setFinalSubmit={setFinalSubmit}
-                handleSaveBill={handleSaveBill}
-                isBillDataSaving={isBillDataSaving}
-              />
-            )}
-
-            {/* Final Submit Button */}
-            {inspectionDatabaseData &&
-              inspectionDatabaseData.layoutInspectionDone &&
-              inspectionDatabaseData.allBillInspectionComplete && (
-                <div className="bottom_fixed_button">
-                  <div className="next_btn_back">
-                    <button
-                      className="theme_btn no_icon btn_fill2 full_width"
-                      onClick={() => setFinalSubmit(true)}
-                      disabled={!isFinalSubmitEnabled()}
-                      style={{
-                        opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
-                        cursor: !isFinalSubmitEnabled() ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      Final Submit
-                    </button>
-                  </div>
-                </div>
+              {/* Layout Inspection Section */}
+              {activeInspection === "layout" && (
+                <LayoutInspectionSection
+                  rooms={rooms}
+                  activeRoom={activeRoom}
+                  setActiveRoom={setActiveRoom}
+                  activeFixture={activeFixture}
+                  setActiveFixture={setActiveFixture}
+                  getRoomClass={getRoomClass}
+                  getFixtureClass={getFixtureClass}
+                  inspectionData={inspectionData}
+                  currentRoomData={currentRoomData}
+                  currentFixtureData={currentFixtureData}
+                  handleRoomChange={handleRoomChange}
+                  handleFixtureChange={handleFixtureChange}
+                  handleFixtureImageUpload={handleFixtureImageUpload}
+                  handleFixtureImageDelete={handleFixtureImageDelete}
+                  isFinalSubmitEnabled={isFinalSubmitEnabled}
+                  inspectionDatabaseData={inspectionDatabaseData}
+                  setFinalSubmit={setFinalSubmit}
+                  handleSave={handleSave}
+                  isDataSaving={isDataSaving}
+                />
               )}
-          </>
-        ) : (
-          <div className="page_loader">
-            <ClipLoader color="var(--theme-green2)" loading={true} />
-          </div>
-        )}
-      </div>
+
+              {/* Bill Inspection Section */}
+              {activeInspection === "bill" && (
+                <BillInspectionSection
+                  bills={bills}
+                  selectedBill={selectedBill}
+                  handleBillTypeClick={handleBillTypeClick}
+                  getBillButtonClass={getBillButtonClass}
+                  currentBillData={currentBillData}
+                  getBillFieldClass={getBillFieldClass}
+                  amount={amount}
+                  setAmount={setAmount}
+                  remark={remark}
+                  setRemark={setRemark}
+                  handleBillImageUpload={handleBillImageUpload}
+                  handleBillImageDelete={handleBillImageDelete}
+                  isFinalSubmitEnabled={isFinalSubmitEnabled}
+                  inspectionDatabaseData={inspectionDatabaseData}
+                  setFinalSubmit={setFinalSubmit}
+                  handleSaveBill={handleSaveBill}
+                  isBillDataSaving={isBillDataSaving}
+                />
+              )}
+
+              {/* Final Submit Button */}
+              {inspectionDatabaseData &&
+                inspectionDatabaseData.layoutInspectionDone &&
+                inspectionDatabaseData.allBillInspectionComplete && (
+                  <div className="bottom_fixed_button">
+                    <div className="next_btn_back">
+                      <button
+                        className="theme_btn no_icon btn_fill2 full_width"
+                        onClick={() => setFinalSubmit(true)}
+                        disabled={!isFinalSubmitEnabled()}
+                        style={{
+                          opacity: !isFinalSubmitEnabled() ? 0.3 : 1,
+                          cursor: !isFinalSubmitEnabled() ? "not-allowed" : "pointer",
+                        }}
+                      >
+                        Final Submit
+                      </button>
+                    </div>
+                  </div>
+                )}
+            </>
+          ) : (
+            <div className="page_loader">
+              <ClipLoader color="var(--theme-green2)" loading={true} />
+            </div>
+          )}
+        </div>
+   
 
       {/* Modals */}
       <ImageActionModal imageActionStatus={imageActionStatus} />

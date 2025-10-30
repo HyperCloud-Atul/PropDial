@@ -36,7 +36,7 @@ import PGCreateProperty from "./pdpages/property/PGCreateProperty";
 import PGUpdateProperty from "./pdpages/property/PGUpdateProperty";
 import MyProperties from "./pdpages/property/MyProperties";
 
-import ViewInspection from "./pdpages/inspection/ViewInspection";
+import ViewInspections from "./pdpages/inspection/viewInspection/ViewInspection";
 import InspectionDetails from "./pdpages/inspection/InspectionDetails";
 import AddInspection from "./pdpages/inspection/AddInspection";
 import PGOwnerDashboard from "./pdpages/roles/owner/PGOwnerDashboard";
@@ -717,7 +717,7 @@ function App() {
                             user.role === "superAdmin" ||
                             user.role === "executive" ||
                             user.role === "owner") ? (
-                          <ViewInspection />
+                          <ViewInspections />
                         ) : (
                           <Navigate to="/" />
                         )
@@ -1206,9 +1206,7 @@ function App() {
                     <Route
                       path="/agents/new"
                       element={
-                        user &&
-                        (user.role === "admin" ||
-                          user.role === "superAdmin") ? (
+                        user?.isEmployee ? (
                           <AddAgent agentID={"new"} />
                         ) : (
                           <PhoneLogin />

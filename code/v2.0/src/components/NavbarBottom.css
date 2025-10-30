@@ -79,7 +79,7 @@ section.bottom_menu_bar {
     box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
     position: fixed;
     width: 100%;
-    z-index: 99;
+    z-index: 9999;
     bottom: 0;
     flex-wrap: wrap;
     justify-content: center;

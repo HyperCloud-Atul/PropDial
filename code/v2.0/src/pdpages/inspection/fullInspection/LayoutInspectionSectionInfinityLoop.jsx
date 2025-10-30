@@ -21,22 +21,7 @@ const LayoutInspectionSection = ({
   handleSave,
   isDataSaving
 }) => {
-  const statusOptions = [
-    "Average",
-    "Bad",
-    "Broken",
-    "Clean",
-    "Damaged",
-    "Dirty",
-    "Excellent",
-    "Good Condition",
-    "Needs Repair",
-    "Not Selected",
-    "Not Working",
-    "Working"
-  ];
-
-
+  const statusOptions = ["Working", "Not Working", "Damaged", "Needs Repair", "Good Condition"];
 
   // Prevent form submission
   const handleFormSubmit = (e) => {
@@ -59,9 +44,9 @@ const LayoutInspectionSection = ({
 
   // Check if fixture has any data
   const hasFixtureData = () => {
-    return isFixtureFieldFilled('status') ||
-      isFixtureFieldFilled('remark') ||
-      (currentFixtureData.images && currentFixtureData.images.length > 0);
+    return isFixtureFieldFilled('status') || 
+           isFixtureFieldFilled('remark') || 
+           (currentFixtureData.images && currentFixtureData.images.length > 0);
   };
 
   return (
@@ -81,10 +66,10 @@ const LayoutInspectionSection = ({
           />
         ))}
       </div>
-
+      
       <div className="vg22"></div>
 
-      {/* Room Level Content */}
+      {/* Room Level Content - Bill Inspection ki tarah */}
       {activeRoom && (
         <div>
           {/* Room Level Form - Prevent default submission */}
@@ -102,7 +87,7 @@ const LayoutInspectionSection = ({
 
                 {currentRoomData.isAllowForInspection === "yes" && (
                   <>
-                    {/* Fixture Selection Buttons */}
+                    {/* Fixture Selection Buttons - Bill inspection ke buttons ki tarah */}
                     <div className="col-12">
                       <div className="form_field w-100" style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
                         <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
@@ -123,64 +108,67 @@ const LayoutInspectionSection = ({
                       </div>
                     </div>
                   </>
-                )}
+                )}  
 
-                {/* Fixture Form - When fixture is selected */}
-                {activeRoom && activeFixture && (
-                  <>
-                    <div className="fixture_form_section">
-                      <h4 className="text-center mb-4" style={{ color: "var(--theme-blue)" }}>
-                        {activeFixture} Inspection
-                      </h4>
+                     {/* Fixture Form - Jab fixture select ho to niche hi form open ho */}
+          {activeRoom && activeFixture && (
+            <>
+             
+              
+              <div className="fixture_form_section">
+                <h4 className="text-center mb-4" style={{ color: "var(--theme-blue)" }}>
+                  {activeFixture} Inspection
+                </h4>
+                
+                {/* Fixture form - Prevent default submission */}
+                <form className="add_inspection_form" onSubmit={handleFormSubmit}>
+                  <div className="aai_form">
+                    <div className="row row_gap_20">
+                      <FixtureField
+                        field="status"
+                        label="Status*"
+                        value={currentFixtureData.status}
+                        onChange={(value) => handleFixtureChange(activeRoom, activeFixture, "status", value)}
+                        type="select"
+                        options={statusOptions}
+                        isFilled={isFixtureFieldFilled('status')}
+                      />
 
-                      {/* Fixture form - Prevent default submission */}
-                      <form className="add_inspection_form" onSubmit={handleFormSubmit}>
-                        <div className="aai_form">
-                          <div className="row row_gap_20">
-                            <FixtureField
-                              field="status"
-                              label="Status*"
-                              value={currentFixtureData.status}
-                              onChange={(value) => handleFixtureChange(activeRoom, activeFixture, "status", value)}
-                              type="select"
-                              options={statusOptions}
-                              isFilled={isFixtureFieldFilled('status')}
-                            />
+                      <FixtureField
+                        field="remark"
+                        label="Remark*"
+                        value={currentFixtureData.remark}
+                        onChange={(value) => handleFixtureChange(activeRoom, activeFixture, "remark", value)}
+                        type="textarea"
+                        isFilled={isFixtureFieldFilled('remark')}
+                      />
 
-                            <FixtureField
-                              field="remark"
-                              label="Remark*"
-                              value={currentFixtureData.remark}
-                              onChange={(value) => handleFixtureChange(activeRoom, activeFixture, "remark", value)}
-                              type="textarea"
-                              isFilled={isFixtureFieldFilled('remark')}
-                            />
-
-                            <FixtureImageUpload
-                              roomId={activeRoom}
-                              fixtureName={activeFixture}
-                              images={currentFixtureData.images || []}
-                              handleImageUpload={handleFixtureImageUpload}
-                              handleImageDelete={handleFixtureImageDelete}
-                              isFilled={currentFixtureData.images && currentFixtureData.images.length > 0}
-                            />
-                          </div>
-                        </div>
-                      </form>
+                      <FixtureImageUpload
+                        roomId={activeRoom}
+                        fixtureName={activeFixture}
+                        images={currentFixtureData.images || []}
+                        handleImageUpload={handleFixtureImageUpload}
+                        handleImageDelete={handleFixtureImageDelete}
+                        isFilled={currentFixtureData.images && currentFixtureData.images.length > 0}
+                      />
                     </div>
-                  </>
-                )}
-
-                <InspectionField
+                  </div>
+                </form>
+              </div>
+            </>
+          )}         
+              <InspectionField
                   field="generalRemark"
                   label={`General Remark${currentRoomData.isAllowForInspection === "yes" ? "" : "*"}`}
                   value={currentRoomData.generalRemark}
                   onChange={(value) => handleRoomChange(activeRoom, "generalRemark", value)}
                   type="textarea"
-                />
+                />          
               </div>
             </div>
           </form>
+
+     
 
           <SaveButtons
             isFinalSubmitEnabled={isFinalSubmitEnabled}
@@ -198,18 +186,18 @@ const LayoutInspectionSection = ({
 
 // Helper components for Layout Inspection
 const RoomButton = ({ room, isActive, roomClass, onClick }) => (
-  <button
+  <button 
     type="button"
-    onClick={onClick}
+    onClick={onClick} 
     className={roomClass}
   >
     <div className="active_hand">
-      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
         <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
       </svg>
     </div>
     <div className="icon_text">
-      <div className="btn_icon">
+   <div className="btn_icon">
         <div className="bi_icon add">
           <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#3F5E98" strokeWidth="40">
             <path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z" />
@@ -244,13 +232,13 @@ const RoomButton = ({ room, isActive, roomClass, onClick }) => (
 );
 
 const FixtureButton = ({ fixtureName, roomId, fixtureClass, isActive, onClick }) => (
-  <button
+  <button 
     type="button"
-    onClick={onClick}
+    onClick={onClick} 
     className={fixtureClass}
   >
     <div className="active_hand">
-      <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
+       <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF">
         <path d="M412-96q-22 0-41-9t-33-26L48-482l27-28q17-17 41.5-20.5T162-521l126 74v-381q0-15.3 10.29-25.65Q308.58-864 323.79-864t25.71 10.46q10.5 10.46 10.5 25.92V-321l-165-97 199 241q3.55 4.2 8.27 6.6Q407-168 412-168h259.62Q702-168 723-189.15q21-21.15 21-50.85v-348q0-15.3 10.29-25.65Q764.58-624 779.79-624t25.71 10.35Q816-603.3 816-588v348q0 60-42 102T672-96H412Zm100-242Zm-72-118v-228q0-15.3 10.29-25.65Q460.58-720 475.79-720t25.71 10.35Q512-699.3 512-684v228h-72Zm152 0v-179.72q0-15.28 10.29-25.78 10.29-10.5 25.5-10.5t25.71 10.35Q664-651.3 664-636v180h-72Z" />
       </svg>
     </div>
@@ -346,15 +334,15 @@ const FixtureField = ({
   isFilled
 }) => {
   const fieldStyle = {
-    padding: "10px",
-    borderRadius: "5px",
+    padding: "10px", 
+    borderRadius: "5px", 
     background: "white",
-    border: isFilled ? "1px solid #ddd" : "1px solid var(--theme-red)"
+    border: isFilled ? "1px solid #ddd" : "1px solid var(--theme-red)" // Red border if not filled
   };
 
   const inputStyle = {
-    padding: "8px",
-    borderRadius: "4px",
+    padding: "8px", 
+    borderRadius: "4px", 
     width: "100%"
   };
 
@@ -382,6 +370,7 @@ const FixtureField = ({
             <textarea
               style={{
                 ...(type === "textarea" ? { minHeight: "104px" } : {}),
+              
                 borderRadius: "4px",
                 width: "100%",
                 padding: "8px"
@@ -399,10 +388,10 @@ const FixtureField = ({
 
 const FixtureImageUpload = ({ roomId, fixtureName, images, handleImageUpload, handleImageDelete, isFilled }) => {
   const containerStyle = {
-    padding: "10px",
-    borderRadius: "5px",
+    padding: "10px", 
+    borderRadius: "5px", 
     background: "white",
-    border: isFilled ? "1px solid #ddd" : "1px solid var(--theme-red)"
+    border: isFilled ? "1px solid #ddd" : "1px solid var(--theme-red)" // Red border if no images
   };
 
   return (

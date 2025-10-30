@@ -1,4 +1,3 @@
-// this is new code with the help of deepseeker ai
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
@@ -46,8 +45,10 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
   const [allBillInspectionComplete, setAllBillInspectionComplete] = useState(false);
   const [inspectionDatabaseData, setInspectionDatabaseData] = useState(null);
 
-  // Function to compute room status for regular inspection
-  const computeRoomStatus = (room) => {
+  // Function to compute room status for regular inspection - WITHOUT STATE UPDATE
+  const computeRoomStatus = useCallback((room) => {
+    if (!room) return "add";
+    
     if (room.isAllowForInspection === "no") {
       return "notallowed";
     }
@@ -70,7 +71,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     } else {
       return "add";
     }
-  };
+  }, []);
 
   // Memoized values
   const currentRoomData = useMemo(() =>
@@ -147,7 +148,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     return () => unsubscribe();
   }, [propertyId]);
 
-  // Rooms data effect
+  // Rooms data effect - FIXED: Remove circular dependency
   useEffect(() => {
     if (!propertyId) return;
 
@@ -173,8 +174,11 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
 
           setInspectionData((prevData) => {
             const newData = { ...prevData };
+            let hasChanges = false;
+
             roomsData.forEach((room) => {
               if (!newData[room.id]) {
+                hasChanges = true;
                 newData[room.id] = {
                   roomId: room.id,
                   roomName: room.roomName,
@@ -188,11 +192,12 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
                   generalRemark: "",
                   cleanRemark: "",
                   isAllowForInspection: "yes",
-                  inspectionStatus: "add", // Default status added
+                  images: []
                 };
               }
             });
-            return newData;
+
+            return hasChanges ? newData : prevData;
           });
         },
         (error) => {
@@ -202,23 +207,6 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
 
     return () => unsubscribe();
   }, [propertyId]);
-
-  // Update room status when inspection data changes
-  useEffect(() => {
-    setInspectionData((prevData) => {
-      const updatedData = { ...prevData };
-      Object.keys(updatedData).forEach(roomId => {
-        const room = updatedData[roomId];
-        if (room) {
-          updatedData[roomId] = {
-            ...room,
-            inspectionStatus: computeRoomStatus(room)
-          };
-        }
-      });
-      return updatedData;
-    });
-  }, [inspectionData]);
 
   // Bills data effect
   useEffect(() => {
@@ -249,7 +237,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     fetchBills();
   }, [propertyId, inspectionId]);
 
-  // Layout inspection completion check
+  // Layout inspection completion check - FIXED: Remove circular dependency
   const isAllLayoutInspectionDone = useCallback(() => {
     const allRoomsInspected = Object.values(inspectionData).every((room) => {
       if (room.isAllowForInspection === "no") {
@@ -268,27 +256,35 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
       );
     });
 
-    if (layoutInspectionDone !== allRoomsInspected) {
-      setLayoutInspectionDone(allRoomsInspected);
-    }
-
     return allRoomsInspected;
-  }, [inspectionData, layoutInspectionDone]);
+  }, [inspectionData]);
 
-  useEffect(() => {
-    isAllLayoutInspectionDone();
-  }, [inspectionData, isAllLayoutInspectionDone]);
-
-  // Bill inspection completion check
-  useEffect(() => {
+  // Bill inspection completion check - FIXED: Remove circular dependency
+  const checkBillInspectionComplete = useCallback(() => {
     const allBillInspectionFull = bills.length > 0 &&
       bills.every((bill) => {
         const billData = billInspectionData[bill.id] || {};
         return billData.amount && billData.remark;
       });
 
-    setAllBillInspectionComplete(allBillInspectionFull);
+    return allBillInspectionFull;
   }, [bills, billInspectionData]);
+
+  // FIXED: Update layout inspection status only when needed
+  useEffect(() => {
+    const layoutDone = isAllLayoutInspectionDone();
+    if (layoutInspectionDone !== layoutDone) {
+      setLayoutInspectionDone(layoutDone);
+    }
+  }, [isAllLayoutInspectionDone, layoutInspectionDone]);
+
+  // FIXED: Update bill inspection status only when needed
+  useEffect(() => {
+    const billsComplete = checkBillInspectionComplete();
+    if (allBillInspectionComplete !== billsComplete) {
+      setAllBillInspectionComplete(billsComplete);
+    }
+  }, [checkBillInspectionComplete, allBillInspectionComplete]);
 
   // Final submit redirect
   useEffect(() => {
@@ -297,7 +293,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   }, [inspectionDocument?.finalSubmit, navigate, propertyId]);
 
-  // Image handling functions
+  // Image handling functions - FIXED: Optimized state updates
   const handleImageUpload = async (e, roomId) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
@@ -347,16 +343,21 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
             async () => {
               try {
                 const url = await storageRef.getDownloadURL();
-                setInspectionData((prev) => ({
-                  ...prev,
-                  [roomId]: {
-                    ...prev[roomId],
-                    images: [
-                      ...(prev[roomId]?.images || []),
-                      { url, name: compressedFile.name },
-                    ],
-                  },
-                }));
+                setInspectionData((prev) => {
+                  const updatedRoom = { ...prev[roomId] };
+                  
+                  return {
+                    ...prev,
+                    [roomId]: {
+                      ...updatedRoom,
+                      images: [
+                        ...(updatedRoom.images || []),
+                        { url, name: compressedFile.name },
+                      ],
+                    }
+                  };
+                });
+                
                 setUploadProgress((prev) => ({
                   ...prev,
                   [file.name]: 100,
@@ -386,13 +387,17 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
 
     try {
       await storageRef.delete();
-      setInspectionData((prev) => ({
-        ...prev,
-        [roomId]: {
-          ...prev[roomId],
-          images: prev[roomId]?.images?.filter((img) => img.url !== image.url),
-        },
-      }));
+      setInspectionData((prev) => {
+        const updatedRoom = { ...prev[roomId] };
+        
+        return {
+          ...prev,
+          [roomId]: {
+            ...updatedRoom,
+            images: updatedRoom.images?.filter((img) => img.url !== image.url) || [],
+          }
+        };
+      });
       setImageActionStatus(null);
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -400,7 +405,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   };
 
-  // Form handling functions
+  // Form handling functions - FIXED: Optimized state updates
   const handleChange = (roomId, field, value) => {
     setInspectionData((prev) => {
       const updatedRoomData = {
@@ -424,15 +429,15 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     });
   };
 
-  // UI helper functions
+  // UI helper functions - FIXED: Compute status on the fly
   const getRoomClass = (roomId) => {
     const room = inspectionData[roomId];
     if (!room) return "room-button";
 
     let className = "room-button";
 
-    // Use the stored inspectionStatus from database
-    const status = room.inspectionStatus || "add";
+    // Compute status dynamically instead of storing it
+    const status = computeRoomStatus(room);
     
     if (status === "notallowed") {
       className += " notallowed";
@@ -481,7 +486,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     );
   };
 
-  // Bill inspection functions
+  // Bill inspection functions - FIXED: Add debounce effect
   const handleBillTypeClick = (bill) => {
     if (selectedBill?.id === bill.id) return;
 
@@ -492,18 +497,23 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     setRemark(billData.remark || "");
   };
 
+  // FIXED: Update bill data with debounce effect
   useEffect(() => {
     if (!selectedBill) return;
 
-    setBillInspectionData((prevData) => ({
-      ...prevData,
-      [selectedBill.id]: {
-        ...(prevData[selectedBill.id] || {}),
-        isBillAvailable,
-        amount,
-        remark,
-      },
-    }));
+    const timer = setTimeout(() => {
+      setBillInspectionData((prevData) => ({
+        ...prevData,
+        [selectedBill.id]: {
+          ...(prevData[selectedBill.id] || {}),
+          isBillAvailable,
+          amount,
+          remark,
+        },
+      }));
+    }, 300);
+
+    return () => clearTimeout(timer);
   }, [isBillAvailable, amount, remark, selectedBill]);
 
   const getBillButtonClass = (bill) => {
@@ -618,7 +628,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
       // Prepare rooms data with computed status
       const roomsToSave = Object.values(inspectionData).map(room => ({
         ...room,
-        inspectionStatus: computeRoomStatus(room) // Ensure latest status is saved
+        inspectionStatus: computeRoomStatus(room)
       }));
 
       await projectFirestore
@@ -710,7 +720,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
       // Prepare rooms data with computed status for final submit
       const roomsToSave = Object.values(inspectionData).map(room => ({
         ...room,
-        inspectionStatus: computeRoomStatus(room) // Ensure latest status is saved
+        inspectionStatus: computeRoomStatus(room)
       }));
 
       // Then final submit
@@ -740,6 +750,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
   // Component rendering
   return (
     <>
+      <ScrollToTop />
       <div className="regular_inspection">
         {propertyId ? (
           <>

@@ -6,6 +6,8 @@
   /* --theme-green:#20b2aa; */
   /* --theme-orange: #e95733;  */
   --theme-green: #00a8a8;
+  --theme-green2-bg:#00a300;
+--theme-green-bg:#00a8a8;
   --theme-green2: #00a300;
   --theme-purple: #5a10d5;
   --theme-blue: #3f5e98;
@@ -188,7 +190,12 @@ a.theme_btn.btn_white {
   font-size: 18px;
   display: none !important;
 }
-
+.green_bg{
+  background: var(--theme-green);
+}
+.green2_bg{
+  background: var(--theme-green2);
+}
 .ba_animation {
   animation: btn_arrow_animation 1s linear infinite;
 }
@@ -794,7 +801,7 @@ h2.card_title {
   padding: 22px;
   bottom: 0;
   background: whitesmoke;
-  z-index: 999;
+  z-index: 99999;
 }
 
 .next_btn_back {
