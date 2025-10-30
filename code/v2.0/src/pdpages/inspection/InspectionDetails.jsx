@@ -974,7 +974,56 @@ const InspectionDetails = () => {
         )}
 
         {/* Details Modal */}
-        <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+        {/* <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              {selectedFixture?.roomName} - {selectedFixture?.fixtureName}
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedFixture && (
+              <div className="modal-content">
+                <div className="fixture-details">
+                  <div className="detail-row">
+                    <strong>Status:</strong>
+                    <span className={`status-badge ${selectedFixture.status?.toLowerCase()}`}>
+                      {selectedFixture.status}
+                    </span>
+                  </div>
+
+                  <div className="detail-row">
+                    <strong>Remark:</strong>
+                    <p>{selectedFixture.remark || 'No remarks'}</p>
+                  </div>
+
+                  {selectedFixture.images && selectedFixture.images.length > 0 && (
+                    <div className="detail-row">
+                      <strong>Images ({selectedFixture.images.length}):</strong>
+                      <div className="modal-images">
+                        {selectedFixture.images.map((img, imgIdx) => (
+                          <div key={imgIdx} className="modal-image-item">
+                            <img
+                              src={img.url}
+                              alt={`${selectedFixture.fixtureName} ${imgIdx}`}
+                              className="modal-image"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal> */}
+        
+          <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
           <Modal.Header closeButton>
             <Modal.Title>
               {selectedFixture?.roomName} - {selectedFixture?.fixtureName}
