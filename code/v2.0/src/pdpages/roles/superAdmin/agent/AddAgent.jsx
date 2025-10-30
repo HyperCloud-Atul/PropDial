@@ -13,7 +13,7 @@ import { BeatLoader } from "react-spinners";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { format } from "date-fns";
 
-const AddAgent = ({ showAIForm, setShowAIForm, handleShowAIForm, agentID }) => {
+const AddAgent = ({agentID }) => {
   const { camelCase } = useCommon();
   const { user } = useAuthContext();
   const isReadOnly = agentID !== "new" ? true : false;
