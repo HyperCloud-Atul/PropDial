@@ -1004,9 +1004,15 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
+  &.pending{
+    grid-template-columns: repeat(1, 1fr);
+  }
 
   @media only screen and (max-width: 1199px) {
     grid-template-columns: repeat(2, 1fr);
+     &.pending{
+    grid-template-columns: repeat(1, 1fr);
+  }
   }
 
   @media only screen and (max-width: 991px) {
@@ -1024,6 +1030,8 @@
     padding: 15px;
     overflow: hidden;
     border-bottom: 1px solid var(--theme-blue);
+    position: relative;
+    padding-bottom: 42px;
 
     @media only screen and (max-width: 575px) {
       border-radius: 0px;
@@ -1031,6 +1039,7 @@
       border-bottom: 2px solid var(--theme-blue);
       margin-left: -15px;
       margin-right: -15px;
+          padding-bottom: 42px;
     }
 
 
@@ -1143,13 +1152,17 @@
   }
 
   .ic_footer {
-    background: #efefef;
+ background: #efefef;
     padding: 6px 15px;
-    margin: 15px -15px -15px -15px;
-    display: flex;
+    display: flex
+;
     justify-content: space-between;
     font-size: 13px;
     gap: 12px;
+    position: absolute;
+    bottom: 0;  
+    width: 100%;
+    left: 0;
 
     @media only screen and (max-width: 575px) {
       font-size: 11px;

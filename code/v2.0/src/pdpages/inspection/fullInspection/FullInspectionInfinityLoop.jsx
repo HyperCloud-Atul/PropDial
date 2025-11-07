@@ -867,7 +867,7 @@ const FullInspection = () => {
               {inspectionDatabaseData &&
                 inspectionDatabaseData.layoutInspectionDone &&
                 inspectionDatabaseData.allBillInspectionComplete && (
-                  <div className="bottom_fixed_button">
+                  <div className="bottom_fixed_button" style={{ zIndex: "99999" }}>
                     <div className="next_btn_back">
                       <button
                         className="theme_btn no_icon btn_fill2 full_width"

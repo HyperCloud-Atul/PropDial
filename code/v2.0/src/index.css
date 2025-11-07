@@ -172,6 +172,11 @@ a.theme_btn.btn_white {
   color: var(--theme-green);
   border: 1px solid var(--theme-green);
 }
+.theme_btn.btn_border2 {
+  background: none;
+  color: var(--theme-green2);
+  border: 1px solid var(--theme-green2);
+}
 
 .theme_btn.btn_border_red {
   background: none;

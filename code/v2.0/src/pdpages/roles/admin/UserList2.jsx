@@ -14,7 +14,6 @@ import "./UserList.scss";
 
 // import filter
 import UserFilters from "./UserFilters";
-
 const userFilter = [
   "Admin",
   "Executive",
@@ -29,26 +28,15 @@ const userFilter = [
   "Frontdesk",
   "Prospective Buyer",
   "Inactive",
-  "Ex Employee", // New filter added
 ];
 
 const UserList = () => {
   const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
-  
-  // Main users collection
   const { documents, error } = useCollection("users-propdial", "", [
     "createdAt",
     "desc",
   ]);
-  
-  // Ex employees collection
-  const { documents: exEmployees, error: exEmployeesError } = useCollection(
-    "users-propdial-ex", 
-    "", 
-    ["createdAt", "desc"]
-  );
-
   const [filter, setFilter] = useState("Admin");
 
   useEffect(() => {
@@ -68,19 +56,8 @@ const UserList = () => {
     setSearchInput(e.target.value);
   };
 
-  // Combine both collections based on filter
-  const getCombinedUsers = () => {
-    if (filter === "Ex Employee") {
-      return exEmployees || [];
-    } else {
-      return documents || [];
-    }
-  };
-
-  const allUsers = getCombinedUsers();
-
-  const users = allUsers
-    ? allUsers.filter((document) => {
+  const users = documents
+    ? documents.filter((document) => {
         let roleMatch = true;
         let searchMatch = true;
         const rolesArray = document.rolesPropDial || [];
@@ -139,15 +116,12 @@ const UserList = () => {
           case "Inactive":
             roleMatch = document.status === "inactive";
             break;
-          case "Ex Employee":
-            // All documents from ex employees collection are considered ex employees
-            roleMatch = true;
-            break;
           default:
             roleMatch = true;
         }
 
         // Filter by search input
+        // console.log("Object: ", Object)
         searchMatch = searchInput
           ? Object.values(document).some(
               (field) =>
@@ -182,7 +156,6 @@ const UserList = () => {
     Buyer: 0,
     "Prospective Buyer": 0,
     Inactive: 0,
-    "Ex Employee": exEmployees ? exEmployees.length : 0, // New count added
   };
 
   if (documents) {
@@ -248,7 +221,7 @@ const UserList = () => {
   // role wise count end
 
   // card and table view mode functionality start
-  const [viewMode, setviewMode] = useState("card_view");
+  const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
 
   const handleModeChange = (newViewMode) => {
     setviewMode(newViewMode);
@@ -258,6 +231,7 @@ const UserList = () => {
   const { exportToExcel, response: res } = useExportToExcel();
 
   const exportUsers = async () => {
+    //create data
     const subsetData = users.map((item) => ({
       Name: item.fullName,
       Mobile: item.phoneNumber,
@@ -269,27 +243,28 @@ const UserList = () => {
       OnboardedTimestamp: item.createdAt
         ? format(item.createdAt.toDate(), "dd-MMM-yy")
         : "N/A",
+
+      // Add other fields as needed
+
+      // Add other fields as needed
     }));
 
-    let filename = filter === "Ex Employee" ? "ExEmployeesList.xlsx" : "UserList.xlsx";
+    let filename = "UserList.xlsx";
     exportToExcel(subsetData, filename);
-  };
 
-  // Combine errors
-  const combinedError = error || exEmployeesError;
+    // console.log(res)
+  };
 
   return (
     <div className="top_header_pg pg_bg user_pg">
-      <div className="page_spacing pg_min_height">
+      <div
+        className="page_spacing pg_min_height
+      "
+      >
         <div className="pg_header d-flex justify-content-between">
           <div className="left">
             <h2 className="m22">
-              Total: <span className="text_orange">
-                {filter === "Ex Employee" 
-                  ? (exEmployees ? exEmployees.length : 0)
-                  : (documents ? documents.length : 0)
-                }
-              </span>,
+              Total: <span className="text_orange">{documents?.length}</span>,
               Filtered: <span className="text_orange">{users?.length}</span>
             </h2>
           </div>
@@ -316,11 +291,14 @@ const UserList = () => {
                 <span className="material-symbols-outlined">search</span>
               </div>
             </div>
+            {/* <span className="r14 light_black">
+              ( Filtered users : {users && users.length} )
+            </span> */}
           </div>
 
           <div className="right">
             <div className="user_filters new_inline">
-              {(documents || exEmployees) && (
+              {documents && (
                 <UserFilters
                   changeFilter={changeFilter}
                   filterList={userFilter}
@@ -353,7 +331,7 @@ const UserList = () => {
           </div>
         </div>
         <hr></hr>
-        {combinedError && <p className="error">{combinedError}</p>}
+        {error && <p className="error">{error}</p>}
         {users && users.length === 0 && (
           <p
             className="text_red medium text-center"
@@ -361,18 +339,18 @@ const UserList = () => {
               fontSize: "18px",
             }}
           >
-            {filter === "Ex Employee" ? "No Ex Employees Found!" : "No Users Yet!"}
+            No Users Yet!
           </p>
         )}
 
-    {viewMode === "card_view" && (
-  <div className="propdial_users all_tenants">
-    {users && <UserSinglecard users={users} isExEmployee={filter === "Ex Employee"} />}
-  </div>
-)}
-{viewMode === "table_view" && users && (
-  <UserTable users={users} filter={filter} isExEmployee={filter === "Ex Employee"} />
-)}
+        {viewMode === "card_view" && (
+          <div className="propdial_users all_tenants">
+            {users && <UserSinglecard users={users} />}
+          </div>
+        )}
+        {viewMode === "table_view" && users && (
+          <UserTable users={users} filter={filter} />
+        )}
       </div>
     </div>
   );

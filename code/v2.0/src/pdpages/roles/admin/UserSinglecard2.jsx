@@ -4,8 +4,7 @@ import { useAuthContext } from "../../../hooks/useAuthContext";
 import UserRoleStatusModal from "./UserRoleStatusModal";
 import ImageModal from "../../imageModal/ImageModal";
 import UserCardItem from "./UserCardItem";
-
-const UserSinglecard = ({ users, isExEmployee }) => {
+const UserSinglecard = ({ users }) => {
   //   modal code start
   const [selectedUser, setSelectedUser] = useState(null);
   const [show, setShow] = useState(false);
@@ -47,10 +46,7 @@ const UserSinglecard = ({ users, isExEmployee }) => {
 
   // update role and status
   const { user } = useAuthContext();
-  // Use different collection for ex-employees
-  const collectionName = isExEmployee ? "users-propdial-ex" : "users-propdial";
-  const { updateDocument } = useFirestore(collectionName);
-  
+  const { updateDocument } = useFirestore("users-propdial");
   const handleSaveChanges = async () => {
     if (!selectedUser) return;
     try {
@@ -86,14 +82,7 @@ const UserSinglecard = ({ users, isExEmployee }) => {
 
   return (
     <>
-      {users && users.map((userObj) => (
-        <UserCardItem 
-          key={userObj.id} 
-          userObj={userObj} 
-          handleImageClick={handleImageClick}
-          isExEmployee={isExEmployee}
-        />
-      ))}
+     {users && users.map((userObj) => <UserCardItem key={userObj.id} userObj={userObj} handleImageClick={handleImageClick} />)}
 
       <UserRoleStatusModal
         show={show}

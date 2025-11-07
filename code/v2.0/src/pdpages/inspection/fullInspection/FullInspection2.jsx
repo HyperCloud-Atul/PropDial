@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 import { projectFirestore, timestamp, projectStorage } from "../../../firebase/config";
 import firebase from 'firebase/compat/app';
+import { useDocument } from "../../../hooks/useDocument";
 import imageCompression from "browser-image-compression";
 import { ClipLoader } from "react-spinners";
 import ScrollToTop from "../../../components/ScrollToTop";
@@ -13,7 +14,8 @@ import ImageActionModal from "./ImageActionModal";
 import SaveSuccessModal from "./SaveSuccessModal";
 import FinalSubmitModal from "./FinalSubmitModal";
 
-const RegularInspection = ({ inspectionId, inspectionDocument }) => {
+const FullInspection = () => {
+  const { inspectionId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
@@ -21,6 +23,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
   const [rooms, setRooms] = useState([]);
   const [inspectionData, setInspectionData] = useState({});
   const [activeRoom, setActiveRoom] = useState(null);
+  const [activeFixture, setActiveFixture] = useState(null);
   const [propertyId, setPropertyId] = useState(null);
   const [uploadProgress, setUploadProgress] = useState({});
   const [isDataSaving, setIsDataSaving] = useState(false);
@@ -45,33 +48,8 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
   const [allBillInspectionComplete, setAllBillInspectionComplete] = useState(false);
   const [inspectionDatabaseData, setInspectionDatabaseData] = useState(null);
 
-  // Function to compute room status for regular inspection - WITHOUT STATE UPDATE
-  const computeRoomStatus = useCallback((room) => {
-    if (!room) return "add";
-    
-    if (room.isAllowForInspection === "no") {
-      return "notallowed";
-    }
-
-    const filledFields = [
-      room.seepage,
-      room.seepageRemark,
-      room.termites,
-      room.termitesRemark,
-      room.otherIssue,
-      room.otherIssueRemark,
-      room.cleanRemark,
-      room.images?.length > 0,
-    ].filter(Boolean).length;
-
-    if (filledFields === 8) {
-      return "full";
-    } else if (filledFields > 0) {
-      return "half";
-    } else {
-      return "add";
-    }
-  }, []);  
+  const { document: inspectionDocument, error: inspectionDocumentError } =
+    useDocument("inspections", inspectionId);
 
   // Memoized values
   const currentRoomData = useMemo(() =>
@@ -79,10 +57,47 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     [inspectionData, activeRoom]
   );
 
+  const currentFixtureData = useMemo(() =>
+    activeRoom && activeFixture ? inspectionData[activeRoom]?.fixtures?.[activeFixture] || {} : {},
+    [inspectionData, activeRoom, activeFixture]
+  );
+
   const currentBillData = useMemo(() =>
     selectedBill ? billInspectionData[selectedBill.id] || {} : {},
     [billInspectionData, selectedBill]
   );
+
+  // Function to compute room status - WITHOUT STATE UPDATE
+  const computeRoomStatus = useCallback((room) => {
+    if (!room) return "add";
+    
+    if (room.isAllowForInspection === "no") {
+      return "notallowed";
+    }
+
+    const fixtures = room.fixtures || {};
+    const totalFixtures = Object.keys(fixtures).length;
+    
+    if (totalFixtures === 0) {
+      return "add";
+    }
+
+    const inspectedFixtures = Object.values(fixtures).filter(fixture => 
+      fixture.status && fixture.remark && fixture.images?.length > 0
+    ).length;
+
+    const partiallyInspectedFixtures = Object.values(fixtures).filter(fixture => 
+      fixture.status || fixture.remark || (fixture.images?.length > 0)
+    ).length;
+
+    if (inspectedFixtures === totalFixtures) {
+      return "full";
+    } else if (partiallyInspectedFixtures > 0) {
+      return "half";
+    } else {
+      return "add";
+    }
+  }, []);
 
   // Combined data fetching effect
   useEffect(() => {
@@ -148,7 +163,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     return () => unsubscribe();
   }, [propertyId]);
 
-  // Rooms data effect - FIXED: Remove circular dependency
+  // Rooms and fixtures data effect
   useEffect(() => {
     if (!propertyId) return;
 
@@ -163,9 +178,11 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
             const layouts = doc.data().layouts || {};
 
             Object.entries(layouts).forEach(([roomKey, roomValue]) => {
+              const fixtures = roomValue.fixtureBySelect || [];
               roomsData.push({
                 id: `${doc.id}_${roomKey}`,
                 roomName: roomValue.roomName || roomKey,
+                fixtures: fixtures
               });
             });
           });
@@ -182,18 +199,19 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
                 newData[room.id] = {
                   roomId: room.id,
                   roomName: room.roomName,
-                  seepage: "",
-                  seepageRemark: "",
-                  termites: "",
-                  termitesRemark: "",
-                  thisLayoutUpdateAt: timestamp.now(),
-                  otherIssue: "",
-                  otherIssueRemark: "",
-                  generalRemark: "",
-                  cleanRemark: "",
                   isAllowForInspection: "yes",
-                  images: []
+                  generalRemark: "",
+                  fixtures: {}
                 };
+
+                // Initialize fixtures data
+                room.fixtures.forEach(fixture => {
+                  newData[room.id].fixtures[fixture] = {
+                    status: "",
+                    remark: "",
+                    images: []
+                  };
+                });
               }
             });
 
@@ -237,29 +255,30 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     fetchBills();
   }, [propertyId, inspectionId]);
 
-  // Layout inspection completion check - FIXED: Remove circular dependency
+  // Layout inspection completion check
   const isAllLayoutInspectionDone = useCallback(() => {
     const allRoomsInspected = Object.values(inspectionData).every((room) => {
       if (room.isAllowForInspection === "no") {
         return Boolean(room.generalRemark);
       }
 
-      return (
-        Boolean(room.seepage) &&
-        Boolean(room.termites) &&
-        Boolean(room.otherIssue) &&
-        Boolean(room.seepageRemark) &&
-        Boolean(room.termitesRemark) &&
-        Boolean(room.otherIssueRemark) &&
-        Boolean(room.cleanRemark) &&
-        room.images?.length > 0
+      const fixtures = room.fixtures || {};
+      const totalFixtures = Object.keys(fixtures).length;
+      if (totalFixtures === 0) return false;
+
+      const allFixturesInspected = Object.values(fixtures).every((fixture) => 
+        Boolean(fixture.status) && 
+        Boolean(fixture.remark) && 
+        fixture.images?.length > 0
       );
+
+      return allFixturesInspected;
     });
 
     return allRoomsInspected;
   }, [inspectionData]);
 
-  // Bill inspection completion check - FIXED: Remove circular dependency
+  // Bill inspection completion check
   const checkBillInspectionComplete = useCallback(() => {
     const allBillInspectionFull = bills.length > 0 &&
       bills.every((bill) => {
@@ -270,7 +289,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     return allBillInspectionFull;
   }, [bills, billInspectionData]);
 
-  // FIXED: Update layout inspection status only when needed
+  // Update layout inspection status only when needed
   useEffect(() => {
     const layoutDone = isAllLayoutInspectionDone();
     if (layoutInspectionDone !== layoutDone) {
@@ -278,7 +297,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   }, [isAllLayoutInspectionDone, layoutInspectionDone]);
 
-  // FIXED: Update bill inspection status only when needed
+  // Update bill inspection status only when needed
   useEffect(() => {
     const billsComplete = checkBillInspectionComplete();
     if (allBillInspectionComplete !== billsComplete) {
@@ -293,12 +312,12 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   }, [inspectionDocument?.finalSubmit, navigate, propertyId]);
 
-  // Image handling functions - FIXED: Optimized state updates
-  const handleImageUpload = async (e, roomId) => {
+  // Image handling functions for fixtures
+  const handleFixtureImageUpload = async (e, roomId, fixtureName) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    const existingCount = inspectionData[roomId]?.images?.length || 0;
+    const existingCount = inspectionData[roomId]?.fixtures?.[fixtureName]?.images?.length || 0;
     const remainingSlots = 10 - existingCount;
     const validFiles = files.slice(0, remainingSlots);
 
@@ -320,7 +339,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
 
         const compressedFile = await imageCompression(file, options);
         const storageRef = projectStorage.ref(
-          `inspection_images/${inspectionId}/${roomId}/${compressedFile.name}`
+          `inspection_images/${inspectionId}/${roomId}/${fixtureName}/${compressedFile.name}`
         );
         const uploadTask = storageRef.put(compressedFile);
 
@@ -345,16 +364,20 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
                 const url = await storageRef.getDownloadURL();
                 setInspectionData((prev) => {
                   const updatedRoom = { ...prev[roomId] };
+                  const updatedFixtures = { ...updatedRoom.fixtures };
+                  const updatedFixture = { ...updatedFixtures[fixtureName] };
                   
+                  updatedFixture.images = [
+                    ...(updatedFixture.images || []),
+                    { url, name: compressedFile.name },
+                  ];
+
+                  updatedFixtures[fixtureName] = updatedFixture;
+                  updatedRoom.fixtures = updatedFixtures;
+
                   return {
                     ...prev,
-                    [roomId]: {
-                      ...updatedRoom,
-                      images: [
-                        ...(updatedRoom.images || []),
-                        { url, name: compressedFile.name },
-                      ],
-                    }
+                    [roomId]: updatedRoom
                   };
                 });
                 
@@ -379,23 +402,27 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   };
 
-  const handleImageDelete = async (roomId, image) => {
+  const handleFixtureImageDelete = async (roomId, fixtureName, image) => {
     setImageActionStatus("deleting");
     const storageRef = projectStorage.ref(
-      `inspection_images/${inspectionId}/${roomId}/${image.name}`
+      `inspection_images/${inspectionId}/${roomId}/${fixtureName}/${image.name}`
     );
 
     try {
       await storageRef.delete();
       setInspectionData((prev) => {
         const updatedRoom = { ...prev[roomId] };
+        const updatedFixtures = { ...updatedRoom.fixtures };
+        const updatedFixture = { ...updatedFixtures[fixtureName] };
         
+        updatedFixture.images = updatedFixture.images?.filter((img) => img.url !== image.url) || [];
+        
+        updatedFixtures[fixtureName] = updatedFixture;
+        updatedRoom.fixtures = updatedFixtures;
+
         return {
           ...prev,
-          [roomId]: {
-            ...updatedRoom,
-            images: updatedRoom.images?.filter((img) => img.url !== image.url) || [],
-          }
+          [roomId]: updatedRoom
         };
       });
       setImageActionStatus(null);
@@ -405,31 +432,37 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   };
 
-  // Form handling functions - FIXED: Optimized state updates
-  const handleChange = (roomId, field, value) => {
-    setInspectionData((prev) => {
-      const updatedRoomData = {
+  // Form handling functions
+  const handleRoomChange = (roomId, field, value) => {
+    setInspectionData((prev) => ({
+      ...prev,
+      [roomId]: {
         ...prev[roomId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleFixtureChange = (roomId, fixtureName, field, value) => {
+    setInspectionData((prev) => {
+      const updatedRoom = { ...prev[roomId] };
+      const updatedFixtures = { ...updatedRoom.fixtures };
+      
+      updatedFixtures[fixtureName] = {
+        ...updatedFixtures[fixtureName],
         [field]: value,
       };
 
-      if (field === "seepage" || field === "termites" || field === "otherIssue") {
-        const remarkField = `${field}Remark`;
-        if (value === "no") {
-          updatedRoomData[remarkField] = "There is no issue";
-        } else if (value === "yes") {
-          updatedRoomData[remarkField] = "";
-        }
-      }
+      updatedRoom.fixtures = updatedFixtures;
 
       return {
         ...prev,
-        [roomId]: updatedRoomData,
+        [roomId]: updatedRoom
       };
     });
   };
 
-  // UI helper functions - FIXED: Compute status on the fly
+  // UI helper functions for rooms
   const getRoomClass = (roomId) => {
     const room = inspectionData[roomId];
     if (!room) return "room-button";
@@ -454,14 +487,23 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     return className;
   };
 
-  const getFieldClass = (roomId, field) => {
-    const roomData = inspectionData[roomId] || {};
+  // UI helper functions for fixtures
+  const getFixtureClass = (roomId, fixtureName) => {
+    const fixture = inspectionData[roomId]?.fixtures?.[fixtureName];
+    if (!fixture) return "room-button add";
 
-    if (field === "image") {
-      return roomData.images && roomData.images.length > 0 ? "filled" : "notfilled";
-    }
+    let className = "room-button";
 
-    return roomData[field] && roomData[field].trim() !== "" ? "filled" : "notfilled";
+    const isComplete = fixture.status && fixture.remark && fixture.images?.length > 0;
+    const hasSomeData = fixture.status || fixture.remark || (fixture.images?.length > 0);
+
+    if (isComplete) className += " full";
+    else if (hasSomeData) className += " half";
+    else className += " add";
+
+    if (fixtureName === activeFixture && roomId === activeRoom) className += " active";
+
+    return className;
   };
 
   const isFinalSubmitEnabled = () => {
@@ -472,21 +514,16 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
           return room.generalRemark;
         }
 
-        return (
-          room.seepage &&
-          room.termites &&
-          room.otherIssue &&
-          room.seepageRemark &&
-          room.termitesRemark &&
-          room.otherIssueRemark &&
-          room.cleanRemark &&
-          room.images?.length > 0
-        );
+        const fixtures = room.fixtures || {};
+        return Object.keys(fixtures).length > 0 && 
+          Object.values(fixtures).every(fixture => 
+            fixture.status && fixture.remark && fixture.images?.length > 0
+          );
       })
     );
   };
 
-  // Bill inspection functions - FIXED: Add debounce effect
+  // Bill inspection functions
   const handleBillTypeClick = (bill) => {
     if (selectedBill?.id === bill.id) return;
 
@@ -497,7 +534,7 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     setRemark(billData.remark || "");
   };
 
-  // FIXED: Update bill data with debounce effect
+  // Update bill data with debounce effect
   useEffect(() => {
     if (!selectedBill) return;
 
@@ -652,147 +689,104 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   };
 
-const computeBillStatus = useCallback((billData) => {
-  if (!billData) return "add";
-  
-  const filledFields = [
-    billData.amount,
-    billData.remark,
-  ].filter(Boolean).length;
+  const handleSaveBill = async () => {
+    if (!bills.length) return;
 
-  if (filledFields === 2) {
-    return "full";
-  } else if (filledFields > 0) {
-    return "half";
-  } else {
-    return "add";
-  }
-}, []);
+    setIsBillDataSaving(true);
 
- const handleSaveBill = async () => {
-  if (!bills.length) return;
+    try {
+      const updatedBills = { ...billInspectionData };
 
-  setIsBillDataSaving(true);
+      bills.forEach((bill) => {
+        const prevBillData = billInspectionData[bill.id] || {};
+        const newBillData = {
+          billId: bill.billId,
+          billDocId: bill.billDocId,
+          billType: bill.billType,
+          authorityName: bill.authorityName,
+          billWebsiteLink: bill.billWebsiteLink,
+        };
 
-  try {
-    const updatedBills = { ...billInspectionData };
+        const changedFields = {};
+        Object.keys(newBillData).forEach((key) => {
+          if (newBillData[key] !== prevBillData[key]) {
+            changedFields[key] = newBillData[key];
+          }
+        });
 
-    bills.forEach((bill) => {
-      const prevBillData = billInspectionData[bill.id] || {};
-      const newBillData = {
-        billId: bill.billId,
-        billDocId: bill.billDocId,
-        billType: bill.billType,
-        authorityName: bill.authorityName,
-        billWebsiteLink: bill.billWebsiteLink,
-      };
-
-      const changedFields = {};
-      Object.keys(newBillData).forEach((key) => {
-        if (newBillData[key] !== prevBillData[key]) {
-          changedFields[key] = newBillData[key];
+        if (Object.keys(changedFields).length > 0) {
+          changedFields.thisBillUpdatedAt = timestamp.now();
+          changedFields.thisBillUpdatedBy = user.phoneNumber;
         }
+
+        updatedBills[bill.id] = {
+          ...(prevBillData || {}),
+          ...changedFields,
+        };
       });
 
-      if (Object.keys(changedFields).length > 0) {
-        changedFields.thisBillUpdatedAt = timestamp.now();
-        changedFields.thisBillUpdatedBy = user.phoneNumber;
-      }
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
+          bills: updatedBills,
+          lastUpdatedAt: timestamp.now(),
+          lastUpdatedBy: user.phoneNumber,
+          allBillInspectionComplete,
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.phoneNumber,
+          }),
+        });
 
-      // Compute inspection status for the bill
-      const currentBillData = {
-        ...(prevBillData || {}),
-        ...changedFields,
-      };
-      const inspectionStatus = computeBillStatus(currentBillData);
+      setAfterSaveModal(true);
+    } catch (error) {
+      console.error("Error saving all bill data:", error);
+    } finally {
+      setIsBillDataSaving(false);
+    }
+  };
 
-      updatedBills[bill.id] = {
-        ...currentBillData,
-        inspectionStatus, // Add inspection status here
-      };
-    });
+  const handleFinalSubmit = async () => {
+    setFinalSubmiting(true);
 
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        bills: updatedBills,
-        lastUpdatedAt: timestamp.now(),
-        lastUpdatedBy: user.phoneNumber,
-        allBillInspectionComplete,
-        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+    try {
+      await handleSaveBill();
+
+      const roomsToSave = Object.values(inspectionData).map(room => ({
+        ...room,
+        inspectionStatus: computeRoomStatus(room)
+      }));
+
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
+          rooms: roomsToSave,
+          finalSubmit: true,
+          layoutInspectionDone,
           updatedAt: timestamp.now(),
-          updatedBy: user.phoneNumber,
-        }),
-      });
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.phoneNumber,
+          }),
+        });
 
-    setAfterSaveModal(true);
-  } catch (error) {
-    console.error("Error saving all bill data:", error);
-  } finally {
-    setIsBillDataSaving(false);
-  }
-};
-
-const handleFinalSubmit = async () => {
-  setFinalSubmiting(true);
-
-  try {
-    // Save bills first with inspectionStatus
-    const updatedBills = { ...billInspectionData };
-    
-    bills.forEach((bill) => {
-      const billData = updatedBills[bill.id] || {};
-      updatedBills[bill.id] = {
-        ...billData,
-        inspectionStatus: computeBillStatus(billData)
-      };
-    });
-
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        bills: updatedBills,
-      });
-
-    // Then save rooms with inspectionStatus
-    const roomsToSave = Object.values(inspectionData).map(room => ({
-      ...room,
-      inspectionStatus: computeRoomStatus(room)
-    }));
-
-    // Then final submit
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        rooms: roomsToSave,
-        bills: updatedBills, // Include bills in final submit
-        finalSubmit: true,
-        layoutInspectionDone,
-        allBillInspectionComplete,
-        updatedAt: timestamp.now(),
-        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-          updatedAt: timestamp.now(),
-          updatedBy: user.phoneNumber,
-        }),
-      });
-
-    navigate(`/inspection-report/${inspectionId}`);
-  } catch (error) {
-    console.error("Error in final submit:", error);
-  } finally {
-    setFinalSubmiting(false);
-    setFinalSubmit(false);
-  }
-};
+      navigate(`/inspection-report/${inspectionId}`);
+    } catch (error) {
+      console.error("Error in final submit:", error);
+    } finally {
+      setFinalSubmiting(false);
+      setFinalSubmit(false);
+    }
+  };
 
   // Component rendering
   return (
     <>
       <ScrollToTop />
-      <div className="regular_inspection">
+    
+      <div className="full_inspection">
         {propertyId ? (
           <>
             <div className="row row_reverse_991">
@@ -830,13 +824,17 @@ const handleFinalSubmit = async () => {
                 rooms={rooms}
                 activeRoom={activeRoom}
                 setActiveRoom={setActiveRoom}
+                activeFixture={activeFixture}
+                setActiveFixture={setActiveFixture}
                 getRoomClass={getRoomClass}
+                getFixtureClass={getFixtureClass}
                 inspectionData={inspectionData}
                 currentRoomData={currentRoomData}
-                getFieldClass={getFieldClass}
-                handleChange={handleChange}
-                handleImageUpload={handleImageUpload}
-                handleImageDelete={handleImageDelete}
+                currentFixtureData={currentFixtureData}
+                handleRoomChange={handleRoomChange}
+                handleFixtureChange={handleFixtureChange}
+                handleFixtureImageUpload={handleFixtureImageUpload}
+                handleFixtureImageDelete={handleFixtureImageDelete}
                 isFinalSubmitEnabled={isFinalSubmitEnabled}
                 inspectionDatabaseData={inspectionDatabaseData}
                 setFinalSubmit={setFinalSubmit}
@@ -872,7 +870,7 @@ const handleFinalSubmit = async () => {
             {inspectionDatabaseData &&
               inspectionDatabaseData.layoutInspectionDone &&
               inspectionDatabaseData.allBillInspectionComplete && (
-                <div className="bottom_fixed_button">
+                <div className="bottom_fixed_button" style={{ zIndex: "99999" }}>
                   <div className="next_btn_back">
                     <button
                       className="theme_btn no_icon btn_fill2 full_width"
@@ -912,4 +910,4 @@ const handleFinalSubmit = async () => {
   );
 };
 
-export default RegularInspection;
+export default FullInspection;

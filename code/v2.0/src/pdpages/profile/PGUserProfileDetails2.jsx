@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDocument } from "../../hooks/useDocument";
 import { useCommon } from "../../hooks/useCommon";
 import { useFirestore } from "../../hooks/useFirestore";
@@ -11,22 +11,338 @@ import { format } from "date-fns";
 import { BeatLoader } from "react-spinners";
 import { projectStorage } from "../../firebase/config";
 import PhoneInput from "react-phone-input-2";
+import { useCollection } from "../../hooks/useCollection";
+import { projectFirestore } from "../../firebase/config";
+import NineDots from "../../components/NineDots";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import formatCountry from "../../utils/formatCountry";
 
 // import scss
 import "./PGUserProfileDetails.scss";
+import ChangeEmployeeButton from "./ChangeEmployeeButton";
+import PropertyDetails from "../../components/property/PropertyDetails";
 
 export default function PGUserProfileDetails2() {
   const { userProfileId } = useParams();
+   const [searchParams] = useSearchParams();
+  const isExEmployee = searchParams.get('type') === 'exEmployee';
   const { camelCase } = useCommon();
+  const { user } = useAuthContext();
+
+   // Dynamic collection name based on ex-employee status
+  const collectionName = isExEmployee ? "users-propdial-ex" : "users-propdial";
 
   // get and update code start
   const { document: userProfileDoc, error: userProfileDocError } = useDocument(
-    "users-propdial",
+    collectionName,
     userProfileId
   );
+
+  // console.log("userProfileDoc: ", userProfileDoc)
+
   const { updateDocument, response: responseUpdateDocument } =
-    useFirestore("users-propdial");
+    useFirestore(collectionName);
   // get and update code end
+
+  // get user
+  const { documents: dbUsers, error: dbuserserror } =
+    useCollection(collectionName);
+  const [dbUserState, setdbUserState] = useState(dbUsers);
+
+  //Master Data Loading Initialisation - Start
+  const { documents: masterCountry, error: masterCountryerror } = useCollection(
+    "m_countries",
+    "",
+    ["country", "asc"]
+  );
+
+  const { documents: masterCity, error: masterCityError } = useCollection(
+    "m_cities",
+    ["status", "==", "active"],
+    ["city", "asc"]
+  );
+
+  const [selectedAmLevel, setSelectedAmLevel] = useState("country");
+  const handleAmRadioChange = (e) => {
+    setSelectedAmLevel(e.target.value);
+  };
+  const [country, setCountry] = useState();
+  const [state, setState] = useState();
+  const [city, setCity] = useState();
+  const [locality, setLocality] = useState();
+  const [society, setSociety] = useState();
+
+  let countryOptions = useRef([]);
+  let stateOptions = useRef([]);
+  let cityOptions = useRef([]);
+  let localityOptions = useRef([]);
+  let societyOptions = useRef([]);
+
+  useEffect(() => {
+    // console.log('in useeffect')
+    if (masterCountry) {
+      countryOptions.current = masterCountry.map((countryData) => ({
+        label: countryData.country,
+        value: countryData.id,
+      }));
+    }
+
+    if (masterCity) {
+      cityOptions.current = masterCity.map((cityData) => ({
+        label: cityData.city,
+        value: cityData.id,
+      }));
+    }
+    // console.log('userProfileDoc.propertiesOwnedInCities', userProfileDoc.propertiesOwnedInCities)
+    setCity(
+      userProfileDoc && userProfileDoc.propertiesOwnedInCities
+        ? userProfileDoc.propertiesOwnedInCities
+        : []
+    );
+
+    // handleCountryChange({ label: "INDIA", value: "_india" })
+    // filteredDataNew({ label: "Andaman & Nicobar Islands", value: "_andaman_&_nicobar_islands" })
+  }, [masterCountry, userProfileDoc]);
+
+  // Populate Master Data - Start
+  //Country select onchange
+  const handleCountryChange = async (option) => {
+    setCountry(option);
+    // let countryname = option.label;
+    // console.log('handleCountryChange option:', option)
+    // const countryid = masterCountry && masterCountry.find((e) => e.country === countryname).id
+    // console.log('countryid:', countryid)
+    const ref = await projectFirestore
+      .collection("m_states")
+      .where("country", "==", option.value)
+      .orderBy("state", "asc");
+    ref.onSnapshot(
+      async (snapshot) => {
+        if (snapshot.docs) {
+          stateOptions.current = snapshot.docs.map((stateData) => ({
+            label: stateData.data().state,
+            value: stateData.id,
+          }));
+          if (stateOptions.current.length === 0) {
+            console.log("No State");
+            handleStateChange(null);
+          } else {
+            handleStateChange({
+              label: stateOptions.current[0].label,
+              value: stateOptions.current[0].value,
+            });
+            // handleStateChange()
+          }
+        } else {
+          // setError('No such document exists')
+        }
+      },
+      (err) => {
+        console.log(err.message);
+        // setError('failed to get document')
+      }
+    );
+  };
+
+  //Stae select onchange
+  const handleStateChange = async (option) => {
+    setState(option);
+    // console.log('state.id:', option.value)
+  };
+
+  // Populate Master Data - Ends
+
+  //Stae select onchange
+  const handleCityChange = async (option) => {
+    setCity(option);
+    // console.log('state.id:', option.value)
+  };
+
+  const [isOwnedCitySaving, setIsOwnedCitySaving] = useState(false);
+  const [isOwnedCityEditing, setIsOwnedCityEditing] = useState(false);
+  const [saveOwnedCityMessage, setSaveOwnedCityMessage] = useState("");
+  const [ownedCityMessageType, setOwnedCityMessageType] = useState("");
+  const [originalCity, setOriginalCity] = useState([]);
+
+  const handleOwnedCityEditClick = () => {
+    if (!isOwnedCityEditing) {
+      // Start editing -> Save the original value
+      setOriginalCity(city);
+    } else {
+      // Cancel editing -> Restore original value
+      setCity(originalCity);
+    }
+    setIsOwnedCityEditing(!isOwnedCityEditing);
+  };
+  // handleSavePropertyOwnedInCities
+  const handleSavePropertyOwnedInCities = async () => {
+    if (!city || city.length === 0) {
+      setSaveOwnedCityMessage("Please select at least one city.");
+      setOwnedCityMessageType("error_msg");
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
+      return;
+    }
+
+    if (
+      JSON.stringify(city) ===
+      JSON.stringify(userProfileDoc?.propertiesOwnedInCities || [])
+    ) {
+      setSaveOwnedCityMessage(
+        "No changes detected. Please update before saving."
+      );
+      setOwnedCityMessageType("error_msg");
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
+      return;
+    }
+
+    const updatedData = {
+      propertiesOwnedInCities: city,
+    };
+
+    setIsOwnedCitySaving(true);
+    setSaveOwnedCityMessage("");
+
+    try {
+      await updateDocument(userProfileId, updatedData);
+      setOwnedCityMessageType("success_msg");
+      setSaveOwnedCityMessage("Cities updated successfully!");
+      setOriginalCity(city); // 🔥 Save updated value
+      setTimeout(() => {
+        setIsOwnedCityEditing(false);
+      }, 4000);
+    } catch (error) {
+      console.error("Error updating cities:", error);
+      setOwnedCityMessageType("error_msg");
+      setSaveOwnedCityMessage("Failed to update cities. Please try again.");
+    } finally {
+      setIsOwnedCitySaving(false);
+      setTimeout(() => {
+        setSaveOwnedCityMessage("");
+        setOwnedCityMessageType("");
+      }, 4000);
+    }
+  };
+
+  // handleSavePropertyOwnedInCities
+  // old code don,t delete
+  // const handleSavePropertyOwnedInCities = async () => {
+  //   const updatedData = {
+  //     propertiesOwnedInCities: city,
+  //   };
+  //   try {
+  //     await updateDocument(userProfileId, updatedData);
+  //   } catch (error) {
+  //     console.error("Error updating details:", error);
+  //   } finally {
+  //   }
+  // };
+
+  // Save Access Mgmt details
+
+  // const handleSaveAccessMgmt = async () => {
+  //   console.log("selected country", country);
+  //   console.log("selected state", state);
+
+  //   const updatedData = {
+  //     accessType: "state",
+  //     accessValue: state,
+  //   };
+
+  //   console.log("updatedData: ", updatedData);
+
+  //   try {
+  //     // const updatedData = {
+  //     //   ...userProfileDoc,
+  //     //   bankDetail: bankDetailFormData,
+  //     // };
+
+  //     await updateDocument(userProfileId, updatedData);
+  //   } catch (error) {
+  //     console.error("Error updating details:", error);
+  //   } finally {
+  //   }
+  // };
+  const [isAccessMgmtSaving, setIsAccessMgmtSaving] = useState(false);
+  const [isAccessMgmtEditing, setIsAccessMgmtEditing] = useState(false);
+  const [saveAccessMgmtMessage, setSaveAccessMgmtMessage] = useState("");
+  const [accessMgmtMessageType, setAccessMgmtMessageType] = useState("");
+  const [originalState, setOriginalState] = useState([]); // Store original state
+
+  const handleAccessMgmtEditClick = () => {
+    if (!isAccessMgmtEditing) {
+      setOriginalState(state);
+    } else {
+      setState(originalState);
+    }
+    setIsAccessMgmtEditing(!isAccessMgmtEditing);
+  };
+
+  const handleSaveAccessMgmt = async () => {
+    if (!state || state.length === 0) {
+      setSaveAccessMgmtMessage("Please select at least one state.");
+      setAccessMgmtMessageType("error_msg");
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+      return;
+    }
+
+    if (
+      JSON.stringify(state) ===
+      JSON.stringify(userProfileDoc?.accessValue || [])
+    ) {
+      setSaveAccessMgmtMessage(
+        "No changes detected. Please update before saving."
+      );
+      setAccessMgmtMessageType("error_msg");
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+      return;
+    }
+
+    const updatedData = {
+      accessType: "state",
+      accessValue: state,
+    };
+
+    setIsAccessMgmtSaving(true);
+    setSaveAccessMgmtMessage("");
+
+    try {
+      await updateDocument(userProfileId, updatedData);
+      setAccessMgmtMessageType("success_msg");
+      setSaveAccessMgmtMessage("Access management updated successfully!");
+      setOriginalState(state);
+      setTimeout(() => {
+        setIsAccessMgmtEditing(false);
+      }, 4000);
+    } catch (error) {
+      console.error("Error updating access management details:", error);
+      setAccessMgmtMessageType("error_msg");
+      setSaveAccessMgmtMessage(
+        "Failed to update access management. Please try again."
+      );
+    } finally {
+      setIsAccessMgmtSaving(false);
+      setTimeout(() => {
+        setSaveAccessMgmtMessage("");
+        setAccessMgmtMessageType("");
+      }, 4000);
+    }
+  };
+
+  useEffect(() => {
+    setdbUserState(dbUsers);
+  }, [dbUsers]);
 
   // code for active inactive start
   // Make sure that userProfileDoc is not null before using it
@@ -44,18 +360,34 @@ export default function PGUserProfileDetails2() {
     setPopupData({ status: newStatus });
   };
 
+  // Add a state to track the error message
+  const [errorForNoSelectReasonMessage, setErrorForNoSelectReasonMessage] =
+    useState("");
+
   // Function to handle the submission of the status change
   const handlePopupSubmit = async () => {
+    // Check if a reason is selected when the status is inactive
+    if (popupData.status === "inactive" && !reason) {
+      setErrorForNoSelectReasonMessage(
+        "Please select a reason before updating the status."
+      );
+      return; // Don't proceed if no reason is selected
+    } else {
+      setErrorForNoSelectReasonMessage(""); // Clear error message when a reason is selected
+    }
+
     setLoading(true);
     try {
       const currentDate = new Date();
 
       const updateData = {
         status: popupData.status,
-        activeBy: popupData.status === "active" ? "Admin" : null, // replace with your logic
+        activeBy: popupData.status === "active" ? user.phoneNumber : null, // replace with your logic
         activeAt: popupData.status === "active" ? currentDate : null, // replace with your logic
-        inactiveBy: popupData.status === "inactive" ? "Admin" : null,
+        inactiveBy: popupData.status === "inactive" ? user.phoneNumber : null,
         inactiveAt: popupData.status === "inactive" ? currentDate : null,
+        inactiveReason: popupData.status === "inactive" ? reason : null, // Add reason here
+        inactiveRemark: popupData.status === "inactive" ? remark : null, // Add remark here
       };
 
       // Add to the 'inactiveByAt' array to track status changes
@@ -63,8 +395,10 @@ export default function PGUserProfileDetails2() {
         // Append inactive status details to the map
         updateData.inactiveByAt = userProfileDoc.inactiveByAt || [];
         updateData.inactiveByAt.push({
-          inactiveBy: "Admin", // Replace with actual user who is marking inactive
+          inactiveBy: user.phoneNumber, // Replace with actual user who is marking inactive
           inactiveAt: currentDate, // Store the current timestamp
+          inactiveReason: reason, // Add the selected reason here
+          inactiveRemark: remark, // Add the remark here      
         });
       }
 
@@ -72,7 +406,7 @@ export default function PGUserProfileDetails2() {
         // Append active status details to the map
         updateData.activeByAt = userProfileDoc.activeByAt || [];
         updateData.activeByAt.push({
-          activeBy: "Admin", // Replace with actual user who is marking active
+          activeBy: user.phoneNumber, // Replace with actual user who is marking active
           activeAt: currentDate, // Store the current timestamp
         });
       }
@@ -107,28 +441,56 @@ export default function PGUserProfileDetails2() {
   }, [userProfileDoc]);
 
   // Handle role change
+  // old code of handle role plz dont delete, this code without selected role number
+  // const handleRoleChange = (role) => {
+  //   if (selectedRoles.includes(role)) {
+  //     // Remove role if already selected
+  //     const updatedRoles = selectedRoles.filter((item) => item !== role);
+  //     setSelectedRoles(updatedRoles);
+
+  //     // Update primary role if the removed role was the primary one
+  //     if (primaryRole === role && updatedRoles.length > 0) {
+  //       setPrimaryRole(updatedRoles[0]);
+  //     } else if (updatedRoles.length === 0) {
+  //       setPrimaryRole("");
+  //     }
+  //   } else {
+  //     // Add role if not selected
+  //     const updatedRoles = [...selectedRoles, role];
+  //     setSelectedRoles(updatedRoles);
+
+  //     // Set the first selected role as the primary role
+  //     if (primaryRole === "") {
+  //       setPrimaryRole(role);
+  //     }
+  //   }
+  // };
+
+  // new code of selected roel number
   const handleRoleChange = (role) => {
-    if (selectedRoles.includes(role)) {
-      // Remove role if already selected
-      const updatedRoles = selectedRoles.filter((item) => item !== role);
-      setSelectedRoles(updatedRoles);
+    setSelectedRoles((prevRoles) => {
+      let updatedRoles;
 
-      // Update primary role if the removed role was the primary one
-      if (primaryRole === role && updatedRoles.length > 0) {
-        setPrimaryRole(updatedRoles[0]);
-      } else if (updatedRoles.length === 0) {
-        setPrimaryRole("");
-      }
-    } else {
-      // Add role if not selected
-      const updatedRoles = [...selectedRoles, role];
-      setSelectedRoles(updatedRoles);
+      if (prevRoles.includes(role)) {
+        // Remove role if already selected
+        updatedRoles = prevRoles.filter((item) => item !== role);
 
-      // Set the first selected role as the primary role
-      if (primaryRole === "") {
-        setPrimaryRole(role);
+        // Update primary role if the removed role was the primary one
+        if (primaryRole === role) {
+          setPrimaryRole(updatedRoles.length > 0 ? updatedRoles[0] : "");
+        }
+      } else {
+        // Add role if not selected
+        updatedRoles = [...prevRoles, role];
+
+        // Set the first selected role as the primary role
+        if (!primaryRole) {
+          setPrimaryRole(role);
+        }
       }
-    }
+
+      return updatedRoles;
+    });
   };
 
   // Handle save button click
@@ -139,14 +501,14 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
       return;
     }
 
     // Check if there are changes
     if (
       JSON.stringify(selectedRoles) ===
-        JSON.stringify(userProfileDoc.rolesPropDial || []) &&
+      JSON.stringify(userProfileDoc.rolesPropDial || []) &&
       primaryRole === (userProfileDoc.rolePropDial || "")
     ) {
       setSaveRoleMessage(
@@ -156,7 +518,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
       return;
     }
 
@@ -175,7 +537,7 @@ export default function PGUserProfileDetails2() {
       setSaveRoleMessage("Roles updated successfully!");
       setTimeout(() => {
         setIsRoleEditing(!isRoleEditing);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating roles:", error);
       setRoleMessageType("error_msg");
@@ -186,7 +548,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRoleMessage("");
         setRoleMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
     }
   };
 
@@ -207,7 +569,7 @@ export default function PGUserProfileDetails2() {
 
   // full code for employee detail start
   const [employeeId, setEmployeeId] = useState("");
-  const [department, setDepartment] = useState([]);
+  const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
   const [uanNumber, setUanNumber] = useState("");
   const [panNumber, setPanNumber] = useState("");
@@ -227,22 +589,8 @@ export default function PGUserProfileDetails2() {
     setIsEdEditing(!isEdEditing);
     if (userProfileDoc) {
       setEmployeeId(userProfileDoc.employeeId || "");
-      setDepartment(
-        userProfileDoc.department
-          ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
-          : []
-      );
-      setDesignation(
-        userProfileDoc.designation
-          ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
-          : ""
-      );
+      setDepartment(userProfileDoc.department || "");
+      setDesignation(userProfileDoc.designation || "");
       setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
@@ -257,30 +605,25 @@ export default function PGUserProfileDetails2() {
   useEffect(() => {
     if (userProfileDoc) {
       setEmployeeId(userProfileDoc.employeeId || "");
-      setDepartment(
-        userProfileDoc.department
-          ? userProfileDoc.department.map((dept) => ({
-              value: dept,
-              label: dept,
-            }))
-          : []
-      );
-      setDesignation(
-        userProfileDoc.designation
-          ? {
-              value: userProfileDoc.designation,
-              label: userProfileDoc.designation,
-            }
-          : ""
-      );
+      setDepartment(userProfileDoc.department || "");
+      setDesignation(userProfileDoc.designation || "");
       setUanNumber(userProfileDoc.uanNumber || "");
       setPanNumber(userProfileDoc.panNumber || "");
       setAadhaarNumber(userProfileDoc.aadhaarNumber || "");
       setDateOfJoining(userProfileDoc.dateOfJoining || "");
-      setDateOfLeaving(
-        userProfileDoc.dateOfJoining ? userProfileDoc.dateOfLeaving || "" : ""
-      );
+      setDateOfLeaving(userProfileDoc.dateOfLeaving || "");
       setManagerName(userProfileDoc.managerName || "");
+    } else {
+      // Set default values for new entries
+      setEmployeeId("");
+      setDepartment("");
+      setDesignation("");
+      setUanNumber("");
+      setPanNumber("");
+      setAadhaarNumber("");
+      setDateOfJoining("");
+      setDateOfLeaving("");
+      setManagerName("");
     }
   }, [userProfileDoc]);
 
@@ -304,9 +647,10 @@ export default function PGUserProfileDetails2() {
     // Validation for required fields
     if (
       !employeeId ||
-      !uanNumber ||
+      !dateOfJoining ||
       !panNumber ||
       !aadhaarNumber ||
+      !department ||
       !designation ||
       department.length === 0
     ) {
@@ -315,10 +659,52 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
 
       return;
     }
+
+    // Validation for UAN number (exactly 12 digits)
+    if (uanNumber && !/^\d{12}$/.test(uanNumber)) {
+      setEmployeeDetailUpdateMessage("UAN number must be exactly 12 digits.");
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 4000);
+      return;
+    }
+
+    // Validation for PAN card (minimum 10 characters)
+    if (panNumber.length < 10) {
+      setEmployeeDetailUpdateMessage(
+        "PAN card must have at least 10 characters."
+      );
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 4000);
+      return;
+    }
+
+    // Remove spaces from the formatted Aadhaar number for validation
+    const rawAadhaarNumber = aadhaarNumber.replace(/\s/g, "");
+
+    // Validation for Aadhaar number (exactly 12 digits)
+    if (!/^\d{12}$/.test(rawAadhaarNumber)) {
+      setEmployeeDetailUpdateMessage(
+        "Aadhaar number must be exactly 12 digits."
+      );
+      setEdMessageType("error_msg");
+      setTimeout(() => {
+        setEmployeeDetailUpdateMessage("");
+        setEdMessageType("");
+      }, 4000);
+      return;
+    }
+
+    // Validation for date of joining and leaving
     if (
       !dateOfJoining ||
       (dateOfLeaving && new Date(dateOfLeaving) <= new Date(dateOfJoining))
@@ -330,14 +716,14 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000);
+      }, 4000);
       return;
     }
 
     const dataSet = {
       employeeId,
-      department: department.map((dept) => dept.value),
-      designation: designation.value,
+      department,
+      designation,
       uanNumber,
       panNumber,
       aadhaarNumber,
@@ -355,7 +741,7 @@ export default function PGUserProfileDetails2() {
       setEmployeeDetailUpdateMessage("Employee details updated successfully!");
       setTimeout(() => {
         setIsEdEditing(!isEdEditing);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating employee details:", error);
       setEdMessageType("error_msg");
@@ -367,10 +753,101 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setEmployeeDetailUpdateMessage("");
         setEdMessageType("");
-      }, 5000); // Clear message after 5 seconds
+      }, 4000); // Clear message after 5 seconds
     }
   };
+
   // full code for employee detail end
+
+  // full code for vehicle detail start
+
+  const [vehicleNumberPlate, setVehicleNumberPlate] = useState("");
+  const [vehicleStatus, setVehicleStatus] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
+  const [drivingLicence, setDrivingLicence] = useState("");
+  const [vehicleDetailUpdateMessage, setVehicleDetailUpdateMessage] =
+    useState("");
+  const [isVdUpdating, setIsVdUpdating] = useState(false);
+  const [isVdEditing, setIsVdEditing] = useState(false);
+  const [vdMessageType, setVdMessageType] = useState("");
+  const handleVdEditClick = () => {
+    setIsVdEditing(!isVdEditing);
+  };
+  const handleVdCancelClick = () => {
+    setIsVdEditing(!isVdEditing);
+    if (userProfileDoc) {
+      setVehicleNumberPlate(userProfileDoc.vehicleNumberPlate || "");
+      setVehicleStatus(userProfileDoc.vehicleStatus || "");
+      setVehicleType(userProfileDoc.vehicleType || "");
+      setDrivingLicence(userProfileDoc.drivingLicence || "");
+    }
+  };
+
+  useEffect(() => {
+    if (userProfileDoc) {
+      setVehicleNumberPlate(userProfileDoc.vehicleNumberPlate || "");
+      setVehicleStatus(userProfileDoc.vehicleStatus || "");
+      setVehicleType(userProfileDoc.vehicleType || "");
+      setDrivingLicence(userProfileDoc.drivingLicence || "");
+    } else {
+      // Set default values for new entries
+      setVehicleNumberPlate("");
+      setVehicleStatus("");
+      setVehicleType("");
+      setDrivingLicence("");
+    }
+  }, [userProfileDoc]);
+  console.log("vehicleStatus", vehicleStatus);
+
+  const handleUpdateVehicleDetail = async () => {
+    // Validation for required fields
+    if (
+      vehicleStatus === "" ||
+      vehicleStatus === undefined ||
+      vehicleStatus === null
+    ) {
+      setVehicleDetailUpdateMessage("Please select vehicle status.");
+      setVdMessageType("error_msg");
+      setTimeout(() => {
+        setVehicleDetailUpdateMessage("");
+        setVdMessageType("");
+      }, 4000); // Clear message after 5 seconds
+      return;
+    }
+
+    const dataSet = {
+      vehicleNumberPlate,
+      vehicleStatus,
+      vehicleType,
+      drivingLicence,
+    };
+
+    setIsVdUpdating(true);
+    setVehicleDetailUpdateMessage("");
+
+    try {
+      await updateDocument(userProfileId, dataSet);
+      setVdMessageType("success_msg");
+      setVehicleDetailUpdateMessage("Vehicle details updated successfully!");
+      setTimeout(() => {
+        setIsVdEditing(!isVdEditing);
+      }, 4000);
+    } catch (error) {
+      console.error("Error updating vehicle details:", error);
+      setVdMessageType("error_msg");
+      setVehicleDetailUpdateMessage(
+        "Failed to update vehicle details. Please try again."
+      );
+    } finally {
+      setIsVdUpdating(false);
+      setTimeout(() => {
+        setVehicleDetailUpdateMessage("");
+        setVdMessageType("");
+      }, 4000); // Clear message after 5 seconds
+    }
+  };
+
+  // full code for full code for vehicle detail end
 
   // code for isemployee start
   const [isEmployee, setIsEmployee] = useState(false); // Default is 'false'
@@ -395,7 +872,39 @@ export default function PGUserProfileDetails2() {
   };
   // code for isemployee end
 
-  // full code for ref1
+  // Code for isAttendanceRequired start
+  const [isAttendanceRequired, setIsAttendanceRequired] = useState(false);
+  const [showConfirmationPopupAr, setShowConfirmationPopupAr] = useState(false);
+  const [
+    selectedAttendanceRequiredStatus,
+    setSelectedAttendanceRequiredStatus,
+  ] = useState(null);
+
+  const handleArRadioChange = (value) => {
+    setSelectedAttendanceRequiredStatus(value); // Set the selected value ("yes" or "no")
+    setShowConfirmationPopupAr(true); // Show the confirmation popup
+  };
+
+  const handleUpdateIsAttendanceRequired = async () => {
+    try {
+      setLoading(true);
+      const updatedStatus = selectedAttendanceRequiredStatus === "yes"; // Fixed the issue
+
+      await updateDocument(userProfileId, {
+        isAttendanceRequired: updatedStatus,
+      });
+
+      setIsAttendanceRequired(updatedStatus); // Update state
+      setShowConfirmationPopupAr(false); // Close popup
+    } catch (error) {
+      console.error("Error updating employee status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Code for isAttendanceRequired end
+
+  // full code for ref1 start
   const [ref1FormData, setRef1FormData] = useState({
     name: "",
     phone: "",
@@ -454,30 +963,25 @@ export default function PGUserProfileDetails2() {
 
   // Validate Fields
   const validateRef1Form = () => {
-    if (
-      !ref1FormData.name ||
-      !ref1FormData.phone ||
-      !ref1FormData.email ||
-      !ref1FormData.address
-    ) {
+    if (!ref1FormData.name || !ref1FormData.phone || !ref1FormData.address) {
       setSaveRef1Message("Please fill all required fields.");
       setRef1MessageType("error_msg");
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(ref1FormData.email)) {
+    if (ref1FormData.email && !emailRegex.test(ref1FormData.email)) {
       setSaveRef1Message("Please enter a valid email address.");
       setRef1MessageType("error_msg");
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -503,7 +1007,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsRef1Editing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating reference 1 details:", error);
       setRef1MessageType("error_msg");
@@ -515,7 +1019,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef1Message("");
         setRef1MessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref1 end
@@ -580,30 +1084,25 @@ export default function PGUserProfileDetails2() {
 
   // Validate Fields
   const validateRef2Form = () => {
-    if (
-      !ref2FormData.name ||
-      !ref2FormData.phone ||
-      !ref2FormData.email ||
-      !ref2FormData.address
-    ) {
+    if (!ref2FormData.name || !ref2FormData.phone || !ref2FormData.address) {
       setSaveRef2Message("Please fill all required fields.");
       setRef2MessageType("error_msg");
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(ref2FormData.email)) {
+    if (ref2FormData.email && !emailRegex.test(ref2FormData.email)) {
       setSaveRef2Message("Please enter a valid email address.");
       setRef2MessageType("error_msg");
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -629,7 +1128,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsRef2Editing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating reference 1 details:", error);
       setRef2MessageType("error_msg");
@@ -641,7 +1140,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveRef2Message("");
         setRef2MessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref2 end
@@ -706,7 +1205,6 @@ export default function PGUserProfileDetails2() {
       !bankDetailFormData.acHolderName ||
       !bankDetailFormData.acNumber ||
       !bankDetailFormData.bankName ||
-      !bankDetailFormData.branchName ||
       !bankDetailFormData.ifscCode
     ) {
       setSaveBankDetailMessage("Please fill all required fields.");
@@ -714,7 +1212,7 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveBankDetailMessage("");
         setBankDetailMessageType("");
-      }, 5000);
+      }, 4000);
       return false;
     }
 
@@ -740,7 +1238,7 @@ export default function PGUserProfileDetails2() {
 
       setTimeout(() => {
         setIsBankDetailEditing(false);
-      }, 5000);
+      }, 4000);
     } catch (error) {
       console.error("Error updating bank details:", error);
       setBankDetailMessageType("error_msg");
@@ -752,12 +1250,13 @@ export default function PGUserProfileDetails2() {
       setTimeout(() => {
         setSaveBankDetailMessage("");
         setBankDetailMessageType("");
-      }, 5000);
+      }, 4000);
     }
   };
   // full code for ref2 end
 
   // old running code for upload document start
+  // (Don't delete)
   // const fileInputRefs = useRef({});
 
   // const [isDocUploading, setIsDocUploading] = useState({});
@@ -859,12 +1358,72 @@ export default function PGUserProfileDetails2() {
     });
   }, [files]);
 
+  // upload document code without delete previous doc from storage automatically
+  //  (Don't delete )
+  // const uploadDocument = async (docType) => {
+  //   try {
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
+  //     const file = files[docType];
+  //     const fileType = getFileType(file);
+
+  //     const storageRef = projectStorage.ref(
+  //       `user-docs/${userProfileId}/${docType}/${file.name}`
+  //     );
+  //     const uploadTask = storageRef.put(file);
+
+  //     uploadTask.on(
+  //       "state_changed",
+  //       (snapshot) => {
+  //         const progress =
+  //           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //         setUploadDocInProgress((prev) => ({ ...prev, [docType]: progress }));
+  //       },
+  //       (error) => {
+  //         console.error(`Error uploading ${docType}:`, error);
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       },
+  //       async () => {
+  //         const fileURL = await storageRef.getDownloadURL();
+  //         await updateDocument(userProfileId, {
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Url`]: fileURL,
+  //           [`${docType.replace(/ /g, "").toLowerCase()}Type`]: fileType,
+  //         });
+  //         setFiles((prev) => {
+  //           const updatedFiles = { ...prev };
+  //           delete updatedFiles[docType];
+  //           return updatedFiles;
+  //         });
+  //         setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error(`Error uploading ${docType}:`, error);
+  //     setIsDocUploading((prev) => ({ ...prev, [docType]: false }));
+  //   }
+  // };
+
+  // upload document code with delete previous doc from storage automatically
   const uploadDocument = async (docType) => {
     try {
       setIsDocUploading((prev) => ({ ...prev, [docType]: true }));
       const file = files[docType];
       const fileType = getFileType(file);
 
+      // Check if there's an existing document and delete it
+      const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+      if (userProfileDoc && userProfileDoc[urlKey]) {
+        const oldFileURL = userProfileDoc[urlKey];
+        const oldFileRef = projectStorage.refFromURL(oldFileURL);
+
+        try {
+          await oldFileRef.delete();
+          console.log(`Previous file for ${docType} deleted successfully.`);
+        } catch (error) {
+          console.error(`Error deleting previous file for ${docType}:`, error);
+        }
+      }
+
+      // Upload the new document
       const storageRef = projectStorage.ref(
         `user-docs/${userProfileId}/${docType}/${file.name}`
       );
@@ -901,31 +1460,129 @@ export default function PGUserProfileDetails2() {
     }
   };
 
+  // code for delete uploaded document from database and storage both
+  const handleDeleteDocument = async (docType) => {
+    try {
+      const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+      if (userProfileDoc && userProfileDoc[urlKey]) {
+        const oldFileURL = userProfileDoc[urlKey];
+        const oldFileRef = projectStorage.refFromURL(oldFileURL);
+
+        // Delete the file from storage
+        await oldFileRef.delete();
+        console.log(`File for ${docType} deleted successfully.`);
+
+        // Remove the URL and file type from the database
+        await updateDocument(userProfileId, {
+          [urlKey]: null,
+          [`${docType.replace(/ /g, "").toLowerCase()}Type`]: null,
+        });
+
+        console.log(`Database entry for ${docType} removed successfully.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting file for ${docType}:`, error);
+    }
+  };
+
+  // code for delete upload document with confirmation popup
+  const [showConfirmModalForDeleteDoc, setShowConfirmModalForDeleteDoc] =
+    useState(false);
+  const [modalDocType, setModalDocType] = useState("");
+  const [isUploadedDocDeleting, setIsUploadedDocDeleting] = useState(false);
+
+  const handleDeleteConfirm = async () => {
+    try {
+      setIsUploadedDocDeleting(true);
+      await handleDeleteDocument(modalDocType); // Call the delete function
+      setIsUploadedDocDeleting(false);
+      setShowConfirmModalForDeleteDoc(false); // Close modal after successful deletion
+    } catch (error) {
+      console.error(`Error deleting ${modalDocType}:`, error);
+      setIsUploadedDocDeleting(false);
+    }
+  };
+
+  const handleDeleteClick = (docType) => {
+    setModalDocType(docType);
+    setShowConfirmModalForDeleteDoc(true);
+  };
+
+  //  (Don't delete )
+  // const renderFilePreview = (docType) => {
+  //   const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
+  //   const typeKey = `${docType.replace(/ /g, "").toLowerCase()}Type`;
+
+  //   if (userProfileDoc && userProfileDoc[urlKey]) {
+  //     return userProfileDoc[typeKey] === "image" ? (
+  //       <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
+  //     ) : (
+  //       <iframe
+  //         // title={`${docType} Viewer`}
+  //         title="PDF Viewer"
+  //         src={userProfileDoc[urlKey]}
+  //         className="document-preview"
+  //         style={{
+  //           width: "100%",
+  //           aspectRatio: "3/2",
+  //         }}
+  //       ></iframe>
+
+  //     );
+  //   }
+  //   return <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />;
+  // };
+
+  // code for redering file with delete button
   const renderFilePreview = (docType) => {
     const urlKey = `${docType.replace(/ /g, "").toLowerCase()}Url`;
     const typeKey = `${docType.replace(/ /g, "").toLowerCase()}Type`;
 
     if (userProfileDoc && userProfileDoc[urlKey]) {
-      return userProfileDoc[typeKey] === "image" ? (
-        <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
-      ) : (
-        <iframe
-          // title={`${docType} Viewer`}
-          title="PDF Viewer"
-          src={userProfileDoc[urlKey]}
-          className="document-preview"
-          style={{
-            width: "100%",
-            aspectRatio: "3/2",
-          }}
-        ></iframe>
+      return (
+        <div className="image_container_inner">
+          {userProfileDoc[typeKey] === "image" ? (
+            <img src={userProfileDoc[urlKey]} alt={`${docType} preview`} />
+          ) : (
+            <iframe
+              title="PDF Viewer"
+              src={userProfileDoc[urlKey]}
+              className="document-preview"
+              style={{
+                width: "100%",
+                aspectRatio: "3/2",
+              }}
+            ></iframe>
+          )}
+          <span
+            class="material-symbols-outlined delete_icon_top"
+            onClick={() => handleDeleteClick(docType)}
+          >
+            delete_forever
+          </span>
+        </div>
       );
     }
-    return <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />;
+    return (
+      <img src="/assets/img/image_small_placeholder.png" alt="Placeholder" />
+    );
   };
 
+  // nine dots menu start
+
+  const nineDotsMenu = [
+    // { title: "Country's List", link: "/countrylist", icon: "public" },
+    { title: "User List", link: "/userlist", icon: "groups" },
+    {
+      title: "Attendance Dashboard",
+      link: "/attendance-dashboard",
+      icon: "alarm",
+    },
+  ];
+  // nine dots menu end
   return (
     <div className="top_header_pg pg_bg user_detail_pg relative">
+      <NineDots nineDotsMenu={nineDotsMenu} />
       <div className="basic_info">
         <div
           className="pic_are relative"
@@ -955,7 +1612,8 @@ export default function PGUserProfileDetails2() {
             <img src="/assets/img/gmailbig.png" alt="propdial" />
           </Link>
           <Link
-            to={`https://wa.me/+${userProfileDoc && userProfileDoc.phoneNumber}`}
+            to={`https://wa.me/+${userProfileDoc && userProfileDoc.phoneNumber
+              }`}
             className="icon right"
           >
             <img src="/assets/img/whatsappbig.png" alt="propdial" />
@@ -963,21 +1621,57 @@ export default function PGUserProfileDetails2() {
         </div>
         <div className="p_info">
           <h5>{userProfileDoc && userProfileDoc.fullName}</h5>
-          <h6>
+          {userProfileDoc?.phoneNumber && (
+            <h6 className="t_number">
+              {(() => {
+                try {
+                  const phoneNumber = parsePhoneNumberFromString(
+                    userProfileDoc.phoneNumber,
+                    userProfileDoc.countryCode?.toUpperCase()
+                  );
+                  return phoneNumber
+                    ? phoneNumber.formatInternational()
+                    : userProfileDoc.phoneNumber;
+                } catch (error) {
+                  return userProfileDoc.phoneNumber;
+                }
+              })()}
+            </h6>
+          )}
+          {/* <h6>
             {" "}
             {userProfileDoc &&
               userProfileDoc.phoneNumber.replace(
                 /(\d{2})(\d{5})(\d{5})/,
                 "+$1 $2-$3"
               )}
-          </h6>
+          </h6> */}
           <h6 className="break_all">
             {userProfileDoc && userProfileDoc.email}
+            {/* {userProfileDoc && userProfileDoc.gender} */}
           </h6>
           <h6>
-            {userProfileDoc && userProfileDoc.city},{" "}
-            {userProfileDoc && userProfileDoc.country}{" "}
+            {userProfileDoc?.city}
+            {userProfileDoc?.city && (userProfileDoc?.residentialCountry || userProfileDoc?.country) && ", "}
+            {formatCountry(
+              userProfileDoc?.residentialCountry || userProfileDoc?.country
+            )}
           </h6>
+          {userProfileDoc?.address && (
+            <h6
+              className="address"
+              style={{
+                background: "#ececec",
+                fontSize: "14px",
+                textTransform: "capitalize",
+                padding: "8px",
+                borderRadius: "6px",
+                marginTop: "6px",
+              }}
+            >
+              {userProfileDoc?.address}
+            </h6>
+          )}
         </div>
         {/* <hr />
         <div className="roles">
@@ -994,7 +1688,7 @@ export default function PGUserProfileDetails2() {
         </div> */}
       </div>
       <div className="detail_info pd_single">
-        <div className="property_card_single mobile_full_card overflow_unset">
+        <div className="property_card_single mobile_full_card overflow_unset onboarded_card">
           <div className="more_detail_card_inner">
             <div className="p_info">
               <div className="p_info_single">
@@ -1008,7 +1702,10 @@ export default function PGUserProfileDetails2() {
                   <h6>On-Boarded</h6>
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
-                      ? format(userProfileDoc.createdAt.toDate(), "dd-MMM-yyyy")
+                      ? format(
+                        userProfileDoc.createdAt.toDate(),
+                        "dd-MMM-yyyy, hh:mm a"
+                      )
                       : ""}
                   </h5>
                 </div>
@@ -1022,9 +1719,9 @@ export default function PGUserProfileDetails2() {
                   <h5>
                     {userProfileDoc && userProfileDoc.createdAt
                       ? format(
-                          userProfileDoc.lastLoginTimestamp.toDate(),
-                          "dd-MMM-yyyy hh:mm a"
-                        )
+                        userProfileDoc.lastLoginTimestamp.toDate(),
+                        "dd-MMM-yyyy, hh:mm a"
+                      )
                       : ""}
                   </h5>
                 </div>
@@ -1032,7 +1729,7 @@ export default function PGUserProfileDetails2() {
             </div>
             <div className="card_blue_divider">
               <div className="active_inactive">
-                <div className="form_field outline blue_single">
+                <div className="form_field outline blue_single makeai">
                   <div className="field_box theme_radio_new">
                     <div
                       className="theme_radio_container"
@@ -1053,7 +1750,42 @@ export default function PGUserProfileDetails2() {
                           }
                           onChange={() => handleStatusChange("active")}
                         />
-                        <label htmlFor="active">Active</label>
+                        <label htmlFor="active">
+                          <div className="label_inner">
+                            {userProfileDoc?.status === "active"
+                              ? "Active"
+                              : "Make Active"}
+
+                            {userProfileDoc &&
+                              userProfileDoc.activeBy &&
+                              userProfileDoc.activeAt && (
+                                <div className="info_icon">
+                                  <span className="material-symbols-outlined">
+                                    info
+                                  </span>
+                                  <div className="info_icon_inner">
+                                    <b className="text_green2">Active</b> by{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        dbUserState &&
+                                        dbUserState.find(
+                                          (user) =>
+                                            user.id === userProfileDoc.activeBy
+                                        )?.fullName}
+                                    </b>{" "}
+                                    on{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        format(
+                                          userProfileDoc.activeAt.toDate(),
+                                          "dd-MMM-yyyy hh:mm a"
+                                        )}
+                                    </b>
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </label>
                       </div>
                       <div className="radio_single">
                         <input
@@ -1062,90 +1794,86 @@ export default function PGUserProfileDetails2() {
                           value="inactive"
                           id="inactive"
                           checked={
-                            userProfileDoc &&
-                            userProfileDoc.status === "inactive"
+                            userProfileDoc?.status === "inactive"
                           }
                           onChange={() => handleStatusChange("inactive")}
                         />
-                        <label htmlFor="inactive">Inactive</label>
+                        <label htmlFor="inactive">
+                          <div className="label_inner">
+                            {userProfileDoc?.status === "inactive"
+                              ? "Inactive"
+                              : "Make Inactive"}
+                            {userProfileDoc &&
+                              userProfileDoc.inactiveAt &&
+                              userProfileDoc.inactiveBy && (
+                                <div className="info_icon">
+                                  <span className="material-symbols-outlined">
+                                    info
+                                  </span>
+                                  <div className="info_icon_inner">
+                                    <b className="text_red">Inactive</b> by{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        dbUserState &&
+                                        dbUserState.find(
+                                          (user) =>
+                                            user.id ===
+                                            userProfileDoc.inactiveBy
+                                        )?.fullName}
+                                    </b>{" "}
+                                    on{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        format(
+                                          userProfileDoc.inactiveAt.toDate(),
+                                          "dd-MMM-yyyy hh:mm a"
+                                        )}
+                                    </b>
+                                    , Reason{" "}
+                                    <b>
+                                      {userProfileDoc &&
+                                        userProfileDoc.inactiveReason &&
+                                        userProfileDoc.inactiveReason}
+                                    </b>
+                                    ,
+                                    {userProfileDoc &&
+                                      userProfileDoc.inactiveRemark && (
+                                        <>
+                                          {" "}
+                                          Remark{" "}
+                                          <b>{userProfileDoc.inactiveRemark}</b>
+                                        </>
+                                      )}
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </label>
                       </div>
                     </div>
                   </div>
                 </div>
-                <Modal
-                  show={showPopup}
-                  onHide={() => setShowPopup(false)}
-                  centered
-                >
-                  <Modal.Header closeButton>
-                    <Modal.Title>Confirm Status Change</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p>
-                      Are you sure you want to mark this user as{" "}
-                      {popupData.status}?
-                    </p>
-
-                    {popupData.status === "inactive" && (
-                      <div>
-                        <div>
-                          <label>Reason for Inactive:</label>
-                          <div>
-                            <input
-                              type="radio"
-                              name="reason"
-                              value="resigned"
-                              checked={reason === "resigned"}
-                              onChange={() => setReason("resigned")}
-                            />
-                            <label>Resigned</label>
-                            <input
-                              type="radio"
-                              name="reason"
-                              value="leave"
-                              checked={reason === "leave"}
-                              onChange={() => setReason("leave")}
-                            />
-                            <label>On Leave</label>
-                            <input
-                              type="radio"
-                              name="reason"
-                              value="other"
-                              checked={reason === "other"}
-                              onChange={() => setReason("other")}
-                            />
-                            <label>Other</label>
-                          </div>
-                        </div>
-                        <div>
-                          <label>Remark:</label>
-                          <textarea
-                            value={remark}
-                            onChange={(e) => setRemark(e.target.value)}
-                            placeholder="Enter any remark..."
-                          ></textarea>
-                        </div>
-                      </div>
-                    )}
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="primary"
-                      onClick={handlePopupSubmit}
-                      disabled={loading}
-                    >
-                      {loading ? "Saving..." : "Yes, Update"}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setShowPopup(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
               </div>
-              <div className="blue_single is_employee">
+              <div className="blue_single is_employee currentrole">
+                <h5>Current Role </h5>
+                <h6 className="text_blue text-capitalize">
+                  {userProfileDoc && userProfileDoc.rolePropDial}
+                </h6>
+              </div>
+              <div className="blue_single is_employee mode">
+                <h5>Mode</h5>
+                <h6
+                  className={` ${userProfileDoc && userProfileDoc.online
+                    ? "text_green2"
+                    : "text_red"
+                    }`}
+                >
+                  {userProfileDoc && userProfileDoc.online
+                    ? "Online"
+                    : "Offline"}
+                </h6>
+              </div>
+              <div className="blue_single is_employee is_employeecard">
                 <h5>Is Employee?</h5>
                 <div className="form_field">
                   <div className="field_box theme_radio_new">
@@ -1164,7 +1892,7 @@ export default function PGUserProfileDetails2() {
                           value="yes"
                           id="yes"
                           checked={
-                            userProfileDoc && userProfileDoc.isEmployee === true
+                            userProfileDoc?.isEmployee === true
                           }
                           onChange={() => handleRadioChange("yes")}
                         />
@@ -1177,8 +1905,7 @@ export default function PGUserProfileDetails2() {
                           value="no"
                           id="no"
                           checked={
-                            userProfileDoc &&
-                            userProfileDoc.isEmployee === false
+                            userProfileDoc?.isEmployee === false
                           }
                           onChange={() => handleRadioChange("no")}
                         />
@@ -1187,61 +1914,402 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 </div>
+
                 <Modal
                   show={showConfirmationPopup}
                   onHide={() => setShowConfirmationPopup(false)}
                   centered
                 >
-                  <Modal.Header closeButton>
-                    <Modal.Title>Confirm Status Change</Modal.Title>
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{
+                      paddingBottom: "0px",
+                      border: "none",
+                    }}
+                  >
+                    <h5>Confirmation</h5>
                   </Modal.Header>
-                  <Modal.Body>
-                    <p>
-                      Are you sure you want to mark this user as{" "}
-                      {selectedEmployeeStatus === "yes"
-                        ? "an employee"
-                        : "not an employee"}
-                      ?
-                    </p>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to mark this user as{" "}
+                    {selectedEmployeeStatus === "yes"
+                      ? "an employee"
+                      : "not an employee"}
+                    ?
                   </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="primary"
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{
+                      border: "none",
+                      gap: "15px",
+                    }}
+                  >
+                    <div
+                      className="cancel_btn"
                       onClick={handleUpdateIsEmployee}
                       disabled={loading}
                     >
                       {loading ? "Saving..." : "Yes, Update"}
-                    </Button>
-                    <Button
-                      variant="secondary"
+                    </div>
+                    <div
+                      className="done_btn"
                       onClick={() => setShowConfirmationPopup(false)}
                     >
-                      Cancel
-                    </Button>
+                      No
+                    </div>
                   </Modal.Footer>
                 </Modal>
               </div>
-              <div className="blue_single is_employee">
-                <h5>Current Role - </h5>
-                <h6 className="text_blue text-capitalize">
-                  {userProfileDoc && userProfileDoc.rolePropDial}
-                </h6>
-              </div>
-              <div className="blue_single is_employee">
-                <h5>Mode - </h5>
-                <h6
-                  className={` ${
-                    userProfileDoc && userProfileDoc.online
-                      ? "text_green2"
-                      : "text_red"
-                  }`}
-                >
-                  {userProfileDoc && userProfileDoc.online
-                    ? "Online"
-                    : "Offline"}
-                </h6>
-              </div>
+              {/* <div className="blue_single is_employee is_employeecard">
+  <h5>Is Employee?</h5>
+  <div className="form_field">
+    <div className="field_box theme_radio_new">
+      <div
+        className="theme_radio_container"
+        style={{
+          padding: "0px",
+          border: "none",
+          background: "transparent",
+        }}
+      >
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="isemployee"
+            value="yes"
+            id={`yes-${userProfileDoc?.id || "user"}`}
+            checked={isEmployee === true}
+            onChange={() => handleRadioChange("yes")}
+          />
+          <label htmlFor={`yes-${userProfileDoc?.id || "user"}`}>Yes</label>
+        </div>
+        <div className="radio_single">
+          <input
+            type="radio"
+            name="isemployee"
+            value="no"
+            id={`no-${userProfileDoc?.id || "user"}`}
+            checked={isEmployee === false}
+            onChange={() => handleRadioChange("no")}
+          />
+          <label htmlFor={`no-${userProfileDoc?.id || "user"}`}>No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Modal
+    show={showConfirmationPopup}
+    onHide={() => setShowConfirmationPopup(false)}
+    centered
+  >
+    <Modal.Header
+      className="justify-content-center"
+      style={{
+        paddingBottom: "0px",
+        border: "none",
+      }}
+    >
+      <h5>Confirmation</h5>
+    </Modal.Header>
+    <Modal.Body
+      className="text-center"
+      style={{
+        color: "#FA6262",
+        fontSize: "20px",
+        border: "none",
+      }}
+    >
+      Are you sure you want to mark this user as{" "}
+      {selectedEmployeeStatus === "yes"
+        ? "an employee?"
+        : "not an employee?"}
+    </Modal.Body>
+    <Modal.Footer
+      className="d-flex justify-content-between"
+      style={{
+        border: "none",
+        gap: "15px",
+      }}
+    >
+      <button
+        className="cancel_btn"
+        onClick={handleUpdateIsEmployee}
+        disabled={loading}
+      >
+        {loading ? "Saving..." : "Yes, Update"}
+      </button>
+      <button
+        className="done_btn"
+        onClick={() => setShowConfirmationPopup(false)}
+      >
+        No
+      </button>
+    </Modal.Footer>
+  </Modal>
+</div>  */}
+              {userProfileDoc?.isEmployee && (
+                <div className="blue_single is_employee currentrole">
+                  <h5>Employee Status</h5>
+                  <h6 className="text_blue text-capitalize">
+                    {userProfileDoc?.isEmployee && userProfileDoc.status === "active" ? "Current" : "EX"}
+
+                  </h6>
+                </div>
+              )}
+
+              {userProfileDoc && userProfileDoc.isEmployee && (
+                <div className="blue_single  is_employee is_attendance_required">
+                  <h5>Is Attendance Required?</h5>
+                  <div className="form_field">
+                    <div className="field_box theme_radio_new">
+                      <div
+                        className="theme_radio_container"
+                        style={{
+                          padding: "0px",
+                          border: "none",
+                          background: "transparent",
+                        }}
+                      >
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="isar"
+                            value="yes"
+                            id="isaryes"
+                            checked={
+                              userProfileDoc?.isAttendanceRequired === true
+                            }
+                            onChange={() => handleArRadioChange("yes")}
+                          />
+                          <label htmlFor="isaryes">yes</label>
+                        </div>
+                        <div className="radio_single">
+                          <input
+                            type="radio"
+                            name="isar"
+                            value="no"
+                            id="isarno"
+                            checked={
+                              userProfileDoc?.isAttendanceRequired === false
+                            } // Fixed checked condition
+                            onChange={() => handleArRadioChange("no")}
+                          />
+                          <label htmlFor="isarno">no</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Confirmation Modal */}
+                  <Modal
+                    show={showConfirmationPopupAr}
+                    onHide={() => setShowConfirmationPopupAr(false)}
+                    centered
+                  >
+                    <Modal.Header
+                      className="justify-content-center"
+                      style={{ paddingBottom: "0px", border: "none" }}
+                    >
+                      <h5>Confirmation</h5>
+                    </Modal.Header>
+                    <Modal.Body
+                      className="text-center"
+                      style={{
+                        color: "#FA6262",
+                        fontSize: "20px",
+                        border: "none",
+                      }}
+                    >
+                      Are you sure you want to mark this user as{" "}
+                      {selectedAttendanceRequiredStatus === "yes"
+                        ? "attendance required"
+                        : "not attendance required"}
+                      ?
+                    </Modal.Body>
+                    <Modal.Footer
+                      className="d-flex justify-content-between"
+                      style={{ border: "none", gap: "15px" }}
+                    >
+                      <div
+                        className="cancel_btn"
+                        onClick={handleUpdateIsAttendanceRequired}
+                        disabled={loading}
+                      >
+                        {loading ? "Saving..." : "Yes, Update"}
+                      </div>
+                      <div
+                        className="done_btn"
+                        onClick={() => setShowConfirmationPopupAr(false)}
+                      >
+                        No
+                      </div>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+              )}
+              {userProfileDoc?.isEmployee && (
+                <ChangeEmployeeButton userProfileId={userProfileId} user={user} />
+              )}
             </div>
+            <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
+              <Modal.Header
+                className="justify-content-center"
+                style={{
+                  paddingBottom: "0px",
+                  border: "none",
+                }}
+              >
+                <h5>
+                  {popupData.status === "inactive"
+                    ? "Reason For Inactive"
+                    : "Confirmation"}
+                </h5>
+              </Modal.Header>
+              <Modal.Body
+                className="text-center"
+                style={{
+                  color: "#FA6262",
+                  fontSize: "20px",
+                  border: "none",
+                }}
+              >
+                {popupData.status === "inactive" && (
+                  <div>
+                    <div className="form_field">
+                      <div className="field_box theme_radio_new">
+                        <div
+                          className="theme_radio_container"
+                          style={{
+                            padding: "0px",
+                            border: "none",
+                          }}
+                        >
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="Security Concerns"
+                              checked={reason === "Security Concerns"}
+                              onChange={() => setReason("Security Concerns")}
+                              id="SecurityConcerns"
+                            />
+
+                            <label htmlFor="SecurityConcerns">
+                              Security Concerns
+                            </label>
+                          </div>
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="PolicyViolations"
+                              checked={reason === "Policy Violations"}
+                              onChange={() => setReason("Policy Violations")}
+                              id="PolicyViolations"
+                            />
+
+                            <label htmlFor="PolicyViolations">
+                              Policy Violations
+                            </label>
+                          </div>
+
+                          {userProfileDoc && userProfileDoc.isEmployee && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="reason"
+                                value="resigned"
+                                checked={reason === "resigned"}
+                                onChange={() => setReason("resigned")}
+                                id="resigned"
+                              />
+                              <label htmlFor="resigned">Resigned</label>
+                            </div>
+                          )}
+                          {userProfileDoc && userProfileDoc.isEmployee && (
+                            <div className="radio_single">
+                              <input
+                                type="radio"
+                                name="reason"
+                                value="leave"
+                                checked={reason === "leave"}
+                                onChange={() => setReason("leave")}
+                                id="leave"
+                              />
+
+                              <label htmlFor="leave">Leave</label>
+                            </div>
+                          )}
+
+                          <div className="radio_single">
+                            <input
+                              type="radio"
+                              name="reason"
+                              value="other"
+                              checked={reason === "other"}
+                              onChange={() => setReason("other")}
+                              id="other"
+                            />
+                            <label htmlFor="other">Other</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form_field mt-3 mb-3">
+                      <textarea
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                        onFocus={(e) => (e.target.style.outline = "none")}
+                        onBlur={(e) => (e.target.style.outline = "")}
+                        placeholder="Enter any remark..."
+                        style={{ outline: "none", paddingLeft: "10px" }}
+                      ></textarea>
+                    </div>
+                  </div>
+                )}
+                Are you sure you want to mark this user as {popupData.status}?
+              </Modal.Body>
+              <Modal.Footer
+                className="d-flex justify-content-between"
+                style={{
+                  border: "none",
+                  gap: "15px",
+                }}
+              >
+                {errorForNoSelectReasonMessage && (
+                  <div
+                    style={{
+                      fontSize: "15px",
+                      padding: "4px 15px",
+                      borderRadius: "8px",
+                      background: "#ffe9e9",
+                      color: "red",
+                      width: "fit-content",
+                      margin: "auto",
+                    }}
+                  >
+                    {errorForNoSelectReasonMessage}
+                  </div>
+                )}
+                <div
+                  className="cancel_btn"
+                  onClick={handlePopupSubmit}
+                  disabled={loading}
+                >
+                  {loading ? "Saving..." : "Yes, Update"}
+                </div>
+                <div className="done_btn" onClick={() => setShowPopup(false)}>
+                  No
+                </div>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
         <div className="property_card_single mobile_full_card overflow_unset">
@@ -1249,9 +2317,8 @@ export default function PGUserProfileDetails2() {
             <h2 className="card_title">
               Roles
               <span
-                className={`material-symbols-outlined action_icon ${
-                  isRoleEditing ? "text_red" : "text_green"
-                }`}
+                className={`material-symbols-outlined action_icon ${isRoleEditing ? "text_red" : "text_green"
+                  }`}
                 onClick={handleRoleEditClick}
               >
                 {isRoleEditing ? "close" : "border_color"}
@@ -1267,33 +2334,131 @@ export default function PGUserProfileDetails2() {
                   }}
                 >
                   {[
-                    { id: "owner", label: "Owner" },
-                    { id: "frontdesk", label: "Frontdesk" },
-                    { id: "executive", label: "Executive" },
-                    { id: "admin", label: "Admin" },
-                    { id: "agent", label: "Agent" },
-                    { id: "superAdmin", label: "Super Admin" },
-                    { id: "tenant", label: "Tenant" },
-                    { id: "prospectiveTenant", label: "Prospective Tenant" },
-                    { id: "buyer", label: "Buyer" },
-                    { id: "prospectiveBuyer", label: "Prospective Buyer" },
-                  ].map(({ id, label }) => (
-                    <div className="radio_single" key={id}>
-                      <input
-                        type="checkbox"
-                        name="user_role"
-                        value={id}
-                        id={id}
-                        disabled={!isRoleEditing}
-                        checked={selectedRoles.includes(id)}
-                        onChange={() => handleRoleChange(id)}
-                      />
-                      <label htmlFor={id}>{label}</label>
-                    </div>
-                  ))}
+                    {
+                      id: "owner",
+                      label: "Owner",
+                      isEmployee: false,
+                      showInBoth: true,
+                    },
+                    {
+                      id: "frontdesk",
+                      label: "Frontdesk",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "executive",
+                      label: "Executive",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "admin",
+                      label: "Admin",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "hr",
+                      label: "HR",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "admin RO",
+                      label: "Admin RO",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "accountant",
+                      label: "accountant",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+
+                    {
+                      id: "agent",
+                      label: "Agent",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "superAdmin",
+                      label: "Super Admin",
+                      isEmployee: true,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "tenant",
+                      label: "Tenant",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "prospectiveTenant",
+                      label: "Prospective Tenant",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "buyer",
+                      label: "Buyer",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                    {
+                      id: "prospectiveBuyer",
+                      label: "Prospective Buyer",
+                      isEmployee: false,
+                      showInBoth: false,
+                    },
+                  ]
+                    .filter(
+                      (role) =>
+                        userProfileDoc?.isEmployee
+                          ? role.isEmployee || role.showInBoth // Show employee roles or those meant for both
+                          : !role.isEmployee || role.showInBoth // Show non-employee roles or those meant for both
+                    )
+                    .map(({ id, label }) => (
+                      // old code plz dont,t delete it
+                      // <div className="radio_single" key={id}>
+                      //   <input
+                      //     type="checkbox"
+                      //     name="user_role"
+                      //     value={id}
+                      //     id={id}
+                      //     disabled={!isRoleEditing}
+                      //     checked={selectedRoles.includes(id)}
+                      //     onChange={() => handleRoleChange(id)}
+                      //   />
+                      //   <label htmlFor={id}>{label}</label>
+                      // </div>
+                      <div
+                        className="radio_single"
+                        key={id}
+                        style={{ display: "flex", alignItems: "center" }}
+                      >
+                        <input
+                          type="checkbox"
+                          name="user_role"
+                          value={id}
+                          id={id}
+                          disabled={!isRoleEditing}
+                          checked={selectedRoles.includes(id)}
+                          onChange={() => handleRoleChange(id)}
+                        />
+                        <label htmlFor={id}>
+                          {label}{" "}
+                          {selectedRoles.includes(id) &&
+                            `(${selectedRoles.indexOf(id) + 1})`}
+                        </label>
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
+
             {isRoleEditing && (
               <div className="btn_msg_area">
                 {saveRoleMessage && (
@@ -1304,18 +2469,16 @@ export default function PGUserProfileDetails2() {
                 <button
                   onClick={handleRoleEditClick}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_border no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_border no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveRole}
                   disabled={isRoleSaving}
-                  className={`theme_btn btn_fill no_icon min_width ${
-                    isRoleSaving ? "disabled" : ""
-                  }`}
+                  className={`theme_btn btn_fill no_icon min_width ${isRoleSaving ? "disabled" : ""
+                    }`}
                 >
                   {isRoleSaving ? "Saving..." : "Save"}
                 </button>
@@ -1323,15 +2486,250 @@ export default function PGUserProfileDetails2() {
             )}
           </div>
         </div>
+
+        {userProfileDoc &&
+          (userProfileDoc.rolePropDial === "owner" ||
+            (userProfileDoc.rolesPropDial &&
+              userProfileDoc.rolesPropDial.includes("owner"))) && (
+            <div className="property_card_single mobile_full_card overflow_unset">
+              <div className="more_detail_card_inner">
+                <h2 className="card_title">
+                  Properties owned within the city
+                  <span
+                    className={`material-symbols-outlined action_icon ${isOwnedCityEditing ? "text_red" : "text_green"
+                      }`}
+                    onClick={handleOwnedCityEditClick}
+                  >
+                    {isOwnedCityEditing ? "close" : "border_color"}
+                  </span>
+                </h2>
+                <div className="vg12"></div>
+                <div className="row row_gap">
+                  <div className="col-lg-4 col-md-6 col-sm-12">
+                    <div className="form_field label_top">
+                      <label>City</label>
+                      <div className="form_field_inner">
+                        <Select
+                          className=""
+                          // onChange={(e) => {
+                          //   handleCityChange({
+                          //     label: e.label,
+                          //     value: e.label
+                          //   }, locality, society)
+                          // }}
+                          onChange={handleCityChange}
+                          isMulti
+                          options={cityOptions.current}
+                          value={city}
+                          isDisabled={!isOwnedCityEditing}
+                          // styles={{
+                          //   control: (baseStyles, state) => ({
+                          //     ...baseStyles,
+                          //     outline: "none",
+                          //     background: "#efefef",
+                          //     border: "none",
+                          //     borderBottom: "none",
+                          //     paddingLeft: "10px",
+                          //     textTransform: "capitalize",
+                          //   }),
+                          // }}
+                          menuPortalTarget={document.body}
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {isOwnedCityEditing && (
+                  <div className="btn_msg_area">
+                    {saveOwnedCityMessage && (
+                      <p className={`msg_area ${ownedCityMessageType}`}>
+                        {saveOwnedCityMessage}
+                      </p>
+                    )}
+                    <button
+                      onClick={handleOwnedCityEditClick}
+                      disabled={isOwnedCitySaving}
+                      className={`theme_btn btn_border no_icon min_width ${isOwnedCitySaving ? "disabled" : ""
+                        }`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSavePropertyOwnedInCities}
+                      disabled={isOwnedCitySaving}
+                      className={`theme_btn btn_fill no_icon min_width ${isOwnedCitySaving ? "disabled" : ""
+                        }`}
+                    >
+                      {isOwnedCitySaving ? "Saving..." : "Save"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+        {userProfileDoc && userProfileDoc.isEmployee && (
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">
+                Access Management
+                <span
+                  className={`material-symbols-outlined action_icon ${isAccessMgmtEditing ? "text_red" : "text_green"
+                    }`}
+                  onClick={handleAccessMgmtEditClick}
+                >
+                  {isAccessMgmtEditing ? "close" : "border_color"}
+                </span>
+              </h2>
+              <div className="form_field">
+                <div className="field_box theme_radio_new">
+                  <div
+                    className="theme_radio_container"
+                    style={{
+                      padding: "0px",
+                      border: "none",
+                    }}
+                  >
+                    {[
+                      { id: "country", label: "Country" },
+                      { id: "region", label: "Region" },
+                      { id: "state", label: "State" },
+                      { id: "city", label: "City" },
+                    ].map(({ id, label }) => (
+                      <div className="radio_single" key={id}>
+                        <input
+                          type="radio"
+                          name="user_role"
+                          value={id}
+                          id={id}
+                          onChange={handleAmRadioChange}
+                          defaultChecked={id === "country"} // Default check for Country
+                        />
+                        <label htmlFor={id}>{label}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="vg22"></div>
+              <div className="vg12"></div>
+              <div className="row row_gap">
+                <div className="col-lg-4 col-md-6 col-sm-12">
+                  <div className="form_field label_top">
+                    <label>Country</label>
+                    <div className="form_field_inner">
+                      <Select
+                        // value={designation}
+                        // onChange={setDesignation}
+                        // options={designationOptions}
+                        onChange={handleCountryChange}
+                        options={countryOptions.current}
+                        value={country}
+                        placeholder="Select Country"
+                        isDisabled={!isAccessMgmtEditing}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {(selectedAmLevel === "region" ||
+                  selectedAmLevel === "state" ||
+                  selectedAmLevel === "city") && (
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="form_field label_top">
+                        <label>Region</label>
+                        <div className="form_field_inner">
+                          <Select
+                            // value={designation}
+                            // onChange={setDesignation}
+                            // options={designationOptions}
+                            // onChange={handleCountryChange}
+                            // options={countryOptions.current}
+                            // value={country}
+                            placeholder="Select Region"
+                            isDisabled={!isAccessMgmtEditing}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {(selectedAmLevel === "state" ||
+                  selectedAmLevel === "city") && (
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="form_field label_top">
+                        <label>State</label>
+                        <div className="form_field_inner">
+                          <Select
+                            isMulti
+                            onChange={handleStateChange}
+                            options={stateOptions.current}
+                            value={state}
+                            placeholder="Select state"
+                            isDisabled={!isAccessMgmtEditing}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                {selectedAmLevel === "city" && (
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <div className="form_field label_top">
+                      <label>City</label>
+                      <div className="form_field_inner">
+                        <Select
+                          // value={designation}
+                          // onChange={setDesignation}
+                          // options={designationOptions}
+                          placeholder="Select city"
+                          isDisabled={!isAccessMgmtEditing}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="vg12"></div>
+              {isAccessMgmtEditing && (
+                <div className="btn_msg_area">
+                  {saveAccessMgmtMessage && (
+                    <p className={`msg_area ${accessMgmtMessageType}`}>
+                      {saveAccessMgmtMessage}
+                    </p>
+                  )}
+
+                  <button
+                    onClick={handleAccessMgmtEditClick}
+                    disabled={isAccessMgmtSaving}
+                    className={`theme_btn btn_border no_icon min_width ${isAccessMgmtSaving ? "disabled" : ""
+                      }`}
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handleSaveAccessMgmt}
+                    disabled={isAccessMgmtSaving}
+                    className={`theme_btn btn_fill no_icon min_width ${isAccessMgmtSaving ? "disabled" : ""
+                      }`}
+                  >
+                    {isAccessMgmtSaving ? "Saving..." : "Save"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Employee Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isEdEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isEdEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isEdEditing ? handleEdCancelClick : handleEdEditClick
                   }
@@ -1353,9 +2751,9 @@ export default function PGUserProfileDetails2() {
                       <h5>
                         {userProfileDoc && userProfileDoc.dateOfJoining
                           ? format(
-                              new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
-                              "dd-MMM-yyyy"
-                            )
+                            new Date(userProfileDoc.dateOfJoining), // Ensure it's converted to a Date object
+                            "dd-MMM-yyyy"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -1373,9 +2771,9 @@ export default function PGUserProfileDetails2() {
                         <h5>
                           {userProfileDoc && userProfileDoc.dateOfLeaving
                             ? format(
-                                new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
-                                "dd-MMM-yyyy"
-                              )
+                              new Date(userProfileDoc.dateOfLeaving), // Ensure it's converted to a Date object
+                              "dd-MMM-yyyy"
+                            )
                             : "Not provided yet"}
                         </h5>
                       </div>
@@ -1396,33 +2794,42 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/department.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/department.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Department</h6>
                       <h5>
                         {userProfileDoc && userProfileDoc.department
-                          ? userProfileDoc.department
+                          ? userProfileDoc.department.value
                           : "Not provided yet"}
                       </h5>
                     </div>
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/designation.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/designation.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Designation</h6>
                       <h5>
                         {userProfileDoc && userProfileDoc.designation
-                          ? userProfileDoc.designation
+                          ? userProfileDoc.designation.value
                           : "Not provided yet"}
                       </h5>
                     </div>
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>UAN Number</h6>
@@ -1435,7 +2842,10 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>PAN Number</h6>
@@ -1448,7 +2858,10 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/id-card.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/id-card.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Aadhar Number</h6>
@@ -1464,10 +2877,10 @@ export default function PGUserProfileDetails2() {
 
               {isEdEditing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Date of Joining</label>
+                        <label>Date of Joining*</label>
                         <div className="form_field_inner">
                           <input
                             type="date"
@@ -1485,7 +2898,14 @@ export default function PGUserProfileDetails2() {
                           <input
                             type="number"
                             value={employeeId}
-                            onChange={(e) => setEmployeeId(e.target.value)}
+                            // onChange={(e) => setEmployeeId(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.length <= 4) {
+                                setEmployeeId(newValue);
+                              }
+                            }}
+                            maxLength="4"
                             placeholder="Enter Employee ID"
                           />
                         </div>
@@ -1493,21 +2913,21 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Department</label>
+                        <label>Department*</label>
                         <div className="form_field_inner">
                           <Select
                             // isMulti
                             value={department}
                             onChange={setDepartment}
                             options={departmentOptions}
-                            placeholder="Select Department(s)"
+                            placeholder="Select Department"
                           />
                         </div>
                       </div>
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Designation</label>
+                        <label>Designation*</label>
                         <div className="form_field_inner">
                           <Select
                             value={designation}
@@ -1520,7 +2940,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Manager Name</label>
+                        <label>Manager Name*</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
@@ -1542,35 +2962,67 @@ export default function PGUserProfileDetails2() {
                         <label>UAN Number</label>
                         <div className="form_field_inner">
                           <input
-                            type="number"
+                            type="text"
                             value={uanNumber}
-                            onChange={(e) => setUanNumber(e.target.value)}
+                            // onChange={(e) => setUanNumber(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value;
+                              if (newValue.length <= 12) {
+                                setUanNumber(newValue);
+                              }
+                            }}
                             placeholder="Enter UAN Number"
+                            maxLength="12"
+                            style={{
+                              textTransform: "uppercase",
+                            }}
                           />
                         </div>
                       </div>
                     </div>{" "}
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>PAN Number</label>
+                        <label>PAN Number*</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
                             value={panNumber}
-                            onChange={(e) => setPanNumber(e.target.value)}
+                            onChange={(e) => {
+                              const newValue = e.target.value.replace(
+                                /\s+/g,
+                                ""
+                              ); // Remove spaces
+                              if (newValue.length <= 10) {
+                                setPanNumber(newValue);
+                              }
+                            }}
+                            style={{
+                              textTransform: "uppercase",
+                            }}
                             placeholder="Enter PAN Number"
+                            maxLength="10"
                           />
                         </div>
                       </div>
                     </div>{" "}
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Aadhaar Number</label>
+                        <label>Aadhaar Number*</label>
                         <div className="form_field_inner">
                           <input
-                            type="number"
+                            type="text"
                             value={aadhaarNumber}
-                            onChange={(e) => setAadhaarNumber(e.target.value)}
+                            onChange={(e) => {
+                              const input = e.target.value.replace(/\s/g, ""); // Remove any existing spaces
+                              if (/^\d*$/.test(input) && input.length <= 12) {
+                                // Allow only digits and max 12 characters
+                                const formatted =
+                                  input
+                                    .match(/.{1,4}/g) // Group digits in chunks of 4
+                                    ?.join(" ") || ""; // Join chunks with a space
+                                setAadhaarNumber(formatted);
+                              }
+                            }}
                             placeholder="Enter Aadhaar Number"
                           />
                         </div>
@@ -1603,18 +3055,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleEdCancelClick}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleUpdateEmployeeDetails}
                       disabled={isEdUpdating}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isEdUpdating ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isEdUpdating ? "disabled" : ""
+                        }`}
                     >
                       {isEdUpdating ? "Saving..." : "Save"}
                     </button>
@@ -1624,7 +3074,337 @@ export default function PGUserProfileDetails2() {
             </div>
           </div>
         )}
-          {userProfileDoc && userProfileDoc.isEmployee && (
+
+        {userProfileDoc && userProfileDoc.isEmployee && (
+          <div className="property_card_single mobile_full_card overflow_unset">
+            <div className="more_detail_card_inner">
+              <h2 className="card_title">
+                Vehicle Detail
+                <span
+                  className={`material-symbols-outlined action_icon ${isVdEditing ? "text_red" : "text_green"
+                    }`}
+                  onClick={
+                    isVdEditing ? handleVdCancelClick : handleVdEditClick
+                  }
+                >
+                  {isVdEditing ? "close" : "border_color"}
+                </span>
+              </h2>
+              {!isVdEditing && (
+                <div className="p_info">
+                  <div className="p_info_single">
+                    <div className="pd_icon">
+                      <img
+                        src="/assets/img/edicon/steering-wheel.png"
+                        alt="propdial"
+                      />
+                    </div>
+                    <div className="pis_content">
+                      <h6>Is Vehicle</h6>
+                      <h5>
+                        {userProfileDoc && userProfileDoc.vehicleStatus === true
+                          ? "Yes"
+                          : "No"}
+                      </h5>
+                    </div>
+                  </div>
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                      <div className="pd_icon">
+                        <img
+                          src={`/assets/img/edicon/${userProfileDoc
+                            ? userProfileDoc.vehicleType === "2-Wheeler"
+                              ? "bike.png"
+                              : userProfileDoc.vehicleType === "4-Wheeler"
+                                ? "car.png"
+                                : "vehicles.png"
+                            : "vehicles.png"
+                            }`}
+                          alt="propdial"
+                        />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Vehicle Type</h6>
+
+                        <h5>
+                          {userProfileDoc && userProfileDoc.vehicleType
+                            ? userProfileDoc.vehicleType
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                      <div className="pd_icon">
+                        <img
+                          src="/assets/img/edicon/numberplate.png"
+                          alt="propdial"
+                        />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Number Plate</h6>
+                        <h5>
+                          {userProfileDoc && userProfileDoc.vehicleNumberPlate
+                            ? userProfileDoc.vehicleNumberPlate
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {userProfileDoc && userProfileDoc.vehicleStatus === true ? (
+                    <div className="p_info_single">
+                      <div className="pd_icon">
+                        <img
+                          src="/assets/img/edicon/id-card.png"
+                          alt="propdial"
+                        />
+                      </div>
+                      <div className="pis_content">
+                        <h6>Driving Licence</h6>
+                        <h5>
+                          {userProfileDoc && userProfileDoc.drivingLicence
+                            ? userProfileDoc.drivingLicence
+                            : "Not provided yet"}
+                        </h5>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              )}
+
+              {isVdEditing && (
+                <>
+                  <div className="row row_gap form_full mt-4">
+                    <div className="col-lg-4 col-md-6 col-sm-12">
+                      <div className="form_field st-2 label_top">
+                        <label htmlFor="">Is Vehicle*</label>
+                        <div className="radio_group">
+                          <div className="radio_group_single">
+                            <div
+                              className={
+                                vehicleStatus === true
+                                  ? "custom_radio_button radiochecked"
+                                  : "custom_radio_button"
+                              }
+                            >
+                              <input
+                                type="radio"
+                                name="vehicleStatus"
+                                id="vsyes"
+                                value="true"
+                                onChange={() => setVehicleStatus(true)}
+                                checked={vehicleStatus === true}
+                              />
+
+                              <label htmlFor="vsyes">
+                                <div className="radio_icon">
+                                  <span className="material-symbols-outlined add">
+                                    add
+                                  </span>
+                                  <span className="material-symbols-outlined check">
+                                    done
+                                  </span>
+                                </div>
+                                <h6>Yes</h6>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="radio_group_single">
+                            <div
+                              className={
+                                vehicleStatus !== true
+                                  ? "custom_radio_button radiochecked"
+                                  : "custom_radio_button"
+                              }
+                            >
+                              <input
+                                type="radio"
+                                name="vehicleStatus"
+                                id="vsno"
+                                value="false"
+                                onChange={() => setVehicleStatus(false)}
+                                checked={vehicleStatus === false}
+                              />
+
+                              <label htmlFor="vsno">
+                                <div className="radio_icon">
+                                  <span className="material-symbols-outlined add">
+                                    add
+                                  </span>
+                                  <span className="material-symbols-outlined check">
+                                    done
+                                  </span>
+                                </div>
+                                <h6>No</h6>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* <div className="form_field_inner">
+                          <Select
+                            // isMulti
+                            value={vehicleStatus}
+                            onChange={setVehicleStatus}
+                            options={vehicleStatusOptions}
+                            placeholder="Select"
+                          />
+            
+                        </div> */}
+                    </div>
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        {/* <div className="form_field label_top">
+                          <label>Vehicle Type*</label>
+                          <div className="form_field_inner">
+                            <Select
+                              value={vehicleType}
+                              onChange={setVehicleType}
+                              options={vehicleTypeOptions}
+                              placeholder="Select Vehicle Type"
+                            />
+                          </div>
+                        </div> */}
+                        <div className="form_field st-2 label_top">
+                          <label htmlFor="">Vehicle Type*</label>
+                          <div className="radio_group">
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  vehicleType === "2-Wheeler"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="radio"
+                                  name="vehicleType"
+                                  id="2-Wheeler"
+                                  value="2-Wheeler"
+                                  onChange={() => setVehicleType("2-Wheeler")}
+                                  checked={vehicleType === "2-Wheeler"}
+                                />
+
+                                <label htmlFor="2-Wheeler">
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>2-Wheeler</h6>
+                                </label>
+                              </div>
+                            </div>
+                            <div className="radio_group_single">
+                              <div
+                                className={
+                                  vehicleType === "4-Wheeler"
+                                    ? "custom_radio_button radiochecked"
+                                    : "custom_radio_button"
+                                }
+                              >
+                                <input
+                                  type="radio"
+                                  name="4-Wheeler"
+                                  id="4-Wheeler"
+                                  value="4-Wheeler"
+                                  onChange={() => setVehicleType("4-Wheeler")}
+                                  checked={vehicleType === "4-Wheeler"}
+                                />
+
+                                <label htmlFor="4-Wheeler">
+                                  <div className="radio_icon">
+                                    <span className="material-symbols-outlined add">
+                                      add
+                                    </span>
+                                    <span className="material-symbols-outlined check">
+                                      done
+                                    </span>
+                                  </div>
+                                  <h6>4-Wheeler</h6>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="form_field label_top">
+                          <label>Number Plate</label>
+                          <div className="form_field_inner">
+                            <input
+                              type="text"
+                              value={vehicleNumberPlate}
+                              onChange={(e) =>
+                                setVehicleNumberPlate(e.target.value)
+                              }
+                              placeholder="Enter Number Plate"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {userProfileDoc && vehicleStatus === true && (
+                      <div className="col-lg-4 col-md-6 col-sm-12">
+                        <div className="form_field label_top">
+                          <label>Driving Licence Number</label>
+                          <div className="form_field_inner">
+                            <input
+                              type="text"
+                              value={drivingLicence}
+                              onChange={(e) =>
+                                setDrivingLicence(e.target.value)
+                              }
+                              placeholder="Enter Driving Licence Number"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="btn_msg_area">
+                    {vehicleDetailUpdateMessage && (
+                      <p className={`msg_area ${vdMessageType}`}>
+                        {vehicleDetailUpdateMessage}
+                      </p>
+                    )}
+
+                    <button
+                      onClick={handleVdCancelClick}
+                      disabled={isVdUpdating}
+                      className={`theme_btn btn_border no_icon min_width ${isVdUpdating ? "disabled" : ""
+                        }`}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleUpdateVehicleDetail}
+                      disabled={isVdUpdating}
+                      className={`theme_btn btn_fill no_icon min_width ${isVdUpdating ? "disabled" : ""
+                        }`}
+                    >
+                      {isVdUpdating ? "Saving..." : "Save"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {userProfileDoc && userProfileDoc.isEmployee && (
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
               <h2 className="card_title">
@@ -1691,6 +3471,52 @@ export default function PGUserProfileDetails2() {
                     </div>
                   </div>
                 ))}
+                <Modal
+                  show={showConfirmModalForDeleteDoc}
+                  onHide={() => setShowConfirmModalForDeleteDoc(false)}
+                  centered
+                >
+                  <Modal.Header
+                    className="justify-content-center"
+                    style={{
+                      paddingBottom: "0px",
+                      border: "none",
+                    }}
+                  >
+                    <h5>Confirm Deletion</h5>
+                  </Modal.Header>
+                  <Modal.Body
+                    className="text-center"
+                    style={{
+                      color: "#FA6262",
+                      fontSize: "20px",
+                      border: "none",
+                    }}
+                  >
+                    Are you sure you want to delete the uploaded {modalDocType}?
+                  </Modal.Body>
+                  <Modal.Footer
+                    className="d-flex justify-content-between"
+                    style={{
+                      border: "none",
+                      gap: "15px",
+                    }}
+                  >
+                    <div
+                      className="cancel_btn"
+                      onClick={handleDeleteConfirm}
+                      disabled={isUploadedDocDeleting}
+                    >
+                      {isUploadedDocDeleting ? "Deleting..." : "Yes"}
+                    </div>
+                    <div
+                      className="done_btn"
+                      onClick={() => setShowConfirmModalForDeleteDoc(false)}
+                    >
+                      No
+                    </div>
+                  </Modal.Footer>
+                </Modal>{" "}
               </div>
             </div>
           </div>
@@ -1701,9 +3527,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Bank Detail
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isBankDetailEditing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isBankDetailEditing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isBankDetailEditing
                       ? handleBankDetailCancelClick
@@ -1717,13 +3542,16 @@ export default function PGUserProfileDetails2() {
                 <div className="p_info for_ref">
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/accountholder.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/accountholder.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>A/C Holder Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acHolderName
+                          userProfileDoc.bankDetail.acHolderName
                           ? userProfileDoc.bankDetail.acHolderName
                           : "Not provided yet"}
                       </h5>
@@ -1731,13 +3559,16 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/accountnumber.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/accountnumber.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>A/C Number</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.acNumber
+                          userProfileDoc.bankDetail.acNumber
                           ? userProfileDoc.bankDetail.acNumber
                           : "Not provided yet"}
                       </h5>
@@ -1751,7 +3582,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Bank Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.bankName
+                          userProfileDoc.bankDetail.bankName
                           ? userProfileDoc.bankDetail.bankName
                           : "Not provided yet"}
                       </h5>
@@ -1765,7 +3596,7 @@ export default function PGUserProfileDetails2() {
                       <h6>Branch Name</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.branchName
+                          userProfileDoc.bankDetail.branchName
                           ? userProfileDoc.bankDetail.branchName
                           : "Not provided yet"}
                       </h5>
@@ -1773,13 +3604,16 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/ifsccode.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/ifsccode.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>IFSC Code</h6>
                       <h5>
                         {userProfileDoc.bankDetail &&
-                        userProfileDoc.bankDetail.ifscCode
+                          userProfileDoc.bankDetail.ifscCode
                           ? userProfileDoc.bankDetail.ifscCode
                           : "Not provided yet"}
                       </h5>
@@ -1790,7 +3624,7 @@ export default function PGUserProfileDetails2() {
 
               {isBankDetailEditing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>A/C Holder Name*</label>
@@ -1844,7 +3678,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Branch Name*</label>
+                        <label>Branch Name</label>
                         <div className="form_field_inner">
                           <input
                             type="text"
@@ -1883,18 +3717,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleBankDetailCancelClick}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleBankDetailSubmit}
                       disabled={isBankDetailSaving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isBankDetailSaving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isBankDetailSaving ? "disabled" : ""
+                        }`}
                     >
                       {isBankDetailSaving ? "Saving..." : "Save"}
                     </button>
@@ -1910,9 +3742,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 1
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef1Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef1Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef1Editing ? handleRef1CancelClick : handleRef1EditClick
                   }
@@ -1937,16 +3768,19 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/mobile-phone.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/mobile-phone.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Phone</h6>
                       <h5>
                         {userProfileDoc.ref1 && userProfileDoc.ref1.phone
                           ? userProfileDoc.ref1.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -1977,12 +3811,41 @@ export default function PGUserProfileDetails2() {
                       </h5>
                     </div>
                   </div>
+                  <div className="p_info_single actions">
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
+                      <Link
+                        to={`https://wa.me/+${userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/whatsappbig.png" alt="propdial" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.phone && (
+                      <Link
+                        to={`tel:+${userProfileDoc.ref1 && userProfileDoc.ref1.phone
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/call-icon.png" alt="propdial" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref1 && userProfileDoc.ref1.email && (
+                      <Link
+                        to={`mailto:${userProfileDoc.ref1 && userProfileDoc.ref1.email
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/gmailbig.png" alt="propdial" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               )}
 
               {isRef1Editing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>Name*</label>
@@ -2036,7 +3899,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Email*</label>
+                        <label>Email</label>
                         <div className="form_field_inner">
                           <input
                             type="email"
@@ -2074,18 +3937,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef1CancelClick}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef1Submit}
                       disabled={isRef1Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef1Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef1Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef1Saving ? "Saving..." : "Save"}
                     </button>
@@ -2101,9 +3962,8 @@ export default function PGUserProfileDetails2() {
               <h2 className="card_title">
                 Reference 2
                 <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef2Editing ? "text_red" : "text_green"
-                  }`}
+                  className={`material-symbols-outlined action_icon ${isRef2Editing ? "text_red" : "text_green"
+                    }`}
                   onClick={
                     isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
                   }
@@ -2128,16 +3988,19 @@ export default function PGUserProfileDetails2() {
                   </div>
                   <div className="p_info_single">
                     <div className="pd_icon">
-                      <img src="/assets/img/edicon/mobile-phone.png" alt="propdial" />
+                      <img
+                        src="/assets/img/edicon/mobile-phone.png"
+                        alt="propdial"
+                      />
                     </div>
                     <div className="pis_content">
                       <h6>Phone</h6>
                       <h5>
                         {userProfileDoc.ref2 && userProfileDoc.ref2.phone
                           ? userProfileDoc.ref2.phone.replace(
-                              /(\d{2})(\d{5})(\d{5})/,
-                              "+$1 $2-$3"
-                            )
+                            /(\d{2})(\d{5})(\d{5})/,
+                            "+$1 $2-$3"
+                          )
                           : "Not provided yet"}
                       </h5>
                     </div>
@@ -2168,12 +4031,41 @@ export default function PGUserProfileDetails2() {
                       </h5>
                     </div>
                   </div>
+                  <div className="p_info_single actions">
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
+                      <Link
+                        to={`https://wa.me/+${userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/whatsappbig.png" alt="propdial" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.phone && (
+                      <Link
+                        to={`tel:+${userProfileDoc.ref2 && userProfileDoc.ref2.phone
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/call-icon.png" alt="propdial" />
+                      </Link>
+                    )}
+                    {userProfileDoc.ref2 && userProfileDoc.ref2.email && (
+                      <Link
+                        to={`mailto:${userProfileDoc.ref2 && userProfileDoc.ref2.email
+                          }`}
+                        className="icon"
+                      >
+                        <img src="/assets/img/gmailbig.png" alt="propdial" />
+                      </Link>
+                    )}
+                  </div>
                 </div>
               )}
 
               {isRef2Editing && (
                 <>
-                  <div className="row row_gap form_full">
+                  <div className="row row_gap form_full mt-4">
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
                         <label>Name*</label>
@@ -2227,7 +4119,7 @@ export default function PGUserProfileDetails2() {
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-12">
                       <div className="form_field label_top">
-                        <label>Email*</label>
+                        <label>Email</label>
                         <div className="form_field_inner">
                           <input
                             type="email"
@@ -2265,18 +4157,16 @@ export default function PGUserProfileDetails2() {
                     <button
                       onClick={handleRef2CancelClick}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_border no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_border no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleRef2Submit}
                       disabled={isRef2Saving}
-                      className={`theme_btn btn_fill no_icon min_width ${
-                        isRef2Saving ? "disabled" : ""
-                      }`}
+                      className={`theme_btn btn_fill no_icon min_width ${isRef2Saving ? "disabled" : ""
+                        }`}
                     >
                       {isRef2Saving ? "Saving..." : "Save"}
                     </button>
@@ -2389,8 +4279,6 @@ export default function PGUserProfileDetails2() {
             ))}
           </div>
         </div> */}
-
-      
       </div>
     </div>
   );

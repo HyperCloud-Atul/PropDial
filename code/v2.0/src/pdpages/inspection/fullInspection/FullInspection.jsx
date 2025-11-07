@@ -689,6 +689,26 @@ const FullInspection = () => {
     }
   };
 
+  const computeBillStatus = useCallback((billData) => {
+    if (!billData) return "add";
+    
+    const filledFields = [
+      billData.amount,
+      billData.remark,
+    ].filter(Boolean).length;
+
+    if (filledFields === 2) {
+      return "full";
+    } else if (filledFields > 0) {
+      return "half";
+    } else {
+      return "add";
+    }
+  }, []);
+
+  // ... (previous effects and functions remain the same)
+
+  // Update handleSaveBill function to include inspectionStatus
   const handleSaveBill = async () => {
     if (!bills.length) return;
 
@@ -719,9 +739,16 @@ const FullInspection = () => {
           changedFields.thisBillUpdatedBy = user.phoneNumber;
         }
 
-        updatedBills[bill.id] = {
+        // Compute inspection status for the bill
+        const currentBillData = {
           ...(prevBillData || {}),
           ...changedFields,
+        };
+        const inspectionStatus = computeBillStatus(currentBillData);
+
+        updatedBills[bill.id] = {
+          ...currentBillData,
+          inspectionStatus, // Add inspection status here
         };
       });
 
@@ -747,24 +774,45 @@ const FullInspection = () => {
     }
   };
 
+  // Update handleFinalSubmit to include bill inspectionStatus
   const handleFinalSubmit = async () => {
     setFinalSubmiting(true);
 
     try {
-      await handleSaveBill();
-
-      const roomsToSave = Object.values(inspectionData).map(room => ({
-        ...room,
-        inspectionStatus: computeRoomStatus(room)
-      }));
+      // Save bills first with inspectionStatus
+      const updatedBills = { ...billInspectionData };
+      
+      bills.forEach((bill) => {
+        const billData = updatedBills[bill.id] || {};
+        updatedBills[bill.id] = {
+          ...billData,
+          inspectionStatus: computeBillStatus(billData)
+        };
+      });
 
       await projectFirestore
         .collection("inspections")
         .doc(inspectionId)
         .update({
+          bills: updatedBills,
+        });
+
+      // Then save rooms with inspectionStatus
+      const roomsToSave = Object.values(inspectionData).map(room => ({
+        ...room,
+        inspectionStatus: computeRoomStatus(room)
+      }));
+
+      // Then final submit
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
           rooms: roomsToSave,
+          bills: updatedBills, // Include bills in final submit
           finalSubmit: true,
           layoutInspectionDone,
+          allBillInspectionComplete,
           updatedAt: timestamp.now(),
           updatedInformation: firebase.firestore.FieldValue.arrayUnion({
             updatedAt: timestamp.now(),
@@ -780,6 +828,8 @@ const FullInspection = () => {
       setFinalSubmit(false);
     }
   };
+
+
 
   // Component rendering
   return (
@@ -870,7 +920,7 @@ const FullInspection = () => {
             {inspectionDatabaseData &&
               inspectionDatabaseData.layoutInspectionDone &&
               inspectionDatabaseData.allBillInspectionComplete && (
-                <div className="bottom_fixed_button">
+                <div className="bottom_fixed_button" style={{ zIndex: "99999" }}>
                   <div className="next_btn_back">
                     <button
                       className="theme_btn no_icon btn_fill2 full_width"

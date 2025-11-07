@@ -13,7 +13,7 @@ import { BeatLoader } from "react-spinners";
 import { useAuthContext } from "../../../../hooks/useAuthContext";
 import { format } from "date-fns";
 
-const AddAgent = ({agentID }) => {
+const AddAgent = ({ agentID }) => {
   const { camelCase } = useCommon();
   const { user } = useAuthContext();
   const isReadOnly = agentID !== "new" ? true : false;
@@ -92,11 +92,11 @@ const AddAgent = ({agentID }) => {
   const formatOptionLabelWithCheck = ({ label, value }, { isSelected }) => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {isSelected && (
-        <span 
-          className="material-symbols-outlined" 
-          style={{ 
-            fontSize: '18px', 
-            marginRight: '8px', 
+        <span
+          className="material-symbols-outlined"
+          style={{
+            fontSize: '18px',
+            marginRight: '8px',
             color: 'var(--theme-green)',
             fontWeight: 'bold'
           }}
@@ -258,7 +258,7 @@ const AddAgent = ({agentID }) => {
         societies.forEach(society => {
           const localityObj = selectedOptions.find(loc => loc.value === society.locality);
           const localityName = localityObj ? localityObj.label : "";
-          
+
           allSocieties.push({
             label: `${society.society}, ${localityName}`,
             value: society.id,
@@ -366,25 +366,98 @@ const AddAgent = ({agentID }) => {
   };
 
   // FIXED: IMPROVED PHONE CHANGE HANDLER - Better duplicate detection
-  const handleChangeAgentPhone = (value) => {
-    setAgentPhone(value);
-    // Clear previous duplicate state when user changes number
-    setHasDuplicatePhone(false);
-    setErrors(prev => ({ ...prev, agentPhone: "" }));
+  // const handleChangeAgentPhone = (value) => {
+  //   setAgentPhone(value);
+  //   // Clear previous duplicate state when user changes number
+  //   setHasDuplicatePhone(false);
+  //   setErrors(prev => ({ ...prev, agentPhone: "" }));
 
-    if (agentID === "new") {
-      const cleanNumber = value.replace(/\D/g, '');
-      if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
-        if (phoneCheckTimeoutRef.current) {
-          clearTimeout(phoneCheckTimeoutRef.current);
+  //   if (agentID === "new") {
+  //     const cleanNumber = value.replace(/\D/g, '');
+  //     if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
+  //       if (phoneCheckTimeoutRef.current) {
+  //         clearTimeout(phoneCheckTimeoutRef.current);
+  //       }
+
+  //       phoneCheckTimeoutRef.current = setTimeout(() => {
+  //         checkMobileNumber(value).then(handleDuplicateResult);
+  //       }, 800);
+  //     }
+  //   }
+  // };
+
+  // FIXED: IMPROVED PHONE CHANGE HANDLER - Better duplicate detection and paste handling
+const handleChangeAgentPhone = (value, country, e, formattedValue) => {
+  // Agar paste event hai to special handling
+  if (e && e.type === 'paste') {
+    const clipboardData = e.clipboardData || window.clipboardData;
+    const pastedData = clipboardData.getData('Text');
+    
+    // Paste kiya gaya number process karein
+    const processedNumber = processPastedNumber(pastedData);
+    if (processedNumber) {
+      setAgentPhone(processedNumber);
+      
+      // Duplicate check for new agents
+      if (agentID === "new") {
+        const cleanNumber = processedNumber.replace(/\D/g, '');
+        if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
+          if (phoneCheckTimeoutRef.current) {
+            clearTimeout(phoneCheckTimeoutRef.current);
+          }
+          
+          phoneCheckTimeoutRef.current = setTimeout(() => {
+            checkMobileNumber(processedNumber).then(handleDuplicateResult);
+          }, 800);
         }
-        
-        phoneCheckTimeoutRef.current = setTimeout(() => {
-          checkMobileNumber(value).then(handleDuplicateResult);
-        }, 800);
       }
+      return;
     }
-  };
+  }
+  
+  // Normal change handling
+  setAgentPhone(value);
+  // Clear previous duplicate state when user changes number
+  setHasDuplicatePhone(false);
+  setErrors(prev => ({ ...prev, agentPhone: "" }));
+
+  if (agentID === "new") {
+    const cleanNumber = value.replace(/\D/g, '');
+    if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {
+      if (phoneCheckTimeoutRef.current) {
+        clearTimeout(phoneCheckTimeoutRef.current);
+      }
+      
+      phoneCheckTimeoutRef.current = setTimeout(() => {
+        checkMobileNumber(value).then(handleDuplicateResult);
+      }, 800);
+    }
+  }
+};
+
+// NEW: Paste kiya gaya number process karne ka function
+const processPastedNumber = (pastedNumber) => {
+  if (!pastedNumber) return null;
+  
+  // Sirf numbers aur + allow karein
+  const cleaned = pastedNumber.replace(/[^\d+]/g, '');
+  
+  // Agar +91 se start ho raha hai
+  if (cleaned.startsWith('+91') && cleaned.length >= 13) {
+    const numberWithoutPlus = cleaned.substring(1); // +91 -> 91
+    return numberWithoutPlus;
+  }
+  // Agar 91 se start ho raha hai (without +)
+  else if (cleaned.startsWith('91') && cleaned.length >= 12) {
+    return cleaned;
+  }
+  // Agar 10 digit number hai (without country code)
+  else if (cleaned.length === 10 && /^\d+$/.test(cleaned)) {
+    return '91' + cleaned;
+  }
+  
+  return null;
+};
 
   // FIXED: Improved name change handler with immediate error clearing
   const handleChangeAgentName = (e) => {
@@ -450,9 +523,9 @@ const AddAgent = ({agentID }) => {
         if (duplicateResult.hasDuplicates) {
           setShowDuplicateModal(true);
           setHasDuplicatePhone(true);
-          setErrors(prev => ({ 
-            ...prev, 
-            agentPhone: "This mobile number is already registered" 
+          setErrors(prev => ({
+            ...prev,
+            agentPhone: "This mobile number is already registered"
           }));
           return false;
         }
@@ -571,22 +644,22 @@ const AddAgent = ({agentID }) => {
   }, []);
 
   const shouldDisableForm = agentID === "new" && (isFormDisabled || hasDuplicatePhone);
-  
+
   // FIXED: IMPROVED SUBMIT BUTTON DISABLE LOGIC
-  const isSubmitDisabled = isUploading || 
-                          Object.values(errors).some(error => error) || 
-                          shouldDisableForm || 
-                          !isFormInitialized ||
-                          hasDuplicatePhone;
+  const isSubmitDisabled = isUploading ||
+    Object.values(errors).some(error => error) ||
+    shouldDisableForm ||
+    !isFormInitialized ||
+    hasDuplicatePhone;
 
   // FIXED: BETTER DUPLICATE MODAL CLOSE HANDLER
   const handleDuplicateModalClose = () => {
     setShowDuplicateModal(false);
     setIsFormDisabled(false);
     setHasDuplicatePhone(true); // Keep this true to prevent submission
-    setErrors(prev => ({ 
-      ...prev, 
-      agentPhone: "Please change the mobile number to continue" 
+    setErrors(prev => ({
+      ...prev,
+      agentPhone: "Please change the mobile number to continue"
     }));
   };
 
@@ -621,7 +694,7 @@ const AddAgent = ({agentID }) => {
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">Phone number*</label>
-                <div className="form_field_inner">
+                {/* <div className="form_field_inner">
                   <PhoneInput
                     country={"in"}
                     onlyCountries={["in"]}
@@ -638,6 +711,49 @@ const AddAgent = ({agentID }) => {
                       maxLength: 15,
                       readOnly: isReadOnly,
                     }}
+                    inputStyle={{
+                      width: "100%",
+                      paddingLeft: "60px",
+                      fontSize: "16px",
+                      borderRadius: "12px",
+                      height: "45px",
+                      backgroundColor: (isReadOnly || shouldDisableForm) ? '#f5f5f5' : '#fff',
+                    }}
+                    buttonStyle={{
+                      borderRadius: "12px",
+                      textAlign: "left",
+                      border: "1px solid #00A8A8",
+                      backgroundColor: (isReadOnly || shouldDisableForm) ? '#f5f5f5' : '#fff',
+                    }}
+                  />
+                  {isCheckingDuplicate && (
+                    <div className="text-muted" style={{ fontSize: "12px", marginTop: "5px" }}>
+                      Checking availability...
+                    </div>
+                  )}
+                  {errors.agentPhone && (
+                    <div className="field_error">{errors.agentPhone}</div>
+                  )}
+                </div> */}
+                     <div className="form_field_inner">
+                  <PhoneInput
+                 country={"in"}
+  onlyCountries={["in"]}
+  countryCodeEditable={false}
+  enableSearch={false}
+  value={agentPhone}
+  onChange={handleChangeAgentPhone}
+  onPaste={(e) => handleChangeAgentPhone(agentPhone, null, e)} // Paste event handle karein
+  keyboardType="phone-pad"
+  placeholder="mobile number"
+  inputProps={{
+    name: "phone",
+    required: true,
+    autoFocus: false,
+    maxLength: 15,
+    readOnly: isReadOnly,
+    onPaste: (e) => handleChangeAgentPhone(agentPhone, null, e) // Additional paste handler
+  }}
                     inputStyle={{
                       width: "100%",
                       paddingLeft: "60px",
@@ -723,7 +839,7 @@ const AddAgent = ({agentID }) => {
                 </div>
               </div>
             </div>
-            
+
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">Pancard Number</label>
@@ -739,7 +855,7 @@ const AddAgent = ({agentID }) => {
                 </div>
               </div>
             </div>
-            
+
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">GST Number</label>
@@ -755,8 +871,8 @@ const AddAgent = ({agentID }) => {
                   />
                 </div>
               </div>
-            </div>               
-            
+            </div>
+
             <div className="col-xl-4 col-lg-6">
               <div className="form_field label_top">
                 <label htmlFor="">State*</label>
@@ -768,29 +884,29 @@ const AddAgent = ({agentID }) => {
                     value={state}
                     isDisabled={shouldDisableForm}
                     styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: shouldDisableForm ? '#f5f5f5' : '#eee',
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                          menu: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                            position: 'absolute',
-                          }),
-                          menuPortal: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                          container: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPosition="fixed"
-                        menuShouldScrollIntoView={false}
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: shouldDisableForm ? '#f5f5f5' : '#eee',
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                      menu: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                        position: 'absolute',
+                      }),
+                      menuPortal: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                      container: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                    }}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    menuShouldScrollIntoView={false}
                   />
                   {errors.state && (
                     <div className="field_error">{errors.state}</div>
@@ -810,29 +926,29 @@ const AddAgent = ({agentID }) => {
                     isDisabled={!state || shouldDisableForm}
                     placeholder={state ? "Select City" : "First select State"}
                     styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: shouldDisableForm ? '#f5f5f5' : '#eee',
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                          menu: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                            position: 'absolute',
-                          }),
-                          menuPortal: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                          container: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPosition="fixed"
-                        menuShouldScrollIntoView={false}
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: shouldDisableForm ? '#f5f5f5' : '#eee',
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                      menu: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                        position: 'absolute',
+                      }),
+                      menuPortal: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                      container: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                    }}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    menuShouldScrollIntoView={false}
                   />
                   {errors.city && (
                     <div className="field_error">{errors.city}</div>
@@ -853,30 +969,30 @@ const AddAgent = ({agentID }) => {
                     isDisabled={!city || shouldDisableForm}
                     placeholder={city ? "Select Locality" : "First select City"}
                     formatOptionLabel={formatOptionLabelWithCheck}
-                   styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: shouldDisableForm ? '#f5f5f5' : '#eee',
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                          menu: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                            position: 'absolute',
-                          }),
-                          menuPortal: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                          container: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPosition="fixed"
-                        menuShouldScrollIntoView={false}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: shouldDisableForm ? '#f5f5f5' : '#eee',
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                      menu: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                        position: 'absolute',
+                      }),
+                      menuPortal: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                      container: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                    }}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    menuShouldScrollIntoView={false}
                   />
                 </div>
               </div>
@@ -894,30 +1010,30 @@ const AddAgent = ({agentID }) => {
                     isDisabled={locality.length === 0 || shouldDisableForm}
                     placeholder={locality.length > 0 ? "Select Society" : "First select Locality"}
                     formatOptionLabel={formatOptionLabelWithCheck}
-                   styles={{
-                          control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            outline: "none",
-                            background: shouldDisableForm ? '#f5f5f5' : '#eee',
-                            borderBottom: " 1px solid var(--theme-blue)",
-                          }),
-                          menu: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                            position: 'absolute',
-                          }),
-                          menuPortal: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                          container: (baseStyles) => ({
-                            ...baseStyles,
-                            zIndex: 999,
-                          }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPosition="fixed"
-                        menuShouldScrollIntoView={false}
+                    styles={{
+                      control: (baseStyles, state) => ({
+                        ...baseStyles,
+                        outline: "none",
+                        background: shouldDisableForm ? '#f5f5f5' : '#eee',
+                        borderBottom: " 1px solid var(--theme-blue)",
+                      }),
+                      menu: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                        position: 'absolute',
+                      }),
+                      menuPortal: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                      container: (baseStyles) => ({
+                        ...baseStyles,
+                        zIndex: 999,
+                      }),
+                    }}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    menuShouldScrollIntoView={false}
                   />
                 </div>
               </div>
@@ -1023,7 +1139,7 @@ const AddAgent = ({agentID }) => {
               <div className="vg22"></div>
             </>
           )}
-          
+
           <div className="row">
             <div className="col-md-6"></div>
             <div className="col-md-6 col-12">
@@ -1031,7 +1147,7 @@ const AddAgent = ({agentID }) => {
                 <div className="col-4">
                   <div className="theme_btn btn_border no_icon text-center"
                   //  onClick={backViewAgents}
-                   >
+                  >
                     Cancel
                   </div>
                 </div>

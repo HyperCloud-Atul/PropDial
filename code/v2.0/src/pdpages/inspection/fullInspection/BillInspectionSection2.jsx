@@ -66,6 +66,18 @@ const BillInspectionSection = ({
                 handleBillImageUpload={handleBillImageUpload}
                 handleBillImageDelete={handleBillImageDelete}
               />
+
+              {/* Display inspection status for the bill */}
+              <div className="col-12">
+                <div className="form_field w-100" style={{ padding: "10px", borderRadius: "5px", background: "white" }}>
+                  <h6 style={{ fontSize: "15px", fontWeight: "500", marginBottom: "8px", color: "var(--theme-blue)" }}>
+                    Inspection Status
+                  </h6>
+                  <div className="field_box">
+                    <StatusBadge status={currentBillData.inspectionStatus} />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </form>
@@ -83,7 +95,43 @@ const BillInspectionSection = ({
   </div>
 );
 
-// Helper components for Bill Inspection
+// Add StatusBadge component to show inspection status
+const StatusBadge = ({ status }) => {
+  const getStatusConfig = (status) => {
+    switch (status) {
+      case 'full':
+        return { label: 'Completed', className: 'status-completed', color: '#00a300' };
+      case 'half':
+        return { label: 'In Progress', className: 'status-in-progress', color: '#FFC107' };
+      case 'notallowed':
+        return { label: 'Not Allowed', className: 'status-not-allowed', color: '#dc3545' };
+      default:
+        return { label: 'Not Started', className: 'status-not-started', color: '#6c757d' };
+    }
+  };
+
+  const config = getStatusConfig(status);
+
+  return (
+    <div 
+      className={`status-badge ${config.className}`}
+      style={{
+        display: 'inline-block',
+        padding: '4px 12px',
+        borderRadius: '20px',
+        backgroundColor: `${config.color}15`,
+        color: config.color,
+        border: `1px solid ${config.color}`,
+        fontSize: '14px',
+        fontWeight: '500'
+      }}
+    >
+      {config.label}
+    </div>
+  );
+};
+
+// Update BillButton to show status-based icons
 const BillButton = ({ bill, isActive, buttonClass, onClick }) => (
   <button onClick={onClick} className={buttonClass}>
     <div className="active_hand">
@@ -125,6 +173,7 @@ const BillButton = ({ bill, isActive, buttonClass, onClick }) => (
   </button>
 );
 
+// Rest of the components remain the same...
 const BillInfoSection = ({ bill }) => (
   <div className="id_name">
     <div className="idn_single">

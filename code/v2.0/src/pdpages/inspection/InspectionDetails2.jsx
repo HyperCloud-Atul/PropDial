@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { usePropertyUserRoles } from "../../utils/usePropertyUserRoles";
 import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 import DownloadReportModal from "./viewInspection/Components/DownloadReportModal";
 import jsPDF from "jspdf";
 import "./Inspection-report.scss";

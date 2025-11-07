@@ -3,7 +3,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Select from "react-select";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDocument } from "../../hooks/useDocument";
 import { useCommon } from "../../hooks/useCommon";
 import { useFirestore } from "../../hooks/useFirestore";
@@ -24,24 +24,29 @@ import PropertyDetails from "../../components/property/PropertyDetails";
 
 export default function PGUserProfileDetails2() {
   const { userProfileId } = useParams();
+   const [searchParams] = useSearchParams();
+  const isExEmployee = searchParams.get('type') === 'exEmployee';
   const { camelCase } = useCommon();
   const { user } = useAuthContext();
 
+   // Dynamic collection name based on ex-employee status
+  const collectionName = isExEmployee ? "users-propdial-ex" : "users-propdial";
+
   // get and update code start
   const { document: userProfileDoc, error: userProfileDocError } = useDocument(
-    "users-propdial",
+    collectionName,
     userProfileId
   );
 
   // console.log("userProfileDoc: ", userProfileDoc)
 
   const { updateDocument, response: responseUpdateDocument } =
-    useFirestore("users-propdial");
+    useFirestore(collectionName);
   // get and update code end
 
   // get user
   const { documents: dbUsers, error: dbuserserror } =
-    useCollection("users-propdial");
+    useCollection(collectionName);
   const [dbUserState, setdbUserState] = useState(dbUsers);
 
   //Master Data Loading Initialisation - Start
@@ -1549,12 +1554,14 @@ export default function PGUserProfileDetails2() {
               }}
             ></iframe>
           )}
+          {!isExEmployee && (
           <span
             class="material-symbols-outlined delete_icon_top"
             onClick={() => handleDeleteClick(docType)}
           >
             delete_forever
           </span>
+          )}
         </div>
       );
     }
@@ -1743,7 +1750,8 @@ export default function PGUserProfileDetails2() {
                           checked={
                             userProfileDoc && userProfileDoc.status === "active"
                           }
-                          onChange={() => handleStatusChange("active")}
+                        onChange={() => !isExEmployee && handleStatusChange("active")}
+                         disabled={isExEmployee}
                         />
                         <label htmlFor="active">
                           <div className="label_inner">
@@ -1791,7 +1799,8 @@ export default function PGUserProfileDetails2() {
                           checked={
                             userProfileDoc?.status === "inactive"
                           }
-                          onChange={() => handleStatusChange("inactive")}
+                        onChange={() => !isExEmployee && handleStatusChange("inactive")}
+                         disabled={isExEmployee}
                         />
                         <label htmlFor="inactive">
                           <div className="label_inner">
@@ -1889,7 +1898,8 @@ export default function PGUserProfileDetails2() {
                           checked={
                             userProfileDoc?.isEmployee === true
                           }
-                          onChange={() => handleRadioChange("yes")}
+                          onChange={() => !isExEmployee && handleRadioChange("yes")}
+                            disabled={isExEmployee}
                         />
                         <label htmlFor="yes">yes</label>
                       </div>
@@ -1903,6 +1913,7 @@ export default function PGUserProfileDetails2() {
                             userProfileDoc?.isEmployee === false
                           }
                           onChange={() => handleRadioChange("no")}
+                           disabled={isExEmployee}
                         />
                         <label htmlFor="no">no</label>
                       </div>
@@ -1961,99 +1972,12 @@ export default function PGUserProfileDetails2() {
                   </Modal.Footer>
                 </Modal>
               </div>
-              {/* <div className="blue_single is_employee is_employeecard">
-  <h5>Is Employee?</h5>
-  <div className="form_field">
-    <div className="field_box theme_radio_new">
-      <div
-        className="theme_radio_container"
-        style={{
-          padding: "0px",
-          border: "none",
-          background: "transparent",
-        }}
-      >
-        <div className="radio_single">
-          <input
-            type="radio"
-            name="isemployee"
-            value="yes"
-            id={`yes-${userProfileDoc?.id || "user"}`}
-            checked={isEmployee === true}
-            onChange={() => handleRadioChange("yes")}
-          />
-          <label htmlFor={`yes-${userProfileDoc?.id || "user"}`}>Yes</label>
-        </div>
-        <div className="radio_single">
-          <input
-            type="radio"
-            name="isemployee"
-            value="no"
-            id={`no-${userProfileDoc?.id || "user"}`}
-            checked={isEmployee === false}
-            onChange={() => handleRadioChange("no")}
-          />
-          <label htmlFor={`no-${userProfileDoc?.id || "user"}`}>No</label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <Modal
-    show={showConfirmationPopup}
-    onHide={() => setShowConfirmationPopup(false)}
-    centered
-  >
-    <Modal.Header
-      className="justify-content-center"
-      style={{
-        paddingBottom: "0px",
-        border: "none",
-      }}
-    >
-      <h5>Confirmation</h5>
-    </Modal.Header>
-    <Modal.Body
-      className="text-center"
-      style={{
-        color: "#FA6262",
-        fontSize: "20px",
-        border: "none",
-      }}
-    >
-      Are you sure you want to mark this user as{" "}
-      {selectedEmployeeStatus === "yes"
-        ? "an employee?"
-        : "not an employee?"}
-    </Modal.Body>
-    <Modal.Footer
-      className="d-flex justify-content-between"
-      style={{
-        border: "none",
-        gap: "15px",
-      }}
-    >
-      <button
-        className="cancel_btn"
-        onClick={handleUpdateIsEmployee}
-        disabled={loading}
-      >
-        {loading ? "Saving..." : "Yes, Update"}
-      </button>
-      <button
-        className="done_btn"
-        onClick={() => setShowConfirmationPopup(false)}
-      >
-        No
-      </button>
-    </Modal.Footer>
-  </Modal>
-</div>  */}
+        
               {userProfileDoc?.isEmployee && (
                 <div className="blue_single is_employee currentrole">
                   <h5>Employee Status</h5>
                   <h6 className="text_blue text-capitalize">
-                    {userProfileDoc?.isEmployee && userProfileDoc.status === "active" ? "Current" : "EX"}
+                {isExEmployee ? "EX" : "Current"}
 
                   </h6>
                 </div>
@@ -2081,7 +2005,8 @@ export default function PGUserProfileDetails2() {
                             checked={
                               userProfileDoc?.isAttendanceRequired === true
                             }
-                            onChange={() => handleArRadioChange("yes")}
+                              onChange={() => !isExEmployee && handleArRadioChange("yes")}
+            disabled={isExEmployee}
                           />
                           <label htmlFor="isaryes">yes</label>
                         </div>
@@ -2094,7 +2019,8 @@ export default function PGUserProfileDetails2() {
                             checked={
                               userProfileDoc?.isAttendanceRequired === false
                             } // Fixed checked condition
-                            onChange={() => handleArRadioChange("no")}
+                           onChange={() => !isExEmployee && handleArRadioChange("no")}
+            disabled={isExEmployee}
                           />
                           <label htmlFor="isarno">no</label>
                         </div>
@@ -2148,10 +2074,10 @@ export default function PGUserProfileDetails2() {
                     </Modal.Footer>
                   </Modal>
                 </div>
-              )}
-              {userProfileDoc?.isEmployee && (
-                <ChangeEmployeeButton userProfileId={userProfileId} user={user} />
-              )}
+              )}        
+              {userProfileDoc?.isEmployee && !isExEmployee && (
+  <ChangeEmployeeButton userProfileId={userProfileId} user={user} />
+)}
             </div>
             <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
               <Modal.Header
@@ -2311,6 +2237,7 @@ export default function PGUserProfileDetails2() {
           <div className="more_detail_card_inner">
             <h2 className="card_title">
               Roles
+                {!isExEmployee && (
               <span
                 className={`material-symbols-outlined action_icon ${isRoleEditing ? "text_red" : "text_green"
                   }`}
@@ -2318,6 +2245,7 @@ export default function PGUserProfileDetails2() {
               >
                 {isRoleEditing ? "close" : "border_color"}
               </span>
+               )}
             </h2>
             <div className="form_field">
               <div className="field_box theme_checkbox">
@@ -2490,6 +2418,7 @@ export default function PGUserProfileDetails2() {
               <div className="more_detail_card_inner">
                 <h2 className="card_title">
                   Properties owned within the city
+                    {!isExEmployee && (
                   <span
                     className={`material-symbols-outlined action_icon ${isOwnedCityEditing ? "text_red" : "text_green"
                       }`}
@@ -2497,6 +2426,7 @@ export default function PGUserProfileDetails2() {
                   >
                     {isOwnedCityEditing ? "close" : "border_color"}
                   </span>
+                    )}
                 </h2>
                 <div className="vg12"></div>
                 <div className="row row_gap">
@@ -2572,6 +2502,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Access Management
+                  {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isAccessMgmtEditing ? "text_red" : "text_green"
                     }`}
@@ -2579,6 +2510,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isAccessMgmtEditing ? "close" : "border_color"}
                 </span>
+                  )}
               </h2>
               <div className="form_field">
                 <div className="field_box theme_radio_new">
@@ -2722,6 +2654,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Employee Detail
+                    {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isEdEditing ? "text_red" : "text_green"
                     }`}
@@ -2731,6 +2664,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isEdEditing ? "close" : "border_color"}
                 </span>
+                    )}
               </h2>
               {!isEdEditing && (
                 <div className="p_info">
@@ -3075,6 +3009,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Vehicle Detail
+                    {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isVdEditing ? "text_red" : "text_green"
                     }`}
@@ -3084,6 +3019,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isVdEditing ? "close" : "border_color"}
                 </span>
+                    )}
               </h2>
               {!isVdEditing && (
                 <div className="p_info">
@@ -3403,17 +3339,7 @@ export default function PGUserProfileDetails2() {
           <div className="property_card_single mobile_full_card overflow_unset">
             <div className="more_detail_card_inner">
               <h2 className="card_title">
-                Employee Document
-                {/* <span
-                  className={`material-symbols-outlined action_icon ${
-                    isRef2Editing ? "text_red" : "text_green"
-                  }`}
-                  onClick={
-                    isRef2Editing ? handleRef2CancelClick : handleRef2EditClick
-                  }
-                >
-                  {isRef2Editing ? "close" : "border_color"}
-                </span> */}
+                Employee Document             
               </h2>
               <div className="employee_docs">
                 {documentTypes.map((docType) => (
@@ -3444,6 +3370,7 @@ export default function PGUserProfileDetails2() {
                       ) : (
                         <div className="doc_name_upload">
                           <h6 className="doc_name">{docType}</h6>
+                          {!isExEmployee && (
                           <label
                             htmlFor={`upload_${docType}`}
                             className="upload_label"
@@ -3461,6 +3388,7 @@ export default function PGUserProfileDetails2() {
                               style={{ display: "none" }}
                             />
                           </label>
+                          )}
                         </div>
                       )}
                     </div>
@@ -3521,6 +3449,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Bank Detail
+                {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isBankDetailEditing ? "text_red" : "text_green"
                     }`}
@@ -3532,6 +3461,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isBankDetailEditing ? "close" : "border_color"}
                 </span>
+                )}
               </h2>
               {!isBankDetailEditing && (
                 <div className="p_info for_ref">
@@ -3736,6 +3666,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Reference 1
+                {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isRef1Editing ? "text_red" : "text_green"
                     }`}
@@ -3745,6 +3676,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isRef1Editing ? "close" : "border_color"}
                 </span>
+                )}
               </h2>
               {!isRef1Editing && (
                 <div className="p_info for_ref">
@@ -3956,6 +3888,7 @@ export default function PGUserProfileDetails2() {
             <div className="more_detail_card_inner">
               <h2 className="card_title">
                 Reference 2
+                {!isExEmployee && (
                 <span
                   className={`material-symbols-outlined action_icon ${isRef2Editing ? "text_red" : "text_green"
                     }`}
@@ -3965,6 +3898,7 @@ export default function PGUserProfileDetails2() {
                 >
                   {isRef2Editing ? "close" : "border_color"}
                 </span>
+                )}
               </h2>
               {!isRef2Editing && (
                 <div className="p_info for_ref">

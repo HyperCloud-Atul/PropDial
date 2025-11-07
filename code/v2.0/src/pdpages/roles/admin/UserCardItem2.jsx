@@ -1,11 +1,11 @@
 // src/components/UserCardItem.jsx
-
+import React from "react";
 import { Link } from "react-router-dom";
 import useUserPropertyCounts from "../../../utils/useUserPropertyCounts";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import formatCountry from "../../../utils/formatCountry";
 
-const UserCardItem = ({ userObj, handleImageClick, isExEmployee }) => {
+const UserCardItem = ({ userObj, handleImageClick }) => {
   const { ownerCount, executiveCount } = useUserPropertyCounts(
     userObj.phoneNumber
   );
@@ -13,8 +13,7 @@ const UserCardItem = ({ userObj, handleImageClick, isExEmployee }) => {
   return (
     <div className={`pu_single ${userObj.status === "inactive" && "inactive"}`}>
       <div className="tc_single relative item">
-        {/* Only show property counts for non-ex employees */}
-        {!isExEmployee && ownerCount > 0 && (
+        {ownerCount > 0 && (
           <Link
             to={`/user-properties/${userObj.phoneNumber}?role=owner`}
             className="role_count"
@@ -22,7 +21,7 @@ const UserCardItem = ({ userObj, handleImageClick, isExEmployee }) => {
             {ownerCount}
           </Link>
         )}
-        {!isExEmployee && executiveCount > 0 && (
+        {executiveCount > 0 && (
           <Link
             to={`/user-properties/${userObj.phoneNumber}?role=executive`}
             className="role_count"
@@ -52,14 +51,13 @@ const UserCardItem = ({ userObj, handleImageClick, isExEmployee }) => {
                     Looks
                   </>
                 )
-              }
+              } // Pass dynamic title
             />
           </div>
 
           <div className="tenant_detail">
-            {/* Modified link to include ex-employee parameter */}
             <Link
-              to={`/profiledetails/${userObj.id}${isExEmployee ? '?type=exEmployee' : ''}`}
+              to={`/profiledetails/${userObj.id}`}
               className="t_name pointer"
             >
               {userObj.salutation} {userObj.fullName}

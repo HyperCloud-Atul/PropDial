@@ -71,7 +71,9 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     } else {
       return "add";
     }
-  }, []);  
+  }, []);
+
+  
 
   // Memoized values
   const currentRoomData = useMemo(() =>
@@ -652,141 +654,100 @@ const RegularInspection = ({ inspectionId, inspectionDocument }) => {
     }
   };
 
-const computeBillStatus = useCallback((billData) => {
-  if (!billData) return "add";
-  
-  const filledFields = [
-    billData.amount,
-    billData.remark,
-  ].filter(Boolean).length;
+  const handleSaveBill = async () => {
+    if (!bills.length) return;
 
-  if (filledFields === 2) {
-    return "full";
-  } else if (filledFields > 0) {
-    return "half";
-  } else {
-    return "add";
-  }
-}, []);
+    setIsBillDataSaving(true);
 
- const handleSaveBill = async () => {
-  if (!bills.length) return;
+    try {
+      const updatedBills = { ...billInspectionData };
 
-  setIsBillDataSaving(true);
+      bills.forEach((bill) => {
+        const prevBillData = billInspectionData[bill.id] || {};
+        const newBillData = {
+          billId: bill.billId,
+          billDocId: bill.billDocId,
+          billType: bill.billType,
+          authorityName: bill.authorityName,
+          billWebsiteLink: bill.billWebsiteLink,
+        };
 
-  try {
-    const updatedBills = { ...billInspectionData };
+        const changedFields = {};
+        Object.keys(newBillData).forEach((key) => {
+          if (newBillData[key] !== prevBillData[key]) {
+            changedFields[key] = newBillData[key];
+          }
+        });
 
-    bills.forEach((bill) => {
-      const prevBillData = billInspectionData[bill.id] || {};
-      const newBillData = {
-        billId: bill.billId,
-        billDocId: bill.billDocId,
-        billType: bill.billType,
-        authorityName: bill.authorityName,
-        billWebsiteLink: bill.billWebsiteLink,
-      };
-
-      const changedFields = {};
-      Object.keys(newBillData).forEach((key) => {
-        if (newBillData[key] !== prevBillData[key]) {
-          changedFields[key] = newBillData[key];
+        if (Object.keys(changedFields).length > 0) {
+          changedFields.thisBillUpdatedAt = timestamp.now();
+          changedFields.thisBillUpdatedBy = user.phoneNumber;
         }
+
+        updatedBills[bill.id] = {
+          ...(prevBillData || {}),
+          ...changedFields,
+        };
       });
 
-      if (Object.keys(changedFields).length > 0) {
-        changedFields.thisBillUpdatedAt = timestamp.now();
-        changedFields.thisBillUpdatedBy = user.phoneNumber;
-      }
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
+          bills: updatedBills,
+          lastUpdatedAt: timestamp.now(),
+          lastUpdatedBy: user.phoneNumber,
+          allBillInspectionComplete,
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.phoneNumber,
+          }),
+        });
 
-      // Compute inspection status for the bill
-      const currentBillData = {
-        ...(prevBillData || {}),
-        ...changedFields,
-      };
-      const inspectionStatus = computeBillStatus(currentBillData);
+      setAfterSaveModal(true);
+    } catch (error) {
+      console.error("Error saving all bill data:", error);
+    } finally {
+      setIsBillDataSaving(false);
+    }
+  };
 
-      updatedBills[bill.id] = {
-        ...currentBillData,
-        inspectionStatus, // Add inspection status here
-      };
-    });
+  const handleFinalSubmit = async () => {
+    setFinalSubmiting(true);
 
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        bills: updatedBills,
-        lastUpdatedAt: timestamp.now(),
-        lastUpdatedBy: user.phoneNumber,
-        allBillInspectionComplete,
-        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+    try {
+      // Save bills first
+      await handleSaveBill();
+
+      // Prepare rooms data with computed status for final submit
+      const roomsToSave = Object.values(inspectionData).map(room => ({
+        ...room,
+        inspectionStatus: computeRoomStatus(room)
+      }));
+
+      // Then final submit
+      await projectFirestore
+        .collection("inspections")
+        .doc(inspectionId)
+        .update({
+          rooms: roomsToSave,
+          finalSubmit: true,
+          layoutInspectionDone,
           updatedAt: timestamp.now(),
-          updatedBy: user.phoneNumber,
-        }),
-      });
+          updatedInformation: firebase.firestore.FieldValue.arrayUnion({
+            updatedAt: timestamp.now(),
+            updatedBy: user.phoneNumber,
+          }),
+        });
 
-    setAfterSaveModal(true);
-  } catch (error) {
-    console.error("Error saving all bill data:", error);
-  } finally {
-    setIsBillDataSaving(false);
-  }
-};
-
-const handleFinalSubmit = async () => {
-  setFinalSubmiting(true);
-
-  try {
-    // Save bills first with inspectionStatus
-    const updatedBills = { ...billInspectionData };
-    
-    bills.forEach((bill) => {
-      const billData = updatedBills[bill.id] || {};
-      updatedBills[bill.id] = {
-        ...billData,
-        inspectionStatus: computeBillStatus(billData)
-      };
-    });
-
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        bills: updatedBills,
-      });
-
-    // Then save rooms with inspectionStatus
-    const roomsToSave = Object.values(inspectionData).map(room => ({
-      ...room,
-      inspectionStatus: computeRoomStatus(room)
-    }));
-
-    // Then final submit
-    await projectFirestore
-      .collection("inspections")
-      .doc(inspectionId)
-      .update({
-        rooms: roomsToSave,
-        bills: updatedBills, // Include bills in final submit
-        finalSubmit: true,
-        layoutInspectionDone,
-        allBillInspectionComplete,
-        updatedAt: timestamp.now(),
-        updatedInformation: firebase.firestore.FieldValue.arrayUnion({
-          updatedAt: timestamp.now(),
-          updatedBy: user.phoneNumber,
-        }),
-      });
-
-    navigate(`/inspection-report/${inspectionId}`);
-  } catch (error) {
-    console.error("Error in final submit:", error);
-  } finally {
-    setFinalSubmiting(false);
-    setFinalSubmit(false);
-  }
-};
+      navigate(`/inspection-report/${inspectionId}`);
+    } catch (error) {
+      console.error("Error in final submit:", error);
+    } finally {
+      setFinalSubmiting(false);
+      setFinalSubmit(false);
+    }
+  };
 
   // Component rendering
   return (

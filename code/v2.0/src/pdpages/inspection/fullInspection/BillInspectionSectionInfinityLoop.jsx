@@ -234,7 +234,7 @@ const BillImageUpload = ({ billId, imageUrl, handleBillImageUpload, handleBillIm
 );
 
 const SaveButtons = ({ isFinalSubmitEnabled, inspectionDatabaseData, setFinalSubmit, handleSave, isSaving, saveText }) => (
-  <div className="bottom_fixed_button" style={{ zIndex: "1000" }}>
+  <div className="bottom_fixed_button" style={{ zIndex: "99999" }}>
     <div className="next_btn_back">
       {inspectionDatabaseData &&
         inspectionDatabaseData.layoutInspectionDone &&
