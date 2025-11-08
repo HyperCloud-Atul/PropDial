@@ -202,12 +202,97 @@ const ViewAgent = () => {
     }, 500);
   };
 
+  // old filteragent code with no loader while change state
+  // don't delete
+  // const filteredAgentList = async (data) => {
+  //   setIsLoading(true);
+  //   console.log("filteredDataNew data: ", data);
+  //   // console.log("agentDoc : ", agentDoc)
+  //   let _filterList = [];
+  //   setSearchInput("");
+
+  //   const ref = await projectFirestore
+  //     .collection("agent-propdial")
+  //     .where("state", "==", data.label);
+  //   // .orderBy("state", "asc");
+
+  //   console.log("ref: ", ref);
+
+  //   ref.onSnapshot(async (snapshot) => {
+  //     console.log(snapshot.docs);
+  //     if (snapshot.docs) {
+  //       console.log("snapshot.docs: ", snapshot.docs);
+  //       _filterList = snapshot.docs.map((agentData) => ({
+  //         agentCompnayName: agentData.data().agentCompnayName,
+  //         agentEmail: agentData.data().agentEmail,
+  //         agentName: agentData.data().agentName,
+  //         agentPhone: agentData.data().agentPhone,
+  //         city: agentData.data().city,
+  //         id: agentData.id,
+  //         state: agentData.data().state,
+  //         createdAt: agentData.data().createdAt,
+  //         createdBy: agentData.data().createdBy,
+  //         searchKey:
+  //           agentData.data().agentName.toLowerCase() +
+  //           agentData.data().city.toLowerCase() +
+  //           agentData.id.toLowerCase(),
+  //       }));
+  //     }
+  //     console.log(_filterList);
+  //     setFilteredData(_filterList);
+  //     setAllData(_filterList);
+  //   });
+  //   setIsLoading(false);
+  // };
+  // const filteredAgentList = (data) => {
+  //   setIsLoading(true); // Set loading to true when fetching begins
+  //   setSearchInput("");
+
+  //   projectFirestore
+  //     .collection("agent-propdial")
+  //     .where("state", "==", data.label)
+  //     .get()
+  //     .then((snapshot) => {
+  //       const _filterList = snapshot.docs.map((agentData) => ({
+  //         agentCompnayName: agentData.data().agentCompnayName,
+  //         agentEmail: agentData.data().agentEmail,
+  //         agentName: agentData.data().agentName,
+  //         agentPhone: agentData.data().agentPhone,
+  //         city: agentData.data().city,
+  //         id: agentData.id,
+  //         state: agentData.data().state,
+  //         createdAt: agentData.data().createdAt,
+  //         createdBy: agentData.data().createdBy,
+  //         // searchKey:
+  //         //   agentData.data().agentName.toLowerCase() +
+  //         //   agentData.data().city.toLowerCase() +
+  //         //   agentData.id.toLowerCase(),
+  //       }));
+  //       setFilteredData(_filterList);
+  //       setAllData(_filterList);
+  //       setIsLoading(false); // Set loading to false once data is fetched
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching filtered data: ", error);
+  //       setIsLoading(false); // Ensure loading is false even if there's an error
+  //     });
+  // };
+
   // View mode start
   const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
   const handleModeChange = (newViewMode) => {
     setviewMode(newViewMode);
   };
 
+  // When state changes, reset data and fetch first page
+
+  // if (isLoading) {
+  //   return (
+  //     <div className="filter_loading" style={{ height: "80vh" }}>
+  //       <BeatLoader color="var(--theme-green)" />
+  //     </div>
+  //   );
+  // }
 
   // View mode end
   return (
