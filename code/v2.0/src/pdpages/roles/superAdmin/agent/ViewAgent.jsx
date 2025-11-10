@@ -5,224 +5,113 @@ import { useNavigate } from "react-router-dom";
 
 import { projectFirestore } from "../../../../firebase/config";
 import { useCollection } from "../../../../hooks/useCollection";
-import useInView from "../../../../hooks/useInView";
 
-// import component
 import AgentSingle from "./AgentSingle";
 import AgentTable from "./AgentTable";
 import Filters from "../../../../components/Filters";
+import client from "../../../../firebase/algoliaConfig";
 
 import "./PGAgent.scss";
-
-const itemsPerPage = 100; // Number of items per page
 
 const statusFilter = ["Active", "Banned"];
 
 const ViewAgent = () => {
   const navigate = useNavigate();
-
-  // let stateOptions = useRef([]);
   const debouncer = useRef(null);
-  const loadingRef = useRef(null);
 
-  const isIntersecting = useInView(loadingRef, {
-    threshold: 0.5,
-    rootMargin: "300px",
-  });
+  const { documents: masterState } = useCollection("m_states", "", [
+    "state",
+    "asc",
+  ]);
 
-  const { documents: masterState, error: masterStateError } = useCollection(
-    "m_states",
-    "",
-    ["state", "asc"]
-  );
-
-  // Search input state
   const [state, setState] = useState({
-    label: "Delhi",
-    value: "_delhi",
+    label: "Karnataka",
+    value: "_karnataka",
   });
   const [searchInput, setSearchInput] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const [allData, setAllData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState("active"); // Default to 'active'
+  const [status, setStatus] = useState("active");
 
-  const lastVisibleDocRef = useRef(null);
-  // const [page, setPage] = useState(1); // Current page
-  const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
-  // const [firstLoad, setFirstLoad] = useState(true);
-  const resetPagination = () => {
-    lastVisibleDocRef.current = null;
-    setFilteredData([]);
-    setAllData([]);
-    setHasMore(true);
-  };
-  const changeStatusFilter = useCallback((newStatus) => {
-    setStatus(newStatus);
-    resetPagination();
-  }, []);
-
-  const stateOptions = useMemo(() => {
-    if (!masterState) return [];
-    return masterState.map((data) => ({
-      label: data.state,
-      value: data.id,
-    }));
-  }, [masterState]);
-
-  // console.log(stateOptions);
-  function toTitleCase(str) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
-  //update state
-
-  //clear the debouncer
-  useEffect(() => {
-    return () => {
-      if (debouncer.current) {
-        clearTimeout(debouncer.current);
-      }
-    };
-  }, []);
   const fetchAgents = useCallback(async () => {
-    if (!hasMore) return;
-    // if (isLoading) return;
     setIsLoading(true);
     try {
-      let ref = await projectFirestore
+      const ref = projectFirestore
         .collection("agent-propdial")
         .where("state", "==", state.label)
         .where("status", "==", status.toLowerCase())
-        .orderBy("agentName", "asc")
-        .limit(itemsPerPage);
-
-      if (lastVisibleDocRef.current) {
-        ref = ref.startAfter(lastVisibleDocRef.current);
-      }
+        .orderBy("agentName", "asc");
 
       const snapshot = await ref.get();
 
       if (!snapshot.empty) {
-        const _filterList = snapshot.docs.map((doc) => ({
+        const docs = snapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
-        lastVisibleDocRef.current = snapshot.docs[snapshot.docs.length - 1];
-        setFilteredData((prevData) => [...prevData, ..._filterList]);
-        setAllData((prevData) => [...prevData, ..._filterList]);
-        setHasMore(snapshot.docs.length === itemsPerPage);
+        setAllData(docs);
       } else {
-        // setFilteredData([]);
-        // setAllData([]);
-        // lastVisibleDocRef.current = null;
-        setHasMore(false);
+        setAllData([]);
       }
     } catch (error) {
-      console.error("Error fetching filtered data: ", error);
+      console.error("Error fetching agents:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [state.label, status, hasMore]);
-
-  const isSearchActive = searchInput.trim() !== "";
+  }, [state.label, status]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!isSearchActive) await fetchAgents();
-    };
-    if (isIntersecting) fetchData();
-  }, [fetchAgents, isIntersecting, isSearchActive]);
+    fetchAgents();
+  }, [fetchAgents]);
 
-  //fetch more data
-
-  //search function
-
-  const handleSearchInputChange = async (e) => {
-    const value = e.target.value || "";
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
     setSearchInput(value);
-    if (debouncer.current) {
-      clearTimeout(debouncer.current);
-    }
-    if (value.trim() === "") {
-      // Reset pagination and re-fetch
-      resetPagination();
-      await fetchAgents(); // Trigger fresh fetch
-      return;
-    }
-    const _searchkey = toTitleCase(value).trim();
 
-    setIsLoading(true);
+    if (debouncer.current) clearTimeout(debouncer.current);
 
     debouncer.current = setTimeout(async () => {
-      console.log("_searchkey: ", _searchkey);
-      try {
-        const nameQuery = projectFirestore
-          .collection("agent-propdial")
-          .where("state", "==", state.label)
-          .where("status", "==", status.toLowerCase())
-          .where("agentName", ">=", _searchkey)
-          .where("agentName", "<=", _searchkey + "\uf8ff")
-          .orderBy("agentName");
-
-        const cityQuery = projectFirestore
-          .collection("agent-propdial")
-          .where("state", "==", state.label)
-          .where("status", "==", status.toLowerCase())
-          .where("city", ">=", _searchkey)
-          .where("city", "<=", _searchkey + "\uf8ff")
-          .orderBy("city");
-
-        const [nameSnap, citySnap] = await Promise.all([
-          nameQuery.get(),
-          cityQuery.get(),
-        ]);
-
-        const allDocs = [...nameSnap.docs, ...citySnap.docs];
-        if (allDocs.length !== 0) {
-          const uniqueDocsMap = new Map();
-          allDocs.forEach((doc) =>
-            uniqueDocsMap.set(doc.id, { ...doc.data(), id: doc.id })
-          );
-
-          const _filterList = Array.from(uniqueDocsMap.values());
-          setFilteredData(_filterList);
-          setHasMore(false);
-        } else {
-          setFilteredData([]);
-        }
-      } catch (err) {
-        console.error("Search error:", err);
-      } finally {
-        setIsLoading(false);
+      const searchValue = value.trim();
+      if (!searchValue) {
+        setSearchResults([]);
+        fetchAgents();
+        return;
       }
-    }, 500);
+
+      const { results } = await client.search({
+        requests: [
+          {
+            indexName: "agent-propdial",
+            query: searchValue,
+            filters: `state:"${state.label}"`,
+            attributesToHighlight: ["agentName", "agentPhone", "city"],
+          },
+        ],
+      });
+      console.log("result:", results);
+
+      setSearchResults(results[0].hits);
+    }, 400);
   };
 
-  // View mode start
-  const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
-  const handleModeChange = (newViewMode) => {
-    setviewMode(newViewMode);
-  };
+  useEffect(() => {
+    return () => {
+      if (debouncer.current) clearTimeout(debouncer.current);
+    };
+  }, []);
+  console.log({ searchResults });
+  /** 🔄 View Mode */
+  const [viewMode, setViewMode] = useState("card_view");
 
-
-  // View mode end
   return (
     <>
-      {/* view agent pg header and filters start  */}
+      {/* Header */}
       <div className="pg_header d-flex justify-content-between">
         <div className="left">
           <h2 className="m22">
-            Filtered Agent:{" "}
-            {/* {agentDoc && <span className="text_orange">{agentDoc.length}</span>} */}
-            {filteredData && (
-              <span className="text_orange">
-                {isLoading ? "" : filteredData.length}
-              </span>
-            )}
+            Agents in <span className="text_orange">{state.label}</span> —{" "}
+            {isLoading ? "Loading..." : allData.length}
           </h2>
         </div>
         <div className="right">
@@ -233,34 +122,37 @@ const ViewAgent = () => {
           />
         </div>
       </div>
-      <div className="vg12"></div>
+
+      <div className="vg12" />
+
+      {/* Filters */}
       <div className="filters">
         <div className="left">
           <div className="rt_global_search search_field">
             <input
-              placeholder="Search"
+              placeholder="Search by name or city"
               value={searchInput}
-              onChange={(e) => handleSearchInputChange(e)}
+              onChange={handleSearchInputChange}
             />
             <div className="field_icon">
               <span className="material-symbols-outlined">search</span>
             </div>
           </div>
+
           <Select
             className="state_filter"
-            onChange={(e) => {
-              setState(e);
-              resetPagination();
-              // filteredAgentList(e);
-            }}
-            options={stateOptions}
+            onChange={(e) => setState(e)}
+            options={masterState?.map((data) => ({
+              label: data.state,
+              value: data.id,
+            }))}
             value={state}
             styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
+              control: (base) => ({
+                ...base,
                 outline: "none",
                 background: "#eee",
-                borderBottom: " 1px solid var(--theme-blue)",
+                borderBottom: "1px solid var(--theme-blue)",
               }),
             }}
           />
@@ -268,17 +160,14 @@ const ViewAgent = () => {
 
         <div className="right">
           <div className="new_inline">
-            <Filters
-              changeFilter={changeStatusFilter}
-              filterList={statusFilter}
-            />
+            <Filters changeFilter={setStatus} filterList={statusFilter} />
           </div>
           <div className="button_filter diff_views">
             <div
               className={`bf_single ${
                 viewMode === "card_view" ? "active" : ""
               }`}
-              onClick={() => handleModeChange("card_view")}
+              onClick={() => setViewMode("card_view")}
             >
               <span className="material-symbols-outlined">
                 calendar_view_month
@@ -288,11 +177,12 @@ const ViewAgent = () => {
               className={`bf_single ${
                 viewMode === "table_view" ? "active" : ""
               }`}
-              onClick={() => handleModeChange("table_view")}
+              onClick={() => setViewMode("table_view")}
             >
               <span className="material-symbols-outlined">view_list</span>
             </div>
           </div>
+
           <div
             onClick={() => navigate("/agents/new")}
             className="theme_btn no_icon header_btn btn_fill"
@@ -301,32 +191,54 @@ const ViewAgent = () => {
           </div>
         </div>
       </div>
-      <hr></hr>
-      {/* view agent pg header and filters end  */}
 
-      {filteredData && filteredData.length === 0 && !isLoading && (
-        <div className="pg_msg">No agents in {state.label}.</div>
+      <hr />
+
+      {/* Empty State */}
+      {allData.length === 0 && !isLoading && (
+        <div className="pg_msg">No agents found in {state.label}.</div>
       )}
-      {/* agent card and table  */}
 
+      {/* Agent Data */}
       <div>
-        {viewMode === "card_view" && filteredData && (
+        {viewMode === "card_view" && (
           <>
-            <AgentSingle agentDoc={filteredData} />
-            {(isLoading || hasMore) && (
-              <div ref={loadingRef} className="filter_loading">
-                <BeatLoader color={"var(--theme-green)"} />
+            {searchResults.length > 0 && (
+              <div className="search-results">
+                {searchResults.map((result) => (
+                  <div key={result.objectID} className="search-result-item">
+                    <h3
+                     
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          result._highlightResult?.agentName?.value ||
+                          result.agentName,
+                      }}
+                    ></h3>
+                    <p className="phone">{result.agentPhone}</p>
+                    <p
+                      className="highlighted-text"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          result._highlightResult?.city?.value || result.city,
+                      }}
+                    ></p>
+                    <small>{result.state}</small>
+                  </div>
+                ))}
+              </div>
+            )}
+            <AgentSingle agentDoc={allData} />
+            {isLoading && (
+              <div className="filter_loading">
+                <BeatLoader color="var(--theme-green)" />
               </div>
             )}
           </>
         )}
-        {viewMode === "table_view" && (
-          // <h5 className="text-center text_green">Coming Soon....</h5>
-          <AgentTable agentDoc={filteredData} />
-        )}
-      </div>
 
-      {/* { && <div style={{ height: "20px" }}>loading...</div>} */}
+        {viewMode === "table_view" && <AgentTable agentDoc={allData} />}
+      </div>
     </>
   );
 };
