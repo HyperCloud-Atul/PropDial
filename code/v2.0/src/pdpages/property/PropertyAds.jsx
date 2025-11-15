@@ -333,7 +333,7 @@ const PropertyAds = () => {
                               color: "var(--theme-blue)",
                             }}
                           >
-                            Select Property Type 3*
+                            Select Property Type*
                           </h6>
                           <div className="field_box theme_radio_new">
                             <div className="theme_radio_container">

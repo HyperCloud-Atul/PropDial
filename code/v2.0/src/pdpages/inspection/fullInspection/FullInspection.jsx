@@ -828,9 +828,6 @@ const FullInspection = () => {
       setFinalSubmit(false);
     }
   };
-
-
-
   // Component rendering
   return (
     <>

@@ -326,10 +326,11 @@ const InspectionDetails = () => {
                     <div className="right">
                       <h6>Date & Time</h6>
                       <h5>
-                        {format(
-                          inspectionDoc.lastUpdatedAt.toDate(),
-                          "dd-MMM-yy, hh:mm a"
-                        )}
+                    {format(
+  (inspectionDoc?.lastUpdatedAt ?? inspectionDoc?.createdAt)?.toDate(),
+  "dd-MMM-yy, hh:mm a"
+)}
+
                       </h5>
                     </div>
                   </div>
@@ -665,79 +666,7 @@ const InspectionDetails = () => {
                 </div>
               </div>
               <div className="room_wise_inspection">
-                {inspectionDoc?.inspectionType?.toLowerCase() === "full" ? (
-                  //             <>
-                  //   {inspectionDoc?.rooms?.map((room, idx) => (
-                  //     <div className="rwi_single" key={idx}>
-                  //       <h2>
-                  //         {room.roomName}
-                  //         {room.isAllowForInspection === "no" && (
-                  //           <h3>Not allowed by tenant for inspection</h3>
-                  //         )}
-                  //       </h2>
-
-                  //       <div className="issues">
-                  //         {room.isAllowForInspection === "yes" && (
-                  //           <div className="top">
-                  //             {/* Fixtures ko dynamically display karna */}
-                  //             {room.fixtures && Object.entries(room.fixtures).map(([fixtureName, fixtureData]) => (
-                  //               <div className="i_single" key={fixtureName}>
-                  //                 <h6>{fixtureName}</h6>
-                  //                 <h5 className={fixtureData?.status?.toLowerCase()}>
-                  //                   {fixtureData.status}
-                  //                 </h5>
-                  //                 <p>
-                  //                   {fixtureData.remark || ""}
-                  //                 </p>
-
-                  //                 {/* Fixture ki images display karna */}
-                  //                 {fixtureData.images && fixtureData.images.length > 0 && (
-                  //                   <div className="fixture-images">
-                  //                     <h6>Fixture Images</h6>
-                  //                     <div className="img_bunch_small">
-                  //                       {fixtureData.images.map((img, i) => (
-                  //                         <img src={img.url} alt={`${fixtureName} ${i}`} key={i} />
-                  //                       ))}
-                  //                     </div>
-                  //                   </div>
-                  //                 )}
-                  //               </div>
-                  //             ))}
-
-                  //             {/* Cleaning Remark (agar hai to) */}
-                  //             {room.cleanRemark && (
-                  //               <div className="i_single">
-                  //                 <h6>Cleaning Remark</h6>
-                  //                 <p>{room.cleanRemark}</p>
-                  //                 <img src="/assets/img/icons/testimonial.png" alt="" />
-                  //               </div>
-                  //             )}
-                  //           </div>
-                  //         )}
-
-                  //         {/* General Remark (agar hai to) */}
-                  //         {room.generalRemark && (
-                  //           <div className="bottom">
-                  //             <h6>General Remark</h6>
-                  //             <p>{room.generalRemark}</p>
-                  //           </div>
-                  //         )}
-                  //       </div>
-
-                  //       {/* Room level ki images (agar fixtures ke alag images nahi hai to) */}
-                  //       {room.isAllowForInspection === "yes" && room.images && room.images.length > 0 && (
-                  //         <div className="images_area">
-                  //           <h6>Room Images</h6>
-                  //           <div className="img_bunch">
-                  //             {room.images.map((img, i) => (
-                  //               <img src={img.url} alt={`Room ${i}`} key={i} />
-                  //             ))}
-                  //           </div>
-                  //         </div>
-                  //       )}
-                  //     </div>
-                  //   ))}
-                  // </>
+                {inspectionDoc?.inspectionType?.toLowerCase() === "full" ? (                  
                   <div className="inspection-tables-container">
                     {inspectionDoc?.rooms?.map((room, roomIdx) => (
                       <div key={roomIdx} className="rwi_single">
@@ -794,10 +723,7 @@ const InspectionDetails = () => {
                                       ) : (
                                         '-'
                                       )}
-                                    </td>
-                                    {/* <td className="remark-cell">
-                                      {fixtureData.remark || '-'}
-                                    </td> */}
+                                    </td>                               
                                     <td className="details-cell">
                                       <Button
                                         variant="outline-primary"

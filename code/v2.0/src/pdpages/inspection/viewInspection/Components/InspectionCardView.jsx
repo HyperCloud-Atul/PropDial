@@ -95,8 +95,10 @@ const InspectionCardView = ({
                       <span>No rooms added</span>
                     )}
                   </div>
-                  <hr />
+                  {iDoc.inspectionType !== "Issue Based" && <hr />}
+              
                   {/* Bills Section */}
+                  {iDoc.inspectionType !== "Issue Based" &&
                   <div className="inspected_room">
                     <h6 className="section_subtitle">Bills:</h6>
                     {iDoc.bills && Object.keys(iDoc.bills).length > 0 ? (
@@ -112,6 +114,7 @@ const InspectionCardView = ({
                       <span>No bills added</span>
                     )}
                   </div>
+}
                 </div>
 
                 <div className="ic_footer">

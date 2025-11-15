@@ -4,6 +4,7 @@ import { useDocument } from "../../hooks/useDocument";
 // import component 
 import FullInspection from "./fullInspection/FullInspection";
 import RegularInspection from "./regularInspection/RegularInspection";
+import IssueBasedInspection from "./issueBasedInspection/IssueBasedInspection";
 import ScrollToTop from "../../components/ScrollToTop";
 const AddInspection = () => {
   const { inspectionId } = useParams();
@@ -26,7 +27,12 @@ const AddInspection = () => {
     inspectionId={inspectionId}
     inspectionDocument={inspectionDocument}
   />
-) : (
+  ) : inspectionDocument?.inspectionType === "Issue Based" ? (
+            <IssueBasedInspection
+              inspectionId={inspectionId}
+              inspectionDocument={inspectionDocument}
+            />
+          ) : (
   <p style={{ textAlign: "center", marginTop: "20px", fontWeight: "500" }}>
     We are back to coming soon regarding this inspection type.
   </p>

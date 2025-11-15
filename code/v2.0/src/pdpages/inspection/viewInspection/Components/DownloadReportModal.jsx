@@ -225,1083 +225,688 @@ const DownloadReportModal = ({
     pdf.text(text.toString(), x, y);
   }
 
-  // const generatePDFReport = async () => {
-  //   if (!selectedInspection) return;
-  //   setIsGenerating(true);
-
-  //   try {
-  //     // Debug log to check data status
-  //     console.log("Data Status:", {
-  //       ownersData: ownersData ? `Array(${ownersData.length})` : 'null',
-  //       executivesData: executivesData ? `Array(${executivesData.length})` : 'null',
-  //       propertyDetails: !!propertyDetails,
-  //       tenantsData: tenantsData.length
-  //     });
-
-  //     const pdf = new jsPDF('p', 'mm', 'a4');
-  //     const pageWidth = pdf.internal.pageSize.getWidth();
-  //     const pageHeight = pdf.internal.pageSize.getHeight();
-  //     let yPosition = 20;
-
-  //     // Header Section - Simple
-  //     pdf.setFontSize(20);
-  //     pdf.setTextColor(0, 0, 0);
-  //     pdf.text(`${selectedInspection.inspectionType} Inspection Report`, pageWidth / 2, yPosition, { align: 'center' });
-  //     yPosition += 8;
-
-  //     pdf.setFontSize(10);
-  //     pdf.setTextColor(100, 100, 100);
-      
-  //     const inspectionDate = formatDate(selectedInspection.updatedAt);
-  //     const inspectorName = dbUserState?.find(user => user.id === selectedInspection.createdBy)?.fullName || selectedInspection.createdBy;
-      
-  //     pdf.text(`Inspected at: ${inspectionDate}`, pageWidth / 2, yPosition, { align: 'center' });
-  //     yPosition += 4;
-  //     pdf.text(`Inspected by: ${inspectorName}`, pageWidth / 2, yPosition, { align: 'center' });
-      
-  //     yPosition += 15;
-
-  //     // Property Address Section
-  //     pdf.setFillColor(245, 245, 245);
-  //     pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-      
-  //     pdf.setFontSize(12);
-  //     pdf.setTextColor(0, 0, 0);
-  //     pdf.text('Property Address', 15, yPosition + 6);
-  //     yPosition += 12;
-
-  //     pdf.setFontSize(10);
-  //     pdf.setTextColor(0, 0, 0);
-
-  //     if (propertyDetails) {
-  //       // First line: Unit Number | Society
-  //       pdf.text(`${propertyDetails.unitNumber || ''} | ${propertyDetails.society || ''}`, 15, yPosition);
-  //       yPosition += 5;
-
-  //       // Second line: BHK | Furnishing | Purpose
-  //       let secondLine = '';
-  //       if (propertyDetails.bhk) secondLine += `${propertyDetails.bhk}`;
-  //       if (propertyDetails.furnishing) secondLine += ` | ${propertyDetails.furnishing}`;
-  //       if (propertyDetails.purpose) {
-  //         const purposeText = propertyDetails.purpose.toLowerCase() === 'rentsaleboth' ? 
-  //           'For Rent / Sale' : `For ${propertyDetails.purpose}`;
-  //         secondLine += ` | ${purposeText}`;
-  //       }
-  //       pdf.text(secondLine, 15, yPosition);
-  //       yPosition += 5;
-
-  //       // Third line: Locality, City, State
-  //       pdf.text(`${propertyDetails.locality || ''}, ${propertyDetails.city || ''}, ${propertyDetails.state || ''}`, 15, yPosition);
-  //       yPosition += 5;
-
-  //       // Fourth line: PID
-  //       pdf.setTextColor(100, 100, 100);
-  //       pdf.text(`PID: ${propertyDetails.pid || selectedInspection.propertyId}`, 15, yPosition);
-  //       pdf.setTextColor(0, 0, 0);
-  //     }
-
-  //     yPosition += 10;
-
-  //     // Property Owner Section - FIXED: Check array length and first element
-  //     if (ownersData && ownersData.length > 0 && ownersData[0]) {
-  //       const owner = ownersData[0];
-  //       pdf.setFillColor(245, 245, 245);
-  //       pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-        
-  //       pdf.setFontSize(12);
-  //       pdf.text('Property Owner', 15, yPosition + 6);
-  //       yPosition += 12;
-
-  //       pdf.setFontSize(10);
-        
-  //       pdf.text(owner.fullName || 'N/A', 15, yPosition);
-  //       yPosition += 4;
-        
-  //       if (owner.phoneNumber) {
-  //         const formattedPhone = owner.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
-  //         pdf.text(formattedPhone, 15, yPosition);
-  //         yPosition += 4;
-  //       }
-        
-  //       if (owner.email) {
-  //         pdf.text(owner.email, 15, yPosition);
-  //         yPosition += 4;
-  //       }
-
-  //       yPosition += 8;
-  //     }
-
-  //     // Property executive Section - FIXED: Check array length and first element
-  //     if (executivesData && executivesData.length > 0 && executivesData[0]) {
-  //       const executive = executivesData[0];
-  //       pdf.setFillColor(245, 245, 245);
-  //       pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-        
-  //       pdf.setFontSize(12);
-  //       pdf.text('Property Executive', 15, yPosition + 6);
-  //       yPosition += 12;
-
-  //       pdf.setFontSize(10);
-
-  //       pdf.text(executive.fullName || 'N/A', 15, yPosition);
-  //       yPosition += 4;
-
-  //       if (executive.phoneNumber) {
-  //         const formattedPhone = executive.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
-  //         pdf.text(formattedPhone, 15, yPosition);
-  //         yPosition += 4;
-  //       }
-        
-  //       if (executive.email) {
-  //         pdf.text(executive.email, 15, yPosition);
-  //         yPosition += 4;
-  //       }
-
-  //       yPosition += 8;
-  //     }
-
-  //     // Tenants Section
-  //     if (tenantsData.length > 0) {
-  //       pdf.setFillColor(245, 245, 245);
-  //       pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-        
-  //       pdf.setFontSize(12);
-  //       pdf.text('Tenants', 15, yPosition + 6);
-  //       yPosition += 12;
-
-  //       pdf.setFontSize(10);
-
-  //       for (let i = 0; i < tenantsData.length; i++) {
-  //         const tenant = tenantsData[i];
-  //         if (i > 0) yPosition += 5; // Space between multiple tenants
-          
-  //         pdf.text(tenant.name || 'Tenant', 15, yPosition);
-  //         yPosition += 4;
-          
-  //         if (tenant.mobile) {
-  //           const formattedPhone = tenant.mobile.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
-  //           pdf.text(formattedPhone, 15, yPosition);
-  //           yPosition += 4;
-  //         }
-          
-  //         if (tenant.emailID) {
-  //           pdf.text(tenant.emailID, 15, yPosition);
-  //           yPosition += 4;
-  //         }
-  //       }
-
-  //       yPosition += 8;
-  //     }
-
-  //     // Bill Details Section
-  //     if (selectedInspection.bills && Object.keys(selectedInspection.bills).length > 0) {
-  //       pdf.setFillColor(245, 245, 245);
-  //       pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-        
-  //       pdf.setFontSize(12);
-  //       pdf.text('Bill Details', 15, yPosition + 6);
-  //       yPosition += 12;
-
-  //       pdf.setFontSize(10);
-
-  //       const billsArray = Object.values(selectedInspection.bills);
-  //       for (let index = 0; index < billsArray.length; index++) {
-  //         const bill = billsArray[index];
-          
-  //         // Check page space before adding bill (leave space for footer)
-  //         if (yPosition > pageHeight - 60) {
-  //           pdf.addPage();
-  //           yPosition = 20;
-  //         }
-
-  //         // Bill header
-  //         pdf.setTextColor(0, 0, 0);
-  //         pdf.text(`${bill.billType} | ${bill.authorityName || ''}`, 15, yPosition);
-  //         yPosition += 4;
-
-  //         // Bill details
-  //         pdf.setTextColor(80, 80, 80);
-          
-  //         if (bill.thisBillUpdatedAt) {
-  //           const billDate = formatDate(bill.thisBillUpdatedAt);
-  //           pdf.text(`Last updated: ${billDate}`, 15, yPosition);
-  //           yPosition += 4;
-  //         }
-
-  //         if (bill.billId) {
-  //           pdf.text(`Bill ID: ${bill.billId}`, 15, yPosition);
-  //           yPosition += 4;
-  //         }
-
-  //         if (bill.amount) {
-  //           pdf.text(`Due Amount: ${bill.amount}`, 15, yPosition); // Fixed spacing
-  //           yPosition += 4;
-  //         }
-
-  //         if (bill.billWebsiteLink) {
-  //           pdf.setTextColor(0, 102, 204);
-  //           // Note: textWithLink might not work in all browsers, using regular text
-  //           pdf.text('Bill Website Link', 15, yPosition);
-  //           pdf.setTextColor(80, 80, 80);
-  //           yPosition += 4;
-  //         }
-
-  //         if (bill.remark) {
-  //           const remarkLines = pdf.splitTextToSize(`Remarks: ${bill.remark}`, pageWidth - 30);
-  //           pdf.text(remarkLines, 15, yPosition);
-  //           yPosition += (remarkLines.length * 4) + 2;
-  //         }
-
-  //         // Bill Images if any
-  //         if (bill.images && bill.images.length > 0) {
-  //           pdf.setTextColor(0, 0, 0);
-  //           pdf.text('Bill Images:', 15, yPosition);
-  //           yPosition += 4;
-
-  //           let imageX = 20;
-  //           const imageWidth = 40;
-  //           const imageHeight = 25;
-
-  //           for (let i = 0; i < bill.images.length; i++) {
-  //             const image = bill.images[i];
-              
-  //             // Check page space for image (leave space for footer)
-  //             if (yPosition + imageHeight > pageHeight - 20) {
-  //               pdf.addPage();
-  //               yPosition = 20;
-  //               imageX = 20;
-  //             }
-
-  //             if (image && image.url) {
-  //               const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
-  //               if (imageResult.success) {
-  //                 pdf.setFontSize(7);
-  //                 pdf.setTextColor(100, 100, 100);
-  //                 pdf.text(`Bill Image ${i + 1}`, imageX + (imageWidth / 2) - 12, yPosition + imageHeight + 3, { align: 'center' });
-                  
-  //                 imageX += imageWidth + 10;
-  //                 pdf.setFontSize(10);
-                  
-  //                 // Move to next row if no space
-  //                 if (imageX + imageWidth > pageWidth - 20) {
-  //                   yPosition += imageHeight + 10;
-  //                   imageX = 20;
-                    
-  //                   // Check page space after moving to new row
-  //                   if (yPosition > pageHeight - 20) {
-  //                     pdf.addPage();
-  //                     yPosition = 20;
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-
-  //           if (imageX > 20) {
-  //             yPosition += imageHeight + 10;
-  //           }
-  //         }
-
-  //         yPosition += 8;
-          
-  //         // Separator between bills
-  //         if (index < billsArray.length - 1) {
-  //           pdf.setDrawColor(220, 220, 220);
-  //           pdf.line(15, yPosition, pageWidth - 15, yPosition);
-  //           yPosition += 8;
-  //         }
-  //       }
-
-  //       yPosition += 5;
-  //     }
-
-  //     // Rooms Inspection Section
-  //     if (selectedInspection.rooms && selectedInspection.rooms.length > 0) {
-  //       // Check page space before adding rooms section
-  //       if (yPosition > pageHeight - 40) {
-  //         pdf.addPage();
-  //         yPosition = 20;
-  //       }
-
-  //       pdf.setFillColor(245, 245, 245);
-  //       pdf.rect(10, yPosition, pageWidth - 20, 8, 'F');
-        
-  //       pdf.setFontSize(12);
-  //       pdf.text('Rooms Inspection', 15, yPosition + 6);
-  //       yPosition += 12;
-
-  //       for (let roomIndex = 0; roomIndex < selectedInspection.rooms.length; roomIndex++) {
-  //         const room = selectedInspection.rooms[roomIndex];
-          
-  //         // Check page space before adding room (leave space for footer)
-  //         if (yPosition > pageHeight - 60) {
-  //           pdf.addPage();
-  //           yPosition = 20;
-  //         }
-
-  //         // Room Name
-  //         pdf.setFontSize(11);
-  //         pdf.setTextColor(0, 0, 0);
-  //         pdf.text(room.roomName, 15, yPosition);
-  //         yPosition += 5;
-
-  //         // Tenant Permission Status
-  //         if (room.isAllowForInspection === "no") {
-  //           pdf.setFontSize(9);
-  //           pdf.setTextColor(200, 0, 0);
-  //           pdf.text('Not allowed by tenant for inspection', 15, yPosition);
-  //           yPosition += 5;
-  //           pdf.setTextColor(0, 0, 0);
-  //         }
-
-  //         // Different content based on inspection type
-  //         if (selectedInspection.inspectionType.toLowerCase() === "full") {
-  //           // FULL INSPECTION - Show fixtures
-  //           if (room.isAllowForInspection === "yes" && room.fixtures && Object.keys(room.fixtures).length > 0) {
-  //             pdf.setFontSize(10);
-  //             pdf.setTextColor(80, 80, 80);
-  //             pdf.text('Fixtures:', 15, yPosition);
-  //             yPosition += 4;
-
-  //             const fixtures = Object.entries(room.fixtures);
-  //             for (let fixtureIndex = 0; fixtureIndex < fixtures.length; fixtureIndex++) {
-  //               const [fixtureName, fixtureData] = fixtures[fixtureIndex];
-                
-  //               // Check page space before adding fixture
-  //               if (yPosition > pageHeight - 40) {
-  //                 pdf.addPage();
-  //                 yPosition = 20;
-  //               }
-
-  //               const cleanName = cleanFixtureName(fixtureName);
-                
-  //               // Fixture name and status
-  //               pdf.setFontSize(9);
-  //               pdf.setTextColor(0, 0, 0);
-  //               pdf.text(`• ${cleanName}:`, 20, yPosition);
-                
-  //               if (fixtureData.status) {
-  //                 const statusX = 80;
-  //                 const statusColor = fixtureData.status.toLowerCase() === 'working' || fixtureData.status.toLowerCase() === 'good' ? 
-  //                   [0, 150, 0] : [200, 0, 0];
-  //                 pdf.setTextColor(...statusColor);
-  //                 pdf.text(fixtureData.status, statusX, yPosition);
-  //                 pdf.setTextColor(0, 0, 0);
-  //               }
-
-  //               yPosition += 4;
-
-  //               // Remark if available
-  //               if (fixtureData.remark) {
-  //                 pdf.setTextColor(80, 80, 80);
-  //                 const remarkLines = pdf.splitTextToSize(`  ${fixtureData.remark}`, pageWidth - 35);
-  //                 pdf.text(remarkLines, 25, yPosition);
-  //                 yPosition += (remarkLines.length * 3.5) + 1;
-  //               }
-
-  //               // Fixture Images
-  //               if (fixtureData.images && fixtureData.images.length > 0) {
-  //                 pdf.setTextColor(0, 0, 0);
-  //                 pdf.text('  Images:', 25, yPosition);
-  //                 yPosition += 3;
-
-  //                 let imageX = 30;
-  //                 const imageWidth = 35;
-  //                 const imageHeight = 25;
-
-  //                 for (let i = 0; i < fixtureData.images.length; i++) {
-  //                   const image = fixtureData.images[i];
-                    
-  //                   // Check page space for image (leave space for footer)
-  //                   if (yPosition + imageHeight > pageHeight - 20) {
-  //                     pdf.addPage();
-  //                     yPosition = 20;
-  //                     imageX = 30;
-  //                   }
-
-  //                   if (image && image.url) {
-  //                     const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
-  //                     if (imageResult.success) {
-  //                       pdf.setFontSize(6);
-  //                       pdf.setTextColor(100, 100, 100);
-  //                       pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
-                        
-  //                       imageX += imageWidth + 8;
-  //                       pdf.setFontSize(9);
-                        
-  //                       // Move to next row if no space
-  //                       if (imageX + imageWidth > pageWidth - 20) {
-  //                         yPosition += imageHeight + 8;
-  //                         imageX = 30;
-                          
-  //                         // Check page space after moving to new row
-  //                         if (yPosition > pageHeight - 20) {
-  //                           pdf.addPage();
-  //                           yPosition = 20;
-  //                         }
-  //                       }
-  //                     }
-  //                   }
-  //                 }
-
-  //                 if (imageX > 30) {
-  //                   yPosition += imageHeight + 6;
-  //                 }
-  //               }
-
-  //               yPosition += 2;
-  //             }
-  //           }
-  //         } else {
-  //           // REGULAR INSPECTION - Show basic issues
-  //           if (room.isAllowForInspection === "yes") {
-  //             pdf.setFontSize(9);
-  //             pdf.setTextColor(0, 0, 0);
-
-  //             // Basic issues
-  //             if (room.seepage) {
-  //               const seepageColor = room.seepage.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-  //               pdf.setTextColor(...seepageColor);
-  //               pdf.text(`• Seepage: ${room.seepage}`, 20, yPosition);
-  //               yPosition += 3;
-  //             }
-
-  //             if (room.termites) {
-  //               const termitesColor = room.termites.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-  //               pdf.setTextColor(...termitesColor);
-  //               pdf.text(`• Termites: ${room.termites}`, 20, yPosition);
-  //               yPosition += 3;
-  //             }
-
-  //             if (room.otherIssue) {
-  //               const otherColor = room.otherIssue.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-  //               pdf.setTextColor(...otherColor);
-  //               pdf.text(`• Other Issues: ${room.otherIssue}`, 20, yPosition);
-  //               yPosition += 3;
-  //             }
-
-  //             // Cleaning Remark
-  //             if (room.cleanRemark) {
-  //               pdf.setTextColor(80, 80, 80);
-  //               pdf.text(`• Cleaning: ${room.cleanRemark}`, 20, yPosition);
-  //               yPosition += 3;
-  //             }
-
-  //             pdf.setTextColor(0, 0, 0);
-
-  //             // Room Images
-  //             if (room.images && room.images.length > 0) {
-  //               pdf.text('Images:', 20, yPosition);
-  //               yPosition += 3;
-
-  //               let imageX = 25;
-  //               const imageWidth = 40;
-  //               const imageHeight = 30;
-
-  //               for (let i = 0; i < room.images.length; i++) {
-  //                 const image = room.images[i];
-                  
-  //                 // Check page space for image (leave space for footer)
-  //                 if (yPosition + imageHeight > pageHeight - 20) {
-  //                   pdf.addPage();
-  //                   yPosition = 20;
-  //                   imageX = 25;
-  //                 }
-
-  //                 if (image && image.url) {
-  //                   const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
-  //                   if (imageResult.success) {
-  //                     pdf.setFontSize(7);
-  //                     pdf.setTextColor(100, 100, 100);
-  //                     pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
-                      
-  //                     imageX += imageWidth + 10;
-  //                     pdf.setFontSize(9);
-                      
-  //                     // Move to next row if no space
-  //                     if (imageX + imageWidth > pageWidth - 20) {
-  //                       yPosition += imageHeight + 8;
-  //                       imageX = 25;
-                        
-  //                       // Check page space after moving to new row
-  //                       if (yPosition > pageHeight - 20) {
-  //                         pdf.addPage();
-  //                         yPosition = 20;
-  //                       }
-  //                     }
-  //                   }
-  //                 }
-  //               }
-
-  //               if (imageX > 25) {
-  //                 yPosition += imageHeight + 6;
-  //               }
-  //             }
-  //           }
-  //         }
-
-  //         // General Remark
-  //         if (room.generalRemark) {
-  //           pdf.setFontSize(9);
-  //           pdf.setTextColor(80, 80, 80);
-  //           const remarkLines = pdf.splitTextToSize(`General Remark: ${room.generalRemark}`, pageWidth - 30);
-  //           pdf.text(remarkLines, 15, yPosition);
-  //           yPosition += (remarkLines.length * 3.5) + 2;
-  //         }
-
-  //         yPosition += 8;
-
-  //         // Room separator
-  //         if (roomIndex < selectedInspection.rooms.length - 1) {
-  //           pdf.setDrawColor(220, 220, 220);
-  //           pdf.line(15, yPosition, pageWidth - 15, yPosition);
-  //           yPosition += 8;
-  //         }
-  //       }
-  //     }
-
-  //     // Footer on all pages - Add footer only if there's enough space
-  //     const pageCount = pdf.internal.getNumberOfPages();
-  //     for (let i = 1; i <= pageCount; i++) {
-  //       pdf.setPage(i);
-  //       pdf.setFontSize(8);
-  //       pdf.setTextColor(100, 100, 100);
-  //       pdf.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-  //       pdf.text(`Generated on ${new Date().toLocaleDateString('en-IN')}`, 15, pageHeight - 10);
-  //     }
-
-  //     // Save PDF
-  //     const fileName = `${selectedInspection.inspectionType}_Inspection_${new Date().toISOString().split('T')[0]}.pdf`;
-  //     pdf.save(fileName);
-
-  //     setTimeout(() => setShowDownloadModal(false), 1000);
-
-  //   } catch (error) {
-  //     console.error("Error generating PDF:", error);
-  //     alert("Error generating PDF report. Please try again.");
-  //   } finally {
-  //     setIsGenerating(false);
-  //   }
-  // };
-
   const generatePDFReport = async () => {
-  if (!selectedInspection) return;
-  setIsGenerating(true);
+    if (!selectedInspection) return;
+    setIsGenerating(true);
 
-  try {
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    let yPosition = 20;
+    try {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yPosition = 20;
 
-    // Header Section - Improved spacing
-    pdf.setFontSize(20);
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(`${selectedInspection.inspectionType} Inspection Report`, pageWidth / 2, yPosition, { align: 'center' });
-    yPosition += 10; // Increased spacing
-
-    pdf.setFontSize(10);
-    pdf.setTextColor(100, 100, 100);
-    
-    const inspectionDate = formatDate(selectedInspection.updatedAt);
-    const inspectorName = dbUserState?.find(user => user.id === selectedInspection.createdBy)?.fullName || selectedInspection.createdBy;
-    
-    pdf.text(`Inspected at: ${inspectionDate}`, pageWidth / 2, yPosition, { align: 'center' });
-    yPosition += 5; // Better spacing
-    pdf.text(`Inspected by: ${inspectorName}`, pageWidth / 2, yPosition, { align: 'center' });
-    
-    yPosition += 20; // More space after header
-
-    // Property Address Section - Improved spacing
-    pdf.setFillColor(245, 245, 245);
-    pdf.rect(10, yPosition, pageWidth - 20, 10, 'F'); // Increased height
-    
-    pdf.setFontSize(12);
-    pdf.setTextColor(0, 0, 0);
-    pdf.text('Property Address', 15, yPosition + 7); // Better vertical centering
-    yPosition += 15; // More spacing
-
-    pdf.setFontSize(10);
-    pdf.setTextColor(0, 0, 0);
-
-    if (propertyDetails) {
-      // Better line spacing
-      pdf.text(`${propertyDetails.unitNumber || ''} | ${propertyDetails.society || ''}`, 15, yPosition);
-      yPosition += 6;
-
-      let secondLine = '';
-      if (propertyDetails.bhk) secondLine += `${propertyDetails.bhk}`;
-      if (propertyDetails.furnishing) secondLine += ` | ${propertyDetails.furnishing}`;
-      if (propertyDetails.purpose) {
-        const purposeText = propertyDetails.purpose.toLowerCase() === 'rentsaleboth' ? 
-          'For Rent / Sale' : `For ${propertyDetails.purpose}`;
-        secondLine += ` | ${purposeText}`;
-      }
-      pdf.text(secondLine, 15, yPosition);
-      yPosition += 6;
-
-      pdf.text(`${propertyDetails.locality || ''}, ${propertyDetails.city || ''}, ${propertyDetails.state || ''}`, 15, yPosition);
-      yPosition += 6;
-
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`PID: ${propertyDetails.pid || selectedInspection.propertyId}`, 15, yPosition);
+      // Header Section - Improved spacing
+      pdf.setFontSize(20);
       pdf.setTextColor(0, 0, 0);
-      yPosition += 6;
-    }
-
-    yPosition += 15; // More space after section
-
-    // Property Owner Section - Improved spacing
-    if (ownersData && ownersData.length > 0 && ownersData[0]) {
-      const owner = ownersData[0];
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
-      
-      pdf.setFontSize(12);
-      pdf.text('Property Owner', 15, yPosition + 7);
-      yPosition += 15;
+      pdf.text(`${selectedInspection.inspectionType} Inspection Report`, pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 10; // Increased spacing
 
       pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
       
-      pdf.text(owner.fullName || 'N/A', 15, yPosition);
-      yPosition += 5;
+      const inspectionDate = formatDate(selectedInspection.updatedAt);
+      const inspectorName = dbUserState?.find(user => user.id === selectedInspection.createdBy)?.fullName || selectedInspection.createdBy;
       
-      if (owner.phoneNumber) {
-        const formattedPhone = owner.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
-        pdf.text(formattedPhone, 15, yPosition);
-        yPosition += 5;
-      }
+      pdf.text(`Inspected at: ${inspectionDate}`, pageWidth / 2, yPosition, { align: 'center' });
+      yPosition += 5; // Better spacing
+      pdf.text(`Inspected by: ${inspectorName}`, pageWidth / 2, yPosition, { align: 'center' });
       
-      if (owner.email) {
-        pdf.text(owner.email, 15, yPosition);
-        yPosition += 5;
-      }
+      yPosition += 20; // More space after header
 
-      yPosition += 12; // More space after section
-    }
-
-    // Property Executive Section - Improved spacing
-    if (executivesData && executivesData.length > 0 && executivesData[0]) {
-      const executive = executivesData[0];
+      // Property Address Section - Improved spacing
       pdf.setFillColor(245, 245, 245);
-      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
+      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F'); // Increased height
       
       pdf.setFontSize(12);
-      pdf.text('Property Executive', 15, yPosition + 7);
-      yPosition += 15;
+      pdf.setTextColor(0, 0, 0);
+      pdf.text('Property Address', 15, yPosition + 7); // Better vertical centering
+      yPosition += 15; // More spacing
 
       pdf.setFontSize(10);
+      pdf.setTextColor(0, 0, 0);
 
-      pdf.text(executive.fullName || 'N/A', 15, yPosition);
-      yPosition += 5;
+      if (propertyDetails) {
+        // Better line spacing
+        pdf.text(`${propertyDetails.unitNumber || ''} | ${propertyDetails.society || ''}`, 15, yPosition);
+        yPosition += 6;
 
-      if (executive.phoneNumber) {
-        const formattedPhone = executive.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
-        pdf.text(formattedPhone, 15, yPosition);
-        yPosition += 5;
+        let secondLine = '';
+        if (propertyDetails.bhk) secondLine += `${propertyDetails.bhk}`;
+        if (propertyDetails.furnishing) secondLine += ` | ${propertyDetails.furnishing}`;
+        if (propertyDetails.purpose) {
+          const purposeText = propertyDetails.purpose.toLowerCase() === 'rentsaleboth' ? 
+            'For Rent / Sale' : `For ${propertyDetails.purpose}`;
+          secondLine += ` | ${purposeText}`;
+        }
+        pdf.text(secondLine, 15, yPosition);
+        yPosition += 6;
+
+        pdf.text(`${propertyDetails.locality || ''}, ${propertyDetails.city || ''}, ${propertyDetails.state || ''}`, 15, yPosition);
+        yPosition += 6;
+
+        pdf.setTextColor(100, 100, 100);
+        pdf.text(`PID: ${propertyDetails.pid || selectedInspection.propertyId}`, 15, yPosition);
+        pdf.setTextColor(0, 0, 0);
+        yPosition += 6;
       }
-      
-      if (executive.email) {
-        pdf.text(executive.email, 15, yPosition);
-        yPosition += 5;
-      }
 
-      yPosition += 12;
-    }
+      yPosition += 15; // More space after section
 
-    // Tenants Section - Improved spacing
-    if (tenantsData.length > 0) {
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
-      
-      pdf.setFontSize(12);
-      pdf.text('Tenants', 15, yPosition + 7);
-      yPosition += 15;
-
-      pdf.setFontSize(10);
-
-      for (let i = 0; i < tenantsData.length; i++) {
-        const tenant = tenantsData[i];
-        if (i > 0) yPosition += 8; // More space between tenants
+      // Property Owner Section - Improved spacing
+      if (ownersData && ownersData.length > 0 && ownersData[0]) {
+        const owner = ownersData[0];
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
         
-        pdf.text(tenant.name || 'Tenant', 15, yPosition);
+        pdf.setFontSize(12);
+        pdf.text('Property Owner', 15, yPosition + 7);
+        yPosition += 15;
+
+        pdf.setFontSize(10);
+        
+        pdf.text(owner.fullName || 'N/A', 15, yPosition);
         yPosition += 5;
         
-        if (tenant.mobile) {
-          const formattedPhone = tenant.mobile.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
+        if (owner.phoneNumber) {
+          const formattedPhone = owner.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
           pdf.text(formattedPhone, 15, yPosition);
           yPosition += 5;
         }
         
-        if (tenant.emailID) {
-          pdf.text(tenant.emailID, 15, yPosition);
+        if (owner.email) {
+          pdf.text(owner.email, 15, yPosition);
           yPosition += 5;
         }
+
+        yPosition += 12; // More space after section
       }
 
-      yPosition += 12;
-    }
-
-    // Bill Details Section - Improved spacing
-    if (selectedInspection.bills && Object.keys(selectedInspection.bills).length > 0) {
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
-      
-      pdf.setFontSize(12);
-      pdf.text('Bill Details', 15, yPosition + 7);
-      yPosition += 15;
-
-      pdf.setFontSize(10);
-
-      const billsArray = Object.values(selectedInspection.bills);
-      for (let index = 0; index < billsArray.length; index++) {
-        const bill = billsArray[index];
+      // Property Executive Section - Improved spacing
+      if (executivesData && executivesData.length > 0 && executivesData[0]) {
+        const executive = executivesData[0];
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
         
-        // Check page space
-        if (yPosition > pageHeight - 80) {
-          pdf.addPage();
-          yPosition = 20;
-        }
+        pdf.setFontSize(12);
+        pdf.text('Property Executive', 15, yPosition + 7);
+        yPosition += 15;
 
-        // Bill header with better spacing
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFontSize(11);
-        pdf.text(`${bill.billType} | ${bill.authorityName || ''}`, 15, yPosition);
-        yPosition += 6;
-
-        // Bill details with improved spacing
         pdf.setFontSize(10);
-        pdf.setTextColor(80, 80, 80);
+
+        pdf.text(executive.fullName || 'N/A', 15, yPosition);
+        yPosition += 5;
+
+        if (executive.phoneNumber) {
+          const formattedPhone = executive.phoneNumber.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
+          pdf.text(formattedPhone, 15, yPosition);
+          yPosition += 5;
+        }
         
-        if (bill.thisBillUpdatedAt) {
-          const billDate = formatDate(bill.thisBillUpdatedAt);
-          pdf.text(`Last updated: ${billDate}`, 15, yPosition);
+        if (executive.email) {
+          pdf.text(executive.email, 15, yPosition);
           yPosition += 5;
         }
 
-        if (bill.billId) {
-          pdf.text(`Bill ID: ${bill.billId}`, 15, yPosition);
+        yPosition += 12;
+      }
+
+      // Tenants Section - Improved spacing
+      if (tenantsData.length > 0) {
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
+        
+        pdf.setFontSize(12);
+        pdf.text('Tenants', 15, yPosition + 7);
+        yPosition += 15;
+
+        pdf.setFontSize(10);
+
+        for (let i = 0; i < tenantsData.length; i++) {
+          const tenant = tenantsData[i];
+          if (i > 0) yPosition += 8; // More space between tenants
+          
+          pdf.text(tenant.name || 'Tenant', 15, yPosition);
           yPosition += 5;
+          
+          if (tenant.mobile) {
+            const formattedPhone = tenant.mobile.replace(/(\d{2})(\d{5})(\d{5})/, '+$1 $2-$3');
+            pdf.text(formattedPhone, 15, yPosition);
+            yPosition += 5;
+          }
+          
+          if (tenant.emailID) {
+            pdf.text(tenant.emailID, 15, yPosition);
+            yPosition += 5;
+          }
         }
 
-        if (bill.amount) {
-          pdf.text(`Due Amount: ${bill.amount}`, 15, yPosition);
-          yPosition += 5;
-        }
+        yPosition += 12;
+      }
 
-        if (bill.billWebsiteLink) {
-          pdf.setTextColor(0, 102, 204);
-          pdf.text('Bill Website Link', 15, yPosition);
-          pdf.setTextColor(80, 80, 80);
-          yPosition += 5;
-        }
+      // Bill Details Section - Improved spacing
+      if (selectedInspection.bills && Object.keys(selectedInspection.bills).length > 0) {
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
+        
+        pdf.setFontSize(12);
+        pdf.text('Bill Details', 15, yPosition + 7);
+        yPosition += 15;
 
-        if (bill.remark) {
-          const remarkLines = pdf.splitTextToSize(`Remarks: ${bill.remark}`, pageWidth - 30);
-          pdf.text(remarkLines, 15, yPosition);
-          yPosition += (remarkLines.length * 5) + 3; // Better line spacing
-        }
+        pdf.setFontSize(10);
 
-        // Bill Images - Improved image handling
-        if (bill.imageUrl) {
-          pdf.setTextColor(0, 0, 0);
-          pdf.text('Bill Image:', 15, yPosition);
-          yPosition += 5;
-
-          // Check space for image
-          if (yPosition + 40 > pageHeight - 20) {
+        const billsArray = Object.values(selectedInspection.bills);
+        for (let index = 0; index < billsArray.length; index++) {
+          const bill = billsArray[index];
+          
+          // Check page space
+          if (yPosition > pageHeight - 80) {
             pdf.addPage();
             yPosition = 20;
           }
 
-          const imageResult = await addImageToPDF(pdf, bill.imageUrl, 20, yPosition, 50, 35);
-          if (imageResult.success) {
-            pdf.setFontSize(7);
-            pdf.setTextColor(100, 100, 100);
-            pdf.text('Bill Document', 20 + 25, yPosition + 40, { align: 'center' });
-            yPosition += 45; // Space after image
+          // Bill header with better spacing
+          pdf.setTextColor(0, 0, 0);
+          pdf.setFontSize(11);
+          pdf.text(`${bill.billType} | ${bill.authorityName || ''}`, 15, yPosition);
+          yPosition += 6;
+
+          // Bill details with improved spacing
+          pdf.setFontSize(10);
+          pdf.setTextColor(80, 80, 80);
+          
+          if (bill.thisBillUpdatedAt) {
+            const billDate = formatDate(bill.thisBillUpdatedAt);
+            pdf.text(`Last updated: ${billDate}`, 15, yPosition);
+            yPosition += 5;
+          }
+
+          if (bill.billId) {
+            pdf.text(`Bill ID: ${bill.billId}`, 15, yPosition);
+            yPosition += 5;
+          }
+
+          if (bill.amount) {
+            pdf.text(`Due Amount: ${bill.amount}`, 15, yPosition);
+            yPosition += 5;
+          }
+
+          if (bill.billWebsiteLink) {
+            pdf.setTextColor(0, 102, 204);
+            pdf.text('Bill Website Link', 15, yPosition);
+            pdf.setTextColor(80, 80, 80);
+            yPosition += 5;
+          }
+
+          if (bill.remark) {
+            const remarkLines = pdf.splitTextToSize(`Remarks: ${bill.remark}`, pageWidth - 30);
+            pdf.text(remarkLines, 15, yPosition);
+            yPosition += (remarkLines.length * 5) + 3; // Better line spacing
+          }
+
+          // Bill Images - Improved image handling
+          if (bill.imageUrl) {
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Bill Image:', 15, yPosition);
+            yPosition += 5;
+
+            // Check space for image
+            if (yPosition + 40 > pageHeight - 20) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            const imageResult = await addImageToPDF(pdf, bill.imageUrl, 20, yPosition, 50, 35);
+            if (imageResult.success) {
+              pdf.setFontSize(7);
+              pdf.setTextColor(100, 100, 100);
+              pdf.text('Bill Document', 20 + 25, yPosition + 40, { align: 'center' });
+              yPosition += 45; // Space after image
+            }
+          }
+
+          yPosition += 10; // Space after bill
+          
+          // Separator between bills
+          if (index < billsArray.length - 1) {
+            pdf.setDrawColor(220, 220, 220);
+            pdf.line(15, yPosition, pageWidth - 15, yPosition);
+            yPosition += 12;
           }
         }
 
-        yPosition += 10; // Space after bill
-        
-        // Separator between bills
-        if (index < billsArray.length - 1) {
-          pdf.setDrawColor(220, 220, 220);
-          pdf.line(15, yPosition, pageWidth - 15, yPosition);
-          yPosition += 12;
-        }
+        yPosition += 8;
       }
 
-      yPosition += 8;
-    }
-
-    // Rooms Inspection Section - Major improvements in spacing
-    if (selectedInspection.rooms && selectedInspection.rooms.length > 0) {
-      if (yPosition > pageHeight - 50) {
-        pdf.addPage();
-        yPosition = 20;
-      }
-
-      pdf.setFillColor(245, 245, 245);
-      pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
-      
-      pdf.setFontSize(12);
-      pdf.text('Rooms Inspection', 15, yPosition + 7);
-      yPosition += 15;
-
-      for (let roomIndex = 0; roomIndex < selectedInspection.rooms.length; roomIndex++) {
-        const room = selectedInspection.rooms[roomIndex];
-        
-        // Check page space
-        if (yPosition > pageHeight - 80) {
+      // INSPECTION DETAILS SECTION - ADDED ISSUE-BASED INSPECTION SUPPORT
+      if (selectedInspection.rooms && selectedInspection.rooms.length > 0) {
+        if (yPosition > pageHeight - 50) {
           pdf.addPage();
           yPosition = 20;
         }
 
-        // Room Name with better styling
-        pdf.setFontSize(11);
-        pdf.setTextColor(40, 40, 40);
-        pdf.setFont(undefined, 'bold');
-        pdf.text(room.roomName, 15, yPosition);
-        pdf.setFont(undefined, 'normal');
-        yPosition += 6;
-
-        // Tenant Permission Status
-        if (room.isAllowForInspection === "no") {
-          pdf.setFontSize(9);
-          pdf.setTextColor(200, 0, 0);
-          pdf.text('Not allowed by tenant for inspection', 20, yPosition);
-          yPosition += 5;
-          pdf.setTextColor(0, 0, 0);
-        }
-
-        // FULL INSPECTION - Fixtures with better spacing
-        if (selectedInspection.inspectionType.toLowerCase() === "full") {
-          if (room.isAllowForInspection === "yes" && room.fixtures && Object.keys(room.fixtures).length > 0) {
-            pdf.setFontSize(10);
-            pdf.setTextColor(80, 80, 80);
-            pdf.text('Fixtures:', 20, yPosition);
-            yPosition += 5;
-
-            const fixtures = Object.entries(room.fixtures);
-            for (let fixtureIndex = 0; fixtureIndex < fixtures.length; fixtureIndex++) {
-              const [fixtureName, fixtureData] = fixtures[fixtureIndex];
-              
-              if (yPosition > pageHeight - 60) {
-                pdf.addPage();
-                yPosition = 20;
-              }
-
-              const cleanName = cleanFixtureName(fixtureName);
-              
-              // Fixture name and status with better layout
-              pdf.setFontSize(9);
-              pdf.setTextColor(0, 0, 0);
-              pdf.text(`• ${cleanName}:`, 25, yPosition);
-              
-              if (fixtureData.status) {
-                const statusX = 70;
-                const statusColor = fixtureData.status.toLowerCase() === 'working' || fixtureData.status.toLowerCase() === 'good' ? 
-                  [0, 150, 0] : [200, 0, 0];
-                pdf.setTextColor(...statusColor);
-                pdf.text(fixtureData.status, statusX, yPosition);
-                pdf.setTextColor(0, 0, 0);
-              }
-
-              yPosition += 5;
-
-              // Remark with better spacing
-              if (fixtureData.remark) {
-                pdf.setTextColor(80, 80, 80);
-                const remarkLines = pdf.splitTextToSize(`  ${fixtureData.remark}`, pageWidth - 40);
-                pdf.text(remarkLines, 30, yPosition);
-                yPosition += (remarkLines.length * 4) + 2;
-              }
-
-              // Fixture Images - Improved image layout
-              if (fixtureData.images && fixtureData.images.length > 0) {
-                pdf.setTextColor(0, 0, 0);
-                pdf.text('  Images:', 30, yPosition);
-                yPosition += 4;
-
-                let imageX = 35;
-                const imageWidth = 30;
-                const imageHeight = 22;
-                const imagesPerRow = Math.floor((pageWidth - 50) / (imageWidth + 5));
-
-                for (let i = 0; i < fixtureData.images.length; i++) {
-                  const image = fixtureData.images[i];
-                  
-                  // Check space for image row
-                  if (yPosition + imageHeight > pageHeight - 25) {
-                    pdf.addPage();
-                    yPosition = 20;
-                    imageX = 35;
-                  }
-
-                  if (image && image.url) {
-                    const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
-                    if (imageResult.success) {
-                      pdf.setFontSize(6);
-                      pdf.setTextColor(100, 100, 100);
-                      pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
-                      
-                      imageX += imageWidth + 5;
-                      
-                      // Move to next row
-                      if ((i + 1) % imagesPerRow === 0) {
-                        yPosition += imageHeight + 8;
-                        imageX = 35;
-                      }
-                    }
-                  }
-                }
-
-                // Move position after images
-                if (imageX > 35) {
-                  yPosition += imageHeight + 10;
-                } else {
-                  yPosition += 5;
-                }
-              } else {
-                yPosition += 3;
-              }
-            }
-          }
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(10, yPosition, pageWidth - 20, 10, 'F');
+        
+        pdf.setFontSize(12);
+        
+        // Different title based on inspection type
+        if (selectedInspection.inspectionType.toLowerCase() === "issue-based") {
+          pdf.text('Issues Found', 15, yPosition + 7);
         } else {
-          // REGULAR INSPECTION - Better spacing
-          if (room.isAllowForInspection === "yes") {
+          pdf.text('Rooms Inspection', 15, yPosition + 7);
+        }
+        
+        yPosition += 15;
+
+        // ISSUE-BASED INSPECTION
+        if (selectedInspection.inspectionType.toLowerCase() === "issue-based") {
+          for (let issueIndex = 0; issueIndex < selectedInspection.rooms.length; issueIndex++) {
+            const issue = selectedInspection.rooms[issueIndex];
+            
+            // Check page space
+            if (yPosition > pageHeight - 80) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            // Issue Header with better styling
+            pdf.setFontSize(11);
+            pdf.setTextColor(40, 40, 40);
+            pdf.setFont(undefined, 'bold');
+            pdf.text(`Issue ${issueIndex + 1}: ${issue.roomName || 'Unnamed Issue'}`, 15, yPosition);
+            pdf.setFont(undefined, 'normal');
+            yPosition += 6;
+
+            // Issue Details
             pdf.setFontSize(9);
-            let hasIssues = false;
+            pdf.setTextColor(80, 80, 80);
 
-            if (room.seepage) {
-              const seepageColor = room.seepage.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-              pdf.setTextColor(...seepageColor);
-              pdf.text(`• Seepage: ${room.seepage}`, 25, yPosition);
+            // Fixture
+            if (issue.fixture) {
+              pdf.text(`Fixture: ${issue.fixture}`, 20, yPosition);
               yPosition += 4;
-              hasIssues = true;
             }
 
-            if (room.termites) {
-              const termitesColor = room.termites.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-              pdf.setTextColor(...termitesColor);
-              pdf.text(`• Termites: ${room.termites}`, 25, yPosition);
+            // Issue Type (if not "other")
+            if (issue.issueType && issue.fixture !== 'other') {
+              pdf.text(`Issue Type: ${issue.issueType}`, 20, yPosition);
               yPosition += 4;
-              hasIssues = true;
             }
 
-            if (room.otherIssue) {
-              const otherColor = room.otherIssue.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
-              pdf.setTextColor(...otherColor);
-              pdf.text(`• Other Issues: ${room.otherIssue}`, 25, yPosition);
-              yPosition += 4;
-              hasIssues = true;
+            // Explanation
+            if (issue.explanation) {
+              const explanationLines = pdf.splitTextToSize(`Description: ${issue.explanation}`, pageWidth - 35);
+              pdf.text(explanationLines, 20, yPosition);
+              yPosition += (explanationLines.length * 4) + 2;
             }
 
-            if (room.cleanRemark) {
+            // Status
+            if (issue.inspectionStatus) {
+              const statusColor = issue.inspectionStatus === 'full' ? [0, 150, 0] : 
+                                issue.inspectionStatus === 'half' ? [255, 165, 0] : [200, 0, 0];
+              pdf.setTextColor(...statusColor);
+              pdf.text(`Status: ${issue.inspectionStatus.charAt(0).toUpperCase() + issue.inspectionStatus.slice(1)}`, 20, yPosition);
               pdf.setTextColor(80, 80, 80);
-              pdf.text(`• Cleaning: ${room.cleanRemark}`, 25, yPosition);
-              yPosition += 4;
-              hasIssues = true;
-            }
-
-            if (!hasIssues) {
-              pdf.setTextColor(0, 150, 0);
-              pdf.text('• No issues found', 25, yPosition);
               yPosition += 4;
             }
 
-            pdf.setTextColor(0, 0, 0);
-
-            // Room Images
-            if (room.images && room.images.length > 0) {
-              pdf.text('Images:', 25, yPosition);
+            // Issue Images
+            if (issue.images && issue.images.length > 0) {
+              pdf.setTextColor(0, 0, 0);
+              pdf.text('Issue Images:', 20, yPosition);
               yPosition += 4;
 
-              let imageX = 30;
+              let imageX = 25;
               const imageWidth = 35;
               const imageHeight = 25;
+              const imagesPerRow = Math.floor((pageWidth - 40) / (imageWidth + 5));
 
-              for (let i = 0; i < room.images.length; i++) {
-                const image = room.images[i];
+              for (let i = 0; i < issue.images.length; i++) {
+                const image = issue.images[i];
                 
+                // Check space for image row
                 if (yPosition + imageHeight > pageHeight - 25) {
                   pdf.addPage();
                   yPosition = 20;
-                  imageX = 30;
+                  imageX = 25;
                 }
 
                 if (image && image.url) {
                   const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
                   if (imageResult.success) {
-                    pdf.setFontSize(7);
+                    pdf.setFontSize(6);
                     pdf.setTextColor(100, 100, 100);
                     pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
                     
-                    imageX += imageWidth + 8;
+                    imageX += imageWidth + 5;
                     
                     // Move to next row
-                    if (imageX + imageWidth > pageWidth - 20) {
+                    if ((i + 1) % imagesPerRow === 0) {
                       yPosition += imageHeight + 8;
-                      imageX = 30;
+                      imageX = 25;
                     }
                   }
                 }
               }
 
-              if (imageX > 30) {
-                yPosition += imageHeight + 8;
+              // Move position after images
+              if (imageX > 25) {
+                yPosition += imageHeight + 10;
               } else {
                 yPosition += 5;
               }
             }
+
+            yPosition += 8; // Space after issue
+
+            // Issue separator
+            if (issueIndex < selectedInspection.rooms.length - 1 && yPosition < pageHeight - 20) {
+              pdf.setDrawColor(220, 220, 220);
+              pdf.line(15, yPosition, pageWidth - 15, yPosition);
+              yPosition += 12;
+            }
+          }
+        } 
+        // FULL INSPECTION - Fixtures with better spacing
+        else if (selectedInspection.inspectionType.toLowerCase() === "full") {
+          for (let roomIndex = 0; roomIndex < selectedInspection.rooms.length; roomIndex++) {
+            const room = selectedInspection.rooms[roomIndex];
+            
+            // Check page space
+            if (yPosition > pageHeight - 80) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            // Room Name with better styling
+            pdf.setFontSize(11);
+            pdf.setTextColor(40, 40, 40);
+            pdf.setFont(undefined, 'bold');
+            pdf.text(room.roomName, 15, yPosition);
+            pdf.setFont(undefined, 'normal');
+            yPosition += 6;
+
+            // Tenant Permission Status
+            if (room.isAllowForInspection === "no") {
+              pdf.setFontSize(9);
+              pdf.setTextColor(200, 0, 0);
+              pdf.text('Not allowed by tenant for inspection', 20, yPosition);
+              yPosition += 5;
+              pdf.setTextColor(0, 0, 0);
+            }
+
+            // FULL INSPECTION - Fixtures with better spacing
+            if (room.isAllowForInspection === "yes" && room.fixtures && Object.keys(room.fixtures).length > 0) {
+              pdf.setFontSize(10);
+              pdf.setTextColor(80, 80, 80);
+              pdf.text('Fixtures:', 20, yPosition);
+              yPosition += 5;
+
+              const fixtures = Object.entries(room.fixtures);
+              for (let fixtureIndex = 0; fixtureIndex < fixtures.length; fixtureIndex++) {
+                const [fixtureName, fixtureData] = fixtures[fixtureIndex];
+                
+                if (yPosition > pageHeight - 60) {
+                  pdf.addPage();
+                  yPosition = 20;
+                }
+
+                const cleanName = cleanFixtureName(fixtureName);
+                
+                // Fixture name and status with better layout
+                pdf.setFontSize(9);
+                pdf.setTextColor(0, 0, 0);
+                pdf.text(`• ${cleanName}:`, 25, yPosition);
+                
+                if (fixtureData.status) {
+                  const statusX = 70;
+                  const statusColor = fixtureData.status.toLowerCase() === 'working' || fixtureData.status.toLowerCase() === 'good' ? 
+                    [0, 150, 0] : [200, 0, 0];
+                  pdf.setTextColor(...statusColor);
+                  pdf.text(fixtureData.status, statusX, yPosition);
+                  pdf.setTextColor(0, 0, 0);
+                }
+
+                yPosition += 5;
+
+                // Remark with better spacing
+                if (fixtureData.remark) {
+                  pdf.setTextColor(80, 80, 80);
+                  const remarkLines = pdf.splitTextToSize(`  ${fixtureData.remark}`, pageWidth - 40);
+                  pdf.text(remarkLines, 30, yPosition);
+                  yPosition += (remarkLines.length * 4) + 2;
+                }
+
+                // Fixture Images - Improved image layout
+                if (fixtureData.images && fixtureData.images.length > 0) {
+                  pdf.setTextColor(0, 0, 0);
+                  pdf.text('  Images:', 30, yPosition);
+                  yPosition += 4;
+
+                  let imageX = 35;
+                  const imageWidth = 30;
+                  const imageHeight = 22;
+                  const imagesPerRow = Math.floor((pageWidth - 50) / (imageWidth + 5));
+
+                  for (let i = 0; i < fixtureData.images.length; i++) {
+                    const image = fixtureData.images[i];
+                    
+                    // Check space for image row
+                    if (yPosition + imageHeight > pageHeight - 25) {
+                      pdf.addPage();
+                      yPosition = 20;
+                      imageX = 35;
+                    }
+
+                    if (image && image.url) {
+                      const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
+                      if (imageResult.success) {
+                        pdf.setFontSize(6);
+                        pdf.setTextColor(100, 100, 100);
+                        pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
+                        
+                        imageX += imageWidth + 5;
+                        
+                        // Move to next row
+                        if ((i + 1) % imagesPerRow === 0) {
+                          yPosition += imageHeight + 8;
+                          imageX = 35;
+                        }
+                      }
+                    }
+                  }
+
+                  // Move position after images
+                  if (imageX > 35) {
+                    yPosition += imageHeight + 10;
+                  } else {
+                    yPosition += 5;
+                  }
+                } else {
+                  yPosition += 3;
+                }
+              }
+            }
+
+            // General Remark with better spacing
+            if (room.generalRemark) {
+              pdf.setFontSize(9);
+              pdf.setTextColor(80, 80, 80);
+              const remarkLines = pdf.splitTextToSize(`General Remark: ${room.generalRemark}`, pageWidth - 35);
+              pdf.text(remarkLines, 20, yPosition);
+              yPosition += (remarkLines.length * 4) + 3;
+            }
+
+            yPosition += 10; // Space after room
+
+            // Room separator
+            if (roomIndex < selectedInspection.rooms.length - 1 && yPosition < pageHeight - 20) {
+              pdf.setDrawColor(220, 220, 220);
+              pdf.line(15, yPosition, pageWidth - 15, yPosition);
+              yPosition += 12;
+            }
+          }
+        } 
+        // REGULAR INSPECTION - Better spacing
+        else {
+          for (let roomIndex = 0; roomIndex < selectedInspection.rooms.length; roomIndex++) {
+            const room = selectedInspection.rooms[roomIndex];
+            
+            // Check page space
+            if (yPosition > pageHeight - 80) {
+              pdf.addPage();
+              yPosition = 20;
+            }
+
+            // Room Name with better styling
+            pdf.setFontSize(11);
+            pdf.setTextColor(40, 40, 40);
+            pdf.setFont(undefined, 'bold');
+            pdf.text(room.roomName, 15, yPosition);
+            pdf.setFont(undefined, 'normal');
+            yPosition += 6;
+
+            // Tenant Permission Status
+            if (room.isAllowForInspection === "no") {
+              pdf.setFontSize(9);
+              pdf.setTextColor(200, 0, 0);
+              pdf.text('Not allowed by tenant for inspection', 20, yPosition);
+              yPosition += 5;
+              pdf.setTextColor(0, 0, 0);
+            }
+
+            // REGULAR INSPECTION - Basic issues with better spacing
+            if (room.isAllowForInspection === "yes") {
+              pdf.setFontSize(9);
+              let hasIssues = false;
+
+              if (room.seepage) {
+                const seepageColor = room.seepage.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
+                pdf.setTextColor(...seepageColor);
+                pdf.text(`• Seepage: ${room.seepage}`, 25, yPosition);
+                yPosition += 4;
+                hasIssues = true;
+              }
+
+              if (room.termites) {
+                const termitesColor = room.termites.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
+                pdf.setTextColor(...termitesColor);
+                pdf.text(`• Termites: ${room.termites}`, 25, yPosition);
+                yPosition += 4;
+                hasIssues = true;
+              }
+
+              if (room.otherIssue) {
+                const otherColor = room.otherIssue.toLowerCase() === 'yes' ? [200, 0, 0] : [0, 150, 0];
+                pdf.setTextColor(...otherColor);
+                pdf.text(`• Other Issues: ${room.otherIssue}`, 25, yPosition);
+                yPosition += 4;
+                hasIssues = true;
+              }
+
+              if (room.cleanRemark) {
+                pdf.setTextColor(80, 80, 80);
+                pdf.text(`• Cleaning: ${room.cleanRemark}`, 25, yPosition);
+                yPosition += 4;
+                hasIssues = true;
+              }
+
+              if (!hasIssues) {
+                pdf.setTextColor(0, 150, 0);
+                pdf.text('• No issues found', 25, yPosition);
+                yPosition += 4;
+              }
+
+              pdf.setTextColor(0, 0, 0);
+
+              // Room Images
+              if (room.images && room.images.length > 0) {
+                pdf.text('Images:', 25, yPosition);
+                yPosition += 4;
+
+                let imageX = 30;
+                const imageWidth = 35;
+                const imageHeight = 25;
+
+                for (let i = 0; i < room.images.length; i++) {
+                  const image = room.images[i];
+                  
+                  if (yPosition + imageHeight > pageHeight - 25) {
+                    pdf.addPage();
+                    yPosition = 20;
+                    imageX = 30;
+                  }
+
+                  if (image && image.url) {
+                    const imageResult = await addImageToPDF(pdf, image.url, imageX, yPosition, imageWidth, imageHeight);
+                    if (imageResult.success) {
+                      pdf.setFontSize(7);
+                      pdf.setTextColor(100, 100, 100);
+                      pdf.text(`${i + 1}`, imageX + (imageWidth / 2) - 2, yPosition + imageHeight + 2, { align: 'center' });
+                      
+                      imageX += imageWidth + 8;
+                      
+                      // Move to next row
+                      if (imageX + imageWidth > pageWidth - 20) {
+                        yPosition += imageHeight + 8;
+                        imageX = 30;
+                      }
+                    }
+                  }
+                }
+
+                if (imageX > 30) {
+                  yPosition += imageHeight + 8;
+                } else {
+                  yPosition += 5;
+                }
+              }
+            }
+
+            // General Remark with better spacing
+            if (room.generalRemark) {
+              pdf.setFontSize(9);
+              pdf.setTextColor(80, 80, 80);
+              const remarkLines = pdf.splitTextToSize(`General Remark: ${room.generalRemark}`, pageWidth - 35);
+              pdf.text(remarkLines, 20, yPosition);
+              yPosition += (remarkLines.length * 4) + 3;
+            }
+
+            yPosition += 10; // Space after room
+
+            // Room separator
+            if (roomIndex < selectedInspection.rooms.length - 1 && yPosition < pageHeight - 20) {
+              pdf.setDrawColor(220, 220, 220);
+              pdf.line(15, yPosition, pageWidth - 15, yPosition);
+              yPosition += 12;
+            }
           }
         }
-
-        // General Remark with better spacing
-        if (room.generalRemark) {
-          pdf.setFontSize(9);
-          pdf.setTextColor(80, 80, 80);
-          const remarkLines = pdf.splitTextToSize(`General Remark: ${room.generalRemark}`, pageWidth - 35);
-          pdf.text(remarkLines, 20, yPosition);
-          yPosition += (remarkLines.length * 4) + 3;
-        }
-
-        yPosition += 10; // Space after room
-
-        // Room separator
-        if (roomIndex < selectedInspection.rooms.length - 1 && yPosition < pageHeight - 20) {
-          pdf.setDrawColor(220, 220, 220);
-          pdf.line(15, yPosition, pageWidth - 15, yPosition);
-          yPosition += 12;
-        }
       }
+
+      // Footer on all pages
+      const pageCount = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(100, 100, 100);
+        pdf.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+        pdf.text(`Generated on ${new Date().toLocaleDateString('en-IN')}`, 15, pageHeight - 10);
+      }
+
+      // Save PDF
+      const fileName = `${selectedInspection.inspectionType}_Inspection_${new Date().toISOString().split('T')[0]}.pdf`;
+      pdf.save(fileName);
+
+      setTimeout(() => setShowDownloadModal(false), 1000);
+
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Error generating PDF report. Please try again.");
+    } finally {
+      setIsGenerating(false);
     }
-
-    // Footer on all pages
-    const pageCount = pdf.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(8);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-      pdf.text(`Generated on ${new Date().toLocaleDateString('en-IN')}`, 15, pageHeight - 10);
-    }
-
-    // Save PDF
-    const fileName = `${selectedInspection.inspectionType}_Inspection_${new Date().toISOString().split('T')[0]}.pdf`;
-    pdf.save(fileName);
-
-    setTimeout(() => setShowDownloadModal(false), 1000);
-
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    alert("Error generating PDF report. Please try again.");
-  } finally {
-    setIsGenerating(false);
-  }
-};
+  };
 
   if (!selectedInspection) return null;
 

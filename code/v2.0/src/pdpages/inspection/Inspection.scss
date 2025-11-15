@@ -343,17 +343,38 @@
       min-height: 140px;
       position: relative;
 
+      .remove_issue {
+    background: var(--theme-red);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    svg{
+      width: 18px;
+      height: 18px;
+    }
+}
+
       .active_hand {
         background: var(--theme-blue);
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
+
         display: none;
         align-items: center;
         justify-content: center;
         position: absolute;
         top: 2px;
-        right: 2px;
+      left: 2px;
+      svg{
+        height: 16px;
+      }
       }
 
       cursor: pointer;

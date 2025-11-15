@@ -954,6 +954,15 @@ h2.card_title {
     gap: 15px;
   }
 }
+@media (max-width: 375px) {
+  .bottom_fixed_button {
+    padding: 25px 10px;
+  }
+
+  .next_btn_back {
+    gap: 8px;
+  }
+}
 
 @media (max-width: 575px) {
   .on_mobile_575 {
@@ -979,6 +988,77 @@ h2.card_title {
   width: 2rem;
   height: 2rem;
   animation: spin 0.8s infinite linear;
+}
+
+.theme_processing_btn {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+color: var(--theme-green);
+  cursor: not-allowed; 
+  transition: color 0.3s ease;
+
+}
+
+/* Animated background layer */
+.theme_processing_btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,168,168,0.1), var(--theme-green), rgba(0,168,168,0.1));
+  animation: fillLoop 2s linear infinite;
+  z-index: 0;
+  border-radius: 8px;
+}
+
+/* Make sure text is above animation */
+.theme_processing_btn {
+  z-index: 1;
+}
+
+.theme_processing_btn2 {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+color: var(--theme-green);
+  cursor: not-allowed; 
+  transition: color 0.3s ease;
+
+}
+
+/* Animated background layer */
+.theme_processing_btn2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,168,168,0.1), var(--theme-green), rgba(0,168,168,0.1));
+  animation: fillLoop 2s linear infinite;
+  z-index: 0;
+  border-radius: 8px;
+}
+
+/* Make sure text is above animation */
+.theme_processing_btn2 {
+  z-index: 1;
+}
+
+/* Keyframes for continuous left-to-right fill */
+@keyframes fillLoop {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 @keyframes spin {
