@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Select from "react-select";
 import { BeatLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
@@ -10,60 +10,178 @@ import AgentSingle from "./AgentSingle";
 import AgentTable from "./AgentTable";
 import Filters from "../../../../components/Filters";
 import client from "../../../../firebase/algoliaConfig";
+import useInView from "../../../../hooks/useInView";
 
 import "./PGAgent.scss";
 
-const statusFilter = ["Active", "Banned"];
-
+// const statusFilter = ["Active", "Banned"];
+const PAGE_SIZE = 10;
 const ViewAgent = () => {
   const navigate = useNavigate();
   const debouncer = useRef(null);
+  const cacheRef = useRef([]);
 
-  const { documents: masterState } = useCollection("m_states", "", [
-    "state",
-    "asc",
-  ]);
-
-  const [state, setState] = useState({
-    label: "Karnataka",
-    value: "_karnataka",
+  // --- STATE HANDLING ---
+  const [masterState, setMasterState] = useState([]);
+  const [state, setState] = useState(() => {
+    const savedState = localStorage.getItem("state");
+    return savedState
+      ? JSON.parse(savedState)
+      : { label: "Karnataka", value: "_karnataka" };
   });
+  const [cityOptions, setCityOptions] = useState([]);
+  const [city, setCity] = useState({
+    label: "Select City",
+    value: "_select_city",
+  });
+
+  useEffect(() => {
+    if (state && state.value) {
+      localStorage.setItem("state", JSON.stringify(state));
+    }
+  }, [state]);
+
+  // --- FETCH STATES ---
+  const fetchStates = async () => {
+    try {
+      const snapshot = await projectFirestore
+        .collection("m_states")
+        .orderBy("state", "asc")
+        .get();
+
+      const states = snapshot.docs.map((doc) => ({
+        label: doc.data().state,
+        value: doc.id,
+      }));
+
+      setMasterState(states);
+      setCity({
+        label: "Select City",
+        value: "_select_city",
+      });
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStates();
+  }, []);
+  // --- FETCH CITIES ---
+  const fetchCities = async () => {
+    if (!state?.label) return;
+    try {
+      const snapshot = await projectFirestore
+        .collection("m_cities")
+        .where("state", "==", state.value)
+        .orderBy("city", "asc")
+        .get();
+
+      const cities = snapshot.docs.map((doc) => ({
+        label: doc.data().city,
+        value: doc.id,
+      }));
+
+      setCityOptions(cities);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setCityOptions([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, [state]);
+
+  // --- DATA + FETCH LOGIC ---
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [allData, setAllData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState("active");
+  // const [status, setStatus] = useState("active");
 
-  const fetchAgents = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const ref = projectFirestore
-        .collection("agent-propdial")
-        .where("state", "==", state.label)
-        .where("status", "==", status.toLowerCase())
-        .orderBy("agentName", "asc");
+  const [setRef, isInView] = useInView({
+    rootMargin: "1000px", // triggers early
+    threshold: 0.1,
+  });
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
 
-      const snapshot = await ref.get();
+  // --- FETCH AGENTS ---
+  const fetchAgents = useCallback(
+    async (reset = false, cursor = null) => {
+      if (city.value === "_select_city") return;
+      setIsLoading(true);
 
-      if (!snapshot.empty) {
+      try {
+        let ref = projectFirestore
+          .collection("agent-propdial")
+          .where("state", "==", state.label)
+          .where("city", "==", city.label)
+          // .where("status", "==", status.toLowerCase())
+          .orderBy("agentName", "asc")
+          .limit(PAGE_SIZE);
+
+        if (!reset && cursor) ref = ref.startAfter(cursor);
+
+        const snapshot = await ref.get();
         const docs = snapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
-        setAllData(docs);
-      } else {
-        setAllData([]);
+
+        setAllData((prev) => {
+          const newData = reset ? docs : [...prev, ...docs];
+          cacheRef.current = newData;
+          return newData;
+        });
+
+        setLastDoc(snapshot.docs[snapshot.docs.length - 1] || null);
+        setHasMore(snapshot.docs.length === PAGE_SIZE);
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching agents:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [state.label, status]);
+    },
+    [state.label, city.value]
+  );
+
+  // Initial fetch on filter change
+  useEffect(() => {
+    if (!city || city.value === "_select_city") return;
+    setAllData([]);
+    setLastDoc(null);
+    setHasMore(true);
+    fetchAgents(true);
+  }, [state, city]);
+
+  // --- INFINITE SCROLL ---
 
   useEffect(() => {
-    fetchAgents();
-  }, [fetchAgents]);
+    if (isInView && hasMore && !isLoading && lastDoc) {
+      console.log("📍 Loading next batch...");
+      fetchAgents(false, lastDoc);
+    }
+  }, [isInView, hasMore, isLoading, lastDoc, fetchAgents]);
+
+  // --- CACHE PERSISTENCE ---
+
+  // useEffect(() => {
+  //   if (allData.length > 0) {
+  //     localStorage.setItem("agentCache", JSON.stringify(allData));
+  //   }
+  // }, [allData]);
+
+  // useEffect(() => {
+  //   const savedCache = localStorage.getItem("agentCache");
+  //   if (savedCache) {
+  //     cacheRef.current = JSON.parse(savedCache);
+  //     setAllData(cacheRef.current);
+  //   }
+  // }, []);
+  // --- SEARCH LOGIC ---
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const handleSearchInputChange = (e) => {
     const value = e.target.value;
@@ -75,23 +193,34 @@ const ViewAgent = () => {
       const searchValue = value.trim();
       if (!searchValue) {
         setSearchResults([]);
-        fetchAgents();
+        setAllData(cacheRef.current);
         return;
       }
 
-      const { results } = await client.search({
-        requests: [
-          {
-            indexName: "agent-propdial",
-            query: searchValue,
-            filters: `state:"${state.label}"`,
-            attributesToHighlight: ["agentName", "agentPhone", "city"],
-          },
-        ],
-      });
-      console.log("result:", results);
+      setIsLoading(true);
+      setSearchLoading(true);
 
-      setSearchResults(results[0].hits);
+      try {
+        const { results } = await client.search({
+          requests: [
+            {
+              indexName: "agent-propdial",
+              query: searchValue,
+              filters: `state:"${state.label}" AND city:"${city.label}"`,
+              attributesToHighlight: ["agentName", "agentPhone"],
+            },
+          ],
+        });
+
+        const hits = results?.[0]?.hits || [];
+        setSearchResults(hits.map((hit) => ({ ...hit, id: hit.objectID })));
+      } catch (error) {
+        console.error("Algolia search error:", error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+        setSearchLoading(false);
+      }
     }, 400);
   };
 
@@ -100,7 +229,6 @@ const ViewAgent = () => {
       if (debouncer.current) clearTimeout(debouncer.current);
     };
   }, []);
-  console.log({ searchResults });
   /** 🔄 View Mode */
   const [viewMode, setViewMode] = useState("card_view");
 
@@ -142,11 +270,22 @@ const ViewAgent = () => {
           <Select
             className="state_filter"
             onChange={(e) => setState(e)}
-            options={masterState?.map((data) => ({
-              label: data.state,
-              value: data.id,
-            }))}
+            options={masterState}
             value={state}
+            styles={{
+              control: (base) => ({
+                ...base,
+                outline: "none",
+                background: "#eee",
+                borderBottom: "1px solid var(--theme-blue)",
+              }),
+            }}
+          />
+          <Select
+            className="state_filter"
+            onChange={(e) => setCity(e)}
+            options={cityOptions}
+            value={city}
             styles={{
               control: (base) => ({
                 ...base,
@@ -159,9 +298,9 @@ const ViewAgent = () => {
         </div>
 
         <div className="right">
-          <div className="new_inline">
+          {/* <div className="new_inline">
             <Filters changeFilter={setStatus} filterList={statusFilter} />
-          </div>
+          </div> */}
           <div className="button_filter diff_views">
             <div
               className={`bf_single ${
@@ -194,50 +333,98 @@ const ViewAgent = () => {
 
       <hr />
 
-      {/* Empty State */}
-      {allData.length === 0 && !isLoading && (
-        <div className="pg_msg">No agents found in {state.label}.</div>
-      )}
-
       {/* Agent Data */}
       <div>
-        {viewMode === "card_view" && (
+        {city.value === "_select_city" ? (
+          <div className="pg_msg text-center">
+            Please select a city to view agents.
+          </div>
+        ) : viewMode === "card_view" ? (
           <>
-            {searchResults.length > 0 && (
-              <div className="search-results">
-                {searchResults.map((result) => (
-                  <div key={result.objectID} className="search-result-item">
-                    <h3
-                     
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          result._highlightResult?.agentName?.value ||
-                          result.agentName,
-                      }}
-                    ></h3>
-                    <p className="phone">{result.agentPhone}</p>
-                    <p
-                      className="highlighted-text"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          result._highlightResult?.city?.value || result.city,
-                      }}
-                    ></p>
-                    <small>{result.state}</small>
-                  </div>
-                ))}
-              </div>
+            {searchInput.trim() ? (
+              searchResults.length > 0 ? (
+                <AgentSingle agentDoc={searchResults} />
+              ) : (
+                !isLoading && (
+                  <div className="pg_msg text-center">No results found.</div>
+                )
+              )
+            ) : allData.length > 0 ? (
+              <AgentSingle agentDoc={allData} />
+            ) : (
+              !isLoading && (
+                <div className="pg_msg text-center">
+                  No agents found in {city.label}.
+                </div>
+              )
             )}
-            <AgentSingle agentDoc={allData} />
+
             {isLoading && (
               <div className="filter_loading">
                 <BeatLoader color="var(--theme-green)" />
               </div>
             )}
+
+            {/* 👇 Infinite Scroll Trigger */}
+            {!hasMore && !isLoading && allData.length > 0 ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "16px",
+                  color: "var(--theme-orange)",
+                  fontWeight: "500",
+                  margin: "10px 0px",
+                }}
+              >
+                🎉 End of list
+              </div>
+            ) : (
+              <div ref={setRef} style={{ height: "120px" }} />
+            )}
+          </>
+        ) : (
+          <>
+            {searchInput.trim() ? (
+              searchResults.length > 0 ? (
+                <AgentTable agentDoc={searchResults} />
+              ) : (
+                !isLoading && (
+                  <div className="pg_msg text-center">No results found.</div>
+                )
+              )
+            ) : allData.length > 0 ? (
+              <AgentTable agentDoc={allData} />
+            ) : (
+              !isLoading && (
+                <div className="pg_msg text-center">
+                  No agents found in {city.label}.
+                </div>
+              )
+            )}
+
+            {isLoading && (
+              <div className="filter_loading">
+                <BeatLoader color="var(--theme-green)" />
+              </div>
+            )}
+
+            {!hasMore && !isLoading && allData.length > 0 ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "16px",
+                  color: "var(--theme-orange)",
+                  fontWeight: "500",
+                  margin: "10px 0px",
+                }}
+              >
+                🎉 End of list
+              </div>
+            ) : (
+              <div ref={setRef} style={{ height: "120px" }} />
+            )}
           </>
         )}
-
-        {viewMode === "table_view" && <AgentTable agentDoc={allData} />}
       </div>
     </>
   );
