@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Select from "react-select";
 import { BeatLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
@@ -11,131 +11,181 @@ import useInView from "../../../../hooks/useInView";
 import AgentSingle from "./AgentSingle";
 import AgentTable from "./AgentTable";
 import Filters from "../../../../components/Filters";
+import client from "../../../../firebase/algoliaConfig";
+import useInView from "../../../../hooks/useInView";
 
 import "./PGAgent.scss";
 
-const itemsPerPage = 100; // Number of items per page
-
-const statusFilter = ["Active", "Banned"];
-
+// const statusFilter = ["Active", "Banned"];
+const PAGE_SIZE = 10;
 const ViewAgent = () => {
   const navigate = useNavigate();
 
   // let stateOptions = useRef([]);
   const debouncer = useRef(null);
-  const loadingRef = useRef(null);
+  const cacheRef = useRef([]);
 
-  const isIntersecting = useInView(loadingRef, {
-    threshold: 0.5,
-    rootMargin: "300px",
+  // --- STATE HANDLING ---
+  const [masterState, setMasterState] = useState([]);
+  const [state, setState] = useState(() => {
+    const savedState = localStorage.getItem("state");
+    return savedState
+      ? JSON.parse(savedState)
+      : { label: "Karnataka", value: "_karnataka" };
+  });
+  const [cityOptions, setCityOptions] = useState([]);
+  const [city, setCity] = useState({
+    label: "Select City",
+    value: "_select_city",
   });
 
-  const { documents: masterState, error: masterStateError } = useCollection(
-    "m_states",
-    "",
-    ["state", "asc"]
-  );
+  useEffect(() => {
+    if (state && state.value) {
+      localStorage.setItem("state", JSON.stringify(state));
+    }
+  }, [state]);
 
-  // Search input state
-  const [state, setState] = useState({
-    label: "Delhi",
-    value: "_delhi",
-  });
+  // --- FETCH STATES ---
+  const fetchStates = async () => {
+    try {
+      const snapshot = await projectFirestore
+        .collection("m_states")
+        .orderBy("state", "asc")
+        .get();
+
+      const states = snapshot.docs.map((doc) => ({
+        label: doc.data().state,
+        value: doc.id,
+      }));
+
+      setMasterState(states);
+      setCity({
+        label: "Select City",
+        value: "_select_city",
+      });
+    } catch (error) {
+      console.error("Error fetching states:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStates();
+  }, []);
+  // --- FETCH CITIES ---
+  const fetchCities = async () => {
+    if (!state?.label) return;
+    try {
+      const snapshot = await projectFirestore
+        .collection("m_cities")
+        .where("state", "==", state.value)
+        .orderBy("city", "asc")
+        .get();
+
+      const cities = snapshot.docs.map((doc) => ({
+        label: doc.data().city,
+        value: doc.id,
+      }));
+
+      setCityOptions(cities);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      setCityOptions([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, [state]);
+
+  // --- DATA + FETCH LOGIC ---
   const [searchInput, setSearchInput] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [allData, setAllData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState("active"); // Default to 'active'
+  // const [status, setStatus] = useState("active");
 
-  const lastVisibleDocRef = useRef(null);
-  // const [page, setPage] = useState(1); // Current page
-  const [hasMore, setHasMore] = useState(true); // Whether there's more data to load
-  // const [firstLoad, setFirstLoad] = useState(true);
-  const resetPagination = () => {
-    lastVisibleDocRef.current = null;
-    setFilteredData([]);
-    setAllData([]);
-    setHasMore(true);
-  };
-  const changeStatusFilter = useCallback((newStatus) => {
-    setStatus(newStatus);
-    resetPagination();
-  }, []);
+  const [setRef, isInView] = useInView({
+    rootMargin: "1000px", // triggers early
+    threshold: 0.1,
+  });
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
 
-  const stateOptions = useMemo(() => {
-    if (!masterState) return [];
-    return masterState.map((data) => ({
-      label: data.state,
-      value: data.id,
-    }));
-  }, [masterState]);
+  // --- FETCH AGENTS ---
+  const fetchAgents = useCallback(
+    async (reset = false, cursor = null) => {
+      if (city.value === "_select_city") return;
+      setIsLoading(true);
 
-  // console.log(stateOptions);
-  function toTitleCase(str) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
-  //update state
+      try {
+        let ref = projectFirestore
+          .collection("agent-propdial")
+          .where("state", "==", state.label)
+          .where("city", "==", city.label)
+          // .where("status", "==", status.toLowerCase())
+          .orderBy("agentName", "asc")
+          .limit(PAGE_SIZE);
 
-  //clear the debouncer
-  useEffect(() => {
-    return () => {
-      if (debouncer.current) {
-        clearTimeout(debouncer.current);
-      }
-    };
-  }, []);
-  const fetchAgents = useCallback(async () => {
-    if (!hasMore) return;
-    // if (isLoading) return;
-    setIsLoading(true);
-    try {
-      let ref = await projectFirestore
-        .collection("agent-propdial")
-        .where("state", "==", state.label)
-        .where("status", "==", status.toLowerCase())
-        .orderBy("agentName", "asc")
-        .limit(itemsPerPage);
+        if (!reset && cursor) ref = ref.startAfter(cursor);
 
-      if (lastVisibleDocRef.current) {
-        ref = ref.startAfter(lastVisibleDocRef.current);
-      }
-
-      const snapshot = await ref.get();
-
-      if (!snapshot.empty) {
-        const _filterList = snapshot.docs.map((doc) => ({
+        const snapshot = await ref.get();
+        const docs = snapshot.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
-        lastVisibleDocRef.current = snapshot.docs[snapshot.docs.length - 1];
-        setFilteredData((prevData) => [...prevData, ..._filterList]);
-        setAllData((prevData) => [...prevData, ..._filterList]);
-        setHasMore(snapshot.docs.length === itemsPerPage);
-      } else {
-        // setFilteredData([]);
-        // setAllData([]);
-        // lastVisibleDocRef.current = null;
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Error fetching filtered data: ", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [state.label, status, hasMore]);
 
-  const isSearchActive = searchInput.trim() !== "";
+        setAllData((prev) => {
+          const newData = reset ? docs : [...prev, ...docs];
+          cacheRef.current = newData;
+          return newData;
+        });
+
+        setLastDoc(snapshot.docs[snapshot.docs.length - 1] || null);
+        setHasMore(snapshot.docs.length === PAGE_SIZE);
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [state.label, city.value]
+  );
+
+  // Initial fetch on filter change
+  useEffect(() => {
+    if (!city || city.value === "_select_city") return;
+    setAllData([]);
+    setLastDoc(null);
+    setHasMore(true);
+    fetchAgents(true);
+  }, [state, city]);
+
+  // --- INFINITE SCROLL ---
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!isSearchActive) await fetchAgents();
-    };
-    if (isIntersecting) fetchData();
-  }, [fetchAgents, isIntersecting, isSearchActive]);
+    if (isInView && hasMore && !isLoading && lastDoc) {
+      console.log("📍 Loading next batch...");
+      fetchAgents(false, lastDoc);
+    }
+  }, [isInView, hasMore, isLoading, lastDoc, fetchAgents]);
+
+  // --- CACHE PERSISTENCE ---
+
+  // useEffect(() => {
+  //   if (allData.length > 0) {
+  //     localStorage.setItem("agentCache", JSON.stringify(allData));
+  //   }
+  // }, [allData]);
+
+  // useEffect(() => {
+  //   const savedCache = localStorage.getItem("agentCache");
+  //   if (savedCache) {
+  //     cacheRef.current = JSON.parse(savedCache);
+  //     setAllData(cacheRef.current);
+  //   }
+  // }, []);
+  // --- SEARCH LOGIC ---
+  const [searchLoading, setSearchLoading] = useState(false);
 
   //fetch more data
 
@@ -158,58 +208,47 @@ const ViewAgent = () => {
     setIsLoading(true);
 
     debouncer.current = setTimeout(async () => {
-      console.log("_searchkey: ", _searchkey);
+      const searchValue = value.trim();
+      if (!searchValue) {
+        setSearchResults([]);
+        setAllData(cacheRef.current);
+        return;
+      }
+
+      setIsLoading(true);
+      setSearchLoading(true);
+
       try {
-        const nameQuery = projectFirestore
-          .collection("agent-propdial")
-          .where("state", "==", state.label)
-          .where("status", "==", status.toLowerCase())
-          .where("agentName", ">=", _searchkey)
-          .where("agentName", "<=", _searchkey + "\uf8ff")
-          .orderBy("agentName");
+        const { results } = await client.search({
+          requests: [
+            {
+              indexName: "agent-propdial",
+              query: searchValue,
+              filters: `state:"${state.label}" AND city:"${city.label}"`,
+              attributesToHighlight: ["agentName", "agentPhone"],
+            },
+          ],
+        });
 
-        const cityQuery = projectFirestore
-          .collection("agent-propdial")
-          .where("state", "==", state.label)
-          .where("status", "==", status.toLowerCase())
-          .where("city", ">=", _searchkey)
-          .where("city", "<=", _searchkey + "\uf8ff")
-          .orderBy("city");
-
-        const [nameSnap, citySnap] = await Promise.all([
-          nameQuery.get(),
-          cityQuery.get(),
-        ]);
-
-        const allDocs = [...nameSnap.docs, ...citySnap.docs];
-        if (allDocs.length !== 0) {
-          const uniqueDocsMap = new Map();
-          allDocs.forEach((doc) =>
-            uniqueDocsMap.set(doc.id, { ...doc.data(), id: doc.id })
-          );
-
-          const _filterList = Array.from(uniqueDocsMap.values());
-          setFilteredData(_filterList);
-          setHasMore(false);
-        } else {
-          setFilteredData([]);
-        }
-      } catch (err) {
-        console.error("Search error:", err);
+        const hits = results?.[0]?.hits || [];
+        setSearchResults(hits.map((hit) => ({ ...hit, id: hit.objectID })));
+      } catch (error) {
+        console.error("Algolia search error:", error);
+        setSearchResults([]);
       } finally {
         setIsLoading(false);
+        setSearchLoading(false);
       }
-    }, 500);
+    }, 400);
   };
 
-  // old filteragent code with no loader while change state
-  // don't delete
-  // const filteredAgentList = async (data) => {
-  //   setIsLoading(true);
-  //   console.log("filteredDataNew data: ", data);
-  //   // console.log("agentDoc : ", agentDoc)
-  //   let _filterList = [];
-  //   setSearchInput("");
+  useEffect(() => {
+    return () => {
+      if (debouncer.current) clearTimeout(debouncer.current);
+    };
+  }, []);
+  /** 🔄 View Mode */
+  const [viewMode, setViewMode] = useState("card_view");
 
   //   const ref = await projectFirestore
   //     .collection("agent-propdial")
@@ -279,10 +318,10 @@ const ViewAgent = () => {
   // };
 
   // View mode start
-  const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
-  const handleModeChange = (newViewMode) => {
-    setviewMode(newViewMode);
-  };
+  // const [viewMode, setviewMode] = useState("card_view"); // Initial mode is grid with 3 columns
+  // const handleModeChange = (newViewMode) => {
+  //   setviewMode(newViewMode);
+  // };
 
   // When state changes, reset data and fetch first page
 
@@ -333,12 +372,8 @@ const ViewAgent = () => {
           </div>
           <Select
             className="state_filter"
-            onChange={(e) => {
-              setState(e);
-              resetPagination();
-              // filteredAgentList(e);
-            }}
-            options={stateOptions}
+            onChange={(e) => setState(e)}
+            options={masterState}
             value={state}
             styles={{
               control: (baseStyles, state) => ({
@@ -349,15 +384,26 @@ const ViewAgent = () => {
               }),
             }}
           />
+          <Select
+            className="state_filter"
+            onChange={(e) => setCity(e)}
+            options={cityOptions}
+            value={city}
+            styles={{
+              control: (base) => ({
+                ...base,
+                outline: "none",
+                background: "#eee",
+                borderBottom: "1px solid var(--theme-blue)",
+              }),
+            }}
+          />
         </div>
 
         <div className="right">
-          <div className="new_inline">
-            <Filters
-              changeFilter={changeStatusFilter}
-              filterList={statusFilter}
-            />
-          </div>
+          {/* <div className="new_inline">
+            <Filters changeFilter={setStatus} filterList={statusFilter} />
+          </div> */}
           <div className="button_filter diff_views">
             <div
               className={`bf_single ${
@@ -389,25 +435,99 @@ const ViewAgent = () => {
       <hr></hr>
       {/* view agent pg header and filters end  */}
 
-      {filteredData && filteredData.length === 0 && !isLoading && (
-        <div className="pg_msg">No agents in {state.label}.</div>
-      )}
-      {/* agent card and table  */}
+      <hr />
 
+      {/* Agent Data */}
       <div>
-        {viewMode === "card_view" && filteredData && (
+        {city.value === "_select_city" ? (
+          <div className="pg_msg text-center">
+            Please select a city to view agents.
+          </div>
+        ) : viewMode === "card_view" ? (
           <>
-            <AgentSingle agentDoc={filteredData} />
-            {(isLoading || hasMore) && (
-              <div ref={loadingRef} className="filter_loading">
-                <BeatLoader color={"var(--theme-green)"} />
+            {searchInput.trim() ? (
+              searchResults.length > 0 ? (
+                <AgentSingle agentDoc={searchResults} />
+              ) : (
+                !isLoading && (
+                  <div className="pg_msg text-center">No results found.</div>
+                )
+              )
+            ) : allData.length > 0 ? (
+              <AgentSingle agentDoc={allData} />
+            ) : (
+              !isLoading && (
+                <div className="pg_msg text-center">
+                  No agents found in {city.label}.
+                </div>
+              )
+            )}
+
+            {isLoading && (
+              <div className="filter_loading">
+                <BeatLoader color="var(--theme-green)" />
               </div>
             )}
+
+            {/* 👇 Infinite Scroll Trigger */}
+            {!hasMore && !isLoading && allData.length > 0 ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "16px",
+                  color: "var(--theme-orange)",
+                  fontWeight: "500",
+                  margin: "10px 0px",
+                }}
+              >
+                🎉 End of list
+              </div>
+            ) : (
+              <div ref={setRef} style={{ height: "120px" }} />
+            )}
           </>
-        )}
-        {viewMode === "table_view" && (
-          // <h5 className="text-center text_green">Coming Soon....</h5>
-          <AgentTable agentDoc={filteredData} />
+        ) : (
+          <>
+            {searchInput.trim() ? (
+              searchResults.length > 0 ? (
+                <AgentTable agentDoc={searchResults} />
+              ) : (
+                !isLoading && (
+                  <div className="pg_msg text-center">No results found.</div>
+                )
+              )
+            ) : allData.length > 0 ? (
+              <AgentTable agentDoc={allData} />
+            ) : (
+              !isLoading && (
+                <div className="pg_msg text-center">
+                  No agents found in {city.label}.
+                </div>
+              )
+            )}
+
+            {isLoading && (
+              <div className="filter_loading">
+                <BeatLoader color="var(--theme-green)" />
+              </div>
+            )}
+
+            {!hasMore && !isLoading && allData.length > 0 ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "16px",
+                  color: "var(--theme-orange)",
+                  fontWeight: "500",
+                  margin: "10px 0px",
+                }}
+              >
+                🎉 End of list
+              </div>
+            ) : (
+              <div ref={setRef} style={{ height: "120px" }} />
+            )}
+          </>
         )}
       </div>
 

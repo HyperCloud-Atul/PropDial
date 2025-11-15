@@ -6,8 +6,8 @@
   /* --theme-green:#20b2aa; */
   /* --theme-orange: #e95733;  */
   --theme-green: #00a8a8;
-  --theme-green2-bg:#00a300;
---theme-green-bg:#00a8a8;
+  --theme-green2-bg: #00a300;
+  --theme-green-bg: #00a8a8;
   --theme-green2: #00a300;
   --theme-purple: #5a10d5;
   --theme-blue: #3f5e98;
@@ -24,13 +24,13 @@
 
   /* background color variables start */
   --theme-green-bg: #e2ffe7;
-  --theme-green2-bg:#bbf7d0;
+  --theme-green2-bg: #bbf7d0;
   --theme-purple-bg: #efe5ff;
   --theme-blue-bg: #dae7ff;
   --theme-blue-light-bg: #eef3ff;
   --theme-inreview: #ffc107;
-  --theme-pending:#ca8a04;
-  --theme-pending-bg:#fef08a;
+  --theme-pending: #ca8a04;
+  --theme-pending-bg: #fef08a;
   --theme-purple-bg-light: #f9f5ff80;
   --theme-orange-bg: #ffefe5;
   --page-bg: #f5f5f5;
@@ -195,10 +195,10 @@ a.theme_btn.btn_white {
   font-size: 18px;
   display: none !important;
 }
-.green_bg{
+.green_bg {
   background: var(--theme-green);
 }
-.green2_bg{
+.green2_bg {
   background: var(--theme-green2);
 }
 .ba_animation {
@@ -1068,4 +1068,11 @@ color: var(--theme-green);
   to {
     transform: rotate(360deg);
   }
+}
+
+em {
+  background: #ffe9a7;
+  font-style: normal;
+  padding: 0 2px;
+  border-radius: 3px;
 }

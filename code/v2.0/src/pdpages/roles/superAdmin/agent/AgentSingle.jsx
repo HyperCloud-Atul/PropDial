@@ -141,13 +141,30 @@ const AgentSingle = ({ agentDoc }) => {
     setSelectedAgent(doc);
     setShowAgentModal(true);
   };
-  // console.log('agentDoc', agentDoc)
   return (
     <div className="agent_cards propdial_users all_tenants ">
       {agentDoc &&
-        agentDoc.map((doc) => (
-          // <div key={doc.id || doc.objectID || index} className="pu_single"> 
-              <div key={doc.id} className="pu_single">
+        agentDoc.map((doc, index) => (
+          <div key={doc.agentPhone + index} className="pu_single relative">
+            {doc?.status?.toLowerCase() === "banned" && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "34px",
+                  right: "50px",
+                  fontSize: "18px",
+                  width: "fit-content",
+                  color: "var(--theme-red)",
+                  textTransform: "uppercase",
+                  fontWeight: "600",
+                  transform: "rotate(-45deg)",
+                  opacity: "0.5",
+                  zIndex: "1",
+                }}
+              >
+                Banned
+              </div>
+            )}
             <div className="tc_single relative item">
               <div className="left">
                 <div className="tcs_img_container">
@@ -266,7 +283,14 @@ const AgentSingle = ({ agentDoc }) => {
 
                 <div className="tenant_detail">
                   <h6 className="t_name pointer">
-                    {camelCase(doc.agentName)}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          doc._highlightResult?.agentName?.value ||
+                          camelCase(doc?.agentName),
+                      }}
+                    />
+                    {/* {camelCase(doc.agentName)} */}
                     {user && user.role === "superAdmin" && (
                       <Link
                         to={`/edit-agent/${doc.id}`}
@@ -279,12 +303,19 @@ const AgentSingle = ({ agentDoc }) => {
                     )}
                   </h6>
                   {doc.agentPhone && (
-                    <h6 className="t_number">
-                      {doc.agentPhone.replace(
-                        /(\d{2})(\d{5})(\d{5})/,
-                        "+$1 $2-$3"
-                      )}
-                    </h6>
+                    <h6
+                      className="t_number"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          doc._highlightResult?.agentPhone?.value ||
+                          (doc.agentPhone
+                            ? doc.agentPhone.replace(
+                                /(\d{2})(\d{5})(\d{5})/,
+                                "+$1 $2-$3"
+                              )
+                            : ""),
+                      }}
+                    />
                   )}
                   {/* {doc.agentEmail && (
                     <h6
